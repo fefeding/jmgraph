@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+	<head>
+		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+
+		<!--[if lt IE 9]>
+    <script src="../lib/html5.js" type="text/javascript"></script>    
+    <script src="../lib/excanvas.js" type="text/javascript"></script>
+<![endif]-->
+
+		<script type="text/javascript" src="../common/jmUtils.js" ></script>
+		<script type="text/javascript" src="../common/jmModels.js" ></script>
+		<script type="text/javascript" src="../common/jmEvents.js" ></script>
+		<script type="text/javascript" src="../common/jmProperty.js" ></script>
+		<script type="text/javascript" src="../common/jmControl.js" ></script>
+		<script type="text/javascript" src="../shapes/jmShape.js" ></script>
+		<script type="text/javascript" src="../shapes/jmPath.js" ></script>
+		<script type="text/javascript" src="../controls/jmImage.js" ></script>
+		<script type="text/javascript" src="../shapes/jmCircle.js" ></script>
+		<script type="text/javascript" src="../shapes/jmArc.js" ></script>
+		<script type="text/javascript" src="../shapes/jmHArc.js" ></script>
+		<script type="text/javascript" src="../jmGraph.js" ></script>
+		<script type="text/javascript">
+
+			function load() {
+				var canvas = document.getElementById('mycanvas');
+				var graph = new jmGraph(canvas);
+
+				var style = {
+					stroke:'rgb(120,20,80)',					
+					lineWidth:6,
+					close:true,
+					zIndex:1
+				};
+
+				var arc = graph.createShape('circle',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});
+
+				var bg = graph.createRadialGradient(arc.width() / 2,arc.height() / 2,0,arc.width() / 2,arc.height() / 2,arc.width() / 2);
+
+				bg.addStop(0,'green');
+				bg.addStop(0.5,'blue');
+				bg.addStop(0.8,'yellow');
+				bg.addStop(1,'red');					
+				style.fill = bg;
+				style.shadow = new jmShadow(0,0,20,'rgb(255,255,255)');				
+/*
+				arc.bind('mouseover',function(evt) {
+					this.style.stroke = 'rgba(88,200,155,0.5)';
+					graph.refresh();
+				});*/
+				arc.bind('touchstart',function(evt) {
+					this.style.stroke = 'rgba(88,200,155,0.5)';
+					graph.refresh();
+				});
+				arc.bind('mouseleave',function(evt) {
+					this.style.stroke = 'rgb(120,20,80)';
+					graph.refresh();
+				});
+
+				
+				graph.children.add(arc);
+				arc.canMove(true);
+
+				style = jmUtils.clone(style);
+				style.stroke = 'rgb(255,255,255)';
+				style.close=false;
+				style.zIndex = 0;
+				delete style.shadow;
+				delete style.fill;
+				
+				var step = Math.PI / 25;
+				var bluestop = 0.5;
+				var bluedir = 0;
+				var yellowstop = 0.8;
+				var yellowdir = 0;
+				var childarc = graph.createShape('arc',{style:style,center:{x:arc.width() / 2,y:arc.height() / 2},start:0,end: Math.PI / 3,radius:arc.width() / 2,anticlockwise:false});
+
+				style = jmUtils.clone(style);
+				style.close = true;
+				style.lineWidth = 1;
+				style.fill = 'red';
+				style.zIndex = 2;
+				var harc = graph.createShape('harc',{style:style,center:{x:600,y:380},start:0,end: 0 ,minRadius:100,maxRadius:150,anticlockwise:false});
+				graph.children.add(harc);
+
+				function arcAni() {		
+					var s=childarc.startAngle() + step;
+					var e = childarc.endAngle() + step;
+					if(s > Math.PI * 2) {
+						s = 0;
+						e = Math.PI / 3;
+					}
+					childarc.startAngle(s);
+					childarc.endAngle(e);
+					harc.endAngle(s);
+					
+					
+					if(bluestop >= yellowstop) {
+						bluedir = 1;
+						//return false;
+					}
+					else if(bluestop < 0.1) {
+						bluedir = 0;
+					}
+					bluestop = bluedir == 0?bluestop + 0.01:bluestop-0.01;
+/*
+					if(yellowstop > 0.9) {
+						yellowdir = 1;
+					}
+					else if(yellowstop < 0.4) {
+						yellowdir = 0;
+					}
+					yellowstop = yellowdir == 0?yellowstop + 0.01:yellowstop-0.01;
+*/		
+					bg.stops.clear();
+					bg.addStop(0,'green');
+					bg.addStop(bluestop,'blue');
+					bg.addStop(yellowstop,'yellow');
+					bg.addStop(1,'red');
+					arc.style.fill=bg;	
+					//graph.redraw();	
+					//setTimeout(arcAni,1);				
+				}
+				arc.children.add(childarc);				
+				childarc.animate(arcAni,10);
+				//setTimeout(arcAni,10);
+				//http://im-img.qq.com/inc/images/new_header2/logo.gif
+				var img = graph.createShape('img',{style:style,position:{x:10,y:10},image:'http://im-img.qq.com/inc/images/new_header2/logo.gif',width:0});
+
+				graph.children.add(img);
+				img.canMove(true);
+
+				
+				harc.canMove(true);
+				graph.redraw();
+			}
+		</script>
+	</head>
+	<body onload="load()" style="margin:10px auto;">
+		<canvas id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;		">不支持canvas</canvas>	
+		<!--<img src="http://demo.iflow.oa.com/content/index/images/gif.gif" />	-->
+	</body>
+</html>

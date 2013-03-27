@@ -48,6 +48,7 @@ var jmGraph = (function() {
 		if(typeof jmArc !== 'undefined') this.registerShape('arc',jmArc);
 		if(typeof jmHArc !== 'undefined') this.registerShape('harc',jmHArc);
 		if(typeof jmPrismatic !== 'undefined') this.registerShape('prismatic',jmPrismatic);
+		if(typeof jmLabel !== 'undefined') this.registerShape('label',jmLabel);
 		if(typeof jmImage !== 'undefined') {
 			this.registerShape('image',jmImage);
 			this.registerShape('img',jmImage);

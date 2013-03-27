@@ -14,53 +14,6 @@ var jmPath = (function() {
 	return __constructor;
 })();
 
-
-/**
-* 开始画控件
-*/
-jmPath.prototype.beginDraw = function() {
-	this.context.beginPath();		
-}
-
-/**
-* 结束画控件
-*/
-jmPath.prototype.endDraw = function() {
-	//如果当前为封闭路径
-	if(this.style.close) {
-		this.context.closePath();
-	}
-	
-	if(this.style['fill']) {
-		this.context.fill();
-	}
-	if(this.style['stroke'] || !this.style['fill']) {
-		this.context.stroke();
-	}		
-}
-
-/**
-* 开始画图
-*/
-jmPath.prototype.draw = function() {	
-	if(this.points.length > 0) {
-		//获取当前控件的绝对位置
-		var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
-		this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-		var len = this.points.length;
-		
-		for(var i=1; i < len;i++) {
-			var p = this.points[i];
-			if(p.m) {
-				this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
-			}
-			else {
-				this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
-			}			
-		}
-	}	
-}
-
 /**
 * 重写检查坐标是否在区域内
 */

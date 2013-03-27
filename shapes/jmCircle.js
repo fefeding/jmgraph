@@ -24,6 +24,29 @@ var jmCircle = (function () {
 })();
 
 /**
+* 生成中心点
+*/
+jmCircle.prototype.getCenter = function() {
+	var center = this.center();
+	var x = center.x;
+	var y = center.y;
+
+	if(jmUtils.checkPercent(x)) {
+		x = jmUtils.percentToNumber(x);
+		if(this.parent && this.parent.bounds) {
+			x = this.parent.bounds.width * x;
+		}
+	}
+	if(jmUtils.checkPercent(y)) {
+		y = jmUtils.percentToNumber(y);
+		if(this.parent && this.parent.bounds) {
+			y = this.parent.bounds.height * y;
+		}
+	}
+	return {x:x,y:y};
+}
+
+/**
 * 初始化图形点
 */
 jmCircle.prototype.initPoints = function() {	
@@ -43,7 +66,8 @@ jmCircle.prototype.initPoints = function() {
 		var p = this.points[i];
 		this.points.push({x:p.x ,y:cy * 2 - p.y});
 	}*/
-	var center = this.center();
+	
+	var center = this.getCenter();
 	var r = this.radius();
 	if(!r) {
 		r = Math.min(this.width() , this.height()) / 2;
@@ -60,7 +84,7 @@ jmCircle.prototype.initPoints = function() {
 */
 jmCircle.prototype.draw = function() {
 	var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;	
-	var center = this.center();
+	var center = this.getCenter();
 	var r = this.radius();
 	if(!r) {
 		r = Math.min(this.width() , this.height()) / 2;

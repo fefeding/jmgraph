@@ -166,6 +166,12 @@ jmControl.prototype.getBounds = function() {
 	return rect;
 }
 
+/**
+* 获取或设定位置坐标
+*/
+jmControl.prototype.position = function(p) {
+	return this.setValue('position',p);
+}
 
 /**
 * 设定或获取宽度
@@ -193,16 +199,27 @@ jmControl.prototype.offset = function(x,y) {
 		}
 	}
 	else if(this.center && typeof this.center == 'function') {
-		var center = this.center();
-		center.x += x;
-		center.y += y;	
-		//this.center(center);	
+		var tmp = this.getCenter?this.getCenter() : this.center();
+		if(tmp) {
+			tmp.x += x;
+			tmp.y += y;	
+			var center = this.center();
+			if(center) {
+				center.x = tmp.x;
+				center.y = tmp.y;
+			}			
+		}		
 	}
 	else if(this.position && typeof this.position == 'function') {
-		var p = this.position();
-		if(p) {
-			p.x += x;
-			p.y += y;
+		var tmp = this.getPosition?this.getPosition():this.position();
+		if(tmp) {
+			tmp.x += x;
+			tmp.y += y;
+			var p = this.position();
+			if(p) {
+				p.x = tmp.x;
+				p.y = tmp.y;
+			}			
 		}		
 	}
 	else if(this.points) {
@@ -235,6 +252,51 @@ jmControl.prototype.getAbsoluteBounds = function() {
 	return rec;
 }
 
+/**
+* 开始画控件
+*/
+jmControl.prototype.beginDraw = function() {
+	this.context.beginPath();		
+}
+
+/**
+* 结束画控件
+*/
+jmControl.prototype.endDraw = function() {
+	//如果当前为封闭路径
+	if(this.style.close) {
+		this.context.closePath();
+	}
+	
+	if(this.style['fill']) {
+		this.context.fill();
+	}
+	if(this.style['stroke'] || !this.style['fill']) {
+		this.context.stroke();
+	}		
+}
+
+/**
+* 开始画图
+*/
+jmControl.prototype.draw = function() {	
+	if(this.points && this.points.length > 0) {
+		//获取当前控件的绝对位置
+		var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+		this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+		var len = this.points.length;
+		
+		for(var i=1; i < len;i++) {
+			var p = this.points[i];
+			if(p.m) {
+				this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
+			}
+			else {
+				this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
+			}			
+		}
+	}	
+}
 
 /**
 * 绘制当前控件

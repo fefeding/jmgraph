@@ -29,12 +29,35 @@ var jmArc = (function () {
 })();
 
 /**
+* 生成中心点
+*/
+jmArc.prototype.getCenter = function() {
+	var center = this.center();
+	var x = center.x;
+	var y = center.y;
+
+	if(jmUtils.checkPercent(x)) {
+		x = jmUtils.percentToNumber(x);
+		if(this.parent && this.parent.bounds) {
+			x = this.parent.bounds.width * x;
+		}
+	}
+	if(jmUtils.checkPercent(y)) {
+		y = jmUtils.percentToNumber(y);
+		if(this.parent && this.parent.bounds) {
+			y = this.parent.bounds.height * y;
+		}
+	}
+	return {x:x,y:y};
+}
+
+/**
 * 初始化图形点
 */
 jmArc.prototype.initPoints = function() {
 	var mw = this.width() / 2;
 	var mh = this.height() / 2;
-	var center = this.center();
+	var center = this.getCenter();
 	var cx = center.x ;//+ bounds.left;
 	var cy = center.y ;//+ bounds.top;
 	//如果设定了半径。则以半径为主

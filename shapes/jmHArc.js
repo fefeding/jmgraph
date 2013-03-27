@@ -30,10 +30,33 @@ var jmHArc = (function () {
 })();
 
 /**
+* 生成中心点
+*/
+jmHArc.prototype.getCenter = function() {
+	var center = this.center();
+	var x = center.x;
+	var y = center.y;
+
+	if(jmUtils.checkPercent(x)) {
+		x = jmUtils.percentToNumber(x);
+		if(this.parent && this.parent.bounds) {
+			x = this.parent.bounds.width * x;
+		}
+	}
+	if(jmUtils.checkPercent(y)) {
+		y = jmUtils.percentToNumber(y);
+		if(this.parent && this.parent.bounds) {
+			y = this.parent.bounds.height * y;
+		}
+	}
+	return {x:x,y:y};
+}
+
+/**
 * 初始化图形点
 */
 jmHArc.prototype.initPoints = function() {	
-	var center = this.center();	
+	var center = this.getCenter();	
 	//如果设定了半径。则以半径为主
 	var minr = this.minRadius();
 	var maxr = this.maxRadius();

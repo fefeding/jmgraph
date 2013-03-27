@@ -49,18 +49,18 @@
 
 				style = jmUtils.clone(style);
 				style.fill = 'rgba(120,20,80,0.5)';
-				arc = graph.createShape('circle',{style:style,center:{x:80,y:180},width:60,height:80});
+				var arc2 = graph.createShape('circle',{style:style,center:{x:'50%',y:'50%'},width:60,height:80});
 				//arc.canMove(true);
-				arc.bind('mouseover',function(evt) {
+				arc2.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(39,72,188,0.5)';
 					graph.refresh();
 				});
-				arc.bind('mouseleave',function(evt) {
+				arc2.bind('mouseleave',function(evt) {
 					this.style.stroke = 'rgb(120,20,80)';
 					graph.refresh();
 				});				
-				graph.children.add(arc);
-				arc.canMove(true);
+				arc.children.add(arc2);
+				arc2.canMove(true);
 				graph.refresh();
 			}
 		</script>

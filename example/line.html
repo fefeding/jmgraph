@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="../shapes/jmBezier.js" ></script>
 		<script type="text/javascript" src="../shapes/jmRect.js" ></script>
 		<script type="text/javascript" src="../shapes/jmArraw.js" ></script>
+		<script type="text/javascript" src="../controls/jmLabel.js" ></script>
 		<script type="text/javascript" src="../jmGraph.js" ></script>
 		<script type="text/javascript">
 
@@ -157,6 +158,13 @@
 				style.lineWidth = 2;
 				var arr = graph.createShape('arraw',{style:style,start:{x:220,y:300},end:{x:250,y:340}});
 				graph.children.add(arr);
+
+				style = jmUtils.clone(style);
+				style.textAlign = 'center';
+				style.font = '30px Arial';
+				var label = graph.createShape('label',{style:style,position:{x:300,y:350},value:'test label',width:120,height:80});
+				graph.children.add(label);
+				label.canMove(true);
 
 				graph.paint();
 				//path.zIndex = 2;

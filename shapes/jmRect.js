@@ -119,13 +119,6 @@ jmRect.prototype.draw = function() {
 }*/
 
 /**
-* 设定或获取是否顺时针画
-*/
-jmRect.prototype.position = function(p) {
-	return this.setValue('position',p);
-}
-
-/**
 * 圆角半径
 */
 jmRect.prototype.radius = function(r) {

@@ -1,0 +1,545 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: jmEditor  jmCell   (jiamaocode Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1365491194.02" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1365491194.02" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1365491194.02"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1365491194.02"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="./index.html" title="jmGraph">jmGraph</a></h1>
+        <h3>jmEditor&nbsp; <span class="subtitle">1.0</span></h3>
+        <a href="./index.html" title="jmGraph">jmGraph</a> 
+            &gt; <a href="./module_jmeditor.html" title="jmEditor">jmEditor</a>
+                 &gt; jmCell 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">jmCell</b>
+                        <span class="extends">
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        流程编辑器单元,继承自jmControl
+参数说明:resizable=是否可改变大小，connectable=是否可连线,value =当前显示字符串,position=单元位置,editor=当前单元所属编辑器,graph=画布,style=样式对象或名称
+                    </div>
+
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_selected">
+                                    <h4><a name="property_selected" property="yui:name">selected</a>
+                                        - <code><span property="yui:type">boolean</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            当前元素是否已被选择
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_add">
+                                    <h4>
+                                        <a name="method_add">add</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">add</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            添加当前元素到画布中
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_connect">
+                                    <h4>
+                                        <a name="method_connect">connect</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">connect</strong>
+                                           (
+                                                
+                                                        
+                                                         to
+                                                    
+                                                
+                                                        , 
+                                                         [value]
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            连接到目标节点
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">to</span>
+                                                        &lt;<span property="yui:type">jmCell</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 要连接到的元素</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">[value]</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 当前连线显示的字符值</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_remove">
+                                    <h4>
+                                        <a name="method_remove">remove</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">remove</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            从编辑器中移除当前节点
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_select">
+                                    <h4>
+                                        <a name="method_select">select</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        boolean
+                                            <strong property="yui:name">select</strong>
+                                           (
+                                                
+                                                        
+                                                         b
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            选择当前节点
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">b</span>
+                                                        &lt;<span property="yui:type">boolean</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 选择或消选当前元素</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        boolean
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">是否被选择</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_setOverlay">
+                                    <h4>
+                                        <a name="method_setOverlay">setOverlay</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">setOverlay</strong>
+                                           (
+                                                
+                                                        
+                                                         src
+                                                    
+                                                
+                                                        , 
+                                                         w
+                                                    
+                                                
+                                                        , 
+                                                         h
+                                                    
+                                                
+                                                        , 
+                                                         tooltip
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            设置一个标识
+例如用来做状态标识等
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">src</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 图片地址</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">w</span>
+                                                        &lt;<span property="yui:type">number</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 图片宽</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">h</span>
+                                                        &lt;<span property="yui:type">nubmer</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 图片高度</span>
+                                                        </dd>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">tooltip</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 标识信息描述</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_setStyle">
+                                    <h4>
+                                        <a name="method_setStyle">setStyle</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">setStyle</strong>
+                                           (
+                                                
+                                                        
+                                                         style
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            初始化当前元素样式
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">style</span>
+                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 样式</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_value">
+                                    <h4>
+                                        <a name="method_value">value</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        string
+                                            <strong property="yui:name">value</strong>
+                                           (
+                                                
+                                                        
+                                                         [v]
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            返回或设置当前元素的值
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">[v]</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> 元素显示的值</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">当前的值</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_jmEditor.html" title="jmEditor">jmEditor</a></li>
+                                <li class=""><a href="module_jmGraph.html" title="jmGraph">jmGraph</a></li>
+                                <li class=""><a href="module_jmUtils.html" title="jmUtils">jmUtils</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="jmCell.html" title="jmCell">jmCell</a></li>
+                                <li class=""><a href="jmConnectLine.html" title="jmConnectLine">jmConnectLine</a></li>
+                                <li class=""><a href="jmEditor.html" title="jmEditor">jmEditor</a></li>
+                                <li class=""><a href="jmEditorDefaultStyle.html" title="jmEditorDefaultStyle">jmEditorDefaultStyle</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="jmcircle.js.html" title="jmcircle.js">jmcircle.js</a></li>
+                                <li class=""><a href="jmevents.js.html" title="jmevents.js">jmevents.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_selected" title="selected">selected</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="methodsList" class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#method_add" title="add">add</a></li>
+                                <li class=""><a href="#method_connect" title="connect">connect</a></li>
+                                <li class=""><a href="#method_remove" title="remove">remove</a></li>
+                                <li class=""><a href="#method_select" title="select">select</a></li>
+                                <li class=""><a href="#method_setOverlay" title="setOverlay">setOverlay</a></li>
+                                <li class=""><a href="#method_setStyle" title="setStyle">setStyle</a></li>
+                                <li class=""><a href="#method_value" title="value">value</a></li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2013 jm47.com. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "jmCell.html#method_add", "access": "", "host": "jmCell", "type": "method", "name": "add"}, {"url": "jmCell.html#method_connect", "access": "", "host": "jmCell", "type": "method", "name": "connect"}, {"url": "jmCell.html#method_remove", "access": "", "host": "jmCell", "type": "method", "name": "remove"}, {"url": "jmCell.html#method_select", "access": "", "host": "jmCell", "type": "method", "name": "select"}, {"url": "jmCell.html#property_selected", "access": "", "host": "jmCell", "type": "property", "name": "selected"}, {"url": "jmCell.html#method_setOverlay", "access": "", "host": "jmCell", "type": "method", "name": "setOverlay"}, {"url": "jmCell.html#method_setStyle", "access": "", "host": "jmCell", "type": "method", "name": "setStyle"}, {"url": "jmCell.html#method_value", "access": "", "host": "jmCell", "type": "method", "name": "value"}];
+</script>
+</body>
+</html>

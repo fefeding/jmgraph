@@ -1,10 +1,23 @@
 /**
-* 基础路径
-* 指定一系列点，画出图形
-*/
+ * 基础路径,大部分图型的基类
+ * 指定一系列点，画出图形
+ *
+ * @class jmPath
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 画布
+ * @param {object} params 路径参数 points=所有描点
+ */
 
 var jmPath = (function() {	
 	function __constructor(graph,params) {
+		/**
+		 * 当前对象类型名jmPath
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = 'jmPath';
 		var style = params && params.style ? params.style : null;
 		this.initializing(graph.context,style);
 		this.graph = graph;
@@ -15,8 +28,14 @@ var jmPath = (function() {
 })();
 
 /**
-* 重写检查坐标是否在区域内
-*/
+ * 重写检查坐标是否在区域内
+ * 支持任意多边形
+ * 根据边界检查某个点是否在区域内，如果样式有fill，则只要在内有效，如果只有stroke则在边框上有效
+ *
+ * @method checkPoint
+ * @param {point} p 待检查的坐标
+ * @return {boolean} 如果在则返回true,否则返回false
+ */
 jmPath.prototype.checkPoint = function(p) {	
 	var w = this.style['lineWidth'] || 1;
 

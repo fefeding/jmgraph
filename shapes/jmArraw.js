@@ -1,13 +1,26 @@
 
 /**
-* 画箭头
-*/
+ * 画箭头,继承自jmPath
+ *
+ * @class jmArraw
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 当前画布
+ * @param {object} 生成箭头所需的参数
+ */
 
 var jmArraw = (function () {
 	function __constructor(graph,params) {
 		if(!params) params = {};
 		this.points = params.points || [];
 		var style = params.style || {};
+		/**
+		 * 当前对象类型名
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = 'jmArraw';
 		this.initializing(graph.context,style);
 		this.graph = graph;
 		
@@ -22,9 +35,14 @@ var jmArraw = (function () {
 })();
 
 /**
-* 初始化图形点
-*/
-jmArraw.prototype.initPoints = function() {	
+ * 初始化图形点
+ * 
+ * @method initPoint
+ * @private
+ * @param {boolean} solid 是否为实心的箭头
+ * @for jmArraw
+ */
+jmArraw.prototype.initPoints = function(solid) {	
 	var rotate = this.angle();
 	var start = this.start();
 	var end = this.end();
@@ -44,54 +62,86 @@ jmArraw.prototype.initPoints = function() {
     var sq = Math.sqrt(offx * offx  + offy * offy);
     var ystep = rsin * sq;
     var xstep = rcos * sq;
-
-    this.points.push(end);
+    
     var p1 = {x:end.x - xstep,y:end.y - ystep};
-    this.points.push(p1);
-
     var r2 = rotate - r;
     rsin = Math.sin(r2);
     rcos = Math.cos(r2);
     ystep = rsin * sq;
     xstep = rcos * sq;
+    var p2 = {x:end.x - xstep,y:end.y - ystep};
 
     this.points.push(end);
-    var p2 = {x:end.x - xstep,y:end.y - ystep};
-    this.points.push(p2);
+    this.points.push(p1);
+    //如果实心箭头则封闭路线
+    if(solid) {
+    	this.points.push(p2);
+    	this.points.push(end);
+    }
+    else {
+    	this.points.push(end);
+    	this.points.push(p2);
+    }
+    
 	return this.points;
 }
 
 
 /**
-* 控制起始点
-*/
+ * 控制起始点
+ *
+ * @method start
+ * @for jmArraw
+ * @param {point} p 起始点
+ * @return {point} 起始点
+ */
 jmArraw.prototype.start = function(p) {
 	return this.setValue('start',p);
 }
 
 /**
-* 控制结束点
-*/
+ * 控制结束点
+ *
+ * @method end
+ * @for jmArraw
+ * @param {point} p 结束点
+ * @return {point} 结束点
+ */
 jmArraw.prototype.end = function(p) {
 	return this.setValue('end',p);
 }
 
 /**
-* 箭头角度
-*/
-jmArraw.prototype.angle = function(p) {
-	return this.setValue('angle',p);
+ * 箭头角度
+ *
+ * @method angle
+ * @for jmArraw
+ * @param {number} r 箭头角度
+ * @return {number} 箭头角度
+ */
+jmArraw.prototype.angle = function(r) {
+	return this.setValue('angle',r);
 }
 
 /**
-* 箭头X偏移量
-*/
+ * 箭头X偏移量
+ *
+ * @method offsetX
+ * @for jmArraw
+ * @param {number} p 箭头X偏移量
+ * @return {number} 箭头X偏移量
+ */
 jmArraw.prototype.offsetX = function(p) {
 	return this.setValue('offsetX',p);
 }
 /**
-* 箭头Y偏移量
-*/
+ * 箭头Y偏移量
+ *
+ * @method offsetY
+ * @for jmArraw
+ * @param {number} p 箭头Y偏移量
+ * @return {number} 箭头Y偏移量
+ */
 jmArraw.prototype.offsetY = function(p) {
 	return this.setValue('offsetY',p);
 }

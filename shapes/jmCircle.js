@@ -1,10 +1,23 @@
 /**
-* 画圆
-*/
+ * 画完整的圆
+ *
+ * @class jmCircle
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 画布
+ * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
+ */
 
 var jmCircle = (function () {
 	function __constructor(graph,params) {
 		if(!params) params = {};
+		/**
+		 * 当前对象类型名jmCircle
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = 'jmCircle';
 		this.points = params.points || [];
 		var style = params.style || {};
 		this.initializing(graph.context,style);
@@ -24,31 +37,12 @@ var jmCircle = (function () {
 })();
 
 /**
-* 生成中心点
-*/
-jmCircle.prototype.getCenter = function() {
-	var center = this.center();
-	var x = center.x;
-	var y = center.y;
-
-	if(jmUtils.checkPercent(x)) {
-		x = jmUtils.percentToNumber(x);
-		if(this.parent && this.parent.bounds) {
-			x = this.parent.bounds.width * x;
-		}
-	}
-	if(jmUtils.checkPercent(y)) {
-		y = jmUtils.percentToNumber(y);
-		if(this.parent && this.parent.bounds) {
-			y = this.parent.bounds.height * y;
-		}
-	}
-	return {x:x,y:y};
-}
-
-/**
-* 初始化图形点
-*/
+ * 初始化图形点
+ * 
+ * @method initPoint
+ * @private
+ * @for jmCircle
+ */
 jmCircle.prototype.initPoints = function() {	
 	/*var mw = this.width() / 2;
 	var mh = this.height() / 2;
@@ -66,30 +60,31 @@ jmCircle.prototype.initPoints = function() {
 		var p = this.points[i];
 		this.points.push({x:p.x ,y:cy * 2 - p.y});
 	}*/
+	var location = this.getLocation();
 	
-	var center = this.getCenter();
-	var r = this.radius();
-	if(!r) {
-		r = Math.min(this.width() , this.height()) / 2;
+	if(!location.radius) {
+		location.radius = Math.min(location.width , location.height) / 2;
 	}
 	this.points = [];
-	this.points.push({x:center.x - r,y:center.y - r});
-	this.points.push({x:center.x + r,y:center.y - r});
-	this.points.push({x:center.x + r,y:center.y + r});
-	this.points.push({x:center.x - r,y:center.y + r});
+	this.points.push({x:location.center.x - location.radius,y:location.center.y - location.radius});
+	this.points.push({x:location.center.x + location.radius,y:location.center.y - location.radius});
+	this.points.push({x:location.center.x + location.radius,y:location.center.y + location.radius});
+	this.points.push({x:location.center.x - location.radius,y:location.center.y + location.radius});
 }
 
 /**
-* 画图
-*/
+ * 重写基类画图，此处为画一个完整的圆 
+ *
+ * @method draw
+ */
 jmCircle.prototype.draw = function() {
 	var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;	
-	var center = this.getCenter();
-	var r = this.radius();
-	if(!r) {
-		r = Math.min(this.width() , this.height()) / 2;
+	var location = this.getLocation();
+	
+	if(!location.radius) {
+		location.radius = Math.min(location.width , location.height) / 2;
 	}
-	this.context.arc(center.x + bounds.left,center.y + bounds.top,r,0,Math.PI * 2);
+	this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top,location.radius,0,Math.PI * 2);
 }
 
 /**
@@ -101,15 +96,25 @@ jmCircle.prototype.getBounds = function() {
 }*/
 
 /**
-* 设定或获取宽度
-*/
+ * 设定或获取中心点
+ * 
+ * @method center
+ * @for jmCircle
+ * @param {point} p 中心参数
+ * @return {point} 当前中心点
+ */
 jmCircle.prototype.center = function(p) {
 	return this.setValue('center',p);
 }
 
 /**
-* 半径
-*/
+ * 设定或获取半径
+ * 
+ * @method radius
+ * @for jmCircle
+ * @param {number} p 半径
+ * @return {number} 当前半径
+ */
 jmCircle.prototype.radius = function(p) {
 	return this.setValue('radius',p);
 }

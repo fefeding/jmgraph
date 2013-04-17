@@ -2,15 +2,6 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-
-		<!--[if lt IE 9]>
-    <script src="../lib/html5.js" type="text/javascript"></script>    
-    <script src="../lib/excanvas.js" type="text/javascript"></script>
-    <script type="text/javascript">
-	var ltie9 = true;
-    </script>
-<![endif]-->
-
 		<script type="text/javascript" src="../common/jmUtils.js" ></script>
 		<script type="text/javascript" src="../common/jmModels.js" ></script>
 			<script type="text/javascript" src="../common/jmProperty.js" ></script>
@@ -26,109 +17,199 @@
 		<script type="text/javascript" src="../shapes/jmBezier.js" ></script>
 		<script type="text/javascript" src="../shapes/jmRect.js" ></script>
 		<script type="text/javascript" src="../shapes/jmArraw.js" ></script>
+		<script type="text/javascript" src="../controls/jmImage.js" ></script>
+		<script type="text/javascript" src="../controls/jmResize.js" ></script>
 		<script type="text/javascript" src="../jmGraph.js" ></script>
-
+		<script type="text/javascript" src="../controls/jmLabel.js" ></script>
 		<script type="text/javascript" src="../controls/jmArrowLine.js" ></script>
 		<script type="text/javascript" src="../editor/jmCell.js" ></script>
 		<script type="text/javascript" src="../editor/jmEditor.js" ></script>
 
+		<!--<script type="text/javascript" src="../jmGraph.all.js" ></script>-->
 		<script type="text/javascript" src="images.js" ></script>
 		<script type="text/javascript">
 
-			function load() {
+			function loadEditor() {
 				var container = document.getElementById('mycanvas');
+				//初始化编辑器
 				var editor = new jmEditor({
-					container:container
+					container:container,
+					enabled : true,
+					connectable:true,
+					movable:true
 				});
+				
+				//生成渐变背景
 				var bg = editor.graph.createLinearGradient(0,0,0,'100%');
 				bg.addColorStop(0,'#43F589');
 				bg.addColorStop(0.5,'#0FA248');
 				bg.addColorStop(1,'#43F589');
 				var style = {
-					stroke:'rgb(138,212,222)',
-					fill : bg,
-					lineWidth:2,
+					stroke:'#000',
+					fill : bg,//指定默认背景为渐变
+					lineWidth:1,
 					close:true,
-					radius:6
+					radius:6,
+					resizable : true,//默认元素可以放大缩小
+					zIndex:1000
 				};
-				style.shadow = new jmShadow(0,0,10,'#0FA248');
+				//设定连线样式
+				style.connectLine = {
+					stroke:'black',
+					normalStroke:'black',
+					overStroke:'red',
+					selectedStroke:'red',
+					lineWidth:1,
+					zIndex:100,
+					//连线上文件的颜色
+					fontStyle : {						
+						fill:'green',
+						textAlign:'center'
+					}
+				};
+				//设定边框样式，用于放大缩小拖放框
+				style.borderStyle = {
+					stroke:'#3BDB05',
+					fill:'transparent',
+					rectStroke:'#3BDB05',//放大缩小小方块颜色
+					close:true
+				};
+				//指定阴影
+				style.shadow = new jmShadow(0,0,10,'#000');
+				
+				
+				//字体样式
+				style.fontStyle = {
+					fill:'blue',
+					textAlign:'center',
+					textBaseline:'middle',//垂直居中
+					font:'14px 微软雅黑'
+				};
+
+				//指定进程图为一个圆
+				style.shape = 'arc';
 				editor.regStyle('process',style);
-
-				editor.regStyle('subflow',style);
-
+				//复制一个进程选择样式
+				var processselectedstyle = jmUtils.clone(style);
+				//注册选择状态
+				processselectedstyle.fill = 'red';
+				editor.regStyle('process_selected',processselectedstyle);
+				
+				//指定条件图形为一个棱形
+				style = jmUtils.clone(style);
+				style.shape = 'prismatic';
 				editor.regStyle('switch',style);
+				//没有改变选中状态样式
+				editor.regStyle('switch_selected',style);
 
+				//指定fork元素为方块。背景为:#000
 				style = jmUtils.clone(style);
 				style.fill = '#000';
-				style.resizable = false;
+				style.resizable = false;//锁定其不让改变大小
+				style.shape = 'rect';
 				editor.regStyle('fork',style);
-				editor.regStyle('join',style);
-
-
+				editor.regStyle('fork_selected',style);
+				//指定join为一个椭圆,样式续承自fork
 				style = jmUtils.clone(style);
-				style.fill = 'rgb(247,190,32)';
-				style.stroke = 'rgb(248,195,60)';
-				style.resizable = true;
-				editor.regStyle('sbuflow',style);
+				style.shape = 'arc';
+				editor.regStyle('join',style);
+				editor.regStyle('join_selected',style);
 
+				//指定子流程为方块。背景为90EE90,可以改变大小
+				style = jmUtils.clone(style);
+				style.fill = '#90EE90';
+				//style.stroke = 'rgb(248,195,60)';
+				style.resizable = true;
+				style.shape = 'rect';
+				editor.regStyle('subflow',style);
+				editor.regStyle('subflow_selected',style);
+
+				//上传文件样式为一张图片
+		        style = jmUtils.clone(style);
+		        style.resizable = true;
+		        style.shape = 'img';
+		        style.width = 120;
+		        style.height = 80;
+		        style.image = images.upload;
+		        editor.regStyle('upload', style);
+		        editor.regStyle('upload-selected', style);
+		         //下载文件
+		        style = jmUtils.clone(style);
+		        style.image = images.download;
+		        editor.regStyle('download', style);
+		        editor.regStyle('download-selected', style);
+
+		        //开始样式,不可改变大小，背景透明
 				var startstyle = jmUtils.clone(style);
+				startstyle.fill = 'transparent';
 				startstyle.resizable = false;
+				startstyle.shape = 'arc';
 				editor.regStyle('start',startstyle);
+				editor.regStyle('start_selected',startstyle);
 				var endstyle = jmUtils.clone(startstyle);
 				endstyle.close = true;
 				endstyle.lineWidth = 1;
 				endstyle.fill = '#64D381';
+				endstyle.shape = 'harc';
+				endstyle.maxRadius=30;
+				endstyle.minRadius=20;
 				editor.regStyle('end',endstyle);
+				editor.regStyle('end_selected',endstyle);
+
 				
 
-				var cell1 = editor.addCell({position :{x:80,y:100},width:100,height:60,shape:'rect',style:'process'});
 
-				var cell2 = editor.addCell({position:{x:500,y:400},width:100,height:100,shape:'circle',style:'sbuflow'});
-
-				cell1.connect(cell2);
-
-				var cell3 = editor.addCell({position:{x:600,y:250},width:100,height:100,shape:'circle',style:'sbuflow'});
-
-
+				//编辑器组件
 				var components = document.getElementById('components');
 
-				var startimg = editor.regComponent(images.start,{width:60,height:60,shape:'arc',style:'start'});
+				var startimg = editor.regComponent(images.start,{width:60,height:60,style:'start',value:'开始'});
 				var li = document.createElement('li');
 				li.appendChild(startimg);
 				components.appendChild(li);
 
-				var processimg = editor.regComponent(images.process,{width:100,height:80,shape:'arc',style:'process'});
+				var processimg = editor.regComponent(images.process,{width:100,height:80,style:'process',value:'process'});
 				li = document.createElement('li');
 				li.appendChild(processimg);
 				components.appendChild(li);
 
-				var subflowimg = editor.regComponent(images.subflow,{width:100,height:80,shape:'rect',style:'subflow'});
+				var subflowimg = editor.regComponent(images.subflow,{width:100,height:80,style:'subflow'});
 				li = document.createElement('li');
 				li.appendChild(subflowimg);
 				components.appendChild(li);
 
-				var forkimg = editor.regComponent(images.fork,{width:100,height:40,shape:'rect',style:'fork'});
+				var forkimg = editor.regComponent(images.fork,{width:100,height:40,style:'fork'});
 				li = document.createElement('li');
 				li.appendChild(forkimg);
 				components.appendChild(li);
 
-				var joinimg = editor.regComponent(images.join,{width:100,height:50,shape:'arc',style:'join'});
+				var joinimg = editor.regComponent(images.join,{width:100,height:50,style:'join'});
 				li = document.createElement('li');
 				li.appendChild(joinimg);
 				components.appendChild(li);
 
-				var switchimg = editor.regComponent(images['switch'],{width:100,height:50,shape:'prismatic',style:'switch'});
+				var switchimg = editor.regComponent(images['switch'],{width:100,height:50,style:'switch'});
 				li = document.createElement('li');
 				li.appendChild(switchimg);
 				components.appendChild(li);
 
-				var endimg = editor.regComponent(images.end,{width:60,maxRadius:30,minRadius:20,height:60,start:0,end:Math.PI * 2,anticlockwise:false,shape:'harc',style:'end'});
+				var upimg = editor.regComponent(images['upload'],{width:100,height:50,style:'upload'});
+				li = document.createElement('li');
+				li.appendChild(upimg);
+				components.appendChild(li);
+
+				var downimg = editor.regComponent(images['download'],{width:100,height:50,style:'download'});
+				li = document.createElement('li');
+				li.appendChild(downimg);
+				components.appendChild(li);
+
+				var endimg = editor.regComponent(images.end,{width:60,height:60,style:'end',value:'结束'});
 				li = document.createElement('li');
 				li.appendChild(endimg);
 				components.appendChild(li);
 
-				editor.graph.paint();
+				
 
+				//工具按钮事件
 				var btn = document.getElementById('btnZoomOut');
 				btn.onclick = function() {
 					editor.execute('zoomOut');
@@ -142,11 +223,164 @@
 					editor.execute('zoomActual');
 				}
 
+				btn = document.getElementById('btnLeft');
+				btn.onclick = function() {
+					editor.align('left');
+				}
+				btn = document.getElementById('btnCenter');
+				btn.onclick = function() {
+					editor.align('center');
+				}
+				btn = document.getElementById('btnRight');
+				btn.onclick = function() {
+					editor.align('right');
+				}
+				btn = document.getElementById('btnTop');
+				btn.onclick = function() {
+					editor.align('top');
+				}
+				btn = document.getElementById('btnMiddle');
+				btn.onclick = function() {
+					editor.align('middle');
+				}
+				btn = document.getElementById('btnBottom');
+				btn.onclick = function() {
+					editor.align('bottom');
+				}
+
 				btn = document.getElementById('btnExpImage');
 				btn.onclick = function() {
 					document.getElementById('expimage').src = editor.toImage();
 					document.getElementById('expimagearea').style.display = 'inline';
+					document.getElementById('json').innerHTML = editor.toJSON().toString();
 				}
+
+				btn = document.getElementById('btnundo');
+				btn.onclick = function() {
+					editor.execute('undo');
+				}
+
+				btn = document.getElementById('btnredo');
+				btn.onclick = function() {
+					editor.execute('redo');
+				}
+ 
+ 				//手动创建节点
+				var startcell = editor.addCell({position :{x:20,y:30},width:60,height:60,style:'start',value:'开始'});	
+ 				var cell1 = editor.addCell({position :{x:80,y:120},width:100,height:60,style:'process'});				
+				cell1.value('test cell');
+
+				startcell.connect(cell1);
+
+				var cell2 = editor.addCell({position:{x:160,y:250},width:100,height:100,style:'subflow',value:'默认值'});
+				//手动连接二个节点
+				cell1.connect(cell2,null,'连线');
+				var cell3 = editor.addCell({position:{x:600,y:250},width:100,height:100,style:'subflow'});	
+				//设置图标标识			
+				cell3.setOverlay('images/running.gif',30,30,'运行中...');
+
+				var endcell = editor.addCell({position :{x:80,y:500},width:60,height:60,style:'end',value:'结束'});	
+				cell2.connect(endcell);
+				editor.graph.refresh();
+
+				//把画图信息转为json对象便于保存
+				//var json = editor.toJSON();
+				//从json数据恢复原画
+				//editor.fromJSON('{"cells":[{"outs":[{"to":6,"from":1}],"id":1,"value":"test cell","position":{"x":135.65216064453125,"y":155.6521759033203},"width":100,"height":60,"style":"process"},{"outs":[{"to":5,"from":2},{"to":1,"from":2}],"id":2,"position":{"x":406.95654296875,"y":73.04345703125},"width":100,"height":100,"style":"subflow"},{"outs":[{"to":2,"from":3},{"to":6,"from":3}],"id":3,"position":{"x":502.60870361328125,"y":270},"width":100,"height":100,"style":"subflow"},{"outs":[{"to":3,"from":4}],"id":4,"position":{"x":269.0869903564453,"y":342.9739246368408},"width":60,"height":60,"style":"end"},{"outs":[{"to":1,"from":5}],"id":5,"position":{"x":156.04348754882812,"y":37.75652503967285},"width":60,"height":60,"style":"start"},{"outs":[{"to":4,"from":6}],"id":6,"position":{"x":123,"y":313.4087085723877},"width":60,"height":60,"style":"end"}]}');
+
+				//元素上的右健菜单
+				editor.graph.bind('mouseup',function(evt) {
+					var menus = editor.menus();
+					//如果右击在元素上
+					if(evt.button == 2 && evt.target && evt.target.findParent) {
+						////右击在元素上或其子元素上,向上查询其父容器jmcell
+						var cell = evt.target.type == 'jmCell' ?evt.target: evt.target.findParent('jmCell');
+						if(cell) {							
+							menus.add('属性',function() {
+								alert(1);
+							}).show();
+							return false;
+						}	
+						//击中空白处
+						else {
+							menus.add('属性',function() {
+								alert(1);
+							}).show();
+							return false;//阻断冒泡
+						}					
+					}
+					menus.hide();				
+				});
+
+				//监听选择事件
+				editor.on('select',function(cell,selected) {
+					if(cell.is(jmCell)) {
+						//当元素被选择后，更改其样式
+						var stylename = cell.styleName;
+						var _index = stylename.indexOf('_');
+						if(_index > 0) {
+							stylename = stylename.substring(0,_index);
+						}
+						cell.setStyle(selected?stylename + '_selected':stylename);
+
+						if(selected) {
+							var cells = editor.getSelectedCells();//获取所有选择的元素
+							//如果只选中一个
+							if(cells.length == 1) {
+								document.getElementById('txtname').value = cell.value();
+							}
+						}						
+					}	
+					else if(cell.is(jmConnectLine)) {
+						if(selected) {
+							var cns = editor.getSelectedConnects();//获取所有选择的连线
+							//如果只选中一个
+							if(cns.length == 1) {
+								document.getElementById('txtname').value = cell.value();
+							}
+						}
+					}				
+				});
+				return editor;
+			}
+			function load() {
+				/*jmUtils.require(['images.js','../common/jmModels.js',
+					'../common/jmProperty.js',
+					'../common/jmEvents.js',
+					'../common/jmControl.js',
+					'../shapes/jmShape.js',
+					'../shapes/jmPath.js',
+					'../shapes/jmLine.js',
+					'../shapes/jmCircle.js',
+					'../shapes/jmArc.js',
+					'../shapes/jmHArc.js',
+					'../shapes/jmPrismatic.js',
+					'../shapes/jmBezier.js',
+					'../shapes/jmRect.js',
+					'../shapes/jmArraw.js',
+					'../jmGraph.js',
+					'../controls/jmLabel.js',
+					'../controls/jmArrowLine.js',
+					'../editor/jmCell.js',
+					'../editor/jmEditor.js'],function(count,err) {
+					if(err) alert(err);
+					else {
+						loadEditor();
+					}
+				});*/
+				var editor = loadEditor();
+				//绑定名称改变事件，将值绑定到被选 中的元素上
+				jmUtils.bindEvent(document.getElementById('txtname'),'change',function() {
+					var cells = editor.getSelectedCells();//获取所有选择的元素
+					for(var i in cells) {
+						cells[i].value(this.value);
+					}
+					var cns = editor.getSelectedConnects();
+					for(var i in cns) {
+						cns[i].value(this.value);
+					}
+					editor.graph.refresh();//刷新画布
+				});
 			}
 		</script>
 	</head>
@@ -154,25 +388,42 @@
 		
 		<table>
 			<tr>
-				<td></td>
+				<td class="first"></td>
 				<td>
+					<button id="btnundo" >撤消</button>
+					<button id="btnredo" >重复</button>
 					<button id="btnZoomOut" >缩小</button>
+
+					<button id="btnLeft" >左对齐</button>
+					<button id="btnCenter" >水平居中</button>
+					<button id="btnRight" >右对齐</button>
+					<button id="btnTop" >顶部对齐</button>
+					<button id="btnMiddle" >垂直居中</button>
+					<button id="btnBottom" >底部对齐</button>
+
 		<button id="btnZoomIn" >放大</button>
 		<button id="btnZoomActual" >复原</button>
 		<button id="btnExpImage" >导出为图片</button>
 	</td>
+	<td></td>
 			</tr>
 			<tr>
-				<td style="width:150px;vertical-align:top;">
+				<td class="first">
 					<ul id="components"></ul>
 				</td>
 				<td>
 			<div id="container">
-				<canvas id="mycanvas" width="800" height="600"></canvas>
+				<canvas id="mycanvas" width="800" height="600">不支持当前浏览器，请用支持html5的浏览器体验，推荐使用<a target="_blank" href="http://google.cn/Chrome">chrome<a/></canvas>
 			</div>
+				</td>
+				<td style="vertical-align:top;">
+					<label for="txtname">名称:</label><input id="txtname" name="txtname" type="text" />
+					<br />
+					<label for="txtdes">说明:</label><input id="txtdes" name="txtdes" type="text" />					
 				</td>
 			</tr>
 		</table>
+		<div id="json"></div>
 		<div id="expimagearea" style="display:none;">
 			<div style="position:relative; height:60px;">
 			<a href="#" style="position:fixed;" onclick="javascript:document.getElementById('expimagearea').style.display='none';">关闭</a>
@@ -189,8 +440,19 @@ html,body,div{
 	margin:0;
 	padding:0;
 }
+
+table td.first {
+	width:150px;
+	vertical-align:top;
+	background-color: #ccc;
+}
 #components {
 	list-style: none;
+	padding:0;
+	margin: 0;	
+}
+#components li img {
+	max-height:22px;
 }
 #container {
 /*background-color: #000;*/
@@ -199,10 +461,11 @@ height:100%;
 display:block;
 overflow: auto;
 }
-#container canvas {
-	background-image:url(data:image/gif;base64,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);
+#container canvas {	
 	margin:0 auto;
-	background-color: #000;
+	border:1px solid #000;
+	background-color: #fff;
+	background: url('images/grid.png');
 }
 
 #expimagearea {
@@ -216,4 +479,34 @@ overflow: auto;
 	left:25%;
 	top:150px;
 }
+
+div.editor-menu {
+			position:absolute;
+			padding: 4px;
+			background-color: #fff;
+			width:auto;
+			height:auto;
+			display: inline;
+			min-width: 80px;
+			border: solid 1px #bbd6ec;
+		    border-radius: 3px;
+		    -webkit-border-radius: 3px;
+		    box-shadow: inset 0 0 2px #fff;
+		     -webkit-box-shadow: inset 0 0 2px #fff;
+		    -moz-box-shadow: inset 0 0 2px #fff;
+		}
+		div.editor-menu ul {
+			list-style: none;	
+			padding:0;
+			margin:0;		
+		}
+		div.editor-menu ul li {
+			cursor:pointer;	
+			color:blue;	
+			padding: 2px;	
+		}
+		div.editor-menu ul li:hover {
+			color:green;
+			background-color: #ccc;
+		}
 </style>

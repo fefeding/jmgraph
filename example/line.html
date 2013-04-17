@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="../shapes/jmRect.js" ></script>
 		<script type="text/javascript" src="../shapes/jmArraw.js" ></script>
 		<script type="text/javascript" src="../controls/jmLabel.js" ></script>
+		<script type="text/javascript" src="../controls/jmResize.js" ></script>		
 		<script type="text/javascript" src="../jmGraph.js" ></script>
 		<script type="text/javascript">
 
@@ -31,10 +32,20 @@
 				var graph = new jmGraph(canvas);				
 				var style = {
 					stroke:'rgb(120,20,80)',
-					lineWidth:10
+					lineWidth:1,
+					close:true
 				};
 				style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');
+
 				var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
+
+				style = jmUtils.clone(style);
+				style.rectStroke = 'green';
+				var resize = graph.createShape('resize',{style:style,position:{x:250,y:200},width:120,height:80});
+				graph.children.add(resize);
+				resize.canMove(true);
+				graph.refresh();
+				
 				//graph.children.add(line);
 /*
 				style = jmUtils.clone(style);
@@ -161,11 +172,15 @@
 
 				style = jmUtils.clone(style);
 				style.textAlign = 'center';
-				style.font = '30px Arial';
+				style.textBaseline = 'middle',
+				style.font = '20px Arial';
+				style.border = {left:1,top:1,right:1,bottom:1};
 				var label = graph.createShape('label',{style:style,position:{x:300,y:350},value:'test label',width:120,height:80});
 				graph.children.add(label);
 				label.canMove(true);
 
+				
+				
 				graph.paint();
 				//path.zIndex = 2;
 				//line.zIndex =1;

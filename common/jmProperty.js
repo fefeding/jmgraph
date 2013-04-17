@@ -1,21 +1,35 @@
 
 /**
-*基础对象
-*/
+ *  所有jm对象的基础对象
+ * 
+ * @class jmObject
+ * @module jmGraph
+ * @for jmGraph
+ */
 function jmObject() {
 
 }
 
 /**
-* 检 查对象是否为指定类型
-*/
+ * 检 查对象是否为指定类型
+ * 
+ * @method is
+ * @param {class} type 判断的类型
+ * @for jmObject
+ * @return {boolean} true=表示当前对象为指定的类型type,false=表示不是
+ */
 jmObject.prototype.is = function(type) {
 	return this instanceof type;
 }
 
 /**
-* 控件动画处理
-*/
+ * 给控件添加动画处理,如果成功执行会导致画布刷新。
+ *
+ * @method animate
+ * @for jmObject
+ * @param {function} handle 动画委托
+ * @param {integer} millisec 此委托执行间隔 （毫秒）
+ */
 jmObject.prototype.animate = function(handle,millisec) {	
 	if(this.is(jmGraph)) {
 		if(handle) {			
@@ -32,9 +46,10 @@ jmObject.prototype.animate = function(handle,millisec) {
 		}
 		if(this.animateHandles) {
 			if(this.animateHandles.count() > 0) {
-				var _this = this;
+				var self = this;
 				//延时处理动画事件
 				this.dispatcher = setTimeout(function() {
+					var _this = self;
 					var needredraw = false;
 					var overduehandles = [];
 					var curTimes = new Date().getTime();
@@ -62,7 +77,7 @@ jmObject.prototype.animate = function(handle,millisec) {
 						_this.redraw();				
 					}
 					_this.animate();
-				},10);//刷新				
+				},20);//刷新				
 			}
 		}
 	}	
@@ -75,53 +90,97 @@ jmObject.prototype.animate = function(handle,millisec) {
 }
 
 /**
-* 对象属性管理
-*/
+ * 对象属性管理
+ * 
+ * @class jmProperty
+ * @for jmGraph
+ * @require jmObject
+ */
 var jmProperty = (function(){
 	function __contructor() {
 		this.__properties = {};
 		this.__eventHandles = {};
 	}
-
 	jmUtils.extend(__contructor,jmObject);
 	return __contructor;
 })();
 
 /**
-* 获取属性值
-*/
+ * 获取属性值
+ * 
+ * @method getValue
+ * @for jmProperty
+ * @param {string} name 获取属性的名称
+ * @return {any} 获取属性的值
+ */
 jmProperty.prototype.getValue = function(name) {
 	if(!this.__properties) this.__properties = {};
 	return this.__properties[name];
 }
 
 /**
-* 获取属性值
-*/
+ * 设置属性值
+ *
+ * @method setValue
+ * @for jmProperty
+ * @param {string} name 设置属性的名称
+ * @param {any} value 设置属性的值
+ * @retunr {any} 当前属性的值
+ */
 jmProperty.prototype.setValue = function(name,value) {
 	if(typeof value !== 'undefined') {
 		if(!this.__properties) this.__properties = {};
 		var args = {oldValue:this.getValue(name),newValue:value};
 		this.__properties[name] = value;
-		this.callHandle('PropertyChange',[name,args]);
+		this.emit('PropertyChange',name,args);
 	}
 	return this.getValue(name);
 }
 
 /**
-* 绑定事件监听
-*/
+ * 绑定事件监听
+ *
+ * @method on
+ * @for jmProperty
+ * @param {string} name 监听事件的名称
+ * @param {function} handle 监听委托 
+ */
 jmProperty.prototype.on = function(name,handle) {
 	if(!this.__eventHandles) this.__eventHandles = {};
-	this.__eventHandles[name] = handle;
+	var handles = this.__eventHandles[name];
+	if(!handles) {
+		handles = this.__eventHandles[name] = []
+	}
+	//如果已绑定相同的事件，则直接返回
+	for(var i in handles) {
+		if(handles[i] === handle) {
+			return;
+		}
+	}
+	handles.push(handle);
 }
 
 /**
-* 执行监听回调
-*/
-jmProperty.prototype.callHandle = function(name,args) {
-	var handle = this.__eventHandles?this.__eventHandles[name]:null;
-	if(handle) {
-		handle.apply(this,args);
+ * 执行监听回调
+ * 
+ * @method emit
+ * @for jmProperty
+ * @param {string} name 触发事件的名称
+ * @param {array} args 事件参数数组
+ */
+ jmProperty.prototype.emit = function(name) {
+	var handles = this.__eventHandles?this.__eventHandles[name]:null;
+	if(handles) {
+		var args = [];
+		var len = arguments.length;
+		if(len > 1) {
+			//截取除name以后的所有参数
+			for(var i=1;i<len;i++) {
+				args.push(arguments[i]);
+			}
+		}		
+		for(var i in handles) {
+			handles[i].apply(this,args);
+		}		
 	}
 }

@@ -25,39 +25,35 @@
 			function load() {
 				var canvas = document.getElementById('mycanvas');
 				var graph = new jmGraph(canvas);
-
 				var style = {
 					stroke:'rgb(120,20,80)',					
 					lineWidth:6,
 					close:true,
 					zIndex:1
-				};
-
-				var arc = graph.createShape('circle',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});
-
-				var bg = graph.createRadialGradient(arc.width() / 2,arc.height() / 2,0,arc.width() / 2,arc.height() / 2,arc.width() / 2);
-
+				};				
+				var bg = graph.createRadialGradient('50%','50%',0,'50%','50%','50%');
 				bg.addStop(0,'green');
 				bg.addStop(0.5,'blue');
 				bg.addStop(0.8,'yellow');
 				bg.addStop(1,'red');					
 				style.fill = bg;
-				style.shadow = new jmShadow(0,0,20,'rgb(255,255,255)');				
-/*
+				style.shadow = new jmShadow(0,0,20,'rgb(255,255,255)');	
+				var arc = graph.createShape('circle',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
+
 				arc.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(88,200,155,0.5)';
 					graph.refresh();
-				});*/
-				arc.bind('touchstart',function(evt) {
-					this.style.stroke = 'rgba(88,200,155,0.5)';
-					graph.refresh();
-				});
+				});				
 				arc.bind('mouseleave',function(evt) {
 					this.style.stroke = 'rgb(120,20,80)';
 					graph.refresh();
 				});
 
-				
+				//arc.bind('touchstart',function(evt) {
+					//this.style.stroke = 'rgba(88,200,155,0.5)';
+					//graph.refresh();
+				//});
+
 				graph.children.add(arc);
 				arc.canMove(true);
 
@@ -125,7 +121,7 @@
 				childarc.animate(arcAni,10);
 				//setTimeout(arcAni,10);
 				//http://im-img.qq.com/inc/images/new_header2/logo.gif
-				var img = graph.createShape('img',{style:style,position:{x:10,y:10},image:'http://im-img.qq.com/inc/images/new_header2/logo.gif',width:0});
+				var img = graph.createShape('img',{style:style,position:{x:10,y:10},image:'http://im-img.qq.com/inc/images/new_header2/logo.gif'});
 
 				graph.children.add(img);
 				img.canMove(true);

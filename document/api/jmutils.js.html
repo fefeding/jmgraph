@@ -1,0 +1,976 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: jmGraph   jmutils.js  (jiamaocode Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1365491194.08" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1365491194.08" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1365491194.08"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1365491194.08"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="./index.html" title="jmGraph">jmGraph</a></h1>
+        <h3>jmGraph&nbsp; <span class="subtitle">1.0</span></h3>
+        <a href="./index.html" title="jmGraph">jmGraph</a> 
+            &gt; <a href="./module_jmgraph.html" title="jmGraph">jmGraph</a>
+                
+                 &gt; jmutils.js (source view) 
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+<div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * ç»å¾åºç¡å¯¹è±¡</span>
+<span class="cm"> * å½ååºçå·¥å·ç±»</span>
+<span class="cm"> * </span>
+<span class="cm"> * @class jmUtils</span>
+<span class="cm"> * @module jmUtils</span>
+<span class="cm"> * @static</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">jmUtils</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+	<span class="kd">function</span> <span class="nx">__contructor</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="k">new</span> <span class="nx">__contructor</span><span class="p">();</span>
+<span class="p">})();</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * ç»§æ¿</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method extend</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {class} target æ´¾çç±»</span>
+<span class="cm"> * @param {class} source åºç±»</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span>  <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>  
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">source</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span><span class="c1">//ç±»å¼ç»§æ¿  </span>
+        <span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span> <span class="c1">//åå»ºä¸ä¸ªä¸­é´å½æ°å¯¹è±¡ä»¥è·åç¶ç±»çååå¯¹è±¡  </span>
+        <span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span> <span class="c1">//è®¾ç½®ååå¯¹è±¡ </span>
+        
+        <span class="kd">var</span> <span class="nx">targetPrototype</span> <span class="o">=</span> <span class="nx">target</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">targetPrototype</span> <span class="o">&amp;&amp;</span> <span class="nx">targetPrototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">!=</span> <span class="nb">Object</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">F</span><span class="p">,</span><span class="nx">targetPrototype</span><span class="p">);</span><span class="c1">//ç»§æ¿åprototype</span>
+        <span class="p">}</span>
+
+        <span class="nx">target</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span> <span class="c1">//å®ä¾åF, ç»§æ¿ç¶ç±»çååä¸­çå±æ§åæ¹æ³ï¼èæ éè°ç¨ç¶ç±»çæé å½æ°å®ä¾åæ å³çç¶ç±»æå  </span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">target</span><span class="p">;</span> <span class="c1">//è®¾ç½®æé å½æ°æåèªå·± </span>
+        <span class="c1">//target.prototype.__baseType = source;  </span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">superClass</span> <span class="o">=</span> <span class="nx">source</span><span class="p">;</span> <span class="c1">//åæ¶ï¼æ·»å ä¸ä¸ªæåç¶ç±»æé å½æ°çå¼ç¨ï¼æ¹ä¾¿è°ç¨ç¶ç±»æ¹æ³æèè°ç¨ç¶ç±»æé å½æ°  </span>
+    <span class="p">}</span> 
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">source</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//æ¹æ³çæ©å  </span>
+            <span class="kd">var</span> <span class="nx">pro</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">target</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">?</span><span class="nx">target</span><span class="p">.</span><span class="nx">prototype</span><span class="o">:</span><span class="nx">target</span><span class="p">;</span>  
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>  
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">pro</span><span class="p">[</span><span class="nx">k</span><span class="p">])</span> <span class="p">{</span> <span class="c1">//å¦æååå¯¹è±¡ä¸å­å¨è¿ä¸ªå±æ§ï¼åå¤å¶  </span>
+                    <span class="nx">pro</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>  
+                <span class="p">}</span>  
+            <span class="p">}</span>  
+            <span class="nx">pro</span><span class="p">[</span><span class="s1">&#39;_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">source</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>  
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;fatal error:&quot;Function.prototype.extend&quot; expects a function or object&#39;</span><span class="p">);</span>  
+    <span class="p">}</span>  
+      
+    <span class="k">return</span> <span class="nx">target</span><span class="p">;</span>  
+<span class="p">};</span> 
+
+<span class="cm">/**</span>
+<span class="cm"> * å¤å¶ä¸ä¸ªå¯¹è±¡</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method clone</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {object} source è¢«å¤å¶çå¯¹è±¡</span>
+<span class="cm"> * @return {object} åæ°sourceçæ·è´å¯¹è±¡</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">clone</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">source</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//å¦æä¸ºå½åæ³åï¼åç´æ¥new</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">isType</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">list</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="nx">source</span><span class="p">.</span><span class="nx">items</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">constructor</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">target</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">k</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">target</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">source</span>
+<span class="p">}</span>   
+
+<span class="cm">/**</span>
+<span class="cm"> * èªå®ä¹éå</span>
+<span class="cm"> * </span>
+<span class="cm"> * @class list</span>
+<span class="cm"> * @namespace jmUtils</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {array} [arr] æ°ç»ï¼å¯è½¬ä¸ºå½åliståç´ </span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>    
+    <span class="kd">function</span> <span class="nx">__constructor</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">arr</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arr</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * å¾éåä¸­æ·»å å¯¹è±¡</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method add</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {any} obj å¾éåä¸­æ·»å çå¯¹è±¡</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>        
+        <span class="k">if</span><span class="p">(</span><span class="nx">obj</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">===</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">obj</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">contain</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * ä»éåä¸­ç§»é¤æå®å¯¹è±¡</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method remove</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {any} obj å°ç§»é¤çå¯¹è±¡</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="nx">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/*if(typeof obj == &#39;function&#39;) {</span>
+<span class="cm">                if(obj(this.items[i])) {</span>
+<span class="cm">                    this.removeAt(i);</span>
+<span class="cm">                }</span>
+<span class="cm">            }</span>
+<span class="cm">            else*/</span>
+             <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">removeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * æç´¢å¼ç§»é¤å¯¹è±¡</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method removeAt</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {integer} index ç§»é¤å¯¹è±¡çç´¢å¼</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeAt</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//delete this.items[index];   </span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * å¤æ­æ¯å¦åå«æä¸ªå¯¹è±¡</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method contain</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {any} obj å¤æ­å½åéåä¸­æ¯å¦åå«æ­¤å¯¹è±¡</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">contain</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/*if(typeof obj === &#39;function&#39;) {</span>
+<span class="cm">            for(var i in this.items) {</span>
+<span class="cm">                if(obj(this.items[i])) return true;</span>
+<span class="cm">            }</span>
+<span class="cm">        }</span>
+<span class="cm">        else {*/</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">obj</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="c1">//}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * ä»éåä¸­è·åæä¸ªå¯¹è±¡</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method get</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {integer/function} index å¦æä¸ºæ´ååè¡¨ç¤ºä¸ºè·åæ­¤ç´¢å¼çå¯¹è±¡ï¼å¦æä¸ºfunctionä¸ºåéè¿æ­¤å§æè·åå¯¹è±¡</span>
+<span class="cm">     * @return {any} éåä¸­çå¯¹è±¡</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">index</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">index</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+        <span class="p">}</span>        
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * éåå½åéå </span>
+<span class="cm">     *</span>
+<span class="cm">     * @method each</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {function} cb éåå½åéåçå§æ</span>
+<span class="cm">     * @param {boolean} inverse æ¯å¦æéåºéå</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">each</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">,</span><span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">cb</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">cb</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//å¦ææååºå¾ªç¯</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">inverse</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span><span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">cb</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+               <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">cb</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+                <span class="p">}</span> 
+            <span class="p">}</span>            
+        <span class="p">}</span>        
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * æåºå½åéå</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method sort</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @param {function} cb æåºå§æ</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sort</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">cb</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * è·åå½åéåå¯¹è±¡ä¸ªæ°</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method count</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     * @return {integer} å½åéåçä¸ªæ°</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * æ¸ç©ºå½åéå</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method clear</span>
+<span class="cm">     * @for list</span>
+<span class="cm">     */</span>
+    <span class="nx">__constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">clear</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">__constructor</span><span class="p">;</span>
+<span class="p">})();</span>
+
+
+<span class="cm">/**</span>
+<span class="cm"> * å¨å±ç¼å­</span>
+<span class="cm"> *</span>
+<span class="cm"> * @class cache</span>
+<span class="cm"> * @namespace jmUtils</span>
+<span class="cm"> * @static</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">cache</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * å½åç¼å­éå</span>
+<span class="cm">     *</span>
+<span class="cm">     * @property items</span>
+<span class="cm">     * @type {object}</span>
+<span class="cm">     * @for cache</span>
+<span class="cm">     */</span>
+    <span class="nx">items</span> <span class="o">:</span> <span class="p">{},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * åç¼å­ä¸­æ·»å å¯¹è±¡</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method add</span>
+<span class="cm">     * @for cache</span>
+<span class="cm">     * @param {string} key å å¥ç¼å­çå¥å¼</span>
+<span class="cm">     * @param {any} value å å¥ç¼å­çå¼</span>
+<span class="cm">     * @return {any} å½åå å¥çå¼</span>
+<span class="cm">     */</span>
+    <span class="nx">add</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * è·addç±»ä¼¼</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method set</span>
+<span class="cm">     * @for cache</span>
+<span class="cm">     * @param {string} key å å¥ç¼å­çå¥å¼</span>
+<span class="cm">     * @param {any} value å å¥ç¼å­çå¼</span>
+<span class="cm">     */</span>
+    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * ä»ç¼å­ä¸­è·åå¯¹è±¡</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method get</span>
+<span class="cm">     * @for cache</span>
+<span class="cm">     * @param {string} key è·åç¼å­çå¥å¼</span>
+<span class="cm">     * @return {any} å¯¹åºå¥çå¼</span>
+<span class="cm">     */</span>
+    <span class="nx">get</span> <span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+    <span class="p">},</span>
+    <span class="cm">/**</span>
+<span class="cm">     * ä»ç¼å­ä¸­ç§»é¤æå®å¥çå¯¹è±¡</span>
+<span class="cm">     *</span>
+<span class="cm">     * @method remove</span>
+<span class="cm">     * @for cache</span>
+<span class="cm">     * @param {string} key éè¦ç§»é¤çç¼å­å¥</span>
+<span class="cm">     */</span>
+    <span class="nx">remove</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * å¤æ­å¯¹è±¡æ¯å¦ä¸ºæ°ç»</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method isArray</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {object} è¢«å¤æ­çå¯¹è±¡</span>
+<span class="cm"> * @return {boolean} true=ä¸ºæ°ç»å¯¹è±¡ï¼false=å½åå¯¹è±¡ä¸ä¸ºæ°ç»</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">isArray</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;[object Array]&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * å è½½jsæä»¶</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method require</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} js éè¦å è½½çJSçè·¯å¾</span>
+<span class="cm"> * @param {function} [callback] åè°å½æ°callbackä¸ºæåæå¤±è´¥ååè°</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">require</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">js</span><span class="p">))</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">loaded</span> <span class="o">=</span> <span class="nx">js</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">js</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="nx">js</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">j</span><span class="p">,</span><span class="nx">err</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">loaded</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">loaded</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">loaded</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//è·åææå·²å è½½çjsæ è®°</span>
+        <span class="kd">var</span> <span class="nx">sc</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">sc</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//å¦æå·²å è½½åç´æ¥è¿åæå</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">sc</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">js</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">js</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">//åå»ºscriptï¼å è½½js</span>
+        <span class="nx">sc</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+        <span class="nx">sc</span><span class="p">.</span><span class="nx">type</span><span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+        <span class="nx">sc</span><span class="p">.</span><span class="nx">charset</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">;</span>
+        <span class="nx">sc</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">js</span><span class="p">;</span>
+        <span class="c1">//appendå°headä¸­</span>
+        <span class="kd">var</span> <span class="nx">head</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">head</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">sc</span><span class="p">);</span>
+
+        <span class="c1">//å è½½åè°</span>
+        <span class="nx">sc</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="nx">sc</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="s1">&#39;loading&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">js</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="c1">//å è½½å¤±è´¥</span>
+        <span class="nx">sc</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">head</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">sc</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="s1">&#39;load faild&#39;</span><span class="p">);</span>
+        <span class="p">}</span>        
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * ç»å®äºä»¶å°htmlå¯¹è±¡</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method bindEvent</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {element} htmlåç´ å¯¹è±¡</span>
+<span class="cm"> * @param {string} name äºä»¶åç§°</span>
+<span class="cm"> * @param {function} fun äºä»¶å§æ</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">bindEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">fun</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="o">+</span><span class="nx">name</span><span class="p">,</span><span class="nx">fun</span><span class="p">);</span>
+    <span class="p">}</span>    
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="nx">fun</span><span class="p">);</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è·ååç´ çç»å¯¹å®ä½</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method getElementPosition</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {element} el ç®æ åç´ å¯¹è±¡</span>
+<span class="cm"> * @return {position} ä½ç½®å¯¹è±¡(top,left)</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">getElementPosition</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">el</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;top&quot;</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="o">:</span><span class="mi">0</span><span class="p">};</span>
+    <span class="k">if</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">();</span>
+        <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">+</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">().</span><span class="nx">top</span><span class="p">;</span>
+        <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollLeft</span> <span class="o">+</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">().</span><span class="nx">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">offsetParent</span><span class="p">)</span> <span class="p">{</span>
+           <span class="k">while</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">offsetParent</span><span class="p">)</span> <span class="p">{</span>
+             <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">+=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">offsetTop</span><span class="p">;</span>
+             <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">offsetLeft</span><span class="p">;</span>
+             <span class="nx">el</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">offsetParent</span><span class="p">;</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+         <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+           <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">x</span><span class="p">){</span>
+           <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">+=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span>
+         <span class="p">}</span>         
+    <span class="p">}</span>   
+    <span class="k">return</span> <span class="nx">pos</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/**</span>
+<span class="cm"> * è·ååç´ äºä»¶è§¦åçä½ç½®</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method getEventPosition</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {eventArg} evt å½åè§¦åäºä»¶çåæ°</span>
+<span class="cm"> * @param {point} [scale] å½åç»å¸çç¼©æ¾æ¯ä¾</span>
+<span class="cm"> * @return {point} äºä»¶è§¦åçä½ç½® </span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">getEventPosition</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">,</span><span class="nx">scale</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">evt</span> <span class="o">=</span> <span class="nx">evt</span> <span class="o">||</span> <span class="nx">event</span><span class="p">;</span>
+    
+    <span class="kd">var</span> <span class="nx">touches</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">changedTouches</span> <span class="o">||</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">targetTouches</span> <span class="o">||</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">touches</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">touches</span><span class="p">)</span> <span class="nx">evt</span> <span class="o">=</span> <span class="nx">touches</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="c1">//å¼å®¹touchäºä»¶</span>
+    <span class="kd">var</span> <span class="nx">px</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">||</span> 
+        <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">+</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollLeft</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollLeft</span><span class="p">));</span>    
+    <span class="kd">var</span> <span class="nx">py</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">||</span> 
+        <span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">+</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">));</span>
+
+    <span class="kd">var</span> <span class="nx">ox</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">offsetX</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">oy</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">offsetY</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">ox</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">oy</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">getElementPosition</span><span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">target</span> <span class="o">||</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">srcElement</span><span class="p">);</span>
+        <span class="nx">ox</span><span class="o">=</span> <span class="nx">px</span> <span class="o">-</span> <span class="nx">p</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+        <span class="nx">oy</span> <span class="o">=</span> <span class="nx">py</span> <span class="o">-</span> <span class="nx">p</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">scale</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">scale</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="nx">ox</span> <span class="o">=</span> <span class="nx">ox</span> <span class="o">/</span> <span class="nx">scale</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">scale</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="nx">oy</span> <span class="o">=</span> <span class="nx">oy</span> <span class="o">/</span> <span class="nx">scale</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">pageX</span><span class="o">:</span><span class="nx">px</span><span class="p">,</span>
+        <span class="nx">pageY</span><span class="o">:</span><span class="nx">py</span><span class="p">,</span>
+        <span class="nx">clientX</span><span class="o">:</span><span class="nx">evt</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span>
+        <span class="nx">clientY</span><span class="o">:</span><span class="nx">evt</span><span class="p">.</span><span class="nx">clientY</span><span class="p">,</span>
+        <span class="c1">//ç¸å¯¹äºå®¹å¨åç§»é</span>
+        <span class="nx">offsetX</span><span class="o">:</span><span class="nx">ox</span><span class="p">,</span>
+        <span class="nx">offsetY</span><span class="o">:</span><span class="nx">oy</span><span class="p">,</span>
+        <span class="nx">layerX</span> <span class="o">:</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span>
+        <span class="nx">layerY</span><span class="o">:</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">layerY</span><span class="p">,</span>
+        <span class="nx">screenX</span><span class="o">:</span><span class="nx">evt</span><span class="p">.</span><span class="nx">screenX</span><span class="p">,</span>
+        <span class="nx">screenY</span><span class="o">:</span><span class="nx">evt</span><span class="p">.</span><span class="nx">screenY</span><span class="p">,</span>
+        <span class="nx">x</span> <span class="o">:</span> <span class="nx">ox</span><span class="p">,</span>
+        <span class="nx">y</span> <span class="o">:</span> <span class="nx">oy</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * æ£ æ¥å¯¹è±¡æ¯å¦ä¸ºæå®çç±»å,ä¸åæ¬ç»§æ¿</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method isType</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {object} target éè¦å¤æ­ç±»åçå¯¹è±¡</span>
+<span class="cm"> * @param {class} type å¯¹è±¡ç±»å</span>
+<span class="cm"> * @return {boolean} è¿åå¯¹è±¡æ¯å¦ä¸ºæå®ç±»å </span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">isType</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span> <span class="p">,</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">target</span> <span class="o">!==</span> <span class="s1">&#39;object&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">===</span> <span class="nx">type</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="cm">/*if(target.__baseType) {        </span>
+<span class="cm">        return jmUtils.isType(target.__baseType.prototype,type);</span>
+<span class="cm">    }*/</span>
+
+    <span class="c1">//return target instanceof type;</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/**</span>
+<span class="cm"> * å¤æ­ç¹æ¯å¦å¨å¤è¾¹å½¢å</span>
+<span class="cm"> * å¦æä¸ä¸ªç¹å¨å¤è¾¹å½¢åé¨ï¼ä»»æè§åº¦åå°çº¿è¯å®ä¼ä¸å¤è¾¹å½¢è¦ä¹æä¸ä¸ªäº¤ç¹ï¼è¦ä¹æä¸å¤è¾¹å½¢è¾¹ççº¿éå ã</span>
+<span class="cm"> * å¦æä¸ä¸ªç¹å¨å¤è¾¹å½¢å¤é¨ï¼ä»»æè§åº¦åå°çº¿è¦ä¹ä¸å¤è¾¹å½¢æä¸ä¸ªäº¤ç¹ï¼è¦ä¹æä¸¤ä¸ªäº¤ç¹ï¼è¦ä¹æ²¡æäº¤ç¹ï¼è¦ä¹æä¸å¤è¾¹å½¢è¾¹ççº¿éå ã</span>
+<span class="cm"> * å©ç¨ä¸é¢çç»è®ºï¼æä»¬åªè¦å¤æ­è¿ä¸ªç¹ä¸å¤è¾¹å½¢çäº¤ç¹ä¸ªæ°ï¼å°±å¯ä»¥å¤æ­åºç¹ä¸å¤è¾¹å½¢çä½ç½®å³ç³»äºã</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method pointInPolygon</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {point} pt åæ å¯¹è±¡</span>
+<span class="cm"> * @param {array} polygon å¤è¾¹åè§åæ å¯¹è±¡æ°ç»</span>
+<span class="cm"> * @param {number} offset å¤æ­å¯åç§»å¼</span>
+<span class="cm"> * @return {integer} 0= ä¸å¨å¾å½¢ååçº¿ä¸ï¼1=å¨è¾¹ä¸ï¼2=å¨å¾å½¢åé¨</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">pointInPolygon</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pt</span><span class="p">,</span><span class="nx">polygon</span><span class="p">,</span><span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">offset</span> <span class="o">=</span> <span class="nx">offset</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nx">offset</span> <span class="o">=</span> <span class="nx">offset</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span><span class="nx">j</span><span class="p">,</span><span class="nx">n</span> <span class="o">=</span> <span class="nx">polygon</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">inside</span><span class="o">=</span><span class="kc">false</span><span class="p">,</span><span class="nx">redo</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">polygon</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">offset</span> <span class="o">&amp;&amp;</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">offset</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="c1">//ä¸æ¡ç´çº¿</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//å¨æå·¦è¾¹ä¹å¤æå¨æå³è¾¹ä¹å¤</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span><span class="p">,</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">offset</span> <span class="o">||</span> 
+            <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span><span class="p">,</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nx">offset</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//å¨æé¡¶é¨ä¹å¤æå¨æåºé¨ä¹å¤</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">,</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="nx">offset</span> <span class="o">||</span> 
+            <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">,</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//å¦æçº¿ä¸ºå¹³è¡ä¸ºçºµåæ ã</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span> <span class="o">==</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span><span class="p">){</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">offset</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//å¦æçº¿ä¸ºå¹³è¡ä¸ºæ¨ªåæ ã</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span> <span class="o">==</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span><span class="p">){</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">offset</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nx">offset</span> <span class="o">&amp;&amp;</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nx">offset</span> <span class="o">&amp;&amp;</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//ç¹å°ç´çº¿çè·ç¦»å°äºå®½åº¦çä¸åï¼è¡¨ç¤ºå¨çº¿ä¸</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">!=</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">!=</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">ff</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">f</span> <span class="o">*</span> <span class="nx">f</span> <span class="o">+</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">y</span><span class="p">));</span>
+            <span class="kd">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">ff</span> <span class="o">*</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">f</span> <span class="p">);</span>
+            
+            <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">offset</span> <span class="o">?</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span> <span class="o">==</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&amp;&amp;</span>    <span class="c1">// æ¯å¦å¨é¡¶ç¹ä¸</span>
+            <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span> <span class="o">==</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">pt</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">pt</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">redo</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">redo</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">inside</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="nx">j</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span><span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> 
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="o">||</span> 
+                <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> <span class="p">)</span> 
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;=</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span> <span class="o">||</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;=</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> 
+                <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">_x</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="o">-</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">x</span><span class="o">-</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">y</span><span class="o">-</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span><span class="o">+</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">_x</span><span class="p">)</span>          <span class="c1">// å¨çº¿çå·¦ä¾§</span>
+                        <span class="nx">inside</span> <span class="o">=</span> <span class="o">!</span><span class="nx">inside</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">==</span> <span class="nx">_x</span><span class="p">)</span>    <span class="c1">// å¨çº¿ä¸</span>
+                    <span class="p">{</span>
+                        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">==</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">)</span> 
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span>    <span class="c1">// äº¤ç¹å¨é¡¶ç¹ä¸</span>
+                <span class="p">{</span>
+                    <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">y</span> <span class="o">?</span> <span class="o">--</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">:</span> <span class="o">++</span><span class="nx">pt</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span>
+                    <span class="nx">redo</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span> <span class="o">==</span>  <span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">y</span> <span class="o">&amp;&amp;</span> <span class="c1">// å¨æ°´å¹³çè¾¹ççº¿ä¸</span>
+                <span class="nx">pt</span><span class="p">.</span><span class="nx">y</span> <span class="o">==</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span> <span class="o">&amp;&amp;</span>
+                <span class="p">(</span> <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="o">||</span> 
+                <span class="p">(</span><span class="nx">polygon</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="nx">pt</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">polygon</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nx">inside</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">inside</span> <span class="o">?</span> <span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * æ£æ¥è¾¹çï¼å­å¯¹è±¡æ¯å¦è¶åºç¶å®¹å¨è¾¹ç</span>
+<span class="cm"> * å½å¯¹è±¡åç§»offsetåæ¯å¦åºç</span>
+<span class="cm"> * è¿å(left:0,right:0,top:0,bottom:0)</span>
+<span class="cm"> * å¦æright&gt;0è¡¨ç¤ºå³è¾¹åºçrightåç§»é,left&lt;0åè¡¨ç¤ºå·¦è¾¹åºçleftåç§»é</span>
+<span class="cm"> * å¦æbottom&gt;0è¡¨ç¤ºä¸è¾¹åºçbottomåç§»é,top&lt;0åè¡¨ç¤ºä¸è¾¹åºçltopåç§»é</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method checkOutSide</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {bound} parentBounds ç¶å¯¹è±¡çè¾¹ç</span>
+<span class="cm"> * @param {bound} targetBounds å¯¹è±¡çè¾¹ç</span>
+<span class="cm"> * @param {number} offset å¤æ­æ¯å¦è¶çå¯å®¹åå·®</span>
+<span class="cm"> * @return {bound} è¶çæ è¯</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">checkOutSide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parentBounds</span><span class="p">,</span><span class="nx">targetBounds</span><span class="p">,</span><span class="nx">offset</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">left</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="nx">right</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="nx">top</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="nx">bottom</span><span class="o">:</span><span class="mi">0</span><span class="p">};</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">offset</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">targetBounds</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">parentBounds</span><span class="p">.</span><span class="nx">left</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">offset</span><span class="p">.</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="nx">targetBounds</span><span class="p">.</span><span class="nx">right</span> <span class="o">+</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">parentBounds</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">offset</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">targetBounds</span><span class="p">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">parentBounds</span><span class="p">.</span><span class="nx">top</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">offset</span><span class="p">.</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">bottom</span> <span class="o">=</span> <span class="nx">targetBounds</span><span class="p">.</span><span class="nx">bottom</span> <span class="o">+</span> <span class="nx">offset</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">parentBounds</span><span class="p">.</span><span class="nx">bottom</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * éè¿æ¶é´çæå¯ ä¸ID</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method guid</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @return {string} å¯ä¸å­ç¬¦ä¸²</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">guid</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">gid</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">gid</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * å»é¤å­ç¬¦ä¸²å¼å§å­ç¬¦</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method trimStart</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} source éè¦å¤ççå­ç¬¦ä¸²</span>
+<span class="cm"> * @param {char} [c] è¦å»é¤å­ç¬¦ä¸²çåç½®å­ç¬¦</span>
+<span class="cm"> * @return {string} å»é¤åç½®å­ç¬¦åçå­ç¬¦ä¸²</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimStart</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">||</span> <span class="s1">&#39; &#39;</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">source</span> <span class="o">&amp;&amp;</span> <span class="nx">source</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">sc</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">sc</span> <span class="o">===</span> <span class="nx">c</span> <span class="o">||</span> <span class="nx">c</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">sc</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">source</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimStart</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">);</span>
+        <span class="p">}</span>        
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">source</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * å»é¤å­ç¬¦ä¸²ç»æçå­ç¬¦c</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method trimEnd</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} source éè¦å¤ççå­ç¬¦ä¸²</span>
+<span class="cm"> * @param {char} [c] è¦å»é¤å­ç¬¦ä¸²çåç½®å­ç¬¦</span>
+<span class="cm"> * @return {string} å»é¤åç½®å­ç¬¦åçå­ç¬¦ä¸²</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">||</span> <span class="s1">&#39; &#39;</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">source</span> <span class="o">&amp;&amp;</span> <span class="nx">source</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">sc</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="nx">source</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">sc</span> <span class="o">===</span> <span class="nx">c</span> <span class="o">||</span> <span class="nx">c</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">sc</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">source</span> <span class="o">=</span> <span class="nx">source</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">source</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimStart</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">);</span>
+        <span class="p">}</span>        
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">source</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * å»é¤å­ç¬¦ä¸²å¼å§ä¸ç»æçå­ç¬¦</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method trim</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} source éè¦å¤ççå­ç¬¦ä¸²</span>
+<span class="cm"> * @param {char} [c] è¦å»é¤å­ç¬¦ä¸²çå­ç¬¦</span>
+<span class="cm"> * @return {string} å»é¤å­ç¬¦åçå­ç¬¦ä¸²</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimEnd</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trimStart</span><span class="p">(</span><span class="nx">source</span><span class="p">,</span><span class="nx">c</span><span class="p">),</span><span class="nx">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * æ£æ¥æ¯å¦ä¸ºç¾åæ¯åæ°</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method checkPercent</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} å­ç¬¦ä¸²åæ°</span>
+<span class="cm"> * @return {boolean} true=å½åå­ç¬¦ä¸²ä¸ºç¾åæ¯åæ°,false=ä¸æ¯</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">checkPercent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">per</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">per</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">per</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">per</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">per</span><span class="p">[</span><span class="nx">per</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;%&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">per</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è½¬æ¢ç¾åæ°ä¸ºæ°å¼ç±»å</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method percentToNumber</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} per æç¾åæ¯è½¬ä¸ºæ°å¼çåæ°</span>
+<span class="cm"> * @return {number} ç¾åæ¯å¯¹åºçæ°å¼</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">percentToNumber</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">per</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">per</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">checkPercent</span><span class="p">(</span><span class="nx">per</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">tmp</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">per</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">tmp</span><span class="p">,</span><span class="s1">&#39;%&#39;</span><span class="p">);</span>
+            <span class="nx">per</span> <span class="o">=</span> <span class="nx">per</span> <span class="o">/</span> <span class="mi">100</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">per</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è§£æXMLå­ç¬¦ä¸²</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method parseXML</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} xml xmlå­ç¬¦ä¸²</span>
+<span class="cm"> * @return {XmlDocument} æå­ç¬¦ä¸²è½¬ä¸ºçxmlå¯¹è±¡</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">parseXML</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xml</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xmlDoc</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">DOMParser</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DOMParser</span><span class="p">();</span>
+        <span class="nx">xmlDoc</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="nx">parseFromString</span><span class="p">(</span><span class="nx">xml</span><span class="p">,</span> <span class="s2">&quot;text/xml&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">ActiveXObject</span><span class="p">)</span> <span class="p">{</span>   
+        <span class="nx">xmlDoc</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="p">(</span><span class="s1">&#39;Microsoft.XMLDOM&#39;</span><span class="p">);</span>
+        <span class="nx">xmlDoc</span><span class="p">.</span><span class="nx">async</span>  <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nx">xmlDoc</span><span class="p">.</span><span class="nx">loadXML</span><span class="p">(</span><span class="nx">xml</span><span class="p">);</span>
+    <span class="p">}</span> 
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>   
+    <span class="k">return</span> <span class="nx">xmlDoc</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è§£æXMLææ¡£ä¸ºjsonå¯¹è±¡</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method xmlToJSON</span>
+<span class="cm"> * @for jmUtils</span>
+<span class="cm"> * @param {string} xml å¾è½¬ä¸ºxmlå¯¹è±¡çxmlå­ç¬¦ä¸²</span>
+<span class="cm"> * @return {object} xmlå¯¹è±¡è½¬ä¸ºçjsonå¯¹è±¡</span>
+<span class="cm"> */</span>
+<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">xmlToJSON</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xml</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">xml</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">xml</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">xml</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">parseXML</span><span class="p">(</span><span class="nx">xml</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="cm">/**</span>
+<span class="cm">     * è§£æèç¹</span>
+<span class="cm">     * </span>
+<span class="cm">     * @method turnChildren</span>
+<span class="cm">     * @param {xmlNode} xmlnode xmlå¯¹è±¡èç¹</span>
+<span class="cm">     * @param {xmlNode} parent å½åå¯¹è±¡çç¶èç¹</span>
+<span class="cm">     * @private</span>
+<span class="cm">     * @return å½åèç¹å¯¹åºçjsonå¯¹è±¡</span>
+<span class="cm">     */</span>
+    <span class="kd">function</span> <span class="nx">turnChildren</span><span class="p">(</span><span class="nx">xmlnode</span><span class="p">,</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xmlnode</span> <span class="o">&amp;&amp;</span> <span class="nx">xmlnode</span><span class="p">.</span><span class="nx">childNodes</span> <span class="o">&amp;&amp;</span> <span class="nx">xmlnode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">xmlnode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">xmlnode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">nodeType</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">nodeName</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">tagName</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span><span class="nx">children</span><span class="o">:</span><span class="p">[],</span><span class="nx">attributes</span><span class="o">:</span><span class="p">{}};</span>
+                    <span class="c1">//è§£æå±æ§</span>
+                    <span class="k">if</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">node</span><span class="p">.</span><span class="nx">attributes</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="kd">var</span> <span class="nx">attr</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">attributes</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+                            <span class="kd">var</span> <span class="nx">attrname</span> <span class="o">=</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">;</span>
+                            <span class="k">if</span><span class="p">(</span><span class="nx">attrname</span><span class="p">)</span> <span class="p">{</span>
+                                <span class="nx">item</span><span class="p">.</span><span class="nx">attributes</span><span class="p">[</span><span class="nx">attrname</span><span class="p">]</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">attr</span><span class="p">.</span><span class="nx">value</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">nodeValue</span> <span class="o">||</span> <span class="nx">attr</span><span class="p">.</span><span class="nx">textContent</span><span class="p">);</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>             
+                    <span class="p">}</span>
+                    <span class="nx">item</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+                    <span class="nx">item</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">nodeValue</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">textContent</span><span class="p">);</span>
+                    <span class="nx">parent</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+                    <span class="nx">turnChildren</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">item</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">parent</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">value</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">nodeValue</span> <span class="o">||</span> <span class="nx">node</span><span class="p">.</span><span class="nx">textContent</span><span class="p">);</span>
+                    <span class="nx">turnChildren</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">parent</span><span class="p">);</span>
+                <span class="p">}</span>                
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>    
+    <span class="kd">var</span> <span class="nx">jsobj</span> <span class="o">=</span> <span class="p">{</span><span class="nx">children</span><span class="o">:</span><span class="p">[]};</span>
+    <span class="nx">jsobj</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">xml</span><span class="p">.</span><span class="nx">xmlVersion</span><span class="p">;</span>
+    <span class="nx">jsobj</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">xml</span><span class="p">.</span><span class="nx">title</span><span class="p">;</span>
+    <span class="nx">turnChildren</span><span class="p">(</span><span class="nx">xml</span><span class="p">,</span> <span class="nx">jsobj</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">jsobj</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class=""><a href="module_jmEditor.html" title="jmEditor">jmEditor</a></li>
+                                <li class="selected"><a href="module_jmGraph.html" title="jmGraph">jmGraph</a></li>
+                                <li class=""><a href="module_jmUtils.html" title="jmUtils">jmUtils</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="jmArc.html" title="jmArc">jmArc</a></li>
+                                <li class=""><a href="jmArraw.html" title="jmArraw">jmArraw</a></li>
+                                <li class=""><a href="jmArrowLine.html" title="jmArrowLine">jmArrowLine</a></li>
+                                <li class=""><a href="jmBezier.html" title="jmBezier">jmBezier</a></li>
+                                <li class=""><a href="jmCircle.html" title="jmCircle">jmCircle</a></li>
+                                <li class=""><a href="jmControl.html" title="jmControl">jmControl</a></li>
+                                <li class=""><a href="jmEvents.html" title="jmEvents">jmEvents</a></li>
+                                <li class=""><a href="jmGradient.html" title="jmGradient">jmGradient</a></li>
+                                <li class=""><a href="jmGraph.html" title="jmGraph">jmGraph</a></li>
+                                <li class=""><a href="jmHArc.html" title="jmHArc">jmHArc</a></li>
+                                <li class=""><a href="jmImage.html" title="jmImage">jmImage</a></li>
+                                <li class=""><a href="jmLabel.html" title="jmLabel">jmLabel</a></li>
+                                <li class=""><a href="jmLine.html" title="jmLine">jmLine</a></li>
+                                <li class=""><a href="jmObject.html" title="jmObject">jmObject</a></li>
+                                <li class=""><a href="jmPath.html" title="jmPath">jmPath</a></li>
+                                <li class=""><a href="jmPrismatic.html" title="jmPrismatic">jmPrismatic</a></li>
+                                <li class=""><a href="jmProperty.html" title="jmProperty">jmProperty</a></li>
+                                <li class=""><a href="jmRect.html" title="jmRect">jmRect</a></li>
+                                <li class=""><a href="jmShadow.html" title="jmShadow">jmShadow</a></li>
+                                <li class=""><a href="jmShape.html" title="jmShape">jmShape</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="jmarc.js.html" title="jmarc.js">jmarc.js</a></li>
+                                <li class=""><a href="jmarraw.js.html" title="jmarraw.js">jmarraw.js</a></li>
+                                <li class=""><a href="jmarrowline.js.html" title="jmarrowline.js">jmarrowline.js</a></li>
+                                <li class=""><a href="jmbezier.js.html" title="jmbezier.js">jmbezier.js</a></li>
+                                <li class=""><a href="jmcell.js.html" title="jmcell.js">jmcell.js</a></li>
+                                <li class=""><a href="jmcontrol.js.html" title="jmcontrol.js">jmcontrol.js</a></li>
+                                <li class=""><a href="jmeditor.js.html" title="jmeditor.js">jmeditor.js</a></li>
+                                <li class=""><a href="jmgraph.js.html" title="jmgraph.js">jmgraph.js</a></li>
+                                <li class=""><a href="jmharc.js.html" title="jmharc.js">jmharc.js</a></li>
+                                <li class=""><a href="jmimage.js.html" title="jmimage.js">jmimage.js</a></li>
+                                <li class=""><a href="jmlabel.js.html" title="jmlabel.js">jmlabel.js</a></li>
+                                <li class=""><a href="jmline.js.html" title="jmline.js">jmline.js</a></li>
+                                <li class=""><a href="jmmodels.js.html" title="jmmodels.js">jmmodels.js</a></li>
+                                <li class=""><a href="jmpath.js.html" title="jmpath.js">jmpath.js</a></li>
+                                <li class=""><a href="jmprismatic.js.html" title="jmprismatic.js">jmprismatic.js</a></li>
+                                <li class=""><a href="jmproperty.js.html" title="jmproperty.js">jmproperty.js</a></li>
+                                <li class=""><a href="jmrect.js.html" title="jmrect.js">jmrect.js</a></li>
+                                <li class=""><a href="jmshape.js.html" title="jmshape.js">jmshape.js</a></li>
+                                <li class="selected"><a href="jmutils.js.html" title="jmutils.js">jmutils.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2013 jm47.com. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "jmGradient.html#method_addStop", "access": "", "host": "jmGradient", "type": "method", "name": "addStop"}, {"url": "jmArraw.html#method_angle", "access": "", "host": "jmArraw", "type": "method", "name": "angle"}, {"url": "jmObject.html#method_animate", "access": "", "host": "jmObject", "type": "method", "name": "animate"}, {"url": "jmArc.html#method_anticlockwise", "access": "", "host": "jmArc", "type": "method", "name": "anticlockwise"}, {"url": "jmHArc.html#method_anticlockwise", "access": "", "host": "jmHArc", "type": "method", "name": "anticlockwise"}, {"url": "jmControl.html#method_beginDraw", "access": "", "host": "jmControl", "type": "method", "name": "beginDraw"}, {"url": "jmControl.html#method_bind", "access": "", "host": "jmControl", "type": "method", "name": "bind"}, {"url": "jmControl.html#method_canMove", "access": "", "host": "jmControl", "type": "method", "name": "canMove"}, {"url": "jmArc.html#method_center", "access": "", "host": "jmArc", "type": "method", "name": "center"}, {"url": "jmCircle.html#method_center", "access": "", "host": "jmCircle", "type": "method", "name": "center"}, {"url": "jmHArc.html#method_center", "access": "", "host": "jmHArc", "type": "method", "name": "center"}, {"url": "jmPrismatic.html#method_center", "access": "", "host": "jmPrismatic", "type": "method", "name": "center"}, {"url": "jmControl.html#method_checkPoint", "access": "", "host": "jmControl", "type": "method", "name": "checkPoint"}, {"url": "jmPath.html#method_checkPoint", "access": "", "host": "jmPath", "type": "method", "name": "checkPoint"}, {"url": "jmGraph.html#method_clear", "access": "", "host": "jmGraph", "type": "method", "name": "clear"}, {"url": "jmControl.html#method_clearEvents", "access": "", "host": "jmControl", "type": "method", "name": "clearEvents"}, {"url": "jmBezier.html#method_cpoints", "access": "", "host": "jmBezier", "type": "method", "name": "cpoints"}, {"url": "jmGraph.html#method_createLine", "access": "", "host": "jmGraph", "type": "method", "name": "createLine"}, {"url": "jmGraph.html#method_createLinearGradient", "access": "", "host": "jmGraph", "type": "method", "name": "createLinearGradient"}, {"url": "jmGraph.html#method_createPath", "access": "", "host": "jmGraph", "type": "method", "name": "createPath"}, {"url": "jmGraph.html#method_createRadialGradient", "access": "", "host": "jmGraph", "type": "method", "name": "createRadialGradient"}, {"url": "jmGraph.html#method_createShape", "access": "", "host": "jmGraph", "type": "method", "name": "createShape"}, {"url": "jmGraph.html#method_css", "access": "", "host": "jmGraph", "type": "method", "name": "css"}, {"url": "jmControl.html#method_cursor", "access": "", "host": "jmControl", "type": "method", "name": "cursor"}, {"url": "jmCircle.html#method_draw", "access": "", "host": "jmCircle", "type": "method", "name": "draw"}, {"url": "jmControl.html#method_draw", "access": "", "host": "jmControl", "type": "method", "name": "draw"}, {"url": "jmImage.html#method_draw", "access": "", "host": "jmImage", "type": "method", "name": "draw"}, {"url": "jmLabel.html#method_draw", "access": "", "host": "jmLabel", "type": "method", "name": "draw"}, {"url": "jmProperty.html#method_emit", "access": "", "host": "jmProperty", "type": "method", "name": "emit"}, {"url": "jmArraw.html#method_end", "access": "", "host": "jmArraw", "type": "method", "name": "end"}, {"url": "jmLine.html#method_end", "access": "", "host": "jmLine", "type": "method", "name": "end"}, {"url": "jmArc.html#method_endAngle", "access": "", "host": "jmArc", "type": "method", "name": "endAngle"}, {"url": "jmHArc.html#method_endAngle", "access": "", "host": "jmHArc", "type": "method", "name": "endAngle"}, {"url": "jmControl.html#method_endDraw", "access": "", "host": "jmControl", "type": "method", "name": "endDraw"}, {"url": "jmControl.html#method_findParent", "access": "", "host": "jmControl", "type": "method", "name": "findParent"}, {"url": "jmControl.html#method_getAbsoluteBounds", "access": "", "host": "jmControl", "type": "method", "name": "getAbsoluteBounds"}, {"url": "jmControl.html#method_getBounds", "access": "", "host": "jmControl", "type": "method", "name": "getBounds"}, {"url": "jmGraph.html#method_getBounds", "access": "", "host": "jmGraph", "type": "method", "name": "getBounds"}, {"url": "jmImage.html#method_getBounds", "access": "", "host": "jmImage", "type": "method", "name": "getBounds"}, {"url": "jmRect.html#method_getBounds", "access": "", "host": "jmRect", "type": "method", "name": "getBounds"}, {"url": "jmArc.html#method_getCenter", "access": "", "host": "jmArc", "type": "method", "name": "getCenter"}, {"url": "jmCircle.html#method_getCenter", "access": "", "host": "jmCircle", "type": "method", "name": "getCenter"}, {"url": "jmHArc.html#method_getCenter", "access": "", "host": "jmHArc", "type": "method", "name": "getCenter"}, {"url": "jmControl.html#method_getEvent", "access": "", "host": "jmControl", "type": "method", "name": "getEvent"}, {"url": "jmBezier.html#method_getPoint", "access": "", "host": "jmBezier", "type": "method", "name": "getPoint"}, {"url": "jmProperty.html#method_getValue", "access": "", "host": "jmProperty", "type": "method", "name": "getValue"}, {"url": "jmControl.html#method_height", "access": "", "host": "jmControl", "type": "method", "name": "height"}, {"url": "jmImage.html#method_image", "access": "", "host": "jmImage", "type": "method", "name": "image"}, {"url": "jmControl.html#method_initializing", "access": "", "host": "jmControl", "type": "method", "name": "initializing"}, {"url": "jmObject.html#method_is", "access": "", "host": "jmObject", "type": "method", "name": "is"}, {"url": "jmHArc.html#method_maxRadius", "access": "", "host": "jmHArc", "type": "method", "name": "maxRadius"}, {"url": "jmHArc.html#method_minRadius", "access": "", "host": "jmHArc", "type": "method", "name": "minRadius"}, {"url": "jmControl.html#method_offset", "access": "", "host": "jmControl", "type": "method", "name": "offset"}, {"url": "jmArraw.html#method_offsetX", "access": "", "host": "jmArraw", "type": "method", "name": "offsetX"}, {"url": "jmArraw.html#method_offsetY", "access": "", "host": "jmArraw", "type": "method", "name": "offsetY"}, {"url": "jmProperty.html#method_on", "access": "", "host": "jmProperty", "type": "method", "name": "on"}, {"url": "jmControl.html#method_paint", "access": "", "host": "jmControl", "type": "method", "name": "paint"}, {"url": "jmControl.html#method_position", "access": "", "host": "jmControl", "type": "method", "name": "position"}, {"url": "jmImage.html#method_position", "access": "", "host": "jmImage", "type": "method", "name": "position"}, {"url": "jmArc.html#method_radius", "access": "", "host": "jmArc", "type": "method", "name": "radius"}, {"url": "jmCircle.html#method_radius", "access": "", "host": "jmCircle", "type": "method", "name": "radius"}, {"url": "jmRect.html#method_radius", "access": "", "host": "jmRect", "type": "method", "name": "radius"}, {"url": "jmControl.html#method_raiseEvent", "access": "", "host": "jmControl", "type": "method", "name": "raiseEvent"}, {"url": "jmGraph.html#method_redraw", "access": "", "host": "jmGraph", "type": "method", "name": "redraw"}, {"url": "jmGraph.html#method_refresh", "access": "", "host": "jmGraph", "type": "method", "name": "refresh"}, {"url": "jmGraph.html#method_registerShape", "access": "", "host": "jmGraph", "type": "method", "name": "registerShape"}, {"url": "jmControl.html#method_runEventHandle", "access": "", "host": "jmControl", "type": "method", "name": "runEventHandle"}, {"url": "jmGraph.html#method_scale", "access": "", "host": "jmGraph", "type": "method", "name": "scale"}, {"url": "jmControl.html#method_setStyle", "access": "", "host": "jmControl", "type": "method", "name": "setStyle"}, {"url": "jmProperty.html#method_setValue", "access": "", "host": "jmProperty", "type": "method", "name": "setValue"}, {"url": "jmControl.html#method_sort", "access": "", "host": "jmControl", "type": "method", "name": "sort"}, {"url": "jmImage.html#method_sourceHeight", "access": "", "host": "jmImage", "type": "method", "name": "sourceHeight"}, {"url": "jmImage.html#method_sourcePosition", "access": "", "host": "jmImage", "type": "method", "name": "sourcePosition"}, {"url": "jmImage.html#method_sourceWidth", "access": "", "host": "jmImage", "type": "method", "name": "sourceWidth"}, {"url": "jmArraw.html#method_start", "access": "", "host": "jmArraw", "type": "method", "name": "start"}, {"url": "jmLine.html#method_start", "access": "", "host": "jmLine", "type": "method", "name": "start"}, {"url": "jmArc.html#method_startAngle", "access": "", "host": "jmArc", "type": "method", "name": "startAngle"}, {"url": "jmHArc.html#method_startAngle", "access": "", "host": "jmHArc", "type": "method", "name": "startAngle"}, {"url": "jmGraph.html#method_toDataURL", "access": "", "host": "jmGraph", "type": "method", "name": "toDataURL"}, {"url": "jmGradient.html#method_toGradient", "access": "", "host": "jmGradient", "type": "method", "name": "toGradient"}, {"url": "jmArc.html#property_type", "access": "", "host": "jmArc", "type": "property", "name": "type"}, {"url": "jmArraw.html#property_type", "access": "", "host": "jmArraw", "type": "property", "name": "type"}, {"url": "jmBezier.html#property_type", "access": "", "host": "jmBezier", "type": "property", "name": "type"}, {"url": "jmCircle.html#property_type", "access": "", "host": "jmCircle", "type": "property", "name": "type"}, {"url": "jmHArc.html#property_type", "access": "", "host": "jmHArc", "type": "property", "name": "type"}, {"url": "jmLine.html#property_type", "access": "", "host": "jmLine", "type": "property", "name": "type"}, {"url": "jmPath.html#property_type", "access": "", "host": "jmPath", "type": "property", "name": "type"}, {"url": "jmPrismatic.html#property_type", "access": "", "host": "jmPrismatic", "type": "property", "name": "type"}, {"url": "jmRect.html#property_type", "access": "", "host": "jmRect", "type": "property", "name": "type"}, {"url": "jmShape.html#property_type", "access": "", "host": "jmShape", "type": "property", "name": "type"}, {"url": "jmControl.html#method_unbind", "access": "", "host": "jmControl", "type": "method", "name": "unbind"}, {"url": "jmControl.html#method_width", "access": "", "host": "jmControl", "type": "method", "name": "width"}, {"url": "jmGraph.html#method_zoomActual", "access": "", "host": "jmGraph", "type": "method", "name": "zoomActual"}, {"url": "jmGraph.html#method_zoomIn", "access": "", "host": "jmGraph", "type": "method", "name": "zoomIn"}, {"url": "jmGraph.html#method_zoomOut", "access": "", "host": "jmGraph", "type": "method", "name": "zoomOut"}];
+</script>
+</body>
+</html>

@@ -1,10 +1,23 @@
 /**
-* 画一条直线
-*/
+ * 画一条直线
+ *
+ * @class jmLine
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
+ */
 
 var jmLine = (function () {
 	function __constructor(graph,params) {
 		if(!params) params = {};
+		/**
+		 * 当前对象类型名jmLine
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = 'jmLine';
 		this.points = params.points || [];
 		var style = params.style || {};
 		this.initializing(graph.context,style);
@@ -23,8 +36,10 @@ var jmLine = (function () {
 })();
 
 /**
-* 初始化图形点
-*/
+ * 初始化图形点,如呆为虚线则根据跳跃间隔描点
+ * @method initPoints
+ * @private
+ */
 jmLine.prototype.initPoints = function() {	
 	var start = this.start();
 	var end = this.end();
@@ -94,15 +109,25 @@ jmLine.prototype.draw = function() {
 }*/
 
 /**
-* 控制起始点
-*/
+ * 控制起始点
+ * 
+ * @method start
+ * @for jmLine
+ * @param {point} p 起始点坐标
+ * @return {point} 当前起始点坐标
+ */
 jmLine.prototype.start = function(p) {
 	return this.setValue('start',p);
 }
 
 /**
-* 控制结束点
-*/
+ * 控制结束点
+ * 
+ * @method end
+ * @for jmLine
+ * @param {point} p 结束点坐标
+ * @return {point} 当前结束点坐标
+ */
 jmLine.prototype.end = function(p) {
 	return this.setValue('end',p);
 }

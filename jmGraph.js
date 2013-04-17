@@ -1,15 +1,22 @@
 
 /**
-* 家猫画图类库
-*/
+ * jmGraph画图类库
+ * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
+ *
+ * @module jmGraph
+ * @class jmGraph
+ * @param {element} canvas 标签canvas
+ * @require jmControl
+ */
 var jmGraph = (function() {
 	//定义图形类型缓存
 	var __jmShapesCache = jmUtils.cache.add('jm_graph_shapes',{});
 
 	function __constructor(canvas) {
 		if(!canvas || !canvas.getContext) {
-			throw new Error('错误的canvas参数');
+			throw 'canvas error';
 		}
+		this.type = 'jmGraph';
 		this.canvas = canvas;
 		var context = canvas.getContext('2d');
 		this.initializing(context);
@@ -20,8 +27,12 @@ var jmGraph = (function() {
 	}
 
 	/**
-	* 注册图型类型
-	*/
+	 * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
+	 *
+	 * @method registerShape 
+	 * @param {string} name 控件图形名称
+	 * @param {class} shape 图形控件类型
+	 */
 	__constructor.prototype.registerShape = function(name,shape) {
 		if(!__jmShapesCache[name]) {
 			__jmShapesCache[name] = shape;
@@ -29,17 +40,27 @@ var jmGraph = (function() {
 	}
 
 	/**
-	* 创建图形
-	*/
+	 * 从已注册的图形类创建图形
+	 * 简单直观创建对象
+	 *
+	 * @method createShape 
+	 * @param {string} name 注册控件的名称
+	 * @param {object} args 实例化控件的参数
+	 * @return {object} 已实例化控件的对象
+	 */
 	__constructor.prototype.createShape = function(name,args) {
-		if(__jmShapesCache[name]) {
-			return new __jmShapesCache[name](this,args);
+		var shape = __jmShapesCache[name];
+		if(shape) {
+			return new shape(this,args);
 		}
 	}
 
 	/**
-	* 初始化默认图型
-	*/
+	 * 初始化默认图形
+	 * 
+	 * @method initShapes
+	 * @private
+	 */
 	function initShapes() {
 		if(typeof jmLine !== 'undefined') this.registerShape('line',jmLine);
 		if(typeof jmPath !== 'undefined') this.registerShape('path',jmPath);
@@ -58,69 +79,90 @@ var jmGraph = (function() {
 		}
 		if(typeof jmArraw !== 'undefined') this.registerShape('arraw',jmArraw);
 		if(typeof jmArrawLine !== 'undefined') this.registerShape('arrawline',jmArrawLine);
+		if(typeof jmResize !== 'undefined') this.registerShape('resize',jmResize);
 	}	
 
 	jmUtils.extend(__constructor,jmControl);//继承基础控件
 	return __constructor;
 })();
 
-/**
-* 设定画布的样式
-*/
-jmGraph.prototype.setStyle = function(name,style) {
-	if(typeof name === 'object') {
-		for(var k in name) {
-			this.canvas.style[k] = name[k];	
-		}
-	}
-	else if(name && style) {
-		this.canvas.style[name] = style;	
-	}
-}
 
 /**
-* 生成线性渐变对象
-*/
+ * 生成线性渐变对象
+ *
+ * @method createLinearGradient
+ * @param {number} x1 线性渐变起始点X坐标
+ * @param {number} y1 线性渐变起始点Y坐标
+ * @param {number} x2 线性渐变结束点X坐标
+ * @param {number} y2 线性渐变结束点Y坐标
+ * @return {jmGradient} 线性渐变对象
+ */
 jmGraph.prototype.createLinearGradient = function(x1,y1,x2,y2) {
 	var gradient = new jmGradient({type:'linear',x1:x1,y1:y1,x2:x2,y2:y2});
 	return gradient;
 }
 
 /**
-* 生成放射渐变对象
-*/
+ * 生成放射渐变对象
+ *
+ * @method createRadialGradient
+ * @param {number} x1 放射渐变小圆中心X坐标
+ * @param {number} y1 放射渐变小圆中心Y坐标
+ * @param {number} r1 放射渐变小圆半径
+ * @param {number} x2 放射渐变大圆中心X坐标
+ * @param {number} y2 放射渐变大圆中心Y坐标
+ * @param {number} r2 放射渐变大圆半径
+ * @return {jmGradient} 放射渐变对象
+ */
 jmGraph.prototype.createRadialGradient = function(x1,y1,r1,x2,y2,r2) {	
 	var gradient = new jmGradient({type:'radial',x1:x1,y1:y1,r1:r1,x2:x2,y2:y2,r2:r2});
 	return gradient;
 }
 
 /**
-* 重新刷新整个画板
-*/
+ * 重新刷新整个画板
+ * 以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+ *
+ * @method refresh
+ */
 jmGraph.prototype.refresh = function() {	
 	//加入动画，触发redraw，会导致多次refresh只redraw一次
 	this.animate(function() {
 		return false;
-	},10);
+	},500);
 	//this.redraw();
 }
 
 /**
-* 重新刷新整个画板
-*/
-jmGraph.prototype.redraw = function() {	
-	this.clear();
+ * 重新刷新整个画板
+ * 此方法直接重画，与refresh效果类似
+ *
+ * @method redraw
+ * @param {number} [w] 清除画布的宽度
+ * @param {number} [h] 清除画布的高度
+ */
+jmGraph.prototype.redraw = function(w,h) {	
+	this.clear(w,h);
 	this.paint();
 }
 
 /**
-* 清除画布
-*/
+ * 清除画布
+ * 
+ * @method clear
+ * @param {number} [w] 清除画布的宽度
+ * @param {number} [h] 清除画布的高度
+ */
 jmGraph.prototype.clear = function(w,h) {
 	//this.canvas.width = this.canvas.width;
 	if(w && h) {
+		//this.zoomActual();//恢复比例缩放
 		this.canvas.width = w;
 		this.canvas.height = h;
+		//保留原有缩放比例
+		if(this.scaleSize) {
+			this.context.scale(this.scaleSize.x,this.scaleSize.y);
+		}
 	}
 	else {
 		w = this.canvas.width;
@@ -134,52 +176,95 @@ jmGraph.prototype.clear = function(w,h) {
 }
 
 /**
-* 生成直线
+* 设置画布样式，此处只是设置其css样式
+*
+* @method css
+* @param {string} name 样式名
+* @param {string} value 样式值
 */
+jmGraph.prototype.css = function(name,value) {
+	if(this.canvas) {
+		this.canvas.style[name] = value;
+	}
+}
+
+/**
+ * 生成路径对象
+ *
+ * @method createPath
+ * @param {array} points 路径中的描点集合
+ * @param {style} style 当前路径的样式
+ * @return {jmPath} 路径对象jmPath
+ */
 jmGraph.prototype.createPath = function(points,style) {
 	var path = this.createShape('path',{points:points,style:style});
 	return path;
 }
 
 /**
-* 生成直线
-*/
+ * 生成直线
+ * 
+ * @method createLine
+ * @param {point} start 直线的起点
+ * @param {point} end 直线的终点
+ * @param {style} 直线的样式
+ * @return {jmLine} 直线对象
+ */
 jmGraph.prototype.createLine = function(start,end,style) {
 	var line = this.createShape('line',{start:start,end:end,style:style});
 	return line;
 }
 
 /**
-* 获取当前控件的边界
-*/
+ * 重写获取当前控件的边界
+ * 
+ * @method getBounds
+ * @return {object} 当前画布的边界 {left,top,right,bottom,width,height}
+ */
 jmGraph.prototype.getBounds = function() {
 	var rect = {};	
 	rect.left = 0; 
 	rect.top = 0; 
 	rect.right = this.canvas.width; 
 	rect.bottom = this.canvas.height; 
-	rect.width = rect.right - rect.left;
-	rect.height = rect.bottom - rect.top;
+	rect.width = rect.right;
+	rect.height = rect.bottom;
 	return rect;
 }
 
 /**
-* 缩小
-*/
+ * 获取当前画布在浏览器中的绝对定位
+ *
+ * @method getPosition
+ * @return {postion} 返回定位坐标
+ */
+jmGraph.prototype.getPosition = function() {
+	return jmUtils.getElementPosition(this.canvas);
+}
+
+/**
+ * 缩小整个画布按比例0.9
+ * 
+ * @method zoomOut
+ */
 jmGraph.prototype.zoomOut = function() {
 	this.scale(0.9 ,0.9);
 }
 
 /**
-* 放大
-*/
+ * 放大 每次增大0.1的比例
+ * 
+ * @method zoomIn
+ */
 jmGraph.prototype.zoomIn = function() {		
 	this.scale(1.1 ,1.1);
 }
 
 /**
-* 大小复原
-*/
+ * 大小复原
+ * 
+ * @method zoomActual
+ */
 jmGraph.prototype.zoomActual = function() {
 	if(this.scaleSize) {
 		this.scale(1 / this.scaleSize.x ,1 / this.scaleSize.y);	
@@ -190,8 +275,12 @@ jmGraph.prototype.zoomActual = function() {
 }
 
 /**
-* 放大缩小
-*/
+ * 放大缩小画布
+ * 
+ * @method scale
+ * @param {number} dx 缩放X轴比例
+ * @param {number} dy 缩放Y轴比例
+ */
 jmGraph.prototype.scale = function(dx,dy) {
 	if(!this.normalSize) {
 		this.normalSize = {width:this.canvas.width,height:this.canvas.height};		
@@ -208,8 +297,11 @@ jmGraph.prototype.scale = function(dx,dy) {
 }
 
 /**
-* 保存为base64图形数据
-*/
+ * 保存为base64图形数据
+ * 
+ * @method toDataURL
+ * @return {string} 当前画布图的base64字符串
+ */
 jmGraph.prototype.toDataURL = function() {
 	var data = this.canvas.toDataURL();
 	return data;

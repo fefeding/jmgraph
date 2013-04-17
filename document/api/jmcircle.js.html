@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: jmEditor   jmcircle.js  (jiamaocode Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1365491194.02" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1365491194.02" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1365491194.02"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1365491194.02"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="./index.html" title="jmGraph">jmGraph</a></h1>
+        <h3>jmEditor&nbsp; <span class="subtitle">1.0</span></h3>
+        <a href="./index.html" title="jmGraph">jmGraph</a> 
+            &gt; <a href="./module_jmeditor.html" title="jmEditor">jmEditor</a>
+                
+                 &gt; jmcircle.js (source view) 
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <div id="srcout">
+                        <style>
+                            #doc3 .classopts { display:none; }
+                        </style>
+<div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * ç»å®æ´çå</span>
+<span class="cm"> *</span>
+<span class="cm"> * @class jmCircle</span>
+<span class="cm"> * @for jmGraph</span>
+<span class="cm"> * @module jmGraph</span>
+<span class="cm"> * @param {jmGraph} graph ç»å¸</span>
+<span class="cm"> * @param {object} params åçåæ°:center=åä¸­å¿,radius=ååå¾,ä¼ååæ­¤å±æ§ï¼å¦ææ²¡æååå®½åé«,width=åå®½,height=åé«</span>
+<span class="cm"> */</span>
+
+<span class="kd">var</span> <span class="nx">jmCircle</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+	<span class="kd">function</span> <span class="nx">__constructor</span><span class="p">(</span><span class="nx">graph</span><span class="p">,</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">params</span><span class="p">)</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{};</span>
+		<span class="cm">/**</span>
+<span class="cm">		 * å½åå¯¹è±¡ç±»ååjmCircle</span>
+<span class="cm">		 *</span>
+<span class="cm">		 * @property type</span>
+<span class="cm">		 * @type string</span>
+<span class="cm">		 */</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;jmCircle&#39;</span><span class="p">;</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">points</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">points</span> <span class="o">||</span> <span class="p">[];</span>
+		<span class="kd">var</span> <span class="nx">style</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">style</span> <span class="o">||</span> <span class="p">{};</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">initializing</span><span class="p">(</span><span class="nx">graph</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span><span class="nx">style</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">graph</span> <span class="o">=</span> <span class="nx">graph</span><span class="p">;</span>
+			
+		<span class="k">this</span><span class="p">.</span><span class="nx">center</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">center</span> <span class="o">||</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">0</span><span class="p">});</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">width</span> <span class="o">||</span> <span class="mi">0</span><span class="p">);</span>
+
+		<span class="c1">//this.on(&#39;PropertyChange&#39;,this.initPoints);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">height</span>  <span class="o">||</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">radius</span>  <span class="o">||</span> <span class="mi">0</span><span class="p">);</span>
+
+		<span class="c1">//this.base = new jmCircle.prototype.constructor.superClass(context,params);</span>
+	<span class="p">}</span>
+	<span class="nx">jmUtils</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">__constructor</span><span class="p">,</span><span class="nx">jmPath</span><span class="p">);</span><span class="c1">//ç»§æ¿pathå¾å½¢</span>
+	<span class="k">return</span> <span class="nx">__constructor</span><span class="p">;</span>
+<span class="p">})();</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * æ®æ ¹æ®ä¸­å¿ç¹åæ°çæä¸­å¿ç¹ï¼æå¯è½æ¯ç¾åæ¯å¼ï¼</span>
+<span class="cm"> *</span>
+<span class="cm"> * @method getCenter</span>
+<span class="cm"> * @for jmCircle</span>
+<span class="cm"> * @return {point} ä¸­å¿åæ å¯¹è±¡</span>
+<span class="cm"> */</span>
+<span class="nx">jmCircle</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getCenter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">center</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">center</span><span class="p">();</span>
+	<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">center</span><span class="p">.</span><span class="nx">x</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">center</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span>
+
+	<span class="k">if</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">checkPercent</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">x</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">percentToNumber</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">bounds</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span><span class="p">(</span><span class="nx">jmUtils</span><span class="p">.</span><span class="nx">checkPercent</span><span class="p">(</span><span class="nx">y</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">y</span> <span class="o">=</span> <span class="nx">jmUtils</span><span class="p">.</span><span class="nx">percentToNumber</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">bounds</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">bounds</span><span class="p">.</span><span class="nx">height</span> <span class="o">*</span> <span class="nx">y</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="nx">y</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * åå§åå¾å½¢ç¹</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method initPoint</span>
+<span class="cm"> * @private</span>
+<span class="cm"> * @for jmCircle</span>
+<span class="cm"> */</span>
+<span class="nx">jmCircle</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initPoints</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>	
+	<span class="cm">/*var mw = this.width() / 2;</span>
+<span class="cm">	var mh = this.height() / 2;</span>
+<span class="cm">	var center = this.center();</span>
+<span class="cm">	var cx = center.x ;//+ bounds.left;</span>
+<span class="cm">	var cy = center.y ;//+ bounds.top;</span>
+<span class="cm">	var r1 =  mw * mw;</span>
+<span class="cm">	var r2 = mh * mh;</span>
+<span class="cm">	this.points = [];</span>
+<span class="cm">	for(var x = -mw;x &lt;= mw; x += 0.1) {</span>
+<span class="cm">		var y = Math.sqrt((1 - (x * x) / r1)) * mh;</span>
+<span class="cm">		this.points.push({x:x + cx,y:y + cy});</span>
+<span class="cm">	}</span>
+<span class="cm">	for(var i= this.points.length - 1;i &gt;= 0;i--) {</span>
+<span class="cm">		var p = this.points[i];</span>
+<span class="cm">		this.points.push({x:p.x ,y:cy * 2 - p.y});</span>
+<span class="cm">	}*/</span>
+	
+	<span class="kd">var</span> <span class="nx">center</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCenter</span><span class="p">();</span>
+	<span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">();</span>
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">points</span> <span class="o">=</span> <span class="p">[];</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">r</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">r</span><span class="p">});</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">r</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">r</span><span class="p">});</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">r</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">r</span><span class="p">});</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">r</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="nx">center</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">r</span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * éååºç±»ç»å¾ï¼æ­¤å¤ä¸ºç»ä¸ä¸ªå®æ´çå </span>
+<span class="cm"> *</span>
+<span class="cm"> * @method draw</span>
+<span class="cm"> */</span>
+<span class="nx">jmCircle</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">bounds</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">absoluteBounds</span><span class="o">?</span><span class="k">this</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">absoluteBounds</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">absoluteBounds</span><span class="p">;</span>	
+	<span class="kd">var</span> <span class="nx">center</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getCenter</span><span class="p">();</span>
+	<span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">();</span>
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">width</span><span class="p">()</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="nx">center</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">left</span><span class="p">,</span><span class="nx">center</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">top</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">* è·åå½åæ§ä»¶çè¾¹ç</span>
+
+<span class="cm">jmCircle.prototype.getBounds = function() {</span>
+<span class="cm">	this.initPoints();</span>
+<span class="cm">	return this.base.getBounds.call(this);</span>
+<span class="cm">}*/</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è®¾å®æè·åä¸­å¿ç¹</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method center</span>
+<span class="cm"> * @for jmCircle</span>
+<span class="cm"> * @param {point} p ä¸­å¿åæ°</span>
+<span class="cm"> * @return {point} å½åä¸­å¿ç¹</span>
+<span class="cm"> */</span>
+<span class="nx">jmCircle</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">center</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="nx">p</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * è®¾å®æè·ååå¾</span>
+<span class="cm"> * </span>
+<span class="cm"> * @method radius</span>
+<span class="cm"> * @for jmCircle</span>
+<span class="cm"> * @param {number} p åå¾</span>
+<span class="cm"> * @return {number} å½ååå¾</span>
+<span class="cm"> */</span>
+<span class="nx">jmCircle</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">radius</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span><span class="nx">p</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+                    </div>
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_jmEditor.html" title="jmEditor">jmEditor</a></li>
+                                <li class=""><a href="module_jmGraph.html" title="jmGraph">jmGraph</a></li>
+                                <li class=""><a href="module_jmUtils.html" title="jmUtils">jmUtils</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="jmCell.html" title="jmCell">jmCell</a></li>
+                                <li class=""><a href="jmConnectLine.html" title="jmConnectLine">jmConnectLine</a></li>
+                                <li class=""><a href="jmEditor.html" title="jmEditor">jmEditor</a></li>
+                                <li class=""><a href="jmEditorDefaultStyle.html" title="jmEditorDefaultStyle">jmEditorDefaultStyle</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class="selected"><a href="jmcircle.js.html" title="jmcircle.js">jmcircle.js</a></li>
+                                <li class=""><a href="jmevents.js.html" title="jmevents.js">jmevents.js</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2013 jm47.com. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "jmCell.html#method_add", "access": "", "host": "jmCell", "type": "method", "name": "add"}, {"url": "jmEditor.html#method_addCell", "access": "", "host": "jmEditor", "type": "method", "name": "addCell"}, {"url": "jmEditorDefaultStyle.html#property_cellBorder", "access": "", "host": "jmEditorDefaultStyle", "type": "property", "name": "cellBorder"}, {"url": "jmEditor.html#property_cells", "access": "", "host": "jmEditor", "type": "property", "name": "cells"}, {"url": "jmEditor.html#method_clear", "access": "", "host": "jmEditor", "type": "method", "name": "clear"}, {"url": "jmCell.html#method_connect", "access": "", "host": "jmCell", "type": "method", "name": "connect"}, {"url": "jmEditor.html#property_connectable", "access": "", "host": "jmEditor", "type": "property", "name": "connectable"}, {"url": "jmEditorDefaultStyle.html#property_connectLine", "access": "", "host": "jmEditorDefaultStyle", "type": "property", "name": "connectLine"}, {"url": "jmEditor.html#property_connects", "access": "", "host": "jmEditor", "type": "property", "name": "connects"}, {"url": "jmEditorDefaultStyle.html#property_dragLine", "access": "", "host": "jmEditorDefaultStyle", "type": "property", "name": "dragLine"}, {"url": "jmEditor.html#method_execute", "access": "", "host": "jmEditor", "type": "method", "name": "execute"}, {"url": "jmEditorDefaultStyle.html#property_font", "access": "", "host": "jmEditorDefaultStyle", "type": "property", "name": "font"}, {"url": "jmEditor.html#method_fromJSON", "access": "", "host": "jmEditor", "type": "method", "name": "fromJSON"}, {"url": "jmEditor.html#method_getCell", "access": "", "host": "jmEditor", "type": "method", "name": "getCell"}, {"url": "jmEditor.html#method_getSelectedCells", "access": "", "host": "jmEditor", "type": "method", "name": "getSelectedCells"}, {"url": "jmConnectLine.html#method_initPoints", "access": "", "host": "jmConnectLine", "type": "method", "name": "initPoints"}, {"url": "jmEditor.html#method_isEnabled", "access": "", "host": "jmEditor", "type": "method", "name": "isEnabled"}, {"url": "jmEditor.html#method_maxId", "access": "", "host": "jmEditor", "type": "method", "name": "maxId"}, {"url": "jmEditor.html#method_menus", "access": "", "host": "jmEditor", "type": "method", "name": "menus"}, {"url": "jmEditor.html#property_movable", "access": "", "host": "jmEditor", "type": "property", "name": "movable"}, {"url": "jmEditor.html#method_moveCells", "access": "", "host": "jmEditor", "type": "method", "name": "moveCells"}, {"url": "jmEditor.html#method_redo", "access": "", "host": "jmEditor", "type": "method", "name": "redo"}, {"url": "jmEditor.html#method_regComponent", "access": "", "host": "jmEditor", "type": "method", "name": "regComponent"}, {"url": "jmEditor.html#method_regStyle", "access": "", "host": "jmEditor", "type": "method", "name": "regStyle"}, {"url": "jmCell.html#method_remove", "access": "", "host": "jmCell", "type": "method", "name": "remove"}, {"url": "jmConnectLine.html#method_remove", "access": "", "host": "jmConnectLine", "type": "method", "name": "remove"}, {"url": "jmEditor.html#method_remove", "access": "", "host": "jmEditor", "type": "method", "name": "remove"}, {"url": "jmEditor.html#method_save", "access": "", "host": "jmEditor", "type": "method", "name": "save"}, {"url": "jmCell.html#method_select", "access": "", "host": "jmCell", "type": "method", "name": "select"}, {"url": "jmEditor.html#method_selectAll", "access": "", "host": "jmEditor", "type": "method", "name": "selectAll"}, {"url": "jmCell.html#property_selected", "access": "", "host": "jmCell", "type": "property", "name": "selected"}, {"url": "jmConnectLine.html#property_selected", "access": "", "host": "jmConnectLine", "type": "property", "name": "selected"}, {"url": "jmEditorDefaultStyle.html#property_selectRect", "access": "", "host": "jmEditorDefaultStyle", "type": "property", "name": "selectRect"}, {"url": "jmCell.html#method_setOverlay", "access": "", "host": "jmCell", "type": "method", "name": "setOverlay"}, {"url": "jmCell.html#method_setStyle", "access": "", "host": "jmCell", "type": "method", "name": "setStyle"}, {"url": "jmEditor.html#property_styles", "access": "", "host": "jmEditor", "type": "property", "name": "styles"}, {"url": "jmEditor.html#method_toImage", "access": "", "host": "jmEditor", "type": "method", "name": "toImage"}, {"url": "jmEditor.html#method_toJSON", "access": "", "host": "jmEditor", "type": "method", "name": "toJSON"}, {"url": "jmEditor.html#property_type", "access": "", "host": "jmEditor", "type": "property", "name": "type"}, {"url": "jmEditor.html#method_undo", "access": "", "host": "jmEditor", "type": "method", "name": "undo"}, {"url": "jmCell.html#method_value", "access": "", "host": "jmCell", "type": "method", "name": "value"}, {"url": "jmConnectLine.html#method_value", "access": "", "host": "jmConnectLine", "type": "method", "name": "value"}];
+</script>
+</body>
+</html>

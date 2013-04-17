@@ -1,7 +1,12 @@
 
 /**
-* 画图基础对象
-*/
+ * 画图基础对象
+ * 当前库的工具类
+ * 
+ * @class jmUtils
+ * @module jmUtils
+ * @static
+ */
 var jmUtils = (function(){
 	function __contructor() {
 		this.version = '0.1';
@@ -10,16 +15,13 @@ var jmUtils = (function(){
 })();
 
 /**
-* 引用JS文件库
-*/
-jmUtils.require = function(src,callback) {
-
-}
-
-/**
-* 继承
-* target 为派生类，source为被继承类
-*/
+ * 继承
+ * 
+ * @method extend
+ * @for jmUtils
+ * @param {class} target 派生类
+ * @param {class} source 基类
+ */
 jmUtils.extend =  function(target,source) {  
     if(typeof source === 'function') {//类式继承  
         var F = function() {}; //创建一个中间函数对象以获取父类的原型对象  
@@ -52,11 +54,21 @@ jmUtils.extend =  function(target,source) {
 }; 
 
 /**
-* 复制一个对象
-*/
+ * 复制一个对象
+ * 
+ * @method clone
+ * @for jmUtils
+ * @param {object} source 被复制的对象
+ * @return {object} 参数source的拷贝对象
+ */
 jmUtils.clone = function(source) {
     if(typeof source === 'object') {
+        //如果为当前泛型，则直接new
+        if(jmUtils.isType(source,jmUtils.list)) {
+            return new jmUtils.list(source.items);
+        }
         var target = {};
+        target.constructor = source.constructor;
         for(var k in source) {
             target[k] = jmUtils.clone(source[k]);
         }
@@ -66,22 +78,33 @@ jmUtils.clone = function(source) {
 }   
 
 /**
-* 自定义集合
-*/
+ * 自定义集合
+ * 
+ * @class list
+ * @namespace jmUtils
+ * @for jmUtils
+ * @param {array} [arr] 数组，可转为当前list元素
+ */
 jmUtils.list = (function() {    
     function __constructor(arr) {
-        this.__items = [];
+        this.items = [];
         if(arr) {
-            if(typeof arr == 'array') {
-                for(var i in arr) this.__items.push(arr[i]);
+            if(jmUtils.isArray(arr)) {
+                this.items = arr.slice(0);
             }
             else {
-                this.__items.push(arr);
+                this.items.push(arr);
             }
         }
     }
 
-    //往集合中添加对象
+    /**
+     * 往集合中添加对象
+     *
+     * @method add
+     * @for list
+     * @param {any} obj 往集合中添加的对象
+     */
     __constructor.prototype.add = function(obj) {        
         if(obj && obj.constructor === Array) {
             for(var i in obj) {
@@ -90,125 +113,309 @@ jmUtils.list = (function() {
             return true;
         }
         if(typeof obj == 'object' && this.contain(obj)) return false;
-        this.__items.push(obj);
+        this.items.push(obj);
     }
 
+    /**
+     * 从集合中移除指定对象
+     * 
+     * @method remove
+     * @for list
+     * @param {any} obj 将移除的对象
+     */
     __constructor.prototype.remove = function(obj) {
-        for(var i = this.__items.length -1;i>=0;i--) {
+        for(var i = this.items.length -1;i>=0;i--) {
             /*if(typeof obj == 'function') {
-                if(obj(this.__items[i])) {
+                if(obj(this.items[i])) {
                     this.removeAt(i);
                 }
             }
             else*/
-             if(this.__items[i] == obj) {
+             if(this.items[i] == obj) {
                 this.removeAt(i);
             }
         }
     }
 
+    /**
+     * 按索引移除对象
+     * 
+     * @method removeAt
+     * @for list
+     * @param {integer} index 移除对象的索引
+     */
     __constructor.prototype.removeAt = function (index) {
-        if(this.__items.length > index) {
-            //delete this.__items[index];   
-            this.__items.splice(index,1);
+        if(this.items.length > index) {
+            //delete this.items[index];   
+            this.items.splice(index,1);
         }
     }
 
+    /**
+     * 判断是否包含某个对象
+     * 
+     * @method contain
+     * @for list
+     * @param {any} obj 判断当前集合中是否包含此对象
+     */
     __constructor.prototype.contain = function(obj) {
         /*if(typeof obj === 'function') {
-            for(var i in this.__items) {
-                if(obj(this.__items[i])) return true;
+            for(var i in this.items) {
+                if(obj(this.items[i])) return true;
             }
         }
         else {*/
-            for(var i in this.__items) {
-                if(this.__items[i] == obj) return true;
+            for(var i in this.items) {
+                if(this.items[i] == obj) return true;
             }
         //}
         return false;
     }
 
+    /**
+     * 从集合中获取某个对象
+     * 
+     * @method get
+     * @for list
+     * @param {integer/function} index 如果为整型则表示为获取此索引的对象，如果为function为则通过此委托获取对象
+     * @return {any} 集合中的对象
+     */
     __constructor.prototype.get = function(index) {
         if(typeof index == 'function') {
-            for(var i in this.__items) {
-                if(index(this.__items[i])) {
-                    return this.__items[i];
+            for(var i in this.items) {
+                if(index(this.items[i])) {
+                    return this.items[i];
                 }
             }
         }
         else {
-            return this.__items[index];
+            return this.items[index];
         }        
     }
 
+    /**
+     * 遍历当前集合 
+     *
+     * @method each
+     * @for list
+     * @param {function} cb 遍历当前集合的委托
+     * @param {boolean} inverse 是否按逆序遍历
+     */
     __constructor.prototype.each = function(cb,inverse) {
         if(cb && typeof cb == 'function') {
             //如果按倒序循环
             if(inverse) {
-                for(var i = this.__items.length - 1;i >= 0; i--) {
-                    cb.call(this,i,this.__items[i]);
+                for(var i = this.items.length - 1;i >= 0; i--) {
+                    cb.call(this,i,this.items[i]);
                 }
             }
             else {
-               for(var i in this.__items) {
-                    cb.call(this,i,this.__items[i]);
+               for(var i in this.items) {
+                    cb.call(this,i,this.items[i]);
                 } 
             }            
         }        
     }
 
+    /**
+     * 排序当前集合
+     *
+     * @method sort
+     * @for list
+     * @param {function} cb 排序委托
+     */
     __constructor.prototype.sort = function(cb) {
-        this.__items.sort(cb);
+        this.items.sort(cb);
     }
 
+    /**
+     * 获取当前集合对象个数
+     *
+     * @method count
+     * @for list
+     * @return {integer} 当前集合的个数
+     */
     __constructor.prototype.count = function() {
-        return this.__items.length;
+        return this.items.length;
     }
 
+    /**
+     * 清空当前集合
+     *
+     * @method clear
+     * @for list
+     */
     __constructor.prototype.clear = function() {
-        this.__items = [];
+        this.items = [];
     }
     return __constructor;
 })();
 
 
 /**
-* 全局缓存
-*/
+ * 全局缓存
+ *
+ * @class cache
+ * @namespace jmUtils
+ * @static
+ */
 jmUtils.cache = {
+    /**
+     * 当前缓存集合
+     *
+     * @property items
+     * @type {object}
+     * @for cache
+     */
     items : {},
+    /**
+     * 向缓存中添加对象
+     *
+     * @method add
+     * @for cache
+     * @param {string} key 加入缓存的健值
+     * @param {any} value 加入缓存的值
+     * @return {any} 当前加入的值
+     */
     add: function(key,value) {
         this.set(key,value);
         return value;
     },
+    /**
+     * 跟add类似
+     * 
+     * @method set
+     * @for cache
+     * @param {string} key 加入缓存的健值
+     * @param {any} value 加入缓存的值
+     */
     set: function(key,value) {
         this.items[key] = value;
     },
+    /**
+     * 从缓存中获取对象
+     *
+     * @method get
+     * @for cache
+     * @param {string} key 获取缓存的健值
+     * @return {any} 对应健的值
+     */
     get :function(key) {
         return this.items[key];
     },
+    /**
+     * 从缓存中移除指定健的对象
+     *
+     * @method remove
+     * @for cache
+     * @param {string} key 需要移除的缓存健
+     */
     remove: function(key) {
         this.items[key] = null;
     }
 }
 
 /**
-* 绑定对象事件
-*/
+ * 判断对象是否为数组
+ *
+ * @method isArray
+ * @for jmUtils
+ * @param {object} 被判断的对象
+ * @return {boolean} true=为数组对象，false=当前对象不为数组
+ */
+jmUtils.isArray = function(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
+/**
+ * 加载js文件
+ * 
+ * @method require
+ * @for jmUtils
+ * @param {string} js 需要加载的JS的路径
+ * @param {function} [callback] 回调函数callback为成功或失败后回调
+ */
+jmUtils.require = function(js,callback) {
+    if(jmUtils.isArray(js)) {
+        var loaded = js.length;
+        for(var i in js) {
+            jmUtils.require(js[i],function(j,err) {
+                if(err) {
+                    if(callback) callback(j,err);
+                }
+                else {
+                    loaded--;
+                    if(loaded == 0) {
+                        if(callback) callback(loaded);
+                    }
+                }
+            });
+        }
+    }
+    else {
+        //获取所有已加载的js标记
+        var sc = document.getElementsByTagName('script');
+        for(var i in sc) {
+            //如果已加载则直接返回成功
+            if(sc[i] === js) {
+                if(callback) callback(js);
+                return;
+            }
+        }
+        //创建script，加载js
+        sc = document.createElement('script');
+        sc.type= 'text/javascript';
+        sc.charset = 'utf-8';
+        sc.src = js;
+        //append到head中
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(sc);
+
+        //加载回调
+        sc.onload = sc.onreadystatechange = function() {
+            if(this.readyState && this.readyState === 'loading') {
+                return;
+            }
+            if(callback) callback(js);
+        }
+        //加载失败
+        sc.onerror = function() {
+            head.removeChild(sc);
+            if(callback) callback(js,'load faild');
+        }        
+    }
+}
+
+/**
+ * 绑定事件到html对象
+ * 
+ * @method bindEvent
+ * @for jmUtils
+ * @param {element} html元素对象
+ * @param {string} name 事件名称
+ * @param {function} fun 事件委托
+ */
 jmUtils.bindEvent = function(target,name,fun) {
-    if(target.addEventListener){
+    if(target.attachEvent) {
+        return target.attachEvent("on"+name,fun);
+    }    
+    else if(target.addEventListener) {
         target.addEventListener(name,fun);
         return true;
-    }else if(target.attachEvent){
-        return target.attachEvent("on"+name,fun);
-    }else{
+    }
+    else {
         return false;
     };
 }
 
 /**
-* 获取元素的绝对定位
-*/
+ * 获取元素的绝对定位
+ *
+ * @method getElementPosition
+ * @for jmUtils
+ * @param {element} el 目标元素对象
+ * @return {position} 位置对象(top,left)
+ */
 jmUtils.getElementPosition = function(el) {
     if(!el) return ;
     var pos = {"top":0, "left":0};
@@ -235,8 +442,14 @@ jmUtils.getElementPosition = function(el) {
     return pos;
 }
 /**
-* 获取事件的位置
-*/
+ * 获取元素事件触发的位置
+ *
+ * @method getEventPosition
+ * @for jmUtils
+ * @param {eventArg} evt 当前触发事件的参数
+ * @param {point} [scale] 当前画布的缩放比例
+ * @return {point} 事件触发的位置 
+ */
 jmUtils.getEventPosition = function(evt,scale) {
     evt = evt || event;
     
@@ -276,8 +489,14 @@ jmUtils.getEventPosition = function(evt,scale) {
 }
 
 /**
-* 检 查对象是否为指定的类型,不包括继承
-*/
+ * 检 查对象是否为指定的类型,不包括继承
+ * 
+ * @method isType
+ * @for jmUtils
+ * @param {object} target 需要判断类型的对象
+ * @param {class} type 对象类型
+ * @return {boolean} 返回对象是否为指定类型 
+ */
 jmUtils.isType = function(target ,type) {
     if(typeof target !== 'object') return false;
     if(target.constructor === type) return true;
@@ -289,14 +508,18 @@ jmUtils.isType = function(target ,type) {
     return false;
 }
 /**
-* 判断点是否在多边形内
-如果一个点在多边形内部，任意角度做射线肯定会与多边形要么有一个交点，要么有与多边形边界线重叠。
-
-如果一个点在多边形外部，任意角度做射线要么与多边形有一个交点，要么有两个交点，要么没有交点，要么有与多边形边界线重叠。
-
-利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
-* 返回直 0= 不在图形内和线上，1=在边上，2=在图形内部
-*/
+ * 判断点是否在多边形内
+ * 如果一个点在多边形内部，任意角度做射线肯定会与多边形要么有一个交点，要么有与多边形边界线重叠。
+ * 如果一个点在多边形外部，任意角度做射线要么与多边形有一个交点，要么有两个交点，要么没有交点，要么有与多边形边界线重叠。
+ * 利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
+ * 
+ * @method pointInPolygon
+ * @for jmUtils
+ * @param {point} pt 坐标对象
+ * @param {array} polygon 多边型角坐标对象数组
+ * @param {number} offset 判断可偏移值
+ * @return {integer} 0= 不在图形内和线上，1=在边上，2=在图形内部
+ */
 jmUtils.pointInPolygon = function(pt,polygon,offset) {
     offset = offset || 1;
     offset = offset / 2;
@@ -402,12 +625,19 @@ jmUtils.pointInPolygon = function(pt,polygon,offset) {
 }
 
 /**
-* 检查边界，子对象是否超出父容器边界
-* 当对象偏移offset后是否出界
-* 返回{left:0,right:0,top:0,bottom:0} 
-* 如果right>0表示右边出界right偏移量,left<0则表示左边出界left偏移量
-* 如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
-*/
+ * 检查边界，子对象是否超出父容器边界
+ * 当对象偏移offset后是否出界
+ * 返回(left:0,right:0,top:0,bottom:0)
+ * 如果right>0表示右边出界right偏移量,left<0则表示左边出界left偏移量
+ * 如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
+ *
+ * @method checkOutSide
+ * @for jmUtils
+ * @param {bound} parentBounds 父对象的边界
+ * @param {bound} targetBounds 对象的边界
+ * @param {number} offset 判断是否越界可容偏差
+ * @return {bound} 越界标识
+ */
 jmUtils.checkOutSide = function(parentBounds,targetBounds,offset) {
     var result = {left:0,right:0,top:0,bottom:0};
     if(offset.x < 0 ) {
@@ -427,47 +657,80 @@ jmUtils.checkOutSide = function(parentBounds,targetBounds,offset) {
 }
 
 /**
-* 生成唯 一ID
-*/
+ * 通过时间生成唯 一ID
+ *
+ * @method guid
+ * @for jmUtils
+ * @return {string} 唯一字符串
+ */
 jmUtils.guid = function() {
     var gid = new Date().getTime();
     return gid;
 }
 
 /**
-* 去除字符串开始字符
-*/
+ * 去除字符串开始字符
+ * 
+ * @method trimStart
+ * @for jmUtils
+ * @param {string} source 需要处理的字符串
+ * @param {char} [c] 要去除字符串的前置字符
+ * @return {string} 去除前置字符后的字符串
+ */
 jmUtils.trimStart = function(source,c) {
     c = c || ' ';
-    if(source && source.length > 0 && source[0] === c) {
-        source = source.substring(1);
-        return jmUtils.trimStart(source,c);
+    if(source && source.length > 0) {
+        var sc = source[0];
+        if(sc === c || c.indexOf(sc) >= 0) {
+            source = source.substring(1);
+            return jmUtils.trimStart(source,c);
+        }        
     }
     return source;
 }
 
 /**
-* 去除字符串结束的字符c
-*/
+ * 去除字符串结束的字符c
+ *
+ * @method trimEnd
+ * @for jmUtils
+ * @param {string} source 需要处理的字符串
+ * @param {char} [c] 要去除字符串的后置字符
+ * @return {string} 去除后置字符后的字符串
+ */
 jmUtils.trimEnd = function(source,c) {
     c = c || ' ';
-    if(source && source.length > 0 && source[source.length - 1] === c) {
-        source = source.substring(0,source.length - 1);
-        return jmUtils.trimStart(source,c);
+    if(source && source.length > 0) {
+        var sc = source[source.length - 1];
+        if(sc === c || c.indexOf(sc) >= 0) {
+            source = source.substring(0,source.length - 1);
+            return jmUtils.trimStart(source,c);
+        }        
     }
     return source;
 }
 
 /**
-* 去除字符串开始与结束的字符
-*/
+ * 去除字符串开始与结束的字符
+ *
+ * @method trim
+ * @for jmUtils
+ * @param {string} source 需要处理的字符串
+ * @param {char} [c] 要去除字符串的字符
+ * @return {string} 去除字符后的字符串
+ */
 jmUtils.trim = function(source,c) {
     return jmUtils.trimEnd(jmUtils.trimStart(source,c),c);
 }
 
 /**
-* 检查是否为百分比参数
-*/
+ * 检查是否为百分比参数
+ *
+ * @method checkPercent
+ * @for jmUtils
+ * @param {string} 字符串参数
+ * @return {boolean} true=当前字符串为百分比参数,false=不是
+ */
 jmUtils.checkPercent = function(per) {
     if(typeof per === 'string') {
         per = jmUtils.trim(per);
@@ -478,8 +741,13 @@ jmUtils.checkPercent = function(per) {
 }
 
 /**
-* 转换百分数为数值类型
-*/
+ * 转换百分数为数值类型
+ *
+ * @method percentToNumber
+ * @for jmUtils
+ * @param {string} per 把百分比转为数值的参数
+ * @return {number} 百分比对应的数值
+ */
 jmUtils.percentToNumber = function(per) {
     if(typeof per === 'string') {
         var tmp = jmUtils.checkPercent(per);
@@ -490,3 +758,88 @@ jmUtils.percentToNumber = function(per) {
     }
     return per;
 }
+
+/**
+ * 解析XML字符串
+ *
+ * @method parseXML
+ * @for jmUtils
+ * @param {string} xml xml字符串
+ * @return {XmlDocument} 把字符串转为的xml对象
+ */
+jmUtils.parseXML = function(xml) {
+    var xmlDoc;
+    if(DOMParser) {
+        var parser = new DOMParser();
+        xmlDoc = parser.parseFromString(xml, "text/xml");
+    }
+    else if(window.ActiveXObject) {   
+        xmlDoc  = new ActiveXObject('Microsoft.XMLDOM');
+        xmlDoc.async  = false;
+        xmlDoc.loadXML(xml);
+    } 
+    else {
+        return null;
+    }   
+    return xmlDoc;
+}
+
+/**
+ * 解析XML文档为json对象
+ *
+ * @method xmlToJSON
+ * @for jmUtils
+ * @param {string} xml 待转为xml对象的xml字符串
+ * @return {object} xml对象转为的json对象
+ */
+jmUtils.xmlToJSON = function(xml) {
+    if (!xml) return null;
+    if(typeof xml === 'string') {
+        xml = jmUtils.parseXML(xml);
+    }
+    /**
+     * 解析节点
+     * 
+     * @method turnChildren
+     * @param {xmlNode} xmlnode xml对象节点
+     * @param {xmlNode} parent 当前对象的父节点
+     * @private
+     * @return 当前节点对应的json对象
+     */
+    function turnChildren(xmlnode,parent) {
+        if (xmlnode && xmlnode.childNodes && xmlnode.childNodes.length > 0) {
+            for (var i = 0; i < xmlnode.childNodes.length; i++) {
+                var node = xmlnode.childNodes[i];
+                if(node.nodeType != 1) continue;
+                var name = node.name || node.nodeName || node.tagName;
+                if (name) {
+                    var item = {children:[],attributes:{}};
+                    //解析属性
+                    if(node.attributes) {
+                        for(var k in node.attributes) {
+                            var attr = node.attributes[k];
+                            var attrname = attr.name || attr.nodeName;
+                            if(attrname) {
+                                item.attributes[attrname] = jmUtils.trim(attr.value || node.nodeValue || attr.textContent);
+                            }
+                        }             
+                    }
+                    item.name = name;
+                    item.value = jmUtils.trim(node.value || node.nodeValue || node.textContent);
+                    parent.children.push(item);
+                    turnChildren(node, item);
+                }
+                else {
+                    parent.value = jmUtils.trim(node.value || node.nodeValue || node.textContent);
+                    turnChildren(node, parent);
+                }                
+            }
+        }
+    }    
+    var jsobj = {children:[]};
+    jsobj.version = xml.xmlVersion;
+    jsobj.title = xml.title;
+    turnChildren(xml, jsobj);
+    return jsobj;
+}
+

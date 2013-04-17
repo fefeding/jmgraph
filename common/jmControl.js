@@ -1,6 +1,11 @@
 /**
-* 控件基础对象
-*/
+ * 控件基础对象
+ * 控件的基础属性和方法
+ *
+ * @class jmControl
+ * @module jmGraph
+ * @for jmGraph
+ */
 
 var jmControl = (function() {
 	function __constructor() {		
@@ -13,14 +18,20 @@ var jmControl = (function() {
 
 
 /**
-* 初始化对象
-*/
+ * 初始化对象，设定样式，初始化子控件对象
+ * 此方法为所有控件需调用的方法
+ *
+ * @method initializing
+ * @for jmControl
+ * @param {canvas} context 当前画布
+ * @param {style} style 当前控件的样式
+ */
 jmControl.prototype.initializing = function(context,style) {
 	this.context = context;
 	this.style = style || {};
 	this.visible = true;
 
-	var _this = this;
+	var self = this;
 	//定义子元素集合
 	this.children = (function() {
 		var lst = new jmUtils.list();
@@ -31,34 +42,32 @@ jmControl.prototype.initializing = function(context,style) {
 				if(obj.parent && obj.parent.children) {
 					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
 				}
-				obj.parent = _this;
+				obj.parent = self;
 				oadd.call(this,obj);
+				obj.emit('add',obj);
 			}
-		} ;
-		var oremove= lst.remove;
+		};
+		lst.oremove= lst.remove;
 		//当把对象从此控件中移除时，把其父节点置为空
 		lst.remove = function(obj) {
-			if(typeof obj === 'object') {
-				/*if(obj.canMove) {
-					obj.canMove(false);
-				}*/
+			if(typeof obj === 'object') {				
 				obj.parent = null;
-				oremove.call(this,obj);
+				this.oremove(obj);
 			}
 		};
 		/**
-		* 根据控件zIndex排序，越大的越高
-		*/
+		 * 根据控件zIndex排序，越大的越高
+		 */
 		lst.sort = function() {
 			var topItems = [];
 			//提取zindex大于0的元素
 			lst.each(function(i,obj) {
-				if(obj.style && obj.style.zIndex && !obj.zIndex) {
+				if(!obj.zIndex && obj.style && obj.style.zIndex) {
 					obj.zIndex = Number(obj.style.zIndex);
 				}
-				if(obj.zIndex && Number(obj.zIndex) > 0) {
+				if(obj.zIndex) {
 					topItems.push(obj);
-					oremove.call(this,obj);
+					this.oremove(obj);
 				}
 			});
 			//通过zindex排序
@@ -72,69 +81,104 @@ jmControl.prototype.initializing = function(context,style) {
 } 
 
 /**
-* 鼠标指针
-*/
+ * 设置鼠标指针
+ * 
+ * @method cursor
+ * @for jmControl
+ * @param {string} cur css鼠标指针标识,例如:pointer,move等
+ */
 jmControl.prototype.cursor = function(cur) {	
 	var graph = this.findParent(jmGraph);
 	if(graph) {
-		graph.setStyle('cursor',cur);
+		graph.css('cursor',cur);
 	}
 }
 
 /**
-* 设定样式到context
-* fill=填充色，stroke=画笔色
-*/
+ * 设定样式到context
+ * 处理样式映射，转换渐变和阴影对象为标准canvas属性
+ * 
+ * @method setStyle
+ * @for jmControl
+ * @param {style} style 样式对象，如:{fill:'black',stroke:'red'}
+ */
 jmControl.prototype.setStyle = function(style) {
 	style = style || this.style;
 	if(!style) return;
 
 	/**
-	* 样式设定
-	* context = 当前画板，style=样式对象，name=样式对象中的名称，
-	* mpkey=样式名称在映射中的key(例如：shadow.blur为模糊值)
-	*/
+	 * 样式设定
+	 * 
+	 * @method __setStyle
+	 * @private
+	 * @param {jmControl} control 当前样式对应的控件对象
+	 * @param {style} style 样式
+	 * @param {string} name 样式名称
+	 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
+	 */
 	function __setStyle(control,style,name,mpkey) {
 		//样式映射名
 		var styleMapCacheKey = 'jm_control_style_mapping';
 		var styleMap = jmUtils.cache.get(styleMapCacheKey);
 		if(!styleMap) {
+			//样式名称，也当做白名单使用
 			styleMap = {
 				'fill':'fillStyle',
 				'stroke':'strokeStyle',
 				'shadow.blur':'shadowBlur',
 				'shadow.x':'shadowOffsetX',
 				'shadow.y':'shadowOffsetY',
-				'shadow.color':'shadowColor'
+				'shadow.color':'shadowColor',
+				'lineWidth' : 'lineWidth',
+				'fillStyle' : 'fillStyle',
+				'strokeStyle' : 'strokeStyle',
+				'font' : 'font',
+				'textAlign' : 'textAlign',
+				'textBaseline' : 'textBaseline',
+				'shadowBlur' : 'shadowBlur',
+				'shadowOffsetX' : 'shadowOffsetX',
+				'shadowOffsetY' : 'shadowOffsetY',
+				'shadowColor' : 'shadowColor'
 			};
 			jmUtils.cache.add(styleMapCacheKey,styleMap);
 		}
 		var styleValue = style[name];
 		if(styleValue) {
-			if(typeof styleValue == 'object' && !styleMap[name]) {
-				for(var k in styleValue) {
-					__setStyle(control,styleValue,k,name + '.' + k);
-				}
+			var t = typeof styleValue;
+			if(t == 'object' && !styleMap[name]) {
+				if(name === 'shadow') {
+					for(var k in styleValue) {
+						__setStyle(control,styleValue,k,name + '.' + k);
+					}
+				}				
 			}
 			//如果为渐变对象
-			else if(jmUtils.isType(styleValue,jmGradient)) {				
+			else if(t == 'object' && jmUtils.isType(styleValue,jmGradient)) {				
 				var mpname = styleMap[mpkey || name] || name;
 				control.context[mpname] = styleValue.toGradient(control);
 			}		
-			else if(typeof styleValue != 'function') {
-				var mpname = styleMap[mpkey || name] || name;
-				control.context[mpname] = style[name];
+			else if(t != 'function' && t != 'object') {
+				var mpname = styleMap[mpkey || name];
+				//只有存在白名单中才处理
+				if(mpname) {
+					control.context[mpname] = styleValue;
+				}				
 			}				
 		}
-	}
+	}	
 	for(var k in style) {
 		__setStyle(this,style,k);
 	}
 }
 
 /**
-* 获取当前控件的边界
-*/
+ * 获取当前控件的边界
+ * 通过分析控件的描点或位置加宽高得到为方形的边界
+ *
+ * @method getBounds
+ * @for jmControl
+ * @return {object} 控件的边界描述对象(left,top,right,bottom,width,height)
+ */
 jmControl.prototype.getBounds = function() {
 	if(this.initPoints) this.initPoints();
 	var rect = {};
@@ -157,6 +201,15 @@ jmControl.prototype.getBounds = function() {
 			}
 		}
 	}
+	else if(this.getLocation) {
+		var p = this.getLocation();
+		if(p) {
+			rect.left = p.left;
+			rect.top = p.top;
+			rect.right = p.left + p.width;
+			rect.bottom = p.top + p.height;
+		}		
+	}
 	if(!rect.left) rect.left = 0; 
 	if(!rect.top) rect.top = 0; 
 	if(!rect.right) rect.right = 0; 
@@ -167,60 +220,145 @@ jmControl.prototype.getBounds = function() {
 }
 
 /**
-* 获取或设定位置坐标
+ * 获取当前控件的位置相关参数
+ * 解析百分比和margin参数
+ *
+ * @method getLocation
+ * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
+ */
+jmControl.prototype.getLocation = function() {
+	/*//如果已经计算过则直接返回
+	//在开画之前会清空此对象
+	if(this.location) return this.location;
 */
+	var localtion = this.location = {left:0,top:0,width:0,height:0};
+	var p = this.position();	
+	localtion.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()):null;//中心
+	localtion.radius = this.radius?this.radius():null;//半径
+	localtion.width = this.width() || 0;
+	localtion.height = this.height() || 0;
+
+	var margin = this.style.margin || {};
+	margin.left = margin.left || 0;
+	margin.top = margin.top || 0;
+	margin.right = margin.right || 0;
+	margin.bottom = margin.bottom || 0;
+	
+	//如果没有指定位置，但指定了margin。则位置取margin偏移量
+	if(p) {
+		localtion.left = p.x;
+		localtion.top = p.y;
+	}
+	else {
+		localtion.left = margin.left;
+		localtion.top = margin.top;
+	}
+
+	if(!this.parent) return localtion;//没有父节点则直接返回
+	var parentBounds = this.parent.bounds?this.parent.bounds:this.parent.getBounds();	
+
+	//处理百分比参数
+	if(jmUtils.checkPercent(localtion.left)) {
+		localtion.left = jmUtils.percentToNumber(localtion.left) * parentBounds.width;
+	}
+	if(jmUtils.checkPercent(localtion.top)) {
+		localtion.top = jmUtils.percentToNumber(localtion.top) * parentBounds.height;
+	}
+	
+	//如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
+	if(jmUtils.checkPercent(localtion.width)) {
+		localtion.width = jmUtils.percentToNumber(localtion.width) * parentBounds.width;
+	}
+	if(jmUtils.checkPercent(localtion.height)) {
+		localtion.height = jmUtils.percentToNumber(localtion.height) * parentBounds.height;
+	}
+	//处理中心点
+	if(localtion.center) {
+		//处理百分比参数
+		if(jmUtils.checkPercent(localtion.center.x)) {
+			localtion.center.x = jmUtils.percentToNumber(localtion.center.x) * parentBounds.width;
+		}
+		if(jmUtils.checkPercent(localtion.center.y)) {
+			localtion.center.y = jmUtils.percentToNumber(localtion.center.y) * parentBounds.height;
+		}
+	}
+	if(localtion.radius) {
+		//处理百分比参数
+		if(jmUtils.checkPercent(localtion.radius)) {
+			localtion.radius = jmUtils.percentToNumber(localtion.radius) * parentBounds.width;
+		}		
+	}
+	return localtion;
+}
+
+/**
+ * 获取或设定位置坐标
+ *
+ * @method position
+ * @param {point} [p] 位置参数{x:1,y:1} ,如果为空则返回当前位置
+ * @return {point} 当前控件的位置
+ */
 jmControl.prototype.position = function(p) {
 	return this.setValue('position',p);
 }
 
 /**
-* 设定或获取宽度
-*/
+ * 设定或获取宽度
+ * 
+ * @method width
+ * @param {number} [w] 宽度，如果为空则返回当前宽度
+ * @return {nubmer} 控件的当前宽度
+ */
 jmControl.prototype.width = function(w) {
 	return this.setValue('width',w);
 }
 
 /**
-* 设定或获取高度
-*/
+ * 设定或获取高度
+ *
+ * @method height
+ * @param {number} [h] 高度
+ * @return {number} 当前控件的高度
+ */
 jmControl.prototype.height = function(h) {
 	return this.setValue('height',h);
 }
 
 /**
-* 对控件进行平移
-*/
-jmControl.prototype.offset = function(x,y) {	
-	if(this.cpoints && typeof this.cpoints == 'function') {
+ * 对控件进行平移
+ * 遍历控件所有描点或位置，设置其偏移量。
+ *
+ * @method offset
+ * @param {number} x x轴偏移量
+ * @param {number} y y轴偏移量
+ */
+jmControl.prototype.offset = function(x,y) {
+	//var location = this.getLocation();	
+	/*if(this.cpoints && typeof this.cpoints == 'function') {
 		var ps = this.cpoints();
 		for(var i in ps) {
 			ps[i].x += x;
 			ps[i].y += y;
 		}
 	}
-	else if(this.center && typeof this.center == 'function') {
-		var tmp = this.getCenter?this.getCenter() : this.center();
-		if(tmp) {
-			tmp.x += x;
-			tmp.y += y;	
-			var center = this.center();
-			if(center) {
-				center.x = tmp.x;
-				center.y = tmp.y;
-			}			
-		}		
+	else */
+	if(this.center && typeof this.center == 'function') {		
+		var center = this.center();
+		if(center) {
+			center.x += x;
+			center.y += y;	
+			this.center(center);
+		}			
 	}
-	else if(this.position && typeof this.position == 'function') {
-		var tmp = this.getPosition?this.getPosition():this.position();
-		if(tmp) {
-			tmp.x += x;
-			tmp.y += y;
-			var p = this.position();
-			if(p) {
-				p.x = tmp.x;
-				p.y = tmp.y;
-			}			
-		}		
+	else if(this.position && typeof this.position == 'function') {		
+		//location.left += x;
+		//location.top += y;
+		var p = this.position();
+		if(p) {
+			p.x += x;
+			p.y += y;
+			this.position(p);
+		}			
 	}
 	else if(this.points) {
 		for(var i in this.points) {
@@ -228,14 +366,20 @@ jmControl.prototype.offset = function(x,y) {
 			this.points[i].y += y;
 		}
 	}
+	//触发控件移动事件
+	this.emit('move',{offsetX:x,offsetY:y});
 }
 
 /**
-* 获取控件相对于画布的绝对边界
-*/
+ * 获取控件相对于画布的绝对边界，
+ * 与getBounds不同的是：getBounds获取的是相对于父容器的边界.
+ *
+ * @method getAbsoluteBounds
+ * @return {object} 边界对象(left,top,right,bottom,width,height)
+ */
 jmControl.prototype.getAbsoluteBounds = function() {
 	//当前控件的边界，
-	var rec = this.bounds;
+	var rec = this.bounds || this.getBounds();
 	if(this.parent && this.parent.absoluteBounds) {
 		//父容器的绝对边界
 		var prec = this.parent.absoluteBounds;
@@ -253,15 +397,21 @@ jmControl.prototype.getAbsoluteBounds = function() {
 }
 
 /**
-* 开始画控件
-*/
+ * 画控件前初始化
+ * 执行beginPath开始控件的绘制
+ * 
+ * @method beginDraw
+ */
 jmControl.prototype.beginDraw = function() {
+	this.emit('beginDraw',this);
 	this.context.beginPath();		
 }
 
 /**
-* 结束画控件
-*/
+ * 结束控件绘制
+ *
+ * @method endDraw
+ */
 jmControl.prototype.endDraw = function() {
 	//如果当前为封闭路径
 	if(this.style.close) {
@@ -277,8 +427,11 @@ jmControl.prototype.endDraw = function() {
 }
 
 /**
-* 开始画图
-*/
+ * 绘制控件
+ * 在画布上描点
+ * 
+ * @method draw
+ */
 jmControl.prototype.draw = function() {	
 	if(this.points && this.points.length > 0) {
 		//获取当前控件的绝对位置
@@ -288,6 +441,7 @@ jmControl.prototype.draw = function() {
 		
 		for(var i=1; i < len;i++) {
 			var p = this.points[i];
+			//移至当前坐标
 			if(p.m) {
 				this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
 			}
@@ -299,10 +453,13 @@ jmControl.prototype.draw = function() {
 }
 
 /**
-* 绘制当前控件
-*/
+ * 绘制当前控件
+ * 协调控件的绘制，先从其子控件开始绘制，再往上冒。
+ *
+ * @method paint
+ */
 jmControl.prototype.paint = function() {
-	if(this.visible !== false) {	
+	if(this.visible !== false) {
 		//计算当前边界
 		this.bounds = this.getBounds();
 		this.absoluteBounds = this.getAbsoluteBounds();
@@ -324,19 +481,31 @@ jmControl.prototype.paint = function() {
 }
 
 /**
-* 获取指定事件的集合
-*/
+ * 获取指定事件的集合
+ * 比如mousedown,mouseup等
+ *
+ * @method getEvent
+ * @param {string} name 事件名称
+ * @return {list} 事件委托的集合
+ */
 jmControl.prototype.getEvent = function(name) {		
 	return this.__events?this.__events[name]:null;
 }
 
 /**
-* 绑定控件的事件
-*/
+ * 绑定控件的事件
+ *
+ * @method bind
+ * @param {string} name 事件名称
+ * @param {function} handle 事件委托
+ */
 jmControl.prototype.bind = function(name,handle) {	
 	/**
-	* 添加事件的集合
-	*/
+	 * 添加事件的集合
+	 *
+	 * @method _setEvent
+	 * @private
+	 */
 	function _setEvent(name,events) {
 		if(!this.__events) this.__events = {};
 		return this.__events[name] = events;
@@ -348,8 +517,12 @@ jmControl.prototype.bind = function(name,handle) {
 }
 
 /**
-* 移除控件的事件
-*/
+ * 移除控件的事件
+ *
+ * @method unbind 
+ * @param {string} name 事件名称
+ * @param {function} handle 从控件中移除事件的委托
+ */
 jmControl.prototype.unbind = function(name,handle) {
 	var eventCollection = this.getEvent(name) ;		
 	if(eventCollection) {
@@ -358,26 +531,34 @@ jmControl.prototype.unbind = function(name,handle) {
 }
 
 /**
-* 独立执行事件委托
-*/
+ * 独立执行事件委托
+ *
+ * @method runEventHandle
+ * @param {string} 将执行的事件名称
+ * @param {object} 事件执行的参数，包括触发事件的对象和位置
+ */
 function runEventHandle(name,args) {
 	var stoped = false;
 	var events = this.getEvent(name);		
 	if(events) {
-		var _this = this;			
+		var self = this;			
 		events.each(function(i,handle) {
 			//只要有一个事件被阻止，则不再向上冒泡
-			if(false === handle.call(_this,args)) {
+			if(false === handle.call(self,args)) {
 				stoped = true;
 			}
 		});		
 	}	
-	return stoped;		
+	return stoped;
 }
 
 /**
-* 检 查坐标是否落在当前控件区域中..true=在区域内
-*/
+ * 检 查坐标是否落在当前控件区域中..true=在区域内
+ *
+ * @method checkPoint
+ * @param {point} p 位置参数
+ * @return {boolean} 当前位置如果在区域内则为true,否则为false。
+ */
 jmControl.prototype.checkPoint = function(p) {
 	//生成当前坐标对应的父级元素的相对位置
 	var abounds = this.bounds || this.getBounds();
@@ -394,14 +575,24 @@ jmControl.prototype.checkPoint = function(p) {
 
 
 /**
-* 触发事件
-*/
+ * 触发控件事件，组合参数并按控件层级关系执行事件冒泡。
+ *
+ * @method raiseEvent
+ * @param {string} name 事件名称
+ * @param {object} args 事件执行参数
+ * @return {boolean} 如果事件被组止冒泡则返回false,否则返回true
+ */
 jmControl.prototype.raiseEvent = function(name,args) {
 	if(this.visible === false) return ;//如果不显示则不响应事件	
 	if(!args.position) {		
 		var graph = this.findParent(jmGraph);
 		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置	
 
+		args = {position:position,
+			button:args.button,
+			keyCode:args.keyCode || args.charCode,
+			ctrlKey:args.ctrlKey
+		};
 		//复制一个参数对象
 		/*var argstmp = {position:position,target:this};
 		for(var k in args) {
@@ -411,15 +602,14 @@ jmControl.prototype.raiseEvent = function(name,args) {
 			}
 		}
 		args = argstmp;*/
-		args.position = position;
-		args.target = this;
+		//args.position = position;		
 	}
 	//先执行子元素事件，如果事件没有被阻断，则向上冒泡
 	var stoped = false;
 	if(this.children) {
 		this.children.each(function(j,el) {	
 			//未被阻止才执行			
-			if(stoped == false) {
+			if(stoped === false) {
 				stoped = (false === el.raiseEvent(name,args));
 			}
 		},true);//按逆序处理
@@ -436,7 +626,11 @@ jmControl.prototype.raiseEvent = function(name,args) {
 	
 	//事件发生在边界内才触发
 	if(this.checkPoint(args.position)) {
-		if(stoped == false) {
+		//如果没有指定触发对象，则认为当前为第一触发对象
+		if(!args.target) {
+			args.target = this;
+		}
+		if(stoped === false) {
 			//如果返回true则阻断冒泡
 			stoped = runEventHandle.call(this,name,args);//执行事件		
 		}
@@ -457,8 +651,11 @@ jmControl.prototype.raiseEvent = function(name,args) {
 }
 
 /**
-* 清空控件指定事件
-*/
+ * 清空控件指定事件
+ *
+ * @method clearEvents
+ * @param {string} name 需要清除的事件名称
+ */
 jmControl.prototype.clearEvents = function(name) {
 	var eventCollection = this.getEvent(name) ;		
 	if(eventCollection) {
@@ -467,10 +664,21 @@ jmControl.prototype.clearEvents = function(name) {
 }
 
 /**
-* 向上查找其父级类型为type的元素
-*/
+ * 查找其父级类型为type的元素，直到找到指定的对象或到最顶级控件后返回空。
+ *
+ * @method findParent 
+ * @param {object} 类型名称或类型对象
+ * @return {object} 指定类型的实例
+ */
 jmControl.prototype.findParent = function(type) {
-	if(this.is(type)) return this;
+	//如果为类型名称，则返回名称相同的类型对象
+	if(typeof type === 'string') {
+		if(this.type == type)
+			return this;
+	}
+	else if(this.is(type)) {
+		return this;
+	}
 	if(this.parent) {
 		return this.parent.findParent(type);
 	}
@@ -478,18 +686,36 @@ jmControl.prototype.findParent = function(type) {
 }
 
 /**
-* 设定是否可以移动
-*/
-jmControl.prototype.canMove = function(m) {
-	var graph = this.findParent(jmGraph);//获取最顶级元素画布
+ * 设定是否可以移动
+ * 此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
+ *
+ * @method canMove
+ * @param {boolean} m true=可以移动，false=不可移动或清除移动。
+ * @param {jmGraph} [graph] 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。
+ */
+jmControl.prototype.canMove = function(m,graph) {
+	graph = graph || this.findParent(jmGraph);//获取最顶级元素画布
 	if(!graph) return;
 
 	if(!this.__mvMonitor) {
+		/**
+		 * 控制控件移动对象
+		 * 
+		 * @property __mvMonitor
+		 * @private
+		 */
 		this.__mvMonitor = {};
 		this.__mvMonitor.mouseDown = false;
 		this.__mvMonitor.curposition={x:0,y:0};
-		var _this = this;
-		_this.__mvMonitor.mv = function(evt) {
+		var self = this;
+		/**
+		 * 控件移动鼠标事件
+		 *
+		 * @method mv
+		 * @private
+		 */
+		this.__mvMonitor.mv = function(evt) {
+			var _this = self;
 			if(_this.__mvMonitor.mouseDown) {	
 				var parentbounds = _this.parent.absoluteBounds || _this.parent.getAbsoluteBounds();		
 				var offsetx = evt.position.x - _this.__mvMonitor.curposition.x;
@@ -513,41 +739,63 @@ jmControl.prototype.canMove = function(m) {
 						if(_this.lockSide.bottom) offsety -= outside.bottom;
 					}
 				}
-				
 				_this.offset(offsetx,offsety);
 				_this.__mvMonitor.curposition.x = evt.position.x;
-				_this.__mvMonitor.curposition.y = evt.position.y;
+				_this.__mvMonitor.curposition.y = evt.position.y;	
 				//触发控件移动事件
-				_this.callHandle('move',[{position:_this.__mvMonitor.curposition,offsetX:offsetx,offsetY:offsety}]);
-				graph.refresh();
+				//_this.emit('move',[{position:_this.__mvMonitor.curposition,offsetX:offsetx,offsetY:offsety}]);			
+				_this.graph.refresh();
 				return false;
 			}
 		}
-		_this.__mvMonitor.mu = function() {
+		/**
+		 * 控件移动鼠标松开事件
+		 *
+		 * @method mu
+		 * @private
+		 */
+		this.__mvMonitor.mu = function() {
+			var _this = self;
 			if(_this.__mvMonitor.mouseDown) {
 				_this.__mvMonitor.mouseDown = false;
 				_this.cursor('default');
-				_this.callHandle('moveend',[{position:_this.__mvMonitor.curposition}]);	
+				_this.emit('moveend',{position:_this.__mvMonitor.curposition});	
 				return false;
 			}			
 		}
-		_this.__mvMonitor.ml = function() {
+		/**
+		 * 控件移动鼠标离开事件
+		 *
+		 * @method ml
+		 * @private
+		 */
+		this.__mvMonitor.ml = function() {
+			var _this = self;
 	 		if(_this.__mvMonitor.mouseDown) {
 				_this.__mvMonitor.mouseDown = false;
 				_this.cursor('default');	
-				_this.callHandle('moveend',[{position:_this.__mvMonitor.curposition}]);
+				_this.emit('moveend',{position:_this.__mvMonitor.curposition});
 				return false;
 			}	
 		}
-		_this.__mvMonitor.md = function(evt) {
-			_this.__mvMonitor.mouseDown = true;
-			_this.cursor('move');
-			var parentbounds = _this.parent.absoluteBounds || _this.parent.getAbsoluteBounds();	
-			_this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
-			_this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
-			//触发控件移动事件
-			_this.callHandle('movestart',[{position:_this.__mvMonitor.curposition}]);
-			return false;
+		/**
+		 * 控件移动鼠标按下事件
+		 *
+		 * @method md
+		 * @private
+		 */
+		this.__mvMonitor.md = function(evt) {
+			var _this = self;
+			if(evt.button == 0 || evt.button == 1) {
+				_this.__mvMonitor.mouseDown = true;
+				_this.cursor('move');
+				var parentbounds = _this.parent.absoluteBounds || _this.parent.getAbsoluteBounds();	
+				_this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
+				_this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
+				//触发控件移动事件
+				_this.emit('movestart',{position:_this.__mvMonitor.curposition});
+				return false;
+			}			
 		}
 	}
 	

@@ -34,16 +34,17 @@
 					stroke:'rgb(120,20,80)',
 					lineWidth:3
 				};
-				if(typeof ltie9 == 'undefined') {
-					style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');		
-				}
-						
-				var psize = 6;
+				style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');
+				
 				var p0={x:160,y:200};
 				var p1={x:200,y:80};
 				var p2={x:400,y:100};
 				var p3={x:420,y:210};
-				var p4={x:500,y:120};
+				var p4={x:500,y:120};				
+
+				var bezier = graph.createShape('bezier',{style:style,points:[p0,p1,p2,p3,p4]});
+				graph.children.add(bezier);
+				bezier.canMove(true);
 
 				var lstyle = jmUtils.clone(style);
 				lstyle.stroke = 'rgba(131,237,111,0.7)';
@@ -52,11 +53,7 @@
 				graph.children.add(path);
 				path.canMove(true);
 
-
-				var bezier = graph.createShape('bezier',{style:style,points:[p0,p1,p2,p3,p4]});
-				graph.children.add(bezier);
-				bezier.canMove(true);
-
+				var psize = 6;
 				var pstyle = jmUtils.clone(style);
 				pstyle.fill = 'rgb(191,216,44)';
 				var p0arc = graph.createShape('arc',{style:pstyle,center:p0,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
@@ -141,7 +138,7 @@
 				var chpstyle = jmUtils.clone(mlstyle);
 				chpstyle.lineWidth = 1;
 				chpstyle.stroke = 'rgb(142,142,15)';
-				function getpoint(ps,t) {
+				function getpoint(ps,t,index) {
 					if(ps.length == 1) return ps[0];
 					if(ps.length == 2) {					
 						var p = {};
@@ -149,19 +146,24 @@
 						p.y = (ps[1].y - ps[0].y) * t + ps[0].y;
 						return p;	
 					}
-					if(ps.length > 2) {
-						var nps = [];
-						var ppp = graph2.createShape('path',{style:chpstyle});
-						graph2.children.add(ppp);
-						chplines.push(ppp);
+					if(ps.length > 2) {	
+						var ppp; 	
+						if(chplines.length <= index) {				
+							ppp = chplines[index] = graph2.createShape('path',{style:chpstyle});
+							graph2.children.add(ppp);
+						}
+						else {
+							ppp = chplines[index];
+						}
+						ppp.points = [];
 						for(var i = 0;i < ps.length - 1;i++) {
 							var p = getpoint([ps[i],ps[i+1]],t);
 							if(p) {
-								//nps.push(p);
 								ppp.points.push(p);
 							}
 						}
-						return getpoint(ppp.points,t);//getpoint(nps,t);//
+						index ++;
+						return getpoint(ppp.points,t,index);
 					}
 				}
 
@@ -178,11 +180,11 @@
 						dir = 0;
 						mbezierpath.points = [];	
 					}
-					for(var i in chplines) {
+					/*for(var i in chplines) {
 						graph2.children.remove(chplines[i]);
 						delete chplines[i];
-					}
-					var mp = getpoint(mpath.points,t);
+					}*/
+					var mp = getpoint(mpath.points,t,0);
 					mbezierpath.points.push(mp);
 
 					if(mbezierpath.points.length > 1) {

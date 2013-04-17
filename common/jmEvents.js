@@ -1,6 +1,10 @@
 /**
-* 事件模型
-*/
+ * 事件模型
+ *
+ * @class jmEvents
+ * @module jmGraph
+ * @for jmGraph
+ */
 
 var jmEvents = (function() {	
 	var __constructor = function(container,target) {
@@ -15,22 +19,33 @@ var jmEvents = (function() {
 		this.container = container;
 		this.target = target || container;
 		this.init = function() {
+			var canvas = this.target;	
+			//禁用鼠标右健系统菜单
+			canvas.oncontextmenu = function() {
+				return false;
+			};
+
 			jmUtils.bindEvent(this.target,'mousedown',function(evt) {
 				evt = evt || event;
 				container.raiseEvent('mousedown',evt);
+				if(evt.preventDefault) evt.preventDefault();
+				return false;				
 			});
 			jmUtils.bindEvent(this.target,'touchstart',function(evt) {
 				evt = evt || event;
-				evt.preventDefault();
+				//evt.preventDefault();
 				container.raiseEvent('touchstart',evt);
 			});
 			jmUtils.bindEvent(window.document,'mousemove',function(evt) {	
-				evt = evt || event;			
-				container.raiseEvent('mousemove',evt);
+				evt = evt || event;		
+				var target = evt.target || evt.srcElement;
+				if(target == canvas) {
+					container.raiseEvent('mousemove',evt);
+				}				
 			});
 			jmUtils.bindEvent(window.document,'touchmove',function(evt) {
 				evt = evt || event;
-				evt.preventDefault();
+				//evt.preventDefault();
 				container.raiseEvent('touchmove',evt);
 			});
 			jmUtils.bindEvent(this.target,'mouseover',function(evt) {
@@ -45,13 +60,18 @@ var jmEvents = (function() {
 				evt = evt || event;
 				container.raiseEvent('mouseout',evt);
 			});
-			jmUtils.bindEvent(this.target,'mouseup',function(evt) {
+			jmUtils.bindEvent(window.document,'mouseup',function(evt) {
 				evt = evt || event;
-				container.raiseEvent('mouseup',evt);
+				var target = evt.target || evt.srcElement;
+				if(target == canvas) {						
+					container.raiseEvent('mouseup',evt);
+					if(evt.preventDefault) evt.preventDefault();
+					return false;
+				}
 			});
 			jmUtils.bindEvent(this.target,'touchend',function(evt) {
 				evt = evt || event;
-				evt.preventDefault();
+				//evt.preventDefault();
 				container.raiseEvent('touchend',evt);
 			});
 			jmUtils.bindEvent(this.target,'dblclick',function(evt) {
@@ -73,17 +93,30 @@ var jmEvents = (function() {
 		this.container = container;
 		this.target = target || container;
 		this.init = function() {
-			jmUtils.bindEvent(this.target,'keypress',function(evt) {
-				container.raiseEvent('keypress',evt);
+			jmUtils.bindEvent(document,'keypress',function(evt) {
+				evt = evt || event;
+				var r = container.raiseEvent('keypress',evt);
+				if(r === false && evt.preventDefault) 
+					evt.preventDefault();
+				return r;
 			});
-			jmUtils.bindEvent(this.target,'keydown',function(evt) {
-				container.raiseEvent('keydown',evt);
+			jmUtils.bindEvent(document,'keydown',function(evt) {
+				evt = evt || event;
+				var r = container.raiseEvent('keydown',evt);
+				if(r === false && evt.preventDefault) 
+					evt.preventDefault();
+				return r;
 			});
-			jmUtils.bindEvent(this.target,'keyup',function(evt) {
-				container.raiseEvent('keyup',evt);
+			jmUtils.bindEvent(document,'keyup',function(evt) {
+				evt = evt || event;
+				var r = container.raiseEvent('keyup',evt);
+				if(r === false && evt.preventDefault) 
+					evt.preventDefault();
+				return r;
 			});
-			jmUtils.bindEvent(this.target,'resize',function(evt) {
-				container.raiseEvent('resize',evt);
+			jmUtils.bindEvent(document,'resize',function(evt) {
+				evt = evt || event;
+				return container.raiseEvent('resize',evt);
 			});
 		}
 		this.init();

@@ -29,15 +29,21 @@
 		<script type="text/javascript" src="images.js" ></script>
 		<script type="text/javascript">
 
-			function loadEditor() {
-				var container = document.getElementById('mycanvas');
+			function loadEditor() {					
+				var container = document.getElementById('container');
 				//初始化编辑器
 				var editor = new jmEditor({
 					container:container,
 					enabled : true,
 					connectable:true,
-					movable:true
+					movable:true,
+					resizable:true
 				});
+
+				if(editor.graph.isSupportedBrowser() == false) {
+					alert('不支持的浏览器');
+					return;
+				} 
 				
 				//生成渐变背景
 				var bg = editor.graph.createLinearGradient(0,0,0,'100%');
@@ -84,6 +90,14 @@
 					textAlign:'center',
 					textBaseline:'middle',//垂直居中
 					font:'14px 微软雅黑'
+				};
+
+				//状态小图标样式
+				style.overlay = {
+					margin:{
+						left:10,
+						top:10
+					}
 				};
 
 				//指定进程图为一个圆
@@ -412,8 +426,7 @@
 					<ul id="components"></ul>
 				</td>
 				<td>
-			<div id="container">
-				<canvas id="mycanvas" width="800" height="600">不支持当前浏览器，请用支持html5的浏览器体验，推荐使用<a target="_blank" href="http://google.cn/Chrome">chrome<a/></canvas>
+			<div id="container">				
 			</div>
 				</td>
 				<td style="vertical-align:top;">

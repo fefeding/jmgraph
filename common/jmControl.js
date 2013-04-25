@@ -7,15 +7,8 @@
  * @for jmGraph
  */
 
-var jmControl = (function() {
-	function __constructor() {		
-		
-	}
-	jmUtils.extend(__constructor,jmProperty);//继承属性绑定
-
-	return __constructor;
-})();
-
+var jmControl = function() {};
+jmUtils.extend(jmControl,jmProperty);//继承属性绑定
 
 /**
  * 初始化对象，设定样式，初始化子控件对象
@@ -39,10 +32,14 @@ jmControl.prototype.initializing = function(context,style) {
 		//当把对象添加到当前控件中时，设定其父节点
 		lst.add = function(obj) {
 			if(typeof obj === 'object') {
-				if(obj.parent && obj.parent.children) {
+				if(obj.parent && obj.parent != self && obj.parent.children) {
 					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
 				}
 				obj.parent = self;
+				//如果存在先移除
+				if(this.contain(obj)) {
+					this.oremove(obj);
+				}
 				oadd.call(this,obj);
 				obj.emit('add',obj);
 			}
@@ -59,22 +56,25 @@ jmControl.prototype.initializing = function(context,style) {
 		 * 根据控件zIndex排序，越大的越高
 		 */
 		lst.sort = function() {
-			var topItems = [];
+			var levelItems = {};
 			//提取zindex大于0的元素
 			lst.each(function(i,obj) {
 				if(!obj.zIndex && obj.style && obj.style.zIndex) {
 					obj.zIndex = Number(obj.style.zIndex);
 				}
 				if(obj.zIndex) {
-					topItems.push(obj);
-					this.oremove(obj);
+					var items = levelItems[obj.zIndex] || (levelItems[obj.zIndex] = []);
+					items.push(obj);					
 				}
 			});
-			//通过zindex排序
+			/*//通过zindex排序
 			topItems.sort(function(item1,item2) {
 				return item1.zIndex - item2.zIndex;
 			});
-			oadd.call(this,topItems);
+			oadd.call(this,topItems);*/
+			for(var index in levelItems) {
+				oadd.call(this,levelItems[index]);
+			}
 		}
 		return lst;
 	})();
@@ -331,9 +331,11 @@ jmControl.prototype.height = function(h) {
  * @method offset
  * @param {number} x x轴偏移量
  * @param {number} y y轴偏移量
+ * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
  */
-jmControl.prototype.offset = function(x,y) {
-	//var location = this.getLocation();	
+jmControl.prototype.offset = function(x,y,trans) {
+	trans = trans === false?false:true;
+	var location = this.getLocation();	
 	/*if(this.cpoints && typeof this.cpoints == 'function') {
 		var ps = this.cpoints();
 		for(var i in ps) {
@@ -344,19 +346,19 @@ jmControl.prototype.offset = function(x,y) {
 	else */
 	if(this.center && typeof this.center == 'function') {		
 		var center = this.center();
-		if(center) {
-			center.x += x;
-			center.y += y;	
+		if(center) {			
+			center.x = location.center.x + x;
+			center.y = location.center.y + y;	
 			this.center(center);
 		}			
 	}
 	else if(this.position && typeof this.position == 'function') {		
-		//location.left += x;
-		//location.top += y;
+		location.left += x;
+		location.top += y;
 		var p = this.position();
 		if(p) {
-			p.x += x;
-			p.y += y;
+			p.x = location.left;
+			p.y = location.top;
 			this.position(p);
 		}			
 	}
@@ -366,8 +368,11 @@ jmControl.prototype.offset = function(x,y) {
 			this.points[i].y += y;
 		}
 	}
+	//计算当前边界
+	this.bounds = this.getBounds();
+	this.absoluteBounds = this.getAbsoluteBounds();
 	//触发控件移动事件
-	this.emit('move',{offsetX:x,offsetY:y});
+	this.emit('move',{offsetX:x,offsetY:y,trans:trans});
 }
 
 /**
@@ -538,18 +543,17 @@ jmControl.prototype.unbind = function(name,handle) {
  * @param {object} 事件执行的参数，包括触发事件的对象和位置
  */
 function runEventHandle(name,args) {
-	var stoped = false;
 	var events = this.getEvent(name);		
 	if(events) {
 		var self = this;			
 		events.each(function(i,handle) {
-			//只要有一个事件被阻止，则不再向上冒泡
+			//只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
 			if(false === handle.call(self,args)) {
-				stoped = true;
+				args.cancel = true;
 			}
 		});		
 	}	
-	return stoped;
+	return args.cancel;
 }
 
 /**
@@ -586,13 +590,17 @@ jmControl.prototype.raiseEvent = function(name,args) {
 	if(this.visible === false) return ;//如果不显示则不响应事件	
 	if(!args.position) {		
 		var graph = this.findParent(jmGraph);
-		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置	
-
+		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置
+		
+		var srcElement = args.srcElement || args.target;
 		args = {position:position,
-			button:args.button,
+			button:args.button == 0?1:args.button,
 			keyCode:args.keyCode || args.charCode,
-			ctrlKey:args.ctrlKey
+			ctrlKey:args.ctrlKey,
+			cancel : false,
+			srcElement : srcElement
 		};
+		
 		//复制一个参数对象
 		/*var argstmp = {position:position,target:this};
 		for(var k in args) {
@@ -605,12 +613,13 @@ jmControl.prototype.raiseEvent = function(name,args) {
 		//args.position = position;		
 	}
 	//先执行子元素事件，如果事件没有被阻断，则向上冒泡
-	var stoped = false;
+	//var stoped = false;
 	if(this.children) {
 		this.children.each(function(j,el) {	
 			//未被阻止才执行			
-			if(stoped === false) {
-				stoped = (false === el.raiseEvent(name,args));
+			if(args.cancel !== true) {
+				//如果被冒止冒泡，
+				el.raiseEvent(name,args);
 			}
 		},true);//按逆序处理
 	}
@@ -624,15 +633,15 @@ jmControl.prototype.raiseEvent = function(name,args) {
 	args.position.x = args.position.offsetX - abounds.left;
 	args.position.y = args.position.offsetY - abounds.top;
 	
-	//事件发生在边界内才触发
+	//事件发生在边界内或健盘事件发生在画布中才触发
 	if(this.checkPoint(args.position)) {
 		//如果没有指定触发对象，则认为当前为第一触发对象
 		if(!args.target) {
 			args.target = this;
 		}
-		if(stoped === false) {
+		if(args.cancel !== true) {
 			//如果返回true则阻断冒泡
-			stoped = runEventHandle.call(this,name,args);//执行事件		
+			runEventHandle.call(this,name,args);//执行事件		
 		}
 		if(!this.focused && name == 'mousemove') {
 	 		this.focused = true;//表明当前焦点在此控件中
@@ -647,7 +656,7 @@ jmControl.prototype.raiseEvent = function(name,args) {
 		}	
 	}
 		
-	return stoped == false;//如果被阻止则返回false,否则返回true
+	return args.cancel == false;//如果被阻止则返回false,否则返回true
 }
 
 /**
@@ -754,13 +763,13 @@ jmControl.prototype.canMove = function(m,graph) {
 		 * @method mu
 		 * @private
 		 */
-		this.__mvMonitor.mu = function() {
+		this.__mvMonitor.mu = function(evt) {
 			var _this = self;
 			if(_this.__mvMonitor.mouseDown) {
 				_this.__mvMonitor.mouseDown = false;
 				_this.cursor('default');
 				_this.emit('moveend',{position:_this.__mvMonitor.curposition});	
-				return false;
+				//return false;
 			}			
 		}
 		/**
@@ -794,7 +803,7 @@ jmControl.prototype.canMove = function(m,graph) {
 				_this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
 				//触发控件移动事件
 				_this.emit('movestart',{position:_this.__mvMonitor.curposition});
-				return false;
+				evt.cancel = true;
 			}			
 		}
 	}

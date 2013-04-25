@@ -13,9 +13,9 @@ var jmGraph = (function() {
 	var __jmShapesCache = jmUtils.cache.add('jm_graph_shapes',{});
 
 	function __constructor(canvas) {
-		if(!canvas || !canvas.getContext) {
+		/*if(!canvas || !canvas.getContext) {
 			throw 'canvas error';
-		}
+		}*/
 		this.type = 'jmGraph';
 		this.canvas = canvas;
 		var context = canvas.getContext('2d');
@@ -86,7 +86,16 @@ var jmGraph = (function() {
 	return __constructor;
 })();
 
-
+/**
+ * 检查是否支持的浏览器
+ *
+ * @method isSurportedBrowser
+ * @return {boolean} true=支持，false=不支持
+ */
+jmGraph.prototype.isSupportedBrowser = function() {
+	var browser = jmUtils.browser();
+	return !browser.msie || browser.ver > 8.0;
+}
 /**
  * 生成线性渐变对象
  *
@@ -239,7 +248,32 @@ jmGraph.prototype.getBounds = function() {
  * @return {postion} 返回定位坐标
  */
 jmGraph.prototype.getPosition = function() {
-	return jmUtils.getElementPosition(this.canvas);
+	var p = jmUtils.getElementPosition(this.canvas);
+	p.width = this.canvas.width;
+	p.height = this.canvas.height;
+	p.right = p.left + p.width;
+	p.bottom = p.top + p.height;
+	return p;
+}
+
+/**
+ * 检 查坐标是否落在当前控件区域中..true=在区域内
+ * graph需要特殊处理，因为它是相对为整个页面的，接收所有事件再分发相对于它本身的子控件。
+ *
+ * @method checkPoint
+ * @param {point} p 位置参数
+ * @return {boolean} 当前位置如果在区域内则为true,否则为false。
+ */
+jmGraph.prototype.checkPoint = function(p) {	
+	var position = this.getPosition();
+
+	if(p.pageX > position.right || p.pageX < position.left) {
+		return false;
+	}
+	if(p.pageY > position.bottom || p.pageY < position.top) {
+		return false;
+	}	
+	return true;
 }
 
 /**

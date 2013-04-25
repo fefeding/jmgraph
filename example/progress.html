@@ -60,7 +60,7 @@
 				style = jmUtils.clone(style);
 				style.stroke = 'rgb(255,255,255)';
 				style.close=false;
-				style.zIndex = 0;
+				style.zIndex = 3;
 				delete style.shadow;
 				delete style.fill;
 				
@@ -75,7 +75,7 @@
 				style.close = true;
 				style.lineWidth = 1;
 				style.fill = 'red';
-				style.zIndex = 2;
+				style.zIndex = 4;
 				var harc = graph.createShape('harc',{style:style,center:{x:600,y:380},start:0,end: 0 ,minRadius:100,maxRadius:150,anticlockwise:false});
 				graph.children.add(harc);
 
@@ -116,11 +116,12 @@
 					arc.style.fill=bg;	
 					//graph.redraw();	
 					//setTimeout(arcAni,1);				
-				}
+				}				
 				arc.children.add(childarc);				
 				childarc.animate(arcAni,10);
-				//setTimeout(arcAni,10);
-				//http://im-img.qq.com/inc/images/new_header2/logo.gif
+				
+				style = jmUtils.clone(style);
+				style.zIndex = 1;
 				var img = graph.createShape('img',{style:style,position:{x:10,y:10},image:'http://im-img.qq.com/inc/images/new_header2/logo.gif'});
 
 				graph.children.add(img);

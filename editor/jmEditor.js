@@ -143,15 +143,16 @@ var jmEditor = (function () {
 		this.movable = option.movable === false?false:true;
 
 		if(option.container) {
-			var canvas = option.container;
-			if(canvas.tagName.toLowerCase() == 'canvas') {
-				this.graph = new jmGraph(option.container);
-			}
-			else {
-				canvas = document.createElement('canvas');	
-				option.container.appendChild(canvas);
-				this.graph = new jmGraph(canvas);
-			}
+			this.container = document.createElement('div');
+			this.container.style.position = 'relative';
+			this.container.style.padding = '0';
+			this.container.style.margin = '0';
+			this.container.style.width = '100%';
+			this.container.style.height = '100%';
+			var canvas = document.createElement('canvas');	
+			this.container.appendChild(canvas);
+			option.container.appendChild(this.container);			
+			this.graph = new jmGraph(canvas);			
 
 			//生成框选对象
 			this.selectRect = this.graph.createShape('rect',{style:jmEditorDefaultStyle.selectRect});	
@@ -255,7 +256,7 @@ jmEditor.prototype.addCell = function(option) {
 	option = option || {};
 	option.graph = this.graph;
 	option.editor = this;
-	if(!this.isEnabled()) {
+	if(!this.isEnabled() || this.option.resizable === false) {
 		option.resizable = false;
 	}	
 	var cell = new jmCell(option);
@@ -268,30 +269,25 @@ jmEditor.prototype.addCell = function(option) {
 	cell.on('select',function(s) {
 		self.emit('select',this,s);
 	});
-	
-	//元素移动时重新处理其大小
-	cell.on('move',function() {
-		resetEditorSize(this);
+	//监听移动事件,如果移动且当前选择了其它节点，则一同移动
+	cell.on('move',function(s) {
+		var _this = self;
+		//如果事件传递则处理所有已选节点位置
+		if(s.trans == true) {			
+			var cells = _this.getSelectedCells();
+			for(var i in cells) {
+				if(cells[i] != this) {
+					cells[i].offset(s.offsetX,s.offsetY,false);//移动但不传递 事件
+				}			
+			}	
+		}
+		_this.resize(this);			
 	});
+	
 	cell.id = option.id || this.maxId();
 	this.cells.add(cell);
 	cell.add();
-
-	/**
-	 * 根据最新元素重新计算画布大小
-	 *
-	 * @method resetEditorSize
-	 * @private
-	 */
-	function resetEditorSize(target) {
-		var p = target.position();
-		var maxw = p.x + target.width();
-		var maxh = p.y + target.height();
-		if(maxw >= target.graph.canvas.width || maxh >= target.graph.canvas.height) {
-			target.graph.redraw(Math.max(maxw,target.graph.canvas.width) + 10,Math.max(maxh,target.graph.canvas.height) + 10);
-		}
-	}
-	resetEditorSize(cell);
+	this.resize(cell);
 	return cell;
 }
 
@@ -338,9 +334,9 @@ jmEditor.prototype.initEvents = function() {
 	var self = this;
 	//编辑器开始框选
 	this.graph.bind('mousedown',function(evt) {
-		var _this = self;
-		_this.selectAll(false);
+		var _this = self;		
 		if(evt.button == 0 || evt.button == 1) {
+			_this.selectAll(false);
 			_this.selecting = true;//开始框选
 			_this.selectRect.position({x:evt.position.offsetX,y:evt.position.offsetY});
 			_this.selectRect.width(1);
@@ -795,7 +791,7 @@ jmEditor.prototype.align = function(der) {
 			for(var i in cells) {
 				var cell = cells[i];
 				if(der == 'left') {
-					cell.offset(topcell.position().x - cell.position().x,0);
+					cell.offset(topcell.position().x - cell.position().x,0,false);
 				}				
 			}
 			break;
@@ -804,21 +800,21 @@ jmEditor.prototype.align = function(der) {
 			for(var i in cells) {
 				var cell = cells[i];			
 				var right = topcell.position().x + topcell.width();
-				cell.offset(right - cell.width() - cell.position().x,0);					
+				cell.offset(right - cell.width() - cell.position().x,0,false);					
 			}
 			break;
 		case 'center': {			
 			for(var i in cells) {
 				var cell = cells[i];				
 				var center = topcell.position().x + topcell.width() / 2;
-				cell.offset(center - cell.width() / 2 - cell.position().x,0);				
+				cell.offset(center - cell.width() / 2 - cell.position().x,0,false);				
 			}
 			break;
 		}
 		case 'top': {
 			for(var i in cells) {
 				var cell = cells[i];				
-				cell.offset(0,topcell.position().y - cell.position().y);				
+				cell.offset(0,topcell.position().y - cell.position().y,false);				
 			}
 			break;
 		}
@@ -826,7 +822,7 @@ jmEditor.prototype.align = function(der) {
 			for(var i in cells) {
 				var cell = cells[i];	
 				var bottom = topcell.position().y + topcell.height();			
-				cell.offset(0,bottom - cell.height() - cell.position().y);				
+				cell.offset(0,bottom - cell.height() - cell.position().y,false);				
 			}
 			break;
 		}
@@ -834,13 +830,45 @@ jmEditor.prototype.align = function(der) {
 			for(var i in cells) {
 				var cell = cells[i];	
 				var middle = topcell.position().y + topcell.height() / 2;			
-				cell.offset(0,middle - cell.height() / 2 - cell.position().y);				
+				cell.offset(0,middle - cell.height() / 2 - cell.position().y,false);				
 			}
 			break;
 		}
 	}	
 	this.save();
 	this.graph.refresh();
+}
+
+/**
+ * 根据最新元素重新计算画布大小
+ * 如果没有指定元素，则循环所有元素计算大小
+ *
+ * @method resize
+ * @param {jmCell} [cell] 是影响大小的元素
+ */
+jmEditor.prototype.resize = function(cell) {
+	var maxw = 0;
+	var maxh = 0;
+	//取元素边界
+	if(cell) {
+		var p = cell.position();
+		maxw = p.x + cell.width();
+		maxh = p.y + cell.height();
+	}
+	//处理所有元素
+	else {
+		this.cells.each(function(i,cell) {
+			var p = cell.position();
+			var w = p.x + cell.width();
+			var h = p.y + cell.height();
+			maxw = Math.max(w,maxw);
+			maxh = Math.max(h,maxh);
+		});
+	}
+	
+	if(maxw > this.graph.canvas.width || maxh > this.graph.canvas.height) {
+		this.graph.redraw(Math.max(maxw,this.graph.canvas.width) + 10,Math.max(maxh,this.graph.canvas.height) + 10);
+	}
 }
 
 
@@ -965,6 +993,7 @@ jmEditor.prototype.fromJSON = function(json,s) {
 				}
 			}	
 		}
+		this.resize();//重置大小
 		this.graph.refresh();
 	}
 	if(s !== true) {

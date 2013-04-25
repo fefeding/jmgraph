@@ -96,14 +96,11 @@ jmObject.prototype.animate = function(handle,millisec) {
  * @for jmGraph
  * @require jmObject
  */
-var jmProperty = (function(){
-	function __contructor() {
-		this.__properties = {};
-		this.__eventHandles = {};
-	}
-	jmUtils.extend(__contructor,jmObject);
-	return __contructor;
-})();
+var jmProperty = function() {	
+	this.__properties = {};
+	this.__eventHandles = {};
+};
+jmUtils.extend(jmProperty,jmObject);
 
 /**
  * 获取属性值

@@ -28,7 +28,7 @@
 		this.position(params.position || {x:0,y:0});
 		this.width(params.width || 0);
 		this.height(params.height  || 0);
-		this.rectSize(params.rectSize || 8);
+		this.rectSize(params.rectSize || 10);
 		this.init();
 	}
 	jmUtils.extend(__constructor,jmRect);//jmRect

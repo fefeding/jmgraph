@@ -131,10 +131,10 @@ jmCell.prototype.create = function() {
 	if(shape) {	
 		var params = jmUtils.extend({
 			style:this.style,
-			width:'90%',
-			height:'90%',
+			width:'94%',
+			height:'94%',
 			center:this.center,
-			position:{x:'5%',y:'5%'}
+			position:{x:'3%',y:'3%'}
 		},this.option);
 		this.shape = this.graph.createShape(shape,params);		
 	}
@@ -194,9 +194,22 @@ jmCell.prototype.add = function() {
 	
 	if(this.shape) this.children.add(this.shape);	
 	
+	//单击选当前元素
+	this.bind('mousedown',function(evt) {			
+		if(evt.button == 1) {
+			//如果没有按下ctrl健，且没有被选中，则清除其它选中
+			if(!evt.ctrlKey && !this.selected) {
+				this.editor.selectAll(false,this.id);
+			}				
+			//选择当前节点		
+			if(!this.selected) this.select(true);
+			evt.cancel = true;
+		}
+	});
+
 	if(this.connectable) {
 		//当有连线拉到当前元素上时，连接这二个元素
-		this.bind('mouseup',function() {
+		this.bind('mouseup',function(evt) {
 			var from = this.editor.connectFrom;
 			if(from) {
 				if(from != this) {
@@ -205,8 +218,9 @@ jmCell.prototype.add = function() {
 				}			
 				this.editor.connectFrom = null;
 				//return false;
-			}
+			}			
 		});
+		
 		this.bind('mousemove',function() {
 			this.connArc.visible = true;	
 			this.graph.refresh();			
@@ -238,23 +252,12 @@ jmCell.prototype.add = function() {
 			_this.graph.refresh();
 		});
 	}
-	
-	//选择当前节点
-	this.bind('mousedown',function(evt) {
-		if(!this.editor.connectFrom) {
-			if(!evt.ctrlKey) {//如果没有按下ctrl健则取消其它的选择
-				//选择当前节点
-				this.editor.selectAll(false,this.id);
-			}			
-			this.select(true);
-			return false;//阻断事件冒泡，防止消选
-		}		
-	});
 
 	//如果当前节点被移动，则重新定位子元素
 	this.on('move',function(args) {
-		self.initPosition();//重新定位
-	});	
+		this.initPosition();//重新定位
+		//this.moved = true;//标识已被移动
+	});
 
 	this.children.add(this.label);	
 	this.resize();
@@ -292,11 +295,22 @@ jmCell.prototype.setOverlay = function(src,w,h,tooltip) {
 		this.overlay = document.createElement('img');
 		this.overlay.style.position = 'absolute';
 		var bounds = this.getAbsoluteBounds();
-		var graphpostion = this.graph.getPosition();
-		this.overlay.style.top = (graphpostion.top + bounds.bottom) + 'px';
-		this.overlay.style.left = (graphpostion.left + bounds.right)+ 'px';
+		var top = bounds.bottom;
+		var left = bounds.right;
+
+		if(this.style && this.style.overlay && this.style.overlay.margin) {
+			if(this.style.overlay.margin.left) {
+				left += this.style.overlay.margin.left;				
+			}
+			if(this.style.overlay.margin.top) {
+				top += this.style.overlay.margin.top;
+			}
+		}
+
+		this.overlay.style.top = top + 'px';
+		this.overlay.style.left = left + 'px';
 		this.overlay.style.border = '0';
-		document.body.appendChild(this.overlay);
+		this.editor.container.appendChild(this.overlay);
 	}
 	if(src) {
 		this.overlay.src = src;
@@ -380,9 +394,20 @@ jmCell.prototype.initPosition = function() {
 	if(this.overlay) {
 		if(this.overlay.tagName == 'IMG') {
 			var bounds = this.getAbsoluteBounds();
-			var graphpostion = this.graph.getPosition();
-			this.overlay.style.top = (graphpostion.top + bounds.bottom) + 'px';
-			this.overlay.style.left = (graphpostion.left + bounds.right)+ 'px';			
+			var top = bounds.bottom;
+			var left = bounds.right;
+
+			if(this.style && this.style.overlay && this.style.overlay.margin) {
+				if(this.style.overlay.margin.left) {
+					left += this.style.overlay.margin.left;				
+				}
+				if(this.style.overlay.margin.top) {
+					top += this.style.overlay.margin.top;
+				}
+			}
+
+			this.overlay.style.top = top + 'px';
+			this.overlay.style.left = left + 'px';		
 		}
 		else {
 			var op = this.overlay.position();
@@ -517,6 +542,9 @@ jmCell.prototype.remove = function() {
 	if(this.editor) {
 		this.editor.cells.remove(this);	
 		this.graph.children.remove(this);	
+		if(this.overlay && this.overlay.parentElement) {
+			this.overlay.parentElement.removeChild(this.overlay);
+		}
 	}
 	//并移除它的连线
 	this.connects.each(function(i,c) {
@@ -541,6 +569,7 @@ var jmConnectLine = (function() {
 		this.id = params.id;
 		this.from = params.from;
 		this.to = params.to;
+		this.selected = false;
 		this.points = params.points || [];
 		var style = params.style || {
 							stroke:jmEditorDefaultStyle.connectLine.stroke,
@@ -597,10 +626,18 @@ jmConnectLine.prototype.initPoints = function() {
 	//节点在目标节点左边
 	if(frompostion.x + this.from.width() < toposition.x) {
 		start = this.from.pos3;
+		var offy = toposition.y - frompostion.y - this.from.height();
 		//节点在目标节点上边
-		if(frompostion.y + this.from.height() < toposition.y) {
+		if(offy > 0) {
+			if(offy > 30) {
+				start = this.from.pos4;
+			}
+			else {
+				start = this.from.pos3;
+			}
 			end = this.to.pos2;
 		}
+		//目标节点在起始节点上边
 		else if(frompostion.y > toposition.y + this.to.height()) {
 			end = this.to.pos4;
 		}
@@ -608,12 +645,20 @@ jmConnectLine.prototype.initPoints = function() {
 			end = this.to.pos1;
 		}		
 	}
-	else if(frompostion.x > toposition.x + this.to.width()) {
-		start = this.from.pos1;
-		if(frompostion.y + this.from.height() < toposition.y) {
+	//如果起始在结束右边
+	else if(frompostion.x > toposition.x + this.to.width()) {	
+		start = this.from.pos1;	
+		var offy = toposition.y - frompostion.y - this.from.height();
+		if(offy > 0) {
+			if(offy > 30) {
+				start = this.from.pos4;
+			}
+			else {
+				start = this.from.pos1;
+			}
 			end = this.to.pos2;
 		}
-		else if(frompostion.y > toposition.y + this.to.height()) {
+		else if(frompostion.y > toposition.y + this.to.height()) {			
 			end = this.to.pos4;
 		}
 		else {
@@ -622,8 +667,8 @@ jmConnectLine.prototype.initPoints = function() {
 		
 	}
 	else if(frompostion.y > toposition.y + this.to.height()) {
-		start = this.from.pos2;
-		end = this.to.pos4;
+		start = this.from.pos1;
+		end = this.to.pos1;
 	}
 	
 	this.points =this.getPoints(start,end);
@@ -653,12 +698,13 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 			return s.y > e.y?1432:1234;//起始点X小于结束点，Y大于结束点则为右下右上
 		}
 	}	
-	var pointOffset = 20;
+	var xOffset = 30;
+	var yOffset = 30;
 	var points = [start];
 	if(start == this.from.pos1) {
 		switch (end) {
 			case this.to.pos1 : {
-				var p1x = Math.min(start.x - pointOffset,end.x - pointOffset);
+				var p1x = Math.min(start.x - xOffset,end.x - xOffset);
 				var p1 = {x:p1x,y:start.y};
 				points.push(p1);
 				var p2 = {x:p1x,y:end.y};
@@ -692,7 +738,7 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 				break;
 			}
 			case this.to.pos2 : {	
-				var p1 = {x:start.x,y:Math.min(start.y - pointOffset,end.y - pointOffset)};
+				var p1 = {x:start.x,y:Math.min(start.y - yOffset,end.y - yOffset)};
 				points.push(p1);			
 				break;
 			}
@@ -725,7 +771,7 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 				break;
 			}
 			case this.to.pos3 : {
-				var p1 = {x:Math.max(start.x + pointOffset,end.x + pointOffset),y:start.y};
+				var p1 = {x:Math.max(start.x + xOffset,end.x + xOffset),y:start.y};
 				points.push(p1);
 				var p2 = {x:p1.x,y:end.y};
 				points.push(p2);
@@ -746,7 +792,7 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 				break;
 			}
 			case this.to.pos2 : {	
-				var p1 = {x:start.x,y:(end.y - start.y) / 2 + start.y};
+				var p1 = {x:start.x,y:Math.max((end.y - start.y) / 2 + start.y,end.y - yOffset)};
 				points.push(p1);	
 				var p2 = {x:end.x,y:p1.y};
 				points.push(p2);	
@@ -758,7 +804,7 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 				break;
 			}
 			case this.to.pos4 : {
-				var p1 = {x:start.x,y:Math.max(start.y + pointOffset,end.y + pointOffset)};
+				var p1 = {x:start.x,y:Math.max(start.y + xOffset,end.y + xOffset)};
 				points.push(p1);
 				var p2 = {x:end.x,y:p1.y};
 				points.push(p2);
@@ -783,19 +829,25 @@ jmConnectLine.prototype.getPoints = function(start,end) {
  */
 jmConnectLine.prototype.select = function(b) {
 	if(typeof b !== 'undefined') {
-		if(b) {
+		var changed = false;
+		if(b && this.selected == false) {
 			this.style.stroke = this.style && this.style.selectedStroke?this.style.selectedStroke:jmEditorDefaultStyle.connectLine.overStroke;
 			this.style.zIndex = 2000;
 			this.selected = true;
+			changed = true;
 		}		
-		else {
+		else if(this.selected == true) {
 			this.style.stroke = this.style && this.style.normalStroke?this.style.normalStroke:jmEditorDefaultStyle.connectLine.stroke;
 			this.style.zIndex = 1;
 			this.selected = false;
+			changed = true;
 		}
-		this.editor.emit('select',this,b);
-	}	
-	this.graph.refresh();
+		if(changed) {
+			this.editor.emit('select',this,b);
+			this.graph.refresh();
+		}
+		
+	}
 }
 
 /**

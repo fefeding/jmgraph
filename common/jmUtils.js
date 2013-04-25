@@ -316,6 +316,61 @@ jmUtils.cache = {
 }
 
 /**
+ * 检查浏览器信息
+ *
+ * @method browser
+ * @for jmUtils
+ * @return {object} 返回浏览器信息,如：msie=true表示为ie浏览器
+ */
+jmUtils.browser = function() { 
+    if(jmUtils.browserInfo)   {
+        return jmUtils.browserInfo;
+    }
+    jmUtils.browserInfo = {agent:navigator.userAgent};
+    
+    if (/Mobile/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.mobile = true;
+    }
+    if (/iPad/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.iPad = true;
+    }
+    else if (/iPhone/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.iPhone = true;
+    }
+    else if (/Android/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.android = true;
+    }
+
+    if (/msie/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.msie = true;
+        var ieinfo = jmUtils.browserInfo.agent.match(/msie\s+\d+(\.\d+)*/i)[0];
+        jmUtils.browserInfo.ver = ieinfo.match(/\d+(\.\d+)*/)[0];
+    }
+    else if (/Chrome/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.chrome = true;
+    }
+    else if (/Safari/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.safari = true;
+    }
+    else if (/Firefox/i.test(jmUtils.browserInfo.agent)) {
+        jmUtils.browserInfo.firefox = true;
+    }
+
+    return  jmUtils.browserInfo;
+}
+
+/**
+ * 检查是否支持的浏览器
+ *
+ * @method isSurportedBrowser
+ * @return {boolean} true=支持，false=不支持
+ */
+jmUtils.isSupportedBrowser = function() {
+    var browser = jmUtils.browser();
+    return !browser.msie || browser.ver > 8.0;
+}
+
+/**
  * 判断对象是否为数组
  *
  * @method isArray
@@ -325,6 +380,50 @@ jmUtils.cache = {
  */
 jmUtils.isArray = function(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
+/**
+ * 加载图片资源
+ *
+ * @method loadImg
+ * @for jmUtils
+ * @param {string/array} src 图片地址
+ * @param {function} [callback] 图片加载完回调
+ */
+jmUtils.loadImg = function(src,callback) {
+    if(jmUtils.isArray(src) || typeof src == 'object') {
+        var count = 0;
+        var loadedcount = 0;
+        for(var i in src) {
+            count ++;
+            if(callback) {
+                jmUtils.loadImg(src[i],function() {
+                    loadedcount++;
+                    if(loadedcount == count) {
+                        callback();
+                    }
+                });
+            }
+            else {
+                jmUtils.loadImg(src[i]);
+            }            
+        }
+    }
+    else if(typeof src == 'string') {
+        var img = document.createElement('img');
+        if(callback) {
+            img.onload = function() {
+                callback();
+            };
+            img.onerror = function() {
+                callback();
+            };
+        }
+        img.src = src;
+    }
+    else {
+        callback();
+    }
 }
 
 /**
@@ -419,10 +518,10 @@ jmUtils.bindEvent = function(target,name,fun) {
 jmUtils.getElementPosition = function(el) {
     if(!el) return ;
     var pos = {"top":0, "left":0};
-    if(document.documentElement && el.getBoundingClientRect) {
+    if(false && document.documentElement && el.getBoundingClientRect) {
         var rect = el.getBoundingClientRect();
-        pos.top = document.documentElement.scrollTop + el.getBoundingClientRect().top;
-        pos.left = document.documentElement.scrollLeft + el.getBoundingClientRect().left;
+        pos.top = document.documentElement.scrollTop + rect.top;
+        pos.left = document.documentElement.scrollLeft + rect.left;
     }
     else {
          if (el.offsetParent) {

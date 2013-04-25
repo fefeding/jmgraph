@@ -63,7 +63,7 @@ jmLabel.prototype.draw = function() {
 		
 		var location = this.getLocation();
 		var x = location.left + bounds.left;
-		var y = location.left + bounds.top;
+		var y = location.top + bounds.top;
 		//通过文字对齐方式计算起始X位置
 		switch(this.style.textAlign) {
 			case 'right': {

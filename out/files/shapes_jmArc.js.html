@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>shapes\jmArc.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/jmArc.html">jmArc</a></li>
+            
+                <li><a href="../classes/jmArraw.html">jmArraw</a></li>
+            
+                <li><a href="../classes/jmArrawLine.html">jmArrawLine</a></li>
+            
+                <li><a href="../classes/jmBezier.html">jmBezier</a></li>
+            
+                <li><a href="../classes/jmCell.html">jmCell</a></li>
+            
+                <li><a href="../classes/jmCircle.html">jmCircle</a></li>
+            
+                <li><a href="../classes/jmConnectLine.html">jmConnectLine</a></li>
+            
+                <li><a href="../classes/jmControl.html">jmControl</a></li>
+            
+                <li><a href="../classes/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../classes/jmEditorDefaultStyle.html">jmEditorDefaultStyle</a></li>
+            
+                <li><a href="../classes/jmEvents.html">jmEvents</a></li>
+            
+                <li><a href="../classes/jmGradient.html">jmGradient</a></li>
+            
+                <li><a href="../classes/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../classes/jmHArc.html">jmHArc</a></li>
+            
+                <li><a href="../classes/jmImage.html">jmImage</a></li>
+            
+                <li><a href="../classes/jmLabel.html">jmLabel</a></li>
+            
+                <li><a href="../classes/jmLine.html">jmLine</a></li>
+            
+                <li><a href="../classes/jmObject.html">jmObject</a></li>
+            
+                <li><a href="../classes/jmPath.html">jmPath</a></li>
+            
+                <li><a href="../classes/jmPrismatic.html">jmPrismatic</a></li>
+            
+                <li><a href="../classes/jmProperty.html">jmProperty</a></li>
+            
+                <li><a href="../classes/jmRect.html">jmRect</a></li>
+            
+                <li><a href="../classes/jmResize.html">jmResize</a></li>
+            
+                <li><a href="../classes/jmShape.html">jmShape</a></li>
+            
+                <li><a href="../classes/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../classes/jmSVGElement.html">jmSVGElement</a></li>
+            
+                <li><a href="../classes/jmUtils.html">jmUtils</a></li>
+            
+                <li><a href="../classes/jmUtils.cache.html">jmUtils.cache</a></li>
+            
+                <li><a href="../classes/jmUtils.list.html">jmUtils.list</a></li>
+            
+                <li><a href="../classes/jmVML.html">jmVML</a></li>
+            
+                <li><a href="../classes/list.html">list</a></li>
+            
+                <li><a href="../classes/menus.html">menus</a></li>
+            
+                <li><a href="../classes/toGlow.html">toGlow</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../modules/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../modules/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../modules/jmUtils.html">jmUtils</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: shapes\jmArc.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * 圆弧图型 继承自jmPath
+ * 参数params说明:center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=是否为顺时针
+ *
+ * @class jmArc
+ * @for jmGraph
+ * @require jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 画布
+ * @param {object} params 圆弧参数
+ */
+
+var jmArc = (function () {
+	function jmArc(graph,params) {
+		if(!params) params = {};
+		this.points = params.points || [];
+		var style = params.style || {};
+		/**
+		 * 当前对象类型名
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = &#x27;jmArc&#x27;;
+		this.graph = graph;
+			
+		this.center(params.center || {x:0,y:0});
+		this.radius(params.radius || 0);
+
+		this.startAngle(params.start  || 0);
+		this.endAngle(params.end  || Math.PI * 2);
+
+		this.width(params.width || 0);
+		this.height(params.height  || 0);
+
+		this.anticlockwise(params.anticlockwise  || 0);
+
+		this.initializing(graph.context,style);
+
+		//this.on(&#x27;PropertyChange&#x27;,this.initPoints);
+		this.base = new jmCircle.prototype.constructor.superClass(graph,params);
+	}
+	jmUtils.extend(jmArc,jmPath);//jmPath
+	return jmArc;
+})();
+
+
+/**
+ * 初始化图形点
+ * 
+ * @method initPoint
+ * @private
+ * @for jmArc
+ */
+jmArc.prototype.initPoints = function() {
+	var location = this.getLocation();//获取位置参数
+	var mw = 0;
+	var mh = 0;
+	var cx = location.center.x ;//+ bounds.left;
+	var cy = location.center.y ;//+ bounds.top;
+	//如果设定了半径。则以半径为主	
+	if(location.radius) {
+		mw = mh = location.radius;
+	}
+	else {
+		mw = location.width / 2;
+		mh = location.height / 2;
+	}
+	
+	var start = this.startAngle();
+	var end = this.endAngle();
+	var anticlockwise = this.anticlockwise();
+	this.points = [];
+	//椭圆方程x=a*cos(r) ,y=b*sin(r)
+	if(start &lt; end) {
+		for(var r=start;r&lt;=end;r += 0.1) {
+			var rr = anticlockwise?-r:r;
+			var p = {
+				x : Math.cos(rr) * mw + cx,
+				y : Math.sin(rr) * mh + cy
+			};
+			this.points.push(p);
+		}
+	}
+	else {
+		for(var r=start;r &gt;= end;r -= 0.1) {
+			var rr = anticlockwise?-r:r;
+			var p = {
+				x : Math.cos(rr) * mw + cx,
+				y : Math.sin(rr) * mh + cy
+			};
+			this.points.push(p);
+		}
+	}
+	return this.points;
+}
+
+/**
+ * 设定或获取中心点
+ * 
+ * @method center
+ * @for jmArc
+ * @param {point} p 中心参数
+ * @return {point} 当前中心点
+ */
+jmArc.prototype.center = function(p) {
+	return this.setValue(&#x27;center&#x27;,p);
+}
+
+/**
+ * 设定或获取半径
+ *
+ * @method radius
+ * @for jmArc
+ * @param {number} r 半径
+ * @return {number} 当前半径
+ */
+jmArc.prototype.radius = function(r) {
+	return this.setValue(&#x27;radius&#x27;,r);
+}
+
+/**
+ * 设定或获取起始角度
+ *
+ * @method startAngle
+ * @for jmArc
+ * @param {number} r 角度
+ * @return {number} 当前起始角度
+ */
+jmArc.prototype.startAngle = function(a) {
+	return this.setValue(&#x27;startAngle&#x27;,a);
+}
+
+/**
+ * 设定或获取结束角度
+ *
+ * @method endAngle
+ * @for jmArc
+ * @param {number} r 角度
+ * @return {number} 当前结束角度
+ */
+jmArc.prototype.endAngle = function(a) {
+	return this.setValue(&#x27;endAngle&#x27;,a);
+}
+
+/**
+ * 设定或获取是否顺时针画
+ *
+ * @method anticlockwise
+ * @for jmArc
+ * @param {boolean} a true=顺时针,false=逆时针
+ * @return {boolean} 当前是否为顺时针
+ */
+jmArc.prototype.anticlockwise = function(a) {
+	return this.setValue(&#x27;anticlockwise&#x27;,a);
+}
+
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

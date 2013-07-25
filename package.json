@@ -1,0 +1,28 @@
+{
+  "family": "jmGraph",
+  "name": "jmGraph",
+  "version": "1.0.0",
+  "description": "一个简单的html5画图库",
+  "homepage": "http://graph.jm47.com/",
+  "keywords": ["canvas", "html5"],
+  "author": "fefeding <haofefe@163.com>",
+  "engines": {},
+  "dependencies": {},
+  "devDependencies": {  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiamao/jmgraph.git"
+  },
+  "main": "./src/jmGraph.js",
+  "spm": {
+    "alias": {
+    },
+    "output": ["main.js"]
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": ""
+    }
+  ]
+}

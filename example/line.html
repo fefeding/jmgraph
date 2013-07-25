@@ -2,206 +2,185 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-
-		<!--[if lt IE 9]>
-    <script src="../lib/html5.js" type="text/javascript"></script>    
-    <script src="../lib/excanvas.js" type="text/javascript"></script>
-<![endif]-->
-
-		<script type="text/javascript" src="../common/jmUtils.js" ></script>
-		<script type="text/javascript" src="../common/jmModels.js" ></script>
-			<script type="text/javascript" src="../common/jmProperty.js" ></script>
-		<script type="text/javascript" src="../common/jmEvents.js" ></script>
-		<script type="text/javascript" src="../common/jmControl.js" ></script>
-		<script type="text/javascript" src="../shapes/jmShape.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPath.js" ></script>
-		<script type="text/javascript" src="../shapes/jmLine.js" ></script>
-		<script type="text/javascript" src="../shapes/jmArc.js" ></script>
-		<script type="text/javascript" src="../shapes/jmCircle.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPrismatic.js" ></script>
-		<script type="text/javascript" src="../shapes/jmBezier.js" ></script>
-		<script type="text/javascript" src="../shapes/jmRect.js" ></script>
-		<script type="text/javascript" src="../shapes/jmArraw.js" ></script>
-		<script type="text/javascript" src="../controls/jmLabel.js" ></script>
-		<script type="text/javascript" src="../controls/jmResize.js" ></script>		
-		<script type="text/javascript" src="../jmGraph.js" ></script>
-		<script type="text/javascript">
-
-			function load() {
-				var canvas = document.getElementById('mycanvas');
-				var graph = new jmGraph(canvas);				
-				var style = {
-					stroke:'rgb(120,20,80)',
-					lineWidth:1,
-					close:true
-				};
-				style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');
-
-				var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
-
-				style = jmUtils.clone(style);
-				style.rectStroke = 'green';
-				var resize = graph.createShape('resize',{style:style,position:{x:250,y:200},width:120,height:80});
-				graph.children.add(resize);
-				resize.canMove(true);
-				graph.refresh();
-				
-				//graph.children.add(line);
-/*
-				style = jmUtils.clone(style);
-				style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');
-				line = graph.createLine();
-				line.style = style;
-				line.start.x = 88;
-				line.start.y = 20;
-				line.end.x = 100;
-				line.end.y = 600;
-				graph.children.add(line);
-
-				style = jmUtils.clone(style);
-				//style.shadow.color='red';
-				line = graph.createLine({x:10,y:50},{x:120,y:66},style);
-				graph.children.add(line);
-*/
-
-				style = jmUtils.clone(style);
-				//delete style['shadow'];
-				style.lineType = "dotted";
-				style.dashLength = 4;
-				style.lineWidth = 2;
-				line = graph.createLine({x:5,y:5},{x:200,y:250},style);
-				style.zIndex = 20;
-				graph.children.add(line);
-				line.bind('mouseover',function(evt) {
-					this.style.stroke = 'rgba(39,72,188,0.5)';
-					//graph.canvas.style.cursor = 'pointer';
-					graph.refresh();
-				});
-				line.bind('mouseleave',function(evt) {
-					this.style.stroke = 'rgb(120,20,80)';
-					//graph.canvas.style.cursor = 'default';
-					graph.refresh();
-				});
-				line.canMove(true);
-				//graph.children.remove(line);
-
-
-				style = jmUtils.clone(style);	
-				var bg = graph.createLinearGradient(0,0,0,100);
-				bg.addColorStop(0,'rgb(0,0,0)');
-				bg.addColorStop(1,'rgb(150,200,180)');
-				style.fill = bg;
-				style.close = true;
-				var rect = 	graph.createPath(null,style);
-				rect.points.push({x:20,y:20});
-				rect.points.push({x:20,y:100});
-				rect.points.push({x:100,y:100});
-				rect.points.push({x:100,y:20});
-				graph.children.add(rect);
-
-				style = jmUtils.clone(style);
-				//style.fill = 'rgba(220,100,80,1)';
-				//delete style.fill;
-				//style.close = true;
-				var path = graph.createPath(null,style);
-				path.points.push({x:10,y:10});
-				path.points.push({x:10,y:60});
-				path.points.push({x:80,y:20});
-				path.points.push({x:90,y:80});				
-				//path.points.push({x:80,y:20});
-				path.points.push({x:80,y:80});
-				
-				rect.children.add(path);
-
-				//rect.children.add(line);
-
-				path.bind('mouseover',function(evt) {
-					this.style.stroke = 'rgba(39,72,188,0.5)';
-					//graph.canvas.style.cursor = 'pointer';
-					graph.refresh();
-				});
-				path.bind('mouseleave',function(evt) {					
-					this.style.stroke = 'rgb(120,20,80)';
-					//graph.canvas.style.cursor = 'default';					
-					graph.refresh();
-				});
-				//rect.canMove(true);
-				//line.canMove(true);
-				path.canMove(true);				
-
-				
-				
-				style = jmUtils.clone(style);
-				var arc = graph.createShape('circle',{style:style,center:{x:160,y:100},width:60,height: 40});				
-
-				arc.bind('mouseover',function(evt) {
-					this.style.stroke = 'rgba(39,72,188,0.5)';
-					//graph.canvas.style.cursor = 'pointer';
-					graph.refresh();
-				});
-				arc.bind('mouseleave',function(evt) {
-					this.style.stroke = 'rgb(120,20,80)';
-					//graph.canvas.style.cursor = 'default';
-					graph.refresh();
-				});
-
-				graph.children.add(arc);
-				arc.canMove(true);
-
-				var pri = graph.createShape('prismatic',{style:style,center:{x:160,y:100},width:60,height: 40});
-				graph.children.add(pri);
-				pri.canMove(true);
-
-				style = jmUtils.clone(style);
-				delete style.fill;
-				delete style.close;
-				var bezier = graph.createShape('bezier',{style:style,points:[{x:160,y:200},{x:200,y:80},{x:400,y:100},{x:420,y:210},{x:500,y:120}]});
-				graph.children.add(bezier);
-				bezier.canMove(true);
-
-				style = jmUtils.clone(style);
-				style.lineWidth = 10;
-				var rect = graph.createShape('rect',{style:style,radius:10,position:{x:300,y:300},width:100,height:100});
-				graph.children.add(rect);
-				rect.canMove(true);
-
-				style = jmUtils.clone(style);
-				style.lineWidth = 2;
-				var arr = graph.createShape('arraw',{style:style,start:{x:220,y:300},end:{x:250,y:340}});
-				graph.children.add(arr);
-
-				style = jmUtils.clone(style);
-				style.textAlign = 'center';
-				style.textBaseline = 'middle',
-				style.font = '20px Arial';
-				style.border = {left:1,top:1,right:1,bottom:1};
-				var label = graph.createShape('label',{style:style,position:{x:300,y:350},value:'test label',width:120,height:80});
-				graph.children.add(label);
-				label.canMove(true);
-
-				
-				
-				graph.paint();
-				//path.zIndex = 2;
-				//line.zIndex =1;
-				var img = graph.toDataURL();
-				document.getElementById('dataimg').src = img;
-/*
-				var p = arc.is(jmControl);
-				alert(p);
-				p = arc.is(jmCircle);
-				alert(p);
-				p = arc.is(jmLine);
-				alert(p);*/
-
-
-			}
-		</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+		<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>		
 	</head>
-	<body onload="load()" style="width:800px;margin:10px auto;border:1px solid blue;">
-		<canvas id="mycanvas" width="500" height="400" style="border:1px solid red;margin:10px;">不支持canvas</canvas>
+	<body style="width:800px;margin:10px auto;border:1px solid blue;">
+		<div id="mycanvas" style="border:1px solid red;margin:10px;width:100%;height:600px;"></div>
 		<div id="eventposition"></div>
 
 		<img id="dataimg" />
 	</body>
+	<script type="text/javascript">	
+		seajs.config({
+			base:'../src/',
+			debug: true
+		});	
+
+		seajs.use('main',function(obj) {
+			var jmUtils = obj.jmUtils;
+			var jmGraph = obj.jmGraph;
+			var graph = new jmGraph('mycanvas',800,600);				
+			var style = {
+				stroke:'rgb(120,20,80)',
+				lineWidth:2,
+				close:true
+				//,
+				//rotate:0.75,
+				//translate: {
+				//	x:300,
+				//	y:-300
+				//}
+			};
+			style.shadow = graph.createShadow(4,4,6,'rgb(39,40,34)');
+			style.lineCap = 'round';
+
+			var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
+			
+			line.bind('mouseover',function(evt) {
+				this.style.stroke = 'rgba(39,72,188,0.5)';
+				this.cursor('pointer');
+				graph.refresh();
+			});
+			line.bind('mouseleave',function(evt) {
+				this.style.stroke = 'rgb(120,20,80)';
+				this.cursor('default');
+				graph.refresh();
+			});
+
+			graph.children.add(line);
+			line.canMove(true);
+			
+			style = jmUtils.clone(style);
+			style.rectStroke = 'green';
+			var resize = graph.createShape('resize',{style:style,position:{x:250,y:200},width:120,height:80});
+			graph.children.add(resize);
+			resize.canMove(true);
+
+
+			style = jmUtils.clone(style);
+			//delete style['shadow'];
+			style.lineType = "dotted";
+			style.dashLength = 4;
+			style.lineWidth = 2;
+			line = graph.createLine({x:5,y:5},{x:200,y:250},style);
+			style.zIndex = 20;
+			graph.children.add(line);
+			line.bind('mouseover',function(evt) {
+				this.style.stroke = 'rgba(39,72,188,0.5)';
+				//graph.canvas.style.cursor = 'pointer';
+				graph.refresh();
+			});
+			line.bind('mouseleave',function(evt) {
+				this.style.stroke = 'rgb(120,20,80)';
+				//graph.canvas.style.cursor = 'default';
+				graph.refresh();
+			});
+			line.canMove(true);
+			//graph.children.remove(line);
+
+
+			style = jmUtils.clone(style);	
+			var bg = graph.createLinearGradient(0,0,0,100);
+			bg.addColorStop(0,'rgb(0,0,0)');
+			bg.addColorStop(1,'rgb(150,200,180)');
+			style.fill = bg;
+			style.close = true;
+			var rect = 	graph.createPath(null,style);
+			rect.points.push({x:20,y:20});
+			rect.points.push({x:20,y:100});
+			rect.points.push({x:100,y:100});
+			rect.points.push({x:100,y:20});
+			graph.children.add(rect);
+
+			style = jmUtils.clone(style);
+			//style.fill = 'rgba(220,100,80,1)';
+			//delete style.fill;
+			//style.close = true;
+			var path = graph.createPath(null,style);
+			path.points.push({x:10,y:10});
+			path.points.push({x:10,y:60});
+			path.points.push({x:80,y:20});
+			path.points.push({x:90,y:80});				
+			//path.points.push({x:80,y:20});
+			path.points.push({x:80,y:80});
+			
+			rect.children.add(path);
+
+			//rect.children.add(line);
+
+			path.bind('mouseover',function(evt) {
+				this.style.stroke = 'rgba(39,72,188,0.5)';
+				//graph.canvas.style.cursor = 'pointer';
+				graph.refresh();
+			});
+			path.bind('mouseleave',function(evt) {					
+				this.style.stroke = 'rgb(120,20,80)';
+				//graph.canvas.style.cursor = 'default';					
+				graph.refresh();
+			});
+			//rect.canMove(true);
+			//line.canMove(true);
+			path.canMove(true);				
+
+			
+			
+			style = jmUtils.clone(style);
+			var arc = graph.createShape('circle',{style:style,center:{x:160,y:100},width:60,height: 40});				
+
+			arc.bind('mouseover',function(evt) {
+				this.style.stroke = 'rgba(39,72,188,0.5)';
+				//graph.canvas.style.cursor = 'pointer';
+				graph.refresh();
+			});
+			arc.bind('mouseleave',function(evt) {
+				this.style.stroke = 'rgb(120,20,80)';
+				//graph.canvas.style.cursor = 'default';
+				graph.refresh();
+			});
+
+			graph.children.add(arc);
+			arc.canMove(true);
+
+			var pri = graph.createShape('prismatic',{style:style,center:{x:160,y:100},width:60,height: 40});
+			graph.children.add(pri);
+			pri.canMove(true);
+
+			style = jmUtils.clone(style);
+			delete style.fill;
+			delete style.close;
+			var bezier = graph.createShape('bezier',{style:style,points:[{x:160,y:200},{x:200,y:80},{x:400,y:100},{x:420,y:210},{x:500,y:120}]});
+			graph.children.add(bezier);
+			bezier.canMove(true);
+
+			style = jmUtils.clone(style);
+			style.lineWidth = 10;
+			style.lineJoin = 'round';
+			var rect = graph.createShape('rect',{style:style,position:{x:300,y:300},width:100,height:100});
+			graph.children.add(rect);
+			rect.canMove(true);
+
+			style = jmUtils.clone(style);
+			style.lineWidth = 5;
+			var arr = graph.createShape('arrawline',{style:style,start:{x:150,y:200},end:{x:400,y:350}});
+			graph.children.add(arr);
+			arr.canMove(true);
+
+			style = jmUtils.clone(style);
+			style.textAlign = 'center';
+			style.textBaseline = 'middle',
+			style.font = '20px Arial';
+			style.border = {left:1,top:1,right:1,bottom:1};
+			var label = graph.createShape('label',{style:style,position:{x:300,y:350},value:'test label',width:120,height:80});
+			graph.children.add(label);
+			label.canMove(true);
+			
+			graph.paint();
+			//path.zIndex = 2;
+			//line.zIndex =1;
+			var img = graph.toDataURL();
+			document.getElementById('dataimg').src = img;
+		});
+	
+	</script>
 </html>

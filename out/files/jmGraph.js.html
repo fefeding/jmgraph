@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jmGraph.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/jmArc.html">jmArc</a></li>
+            
+                <li><a href="../classes/jmArraw.html">jmArraw</a></li>
+            
+                <li><a href="../classes/jmArrawLine.html">jmArrawLine</a></li>
+            
+                <li><a href="../classes/jmBezier.html">jmBezier</a></li>
+            
+                <li><a href="../classes/jmCell.html">jmCell</a></li>
+            
+                <li><a href="../classes/jmCircle.html">jmCircle</a></li>
+            
+                <li><a href="../classes/jmConnectLine.html">jmConnectLine</a></li>
+            
+                <li><a href="../classes/jmControl.html">jmControl</a></li>
+            
+                <li><a href="../classes/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../classes/jmEditorDefaultStyle.html">jmEditorDefaultStyle</a></li>
+            
+                <li><a href="../classes/jmEvents.html">jmEvents</a></li>
+            
+                <li><a href="../classes/jmGradient.html">jmGradient</a></li>
+            
+                <li><a href="../classes/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../classes/jmHArc.html">jmHArc</a></li>
+            
+                <li><a href="../classes/jmImage.html">jmImage</a></li>
+            
+                <li><a href="../classes/jmLabel.html">jmLabel</a></li>
+            
+                <li><a href="../classes/jmLine.html">jmLine</a></li>
+            
+                <li><a href="../classes/jmObject.html">jmObject</a></li>
+            
+                <li><a href="../classes/jmPath.html">jmPath</a></li>
+            
+                <li><a href="../classes/jmPrismatic.html">jmPrismatic</a></li>
+            
+                <li><a href="../classes/jmProperty.html">jmProperty</a></li>
+            
+                <li><a href="../classes/jmRect.html">jmRect</a></li>
+            
+                <li><a href="../classes/jmResize.html">jmResize</a></li>
+            
+                <li><a href="../classes/jmShape.html">jmShape</a></li>
+            
+                <li><a href="../classes/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../classes/jmSVGElement.html">jmSVGElement</a></li>
+            
+                <li><a href="../classes/jmUtils.html">jmUtils</a></li>
+            
+                <li><a href="../classes/jmUtils.cache.html">jmUtils.cache</a></li>
+            
+                <li><a href="../classes/jmUtils.list.html">jmUtils.list</a></li>
+            
+                <li><a href="../classes/jmVML.html">jmVML</a></li>
+            
+                <li><a href="../classes/list.html">list</a></li>
+            
+                <li><a href="../classes/menus.html">menus</a></li>
+            
+                <li><a href="../classes/toGlow.html">toGlow</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../modules/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../modules/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../modules/jmUtils.html">jmUtils</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: jmGraph.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+/**
+ * jmGraph画图类库
+ * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
+ *
+ * @module jmGraph
+ * @class jmGraph
+ * @param {element} canvas 标签canvas
+ * @require jmControl
+ */
+var jmGraph = (function() {
+	//定义图形类型缓存
+	var __jmShapesCache = {};
+
+	function jmGraph(canvas,w,h) {
+		/*if(!canvas || !canvas.getContext) {
+			throw &#x27;canvas error&#x27;;
+		}*/
+		this.type = &#x27;jmGraph&#x27;;
+		/**
+		 * 当前支持的画图类型 svg/canvas
+		 *
+		 * @property mode
+		 * @type {string}
+		 */
+		this.mode = jmUtils.checkSupportedMode();
+
+		if(typeof canvas === &#x27;string&#x27;) {
+			canvas = document.getElementById(canvas);
+		}
+		if(this.mode == &#x27;canvas&#x27;) {	
+			if(canvas.tagName != &#x27;CANVAS&#x27;) {
+				var cn = document.createElement(&#x27;canvas&#x27;);
+				canvas.appendChild(cn);
+				cn.width = canvas.clientWidth;
+				cn.height = canvas.clientHeight;
+				canvas = cn;
+			}		
+			this.canvas = canvas;
+			this.context = canvas.getContext(&#x27;2d&#x27;);	
+
+			if(w) this.width(w);
+			if(h) this.height(h);		
+		}
+		else {
+			//this.container = canvas.parentElement;
+			//this.container.removeChild(canvas);			
+			//if(this.mode == &#x27;svg&#x27;) {
+				this.context = new jmSVG(canvas,w,h);
+			//}
+			/*else {
+				this.context = new jmVML();
+				this.on(&#x27;beginDraw&#x27;,function() {
+					this.context.container.remove();
+				});
+				this.on(&#x27;endDraw&#x27;,function() {
+					this.context.container.appendTo(this.container);
+				});
+			}	*/		
+			this.canvas = this.context.paper;
+			//this.context.container.width(canvas.width || &#x27;100%&#x27;);
+			//this.context.container.height(canvas.height || &#x27;100%&#x27;);
+			//this.context.container.appendTo(this.container);			
+		}
+		this.initializing(this.context);
+
+		initShapes.call(this);
+		
+		//绑定事件
+		this.eventHandler = new jmEvents(this,this.canvas.canvas || this.canvas);
+	}
+
+	/**
+	 * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
+	 *
+	 * @method registerShape 
+	 * @param {string} name 控件图形名称
+	 * @param {class} shape 图形控件类型
+	 */
+	jmGraph.prototype.registerShape = function(name,shape) {
+		if(!__jmShapesCache[name]) {
+			__jmShapesCache[name] = shape;
+		}
+	}
+
+	/**
+	 * 从已注册的图形类创建图形
+	 * 简单直观创建对象
+	 *
+	 * @method createShape 
+	 * @param {string} name 注册控件的名称
+	 * @param {object} args 实例化控件的参数
+	 * @return {object} 已实例化控件的对象
+	 */
+	jmGraph.prototype.createShape = function(name,args) {
+		var shape = __jmShapesCache[name];
+		if(shape) {
+			if(!args) args = {};
+			args.mode = this.mode;
+			var obj = new shape(this,args);
+			return obj;
+		}
+	}
+
+	/**
+	 * 初始化默认图形
+	 * 
+	 * @method initShapes
+	 * @private
+	 */
+	function initShapes() {
+		if(typeof jmLine !== &#x27;undefined&#x27;) this.registerShape(&#x27;line&#x27;,jmLine);
+		if(typeof jmPath !== &#x27;undefined&#x27;) this.registerShape(&#x27;path&#x27;,jmPath);
+		if(typeof jmRect !== &#x27;undefined&#x27;) this.registerShape(&#x27;rect&#x27;,jmRect);
+		if(typeof jmCircle !== &#x27;undefined&#x27;) this.registerShape(&#x27;circle&#x27;,jmCircle);
+		if(typeof jmArc !== &#x27;undefined&#x27;) this.registerShape(&#x27;arc&#x27;,jmArc);
+		if(typeof jmHArc !== &#x27;undefined&#x27;) this.registerShape(&#x27;harc&#x27;,jmHArc);
+		if(typeof jmPrismatic !== &#x27;undefined&#x27;) this.registerShape(&#x27;prismatic&#x27;,jmPrismatic);
+		if(typeof jmLabel !== &#x27;undefined&#x27;) this.registerShape(&#x27;label&#x27;,jmLabel);
+		if(typeof jmImage !== &#x27;undefined&#x27;) {
+			this.registerShape(&#x27;image&#x27;,jmImage);
+			this.registerShape(&#x27;img&#x27;,jmImage);
+		}
+		if(typeof jmBezier !== &#x27;undefined&#x27;) {
+			this.registerShape(&#x27;bezier&#x27;,jmBezier);
+		}
+		if(typeof jmArraw !== &#x27;undefined&#x27;) this.registerShape(&#x27;arraw&#x27;,jmArraw);
+		if(typeof jmArrawLine !== &#x27;undefined&#x27;) this.registerShape(&#x27;arrawline&#x27;,jmArrawLine);
+		if(typeof jmResize !== &#x27;undefined&#x27;) this.registerShape(&#x27;resize&#x27;,jmResize);
+	}	
+	jmUtils.extend(jmGraph,jmControl);//继承基础控件
+	return jmGraph;
+})();
+
+/**
+ * 检查是否支持的浏览器
+ *
+ * @method isSurportedBrowser
+ * @return {boolean} true=支持，false=不支持
+ */
+jmGraph.prototype.isSupportedBrowser = function() {
+	var browser = jmUtils.browser();
+	return !browser.msie || browser.ver &gt; 8.0;
+}
+/**
+ * 生成线性渐变对象
+ *
+ * @method createLinearGradient
+ * @param {number} x1 线性渐变起始点X坐标
+ * @param {number} y1 线性渐变起始点Y坐标
+ * @param {number} x2 线性渐变结束点X坐标
+ * @param {number} y2 线性渐变结束点Y坐标
+ * @return {jmGradient} 线性渐变对象
+ */
+jmGraph.prototype.createLinearGradient = function(x1,y1,x2,y2) {
+	var gradient = new jmGradient({type:&#x27;linear&#x27;,x1:x1,y1:y1,x2:x2,y2:y2});
+	return gradient;
+}
+
+/**
+ * 生成放射渐变对象
+ *
+ * @method createRadialGradient
+ * @param {number} x1 放射渐变小圆中心X坐标
+ * @param {number} y1 放射渐变小圆中心Y坐标
+ * @param {number} r1 放射渐变小圆半径
+ * @param {number} x2 放射渐变大圆中心X坐标
+ * @param {number} y2 放射渐变大圆中心Y坐标
+ * @param {number} r2 放射渐变大圆半径
+ * @return {jmGradient} 放射渐变对象
+ */
+jmGraph.prototype.createRadialGradient = function(x1,y1,r1,x2,y2,r2) {	
+	var gradient = new jmGradient({type:&#x27;radial&#x27;,x1:x1,y1:y1,r1:r1,x2:x2,y2:y2,r2:r2});
+	return gradient;
+}
+
+/**
+ * 重新刷新整个画板
+ * 以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+ *
+ * @method refresh
+ */
+jmGraph.prototype.refresh = function() {	
+	//加入动画，触发redraw，会导致多次refresh只redraw一次
+	this.animate(function() {
+		return false;
+	},100,&#x27;jmgraph_refresh&#x27;);
+	//this.redraw();
+}
+
+/**
+ * 重新刷新整个画板
+ * 此方法直接重画，与refresh效果类似
+ *
+ * @method redraw
+ * @param {number} [w] 清除画布的宽度
+ * @param {number} [h] 清除画布的高度
+ */
+jmGraph.prototype.redraw = function(w,h) {	
+	this.clear(w,h);
+	this.paint();
+}
+
+/**
+ * 清除画布
+ * 
+ * @method clear
+ * @param {number} [w] 清除画布的宽度
+ * @param {number} [h] 清除画布的高度
+ */
+jmGraph.prototype.clear = function(w,h) {
+	//this.canvas.width = this.canvas.width;
+	if(w &amp;&amp; h) {
+		//this.zoomActual();//恢复比例缩放
+		this.canvas.width = w;
+		this.canvas.height = h;
+		//保留原有缩放比例
+		if(this.scaleSize) {
+			if(this.context.scale) this.context.scale(this.scaleSize.x,this.scaleSize.y);
+		}
+	}
+	else {
+		w = this.canvas.width;
+		h = this.canvas.height;
+		if(this.scaleSize) {
+			w = w / this.scaleSize.x;
+			h = h / this.scaleSize.y;
+		}
+	}
+	if(this.context.clearRect) this.context.clearRect(0,0,w,h);
+}
+
+/**
+* 设置画布样式，此处只是设置其css样式
+*
+* @method css
+* @param {string} name 样式名
+* @param {string} value 样式值
+*/
+jmGraph.prototype.css = function(name,value) {
+	if(this.canvas) {
+		this.canvas.style[name] = value;
+	}
+}
+
+/**
+ * 生成路径对象
+ *
+ * @method createPath
+ * @param {array} points 路径中的描点集合
+ * @param {style} style 当前路径的样式
+ * @return {jmPath} 路径对象jmPath
+ */
+jmGraph.prototype.createPath = function(points,style) {
+	var path = this.createShape(&#x27;path&#x27;,{points:points,style:style});
+	return path;
+}
+
+/**
+ * 生成直线
+ * 
+ * @method createLine
+ * @param {point} start 直线的起点
+ * @param {point} end 直线的终点
+ * @param {style} 直线的样式
+ * @return {jmLine} 直线对象
+ */
+jmGraph.prototype.createLine = function(start,end,style) {
+	var line = this.createShape(&#x27;line&#x27;,{start:start,end:end,style:style});
+	return line;
+}
+
+/**
+ * 重写获取当前控件的边界
+ * 
+ * @method getBounds
+ * @return {object} 当前画布的边界 {left,top,right,bottom,width,height}
+ */
+jmGraph.prototype.getBounds = function() {
+	var rect = {};	
+	rect.left = 0; 
+	rect.top = 0; 
+	if(typeof this.canvas.width === &#x27;function&#x27;) {
+		rect.right = this.canvas.width(); 
+	}
+	else {
+		rect.right = this.canvas.width; 
+	}
+	
+	if(typeof this.canvas.height === &#x27;function&#x27;) {
+		rect.bottom = this.canvas.height(); 
+	}
+	else {
+		rect.bottom = this.canvas.height; 
+	}
+	rect.width = rect.right;
+	rect.height = rect.bottom;
+	return rect;
+}
+
+/**
+ * 获取当前画布在浏览器中的绝对定位
+ *
+ * @method getPosition
+ * @return {postion} 返回定位坐标
+ */
+jmGraph.prototype.getPosition = function() {
+	var p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+	p.width = this.canvas.width;
+	p.height = this.canvas.height;
+	p.right = p.left + p.width;
+	p.bottom = p.top + p.height;
+	return p;
+}
+
+/**
+ * 检 查坐标是否落在当前控件区域中..true=在区域内
+ * graph需要特殊处理，因为它是相对为整个页面的，接收所有事件再分发相对于它本身的子控件。
+ *
+ * @method checkPoint
+ * @param {point} p 位置参数
+ * @return {boolean} 当前位置如果在区域内则为true,否则为false。
+ */
+jmGraph.prototype.checkPoint = function(p) {	
+	var position = this.getPosition();
+
+	if(p.pageX &gt; position.right || p.pageX &lt; position.left) {
+		return false;
+	}
+	if(p.pageY &gt; position.bottom || p.pageY &lt; position.top) {
+		return false;
+	}	
+	return true;
+}
+
+/**
+ * 缩小整个画布按比例0.9
+ * 
+ * @method zoomOut
+ */
+jmGraph.prototype.zoomOut = function() {
+	this.scale(0.9 ,0.9);
+}
+
+/**
+ * 放大 每次增大0.1的比例
+ * 
+ * @method zoomIn
+ */
+jmGraph.prototype.zoomIn = function() {		
+	this.scale(1.1 ,1.1);
+}
+
+/**
+ * 大小复原
+ * 
+ * @method zoomActual
+ */
+jmGraph.prototype.zoomActual = function() {
+	if(this.scaleSize) {
+		this.scale(1 / this.scaleSize.x ,1 / this.scaleSize.y);	
+	}
+	else {
+		this.scale(1 ,1);	
+	}	
+}
+
+/**
+ * 宽度
+ * 
+ * @method width
+ */
+jmGraph.prototype.width = function(w) {
+	//if(this.mode == &#x27;canvas&#x27;) {
+		if(typeof w !== &#x27;undefined&#x27;) this.canvas.width = w;
+		return this.canvas.width;
+	//}
+	//else {
+		//if(typeof w !== &#x27;undefined&#x27;) this.canvas.width(w);
+		//return this.canvas.width();
+	//}
+}
+
+/**
+ * 高度
+ * 
+ * @method width
+ */
+jmGraph.prototype.height = function(h) {
+	//if(this.mode == &#x27;canvas&#x27;) {
+		if(typeof h !== &#x27;undefined&#x27;) this.canvas.height = h;
+		return this.canvas.height;
+	//}
+	//else {
+		//if(typeof h !== &#x27;undefined&#x27;) this.canvas.height(h);
+		//return this.canvas.height();
+	//}
+}
+
+/**
+ * 放大缩小画布
+ * 
+ * @method scale
+ * @param {number} dx 缩放X轴比例
+ * @param {number} dy 缩放Y轴比例
+ */
+jmGraph.prototype.scale = function(dx,dy) {
+	if(!this.normalSize) {
+		this.normalSize = {width:this.canvas.width,height:this.canvas.height};		
+	}
+	
+	this.context.scale(dx,dy);
+	if(!this.scaleSize) {
+		this.scaleSize = {x:dx,y:dy};
+	}
+	else {
+		this.scaleSize = {x:dx * this.scaleSize.x,y:dy * this.scaleSize.y};
+	}
+	this.refresh();
+}
+
+/**
+ * 保存为base64图形数据
+ * 
+ * @method toDataURL
+ * @return {string} 当前画布图的base64字符串
+ */
+jmGraph.prototype.toDataURL = function() {
+	var data = this.canvas.toDataURL?this.canvas.toDataURL():&#x27;&#x27;;
+	return data;
+}
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

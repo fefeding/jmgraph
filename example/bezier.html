@@ -2,205 +2,197 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-		<!--[if lt IE 9]>
-    <script src="../lib/html5.js" type="text/javascript"></script>    
-    <script src="../lib/excanvas.js" type="text/javascript"></script>
-    <script type="text/javascript">
-	var ltie9 = true;
-    </script>
-<![endif]-->
-
-		<script type="text/javascript" src="../common/jmUtils.js" ></script>
-		<script type="text/javascript" src="../common/jmModels.js" ></script>
-			<script type="text/javascript" src="../common/jmProperty.js" ></script>
-		<script type="text/javascript" src="../common/jmEvents.js" ></script>
-		<script type="text/javascript" src="../common/jmControl.js" ></script>
-		<script type="text/javascript" src="../shapes/jmShape.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPath.js" ></script>
-		<script type="text/javascript" src="../shapes/jmLine.js" ></script>
-		<script type="text/javascript" src="../shapes/jmCircle.js" ></script>
-				<script type="text/javascript" src="../shapes/jmArc.js" ></script>
-						<script type="text/javascript" src="../shapes/jmArraw.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPrismatic.js" ></script>
-		<script type="text/javascript" src="../shapes/jmBezier.js" ></script>
-		<script type="text/javascript" src="../jmGraph.js" ></script>
-		<script type="text/javascript">
-
-			function load() {
-				var canvas = document.getElementById('mycanvas');
-				var graph = new jmGraph(canvas);				
-				var style = {
-					stroke:'rgb(120,20,80)',
-					lineWidth:3
-				};
-				style.shadow = new jmShadow(4,4,6,'rgb(39,40,34)');
-				
-				var p0={x:160,y:200};
-				var p1={x:200,y:80};
-				var p2={x:400,y:100};
-				var p3={x:420,y:210};
-				var p4={x:500,y:120};				
-
-				var bezier = graph.createShape('bezier',{style:style,points:[p0,p1,p2,p3,p4]});
-				graph.children.add(bezier);
-				bezier.canMove(true);
-
-				var lstyle = jmUtils.clone(style);
-				lstyle.stroke = 'rgba(131,237,111,0.7)';
-				lstyle.lineWidth = 1;
-				var path = graph.createShape('path',{style:lstyle,points:[p0,p1,p2,p3,p4]});
-				graph.children.add(path);
-				path.canMove(true);
-
-				var psize = 6;
-				var pstyle = jmUtils.clone(style);
-				pstyle.fill = 'rgb(191,216,44)';
-				var p0arc = graph.createShape('arc',{style:pstyle,center:p0,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph.children.add(p0arc);
-				p0arc.canMove(true);
-				var p1arc = graph.createShape('arc',{style:pstyle,center:p1,radius:psize,width:psize,height:psize,start:0,end:Math.PI * 2,anticlockwise:true});
-				graph.children.add(p1arc);
-				p1arc.canMove(true);
-				var p2arc = graph.createShape('arc',{style:pstyle,center:p2,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph.children.add(p2arc);
-				p2arc.canMove(true);
-				var p3arc = graph.createShape('arc',{style:pstyle,center:p3,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph.children.add(p3arc);
-				p3arc.canMove(true);
-				var p4arc = graph.createShape('arc',{style:pstyle,center:p4,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph.children.add(p4arc);
-				p4arc.canMove(true);
-				graph.paint();
-
-				
-
-				//动画部分
-				var canvas2 = document.getElementById('mycanvas2');
-				var graph2 = new jmGraph(canvas2);	
-				var mp0={x:160,y:300};
-				var mp1={x:200,y:130};
-				var mp2={x:400,y:80};
-				var mp3={x:420,y:300};
-				var mp4={x:500,y:320};
-				var mp5 = {x:600,y:81};
-				var mp6 = {x:700,y:90};
-				var mp7={x:650,y:320};
-				var mp8={x:760,y:350};
-				var mp9={x:800,y:60};
-				var mlstyle = jmUtils.clone(lstyle);
-				mlstyle.lineWidth = 2;
-				mlstyle.stroke = '#086C0A';
-				delete mlstyle.shadow;
-				var mpath = graph2.createShape('path',{style:mlstyle,points:[mp0,mp1,mp2,mp3,mp4,mp5,mp6,mp7,mp8,mp9]});
-				graph2.children.add(mpath);
-				//mpath.canMove(true);
-				var p0arc = graph2.createShape('arc',{style:pstyle,center:mp0,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p0arc);
-				p0arc.canMove(true);
-				var p1arc = graph2.createShape('arc',{style:pstyle,center:mp1,radius:psize,width:psize,height:psize,start:0,end:Math.PI * 2,anticlockwise:true});
-				graph2.children.add(p1arc);
-				p1arc.canMove(true);
-				var p2arc = graph2.createShape('arc',{style:pstyle,center:mp2,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p2arc);
-				p2arc.canMove(true);
-				var p3arc = graph2.createShape('arc',{style:pstyle,center:mp3,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p3arc);
-				p3arc.canMove(true);
-				var p4arc = graph2.createShape('arc',{style:pstyle,center:mp4,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p4arc);
-				p4arc.canMove(true);
-				var p5arc = graph2.createShape('arc',{style:pstyle,center:mp5,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p5arc);
-				p5arc.canMove(true);
-				var p6arc = graph2.createShape('arc',{style:pstyle,center:mp6,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p6arc);
-				p6arc.canMove(true);
-				var p7arc = graph2.createShape('arc',{style:pstyle,center:mp7,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p7arc);
-				p7arc.canMove(true);
-				var p8arc = graph2.createShape('arc',{style:pstyle,center:mp8,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p8arc);
-				p8arc.canMove(true);
-				var p9arc = graph2.createShape('arc',{style:pstyle,center:mp9,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
-				graph2.children.add(p9arc);
-				p9arc.canMove(true);
-
-				style.zIndex = 100;
-				var mbezierpath = graph2.createShape('path',{style:style});
-				graph2.children.add(mbezierpath);
-
-				var arrstyle = jmUtils.clone(style);
-				var arr = graph2.createShape('arraw',{style:arrstyle});
-				graph2.children.add(arr);
-
-				var chplines = [];
-				var chpstyle = jmUtils.clone(mlstyle);
-				chpstyle.lineWidth = 1;
-				chpstyle.stroke = 'rgb(142,142,15)';
-				function getpoint(ps,t,index) {
-					if(ps.length == 1) return ps[0];
-					if(ps.length == 2) {					
-						var p = {};
-						p.x = (ps[1].x - ps[0].x) * t + ps[0].x;
-						p.y = (ps[1].y - ps[0].y) * t + ps[0].y;
-						return p;	
-					}
-					if(ps.length > 2) {	
-						var ppp; 	
-						if(chplines.length <= index) {				
-							ppp = chplines[index] = graph2.createShape('path',{style:chpstyle});
-							graph2.children.add(ppp);
-						}
-						else {
-							ppp = chplines[index];
-						}
-						ppp.points = [];
-						for(var i = 0;i < ps.length - 1;i++) {
-							var p = getpoint([ps[i],ps[i+1]],t);
-							if(p) {
-								ppp.points.push(p);
-							}
-						}
-						index ++;
-						return getpoint(ppp.points,t,index);
-					}
-				}
-
-				var t = 0;
-				var dir = 0;
-				mpath.animate(function() {		
-					if(t > 1) {
-						t = 1;
-						dir = 1;
-						mbezierpath.points = [];	
-					}
-					else if(t < 0) {
-						t=0;
-						dir = 0;
-						mbezierpath.points = [];	
-					}
-					/*for(var i in chplines) {
-						graph2.children.remove(chplines[i]);
-						delete chplines[i];
-					}*/
-					var mp = getpoint(mpath.points,t,0);
-					mbezierpath.points.push(mp);
-
-					if(mbezierpath.points.length > 1) {
-						arr.start(mbezierpath.points[mbezierpath.points.length -2]);
-						arr.end(mbezierpath.points[mbezierpath.points.length -1]);
-					}
-					t = dir==0?(t + 0.005) : (t - 0.005);					
-				},10);
-				
-				graph2.paint();				
-			}
-		</script>
+		<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>	
+		
 	</head>
-	<body onload="load()" style="width:100%;margin:10px auto;border:1px solid blue;">
+	<body style="width:100%;margin:10px auto;border:1px solid blue;">
 		可用鼠标移动节点位置 <br />
-		<canvas id="mycanvas" width="1024" height="280" style="border:1px solid red;margin:10px;">不支持canvas</canvas>
-		<canvas id="mycanvas2" width="1024" height="600" style="border:1px solid red;margin:10px;">不支持canvas</canvas>
+		<div id="mycanvas" width="1024" height="500" style="border:1px solid red;margin:10px;width:1024px;height:500px;"></div>
+		<div id="mycanvas2" width="1024" height="600" style="border:1px solid red;margin:10px;width:1024px;height:600px;"></div>
 	</body>
 </html>
+
+<script type="text/javascript">
+
+		seajs.config({
+			base:'../src/',
+			debug: true
+		});	
+
+		seajs.use('main',function(obj) {
+			var jmUtils = obj.jmUtils;
+			var jmGraph = obj.jmGraph;
+			var psize = 6;	
+			var style = {
+				stroke:'rgb(120,20,80)',					
+				lineWidth:3
+			};
+			//var canvas = document.getElementById('mycanvas');
+			var graph = new jmGraph('mycanvas',1024,500);
+
+			style.shadow = graph.createShadow(4,4,6,'rgb(39,40,34)');
+			var lstyle = jmUtils.clone(style);
+			lstyle.stroke = 'rgba(131,237,111,0.7)';
+			lstyle.lineWidth = 1;
+			var pstyle = jmUtils.clone(style);
+			pstyle.fill = 'rgb(191,216,44)';
+
+			var p0={x:160,y:200};
+			var p1={x:200,y:80};
+			var p2={x:400,y:100};
+			var p3={x:420,y:210};
+			var p4={x:500,y:120};				
+
+			var bezier = graph.createShape('bezier',{style:style,points:[p0,p1,p2,p3,p4]});
+			graph.children.add(bezier);
+			bezier.canMove(true);
+			
+			
+			var path = graph.createShape('path',{style:lstyle,points:[p0,p1,p2,p3,p4]});
+			graph.children.add(path);
+			path.canMove(true);
+
+			
+			
+			var p0arc = graph.createShape('arc',{style:pstyle,center:p0,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph.children.add(p0arc);
+			p0arc.canMove(true);
+			var p1arc = graph.createShape('arc',{style:pstyle,center:p1,radius:psize,width:psize,height:psize,start:0,end:Math.PI * 2,anticlockwise:true});
+			graph.children.add(p1arc);
+			p1arc.canMove(true);
+			var p2arc = graph.createShape('arc',{style:pstyle,center:p2,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph.children.add(p2arc);
+			p2arc.canMove(true);
+			var p3arc = graph.createShape('arc',{style:pstyle,center:p3,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph.children.add(p3arc);
+			p3arc.canMove(true);
+			var p4arc = graph.createShape('arc',{style:pstyle,center:p4,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph.children.add(p4arc);
+			p4arc.canMove(true);
+			graph.paint();
+
+
+			//动画部分
+			var canvas2 = document.getElementById('mycanvas2');
+			var graph2 = new jmGraph(canvas2);	
+			var mp0={x:160,y:300};
+			var mp1={x:200,y:130};
+			var mp2={x:400,y:80};
+			var mp3={x:420,y:300};
+			var mp4={x:500,y:320};
+			var mp5 = {x:600,y:81};
+			var mp6 = {x:700,y:90};
+			var mp7={x:650,y:320};
+			var mp8={x:760,y:350};
+			var mp9={x:800,y:60};
+			var mlstyle = jmUtils.clone(lstyle);
+			mlstyle.lineWidth = 2;
+			mlstyle.stroke = '#086C0A';
+			delete mlstyle.shadow;
+			var mpath = graph2.createShape('path',{style:mlstyle,points:[mp0,mp1,mp2,mp3,mp4,mp5,mp6,mp7,mp8,mp9]});
+			graph2.children.add(mpath);
+			//mpath.canMove(true);
+			var p0arc = graph2.createShape('arc',{style:pstyle,center:mp0,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p0arc);
+			p0arc.canMove(true);
+			var p1arc = graph2.createShape('arc',{style:pstyle,center:mp1,radius:psize,width:psize,height:psize,start:0,end:Math.PI * 2,anticlockwise:true});
+			graph2.children.add(p1arc);
+			p1arc.canMove(true);
+			var p2arc = graph2.createShape('arc',{style:pstyle,center:mp2,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p2arc);
+			p2arc.canMove(true);
+			var p3arc = graph2.createShape('arc',{style:pstyle,center:mp3,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p3arc);
+			p3arc.canMove(true);
+			var p4arc = graph2.createShape('arc',{style:pstyle,center:mp4,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p4arc);
+			p4arc.canMove(true);
+			var p5arc = graph2.createShape('arc',{style:pstyle,center:mp5,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p5arc);
+			p5arc.canMove(true);
+			var p6arc = graph2.createShape('arc',{style:pstyle,center:mp6,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p6arc);
+			p6arc.canMove(true);
+			var p7arc = graph2.createShape('arc',{style:pstyle,center:mp7,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p7arc);
+			p7arc.canMove(true);
+			var p8arc = graph2.createShape('arc',{style:pstyle,center:mp8,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p8arc);
+			p8arc.canMove(true);
+			var p9arc = graph2.createShape('arc',{style:pstyle,center:mp9,radius:psize,start:0,end:Math.PI * 2,width:psize,height:psize});
+			graph2.children.add(p9arc);
+			p9arc.canMove(true);
+
+			style.zIndex = 100;
+			var mbezierpath = graph2.createShape('path',{style:style});
+			graph2.children.add(mbezierpath);
+
+			var arrstyle = jmUtils.clone(style);
+			var arr = graph2.createShape('arraw',{style:arrstyle});
+			graph2.children.add(arr);
+
+			var chplines = [];
+			var chpstyle = jmUtils.clone(mlstyle);
+			chpstyle.lineWidth = 1;
+			chpstyle.stroke = 'rgb(142,142,15)';
+			function getpoint(ps,t,index) {
+				if(ps.length == 1) return ps[0];
+				if(ps.length == 2) {					
+					var p = {};
+					p.x = (ps[1].x - ps[0].x) * t + ps[0].x;
+					p.y = (ps[1].y - ps[0].y) * t + ps[0].y;
+					return p;	
+				}
+				if(ps.length > 2) {	
+					var ppp; 	
+					if(chplines.length <= index) {				
+						ppp = chplines[index] = graph2.createShape('path',{style:chpstyle});
+						graph2.children.add(ppp);
+					}
+					else {
+						ppp = chplines[index];
+					}
+					ppp.points = [];
+					for(var i = 0;i < ps.length - 1;i++) {
+						var p = getpoint([ps[i],ps[i+1]],t);
+						if(p) {
+							ppp.points.push(p);
+						}
+					}
+					index ++;
+					return getpoint(ppp.points,t,index);
+				}
+			}
+
+			var t = 0;
+			var dir = 0;
+			mpath.animate(function() {		
+				if(t > 1) {
+					t = 1;
+					dir = 1;
+					mbezierpath.points = [];	
+				}
+				else if(t < 0) {
+					t=0;
+					dir = 0;
+					mbezierpath.points = [];	
+				}
+				/*for(var i in chplines) {
+					graph2.children.remove(chplines[i]);
+					delete chplines[i];
+				}*/
+				var mp = getpoint(mpath.points,t,0);
+				mbezierpath.points.push(mp);
+
+				if(mbezierpath.points.length > 1) {
+					arr.start(mbezierpath.points[mbezierpath.points.length -2]);
+					arr.end(mbezierpath.points[mbezierpath.points.length -1]);
+				}
+				t = dir==0?(t + 0.005) : (t - 0.005);					
+			},10);
+			
+			graph2.paint();
+	});
+</script>

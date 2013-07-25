@@ -2,37 +2,42 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-
-		<!--[if lt IE 9]>
-    <script src="../lib/html5.js" type="text/javascript"></script>    
-    <script src="../lib/excanvas.js" type="text/javascript"></script>
-<![endif]-->
-
-		<script type="text/javascript" src="../common/jmUtils.js" ></script>
-<script type="text/javascript" src="../common/jmModels.js" ></script>
-		<script type="text/javascript" src="../common/jmEvents.js" ></script>
-		<script type="text/javascript" src="../common/jmProperty.js" ></script>
-		<script type="text/javascript" src="../common/jmControl.js" ></script>
-		<script type="text/javascript" src="../shapes/jmShape.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPath.js" ></script>
 		
-		<script type="text/javascript" src="../shapes/jmCircle.js" ></script>
-		<script type="text/javascript" src="../shapes/jmArc.js" ></script>
-		<script type="text/javascript" src="../jmGraph.js" ></script>
-		<script type="text/javascript">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>
+		
+	</head>
+	<body style="width:800px;margin:10px auto;border:1px solid blue;" >	
+		<div id="mycanvas" style="border:1px solid red;margin:10px;">
+		</div>	
+		
+	</body>
+</html>
 
-			function load() {
-				var canvas = document.getElementById('mycanvas');
-				var graph = new jmGraph(canvas);				
+<script type="text/javascript">
+
+		seajs.config({
+			base:'../src/',
+			debug: true
+		});	
+
+		seajs.use('main',function(obj) {
+			var jmUtils = obj.jmUtils;
+			var jmGraph = obj.jmGraph;
+				
+				var graph = new jmGraph('mycanvas',800,600);				
 				var style = {
-					stroke:'rgb(120,20,80)',
-					//fill : 'rgba(120,20,80,0.5)',
+					stroke:'rgb(120,20,80)',					
 					lineWidth:2,
+					//fill:'transparent',
 					close:true
 				};
-				style.shadow = new jmShadow(0,0,6,'rgb(39,40,34)');
-				
-				var arc = graph.createShape('arc',{style:style,center:{x:80,y:80},radius:60,start: Math.PI / 3,end:Math.PI,anticlockwise:true});
+				style.shadow = new graph.createShadow(0,0,6,'rgb(39,40,34)');
+
+				var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
+				graph.children.add(line);
+
+				var arc = graph.createShape('arc',{style:style,center:{x:100,y:400},radius:60,start: Math.PI / 3,end:Math.PI,anticlockwise:true});
 				//arc.canMove(true);
 				arc.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(39,72,188,0.5)';
@@ -48,8 +53,8 @@
 				arc.canMove(true);
 
 				style = jmUtils.clone(style);
-				style.fill = 'rgba(120,20,80,0.5)';
-				var arc2 = graph.createShape('circle',{style:style,center:{x:'50%',y:'50%'},width:60,height:80});
+				style.fill = 'rgb(120,20,80)';
+				var arc2 = graph.createShape('arc',{style:style,center:{x:'50%',y:'50%'},width:60,height:60});
 				//arc.canMove(true);
 				arc2.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(39,72,188,0.5)';
@@ -61,11 +66,11 @@
 				});				
 				arc.children.add(arc2);
 				arc2.canMove(true);
-				graph.refresh();
+				
+				graph.refresh();			
+			});
+
+			function keydonw (evt) {
+				window.console.log(evt.keyCode);
 			}
 		</script>
-	</head>
-	<body onload="load()" style="width:800px;margin:10px auto;border:1px solid blue;">
-		<canvas id="mycanvas" width="500" height="400" style="border:1px solid red;margin:10px;">不支持canvas</canvas>
-	</body>
-</html>

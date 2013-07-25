@@ -2,29 +2,28 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+		<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>	
+		
+	</head>
+	<body style="margin:10px auto;">
+		<div id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;		"></div>	
+		<!--<img src="http://demo.iflow.oa.com/content/index/images/gif.gif" />	-->
+	</body>
+</html>
 
-		<!--[if lt IE 9]>
-    <script src="../lib/html5.js" type="text/javascript"></script>    
-    <script src="../lib/excanvas.js" type="text/javascript"></script>
-<![endif]-->
+<script type="text/javascript">
 
-		<script type="text/javascript" src="../common/jmUtils.js" ></script>
-		<script type="text/javascript" src="../common/jmModels.js" ></script>
-		<script type="text/javascript" src="../common/jmEvents.js" ></script>
-		<script type="text/javascript" src="../common/jmProperty.js" ></script>
-		<script type="text/javascript" src="../common/jmControl.js" ></script>
-		<script type="text/javascript" src="../shapes/jmShape.js" ></script>
-		<script type="text/javascript" src="../shapes/jmPath.js" ></script>
-		<script type="text/javascript" src="../controls/jmImage.js" ></script>
-		<script type="text/javascript" src="../shapes/jmCircle.js" ></script>
-		<script type="text/javascript" src="../shapes/jmArc.js" ></script>
-		<script type="text/javascript" src="../shapes/jmHArc.js" ></script>
-		<script type="text/javascript" src="../jmGraph.js" ></script>
-		<script type="text/javascript">
+		seajs.config({
+			base:'../src/',
+			debug: true
+		});	
 
-			function load() {
-				var canvas = document.getElementById('mycanvas');
-				var graph = new jmGraph(canvas);
+		seajs.use('main',function(obj) {
+			var jmUtils = obj.jmUtils;
+			var jmGraph = obj.jmGraph;
+				
+				var graph = new jmGraph('mycanvas',800,600);
 				var style = {
 					stroke:'rgb(120,20,80)',					
 					lineWidth:6,
@@ -37,8 +36,8 @@
 				bg.addStop(0.8,'yellow');
 				bg.addStop(1,'red');					
 				style.fill = bg;
-				style.shadow = new jmShadow(0,0,20,'rgb(255,255,255)');	
-				var arc = graph.createShape('circle',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
+				style.shadow = graph.createShadow(0,0,20,'rgb(255,255,255)');	
+				var arc = graph.createShape('arc',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
 
 				arc.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(88,200,155,0.5)';
@@ -124,17 +123,11 @@
 				style.zIndex = 1;
 				var img = graph.createShape('img',{style:style,position:{x:10,y:10},image:'http://im-img.qq.com/inc/images/new_header2/logo.gif'});
 
-				graph.children.add(img);
-				img.canMove(true);
+				//graph.children.add(img);
+				//img.canMove(true);
 
 				
 				harc.canMove(true);
 				graph.redraw();
-			}
+			});
 		</script>
-	</head>
-	<body onload="load()" style="margin:10px auto;">
-		<canvas id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;		">不支持canvas</canvas>	
-		<!--<img src="http://demo.iflow.oa.com/content/index/images/gif.gif" />	-->
-	</body>
-</html>

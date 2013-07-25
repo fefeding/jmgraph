@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>common\jmControl.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/jmArc.html">jmArc</a></li>
+            
+                <li><a href="../classes/jmArraw.html">jmArraw</a></li>
+            
+                <li><a href="../classes/jmArrawLine.html">jmArrawLine</a></li>
+            
+                <li><a href="../classes/jmBezier.html">jmBezier</a></li>
+            
+                <li><a href="../classes/jmCell.html">jmCell</a></li>
+            
+                <li><a href="../classes/jmCircle.html">jmCircle</a></li>
+            
+                <li><a href="../classes/jmConnectLine.html">jmConnectLine</a></li>
+            
+                <li><a href="../classes/jmControl.html">jmControl</a></li>
+            
+                <li><a href="../classes/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../classes/jmEditorDefaultStyle.html">jmEditorDefaultStyle</a></li>
+            
+                <li><a href="../classes/jmEvents.html">jmEvents</a></li>
+            
+                <li><a href="../classes/jmGradient.html">jmGradient</a></li>
+            
+                <li><a href="../classes/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../classes/jmHArc.html">jmHArc</a></li>
+            
+                <li><a href="../classes/jmImage.html">jmImage</a></li>
+            
+                <li><a href="../classes/jmLabel.html">jmLabel</a></li>
+            
+                <li><a href="../classes/jmLine.html">jmLine</a></li>
+            
+                <li><a href="../classes/jmObject.html">jmObject</a></li>
+            
+                <li><a href="../classes/jmPath.html">jmPath</a></li>
+            
+                <li><a href="../classes/jmPrismatic.html">jmPrismatic</a></li>
+            
+                <li><a href="../classes/jmProperty.html">jmProperty</a></li>
+            
+                <li><a href="../classes/jmRect.html">jmRect</a></li>
+            
+                <li><a href="../classes/jmResize.html">jmResize</a></li>
+            
+                <li><a href="../classes/jmShape.html">jmShape</a></li>
+            
+                <li><a href="../classes/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../classes/jmSVGElement.html">jmSVGElement</a></li>
+            
+                <li><a href="../classes/jmUtils.html">jmUtils</a></li>
+            
+                <li><a href="../classes/jmUtils.cache.html">jmUtils.cache</a></li>
+            
+                <li><a href="../classes/jmUtils.list.html">jmUtils.list</a></li>
+            
+                <li><a href="../classes/jmVML.html">jmVML</a></li>
+            
+                <li><a href="../classes/list.html">list</a></li>
+            
+                <li><a href="../classes/menus.html">menus</a></li>
+            
+                <li><a href="../classes/toGlow.html">toGlow</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../modules/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../modules/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../modules/jmUtils.html">jmUtils</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: common\jmControl.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * 控件基础对象
+ * 控件的基础属性和方法
+ *
+ * @class jmControl
+ * @module jmGraph
+ * @for jmGraph
+ */
+
+var jmControl = function() {};
+jmUtils.extend(jmControl,jmProperty);//继承属性绑定
+
+/**
+ * 初始化对象，设定样式，初始化子控件对象
+ * 此方法为所有控件需调用的方法
+ *
+ * @method initializing
+ * @for jmControl
+ * @param {canvas} context 当前画布
+ * @param {style} style 当前控件的样式
+ */
+jmControl.prototype.initializing = function(context,style) {
+	this.context = context;
+	this.style = style || {};
+	//this.style.fill = this.style.fill || &#x27;transparent&#x27;;
+	this.visible = true;
+
+	//如果不是html5模式，则生成非hmtl5元素
+	var mode = this.mode || (this.mode = this.graph.mode);
+	if(mode !== &#x27;canvas&#x27; &amp;&amp; !this.svgShape &amp;&amp; this.type !== &#x27;jmGraph&#x27;) {
+		this.svgShape = this.context.create(&#x27;path&#x27;,this);
+		//this.svgShape.appendTo(this.graph.canvas);
+	}
+
+	var self = this;
+	//定义子元素集合
+	this.children = (function() {
+		var lst = new jmUtils.list();
+		var oadd = lst.add;
+		//当把对象添加到当前控件中时，设定其父节点
+		lst.add = function(obj) {
+			if(typeof obj === &#x27;object&#x27;) {
+				if(obj.parent &amp;&amp; obj.parent != self &amp;&amp; obj.parent.children) {
+					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
+				}
+				obj.parent = self;
+				//如果存在先移除
+				if(this.contain(obj)) {
+					this.oremove(obj);
+				}
+				oadd.call(this,obj);
+				obj.emit(&#x27;add&#x27;,obj);
+			}
+		};
+		lst.oremove= lst.remove;
+		//当把对象从此控件中移除时，把其父节点置为空
+		lst.remove = function(obj) {
+			if(typeof obj === &#x27;object&#x27;) {				
+				obj.parent = null;
+				this.oremove(obj);
+			}
+		};
+		/**
+		 * 根据控件zIndex排序，越大的越高
+		 */
+		lst.sort = function() {
+			var levelItems = {};
+			//提取zindex大于0的元素
+			lst.each(function(i,obj) {
+				if(!obj.zIndex &amp;&amp; obj.style &amp;&amp; obj.style.zIndex) {
+					obj.zIndex = Number(obj.style.zIndex);
+				}
+				if(obj.zIndex) {
+					var items = levelItems[obj.zIndex] || (levelItems[obj.zIndex] = []);
+					items.push(obj);					
+				}
+			});
+			/*//通过zindex排序
+			topItems.sort(function(item1,item2) {
+				return item1.zIndex - item2.zIndex;
+			});
+			oadd.call(this,topItems);*/
+			for(var index in levelItems) {
+				oadd.call(this,levelItems[index]);
+			}
+		}
+		return lst;
+	})();
+} 
+
+/**
+ * 设置鼠标指针
+ * 
+ * @method cursor
+ * @for jmControl
+ * @param {string} cur css鼠标指针标识,例如:pointer,move等
+ */
+jmControl.prototype.cursor = function(cur) {
+	if(this.svgShape) {
+		this.svgShape.css(&#x27;cursor&#x27;,cur);
+	}
+	else {
+		var graph = this.graph || this.findParent(jmGraph);
+		if(graph) {		
+			graph.css(&#x27;cursor&#x27;,cur);		
+		}
+	}	
+}
+
+/**
+ * 设定样式到context
+ * 处理样式映射，转换渐变和阴影对象为标准canvas属性
+ * 
+ * @method setStyle
+ * @for jmControl
+ * @param {style} style 样式对象，如:{fill:&#x27;black&#x27;,stroke:&#x27;red&#x27;}
+ */
+jmControl.prototype.setStyle = function(style) {
+	style = style || this.style;
+	if(!style) return;
+
+	/**
+	 * 样式设定
+	 * 
+	 * @method __setStyle
+	 * @private
+	 * @param {jmControl} control 当前样式对应的控件对象
+	 * @param {style} style 样式
+	 * @param {string} name 样式名称
+	 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
+	 */
+	function __setStyle(control,style,name,mpkey) {		
+		var styleValue = style[name];
+		if(styleValue) {
+			if(!control.mode || control.mode == &#x27;canvas&#x27;) {
+				//样式映射名
+				var styleMapCacheKey = &#x27;jm_control_style_mapping&#x27;;
+				var styleMap = jmUtils.cache.get(styleMapCacheKey);
+				if(!styleMap) {
+					//样式名称，也当做白名单使用					
+					styleMap = {
+						&#x27;fill&#x27;:&#x27;fillStyle&#x27;,
+						&#x27;stroke&#x27;:&#x27;strokeStyle&#x27;,
+						&#x27;shadow.blur&#x27;:&#x27;shadowBlur&#x27;,
+						&#x27;shadow.x&#x27;:&#x27;shadowOffsetX&#x27;,
+						&#x27;shadow.y&#x27;:&#x27;shadowOffsetY&#x27;,
+						&#x27;shadow.color&#x27;:&#x27;shadowColor&#x27;,
+						&#x27;lineWidth&#x27; : &#x27;lineWidth&#x27;,
+						&#x27;fillStyle&#x27; : &#x27;fillStyle&#x27;,
+						&#x27;strokeStyle&#x27; : &#x27;strokeStyle&#x27;,
+						&#x27;font&#x27; : &#x27;font&#x27;,
+						&#x27;textAlign&#x27; : &#x27;textAlign&#x27;,
+						&#x27;textBaseline&#x27; : &#x27;textBaseline&#x27;,
+						&#x27;shadowBlur&#x27; : &#x27;shadowBlur&#x27;,
+						&#x27;shadowOffsetX&#x27; : &#x27;shadowOffsetX&#x27;,
+						&#x27;shadowOffsetY&#x27; : &#x27;shadowOffsetY&#x27;,
+						&#x27;shadowColor&#x27; : &#x27;shadowColor&#x27;,
+						&#x27;lineJoin&#x27;: &#x27;lineJoin&#x27;,//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+						&#x27;lineCap&#x27;:&#x27;lineCap&#x27; //线条终端点,butt(默认，平),round(圆),square（方）
+					};
+					jmUtils.cache.add(styleMapCacheKey,styleMap);
+				}
+				var t = typeof styleValue;
+				if(t == &#x27;object&#x27; &amp;&amp; !styleMap[name]) {
+					if(name === &#x27;shadow&#x27;) {
+						for(var k in styleValue) {
+							__setStyle(control,styleValue,k,name + &#x27;.&#x27; + k);
+						}
+					}				
+				}
+				//如果为渐变对象
+				else if(t == &#x27;object&#x27; &amp;&amp; jmUtils.isType(styleValue,jmGradient)) {
+					var mpname = styleMap[mpkey || name] || name;					
+					control.context[mpname] = styleValue.toGradient(control);
+				}
+				else if(t != &#x27;function&#x27; &amp;&amp; t != &#x27;object&#x27;) {
+					var mpname = styleMap[mpkey || name];
+					//只有存在白名单中才处理
+					if(mpname) {						
+						control.context[mpname] = styleValue;						
+					}				
+				}				
+			}
+			else if(control.svgShape) {				
+				control.svgShape.attr(mpkey || name,styleValue);
+			}
+		}
+	}	
+	for(var k in style) {
+		__setStyle(this,style,k);
+	}
+}
+
+/**
+ * 获取当前控件的边界
+ * 通过分析控件的描点或位置加宽高得到为方形的边界
+ *
+ * @method getBounds
+ * @for jmControl
+ * @return {object} 控件的边界描述对象(left,top,right,bottom,width,height)
+ */
+jmControl.prototype.getBounds = function() {
+	//if(this.initPoints) this.initPoints();
+	var rect = {};
+	
+	if(this.points &amp;&amp; this.points.length &gt; 0) {		
+		for(var i in this.points) {
+			var p = this.points[i];
+			if(typeof rect.left === &#x27;undefined&#x27; || rect.left &gt; p.x) {
+				rect.left = p.x;
+			}
+			if(typeof rect.top === &#x27;undefined&#x27;  || rect.top &gt; p.y) {
+				rect.top = p.y;
+			}
+
+			if(typeof rect.right === &#x27;undefined&#x27;  || rect.right &lt; p.x) {
+				rect.right = p.x;
+			}
+			if(typeof rect.bottom === &#x27;undefined&#x27; || rect.bottom &lt; p.y) {
+				rect.bottom = p.y;
+			}
+		}
+	}
+	else if(this.getLocation) {
+		var p = this.getLocation();
+		if(p) {
+			rect.left = p.left;
+			rect.top = p.top;
+			rect.right = p.left + p.width;
+			rect.bottom = p.top + p.height;
+		}		
+	}
+	if(!rect.left) rect.left = 0; 
+	if(!rect.top) rect.top = 0; 
+	if(!rect.right) rect.right = 0; 
+	if(!rect.bottom) rect.bottom = 0; 
+	rect.width = rect.right - rect.left;
+	rect.height = rect.bottom - rect.top;
+	return rect;
+}
+
+/**
+ * 获取当前控件的位置相关参数
+ * 解析百分比和margin参数
+ *
+ * @method getLocation
+ * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
+ */
+jmControl.prototype.getLocation = function(reset) {
+	//如果已经计算过则直接返回
+	//在开画之前会清空此对象
+	if(reset !== true &amp;&amp; this.location) return this.location;
+
+	var localtion = this.location = {left:0,top:0,width:0,height:0};
+	var p = this.position();	
+	localtion.center = this.center &amp;&amp; typeof this.center === &#x27;function&#x27;?jmUtils.clone(this.center()):null;//中心
+	localtion.radius = this.radius?this.radius():null;//半径
+	localtion.width = this.width() || 0;
+	localtion.height = this.height() || 0;
+
+	var margin = this.style.margin || {};
+	margin.left = margin.left || 0;
+	margin.top = margin.top || 0;
+	margin.right = margin.right || 0;
+	margin.bottom = margin.bottom || 0;
+	
+	//如果没有指定位置，但指定了margin。则位置取margin偏移量
+	if(p) {
+		localtion.left = p.x;
+		localtion.top = p.y;
+	}
+	else {
+		localtion.left = margin.left;
+		localtion.top = margin.top;
+	}
+
+	if(!this.parent) return localtion;//没有父节点则直接返回
+	var parentBounds = this.parent.bounds?this.parent.bounds:this.parent.getBounds();	
+
+	//处理百分比参数
+	if(jmUtils.checkPercent(localtion.left)) {
+		localtion.left = jmUtils.percentToNumber(localtion.left) * parentBounds.width;
+	}
+	if(jmUtils.checkPercent(localtion.top)) {
+		localtion.top = jmUtils.percentToNumber(localtion.top) * parentBounds.height;
+	}
+	
+	//如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
+	if(jmUtils.checkPercent(localtion.width)) {
+		localtion.width = jmUtils.percentToNumber(localtion.width) * parentBounds.width;
+	}
+	if(jmUtils.checkPercent(localtion.height)) {
+		localtion.height = jmUtils.percentToNumber(localtion.height) * parentBounds.height;
+	}
+	//处理中心点
+	if(localtion.center) {
+		//处理百分比参数
+		if(jmUtils.checkPercent(localtion.center.x)) {
+			localtion.center.x = jmUtils.percentToNumber(localtion.center.x) * parentBounds.width;
+		}
+		if(jmUtils.checkPercent(localtion.center.y)) {
+			localtion.center.y = jmUtils.percentToNumber(localtion.center.y) * parentBounds.height;
+		}
+	}
+	if(localtion.radius) {
+		//处理百分比参数
+		if(jmUtils.checkPercent(localtion.radius)) {
+			localtion.radius = jmUtils.percentToNumber(localtion.radius) * Math.min(parentBounds.width,parentBounds.height);
+		}		
+	}
+	return localtion;
+}
+
+/**
+ * 获取或设定位置坐标
+ *
+ * @method position
+ * @param {point} [p] 位置参数{x:1,y:1} ,如果为空则返回当前位置
+ * @return {point} 当前控件的位置
+ */
+jmControl.prototype.position = function(p) {
+	return this.setValue(&#x27;position&#x27;,p);
+}
+
+/**
+ * 设定或获取宽度
+ * 
+ * @method width
+ * @param {number} [w] 宽度，如果为空则返回当前宽度
+ * @return {nubmer} 控件的当前宽度
+ */
+jmControl.prototype.width = function(w) {
+	return this.setValue(&#x27;width&#x27;,w);
+}
+
+/**
+ * 设定或获取高度
+ *
+ * @method height
+ * @param {number} [h] 高度
+ * @return {number} 当前控件的高度
+ */
+jmControl.prototype.height = function(h) {
+	return this.setValue(&#x27;height&#x27;,h);
+}
+
+/**
+ * 对控件进行平移
+ * 遍历控件所有描点或位置，设置其偏移量。
+ *
+ * @method offset
+ * @param {number} x x轴偏移量
+ * @param {number} y y轴偏移量
+ * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
+ */
+jmControl.prototype.offset = function(x,y,trans) {
+	trans = trans === false?false:true;	
+	var location = this.getLocation();
+	
+	var offseted = false;
+	if(this.center &amp;&amp; typeof this.center == &#x27;function&#x27;) {		
+		var center = this.center();
+		if(center) {			
+			center.x = location.center.x + x;
+			center.y = location.center.y + y;
+			//this.center(center);
+			offseted = true;
+		}			
+	}
+	if(offseted == false &amp;&amp; this.position &amp;&amp; typeof this.position == &#x27;function&#x27;) {
+		var p = this.position();
+		if(p) {
+			location.left += x;
+			location.top += y;
+			p.x = location.left;
+			p.y = location.top;
+			//this.position(p);
+			offseted = true;
+		}			
+	}
+	if(offseted == false &amp;&amp; this.cpoints &amp;&amp; typeof this.cpoints == &#x27;function&#x27;) {
+		var p = this.cpoints();
+		if(p) {			
+			var len = p.length;
+			for(var i=0; i &lt; len;i++) {
+				p[i].x += x;
+				p[i].y += y;
+			}		
+			offseted = true;
+		}			
+	}
+	
+	if(offseted == false &amp;&amp; this.points) {
+		var len = this.points.length;
+		for(var i=0; i &lt; len;i++) {
+			this.points[i].x += x;
+			this.points[i].y += y;
+		}
+		offseted = true;
+	}
+	
+	//触发控件移动事件	
+	this.emit(&#x27;move&#x27;,{offsetX:x,offsetY:y,trans:trans});
+
+	this.getLocation(true);	//重置
+	this.graph.refresh();
+}
+
+/**
+ * 获取控件相对于画布的绝对边界，
+ * 与getBounds不同的是：getBounds获取的是相对于父容器的边界.
+ *
+ * @method getAbsoluteBounds
+ * @return {object} 边界对象(left,top,right,bottom,width,height)
+ */
+jmControl.prototype.getAbsoluteBounds = function() {
+	//当前控件的边界，
+	var rec = this.bounds || this.getBounds();
+	if(this.parent &amp;&amp; this.parent.absoluteBounds) {
+		//父容器的绝对边界
+		var prec = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();
+		
+		return {
+			left : prec.left + rec.left,
+			top : prec.top + rec.top,
+			right : prec.left + rec.right,
+			bottom : prec.top + rec.bottom,
+			width : rec.width,
+			height : rec.height
+		};
+	}
+	return rec;
+}
+
+/**
+ * 画控件前初始化
+ * 执行beginPath开始控件的绘制
+ * 
+ * @method beginDraw
+ */
+jmControl.prototype.beginDraw = function() {	
+	this.getLocation(true);//重置位置信息
+	this.context.beginPath();			
+}
+
+/**
+ * 结束控件绘制
+ *
+ * @method endDraw
+ */
+jmControl.prototype.endDraw = function() {
+	//如果当前为封闭路径
+	if(this.style.close) {
+		this.context.closePath();
+	}
+	
+	if(this.style[&#x27;fill&#x27;]) {
+		this.context.fill();
+	}
+	if(this.style[&#x27;stroke&#x27;] || !this.style[&#x27;fill&#x27;]) {
+		this.context.stroke();
+	}		
+}
+
+/**
+ * 绘制控件
+ * 在画布上描点
+ * 
+ * @method draw
+ */
+jmControl.prototype.draw = function() {	
+	if(this.points &amp;&amp; this.points.length &gt; 0) {
+		//获取当前控件的绝对位置
+		var bounds = this.parent &amp;&amp; this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+		if(!this.mode || this.mode == &#x27;canvas&#x27;) {
+			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+			var len = this.points.length;			
+			for(var i=1; i &lt; len;i++) {
+				var p = this.points[i];
+				//移至当前坐标
+				if(p.m) {
+					this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
+				}
+				else {
+					this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
+				}			
+			}
+		}
+		else {			
+			this.svgShape.setStyle(this);
+			var ps = this.points.slice(0);
+			var len = ps.length;			
+			for(var i=0; i &lt; len;i++) {
+				ps[i].x += bounds.left;
+				ps[i].y += bounds.top;
+			}
+			this.svgShape.attr(&#x27;path&#x27;,ps,this.style.close);	
+		}
+	}	
+}
+
+/**
+ * 绘制当前控件
+ * 协调控件的绘制，先从其子控件开始绘制，再往上冒。
+ *
+ * @method paint
+ */
+jmControl.prototype.paint = function(v) {
+	if(v !== false &amp;&amp; this.visible !== false) {
+		if(this.svgShape) this.svgShape.show();
+
+		if(this.initPoints) this.initPoints();
+		//计算当前边界
+		this.bounds = this.getBounds();
+		this.absoluteBounds = this.getAbsoluteBounds();
+
+		this.context.save();
+		if(this.svgShape &amp;&amp; this.svgShape.glow) this.svgShape.glow.remove();
+		this.setStyle();//设定样式
+		this.emit(&#x27;beginDraw&#x27;,this);
+		if(this.beginDraw) this.beginDraw();
+		if(this.draw) this.draw();	
+		if(this.endDraw) this.endDraw();
+		
+		if(this.children) {	
+			this.children.sort();//先排序
+			this.children.each(function(i,item) {
+				if(item &amp;&amp; item.paint) item.paint();
+			});
+		}
+		
+		this.emit(&#x27;endDraw&#x27;,this);	
+		this.context.restore();
+	}
+	else {
+		if(this.svgShape) {
+			this.svgShape.hide();
+			if(this.children) {					
+				this.children.each(function(i,item) {
+					if(item &amp;&amp; item.paint) item.paint(false);
+				});
+			}
+		}
+	}
+}
+
+/**
+ * 获取指定事件的集合
+ * 比如mousedown,mouseup等
+ *
+ * @method getEvent
+ * @param {string} name 事件名称
+ * @return {list} 事件委托的集合
+ */
+jmControl.prototype.getEvent = function(name) {		
+	return this.__events?this.__events[name]:null;
+}
+
+/**
+ * 绑定控件的事件
+ *
+ * @method bind
+ * @param {string} name 事件名称
+ * @param {function} handle 事件委托
+ */
+jmControl.prototype.bind = function(name,handle) {	
+	//if(this.svgShape) {
+		//this.svgShape.bind(name,handle);
+		//return;
+	//}
+	/**
+	 * 添加事件的集合
+	 *
+	 * @method _setEvent
+	 * @private
+	 */
+	function _setEvent(name,events) {
+		if(!this.__events) this.__events = {};
+		return this.__events[name] = events;
+	}
+	var eventCollection = this.getEvent(name) || _setEvent.call(this,name,new jmUtils.list());
+	if(!eventCollection.contain(handle)) {
+		eventCollection.add(handle);
+	}
+}
+
+/**
+ * 移除控件的事件
+ *
+ * @method unbind 
+ * @param {string} name 事件名称
+ * @param {function} handle 从控件中移除事件的委托
+ */
+jmControl.prototype.unbind = function(name,handle) {
+	//if(this.svgShape) {
+		//this.svgShape.unbind(name,handle);
+		//return;
+	//}
+
+	var eventCollection = this.getEvent(name) ;		
+	if(eventCollection) {
+		eventCollection.remove(handle);
+	}
+}
+
+/**
+ * 独立执行事件委托
+ *
+ * @method runEventHandle
+ * @param {string} 将执行的事件名称
+ * @param {object} 事件执行的参数，包括触发事件的对象和位置
+ */
+function runEventHandle(name,args) {
+	var events = this.getEvent(name);		
+	if(events) {
+		var self = this;			
+		events.each(function(i,handle) {
+			//只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
+			if(false === handle.call(self,args)) {
+				args.cancel = true;
+			}
+		});		
+	}	
+	return args.cancel;
+}
+
+/**
+ * 检 查坐标是否落在当前控件区域中..true=在区域内
+ *
+ * @method checkPoint
+ * @param {point} p 位置参数
+ * @return {boolean} 当前位置如果在区域内则为true,否则为false。
+ */
+jmControl.prototype.checkPoint = function(p) {
+	//生成当前坐标对应的父级元素的相对位置
+	var abounds = this.bounds || this.getBounds();
+
+	if(p.x &gt; abounds.right || p.x &lt; abounds.left) {
+		return false;
+	}
+	if(p.y &gt; abounds.bottom || p.y &lt; abounds.top) {
+		return false;
+	}
+	
+	return true;
+}
+
+
+/**
+ * 触发控件事件，组合参数并按控件层级关系执行事件冒泡。
+ *
+ * @method raiseEvent
+ * @param {string} name 事件名称
+ * @param {object} args 事件执行参数
+ * @return {boolean} 如果事件被组止冒泡则返回false,否则返回true
+ */
+jmControl.prototype.raiseEvent = function(name,args) {
+	if(this.visible === false) return ;//如果不显示则不响应事件	
+	if(!args.position) {		
+		var graph = this.findParent(jmGraph);
+		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置
+		
+		//如果不是html5模式，则处理每个元素的相对位置为graph容器的位置
+		if(this.mode !== &#x27;canvas&#x27;) {
+			var graphposition = graph.getPosition();
+			position.x = position.offsetX = position.pageX - graphposition.left;
+			position.y = position.offsetY = position.pageY - graphposition.top;
+		}
+
+		var srcElement = args.srcElement || args.target;
+		args = {position:position,
+			button:args.button == 0?1:args.button,
+			keyCode:args.keyCode || args.charCode || args.which,
+			ctrlKey:args.ctrlKey,
+			cancel : false,
+			srcElement : srcElement
+		};		
+	}
+	//先执行子元素事件，如果事件没有被阻断，则向上冒泡
+	//var stoped = false;
+	if(this.children) {
+		this.children.each(function(j,el) {	
+			//未被阻止才执行			
+			if(args.cancel !== true) {
+				//如果被冒止冒泡，
+				//stoped = el.raiseEvent(name,args) === false?true:stoped;
+				el.raiseEvent(name,args)
+			}
+		},true);//按逆序处理
+	}
+	//if(stoped) return false;
+
+	//获取当前对象的父元素绝对位置
+	//生成当前坐标对应的父级元素的相对位置
+	var abounds = this.parent &amp;&amp; this.parent.absoluteBounds?this.parent.absoluteBounds : this.absoluteBounds;
+	if(!abounds) return false;	
+	//args = jmUtils.clone(args);//参数副本
+	args.position.x = args.position.offsetX - abounds.left;
+	args.position.y = args.position.offsetY - abounds.top;
+	
+	//事件发生在边界内或健盘事件发生在画布中才触发
+	if(this.checkPoint(args.position)) {
+		//如果没有指定触发对象，则认为当前为第一触发对象
+		if(!args.target) {
+			args.target = this;
+		}
+		if(args.cancel !== true) {
+			//如果返回true则阻断冒泡
+			runEventHandle.call(this,name,args);//执行事件		
+		}
+		if(!this.focused &amp;&amp; name == &#x27;mousemove&#x27;) {
+	 		this.focused = true;//表明当前焦点在此控件中
+	 		this.raiseEvent(&#x27;mouseover&#x27;,args);
+		}	
+	}
+	else {
+		//如果焦点不在，且原焦点在，则触发mouseleave事件
+		if(this.focused &amp;&amp; name == &#x27;mousemove&#x27;) {
+	 		this.focused = false;//表明当前焦点离开
+	 		runEventHandle.call(this,&#x27;mouseleave&#x27;,args);//执行事件	
+		}	
+	}
+		
+	return args.cancel == false;//如果被阻止则返回false,否则返回true
+}
+
+/**
+ * 清空控件指定事件
+ *
+ * @method clearEvents
+ * @param {string} name 需要清除的事件名称
+ */
+jmControl.prototype.clearEvents = function(name) {
+	var eventCollection = this.getEvent(name) ;		
+	if(eventCollection) {
+		eventCollection.clear;
+	}
+}
+
+/**
+ * 查找其父级类型为type的元素，直到找到指定的对象或到最顶级控件后返回空。
+ *
+ * @method findParent 
+ * @param {object} 类型名称或类型对象
+ * @return {object} 指定类型的实例
+ */
+jmControl.prototype.findParent = function(type) {
+	//如果为类型名称，则返回名称相同的类型对象
+	if(typeof type === &#x27;string&#x27;) {
+		if(this.type == type)
+			return this;
+	}
+	else if(this.is(type)) {
+		return this;
+	}
+	if(this.parent) {
+		return this.parent.findParent(type);
+	}
+	return null;
+}
+
+/**
+ * 设定是否可以移动
+ * 此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
+ *
+ * @method canMove
+ * @param {boolean} m true=可以移动，false=不可移动或清除移动。
+ * @param {jmGraph} [graph] 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。
+ */
+jmControl.prototype.canMove = function(m,graph) {
+	if(!this.__mvMonitor) {
+		/**
+		 * 控制控件移动对象
+		 * 
+		 * @property __mvMonitor
+		 * @private
+		 */
+		this.__mvMonitor = {};
+		this.__mvMonitor.mouseDown = false;
+		this.__mvMonitor.curposition={x:0,y:0};
+		var self = this;
+		/**
+		 * 控件移动鼠标事件
+		 *
+		 * @method mv
+		 * @private
+		 */
+		this.__mvMonitor.mv = function(evt) {
+			var _this = self;
+			if(_this.__mvMonitor.mouseDown) {
+				_this.parent.bounds = null;
+				var parentbounds = _this.parent.getAbsoluteBounds();		
+				var offsetx = evt.position.x - _this.__mvMonitor.curposition.x;
+				var offsety = evt.position.y - _this.__mvMonitor.curposition.y;				
+				
+				//如果锁定边界
+				if(_this.lockSide) {
+					var thisbounds = _this.bounds || _this.getAbsoluteBounds();					
+					//检查边界出界
+					var outside = jmUtils.checkOutSide(parentbounds,thisbounds,{x:offsetx,y:offsety});
+					if(outside.left &lt; 0) {
+						if(_this.lockSide.left) offsetx -= outside.left;
+					}
+					else if(outside.right &gt; 0) {
+						if(_this.lockSide.right) offsetx -= outside.right;
+					}
+					if(outside.top &lt; 0) {
+						if(_this.lockSide.top) offsety -= outside.top;
+					}
+					else if(outside.bottom &gt; 0) {
+						if(_this.lockSide.bottom) offsety -= outside.bottom;
+					}
+				}
+				
+				if(offsetx &amp;&amp; offsety) {
+					_this.offset(offsetx,offsety);
+					_this.__mvMonitor.curposition.x = evt.position.x;
+					_this.__mvMonitor.curposition.y = evt.position.y;	
+					//console.log(offsetx + &#x27;.&#x27; + offsety);
+				}
+				return false;
+			}
+		}
+		/**
+		 * 控件移动鼠标松开事件
+		 *
+		 * @method mu
+		 * @private
+		 */
+		this.__mvMonitor.mu = function(evt) {
+			var _this = self;
+			if(_this.__mvMonitor.mouseDown) {
+				_this.__mvMonitor.mouseDown = false;
+				_this.cursor(&#x27;default&#x27;);
+				_this.emit(&#x27;moveend&#x27;,{position:_this.__mvMonitor.curposition});	
+				//return false;
+			}			
+		}
+		/**
+		 * 控件移动鼠标离开事件
+		 *
+		 * @method ml
+		 * @private
+		 */
+		this.__mvMonitor.ml = function() {
+			var _this = self;
+	 		if(_this.__mvMonitor.mouseDown) {
+				_this.__mvMonitor.mouseDown = false;
+				_this.cursor(&#x27;default&#x27;);	
+				_this.emit(&#x27;moveend&#x27;,{position:_this.__mvMonitor.curposition});
+				return false;
+			}	
+		}
+		/**
+		 * 控件移动鼠标按下事件
+		 *
+		 * @method md
+		 * @private
+		 */
+		this.__mvMonitor.md = function(evt) {
+			var _this = self;
+			if(_this.__mvMonitor.mouseDown) return;
+			if(evt.button == 0 || evt.button == 1) {
+				_this.__mvMonitor.mouseDown = true;
+				_this.cursor(&#x27;move&#x27;);
+				var parentbounds = _this.parent.absoluteBounds || _this.parent.getAbsoluteBounds();	
+				_this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
+				_this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
+				//触发控件移动事件
+				_this.emit(&#x27;movestart&#x27;,{position:_this.__mvMonitor.curposition});
+				
+				evt.cancel = true;
+				return false;
+			}			
+		}
+	}
+	graph = graph || this.graph || this.findParent(jmGraph);//获取最顶级元素画布
+	
+	if(graph &amp;&amp; m) {
+		
+			graph.bind(&#x27;mousemove&#x27;,this.__mvMonitor.mv);
+			graph.bind(&#x27;mouseup&#x27;,this.__mvMonitor.mu);
+			graph.bind(&#x27;mouseleave&#x27;,this.__mvMonitor.ml);
+			this.bind(&#x27;mousedown&#x27;,this.__mvMonitor.md);
+			graph.bind(&#x27;touchmove&#x27;,this.__mvMonitor.mv);
+			graph.bind(&#x27;touchend&#x27;,this.__mvMonitor.mu);
+			this.bind(&#x27;touchstart&#x27;,this.__mvMonitor.md);	
+			
+	}
+	else {
+		
+			graph.unbind(&#x27;mousemove&#x27;,this.__mvMonitor.mv);
+			graph.unbind(&#x27;mouseup&#x27;,this.__mvMonitor.mu);
+			graph.unbind(&#x27;mouseleave&#x27;,this.__mvMonitor.ml);
+			this.unbind(&#x27;mousedown&#x27;,this.__mvMonitor.md);
+			graph.unbind(&#x27;touchmove&#x27;,this.__mvMonitor.mv);
+			graph.unbind(&#x27;touchend&#x27;,this.__mvMonitor.mu);
+			this.unbind(&#x27;touchstart&#x27;,this.__mvMonitor.md);	
+		
+	}
+}
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

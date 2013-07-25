@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>editor\jmCell.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/jmArc.html">jmArc</a></li>
+            
+                <li><a href="../classes/jmArraw.html">jmArraw</a></li>
+            
+                <li><a href="../classes/jmArrawLine.html">jmArrawLine</a></li>
+            
+                <li><a href="../classes/jmBezier.html">jmBezier</a></li>
+            
+                <li><a href="../classes/jmCell.html">jmCell</a></li>
+            
+                <li><a href="../classes/jmCircle.html">jmCircle</a></li>
+            
+                <li><a href="../classes/jmConnectLine.html">jmConnectLine</a></li>
+            
+                <li><a href="../classes/jmControl.html">jmControl</a></li>
+            
+                <li><a href="../classes/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../classes/jmEditorDefaultStyle.html">jmEditorDefaultStyle</a></li>
+            
+                <li><a href="../classes/jmEvents.html">jmEvents</a></li>
+            
+                <li><a href="../classes/jmGradient.html">jmGradient</a></li>
+            
+                <li><a href="../classes/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../classes/jmHArc.html">jmHArc</a></li>
+            
+                <li><a href="../classes/jmImage.html">jmImage</a></li>
+            
+                <li><a href="../classes/jmLabel.html">jmLabel</a></li>
+            
+                <li><a href="../classes/jmLine.html">jmLine</a></li>
+            
+                <li><a href="../classes/jmObject.html">jmObject</a></li>
+            
+                <li><a href="../classes/jmPath.html">jmPath</a></li>
+            
+                <li><a href="../classes/jmPrismatic.html">jmPrismatic</a></li>
+            
+                <li><a href="../classes/jmProperty.html">jmProperty</a></li>
+            
+                <li><a href="../classes/jmRect.html">jmRect</a></li>
+            
+                <li><a href="../classes/jmResize.html">jmResize</a></li>
+            
+                <li><a href="../classes/jmShape.html">jmShape</a></li>
+            
+                <li><a href="../classes/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../classes/jmSVGElement.html">jmSVGElement</a></li>
+            
+                <li><a href="../classes/jmUtils.html">jmUtils</a></li>
+            
+                <li><a href="../classes/jmUtils.cache.html">jmUtils.cache</a></li>
+            
+                <li><a href="../classes/jmUtils.list.html">jmUtils.list</a></li>
+            
+                <li><a href="../classes/jmVML.html">jmVML</a></li>
+            
+                <li><a href="../classes/list.html">list</a></li>
+            
+                <li><a href="../classes/menus.html">menus</a></li>
+            
+                <li><a href="../classes/toGlow.html">toGlow</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../modules/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../modules/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../modules/jmUtils.html">jmUtils</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: editor\jmCell.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+/**
+ * 流程编辑器单元,继承自jmControl
+ * 参数说明:resizable=是否可改变大小，connectable=是否可连线,value =当前显示字符串,position=单元位置,editor=当前单元所属编辑器,graph=画布,style=样式对象或名称
+ * 
+ * @class jmCell
+ * @for jmEditor
+ * @module jmEditor
+ * @param {object} option 参数
+ */
+var jmCell = (function () {
+	function jmCell(option) {		
+		this.option = option;			
+		this.type = &#x27;jmCell&#x27;;
+		this.value(option.value || &#x27;&#x27;);
+		this.graph = option.graph;
+		this.editor = option.editor;		
+		this.styleName = option.style;		
+		this.setStyle(this.styleName);
+		option.position = option.position || {x:0,y:0};
+
+		//如果从样式中取大小，则重新定位
+		if(option.width) {
+			this.width(option.width);
+		}
+		else if(this.style.width) {
+			this.width(this.style.width);
+			option.position.x -= this.style.width / 2;
+		}
+		if(option.height) {
+			this.height(option.height);
+		}
+		else if(this.style.height) {
+			this.height(this.style.height);
+			option.position.y -= this.style.height / 2;
+		}
+		this.position(option.position);	
+
+		/**
+		 * 当前元素是否已被选择
+		 *
+		 * @property selected
+		 * @type boolean
+		 */
+		this.selected = false;
+		this.initializing(this.graph.context,this.style);
+		//已option参数为准
+		if(typeof option.resizable != &#x27;undefined&#x27;) {
+			this.resizable = option.resizable;
+		}
+		else if(typeof this.style.resizable != &#x27;undefined&#x27;) {
+			this.resizable = this.style.resizable;			
+		}
+		
+		if(typeof option.connectable != &#x27;undefined&#x27;) {
+			this.connectable = option.connectable;
+		}
+		else if(typeof this.style.connectable != &#x27;undefined&#x27;) {
+			this.connectable = this.style.connectable;			
+		}	
+		else {
+			this.connectable = this.editor.connectable;
+		}	
+	}
+	jmUtils.extend(jmCell,jmControl);//继承属性绑定
+	return jmCell;
+})();
+
+/**
+ * 初始化当前元素样式
+ *
+ * @method setStyle
+ * @for jmCell
+ * @param {object} style 样式
+ */
+jmCell.prototype.setStyle = function(style) {
+	if(style) {
+		var mpstyle = this.editor.styles[style]
+		 if(mpstyle) {
+		 	this.styleName = style;
+		 	this.style = jmUtils.clone(mpstyle);
+		 }
+		 else {
+		 	this.style = jmUtils.clone(style);
+		 	mpstyle = style;
+		 }
+		if(typeof this.style.resizable != &#x27;undefined&#x27;) {
+			this.resizable = this.style.resizable;	
+		}
+		this.style.zIndex = this.style.zIndex || 1000;
+		this.fontStyle = mpstyle.fontStyle || jmEditorDefaultStyle.font;
+		this.style.padding = this.style.padding || {left:8,top:8,right:8,bottom:8};
+		if(this.label) {
+			this.label.style = this.fontStyle;
+		}
+		if(this.shape) {
+			mpstyle.zIndex = 0;
+			this.shape.style = mpstyle;
+		}
+	}	
+}
+
+/**
+ * 生成节点元素
+ * 并生成基础子控件,包括图形，边界，拖放标识和连线等
+ *
+ * @method create
+ * @for jmCell
+ * @private
+ */
+jmCell.prototype.create = function() {
+	this.connects = new jmUtils.list();
+	var w = this.width();
+	var h = this.height();
+	this.center = {x:w / 2,y:h / 2};
+	var borderStyle;
+	if(this.style.borderStyle) {
+		borderStyle = this.style.borderStyle;
+	}
+	else {
+		borderStyle = {
+					stroke:this.style.borderStroke || jmEditorDefaultStyle.cellBorder.stroke,
+					//fill:&#x27;transparent&#x27;,
+					//大小改变拖放边框样式
+					rectStroke:this.style.borderStroke || jmEditorDefaultStyle.cellBorder.stroke,
+					close:true
+				};
+	}
+	this.rect = this.graph.createShape(&#x27;resize&#x27;,{
+				width:w,
+				height:h,
+				movable:false,
+				resizable:this.resizable,
+				style:borderStyle});
+
+	this.rect.visible = false;
+	var shape = this.option.shape || this.style.shape;
+	if(shape) {	
+		var params = jmUtils.extend({
+			style:this.style,
+			width:&#x27;94%&#x27;,
+			height:&#x27;94%&#x27;,
+			center:this.center,
+			position:{x:&#x27;3%&#x27;,y:&#x27;3%&#x27;}
+		},this.option);
+		this.shape = this.graph.createShape(shape,params);		
+	}
+
+	if(this.connectable) {
+		//创建连线拉动点
+		var centerArcSzie = 8;
+		var bg = this.graph.createRadialGradient(centerArcSzie / 2,centerArcSzie / 2,0,centerArcSzie / 2,centerArcSzie / 2,centerArcSzie);
+			bg.addStop(0,&#x27;#00FF00&#x27;);
+			bg.addStop(1,&#x27;#059505&#x27;);		
+		//连接拖动圆点
+		this.connArc = this.graph.createShape(&#x27;arc&#x27;,{
+			center:{x:&#x27;50%&#x27;,y:&#x27;50%&#x27;},			
+			width:centerArcSzie,
+			height:centerArcSzie,
+			radius:centerArcSzie,
+			style:{
+				fill:bg,
+				close:true,
+				zIndex:200
+			}});
+		this.connArc.visible = false;	
+		//带箭头的连线，用来拖动连接对象
+		this.connectLine = new jmArrawLine(this.graph,{
+			start:this.center,
+			end:this.connArc.center(),
+			offsetX: 6,
+			offsetY: 12,
+			style:jmEditorDefaultStyle.dragLine
+		});
+
+		this.connectLine.visible = false;	
+		this.children.add(this.connectLine);
+	}
+	
+	//当前节点字符串为示控件
+	this.label = this.graph.createShape(&#x27;label&#x27;,{
+		style:this.fontStyle,
+		width:&#x27;100%&#x27;,
+		height:&#x27;100%&#x27;,
+		value : this.value()
+	});
+	this.setStyle(this.styleName);	
+}
+
+/**
+ * 添加当前元素到画布中
+ *
+ * @method add
+ * @for jmCell
+ */
+jmCell.prototype.add = function() {
+	this.create();
+	this.children.add(this.rect);	
+	this.graph.children.add(this);
+	//如果可以移动
+	if(this.editor.movable) {
+		this.canMove(true);
+	}
+	
+	if(this.shape) this.children.add(this.shape);	
+	
+	//单击选当前元素
+	this.bind(&#x27;mousedown&#x27;,function(evt) {			
+		//if(evt.button == 1) {
+			//如果没有按下ctrl健，且没有被选中，则清除其它选中
+			if(!evt.ctrlKey &amp;&amp; !this.selected) {
+				this.editor.selectAll(false,this.id);
+			}				
+			//选择当前节点		
+			if(!this.selected) this.select(true);
+			evt.cancel = true;
+		//}
+	});
+	
+	//当有连线拉到当前元素上时，连接这二个元素
+		this.bind(&#x27;mouseup&#x27;,function(evt) {
+			var from = this.editor.connectFrom;
+			if(from) {
+				if(from != this) {
+					//连接二个节点
+					if(from.connect(this) !== false)
+					{
+						this.editor.save();//保存状态
+					}
+				}			
+				this.editor.connectFrom = null;
+				//return false;
+			}			
+		});
+
+	if(this.connectable) {		
+		this.bind(&#x27;mousemove&#x27;,function() {
+			this.connArc.visible = true;	
+			this.graph.refresh();			
+		});
+		this.bind(&#x27;mouseleave&#x27;,function() {		
+			if(this.editor.connectFrom != this) {
+				this.connArc.visible = false;
+				this.graph.refresh();
+			}		
+		});
+		
+		this.children.add(this.connArc);	
+		this.connArc.canMove(true);
+		//开始移动连线
+		this.connArc.on(&#x27;movestart&#x27;,function(args) {
+			var _this = self;
+			_this.editor.connectFrom = _this;
+			_this.connectLine.visible = true;
+		});
+		//结束移动时归位
+		this.connArc.on(&#x27;moveend&#x27;,function(args) {
+			var _this = self;
+			var arccenter = _this.connArc.center();
+			arccenter.x = &#x27;50%&#x27;;
+			arccenter.y = &#x27;50%&#x27;;
+			_this.editor.connectFrom = null;
+			_this.connectLine.visible = false;
+			_this.connArc.visible = false;
+			_this.graph.refresh();
+		});
+	}
+
+	//如果当前节点被移动，则重新定位子元素
+	this.on(&#x27;move&#x27;,function(args) {
+		this.initPosition();//重新定位
+		//this.moved = true;//标识已被移动
+	});
+
+	this.children.add(this.label);	
+	this.resize();
+
+	//监听大小改变
+	var self = this;
+	this.rect.on(&#x27;resize&#x27;,function(px,py,dx,dy) {
+		var _this = self;
+		_this.position().x += px;
+		_this.position().y += py;
+		var w = _this.width() + dx;
+		var h = _this.height() + dy;
+		_this.width(w);
+		_this.height(h);
+		_this.resize();
+	});
+}
+
+/**
+* 设置一个标识
+* 例如用来做状态标识等
+*
+* @method setOverlay
+* @param {string} src 图片地址
+* @param {number} w 图片宽
+* @param {nubmer} h 图片高度
+* @param {string} tooltip 标识信息描述
+*/
+jmCell.prototype.setOverlay = function(src,w,h,tooltip) {
+	if(!this.overlay) {
+		/*this.overlay = this.graph.createShape(&#x27;img&#x27;,
+			{style:this.style,position:{x:this.width(),y:this.height()},image:src,width:0});
+		this.children.add(this.overlay);*/
+
+		this.overlay = document.createElement(&#x27;img&#x27;);
+		this.overlay.style.position = &#x27;absolute&#x27;;
+		var bounds = this.getAbsoluteBounds();
+		var top = bounds.bottom;
+		var left = bounds.right;
+
+		if(this.style &amp;&amp; this.style.overlay &amp;&amp; this.style.overlay.margin) {
+			if(this.style.overlay.margin.left) {
+				left += this.style.overlay.margin.left;				
+			}
+			if(this.style.overlay.margin.top) {
+				top += this.style.overlay.margin.top;
+			}
+		}
+
+		this.overlay.style.top = top + &#x27;px&#x27;;
+		this.overlay.style.left = left + &#x27;px&#x27;;
+		this.overlay.style.border = &#x27;0&#x27;;
+		this.editor.container.appendChild(this.overlay);
+	}
+	if(src) {
+		this.overlay.src = src;
+		this.overlay.width = w;
+		this.overlay.height = h;
+		this.overlay.title = tooltip;
+		/*this.overlay.width(w);
+		this.overlay.height(h);		
+		this.overlay.image(src).title = tooltip;
+		this.overlay.visible = true;*/
+	}
+	else {
+		this.overlay.visible = false;
+	}
+	return this.overlay;
+}
+
+/**
+ * 大小改变事件
+ * 重置各元素大小和位置
+ *
+ * @method resize
+ * @for jmCell
+ * @private
+ */
+jmCell.prototype.resize = function() {
+	var w = this.width();
+	var h = this.height();	
+
+	var center = this.center;
+	//如果设有padding
+	//则计算大小减去padding大小
+	if(this.style.padding) {
+		w = w - (this.style.padding.left || 0) - (this.style.padding.right || 0);
+		h = h - (this.style.padding.top || 0) - (this.style.padding.bottom || 0);
+		center.x = w/2 + (this.style.padding.left || 0);
+		center.y = h/2 + (this.style.padding.top || 0);
+	}
+	else {
+		center.x = w / 2;
+		center.y = h / 2;
+	}
+	if(this.connArc) {
+		this.connArc.center().x = center.x;
+		this.connArc.center().y = center.y;
+	}
+	this.initPosition();
+}
+
+/**
+ * 重新初始化各位置
+ * 
+ * @method initPosition
+ * @for jmCell
+ * @private
+ */
+jmCell.prototype.initPosition = function() {
+
+	var p = this.position();
+	//定义四个线路口
+	if(!this.pos1) this.pos1 = {};
+	this.pos1.x = p.x;
+	this.pos1.y = p.y + this.height() / 2;
+
+	if(!this.pos2) this.pos2 = {};
+	this.pos2.x = p.x + this.width() / 2;
+	this.pos2.y = p.y;
+
+	if(!this.pos3) this.pos3 = {};
+	this.pos3.x = p.x + this.width();
+	this.pos3.y = this.pos1.y;
+
+	if(!this.pos4) this.pos4 = {};
+	this.pos4.x = this.pos2.x;
+	this.pos4.y = p.y + this.height();
+
+	this.rect.width(this.width());
+	this.rect.height(this.height());
+	
+	//如果已设定标识信息，则定位
+	if(this.overlay) {
+		if(this.overlay.tagName == &#x27;IMG&#x27;) {
+			var bounds = this.getAbsoluteBounds();
+			var top = bounds.bottom;
+			var left = bounds.right;
+
+			if(this.style &amp;&amp; this.style.overlay &amp;&amp; this.style.overlay.margin) {
+				if(this.style.overlay.margin.left) {
+					left += this.style.overlay.margin.left;				
+				}
+				if(this.style.overlay.margin.top) {
+					top += this.style.overlay.margin.top;
+				}
+			}
+
+			this.overlay.style.top = top + &#x27;px&#x27;;
+			this.overlay.style.left = left + &#x27;px&#x27;;		
+		}
+		else {
+			var op = this.overlay.position();
+			op.x = this.width();
+			op.y = this.height();
+		}
+	}
+}
+
+/**
+ * 选择当前节点
+ *
+ * @method select
+ * @for jmCell
+ * @param {boolean} b 选择或消选当前元素
+ * @param {boolean} [raiseEvent=true] 是否触发选择事件
+ * @return {boolean} 是否被选择
+ */
+jmCell.prototype.select = function(b,raiseEvent) {
+	var changed = false;//是否改变了选择状态
+	if(b === false &amp;&amp; this.selected === true) {
+		//this.rect.style.stroke = &#x27;transparent&#x27;;	
+		this.rect.visible = false;	
+		this.selected = false;	
+		changed = true;	
+	}
+	else if(b === true &amp;&amp; !this.selected) {
+		this.selected = true;	
+		this.rect.visible = true;	
+		changed = true;		
+	}
+	if(changed) {		
+		this.graph.refresh();
+		//触发选择事件
+		if(raiseEvent !== false) {
+			this.emit(&#x27;select&#x27;,this.selected);
+		}		
+	}	
+}
+
+/**
+ * 连接到目标节点
+ * 
+ * @method connect
+ * @for jmCell
+ * @param {jmCell} to 要连接到的元素
+ * @param {number} id 指定当前连线的id
+ * @param {string} [value] 当前连线显示的字符值
+ */
+jmCell.prototype.connect = function(to,id,value) {
+	//查找相同的连线，如果存在则不重连
+	var line  = this.connects.get(function(l) {
+		return (l.from == this &amp;&amp; l.to == to);
+	});
+	if(!line) {
+		//检查元素是否可连接
+		if(this.editor.validConnect &amp;&amp; !this.editor.validConnect(this,to)) {
+			return false;
+		}
+
+		id = id || this.editor.maxId();
+		line = this.graph.createShape(&#x27;cellConnectLine&#x27;,{
+			id:id,
+			from:this,
+			to:to,
+			style:jmUtils.clone(this.style.connectLine),
+			editor:this.editor
+		});	
+		
+		this.connects.add(line);
+		to.connects.add(line);
+		line.value(value);
+		this.graph.children.add(line);
+		this.editor.connects.add(line);//记录到编辑器中
+
+		//连线鼠标进入控件
+		line.bind(&#x27;mouseover&#x27;,function() {	
+			if(!this.selected)	 {
+				var overstroke = this.style &amp;&amp; this.style.overStroke?this.style.overStroke:jmEditorDefaultStyle.connectLine.overStroke;
+				this.style.stroke = overstroke;
+				this.style.zIndex = 2000;
+				this.graph.refresh();
+			}			
+		});
+		//连线鼠标离开控件
+		line.bind(&#x27;mouseleave&#x27;,function() {
+			if(!this.selected) {
+				var stroke = this.style &amp;&amp; this.style.normalStroke?this.style.normalStroke:jmEditorDefaultStyle.connectLine.stroke;
+				this.style.stroke = stroke;
+				this.style.zIndex = 1;
+				this.graph.refresh();
+			}			
+		});
+		//当按下鼠标时选择当前线
+		line.bind(&#x27;mousedown&#x27;,function(evt) {
+			var b = this.selected;	
+			if(!evt.ctrlKey &amp;&amp; !this.selected) {
+				this.editor.selectAll(false,this.id);
+			}
+			
+			this.select(!b);			
+			return false;
+		});
+	}
+}
+
+/**
+ * 返回或设置当前元素的值 
+ *
+ * @method value
+ * @for jmCell
+ * @param {string} [v] 元素显示的值
+ * @return {string} 当前的值
+ */
+jmCell.prototype.value = function(v) {
+	if(typeof v !== &#x27;undefined&#x27;) {
+		if(this.label) {
+			this.label.value = v;
+		}
+		return this.setValue(&#x27;value&#x27;,v);
+	}
+	return this.getValue(&#x27;value&#x27;);
+}
+
+/**
+ * 设定或获取中心点
+ * 
+ * @method center
+ * @for jmHArc
+ * @param {point} p 中心点坐标
+ * @return {point} 当前中心点坐标
+ */
+jmCell.prototype.center = function(p) {
+	return this.setValue(&#x27;center&#x27;,p);
+}
+
+/**
+ * 从编辑器中移除当前节点
+ *
+ * @method remove
+ * @for jmCell
+ */
+jmCell.prototype.remove = function() {
+	if(this.editor) {
+		this.editor.cells.remove(this);	
+		this.graph.children.remove(this);	
+		if(this.overlay &amp;&amp; this.overlay.parentElement) {
+			this.overlay.parentElement.removeChild(this.overlay);
+		}
+	}
+	//并移除它的连线
+	this.connects.each(function(i,c) {
+		c.remove();	
+	},true);
+}
+
+/**
+ * 二元素之间的连线,继承自jmPath
+ * 连线参数:from=起始元素，to=目标元素,value=连线值
+ *
+ * @class jmConnectLine
+ * @for jmEditor
+ * @module jmEditor
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 连线参数
+ */
+var jmConnectLine = (function() { 
+	function jmConnectLine(graph,params) {
+		this.graph = graph;
+		this.editor = params.editor;
+		this.id = params.id;
+		this.from = params.from;
+		this.to = params.to;
+		this.selected = false;
+		this.points = params.points || [];
+		var style = params.style || {
+							stroke:jmEditorDefaultStyle.connectLine.stroke,
+							lineWidth:jmEditorDefaultStyle.connectLine.lineWidth,
+							zIndex :1
+						};
+		this.type = &quot;jmConnectLine&quot;;
+		//style.fill = &#x27;transparent&#x27;;
+		style.close = false;
+		this.initializing(graph.context,style);
+
+		params = jmUtils.extend({
+					start:params.from.outPos2,
+					end:params.to.inPos					
+					},params);
+		
+		var arrawstyle = jmUtils.clone(params.style);
+		arrawstyle.fill = style.stroke;
+		params.style = arrawstyle;
+		this.arraw = graph.createShape(&#x27;arraw&#x27;,params);	
+		this.children.add(this.arraw);
+
+		var fontstyle = this.style.fontStyle || jmEditorDefaultStyle.font;
+		this.label = this.graph.createShape(&#x27;label&#x27;,{style:fontstyle});
+		//当连线建立时，同时加入标签
+		this.on(&#x27;add&#x27;,function(obj) {
+			obj.children.add(obj.label);
+		});
+		this.on(&#x27;beginDraw&#x27;,function(obj) {
+			var bounds = obj.bounds;
+			obj.label.width(bounds.width);
+			obj.label.height(bounds.height);
+		});
+
+		/**
+		 * 当前是否为选中状态
+		 *
+		 * @property selected
+		 * @for jmConnectLine
+		 */
+		this.selected = false;
+	}
+	jmUtils.extend(jmConnectLine,jmPath);
+	return jmConnectLine;
+})();
+
+/**
+ * 初始化图形点,通过元素出口和入口计算最佳连线路径
+ *
+ * @method initPoints 
+ * @for jmConnectLine
+ * @return {array} 所有描点集合
+ */
+jmConnectLine.prototype.initPoints = function() {	
+	var start = this.from.pos4;
+	var end = this.to.pos2;
+	var toposition = this.to.position();
+	var frompostion = this.from.position();
+	//节点在目标节点左边
+	if(frompostion.x + this.from.width() &lt; toposition.x) {
+		start = this.from.pos3;
+		var offy = toposition.y - frompostion.y - this.from.height();
+		//节点在目标节点上边
+		if(offy &gt; 0) {
+			if(offy &gt; 30) {
+				start = this.from.pos4;
+			}
+			else {
+				start = this.from.pos3;
+			}
+			end = this.to.pos2;
+		}
+		//目标节点在起始节点上边
+		else if(frompostion.y &gt; toposition.y + this.to.height()) {
+			end = this.to.pos4;
+		}
+		else {
+			end = this.to.pos1;
+		}		
+	}
+	//如果起始在结束右边
+	else if(frompostion.x &gt; toposition.x + this.to.width()) {	
+		start = this.from.pos1;	
+		var offy = toposition.y - frompostion.y - this.from.height();
+		if(offy &gt; 0) {
+			if(offy &gt; 30) {
+				start = this.from.pos4;
+			}
+			else {
+				start = this.from.pos1;
+			}
+			end = this.to.pos2;
+		}
+		else if(frompostion.y &gt; toposition.y + this.to.height()) {			
+			end = this.to.pos4;
+		}
+		else {
+			end = this.to.pos3;
+		}	
+		
+	}
+	else if(frompostion.y &gt; toposition.y + this.to.height()) {
+		start = this.from.pos1;
+		end = this.to.pos1;
+	}
+	
+	this.points =this.getPoints(start,end);
+	return this.points;
+}
+
+/**
+ * 给定开始点与结束点，计算连线路径
+ *
+ * @method getPoints
+ * @for jmConnectLine
+ * @private
+ */
+jmConnectLine.prototype.getPoints = function(start,end) {
+	//获取二点的方位，1=left,2=top,3=right,=bottom	
+	function getDirection(s,e) {
+		if(s.x == e.x) {
+			return s.y &gt; e.y?4:2;//垂直方向
+		}
+		if(s.y == e.y) {
+			return s.x &gt; e.x?3:1;//水平方向
+		}
+		if(s.x &gt; e.x) {
+			return s.y &gt; e.y?3412:3214;//起始点x,y都大于结束点则为左上右下
+		}
+		else {
+			return s.y &gt; e.y?1432:1234;//起始点X小于结束点，Y大于结束点则为右下右上
+		}
+	}	
+	var xOffset = 30;
+	var yOffset = 30;
+	var points = [start];
+	if(start == this.from.pos1) {
+		switch (end) {
+			case this.to.pos1 : {
+				var p1x = Math.min(start.x - xOffset,end.x - xOffset);
+				var p1 = {x:p1x,y:start.y};
+				points.push(p1);
+				var p2 = {x:p1x,y:end.y};
+				points.push(p2);
+				break;
+			}
+			case this.to.pos2 : {	
+				var p1 = {x:end.x,y:start.y};
+				points.push(p1);			
+				break;
+			}
+			case this.to.pos3 : {
+				var p1 = {x:(start.x - end.x)/2 + end.x,y:start.y};
+				points.push(p1);
+				var p2 = {x:p1.x,y:end.y};
+				points.push(p2);
+				break;
+			}
+			case this.to.pos4 : {
+				var p1 = {x:end.x,y:start.y};
+				points.push(p1);
+				break;
+			}
+		}
+	}
+	else if(start == this.from.pos2) {
+		switch (end) {
+			case this.to.pos1 : {				
+				var p1 = {x:start.x,y:end.y};
+				points.push(p1);
+				break;
+			}
+			case this.to.pos2 : {	
+				var p1 = {x:start.x,y:Math.min(start.y - yOffset,end.y - yOffset)};
+				points.push(p1);			
+				break;
+			}
+			case this.to.pos3 : {
+				var p1 = {x:start.x,y:end.y};
+				points.push(p1);
+				break;
+			}
+			case this.to.pos4 : {
+				var p1 = {x:start.x,y:(start.y - end.y) / 2 + end.y};
+				points.push(p1);
+				var p2 = {x:end.x,y:p1.y};
+				points.push(p2);
+				break;
+			}
+		}
+	}
+	else if(start == this.from.pos3) {
+		switch (end) {
+			case this.to.pos1 : {				
+				var p1 = {x:(end.x - start.x) / 2 + start.x,y:start.y};
+				points.push(p1);
+				var p2 = {x:p1.x,y:end.y};
+				points.push(p2);
+				break;
+			}
+			case this.to.pos2 : {	
+				var p1 = {x:end.x,y:start.y};
+				points.push(p1);			
+				break;
+			}
+			case this.to.pos3 : {
+				var p1 = {x:Math.max(start.x + xOffset,end.x + xOffset),y:start.y};
+				points.push(p1);
+				var p2 = {x:p1.x,y:end.y};
+				points.push(p2);
+				break;
+			}
+			case this.to.pos4 : {
+				var p1 = {x:end.x,y:start.y};
+				points.push(p1);
+				break;
+			}
+		}
+	}
+	else if(start == this.from.pos4) {
+		switch (end) {
+			case this.to.pos1 : {				
+				var p1 = {x:start.x,y:end.y};
+				points.push(p1);		
+				break;
+			}
+			case this.to.pos2 : {	
+				var p1 = {x:start.x,y:Math.max((end.y - start.y) / 2 + start.y,end.y - yOffset)};
+				points.push(p1);	
+				var p2 = {x:end.x,y:p1.y};
+				points.push(p2);	
+				break;
+			}
+			case this.to.pos3 : {
+				var p1 = {x:start.x,y:end.y};
+				points.push(p1);
+				break;
+			}
+			case this.to.pos4 : {
+				var p1 = {x:start.x,y:Math.max(start.y + xOffset,end.y + xOffset)};
+				points.push(p1);
+				var p2 = {x:end.x,y:p1.y};
+				points.push(p2);
+				break;
+			}
+		}
+	}
+	points.push(end);
+
+	var from = jmUtils.clone(points[points.length - 2]);
+	var to = jmUtils.clone(end);
+	var minx;
+	var miny;
+	for(var i in points) {
+		var p = points[i];
+		minx = Math.min(minx || p.x,p.x);
+		miny = Math.min(miny || p.y,p.y);
+	}
+	from.x -= minx;
+	to.x -= minx;
+	from.y -= miny;
+	to.y -= miny;
+	this.arraw.start(from);    
+    this.arraw.end(to);
+    this.arraw.style.stroke = this.arraw.style.fill = this.style.stroke;
+    //实心箭头
+	//points = points.concat(this.arraw.initPoints(false));
+	return points;
+}
+
+/**
+ * 选择当前连线
+ *
+ * @method value
+ * @for jmConnectLine
+ * @return {string} 当前连线的值
+ */
+jmConnectLine.prototype.select = function(b) {
+	if(typeof b !== &#x27;undefined&#x27;) {
+		var changed = false;
+		if(b &amp;&amp; this.selected == false) {
+			this.style.stroke = this.style &amp;&amp; this.style.selectedStroke?this.style.selectedStroke:jmEditorDefaultStyle.connectLine.overStroke;
+			this.style.zIndex = 10;
+			this.selected = true;
+			changed = true;
+		}		
+		else if(this.selected == true) {
+			this.style.stroke = this.style &amp;&amp; this.style.normalStroke?this.style.normalStroke:jmEditorDefaultStyle.connectLine.stroke;
+			this.style.zIndex = 1;
+			this.selected = false;
+			changed = true;
+		}
+		if(changed) {
+			this.editor.emit(&#x27;select&#x27;,this,b);
+			this.graph.refresh();
+		}
+		
+	}
+}
+
+/**
+ * 当前连线标签值
+ *
+ * @method value
+ * @for jmConnectLine
+ * @return {string} 当前连线的值
+ */
+jmConnectLine.prototype.value = function(v) {
+	if(typeof v !== &#x27;undefined&#x27;) this.label.value = v;
+	return this.label.value;
+}
+
+/**
+ * 移除当前连线
+ *
+ * @method remove
+ * @for jmConnectLine
+ */
+jmConnectLine.prototype.remove = function() {
+	//从起始元素中移除
+	if(this.from) {
+		this.from.connects.remove(this);
+	}
+	//从目标元素中移除
+	if(this.to) {
+		this.to.connects.remove(this);
+	}
+	if(this.editor) {
+		this.editor.connects.remove(this);
+	}
+	//从编辑器中移除
+	this.graph.children.remove(this);
+}
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

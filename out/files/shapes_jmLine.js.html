@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>shapes\jmLine.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/jmArc.html">jmArc</a></li>
+            
+                <li><a href="../classes/jmArraw.html">jmArraw</a></li>
+            
+                <li><a href="../classes/jmArrawLine.html">jmArrawLine</a></li>
+            
+                <li><a href="../classes/jmBezier.html">jmBezier</a></li>
+            
+                <li><a href="../classes/jmCell.html">jmCell</a></li>
+            
+                <li><a href="../classes/jmCircle.html">jmCircle</a></li>
+            
+                <li><a href="../classes/jmConnectLine.html">jmConnectLine</a></li>
+            
+                <li><a href="../classes/jmControl.html">jmControl</a></li>
+            
+                <li><a href="../classes/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../classes/jmEditorDefaultStyle.html">jmEditorDefaultStyle</a></li>
+            
+                <li><a href="../classes/jmEvents.html">jmEvents</a></li>
+            
+                <li><a href="../classes/jmGradient.html">jmGradient</a></li>
+            
+                <li><a href="../classes/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../classes/jmHArc.html">jmHArc</a></li>
+            
+                <li><a href="../classes/jmImage.html">jmImage</a></li>
+            
+                <li><a href="../classes/jmLabel.html">jmLabel</a></li>
+            
+                <li><a href="../classes/jmLine.html">jmLine</a></li>
+            
+                <li><a href="../classes/jmObject.html">jmObject</a></li>
+            
+                <li><a href="../classes/jmPath.html">jmPath</a></li>
+            
+                <li><a href="../classes/jmPrismatic.html">jmPrismatic</a></li>
+            
+                <li><a href="../classes/jmProperty.html">jmProperty</a></li>
+            
+                <li><a href="../classes/jmRect.html">jmRect</a></li>
+            
+                <li><a href="../classes/jmResize.html">jmResize</a></li>
+            
+                <li><a href="../classes/jmShape.html">jmShape</a></li>
+            
+                <li><a href="../classes/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../classes/jmSVGElement.html">jmSVGElement</a></li>
+            
+                <li><a href="../classes/jmUtils.html">jmUtils</a></li>
+            
+                <li><a href="../classes/jmUtils.cache.html">jmUtils.cache</a></li>
+            
+                <li><a href="../classes/jmUtils.list.html">jmUtils.list</a></li>
+            
+                <li><a href="../classes/jmVML.html">jmVML</a></li>
+            
+                <li><a href="../classes/list.html">list</a></li>
+            
+                <li><a href="../classes/menus.html">menus</a></li>
+            
+                <li><a href="../classes/toGlow.html">toGlow</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/jmEditor.html">jmEditor</a></li>
+            
+                <li><a href="../modules/jmGraph.html">jmGraph</a></li>
+            
+                <li><a href="../modules/jmSVG.html">jmSVG</a></li>
+            
+                <li><a href="../modules/jmUtils.html">jmUtils</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: shapes\jmLine.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * 画一条直线
+ *
+ * @class jmLine
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
+ */
+
+var jmLine = (function () {
+	function jmLine(graph,params) {
+		if(!params) params = {};
+		/**
+		 * 当前对象类型名jmLine
+		 *
+		 * @property type
+		 * @type string
+		 */
+		this.type = &#x27;jmLine&#x27;;
+		this.points = params.points || [];
+		var style = params.style || {};
+		
+		this.graph = graph;
+			
+		this.start(params.start || {x:0,y:0});
+		this.end(params.end || {x:0,y:0});
+		//this.points.push(this.start);
+		//this.points.push(this.end);
+
+		style.lineType = style.lineType || &#x27;solid&#x27;;
+		style.dashLength = style.dashLength || 4;
+		this.initializing(graph.context,style);
+	}
+	jmUtils.extend(jmLine,jmPath);//继承path图形
+	return jmLine;
+})();
+
+/**
+ * 初始化图形点,如呆为虚线则根据跳跃间隔描点
+ * @method initPoints
+ * @private
+ */
+jmLine.prototype.initPoints = function() {	
+	var start = this.start();
+	var end = this.end();
+	this.points = [];	
+	this.points.push(start);
+
+	if(this.style.lineType === &#x27;dotted&#x27;) {			
+		var dx = end.x - start.x;
+		var dy = end.y - start.y;
+		var lineLen = Math.sqrt(dx * dx + dy * dy);
+		dx = dx / lineLen;
+		dy = dy / lineLen;
+		var dottedstart = false;
+		var dottedsp = this.style.dashLength / 2;
+		for(var l=this.style.dashLength; l&lt;=lineLen;) {
+			if(dottedstart == false) {
+				this.points.push({x:start.x + dx * l,y:start.y+ dy * l});
+				l += dottedsp;
+			}
+			else {				
+				this.points.push({x:start.x + dx * l,y:start.y+ dy * l,m:true});
+				l += this.style.dashLength;
+			}
+			dottedstart = !dottedstart;				
+		}
+	}
+	this.points.push(end);
+	return this.points;
+}
+
+/**
+* 开始画图
+*//*
+jmLine.prototype.draw = function() {	
+	
+	//获取当前控件的绝对位置
+	var bounds = this.parent &amp;&amp; this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+	var startx = this.start.x + bounds.left;
+	var starty = this.start.y + bounds.top;
+	this.context.moveTo(startx,starty);
+	
+	if(this.style.lineType === &#x27;dotted&#x27;) {			
+		var dx = this.end.x - this.start.x;
+		var dy = this.end.y - this.start.y;
+		var lineLen = Math.sqrt(dx * dx + dy * dy);
+		dx = dx / lineLen;
+		dy = dy / lineLen;
+		var dottedstart = false;
+		var dottedsp = this.style.dashLength / 2;
+		for(var l=this.style.dashLength; l&lt;=lineLen;) {
+			if(dottedstart == false) {
+				this.context.lineTo(startx + dx * l,starty+ dy * l);
+				l += dottedsp;
+			}
+			else {
+				this.context.moveTo(startx + dx * l,starty+ dy * l);
+				l += this.style.dashLength;
+			}
+			dottedstart = !dottedstart;				
+		}
+		this.context.lineTo(this.end.x+ bounds.left,this.end.y + bounds.top);		
+	}
+	else {			
+		this.context.lineTo(this.end.x+ bounds.left,this.end.y + bounds.top);
+	}
+		
+}*/
+
+/**
+ * 控制起始点
+ * 
+ * @method start
+ * @for jmLine
+ * @param {point} p 起始点坐标
+ * @return {point} 当前起始点坐标
+ */
+jmLine.prototype.start = function(p) {
+	return this.setValue(&#x27;start&#x27;,p);
+}
+
+/**
+ * 控制结束点
+ * 
+ * @method end
+ * @for jmLine
+ * @param {point} p 结束点坐标
+ * @return {point} 当前结束点坐标
+ */
+jmLine.prototype.end = function(p) {
+	return this.setValue(&#x27;end&#x27;,p);
+}
+
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

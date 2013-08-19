@@ -132,20 +132,12 @@ div.editor-menu {
 		}
 </style>
 
-<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>	
+<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
 
 		<script type="text/javascript" src="images.js" ></script>
 		<script type="text/javascript">
 
-		seajs.config({
-			base:'../src/',
-			debug: true
-		});	
-
-		seajs.use('main',function(modules) {
-			var jmUtils = modules.jmUtils;
-			var jmGraph = modules.jmGraph;			
-			var jmEditor = modules.jmEditor;
+		loadJMGraph(function() {
 			
 				//初始化编辑器
 				var editor = new jmEditor({
@@ -506,7 +498,7 @@ div.editor-menu {
 		            else if(from.styleName == 'join') {
 		                //如果fork已存在出口
 		                if(from.connects.count(function(con) {
-		                        return con.from = form;
+		                        return con.from = from;
 		                    }) > 0) {
 		                    alert('join元素有且只能有一个出口');
 		                    return false;

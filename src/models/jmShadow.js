@@ -11,29 +11,27 @@
  * @param {number} blur 模糊值
  * @param {string} color 阴影的颜色
  */
- define(function(require,exports,module) {
-	function jmShadow(x,y,blur,color) {
-		this.x = x;
-		this.y = y;
-		this.blur = blur;
-		this.color = color;
 
-		/**
-		 * 转换为raphael的光晕对象
-		 *
-		 * @method toGlow
-		 * @for jmShadow
-		 * @class jmShadow	
-		 * @return {object} raphael的光晕对象
-		 */
-		this.toGlow = function() {
-			return {
-				width: this.blur,
-				offsetx : this.x,
-				offsety : this.y,
-				color : this.color
-			}
+function jmShadow(x,y,blur,color) {
+	this.x = x;
+	this.y = y;
+	this.blur = blur;
+	this.color = color;
+
+	/**
+	 * 转换为raphael的光晕对象
+	 *
+	 * @method toGlow
+	 * @for jmShadow
+	 * @class jmShadow	
+	 * @return {object} raphael的光晕对象
+	 */
+	this.toGlow = function() {
+		return {
+			width: this.blur,
+			offsetx : this.x,
+			offsety : this.y,
+			color : this.color
 		}
 	}
-	module.exports = jmShadow;
-});
+}

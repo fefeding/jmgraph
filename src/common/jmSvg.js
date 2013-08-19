@@ -349,7 +349,7 @@ jmSVGElement.prototype.attr = function(n,v,close,scale) {
                         this.glow = this.element.glow(v.toGlow());
                     }
                 }
-                else {
+                else if(v != 'transparent') {
                     this.element.attr(n,v);
                 }
             }

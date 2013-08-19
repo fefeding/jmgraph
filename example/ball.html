@@ -3,7 +3,7 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/lib/sea.js" id="seajsnode" ></script>	
+		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>		
 
 		<style>
 		html,body {
@@ -29,16 +29,8 @@
 </html>
 
 <script type="text/javascript">
-			
-		seajs.config({
-			base:'../src/',
-			debug: true
-		});	
-
-		seajs.use('main',function(obj) {
-			var jmUtils = obj.jmUtils;
-			var jmGraph = obj.jmGraph;
-
+		
+		loadJMGraph(function() {
 			jmUtils.bindEvent(window,'resize',resize);			
 			refreshBall();
 

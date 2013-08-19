@@ -4,54 +4,9 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
 		<script type="text/javascript">
-function getElementPosition (el) {
-    if(document.documentElement && el.getBoundingClientRect) {
-        var rect = el.getBoundingClientRect();
-        return {
-           top:document.documentElement.scrollTop + el.getBoundingClientRect().top,
-           left:document.documentElement.scrollLeft + el.getBoundingClientRect().left
-         };
-    }
-    else {
-         var pos = {"top":0, "left":0};
-         if (el.offsetParent){
-           while (el.offsetParent){
-             pos.top += el.offsetTop;
-             pos.left += el.offsetLeft;
-             el = el.offsetParent;
-           }
-         }else if(el.x){
-           pos.left += el.x;
-         }else if(el.x){
-           pos.top += el.y;
-         }
-         return pos;
-    }
-}
-			function touchstart(evt) {
-				evt = evt || event;
-				var tevt = evt.touches[0];
-				tevt.offsetX = tevt.pageX - getElementPosition(evt.target).left;
-				for(var i in tevt) {
-					document.getElementById('info').innerHTML += ('start--' + i + ':' + tevt[i] + '   ');
-				}
-			}
-			function touchmove(evt) {
-				evt = evt || event;
-				evt = evt.touches[0];
-				for(var i in evt) {
-					document.getElementById('info').innerHTML += ('move' + i + ':' + evt[i] + '   ');
-				}
-			}
-			function touchend(evt) {
-				/*evt = evt || event;
-				 var touches = evt.targetTouches || evt.changedTouches || evt.touches;
-    			if(touches) evt = touches[0];//兼容touch事件
-				for(var i in evt) {
-					document.getElementById('info').innerHTML += ('end' + i + ':' + evt[i] + '   ');
-				}*/
-				document.getElementById('info').innerHTML += 'end';
-			}
+		var s = '<adaf></fsdf>fasfasf<add><fefe*>';
+		var ms = s.match(/\<[\s\S]*?\>/g);
+		var mm = ms;
 		</script>
 	</head>
 	<body style="margin:10px;">

@@ -15,3 +15,5 @@ jmGraph
 Code Layout
 -----------
 
+[Document](http://graph.jm47.com/out/)
+

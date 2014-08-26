@@ -58,10 +58,13 @@ jmLabel.prototype.initPoints = function() {
  * @return {object} 含文本大小的对象
  */
 jmLabel.prototype.testSize = function() {
+	this.context.save();
+	this.setStyle();
 	//计算宽度
 	var textSize = this.context.measureText?
 						this.context.measureText(this.value):
 						{width:(this.svgShape?this.svgShape.element.getBBox().width:15)};
+	this.context.restore();
 	textSize.height = 15;
 	return textSize;
 }
@@ -106,20 +109,22 @@ jmLabel.prototype.draw = function() {
 	}
 
 	if(this.mode == 'canvas') {
-		if(this.style.fill && this.context.fillText) {
-			if(this.style.maxWidth) {
-				this.context.fillText(this.value,x,y,this.style.maxWidth);
+		if(this.value) {
+			if(this.style.fill && this.context.fillText) {
+				if(this.style.maxWidth) {
+					this.context.fillText(this.value,x,y,this.style.maxWidth);
+				}
+				else {
+					this.context.fillText(this.value,x,y);
+				}
 			}
-			else {
-				this.context.fillText(this.value,x,y);
-			}
-		}
-		else if(this.context.strokeText) {
-			if(this.style.maxWidth) {
-				this.context.strokeText(this.value,x,y,this.style.maxWidth);
-			}
-			else {
-				this.context.strokeText(this.value,x,y);
+			else if(this.context.strokeText) {
+				if(this.style.maxWidth) {
+					this.context.strokeText(this.value,x,y,this.style.maxWidth);
+				}
+				else {
+					this.context.strokeText(this.value,x,y);
+				}
 			}
 		}
 		//如果有指定边框，则画出边框

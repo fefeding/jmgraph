@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
-		
+<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.min.js"></script>	
 	</head>
 	<body style="width:100%;margin:10px auto;border:1px solid blue;">
 		可用鼠标移动节点位置 <br />
@@ -15,8 +15,6 @@
 
 <script type="text/javascript">
 
-		loadJMGraph(function(obj) {
-			
 			var psize = 6;	
 			var style = {
 				stroke:'rgb(120,20,80)',					
@@ -187,5 +185,5 @@
 			},10);
 			
 			graph2.paint();
-	});
+
 </script>

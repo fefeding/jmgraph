@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
-
+		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.min.js"></script>
 		<style>
 		html,body {
 			margin:0;
@@ -29,9 +29,7 @@
 </html>
 
 <script type="text/javascript">
-		
-		loadJMGraph(function() {
-			
+
 			var graph;
 			var balls = [];
 
@@ -269,5 +267,5 @@
 					return this.shape.visible;
 				}
 			}
-		});
+		
 		</script>

@@ -3,9 +3,7 @@ jmGraph
 
 基于html5的简单写图组件
 
-License
--------
-你可以任意修改和传播此组件源码
+
 
 
 [Examples](http://graph.jm47.com/example/index.html)

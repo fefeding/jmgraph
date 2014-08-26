@@ -60,7 +60,7 @@ jmControl.prototype.initializing = function(context,style) {
 		lst.remove = function(obj) {
 			if(typeof obj === 'object') {				
 				obj.parent = null;
-				obj.remove();
+				obj.remove(true);
 				this.oremove(obj);
 			}
 		};
@@ -900,7 +900,7 @@ jmControl.prototype.canMove = function(m,graph) {
 					}
 				}
 				
-				if(offsetx && offsety) {
+				if(offsetx || offsety) {
 					_this.offset(offsetx,offsety);
 					_this.__mvMonitor.curposition.x = evt.position.x;
 					_this.__mvMonitor.curposition.y = evt.position.y;	

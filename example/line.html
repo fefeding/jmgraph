@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
-		<script type="text/javascript" src="../src/jmgraph.min.js"></script>			
+		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>			
 	</head>
 	<body style="width:800px;margin:10px auto;border:1px solid blue;">
 		<div id="mycanvas" style="border:1px solid red;margin:10px;width:100%;height:600px;"></div>
@@ -13,8 +13,7 @@
 		<img id="dataimg" />
 	</body>
 	<script type="text/javascript">	
-		
-		loadJMGraph(function() {			
+				
 			var graph = new jmGraph('mycanvas',800,600);				
 			var style = {
 				stroke:'rgb(120,20,80)',
@@ -175,7 +174,6 @@
 			//line.zIndex =1;
 			var img = graph.toDataURL();
 			document.getElementById('dataimg').src = img;
-		});
-	
+		
 	</script>
 </html>

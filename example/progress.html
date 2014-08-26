@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
-		
+		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>
 	</head>
 	<body style="margin:10px auto;">
 		<div id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;		"></div>	
@@ -14,9 +14,6 @@
 
 <script type="text/javascript">
 
-
-		loadJMGraph(function(obj) {
-			
 				var graph = new jmGraph('mycanvas',800,600);
 				var style = {
 					stroke:'rgb(120,20,80)',					
@@ -123,5 +120,5 @@
 				
 				harc.canMove(true);
 				graph.redraw();
-			});
+		
 		</script>

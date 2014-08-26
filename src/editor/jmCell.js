@@ -562,7 +562,8 @@ jmCell.prototype.center = function(p) {
  * @method remove
  * @for jmCell
  */
-jmCell.prototype.remove = function() {
+jmCell.prototype.remove = function(r) {
+	if(r) return;
 	if(this.editor) {
 		this.editor.cells.remove(this);	
 		this.graph.children.remove(this);	

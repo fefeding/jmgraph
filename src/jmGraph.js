@@ -19,7 +19,7 @@ function jmGraph(canvas,w,h) {
 	 * @property mode
 	 * @type {string}
 	 */
-	this.mode = jmUtils.checkSupportedMode();
+	this.mode = 'canvas';//jmUtils.checkSupportedMode();
 
 	if(typeof canvas === 'string') {
 		canvas = document.getElementById(canvas);
@@ -31,12 +31,20 @@ function jmGraph(canvas,w,h) {
 			cn.width = canvas.clientWidth;
 			cn.height = canvas.clientHeight;
 			canvas = cn;
+			
+			
 		}		
 		this.canvas = canvas;
+		if(w) this.width(w);
+		if(h) this.height(h);	
+
+		//当为ie9以下版本时，采用excanvas初始化canvas
+		if(typeof G_vmlCanvasManager != 'undefined') {
+			G_vmlCanvasManager.init_(document);
+		}
 		this.context = canvas.getContext('2d');	
 
-		if(w) this.width(w);
-		if(h) this.height(h);		
+			
 	}
 	else {
 		this.context = new jmSVG(canvas,w,h);			
@@ -127,7 +135,7 @@ jmGraph.prototype.isSupportedBrowser = function() {
 /**
  * 生成阴影对象
  *
- * @method createLinearGradient
+ * @method createShadow
  * @param {number} x x偏移量
  * @param {number} y y偏移量
  * @param {number} blur 模糊值

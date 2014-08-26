@@ -223,7 +223,7 @@ jmEditor.prototype.menus = function() {
 			else {
 				mitem.appendChild(item);
 			}
-			mitem.onclick = function() {
+			mitem.onmouseup = function() {
 				if(click) {
 					click.call(this);
 				}

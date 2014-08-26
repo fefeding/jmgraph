@@ -268,7 +268,7 @@ jmConnectLine.prototype.getPoints = function(start,end) {
 	var to = jmUtils.clone(end);
 	var minx;
 	var miny;
-	for(var i in points) {
+	for(var i=0;i<points.length;i++) {
 		var p = points[i];
 		minx = Math.min(minx || p.x,p.x);
 		miny = Math.min(miny || p.y,p.y);
@@ -333,7 +333,8 @@ jmConnectLine.prototype.value = function(v) {
  * @method remove
  * @for jmConnectLine
  */
-jmConnectLine.prototype.remove = function() {
+jmConnectLine.prototype.remove = function(r) {
+	if(r) return;
 	//从起始元素中移除
 	if(this.from) {
 		this.from.connects.remove(this);

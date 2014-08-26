@@ -4,8 +4,8 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 		
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>	
-		
+		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>
 	</head>
 	<body style="width:800px;margin:10px auto;border:1px solid blue;" >	
 		<div id="mycanvas" style="border:1px solid red;margin:10px;">
@@ -16,9 +16,6 @@
 
 <script type="text/javascript">
 
-
-		loadJMGraph(function() {
-			
 				var graph = new jmGraph('mycanvas',800,600);				
 				var style = {
 					stroke:'rgb(120,20,80)',					
@@ -75,6 +72,12 @@
 				var s = 0;
 				var e = 0;
 				var colors = ['red','green','blue','#ccc','#45f235','#22346a','#eaf345'];
+
+				var center = {x:250,y:200};
+				var ca = graph.createShape('arc',{style:style,center:center,radius:5,anticlockwise:true});				
+				graph.children.add(ca);
+
+				var rotatePosition = {x:center.x-10,y:center.y-10};
 				for(var i=0;i<data.length;i++) {
 					var per = data[i] / total;
 					var angle = per * Math.PI * 2;
@@ -82,15 +85,22 @@
 					e += angle;
 
 					style = jmUtils.clone(style);
-					style.fill = colors[i];
-					//var a = Math.PI * 0.5
-					var a = graph.createShape('arc',{style:style,center:{x:250,y:200},radius:200,start: s,end:e,anticlockwise:true});
+					style.fill = colors[i];					
+					//style.rotate = 0.2;
+					var a = graph.createShape('arc',{style:style,center:center,radius:100,start: s,end:e,anticlockwise:true});
+					//a.rotatePosition = rotatePosition;
 					graph.children.add(a);
 				}
 				
 				graph.refresh();			
-			},true);
-
+				/*var r = 0;
+				graph.animate(function() {
+					r++;
+					this.children.each(function(i,a) {
+						a.style.rotate = r;
+					});
+				},2000);*/
+				
 			function keydonw (evt) {
 				window.console.log(evt.keyCode);
 			}

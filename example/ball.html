@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/loadJMGraph.js" id="jmgraph"></script>		
-
+		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
+		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>
 		<style>
 		html,body {
 			margin:0;
@@ -30,13 +30,12 @@
 
 <script type="text/javascript">
 		
-		loadJMGraph(function() {
 			jmUtils.bindEvent(window,'resize',resize);			
 			refreshBall();
 
 			var graph;
 			function refreshBall() {
-				
+				resize();
 				graph = new jmGraph('mycanvas');	
 				var style = {				
 					lineWidth:1,
@@ -45,7 +44,7 @@
 					fill:'#05a2e2'
 				};
 				
-				resize();
+				
 
 				var balls = [];
 				function createPosition(radius,i) {
@@ -206,5 +205,5 @@
 					return this.center.y;
 				}
 			}
-		});
+		
 		</script>

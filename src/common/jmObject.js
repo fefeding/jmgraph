@@ -48,17 +48,17 @@ jmObject.prototype.animate = function(handle,millisec) {
 		}
 		if(this.animateHandles) {
 			if(this.animateHandles.count() > 0) {
-				//var self = this;
+				var self = this;
 				//延时处理动画事件
-				this.dispatcher = setTimeout(function(self) {
-					//var _this = self;
+				this.dispatcher = setTimeout(function(_this) {
+					_this = _this || self;
 					var needredraw = false;
 					var overduehandles = [];
 					var curTimes = new Date().getTime();
-					self.animateHandles.each(function(i,ani) {						
+					_this.animateHandles.each(function(i,ani) {						
 						try {
 							if(ani && ani.handle && (!ani.times || curTimes - ani.times >= ani.millisec)) {
-								var r = ani.handle.apply(self,ani.params);
+								var r = ani.handle.apply(_this,ani.params);
 								if(r === false) {
 									overduehandles.push(ani);//表示已完成的动画效果
 								}								
@@ -74,13 +74,13 @@ jmObject.prototype.animate = function(handle,millisec) {
 						}						
 					});
 					for(var i in overduehandles) {
-						self.animateHandles.remove(overduehandles[i]);//移除完成的效果
+						_this.animateHandles.remove(overduehandles[i]);//移除完成的效果
 					}
 					if(needredraw) {
-						self.redraw();				
+						_this.redraw();				
 					}
 					//console.log(curTimes)
-					self.animate();
+					_this.animate();
 				},10,this);//刷新				
 			}
 		}

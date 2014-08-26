@@ -38,16 +38,18 @@ jmUtils.extend(jmRect,jmPath);//jmPath
  * @return {bound} 当前控件边界
  */
 jmRect.prototype.getBounds = function() {
-	var rect = {};
-	this.initPoints();
-	var p = this.position();
-	rect.left = p.x; 
-	rect.top = p.y; 
-	rect.right = p.x + this.width(); 
-	rect.bottom = p.y + this.height(); 
-	rect.width = rect.right - rect.left;
-	rect.height = rect.bottom - rect.top;
-	return rect;
+	 var rect = {};
+    this.initPoints();
+    var p = this.getLocation();
+    rect.left = p.left; 
+    rect.top = p.top; 
+    
+    rect.right = p.x + p.width; 
+    rect.bottom = p.y + p.height; 
+    
+    rect.width = rect.right - rect.left;
+    rect.height = rect.bottom - rect.top;
+    return rect;
 }
 
 /**

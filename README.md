@@ -3,7 +3,7 @@ jmGraph
 
 基于html5的简单写图组件
 
-[主页:http://graph.jm47.com/](http://graph.jm47.com/)
+主页:[http://graph.jm47.com/](http://graph.jm47.com/)
 
 
 [Examples](http://graph.jm47.com/example/index.html)

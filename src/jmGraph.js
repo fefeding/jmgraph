@@ -37,6 +37,9 @@ function jmGraph(canvas, option, callback) {
 		if(typeof canvas === 'string') {
 			canvas = document.getElementById(canvas);
 		}
+		else if(canvas.length) {
+			canvas = canvas[0];
+		}
 		if(canvas.tagName != 'CANVAS') {
 			var cn = document.createElement('canvas');
 			canvas.appendChild(cn);

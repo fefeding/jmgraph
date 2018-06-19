@@ -10,14 +10,6 @@
  * @param {function} callback 初始化后的回调
  */
 function jmGraph(canvas, option, callback) {
-	/*if(!canvas || !canvas.getContext) {
-		throw 'canvas error';
-	}*/
-
-	//当为ie9以下版本时，采用excanvas初始化canvas
-	//if(typeof G_vmlCanvasManager != 'undefined') {
-	//	G_vmlCanvasManager.init_(document);
-	//}
 	
 	if(this instanceof jmGraph) {
 		this.type = 'jmGraph';
@@ -131,16 +123,12 @@ jmGraph.prototype.init = function(callback) {
 					 console.error && console.error(this.src + ' load failure');
 					 cb && cb(0);
 				 }
-				 /*import(url).then(function(){
-				 	if(o.name && typeof window[o.typeName] !== 'undefined') self.registerShape(o.name, window[o.typeName]);				
-					loadComponent(obj.slice(1), cb);
-				 });*/
 				 return;       
 			}
 		}		
 		cb && cb(1);
 	}
-	// 初始化默认图形组件
+	
 	// 初始化默认图形组件
 	loadComponent([		
 			{typeName:'jmUtils',url:'common/jmUtils.js'},

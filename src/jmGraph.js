@@ -178,7 +178,7 @@ jmGraph.prototype.init = function(callback) {
 		//绑定事件
 		self.eventHandler = new jmEvents(self,self.canvas.canvas || self.canvas);		
 
-		self.initializing(self.context);		
+		self.initializing(self.context, self.option.style);		
 
 		callback && callback(ret?self:null);
 	});

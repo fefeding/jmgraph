@@ -1,7 +1,7 @@
 /**
  * 图片控件，继承自jmControl
  * params参数中image为指定的图片源地址或图片img对象，
- * postion=当前控件的位置，width=其宽度，height=高度，sposition=从当前图片中展示的位置，swidth=从图片中截取的宽度,sheight=从图片中截取的高度。
+ * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
  * 
  * @class jmImage
  * @for jmGraph
@@ -18,9 +18,9 @@ function jmImage(graph,params) {
 	this.height(params.height);
 	this.type = 'jmImage';
 	this.position(params.position || {x:0,y:0});
-	this.sourceWidth(params.swidth);
-	this.sourceHeight(params.sheight);
-	this.sourcePosition(params.sposition);
+	this.sourceWidth(params.sourceWidth);
+	this.sourceHeight(params.sourceHeight);
+	this.sourcePosition(params.sourcePosition);
 	this.image(params.image || style.image);
 	this.initializing(graph.context,style);
 }
@@ -45,6 +45,7 @@ jmImage.prototype.draw = function() {
 		var sw = this.sourceWidth();
 		var sh = this.sourceHeight();
 		var img = this.image();
+
 		if(sw || sh) {
 			if(!sw) sw= p.width;
 			if(!sh) sh= p.height;
@@ -105,9 +106,13 @@ jmImage.prototype.getBounds = function() {
  */
 jmImage.prototype.image = function(img) {
 	if(img && typeof img == 'string') {
-		var g = document.createElement('img');
+		var g = this.getValue('image')||document.createElement('img');
 		g.src = img;
+		if(this.style) this.style.image = img;
 		img = g;
+	}
+	else if(typeof img == 'undefined') {
+		return this.getValue('image');
 	}
 	return this.setValue('image',img);
 }

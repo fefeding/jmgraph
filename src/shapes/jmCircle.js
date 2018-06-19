@@ -1,5 +1,5 @@
 /**
- * 画完整的圆
+ * 画规则的圆弧
  *
  * @class jmCircle
  * @for jmGraph
@@ -29,9 +29,13 @@ function jmCircle(graph,params) {
 	this.height(params.height  || 0);
 	this.radius(params.radius  || 0);
 
+	this.startAngle(params.start  || 0);
+	this.endAngle(params.end  || Math.PI * 2);
+	this.anticlockwise(params.anticlockwise  || 0);
+
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmCircle,jmPath);//继承path图形
+jmUtils.extend(jmCircle,jmArc);//继承path图形
 
 /**
  * 初始化图形点
@@ -81,22 +85,11 @@ jmCircle.prototype.draw = function() {
 	if(!location.radius) {
 		location.radius = Math.min(location.width , location.height) / 2;
 	}
-	if(!this.mode || this.mode == 'canvas') {
-		this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top,location.radius,0,Math.PI * 2);
-	}
-	else {
-		if(!this.svgShape) {
-			this.svgShape = this.context.create('circle',this);
-			this.setStyle();
-			this.svgShape.appendTo(this.graph.canvas);
-		}	
-		this.svgShape.setStyle(this);		
-		this.svgShape.attr({
-			cx:location.center.x + bounds.left,
-			cy:location.center.y + bounds.top,
-			r:location.radius
-		});
-	}
+	var start = this.startAngle();
+	var end = this.endAngle();
+	var anticlockwise = this.anticlockwise();
+	//context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+	this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top,location.radius, start,end,anticlockwise);
 }
 
 /**

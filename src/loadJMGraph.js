@@ -39,9 +39,6 @@ loadJMGraph = function(base,callback,debug) {
     
     if(debug) {
         var js = [
-            base + 'jmgraph.debug.js'
-        ];
-        /*[
     			base + 'common/jmUtils.js',
     			base + 'models/jmGradient.js',
                 base + 'models/jmShadow.js',
@@ -68,7 +65,7 @@ loadJMGraph = function(base,callback,debug) {
     			base + 'editor/jmCell.js',
                 base + 'editor/jmConnectLine.js',
     			base + 'editor/jmEditor.js'
-    			];*/
+    			];
     }
     else {
         var js = [

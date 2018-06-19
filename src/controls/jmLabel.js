@@ -21,12 +21,11 @@ function jmLabel(graph,params) {
 	style.textBaseline = style.textBaseline || 'middle',
 	
 	this.graph = graph;
-	this.value = params.value;
+	this.text(params.text||'');
 	this.position(params.position || {x:0,y:0});
 	this.width(params.width || 0);
 	this.height(params.height  || 0);
 
-	if(graph.mode != 'canvas') this.svgShape = graph.context.create('text',this);
 	this.initializing(graph.context,style);
 }
 jmUtils.extend(jmLabel,jmControl);//jmPath
@@ -62,8 +61,8 @@ jmLabel.prototype.testSize = function() {
 	this.setStyle();
 	//计算宽度
 	var textSize = this.context.measureText?
-						this.context.measureText(this.value):
-						{width:(this.svgShape?this.svgShape.element.getBBox().width:15)};
+						this.context.measureText(this.text()):
+						{width:15};
 	this.context.restore();
 	textSize.height = 15;
 	return textSize;
@@ -108,55 +107,48 @@ jmLabel.prototype.draw = function() {
 
 	}
 
-	if(this.mode == 'canvas') {
-		if(this.value) {
-			if(this.style.fill && this.context.fillText) {
-				if(this.style.maxWidth) {
-					this.context.fillText(this.value,x,y,this.style.maxWidth);
-				}
-				else {
-					this.context.fillText(this.value,x,y);
-				}
+	var txt = this.text();
+	if(txt) {
+		if(this.style.fill && this.context.fillText) {
+			if(this.style.maxWidth) {
+				this.context.fillText(txt,x,y,this.style.maxWidth);
 			}
-			else if(this.context.strokeText) {
-				if(this.style.maxWidth) {
-					this.context.strokeText(this.value,x,y,this.style.maxWidth);
-				}
-				else {
-					this.context.strokeText(this.value,x,y);
-				}
+			else {
+				this.context.fillText(txt,x,y);
 			}
 		}
-		//如果有指定边框，则画出边框
-		if(this.style.border) {
-			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			if(this.style.border.top) {
-				this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+		else if(this.context.strokeText) {
+			if(this.style.maxWidth) {
+				this.context.strokeText(txt,x,y,this.style.maxWidth);
 			}
-			
-			if(this.style.border.right) {
-				this.context.moveTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
-				this.context.lineTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+			else {
+				this.context.strokeText(txt,x,y);
 			}
-			
-			if(this.style.border.bottom) {
-				this.context.moveTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
-				this.context.lineTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
-			}
-			
-			if(this.style.border.left) {
-				this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
-				this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			}	
 		}
 	}
-	else {
-		this.svgShape.attr({
-			x:x,
-			y:y,
-			text:this.value
-		})
+	//如果有指定边框，则画出边框
+	if(this.style.border) {
+		this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+		if(this.style.border.top) {
+			this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+		}
+		
+		if(this.style.border.right) {
+			this.context.moveTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+			this.context.lineTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+		}
+		
+		if(this.style.border.bottom) {
+			this.context.moveTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+			this.context.lineTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
+		}
+		
+		if(this.style.border.left) {
+			this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
+			this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+		}	
 	}
+	
 }
 
 /**
@@ -177,6 +169,19 @@ jmLabel.prototype.width = function(w) {
 			return this.testSize().width;
 		}		
 	}
+}
+/**
+ * 显示文字
+ *
+ * @method text
+ * @param {string} txt 文字
+ * @return {string} 当前显示的文字
+ */
+jmLabel.prototype.text = function(txt) {
+	if(typeof txt != 'undefined') {
+		return this.setValue('text',txt);
+	}
+	return this.getValue('text');
 }
 
 

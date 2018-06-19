@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+	<title>小飞机</title>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<script type="text/javascript" src="shake.js?2"></script>
+	<!--<script type="text/javascript" src="../../src/jmGraph.js"></script>-->
+	<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	
+	<style>
+	html,body {
+		margin:0;
+		padding:0;
+		width:100%;
+		height:100%;
+		overflow: hidden;
+		-webkit-user-select: none;  /* Chrome all / Safari all */
+		-moz-user-select: none;     /* Firefox all */
+		-ms-user-select: none;      /* IE 10+ */
+		/* No support for these yet, use at own risk */
+		-o-user-select: none;
+		user-select: none;
+	}
+	#mycanvas {
+		background-color:#000;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	</style>
+</head>
+<body >
+		<div style='display:none;'><img src="img/fj_ico.png" /></div>
+	<div id="mycanvas">
+		</div>	
+	
+</body>
+<script type="text/javascript">
+var graph;
+var sources = [
+'img/bg.jpg',
+'img/fj1.png',
+'img/zd1.png',
+'img/dr1.png'
+];
+window.onerror = function(msg,url,line,col,err) {
+	//alert(msg);
+}
+//初始化jmgraph
+jmGraph('mycanvas').then((g)=>{	
+	//jmUtils.bindEvent(window,'resize',resize);
+	graph = g;
+	init(g);
+
+	//实时更新画布
+	function update() {
+		g.redraw();
+		requestAnimationFrame(update);
+	}
+	update();
+});
+//初始化
+function init(g) {
+	//背景
+	var bg1 = g.createShape('image',{
+		width: '100%',
+		height: '100%',
+		position: {x:0,y:-g.height()},
+		image: sources[0]
+	});
+	g.children.add(bg1);
+	var bg2 = g.createShape('image',{
+		width: '100%',
+		height: '100%',
+		position: {x:0,y:0},
+		image: sources[0]
+	});
+	g.children.add(bg2);
+	/*var bg3 = g.createShape('image',{
+		width: '100%',
+		height: '100%',
+		position: {x:0,y:'100%'},
+		image: sources[0]
+	});
+	g.children.add(bg3);*/
+
+	var log = g.createShape('label', {
+		position: {x:0,y:0},
+		width: 200,
+		height: 50,
+		style: {
+			stroke: '#fff',
+			fill: '#fff',
+			zIndex: 100000,
+			border:{left:1,top:1,right:1,bottom:1}
+		}
+	});
+	g.children.add(log);
+
+	var mainRole = new fj(g);
+
+
+	var touchLastPosition = {x:0,y:0};
+	g.bind('touchmove', function(arg){
+		var offsetx = arg.position.x;// - touchLastPosition.x;
+		var offsety = arg.position.y;// - touchLastPosition.y;	
+		mainRole.move(offsetx-30, offsety-30);
+	});
+	g.bind('touchstart', function(arg){
+		touchLastPosition.x = arg.position.x;
+		touchLastPosition.y = arg.position.y;	
+	});
+
+	var drCreateTime = Date.now();
+	setInterval(function(){
+		if(Date.now()-drCreateTime > 100) {
+			new dr1(g, {
+				x: Math.random() * (g.width()-20),
+				y: -60
+			});
+			drCreateTime = Date.now();
+		}
+		var gbSpeed = 1;
+		//背景滚动
+		bg1.position().y += gbSpeed;
+		bg2.position().y += gbSpeed;
+		if(bg1.position().y >= g.height()) {
+			bg1.position().y = -g.height();
+		}
+		if(bg2.position().y >= g.height()) {
+			bg2.position().y = -g.height();
+		}
+
+		g.children.each(function(i,dr){
+			if(dr && dr.isDR && dr.role.state == 1) {
+				if(dr.position().y > g.height()) {
+					dr.die && dr.die();
+					return;
+				}
+				var bound = dr.getBounds();
+				g.children.each(function(j,zd){
+					if(zd && zd.isZD) {
+						var zdbounds = zd.getBounds();
+						if(zdbounds.top <= bound.bottom && zdbounds.bottom > bound.bottom && zdbounds.right > bound.left && zdbounds.left < bound.right) {
+							dr.die && dr.die();
+							if(!zd.isBob) g.children.remove(zd);//如果不是超级炸弹，则子弹也消失
+							return false;
+						}
+					}
+				},true);
+
+				//如果敌人还活着，则向前走一步
+				if(dr.role.state == 1) {
+					dr.role.move();
+				}
+
+				if(mainRole.state !==0 && dr.role.state == 1) {
+					var meBound = mainRole.shape.getBounds();
+					if(bound.bottom >= meBound.top+5 && bound.top < meBound.bottom && bound.right > meBound.left+8 && bound.left < meBound.right-8) {
+							
+							mainRole.die();
+						}
+				}
+			}
+		},true);
+	}, 30);
+
+	
+	var dev = new devicemotion();
+	var lastDevOpt = null;
+	var lastDevTime = Date.now();
+    dev.bindShake({
+      handler: function(opt){
+		if(opt) {		
+			if(Date.now()-lastDevTime < 50) return;
+			var gamma = opt.gamma || (opt.x*10);
+			var beta = opt.beta || (-opt.y*10);
+			var alpha = opt.alpha || (opt.z*10);
+			
+			var x =Math.floor((gamma+20)/40*g.width()/10) * 10;
+			var y = mainRole.shape.position().y;
+
+			log.value = 'x:' + x + ',y:' + y;
+			if(!isNaN(x) && !isNaN(y)) mainRole.move(x,y);
+			
+		}
+		else {
+			//alert(JSON.stringify(opt));
+		}
+		lastDevOpt = opt;
+	  }
+	});
+
+}
+
+function fj(g) {
+	this.shape = g.createShape('image',{
+		width: 60,
+		height: 60,
+		position: {x: g.width()/2-20, y: g.height()-100},
+		image: sources[1],
+		style: {
+			rotation: {
+				point: {x: '50%', y: '50%'},
+				angle: Math.PI
+			}
+		}
+	});
+	g.children.add(this.shape);
+
+	this.state = '1';//活着，2=死了
+	
+	var self = this;
+	var lastZDTime = Date.now();
+	var bobTime = Date.now();//大炸弹出现时间
+	//不断地发射子弹
+	this.inter = setInterval(function(){
+		if(self.state == '1' && Date.now() - lastZDTime > 160) {
+			var w = 20;
+			var h = 20;
+			if(Date.now() - bobTime > 20000) {
+				w = 600;
+				bobTime = Date.now();
+			}
+			var zd = g.createShape('image',{
+				width: w,
+				height: h,
+				position: {x: self.shape.position().x + 30 - w/2, y: self.shape.position().y - h},
+				image: sources[2]
+			});
+			
+			if(w > 20) {
+				zd.isBob = true;
+			}
+			zd.isZD = true;
+			g.children.add(zd);
+			lastZDTime = Date.now();
+		}
+		g.children.each(function(i,z){
+			if(z&&z.isZD) {
+				z.position().y -= 1;
+				if(z.position().y <= 0) {
+					g.children.remove(z);
+				}
+			}
+
+		}, true);
+	}, 5);
+
+	this.die = function() {
+		clearInterval(this.inter);
+		this.shape.visible = false;
+		alert('你死了');
+		this.state = 0;
+	}
+
+	//移动
+	this.move = function(x, y) {
+		var pos = this.shape.position();
+		
+		if(x <= -30) x = -30;
+		else if(x >= g.width()-30) x = g.width()-30;
+
+		if(y <= 0) y = 0;
+		else if(y >= g.height() - 60) y = g.height() - 60;
+		
+		pos.x = x;
+		pos.y = y;
+	}	
+}	
+
+function dr1(g, pos){
+
+	this.speed = Math.random()+ 0.5;
+	var size = 30 * this.speed;
+
+	this.shape = g.createShape('image',{
+		width: size,
+		height: size,
+		position: pos,
+		image: sources[3]
+	});
+	this.shape.style.zIndex = size;
+	
+	g.children.add(this.shape);
+	this.shape.role = this;
+	this.shape.isDR = true;
+	this.state = 1;
+	
+
+	this.shape.die = function(){	
+			
+		var self = this;
+		//var ms = src.match(/dr1_die(\d+)\.png/);
+		/*var index = 1;
+		if(ms && ms.length>1){
+			index = Number(ms[1])+1;
+		} */
+		this.image('img/dr_die.gif');
+
+		this.role.state = 0;
+		clearInterval(this.role.inter);
+
+		setTimeout(function(){
+			g.children.remove(self);
+		}, 1000);
+		
+	}
+
+	var that = this;
+	this.move = function(){
+		this.shape.position().y+=this.speed;
+	}
+}
+</script>
+</html>

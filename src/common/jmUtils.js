@@ -56,15 +56,24 @@ jmUtils.extend =  function(target,source) {
  * @method clone
  * @for jmUtils
  * @param {object} source 被复制的对象
+ * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
  * @return {object} 参数source的拷贝对象
  */
-jmUtils.clone = function(source) {
+jmUtils.clone = function(source, deep) {
     if(source && typeof source === 'object') {
         //如果为当前泛型，则直接new
         if(jmUtils.isType(source,jmUtils.list)) {
             return new jmUtils.list(source.items);
         }
         else if(jmUtils.isArray(source)) {
+            //如果是深度复，则拷贝每个对象
+            if(deep) {
+                var dest = [];
+                for(var i=0;i<source.length;i++) {
+                    dest.push(jmUtils.clone(source[i]));
+                }
+                return dest;
+            }
             return source.slice(0);
         }
         var target = {};
@@ -576,12 +585,19 @@ jmUtils.require = function(js,callback) {
  * @param {string} name 事件名称
  * @param {function} fun 事件委托
  */
-jmUtils.bindEvent = function(target,name,fun) {
+jmUtils.bindEvent = function(target, name, fun, opt) {
+    if(name && name.indexOf(' ') != -1) {
+        var ns = name.split(' ');
+        for(var i=0;i<ns.length;i++) {
+            jmUtils.bindEvent(target, ns[i], fun, opt);
+        }
+        return;
+    }
     if(target.attachEvent) {
-        return target.attachEvent("on"+name,fun);
+        return target.attachEvent("on"+name,fun,opt);
     }    
     else if(target.addEventListener) {
-        target.addEventListener(name,fun);
+        target.addEventListener(name,fun,opt);
         return true;
     }
     else {
@@ -860,6 +876,70 @@ jmUtils.checkOutSide = function(parentBounds,targetBounds,offset) {
 }
 
 /**
+ * 把一个或多个点绕某个点旋转一定角度
+ * 先把坐标原点移到旋转中心点，计算后移回
+ * @method rotatePoints
+ * @param {Array/object} p 一个或多个点
+ * @param {*} rp 旋转中心点
+ * @param {*} r 旋转角度
+ */
+jmUtils.rotatePoints = function(p, rp, r) {
+    if(!r || !p) return p;
+    var cos = Math.cos(r);
+    var sin = Math.sin(r);
+    if(p.length) {
+        for(var i=0;i<p.length;i++) {
+            if(!p[i]) continue;
+            var x1 = p[i].x - rp.x;
+            var y1 = p[i].y - rp.y;
+            p[i].x = x1 * cos - y1 * sin + rp.x;
+            p[i].y = x1 * sin + y1 * cos + rp.y;
+        }
+    }
+    else {
+        var x1 = p.x - rp.x;
+        var y1 = p.y - rp.y;
+        p.x = x1 * cos - y1 * sin + rp.x;
+        p.y = x1 * sin + y1 * cos + rp.y;
+    }
+    return p;
+}
+
+/**
+ * 把一个或多个点绕某个点平移一定坐标
+ * @method offsetPoints
+ * @param {Array/object} p 一个或多个点
+ * @param {*} offp 平移坐标{x:0,y:0}
+ */
+jmUtils.offsetPoints = function(p, offp) {
+    if(!offp) return p;
+    if(p.length) {
+        for(var i=0;i<p.length;i++) {
+            p[i].x += offp.x;
+            p[i].y += offp.y;
+        }
+    }
+    else {
+        p.x += offp.x;
+        p.y += offp.y;
+    }
+    return p;
+}
+
+/**
+ * 把一个或多个点绕某个点平移一定坐标
+ * @method getDistance
+ * @param {point} p1 点1
+ * @param {point} p2 点2
+ * @returns {number} 返回二点的距离
+ */
+jmUtils.getDistance = function(p1, p2) {
+    var cx = p1.x - p2.x;
+    var cy = p1.y - p2.y;
+    return Math.sqrt(cx * cx + cy * cy);
+}
+
+/**
  * 通过时间生成唯 一ID
  *
  * @method guid
@@ -955,7 +1035,7 @@ jmUtils.percentToNumber = function(per) {
     if(typeof per === 'string') {
         var tmp = jmUtils.checkPercent(per);
         if(tmp) {
-            per = jmUtils.trim(tmp,'%');
+            per = jmUtils.trim(tmp,'% ');
             per = per / 100;
         }
     }
@@ -1082,15 +1162,14 @@ jmUtils.hexToNumber = function(h) {
     var hex = '0123456789abcdef';
     var v = 0;
     var l = h.length;
-    for(var i=l - 1;i>=0;i--) {
-        var iv = Number(hex.indexOf(h[i]));
+    for(var i=0;i<l;i++) {
+        var iv = hex.indexOf(h[i]);
         if(iv == 0) continue;
-        var n = l - i;
-        var s = 1;
-        for(var j=0;j<n;j++) {
-            s *= 16;
+        
+        for(var j=1;j<l - i;j++) {
+            iv *= 16;
         }
-        v += iv * s;
+        v += iv;
     }
     return v;
 }
@@ -1123,57 +1202,47 @@ jmUtils.numberToHex = function(v) {
  * @param {string} hex 16进制颜色表达
  * @return {string} 颜色字符串
  */
-jmUtils.toColor = function(r,g,b,a) {
-    if(typeof r == 'string') {
-        if(r.indexOf('rgb') >= 0) {
-            //去除前后的空格，r,g,b,a,(,)
-            r = this.trim(r,'rgba()) ');
-            var tmp = r.split(',');
-            r = tmp[0];
-            g = tmp[1];
-            b = tmp[2];
-            if(a == undefined && tmp.length > 3) a = tmp[3];
-        }
-        else if(r.length < 6) {
-            b = r.substring(r.length-1,1);
-            g = r.substring(r.length-2,1);
-            r = r.substring(r.length-3,1) ;
-            b += '' + b;
-            g += '' + g;
-            r += '' + r;
-            r = this.hexToNumber(r);
-            g = this.hexToNumber(g);
-            b = this.hexToNumber(b);
-        }
-        else {           
-            b = r.substring(r.length-2,2);
-            g = r.substring(r.length-4,2);
-            //透明度
-            if(r.length > 7) {
-                a = r.substring(r.length-8,2);
-                a = this.hexToNumber(a) / 255;
+jmUtils.toColor = function(r,g,b,a) {    
+    if(typeof r == 'string' && r) {
+        r = this.trim(r);
+        //当为7位时，表示需要转为带透明度的rgba
+        if(r[0] == '#') {
+            if(r.length >= 8) {
+                a = r.substr(1,2);
+                g = r.substr(5,2);
+                b = r.substr(7,2);
+                r = r.substr(3,2);
+                //透明度
+                a = (this.hexToNumber(a) / 255).toFixed(4);
+
+                r = this.hexToNumber(r||0);
+                g = this.hexToNumber(g||0);
+                b = this.hexToNumber(b||0);
             }
-            r = r.substring(r.length-6,2) ;
-            r = this.hexToNumber(r);
-            g = this.hexToNumber(g);
-            b = this.hexToNumber(b);
-        }
-        if(a) {            
+            //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
+            else if(r.length === 5) {
+                a = r.substr(1,1);
+                g = r.substr(3,1);//除#号外的第二位
+                b = r.substr(4,1);
+                r = r.substr(2,1);
+
+                r = this.hexToNumber(r||0);
+                g = this.hexToNumber(g||0);
+                b = this.hexToNumber(b||0);
+                //透明度
+                a = (this.hexToNumber(a) / 255).toFixed(4);
+            }
+        }        
+    }
+    if(typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
+        if(typeof a != 'undefined') {            
             return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
         }
         else {
             return 'rgb(' + r + ',' + g + ',' + b + ')';
         }
     }
-    else {
-        r = this.numberToHex(r);
-        r = r.length == 1?('0' + r):r;
-        g = this.numberToHex(g);
-        g = g.length == 1?('0' + g):g;
-        b = this.numberToHex(b);
-        b = b.length == 1?('0' + b):b;
-        return '#' + r + g + b;
-    }
+    return r;
 }
 
 /**

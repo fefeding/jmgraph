@@ -1,7 +1,7 @@
 {
   "family": "jmGraph",
   "name": "jmGraph",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "一个简单的html5画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": ["canvas", "html5"],

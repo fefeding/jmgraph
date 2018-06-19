@@ -26,7 +26,7 @@ function jmResize(graph,params) {
 	this.position(params.position || {x:0,y:0});
 	this.width(params.width || 0);
 	this.height(params.height  || 0);
-	this.rectSize(params.rectSize || 10);
+	this.rectSize(params.rectSize || 8);
 	this.initializing(graph.context,style);
 	this.init();
 }
@@ -52,7 +52,7 @@ jmResize.prototype.init = function() {
 				height:rs,
 				style:{
 					stroke: this.style.rectStroke || 'red',
-					//fill:'transparent',
+					fill: this.style.rectFill || 'transparent',
 					close:true,
 					zIndex:100
 				}});
@@ -74,7 +74,6 @@ jmResize.prototype.init = function() {
  * @private
  */
 jmResize.prototype.bindRectEvents = function() {
-	var self = this;
 	
 	for(var i in this.resizeRects) {
 		var r = this.resizeRects[i];		
@@ -112,11 +111,12 @@ jmResize.prototype.bindRectEvents = function() {
 			}
 			else if(this.index == 7) {
 				dx = - arg.offsetX;
+				dx = - arg.offsetX;
 				px = arg.offsetX;
 				dy = arg.offsetY;				
 			}
 			//重新定位
-			self.reset(px,py,dx,dy);
+			this.parent.reset(px,py,dx,dy);
 		});
 		//鼠标指针
 		r.bind('mousemove',function() {	
@@ -138,16 +138,30 @@ jmResize.prototype.bindRectEvents = function() {
  * @param {number} dy 大小y轴偏移
  */
 jmResize.prototype.reset = function(px,py,dx,dy) {
-	var minSize = 5;
+	var minWidth = typeof this.style.minWidth=='undefined'?5:this.style.minWidth;
+	var minHeight = typeof this.style.minHeight=='undefined'?5:this.style.minHeight;
+
 	var location = this.getLocation();
 	if(dx != 0 || dy != 0) {
 		var w = location.width + dx;
 		var h = location.height + dy;
-		if(w >= minSize && h >= minSize) {
-			this.width(w);
-			this.height(h);
+		if(w >= minWidth || h >= minHeight) {
+			if(w >= minWidth) {
+				this.width(w);
+			}
+			else {
+				px = 0;
+				dx = 0;
+			}
+			if(h >= minHeight) {
+				this.height(h);
+			}
+			else {
+				py = 0;
+				dy = 0;
+			}
 			//如果当前控件能移动才能改变其位置
-			if(this.params.movable !== false) {
+			if(this.params.movable !== false && (px||py)) {
 				var p = this.position();
 				p.x = location.left + px;
 				p.y = location.top + py;

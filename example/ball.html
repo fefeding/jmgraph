@@ -3,14 +3,15 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
-		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>
+		<script type="text/javascript" src="../src/jmGraph.js"></script>
+		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
 		<style>
 		html,body {
 			margin:0;
 			padding:0;
 			width:100%;
 			height:100%;
+			overflow: hidden;
 		}
 		#mycanvas {
 			background-color:#000;
@@ -30,13 +31,25 @@
 
 <script type="text/javascript">
 		
-			jmUtils.bindEvent(window,'resize',resize);			
-			refreshBall();
+			
+			//初始化jmgraph
+			jmGraph('mycanvas').then((g)=>{
+				
+				jmUtils.bindEvent(window,'resize',resize);			
+				refreshBall(g);
+
+				//实时更新画布
+				function update() {
+					g.redraw();
+					requestAnimationFrame(update);
+				}
+				update();
+			});	
 
 			var graph;
-			function refreshBall() {
+			function refreshBall(g) {
 				resize();
-				graph = new jmGraph('mycanvas');	
+				graph = g;	
 				var style = {				
 					lineWidth:1,
 					close:true,
@@ -168,18 +181,15 @@
 						y = Math.max(y,b1.radius);
 						y = Math.min(maxY,y);
 						b1.y(y);						
-					}	
-					graph.refresh();	
+					}
 					setTimeout(animate,1);				
 				};
-				graph.refresh();
 				animate();		
 			}
 			function resize() {
 				if(graph) {
 					graph.width(window.innerWidth - 10);
 					graph.height(window.innerHeight - 10);
-					graph.refresh();	
 				}	
 			}
 

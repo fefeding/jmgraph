@@ -6,8 +6,8 @@
  * @module jmGraph
  * @for jmGraph
  */	
-function jmControl() {
-
+function jmControl(graph, option) {	
+	
 };
 //继承属性绑定
 jmUtils.extend(jmControl,jmProperty);
@@ -24,15 +24,7 @@ jmUtils.extend(jmControl,jmProperty);
 jmControl.prototype.initializing = function(context,style) {
 	this.context = context;
 	this.style = style || {};
-	//this.style.fill = this.style.fill || 'transparent';
 	this.visible = true;
-
-	//如果不是html5模式，则生成非hmtl5元素
-	var mode = this.mode || (this.mode = this.graph.mode);
-	if(mode !== 'canvas' && !this.svgShape && this.type !== 'jmGraph') {
-		this.svgShape = this.context.create('path',this);
-		//this.svgShape.appendTo(this.graph.canvas);
-	}
 
 	var self = this;
 	//定义子元素集合
@@ -70,10 +62,12 @@ jmControl.prototype.initializing = function(context,style) {
 		lst.sort = function() {
 			var levelItems = {};
 			//提取zindex大于0的元素
+			//为了保证0的层级不改变，只能把大于0的提出来。
 			lst.each(function(i,obj) {
 				var zindex = obj.zIndex;
 				if(!zindex && obj.style && obj.style.zIndex) {
 					zindex = Number(obj.style.zIndex);
+					if(isNaN(zindex)) zindex=obj.style.zIndex||0;
 				}
 				if(zindex) {
 					var items = levelItems[zindex] || (levelItems[zindex] = []);
@@ -101,16 +95,11 @@ jmControl.prototype.initializing = function(context,style) {
  * @for jmControl
  * @param {string} cur css鼠标指针标识,例如:pointer,move等
  */
-jmControl.prototype.cursor = function(cur) {
-	if(this.svgShape) {
-		this.svgShape.css('cursor',cur);
+jmControl.prototype.cursor = function(cur) {	
+	var graph = this.graph || this.findParent('jmGraph');
+	if(graph) {		
+		graph.css('cursor',cur);		
 	}
-	else {
-		var graph = this.graph || this.findParent('jmGraph');
-		if(graph) {		
-			graph.css('cursor',cur);		
-		}
-	}	
 }
 
 /**
@@ -136,9 +125,9 @@ jmControl.prototype.setStyle = function(style) {
 	 * @param {string} name 样式名称
 	 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
 	 */
-	function __setStyle(control,style,name,mpkey) {		
-		var styleValue = style[name];
-		if(styleValue) {
+	function __setStyle(control,style,name,mpkey) {
+		//var styleValue = style[mpkey||name]||style;
+		if(style) {
 			if(!control.mode || control.mode == 'canvas') {
 				//样式映射名
 				var styleMapCacheKey = 'jm_control_style_mapping';
@@ -168,84 +157,97 @@ jmControl.prototype.setStyle = function(style) {
 					};
 					jmUtils.cache.add(styleMapCacheKey,styleMap);
 				}
-				var t = typeof styleValue;
-				if(t == 'object' && !styleMap[name]) {
+				var t = typeof style;	
+				var mpname = styleMap[mpkey || name];
+
+				//如果为渐变对象
+				if(jmUtils.isType(style,jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
+					//如果是渐变，则需要转换
+					if(t == 'string' && style.indexOf('-gradient') > -1) {
+						style = new jmGradient(style);
+					}
+					__setStyle(control,style.toGradient(control),mpname||name);	
+				}
+				else if(t == 'function') {					
+					if(mpname) {
+						style = style.call(this, mpname);
+						if(style) {
+							__setStyle(control,style,mpname);	
+						}
+					}
+				}
+				else if(mpname) {
+					//只有存在白名单中才处理
+					//颜色转换
+					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+						style = jmUtils.toColor(style);
+					}					
+					control.context[mpname] = style;
+				}	
+				else {
 					switch(name) {
 						//阴影样式
 						case 'shadow' : {
-							for(var k in styleValue) {
-								__setStyle(control,styleValue,k,name + '.' + k);
+							if(t == 'string') {
+								__setStyle(control, new jmShadow(style), name);
+								break;
+							}
+							for(var k in style) {
+								__setStyle(control, style[k], k, name + '.' + k);
 							}
 							break;
 						}
 						//平移
 						case 'translate' : {
-							control.context.translate(styleValue.x,styleValue.y);
+							control.context.translate(style.x,style.y);
+							break;
+						}
+						//旋转
+						case 'rotation' : {								
+							//旋 转先移位偏移量
+							var tranX = 0;
+							var tranY = 0;
+							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
+							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
+							if(style.point) {
+								var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
+								style = control.getRotation(style);
+								
+								tranX = style.rotateX + bounds.left;
+								tranY = style.rotateY + bounds.top;	
+							}
+												
+							if(tranX!=0 || tranY != 0) control.context.translate(tranX,tranY);
+							control.context.rotate(style.angle);
+							if(tranX!=0 || tranY != 0) control.context.translate(-tranX,-tranY);
+							break;
+						}
+						case 'transform' : {
+							if(jmUtils.isArray(style)) {
+								control.context.transform.apply(control.context,style);
+							}
+							else if(typeof style == 'object') {
+								control.context.transform(style.scaleX,//水平缩放
+									style.skewX,//水平倾斜
+									style.skewY,//垂直倾斜
+									style.scaleY,//垂直缩放
+									style.offsetX,//水平位移
+									style.offsetY);//垂直位移
+							}								
+							break;
+						}
+						//位移
+						case 'translate' : {
+							control.context.translate(style.x,style.y);			
+							break;
+						}
+						//鼠标指针
+						case 'cursor' : {
+							control.cursor(style);
 							break;
 						}
 					}							
-				}
-				//如果为渐变对象
-				else if(t == 'object' && jmUtils.isType(styleValue,jmGradient)) {
-					var mpname = styleMap[mpkey || name] || name;					
-					control.context[mpname] = styleValue.toGradient(control);
-				}
-				else if(t != 'function' && t != 'object') {
-					var mpname = styleMap[mpkey || name];
-					//只有存在白名单中才处理
-					if(mpname) {						
-						control.context[mpname] = styleValue;						
-					}
-					//不在白名单中的特殊样式处理
-					else {
-						switch(name) {
-							//旋转
-							case 'rotate' : {								
-								//旋 转先移位偏移量
-								var tranX = 0;
-								var tranY = 0;
-								//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
-								if(control.rotatePosition) {
-									var bounds = control.parent && control.parent.absoluteBounds?control.parent.absoluteBounds:control.absoluteBounds;
-									tranX = control.rotatePosition.x + bounds.left;
-									tranY = control.rotatePosition.y + bounds.top;
-								}
-													
-								control.context.translate(tranX,tranY);
-								control.context.rotate(styleValue);
-								break;
-							}
-							case 'transform' : {
-								if(jmUtils.isArray(styleValue)) {
-									control.context.transform.apply(control.context,styleValue);
-								}
-								else if(typeof styleValue == 'object') {
-									control.context.transform(styleValue.scaleX,//水平缩放
-										styleValue.skewX,//水平倾斜
-										styleValue.skewY,//垂直倾斜
-										styleValue.scaleY,//垂直缩放
-										styleValue.offsetX,//水平位移
-										styleValue.offsetY);//垂直位移
-								}								
-								break;
-							}
-							//位移
-							case 'translate' : {
-								control.context.translate(styleValue.x,styleValue.y);			
-								break;
-							}
-							//鼠标指针
-							case 'cursor' : {
-								control.cursor(styleValue);
-								break;
-							}
-						}
-					}
-
-				}				
-			}
-			else if(control.svgShape) {				
-				control.svgShape.attr(mpkey || name,styleValue);
+				}			
 			}
 		}
 	}	
@@ -257,12 +259,17 @@ jmControl.prototype.setStyle = function(style) {
 	if(this.transform) {
 		__setStyle(this,{transform:this.transform},'transform');
 	}
-	if(this.rotate) {
-		__setStyle(this,{rotate:this.rotate},'rotate');
-	}
 	//设置样式
 	for(var k in style) {
-		__setStyle(this,style,k);
+		var t = typeof style[k];
+		//先处理部分样式，以免每次都需要初始化解析
+		if(t == 'string' && style[k].indexOf('-gradient') > -1) {
+			style[k] = new jmGradient(style[k]);
+		}
+		else if(t == 'string' && k == 'shadow') {
+			style[k] = new jmShadow(style[k]);
+		}
+		__setStyle(this,style[k],k);
 	}
 }
 
@@ -272,10 +279,13 @@ jmControl.prototype.setStyle = function(style) {
  *
  * @method getBounds
  * @for jmControl
+ * @param {boolean} [isReset=false] 是否强制重新计算
  * @return {object} 控件的边界描述对象(left,top,right,bottom,width,height)
  */
-jmControl.prototype.getBounds = function() {
-	//if(this.initPoints) this.initPoints();
+jmControl.prototype.getBounds = function(isReset) {
+	//如果当次计算过，则不重复计算
+	if(this.bounds && !isReset) return this.bounds;
+
 	var rect = {};
 	
 	if(this.points && this.points.length > 0) {		
@@ -311,7 +321,7 @@ jmControl.prototype.getBounds = function() {
 	if(!rect.bottom) rect.bottom = 0; 
 	rect.width = rect.right - rect.left;
 	rect.height = rect.bottom - rect.top;
-	return rect;
+	return this.bounds=rect;
 }
 
 /**
@@ -324,14 +334,14 @@ jmControl.prototype.getBounds = function() {
 jmControl.prototype.getLocation = function(reset) {
 	//如果已经计算过则直接返回
 	//在开画之前会清空此对象
-	if(reset !== true && this.location) return this.location;
+	//if(reset !== true && this.location) return this.location;
 
-	var localtion = this.location = {left:0,top:0,width:0,height:0};
+	var local = this.location = {left:0,top:0,width:0,height:0};
 	var p = this.position();	
-	localtion.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()):null;//中心
-	localtion.radius = this.radius?this.radius():null;//半径
-	localtion.width = this.width() || 0;
-	localtion.height = this.height() || 0;
+	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()):null;//中心
+	local.radius = this.radius?this.radius():null;//半径
+	local.width = this.width() || 0;
+	local.height = this.height() || 0;
 
 	var margin = this.style.margin || {};
 	margin.left = margin.left || 0;
@@ -341,49 +351,81 @@ jmControl.prototype.getLocation = function(reset) {
 	
 	//如果没有指定位置，但指定了margin。则位置取margin偏移量
 	if(p) {
-		localtion.left = p.x;
-		localtion.top = p.y;
+		local.left = p.x;
+		local.top = p.y;
 	}
 	else {
-		localtion.left = margin.left;
-		localtion.top = margin.top;
+		local.left = margin.left;
+		local.top = margin.top;
 	}
 
-	if(!this.parent) return localtion;//没有父节点则直接返回
+	if(!this.parent) return local;//没有父节点则直接返回
 	var parentBounds = this.parent.bounds?this.parent.bounds:this.parent.getBounds();	
 
 	//处理百分比参数
-	if(jmUtils.checkPercent(localtion.left)) {
-		localtion.left = jmUtils.percentToNumber(localtion.left) * parentBounds.width;
+	if(jmUtils.checkPercent(local.left)) {
+		local.left = jmUtils.percentToNumber(local.left) * parentBounds.width;
 	}
-	if(jmUtils.checkPercent(localtion.top)) {
-		localtion.top = jmUtils.percentToNumber(localtion.top) * parentBounds.height;
+	if(jmUtils.checkPercent(local.top)) {
+		local.top = jmUtils.percentToNumber(local.top) * parentBounds.height;
 	}
 	
 	//如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
-	if(jmUtils.checkPercent(localtion.width)) {
-		localtion.width = jmUtils.percentToNumber(localtion.width) * parentBounds.width;
+	if(jmUtils.checkPercent(local.width)) {
+		local.width = jmUtils.percentToNumber(local.width) * parentBounds.width;
 	}
-	if(jmUtils.checkPercent(localtion.height)) {
-		localtion.height = jmUtils.percentToNumber(localtion.height) * parentBounds.height;
+	if(jmUtils.checkPercent(local.height)) {
+		local.height = jmUtils.percentToNumber(local.height) * parentBounds.height;
 	}
 	//处理中心点
-	if(localtion.center) {
+	if(local.center) {
 		//处理百分比参数
-		if(jmUtils.checkPercent(localtion.center.x)) {
-			localtion.center.x = jmUtils.percentToNumber(localtion.center.x) * parentBounds.width;
+		if(jmUtils.checkPercent(local.center.x)) {
+			local.center.x = jmUtils.percentToNumber(local.center.x) * parentBounds.width;
 		}
-		if(jmUtils.checkPercent(localtion.center.y)) {
-			localtion.center.y = jmUtils.percentToNumber(localtion.center.y) * parentBounds.height;
+		if(jmUtils.checkPercent(local.center.y)) {
+			local.center.y = jmUtils.percentToNumber(local.center.y) * parentBounds.height;
 		}
 	}
-	if(localtion.radius) {
+	if(local.radius) {
 		//处理百分比参数
-		if(jmUtils.checkPercent(localtion.radius)) {
-			localtion.radius = jmUtils.percentToNumber(localtion.radius) * Math.min(parentBounds.width,parentBounds.height);
+		if(jmUtils.checkPercent(local.radius)) {
+			local.radius = jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width,parentBounds.height);
 		}		
 	}
-	return localtion;
+	return local;
+}
+
+/**
+ * 获取当前控制的旋转信息
+ * @returns {object} 旋转中心和角度
+ */
+jmControl.prototype.getRotation = function(rotation) {
+	rotation = rotation || this.style.rotation;
+	if(!rotation) {
+		//如果本身没有，则可以继承父级的
+		rotation = this.parent && this.parent.getRotation?this.parent.getRotation():null;
+		//如果父级有旋转，则把坐标转换为当前控件区域
+		if(rotation) {
+			var bounds = this.bounds||this.getBounds();
+			rotation.rotateX -= bounds.left;
+			rotation.rotateY -= bounds.top;
+		}
+	}
+	else {
+		var bounds = this.bounds||this.getBounds();
+		rotation.rotateX = rotation.point.x;
+		if(jmUtils.checkPercent(rotation.rotateX)) {
+			rotation.rotateX  = jmUtils.percentToNumber(rotation.rotateX) * bounds.width;
+		}
+
+		rotation.rotateY = rotation.point.y;
+		if(jmUtils.checkPercent(rotation.rotateY)) {
+			rotation.rotateY  = jmUtils.percentToNumber(rotation.rotateY) * bounds.height;
+		}
+	}
+	return rotation;
+
 }
 
 /**
@@ -392,8 +434,7 @@ jmControl.prototype.getLocation = function(reset) {
  *
  * @method remove 
  */
-jmControl.prototype.remove = function() {
-	if(this.svgShape) this.svgShape.remove();
+jmControl.prototype.remove = function() {	
 	if(this.parent) {
 		this.parent.children.remove(this);
 	}
@@ -440,8 +481,9 @@ jmControl.prototype.height = function(h) {
  * @param {number} x x轴偏移量
  * @param {number} y y轴偏移量
  * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
+ * @param {object} [evt] 如果是事件触发，则传递move事件参数
  */
-jmControl.prototype.offset = function(x,y,trans) {
+jmControl.prototype.offset = function(x, y, trans, evt) {
 	trans = trans === false?false:true;	
 	var location = this.getLocation(true);
 	
@@ -488,10 +530,22 @@ jmControl.prototype.offset = function(x,y,trans) {
 	}
 	
 	//触发控件移动事件	
-	this.emit('move',{offsetX:x,offsetY:y,trans:trans});
+	this.emit('move',{offsetX:x,offsetY:y,trans:trans,evt:evt});
+}
 
-	//this.getLocation(true);	//重置
-	this.graph.refresh();
+/**
+ * 把图形旋转一个角度
+ * @param {number} angle 旋转角度
+ * @param {object} point 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'}
+ */
+jmControl.prototype.rotate = function(angle, point) {	
+	/*this.children.each(function(i,c){
+		c.rotate(angle);
+	});*/
+	this.style.rotation = {
+		angle: angle,
+		point: point
+	};
 }
 
 /**
@@ -503,7 +557,7 @@ jmControl.prototype.offset = function(x,y,trans) {
  */
 jmControl.prototype.getAbsoluteBounds = function() {
 	//当前控件的边界，
-	var rec = this.bounds || this.getBounds();
+	var rec = this.getBounds();
 	if(this.parent && this.parent.absoluteBounds) {
 		//父容器的绝对边界
 		var prec = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();
@@ -547,7 +601,7 @@ jmControl.prototype.endDraw = function() {
 	}
 	if(this.style['stroke'] || !this.style['fill']) {
 		this.context.stroke();
-	}		
+	}
 }
 
 /**
@@ -560,30 +614,19 @@ jmControl.prototype.draw = function() {
 	if(this.points && this.points.length > 0) {
 		//获取当前控件的绝对位置
 		var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
-		if(!this.mode || this.mode == 'canvas') {
-			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			var len = this.points.length;			
-			for(var i=1; i < len;i++) {
-				var p = this.points[i];
-				//移至当前坐标
-				if(p.m) {
-					this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
-				}
-				else {
-					this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
-				}			
+		
+		this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+		var len = this.points.length;			
+		for(var i=1; i < len;i++) {
+			var p = this.points[i];
+			//移至当前坐标
+			if(p.m) {
+				this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
 			}
-		}
-		else {			
-			this.svgShape.setStyle(this);
-			var ps = this.points.slice(0);
-			var len = ps.length;			
-			for(var i=0; i < len;i++) {
-				ps[i].x += bounds.left;
-				ps[i].y += bounds.top;
-			}
-			this.svgShape.attr('path',ps,this.style.close);	
-		}
+			else {
+				this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
+			}			
+		}		
 	}	
 }
 
@@ -594,41 +637,30 @@ jmControl.prototype.draw = function() {
  * @method paint
  */
 jmControl.prototype.paint = function(v) {
-	if(v !== false && this.visible !== false) {
-		if(this.svgShape) this.svgShape.show();
-
+	if(v !== false && this.visible !== false) {		
 		if(this.initPoints) this.initPoints();
 		//计算当前边界
-		this.bounds = this.getBounds();
+		this.bounds = null;
 		this.absoluteBounds = this.getAbsoluteBounds();
 
 		this.context.save();
-		if(this.svgShape && this.svgShape.glow) this.svgShape.glow.remove();
+		
 		this.setStyle();//设定样式
 		this.emit('beginDraw',this);
+
 		if(this.beginDraw) this.beginDraw();
 		if(this.draw) this.draw();	
 		if(this.endDraw) this.endDraw();
-		
+
 		if(this.children) {	
 			this.children.sort();//先排序
 			this.children.each(function(i,item) {
 				if(item && item.paint) item.paint();
 			});
 		}
-		
+
 		this.emit('endDraw',this);	
 		this.context.restore();
-	}
-	else {
-		if(this.svgShape) {
-			this.svgShape.hide();
-			if(this.children) {					
-				this.children.each(function(i,item) {
-					if(item && item.paint) item.paint(false);
-				});
-			}
-		}
 	}
 }
 
@@ -651,11 +683,8 @@ jmControl.prototype.getEvent = function(name) {
  * @param {string} name 事件名称
  * @param {function} handle 事件委托
  */
-jmControl.prototype.bind = function(name,handle) {	
-	//if(this.svgShape) {
-		//this.svgShape.bind(name,handle);
-		//return;
-	//}
+jmControl.prototype.bind = function(name,handle) {
+	
 	/**
 	 * 添加事件的集合
 	 *
@@ -679,12 +708,7 @@ jmControl.prototype.bind = function(name,handle) {
  * @param {string} name 事件名称
  * @param {function} handle 从控件中移除事件的委托
  */
-jmControl.prototype.unbind = function(name,handle) {
-	//if(this.svgShape) {
-		//this.svgShape.unbind(name,handle);
-		//return;
-	//}
-
+jmControl.prototype.unbind = function(name,handle) {	
 	var eventCollection = this.getEvent(name) ;		
 	if(eventCollection) {
 		eventCollection.remove(handle);
@@ -717,16 +741,67 @@ function runEventHandle(name,args) {
  *
  * @method checkPoint
  * @param {point} p 位置参数
+ * @param {number} [pad] 可选参数，表示线条多远内都算在线上
  * @return {boolean} 当前位置如果在区域内则为true,否则为false。
  */
-jmControl.prototype.checkPoint = function(p) {
-	//生成当前坐标对应的父级元素的相对位置
-	var abounds = this.bounds || this.getBounds();
+jmControl.prototype.checkPoint = function(p, pad) {
+	var bounds = this.getBounds();	
+	var rotation = this.getRotation();//获取当前旋转参数
+	var ps = this.points;
+	//如果不是路径组成，则采用边界做为顶点
+	if(!ps || !ps.length) {
+		ps = [];
+		ps.push({x: bounds.left, y: bounds.top}); //左上角
+		ps.push({x: bounds.right, y: bounds.top});//右上角
+		ps.push({x: bounds.right, y: bounds.bottom});//右下角
+		ps.push({x: bounds.left, y: bounds.bottom}); //左下
+		ps.push({x: bounds.left, y: bounds.top}); //左上角   //闭合
+	}
+	//如果有指定padding 表示接受区域加宽，命中更易
+	pad = Number(pad || this.style['touchPadding'] || this.style['lineWidth'] || 1);
+	if(ps && ps.length) {
+		
+		//如果有旋转参数，则需要转换坐标再处理
+		if(rotation && rotation.angle != 0) {
+			ps = jmUtils.clone(ps, true);//拷贝一份数据
+			//rotateX ,rotateY 是相对当前控件的位置
+			ps = jmUtils.rotatePoints(ps, {
+				x: rotation.rotateX + bounds.left,
+				y: rotation.rotateY + bounds.top
+			}, rotation.angle);
+		}
+		//如果当前路径不是实心的
+		//就只用判断点是否在边上即可	
+		if(ps.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
+			var i = 0;
+			var count = ps.length;
+			for(var j = i+1; j <= count; j = (++i + 1)) {
+				//如果j超出最后一个
+				//则当为封闭图形时跟第一点连线处理.否则直接返回false
+				if(j == count) {
+					if(this.style.close) {
+						var r = jmUtils.pointInPolygon(p,[ps[i],ps[0]], pad);
+						if(r) return true;
+					}
+				} 
+				else {
+					//判断是否在点i,j连成的线上
+					var s = jmUtils.pointInPolygon(p,[ps[i],ps[j]], pad);
+					if(s) return true;
+				}			
+			}
+			//不是封闭的图形，则直接返回
+			if(!this.style['fill']) return false;
+		}
 
-	if(p.x > abounds.right || p.x < abounds.left) {
+		var r = jmUtils.pointInPolygon(p,ps, pad);		
+		return r;
+	}
+
+	if(p.x > bounds.right || p.x < bounds.left) {
 		return false;
 	}
-	if(p.y > abounds.bottom || p.y < abounds.top) {
+	if(p.y > bounds.bottom || p.y < bounds.top) {
 		return false;
 	}
 	
@@ -746,14 +821,7 @@ jmControl.prototype.raiseEvent = function(name,args) {
 	if(this.visible === false) return ;//如果不显示则不响应事件	
 	if(!args.position) {		
 		var graph = this.findParent('jmGraph');
-		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置
-		
-		//如果不是html5模式，则处理每个元素的相对位置为graph容器的位置
-		if(this.mode !== 'canvas') {
-			var graphposition = graph.getPosition();
-			position.x = position.offsetX = position.pageX - graphposition.left;
-			position.y = position.offsetY = position.pageY - graphposition.top;
-		}
+		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置		
 
 		var srcElement = args.srcElement || args.target;
 		args = {position:position,
@@ -764,6 +832,7 @@ jmControl.prototype.raiseEvent = function(name,args) {
 			srcElement : srcElement
 		};		
 	}
+	args.path = args.path||[]; //事件冒泡路径
 	//先执行子元素事件，如果事件没有被阻断，则向上冒泡
 	//var stoped = false;
 	if(this.children) {
@@ -792,6 +861,9 @@ jmControl.prototype.raiseEvent = function(name,args) {
 		if(!args.target) {
 			args.target = this;
 		}
+		
+		args.path.push(this);
+
 		if(args.cancel !== true) {
 			//如果返回true则阻断冒泡
 			runEventHandle.call(this,name,args);//执行事件		
@@ -875,12 +947,17 @@ jmControl.prototype.canMove = function(m,graph) {
 		 */
 		this.__mvMonitor.mv = function(evt) {
 			var _this = self;
+			//如果鼠标经过当前可移动控件，则显示可移动指针
+			//if(evt.path && evt.path.indexOf(_this)>-1) {
+			//	_this.cursor('move');	
+			//}
+
 			if(_this.__mvMonitor.mouseDown) {
 				_this.parent.bounds = null;
 				var parentbounds = _this.parent.getAbsoluteBounds();		
-				var offsetx = evt.position.x - _this.__mvMonitor.curposition.x;
-				var offsety = evt.position.y - _this.__mvMonitor.curposition.y;				
-				
+				var offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
+				var offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				
+				//console.log(offsetx + ',' + offsety);
 				//如果锁定边界
 				if(_this.lockSide) {
 					var thisbounds = _this.bounds || _this.getAbsoluteBounds();					
@@ -901,9 +978,9 @@ jmControl.prototype.canMove = function(m,graph) {
 				}
 				
 				if(offsetx || offsety) {
-					_this.offset(offsetx,offsety);
-					_this.__mvMonitor.curposition.x = evt.position.x;
-					_this.__mvMonitor.curposition.y = evt.position.y;	
+					_this.offset(offsetx, offsety, true, evt);
+					_this.__mvMonitor.curposition.x = evt.position.offsetX;
+					_this.__mvMonitor.curposition.y = evt.position.offsetY;	
 					//console.log(offsetx + '.' + offsety);
 				}
 				return false;
@@ -919,7 +996,7 @@ jmControl.prototype.canMove = function(m,graph) {
 			var _this = self;
 			if(_this.__mvMonitor.mouseDown) {
 				_this.__mvMonitor.mouseDown = false;
-				_this.cursor('default');
+				//_this.cursor('default');
 				_this.emit('moveend',{position:_this.__mvMonitor.curposition});	
 				//return false;
 			}			
@@ -934,7 +1011,7 @@ jmControl.prototype.canMove = function(m,graph) {
 			var _this = self;
 	 		if(_this.__mvMonitor.mouseDown) {
 				_this.__mvMonitor.mouseDown = false;
-				_this.cursor('default');	
+				//_this.cursor('default');	
 				_this.emit('moveend',{position:_this.__mvMonitor.curposition});
 				return false;
 			}	
@@ -946,16 +1023,16 @@ jmControl.prototype.canMove = function(m,graph) {
 		 * @private
 		 */
 		this.__mvMonitor.md = function(evt) {
-			var _this = self;
-			if(_this.__mvMonitor.mouseDown) return;
+			
+			if(this.__mvMonitor.mouseDown) return;
 			if(evt.button == 0 || evt.button == 1) {
-				_this.__mvMonitor.mouseDown = true;
-				_this.cursor('move');
-				var parentbounds = _this.parent.absoluteBounds || _this.parent.getAbsoluteBounds();	
-				_this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
-				_this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
+				this.__mvMonitor.mouseDown = true;
+				//this.cursor('move');
+				var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();	
+				this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
+				this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
 				//触发控件移动事件
-				_this.emit('movestart',{position:_this.__mvMonitor.curposition});
+				this.emit('movestart',{position:this.__mvMonitor.curposition});
 				
 				evt.cancel = true;
 				return false;
@@ -964,27 +1041,27 @@ jmControl.prototype.canMove = function(m,graph) {
 	}
 	graph = graph || this.graph || this.findParent('jmGraph');//获取最顶级元素画布
 	
-	if(graph && m) {
+	if(m !== false) {
 		
-			graph.bind('mousemove',this.__mvMonitor.mv);
-			graph.bind('mouseup',this.__mvMonitor.mu);
-			graph.bind('mouseleave',this.__mvMonitor.ml);
-			this.bind('mousedown',this.__mvMonitor.md);
-			graph.bind('touchmove',this.__mvMonitor.mv);
-			graph.bind('touchend',this.__mvMonitor.mu);
-			this.bind('touchstart',this.__mvMonitor.md);	
+		graph.bind('mousemove',this.__mvMonitor.mv);
+		graph.bind('mouseup',this.__mvMonitor.mu);
+		graph.bind('mouseleave',this.__mvMonitor.ml);
+		this.bind('mousedown',this.__mvMonitor.md);
+		graph.bind('touchmove',this.__mvMonitor.mv);
+		graph.bind('touchend',this.__mvMonitor.mu);
+		this.bind('touchstart',this.__mvMonitor.md);	
 			
 	}
 	else {
 		
-			graph.unbind('mousemove',this.__mvMonitor.mv);
-			graph.unbind('mouseup',this.__mvMonitor.mu);
-			graph.unbind('mouseleave',this.__mvMonitor.ml);
-			this.unbind('mousedown',this.__mvMonitor.md);
-			graph.unbind('touchmove',this.__mvMonitor.mv);
-			graph.unbind('touchend',this.__mvMonitor.mu);
-			this.unbind('touchstart',this.__mvMonitor.md);	
-		
+		graph.unbind('mousemove',this.__mvMonitor.mv);
+		graph.unbind('mouseup',this.__mvMonitor.mu);
+		graph.unbind('mouseleave',this.__mvMonitor.ml);
+		this.unbind('mousedown',this.__mvMonitor.md);
+		graph.unbind('touchmove',this.__mvMonitor.mv);
+		graph.unbind('touchend',this.__mvMonitor.mu);
+		this.unbind('touchstart',this.__mvMonitor.md);	
 	}
+	return this;
 }
 

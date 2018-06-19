@@ -34,26 +34,36 @@ jmUtils.extend(jmPath,jmShape);//继承基础图形
  * @param {point} p 待检查的坐标
  * @return {boolean} 如果在则返回true,否则返回false
  */
-jmPath.prototype.checkPoint = function(p) {	
+/*jmPath.prototype.checkPoint = function(p) {	
 	var w = this.style['lineWidth'] || 1;
+	var ps = this.points;
 
+	var rotation = this.getRotation();//获取当前旋转参数
+	//如果有旋转参数，则需要转换坐标再处理
+	if(rotation) {
+		ps = [].concat(ps);//拷贝一份数据
+		ps = jmUtils.rotatePoints(ps, {
+			x: rotation.rotateX,
+			y: rotation.rotateY
+		}, rotation.angle);
+	}
 	//如果当前路径不是实心的
 	//就只用判断点是否在边上即可	
-	if(this.points.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
+	if(ps.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
 		var i = 0;
-		var count = this.points.length;
+		var count = ps.length;
 		for(var j = i+1; j <= count; j = (++i + 1)) {
 			//如果j超出最后一个
 			//则当为封闭图形时跟第一点连线处理.否则直接返回false
 			if(j == count) {
 				if(this.style.close) {
-					var r = jmUtils.pointInPolygon(p,[this.points[i],this.points[0]],w);
+					var r = jmUtils.pointInPolygon(p,[ps[i],ps[0]],w);
 					if(r) return true;
 				}
 			} 
 			else {
 				//判断是否在点i,j连成的线上
-				var s = jmUtils.pointInPolygon(p,[this.points[i],this.points[j]],w);
+				var s = jmUtils.pointInPolygon(p,[ps[i],ps[j]],w);
 				if(s) return true;
 			}			
 		}
@@ -61,7 +71,7 @@ jmPath.prototype.checkPoint = function(p) {
 		if(!this.style['fill']) return false;
 	}
 
-	var r = jmUtils.pointInPolygon(p,this.points,w);
+	var r = jmUtils.pointInPolygon(p,ps,w);
 	return r;
-}
+}*/
 

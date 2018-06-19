@@ -70,6 +70,7 @@ jmProperty.prototype.on = function(name,handle) {
 		}
 	}
 	handles.push(handle);
+	return this;
 }
 
 /**
@@ -95,5 +96,6 @@ jmProperty.prototype.on = function(name,handle) {
 			handles[i].apply(this,args);
 		}		
 	}
+	return this;
 }
 

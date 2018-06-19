@@ -7,12 +7,20 @@
  * @param {object} op 渐变参数,type:[linear= 线性渐变,radial=放射性渐变] 
  */
 function jmGradient(op) {
-	if(op) {
+
+	this.stops = new jmUtils.list();
+
+	if(op && typeof op == 'object') {
 		for(var k in op) {
 			this[k] = op[k];
 		}
 	}
-	this.stops = new jmUtils.list();
+	//解析字符串格式
+	//linear-gradient(direction, color-stop1, color-stop2, ...);
+	//radial-gradient(center, shape size, start-color, ..., last-color);
+	else if(typeof op == 'string') {
+		this.fromString(op);
+	}
 }
 
 /**
@@ -43,8 +51,8 @@ jmGradient.prototype.toGradient = function(control) {
 	var gradient;
 	var context = control.context || control;
 	var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
-	var x1 = this.x1;
-	var y1 = this.y1;
+	var x1 = this.x1||0;
+	var y1 = this.y1||0;
 	var x2 = this.x2;
 	var y2 = this.y2;
 
@@ -58,6 +66,7 @@ jmGradient.prototype.toGradient = function(control) {
 		d = Math.min(location.width,location.height);				
 	}
 
+	//var offsetLine = 1;//渐变长度或半径
 	//处理百分比参数
 	if(jmUtils.checkPercent(x1)) {
 		x1 = jmUtils.percentToNumber(x1) * (location.width || d);
@@ -71,22 +80,15 @@ jmGradient.prototype.toGradient = function(control) {
 	if(jmUtils.checkPercent(y2)) {
 		y2 = jmUtils.percentToNumber(y2) * (location.height || d);
 	}	
-	if(this.type === 'linear') {
-		if(control.mode == 'canvas') {
-			gradient = context.createLinearGradient(x1 + bounds.left,y1 + bounds.top,x2 + bounds.left,y2 + bounds.top);
-		}
-		else {
-			gradient = Raphael.deg(Math.atan2(y2-y1,x2-x1)) + '-';
-			this.stops.each(function(i,stop) {	
-				gradient += stop.color + ':' + Math.floor(stop.offset * 100) + '-';
-			});
-			gradient = jmUtils.trimEnd(gradient,'-');
-		}
+	if(this.type === 'linear') {		
+		gradient = context.createLinearGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,Number(x2) + bounds.left,Number(y2) + bounds.top);	
+		var x = Math.abs(x2-x1);
+		var y = Math.abs(y2-y1);
+		//offsetLine = Math.sqrt(x*x + y*y);
 	}
 	else if(this.type === 'radial') {
-		var r1 = this.r1;
+		var r1 = this.r1||0;
 		var r2 = this.r2;
-		
 		if(jmUtils.checkPercent(r1)) {
 			r1 = jmUtils.percentToNumber(r1);			
 			r1 = d * r1;
@@ -95,36 +97,97 @@ jmGradient.prototype.toGradient = function(control) {
 			r2 = jmUtils.percentToNumber(r2);
 			r2 = d * r2;
 		}	
-		if(control.mode == 'canvas') {		
-			gradient = context.createRadialGradient(x1 + bounds.left,y1 + bounds.top,r1,x2 + bounds.left,y2 + bounds.top,r2);
-		}
-		else {
-			gradient = 'r(';
-			this.stops.each(function(i,stop) {	
-				gradient += stop.offset + ',';
-			});
-			gradient = jmUtils.trimEnd(gradient,',') + ')';
-			this.stops.each(function(i,stop) {	
-				gradient += stop.color + '-';
-			});
-			gradient = jmUtils.trimEnd(gradient,'-');
-		}
+		//offsetLine = Math.abs(r2 - r1);//二圆半径差
+		gradient = context.createRadialGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,r1,Number(x2) + bounds.left,Number(y2) + bounds.top,r2);		
 	}
-	if(control.mode == 'canvas') {	
-		this.stops.each(function(i,stop) {			
-			gradient.addColorStop(stop.offset,stop.color);		
-		});
-	}
+	//颜色渐变
+	this.stops.each(function(i,s) {	
+		var c = jmUtils.toColor(s.color);
+		//s.offset 0.0 ~ 1.0
+		gradient.addColorStop(s.offset, c);		
+	});
+	
 	return gradient;
 }
 
 /**
- * 转换为raphael的渐变的字符串表达
+ * 变换为字条串格式
+ * linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
+ * linear-gradient线性渐变，x1 y1表示起点，x2 y2表示结束点,color表颜色，step为当前颜色偏移
+ * radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2为结束圆 中心和半径，颜色例似线性渐变 step为0-1之间
+ *
+ * @method fromString
+ * @for jmGradient
+ * @return {string} 
+ */
+jmGradient.prototype.fromString = function(s) {
+	if(!s) return;
+	var ms = s.match(/(linear|radial)-gradient\s*\(\s*([^,]+[^\)]+)\)/i);
+	if(!ms || ms.length < 3) return;
+	this.type = ms[1].toLowerCase();
+	var pars = ms[2].split(',');
+	if(pars.length) {
+		var ps = jmUtils.trim(pars[0]).split(/\s+/);
+		//线性渐变
+		if(this.type == 'linear') {
+			if(ps.length <= 2) {
+				this.x2 = ps[0];
+				this.y2 = ps[1]||0;
+			}
+			else {
+				this.x1 = ps[0];
+				this.y1 = ps[1];
+				this.x2 = ps[2];
+				this.y2 = ps[3]
+			}
+		}
+		//径向渐变
+		else {
+			if(ps.length <= 3) {
+				this.x2 = ps[0];
+				this.y2 = ps[1]||0;
+				this.r2 = ps[2]||0;
+			}
+			else {
+				this.x1 = ps[0];
+				this.y1 = ps[1];
+				this.r1 = ps[2];
+				this.x2 = ps[3];
+				this.y2 = ps[3];
+				this.r2 = ps[3];
+			}
+		}
+		//解析颜色偏移
+		//color step
+		if(pars.length > 1) {
+			for(var i=1;i<pars.length;i++) {
+				var cs = jmUtils.trim(pars[i]).split(/\s+/);
+				if(cs.length) {
+					this.addStop(cs[1]||0, cs[0]);
+				}
+			}
+		}
+	}
+}
+
+/**
+ * 转换为渐变的字符串表达
  *
  * @method toString
  * @for jmGradient
- * @return {string} raphael的渐变的字符串表达
+ * @return {string} linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
  */
 jmGradient.prototype.toString = function() {
-
+	var str = this.type + '-gradient(';
+	if(this.type == 'linear') {
+		str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
+	}
+	else {
+		str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
+	}
+	//颜色渐变
+	this.stops.each(function(i,s) {	
+		str += ',' + s.color + ' ' + s.offset;
+	});
+	return str + ')';
 }

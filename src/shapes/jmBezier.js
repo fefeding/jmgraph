@@ -106,7 +106,6 @@ jmBezier.prototype.offset = function(x,y,trans) {
 		//触发控件移动事件	
 		this.emit('move',{offsetX:x,offsetY:y,trans:trans});
 		this.getLocation(true);	//重置
-		this.graph.refresh();
 	}
 }
 

@@ -4,8 +4,8 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 		
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
-		<script type="text/javascript" src="../src/jmgraph.debug.js"></script>
+		<script type="text/javascript" src="../src/jmGraph.js"></script>
+		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
 	</head>
 	<body style="width:800px;margin:10px auto;border:1px solid blue;" >	
 		<div id="mycanvas" style="border:1px solid red;margin:10px;">
@@ -15,8 +15,23 @@
 </html>
 
 <script type="text/javascript">
+			//初始化jmgraph
+			jmGraph('mycanvas', {
+				width: 800,
+				height: 600
+			}).then((g)=>{
+						
+				init(g);
 
-				var graph = new jmGraph('mycanvas',800,600);				
+				//实时更新画布
+				function update() {
+					g.redraw();
+					//requestAnimationFrame(update);
+				}
+				update();
+			});	
+
+			function init(graph) {			
 				var style = {
 					stroke:'rgb(120,20,80)',					
 					lineWidth:2,
@@ -32,11 +47,9 @@
 				//arc.canMove(true);
 				arc.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(39,72,188,0.5)';
-					graph.refresh();
 				});
 				arc.bind('mouseleave',function(evt) {
 					this.style.stroke = 'rgb(120,20,80)';
-					graph.refresh();
 				});
 				//arc.width(300);
 				//arc.height(200);
@@ -51,11 +64,9 @@
 				//arc.canMove(true);
 				arc2.bind('mouseover',function(evt) {
 					this.style.stroke = 'rgba(39,72,188,0.5)';
-					graph.refresh();
 				});
 				arc2.bind('mouseleave',function(evt) {
 					this.style.stroke = 'rgb(120,20,80)';
-					graph.refresh();
 				});				
 				//arc.children.add(arc2);
 				//arc2.canMove(true);
@@ -104,4 +115,5 @@
 			function keydonw (evt) {
 				window.console.log(evt.keyCode);
 			}
-		</script>
+		}
+</script>

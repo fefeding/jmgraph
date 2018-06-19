@@ -51,15 +51,17 @@ jmLine.prototype.initPoints = function() {
 		dx = dx / lineLen;
 		dy = dy / lineLen;
 		var dottedstart = false;
-		var dottedsp = this.style.dashLength / 2;
-		for(var l=this.style.dashLength; l<=lineLen;) {
+
+		var dashLen = this.style.dashLength || 5;
+		var dottedsp = dashLen / 2;
+		for(var l=dashLen; l<=lineLen;) {
 			if(dottedstart == false) {
 				this.points.push({x:start.x + dx * l,y:start.y+ dy * l});
 				l += dottedsp;
 			}
 			else {				
 				this.points.push({x:start.x + dx * l,y:start.y+ dy * l,m:true});
-				l += this.style.dashLength;
+				l += dashLen;
 			}
 			dottedstart = !dottedstart;				
 		}

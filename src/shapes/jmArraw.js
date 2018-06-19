@@ -78,7 +78,7 @@ jmArraw.prototype.initPoints = function(solid) {
     //如果实心箭头则封闭路线
     if(solid || this.style.fill) {    	
     	this.points.push(p2);
-    	this.points.push(s);
+    	this.points.push(end);
     }
     else {
     	this.points.push(s);

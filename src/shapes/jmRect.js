@@ -44,8 +44,8 @@ jmRect.prototype.getBounds = function() {
     rect.left = p.left; 
     rect.top = p.top; 
     
-    rect.right = p.x + p.width; 
-    rect.bottom = p.y + p.height; 
+    rect.right = p.left + p.width; 
+    rect.bottom = p.top + p.height; 
     
     rect.width = rect.right - rect.left;
     rect.height = rect.bottom - rect.top;
@@ -59,7 +59,7 @@ jmRect.prototype.getBounds = function() {
  * @param {point} p 待检查的坐标
  * @return {boolean} 如果在则返回true,否则返回false
  */
-jmRect.prototype.checkPoint = function(p) {	
+/*jmRect.prototype.checkPoint = function(p) {	
 	//生成当前坐标对应的父级元素的相对位置
 	var abounds = this.bounds || this.getBounds();
 
@@ -71,7 +71,7 @@ jmRect.prototype.checkPoint = function(p) {
 	}
 	
 	return true;
-}
+}*/
 
 /**
  * 初始化图形点
@@ -86,6 +86,11 @@ jmRect.prototype.initPoints = function() {
 	var p2 = {x:location.left + location.width,y:location.top};
 	var p3 = {x:location.left + location.width,y:location.top + location.height};
 	var p4 = {x:location.left,y:location.top + location.height};
+
+	//如果指定为虚线 , 则初始化一个直线组件，来构建虚线点集合
+	if(this.style.lineType === 'dotted' && !this.dottedLine) {
+		this.dottedLine = this.graph.createShape('line', {style: this.style});
+	}
 	
 	//如果有边界弧度则借助圆弧对象计算描点
 	if(location.radius && location.radius < location.width/2 && location.radius < location.height/2) {
@@ -118,9 +123,33 @@ jmRect.prototype.initPoints = function() {
 	else {
 		this.points = [];
 		this.points.push(p1);
+		//如果是虚线
+		if(this.dottedLine) {
+			this.dottedLine.start(p1);
+			this.dottedLine.end(p2);
+			this.points = this.points.concat(this.dottedLine.initPoints());
+		}
 		this.points.push(p2);
+		//如果是虚线
+		if(this.dottedLine) {
+			this.dottedLine.start(p2);
+			this.dottedLine.end(p3);
+			this.points = this.points.concat(this.dottedLine.initPoints());
+		}
 		this.points.push(p3);
+		//如果是虚线
+		if(this.dottedLine) {
+			this.dottedLine.start(p3);
+			this.dottedLine.end(p4);
+			this.points = this.points.concat(this.dottedLine.initPoints());
+		}
 		this.points.push(p4);
+		//如果是虚线
+		if(this.dottedLine) {
+			this.dottedLine.start(p4);
+			this.dottedLine.end(p1);
+			this.points = this.points.concat(this.dottedLine.initPoints());
+		}
 	}		
 	
 	return this.points;

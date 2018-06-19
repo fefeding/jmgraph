@@ -6,7 +6,10 @@
  * @for jmGraph
  */
 
-function jmObject() {
+function jmObject(graph) {
+	if(graph && graph instanceof jmGraph) {
+		this.graph = graph;
+	}
 }
 
 /**
@@ -52,7 +55,7 @@ jmObject.prototype.animate = function(handle,millisec) {
 				//延时处理动画事件
 				this.dispatcher = setTimeout(function(_this) {
 					_this = _this || self;
-					var needredraw = false;
+					//var needredraw = false;
 					var overduehandles = [];
 					var curTimes = new Date().getTime();
 					_this.animateHandles.each(function(i,ani) {						
@@ -63,7 +66,7 @@ jmObject.prototype.animate = function(handle,millisec) {
 									overduehandles.push(ani);//表示已完成的动画效果
 								}								
 								ani.times = curTimes;
-								needredraw = true;								
+								//needredraw = true;								
 							}
 						}
 						catch(e) {
@@ -76,9 +79,9 @@ jmObject.prototype.animate = function(handle,millisec) {
 					for(var i in overduehandles) {
 						_this.animateHandles.remove(overduehandles[i]);//移除完成的效果
 					}
-					if(needredraw) {
-						_this.redraw();				
-					}
+					//if(needredraw) {
+					//	_this.redraw();				
+					//}
 					//console.log(curTimes)
 					_this.animate();
 				},10,this);//刷新				

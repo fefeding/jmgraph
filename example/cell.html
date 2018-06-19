@@ -2,15 +2,16 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-<meta name="viewport" content="width=device-width,initial-scale=1">
-		<!--[if lt IE 9]><script type="text/javascript" src="../../jmgraph/src/lib/excanvas.js"></script><![endif]-->	
-		<script type="text/javascript" src="../src/jmgraph.min.js"></script>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<script type="text/javascript" src="../src/jmGraph.js"></script>
+		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
 		<style>
 		html,body {
 			margin:0;
 			padding:0;
 			width:100%;
 			height:100%;
+			overflow: hidden;
 		}
 		#mycanvas {
 			background-color:#000;
@@ -32,9 +33,19 @@
 
 			var graph;
 			var balls = [];
+			//初始化jmgraph
+			jmGraph('mycanvas').then((g)=>{
+				
+				jmUtils.bindEvent(window,'resize',resize);			
+				refreshBall(g);
 
-			jmUtils.bindEvent(window,'resize',resize);
-			refreshBall();
+				//实时更新画布
+				function update() {
+					g.redraw();
+					requestAnimationFrame(update);
+				}
+				update();
+			});	
 			
 			function createPosition(radius,i) {
 				var canvas = document.getElementById('mycanvas');
@@ -60,9 +71,9 @@
 				return c;
 			}
 
-			function refreshBall() {
+			function refreshBall(g) {
 				
-				graph = new jmGraph('mycanvas',800,600);	
+				graph = g;	
 				var style = {				
 					lineWidth:1,
 					close:true
@@ -84,17 +95,16 @@
 				style.fill.addStop(0,'rgb(112,154,22)');
 				style.fill.addStop(1,'rgb(49,95,118)');	
 
+				var count = graph.width() / 20;
 					
-				for(var i=0;i<100;i++) {
+				for(var i=0;i<count;i++) {
 					var radius = Math.random() * 10 + 4;
 					var styletmp = jmUtils.clone(style);
 					
 					var p = createPosition(radius);
 					var b = new cell(graph,p.x,p.y,radius,styletmp);
-					b.vx = Math.random() - 1;
-					b.vy = Math.random() - 1;
-					//b.ax = 0;
-					//b.ay = 0.1;
+					b.vx = Math.random() - Math.random();
+					b.vy = Math.random() - Math.random();
 					balls.push(b);
 				}
 
@@ -107,11 +117,11 @@
 
 				//主体细胞
 				
-				var myCell = createCell(graph.width() / 2,graph.height() / 2,10,styletmp);//new cell(graph,graph.width() / 2,graph.height() / 2,10,styletmp);
+				var myCell = createCell(graph.width() / 2,graph.height() / 2,14,styletmp);//new cell(graph,graph.width() / 2,graph.height() / 2,10,styletmp);
 
 				//balls.push(myCell);
 
-				graph.bind('mouseup',function(evt) {
+				graph.bind('click',function(evt) {
 					var x = evt.position.x;
 					var y = evt.position.y;
 					myCell.go(x,y);

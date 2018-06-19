@@ -6,86 +6,195 @@
  * @module jmGraph
  * @class jmGraph
  * @param {element} canvas 标签canvas
- * @require jmControl
+ * @param {object} option 参数：{width:宽,height:高}
+ * @param {function} callback 初始化后的回调
  */
-function jmGraph(canvas,w,h) {
+function jmGraph(canvas, option, callback) {
 	/*if(!canvas || !canvas.getContext) {
 		throw 'canvas error';
 	}*/
-	this.type = 'jmGraph';
-	/**
-	 * 当前支持的画图类型 svg/canvas
-	 *
-	 * @property mode
-	 * @type {string}
-	 */
-	this.mode = 'canvas';//jmUtils.checkSupportedMode();
 
-	if(typeof canvas === 'string') {
-		canvas = document.getElementById(canvas);
-	}
-	if(this.mode == 'canvas') {	
+	//当为ie9以下版本时，采用excanvas初始化canvas
+	//if(typeof G_vmlCanvasManager != 'undefined') {
+	//	G_vmlCanvasManager.init_(document);
+	//}
+	
+	if(this instanceof jmGraph) {
+		this.type = 'jmGraph';
+		/**
+		 * 当前支持的画图类型 svg/canvas
+		 *
+		 * @property mode
+		 * @type {string}
+		 */
+		this.mode = 'canvas';
+		/**
+		 * 当前支持的图形集
+		 *
+		 * @property mode
+		 * @type {object}
+		 */
+		this.shapes = {};
+
+		if(typeof option == 'function') {
+			callback = option;
+			option = {};
+		}
+		this.option = option||{};
+
+		if(typeof canvas === 'string') {
+			canvas = document.getElementById(canvas);
+		}
 		if(canvas.tagName != 'CANVAS') {
 			var cn = document.createElement('canvas');
 			canvas.appendChild(cn);
-			cn.width = canvas.clientWidth;
-			cn.height = canvas.clientHeight;
+			cn.width = canvas.offsetWidth||canvas.clientWidth;
+			cn.height = canvas.offsetHeight||canvas.clientHeight;
 			canvas = cn;
-			
-			
 		}		
 		this.canvas = canvas;
-		if(w) this.width(w);
-		if(h) this.height(h);	
-
-		//当为ie9以下版本时，采用excanvas初始化canvas
-		if(typeof G_vmlCanvasManager != 'undefined') {
-			G_vmlCanvasManager.init_(document);
-		}
-		this.context = canvas.getContext('2d');	
-
-			
+		this.context = canvas.getContext('2d');
+		this.init(callback);
 	}
-	else {
-		this.context = new jmSVG(canvas,w,h);			
-		this.canvas = this.context.paper;		
+	else {		
+		return new Promise(function(resolve, reject){
+			new jmGraph(canvas, option, function(g){				
+				if(g) resolve && resolve(g);
+				else reject && reject(g);				
+			});
+		});
 	}
-	this.initializing(this.context);
-
-	/**
-	 * 初始化默认图形
-	 * 
-	 * @method initShapes
-	 * @private
-	 */
-	(function initShapes() {
-		if(typeof jmLine !== 'undefined') this.registerShape('line',jmLine);
-		if(typeof jmPath !== 'undefined') this.registerShape('path',jmPath);
-		if(typeof jmRect !== 'undefined') this.registerShape('rect',jmRect);
-		if(typeof jmCircle !== 'undefined') this.registerShape('circle',jmCircle);
-		if(typeof jmArc !== 'undefined') this.registerShape('arc',jmArc);
-		if(typeof jmHArc !== 'undefined') this.registerShape('harc',jmHArc);
-		if(typeof jmPrismatic !== 'undefined') this.registerShape('prismatic',jmPrismatic);
-		if(typeof jmLabel !== 'undefined') this.registerShape('label',jmLabel);
-		if(typeof jmImage !== 'undefined') {
-			this.registerShape('image',jmImage);
-			this.registerShape('img',jmImage);
-		}
-		if(typeof jmBezier !== 'undefined') {
-			this.registerShape('bezier',jmBezier);
-		}
-		if(typeof jmArraw !== 'undefined') this.registerShape('arraw',jmArraw);
-		if(typeof jmArrawLine !== 'undefined') this.registerShape('arrawline',jmArrawLine);
-		if(typeof jmResize !== 'undefined') this.registerShape('resize',jmResize);
-		if(typeof jmTooltip !== 'undefined') this.registerShape('tooltip',jmTooltip);
-	}).call(this);
-	
-	//绑定事件
-	this.eventHandler = new jmEvents(this,this.canvas.canvas || this.canvas);
 }
 
-//继承基础控件
-jmUtils.extend(jmGraph,jmControl);	
+/**
+ * 初始化画布
+ * @method init
+ */
+jmGraph.prototype.init = function(callback) {
+	var self = this;
+	var graphBaseUrl = '';//当前graph.js的路径
+	//加载组件
+	function loadComponent(obj, cb) {
+		if(!graphBaseUrl) {
+			//获取当前graph路径
+            var sc = document.getElementsByTagName('script');
+            for(var i =0; i < sc.length;i++) {
+                var src = sc[i].src;
+                var graphindex = src.indexOf('jmGraph');
+                if(graphindex >= 0) {
+                    graphBaseUrl = src.substring(0,graphindex);
+                    break;
+                }
+            }
+		}
+		if(obj) {
+			var o = obj;
+			//如果为数组，则先处理第一个
+			if(obj.length) {
+				o = obj[0];
+			}
+			if(o.url && o.typeName) {
+				//如果当前组件已加载过，则直接返回
+				if(self.shapes[o.name] || typeof window[o.typeName] !== 'undefined') {
+					//没有注册的类型先注册
+					if(o.name && !self.shapes[o.name] && typeof window[o.typeName] !== 'undefined') self.registerShape(o.name, window[o.typeName]);	
+					loadComponent(obj.slice(1), cb);
+					return;
+				}
+				var url = graphBaseUrl + o.url;
+				 //创建script，加载js
+				 var sc = document.createElement('script');
+				 sc.type= 'text/javascript';
+				 sc.charset = 'utf-8';
+				 sc.src = url;
+				 //append到head中
+				 var head = document.getElementsByTagName('head')[0];
+				 head.appendChild(sc);		 
+				 
+				function loadCallback(e) {
+					if(this.readyState && this.readyState !== 'loaded' && this.readyState !== 'complete') {
+						return;
+					}	
+					if(o.name && typeof window[o.typeName] !== 'undefined') self.registerShape(o.name, window[o.typeName]);				
+					loadComponent(obj.slice(1), cb);
+				}
+				//加载回调
+				if(sc.readyState) {
+					sc.onreadystatechange = loadCallback;
+				}
+				else {
+					sc.onload = loadCallback;
+				}
+				 //加载失败
+				 sc.onerror = function() {
+					 head.removeChild(sc);
+					 console.error && console.error(this.src + ' load failure');
+					 cb && cb(0);
+				 }
+				 /*import(url).then(function(){
+				 	if(o.name && typeof window[o.typeName] !== 'undefined') self.registerShape(o.name, window[o.typeName]);				
+					loadComponent(obj.slice(1), cb);
+				 });*/
+				 return;       
+			}
+		}		
+		cb && cb(1);
+	}
+	// 初始化默认图形组件
+	// 初始化默认图形组件
+	loadComponent([		
+			{typeName:'jmUtils',url:'common/jmUtils.js'},
+			{typeName:'jmGradient',url:'models/jmGradient.js'},
+			{typeName:'jmShadow',url:'models/jmShadow.js'},
+			{typeName:'jmObject',url:'common/jmObject.js'},
+			{typeName:'jmProperty',url:'common/jmProperty.js'},
+			{typeName:'jmEvents',url:'common/jmEvents.js'},
+			{typeName:'jmControl',url:'common/jmControl.js'},			
+			{typeName:'jmShape',url:'shapes/jmShape.js'},
+			{name:'path',typeName:'jmPath',url:'shapes/jmPath.js'},
+			{name:'line',typeName:'jmLine',url:'shapes/jmLine.js'},
+			{name:'arc',typeName:'jmArc',url:'shapes/jmArc.js'},
+			{name:'circle',typeName:'jmCircle',url:'shapes/jmCircle.js'},			
+			{name:'harc',typeName:'jmHArc',url:'shapes/jmHArc.js'},
+			{name:'prismatic',typeName:'jmPrismatic',url:'shapes/jmPrismatic.js'},
+			{name:'bezier',typeName:'jmBezier',url:'shapes/jmBezier.js'},
+			{name:'rect',typeName:'jmRect',url:'shapes/jmRect.js'},
+			{name:'arraw',typeName:'jmArraw',url:'shapes/jmArraw.js'},					
+			{name:'label',typeName:'jmLabel',url:'controls/jmLabel.js'},
+			{name:'image',typeName:'jmImage',url:'controls/jmImage.js'},
+			{name:'resize',typeName:'jmResize',url:'controls/jmResize.js'},
+			{name:'arrawline',typeName:'jmArrawLine',url:'controls/jmArrawLine.js'},
+			{name:'tooltip',typeName:'jmTooltip',url:'controls/jmTooltip.js'}
+	], function(ret){
+
+		//继承基础控件
+		//jmUtils.extend(jmGraph,jmControl);	
+		jmUtils.extend(self, new jmControl());
+		/**
+		 * 画控件前初始化
+		 * 为了解决一像素线条问题
+		 */
+		self.on('beginDraw', function() {	
+			this.context.translate(0.5, 0.5);
+		});
+		/**
+		 * 结束控件绘制 为了解决一像素线条问题
+		 */
+		self.on('endDraw', function() {	
+			this.context.translate(-0.5, -0.5);		
+		});
+		
+		if(self.option.width > 0) self.width(self.option.width);
+		if(self.option.height > 0) self.height(self.option.height);	
+
+		//绑定事件
+		self.eventHandler = new jmEvents(self,self.canvas.canvas || self.canvas);		
+
+		self.initializing(self.context);		
+
+		callback && callback(ret?self:null);
+	});
+}
 
 /**
  * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
@@ -95,10 +204,7 @@ jmUtils.extend(jmGraph,jmControl);
  * @param {class} shape 图形控件类型
  */
 jmGraph.prototype.registerShape = function(name,shape) {
-	name = 'jmGraph.shapes.' + name;
-	if(!jmUtils.cache.get(name)) {
-		jmUtils.cache.set(name , shape);
-	}
+	this.shapes[name] = shape;
 }
 
 /**
@@ -111,12 +217,11 @@ jmGraph.prototype.registerShape = function(name,shape) {
  * @return {object} 已实例化控件的对象
  */
 jmGraph.prototype.createShape = function(name,args) {
-	name = 'jmGraph.shapes.' + name;
-	var shape = jmUtils.cache.get(name);
+	var shape = this.shapes[name];
 	if(shape) {
 		if(!args) args = {};
 		args.mode = this.mode;
-		var obj = new shape(this,args);
+		var obj = new shape(this, args);
 		return obj;
 	}
 }
@@ -232,7 +337,16 @@ jmGraph.prototype.clear = function(w,h) {
 			h = h / this.scaleSize.y;
 		}
 	}
-	if(this.context.clearRect) this.context.clearRect(0,0,w,h);
+	//如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
+	if(this.style && this.style.fill) {
+		this.points = [
+			{x:0,y:0},
+			{x:w,y:0},
+			{x:w,y:h},
+			{x:0,y:h}
+		];
+	}
+	else if(this.context.clearRect) this.context.clearRect(0,0,w,h);
 }
 
 /**
@@ -434,4 +548,20 @@ jmGraph.prototype.toDataURL = function() {
 	var data = this.canvas.toDataURL?this.canvas.toDataURL():'';
 	return data;
 }
+
+/** 
+ * 自动刷新画版
+ * @param {function} callback 执行回调
+ */
+jmGraph.prototype.autoRefresh = function(callback) {
+	var self = this;
+	function update() {
+		self.redraw();
+		requestAnimationFrame(update);
+		callback && callback();
+	}
+	update();
+	return this;
+}
+
 

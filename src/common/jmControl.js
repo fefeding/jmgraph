@@ -142,6 +142,7 @@ jmControl.prototype.setStyle = function(style) {
 						'shadow.y':'shadowOffsetY',
 						'shadow.color':'shadowColor',
 						'lineWidth' : 'lineWidth',
+						'miterLimit': 'miterLimit',
 						'fillStyle' : 'fillStyle',
 						'strokeStyle' : 'strokeStyle',
 						'font' : 'font',

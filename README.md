@@ -93,4 +93,4 @@ function init(g){
 | textAlign | textAlign | 文本内容的当前对齐方式
 | textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
 | lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
-| lineCap | lineCap 线条的结束端点样式：butt(默认，平),round(圆),square（方）
+| lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）

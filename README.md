@@ -41,3 +41,32 @@ jmGraph
     });
 </script>
 ```
+在画布上画一个方块
+```javascript
+
+function init(g){
+    var style = {
+        stroke:'#46BF86',
+        lineWidth: 2
+    };
+    style.shadow = '0,0,10,#fff';//阴影
+    //style.opacity = 0.2;			
+    //style.lineCap = 'round';
+
+    //创建一个方块
+    var rect = g.createShape('rect',{
+        style:style,
+        position: {x:100,y:100}, //左上角坐标
+        width:100,
+        height:100
+    });
+    g.children.add(rect);
+
+    //绘制，可以用requestAnimationFrame动态刷新
+    function update() {
+        g.redraw();
+        //requestAnimationFrame(update);
+    }
+    update();
+}
+```

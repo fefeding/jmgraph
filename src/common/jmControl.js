@@ -339,8 +339,8 @@ jmControl.prototype.getBounds = function(isReset) {
 	if(this.bounds && !isReset) return this.bounds;
 
 	var rect = {
-		left: 0,
-		top: 0
+		left: undefined, //只能初始化成undefined，这样会认为没有被设置
+		top: undefined
 	};
 	//jmGraph，特殊处理
 	if(this.type == 'jmGraph' && this.canvas) {
@@ -430,7 +430,7 @@ jmControl.prototype.getLocation = function(reset) {
 	}
 
 	if(!this.parent) return local;//没有父节点则直接返回
-	var parentBounds = this.parent.bounds?this.parent.bounds:this.parent.getBounds();	
+	var parentBounds = this.parent.getBounds();	
 
 	//处理百分比参数
 	if(jmUtils.checkPercent(local.left)) {
@@ -477,13 +477,13 @@ jmControl.prototype.getRotation = function(rotation) {
 		rotation = this.parent && this.parent.getRotation?this.parent.getRotation():null;
 		//如果父级有旋转，则把坐标转换为当前控件区域
 		if(rotation) {
-			var bounds = this.bounds||this.getBounds();
+			var bounds = this.getBounds();
 			rotation.rotateX -= bounds.left;
 			rotation.rotateY -= bounds.top;
 		}
 	}
 	else {
-		var bounds = this.bounds||this.getBounds();
+		var bounds = this.getBounds();
 		rotation.rotateX = rotation.point.x;
 		if(jmUtils.checkPercent(rotation.rotateX)) {
 			rotation.rotateX  = jmUtils.percentToNumber(rotation.rotateX) * bounds.width;

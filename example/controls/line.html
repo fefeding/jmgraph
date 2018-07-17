@@ -18,7 +18,14 @@
 			width: 800,
 			height: 600
 		}).then((g)=>{
-			init(g)
+			init(g);
+
+			function update() {
+				if(g.neadUpdate) g.redraw();
+				requestAnimationFrame(update);
+			}
+
+			update();
 		});	
 			
 		function init(graph){
@@ -39,12 +46,12 @@
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
 				this.cursor('pointer');
-				graph.refresh();
+				this.neadUpdate = true;
 			});
 			line.bind('mouseleave',function(evt) {
 				this.style.stroke = 'rgb(120,20,80)';
 				this.cursor('default');
-				graph.refresh();
+				this.neadUpdate = true;
 			});
 			line.canMove(true);
 
@@ -64,12 +71,12 @@
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
 				//graph.canvas.style.cursor = 'pointer';
-				graph.refresh();
+				this.neadUpdate = true;
 			});
 			line.bind('mouseleave',function(evt) {
 				this.style.stroke = 'rgb(120,20,80)';
 				//graph.canvas.style.cursor = 'default';
-				graph.refresh();
+				this.neadUpdate = true;
 			});
 			line.canMove(true);
 			
@@ -106,11 +113,13 @@
 
 			path.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
+				this.neadUpdate = true;
 				//graph.canvas.style.cursor = 'pointer';
 				
 			});
 			path.bind('mouseleave',function(evt) {					
 				this.style.stroke = 'rgb(120,20,80)';
+				this.neadUpdate = true;
 				//graph.canvas.style.cursor = 'default';
 			});
 			
@@ -118,13 +127,6 @@
 			//line.canMove(true);
 			path.canMove(true);	
 			
-
-			function update() {
-				graph.redraw();
-				requestAnimationFrame(update);
-			}
-
-			update();
 		}
 			
 		

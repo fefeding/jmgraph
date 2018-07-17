@@ -94,3 +94,34 @@ function init(g){
 | textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
 | lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
 | lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
+
+
+事件
+---
+
+事件的绑定`jquery(bind/unbind)`。
+示例：
+```javascript
+//创建一条线
+var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
+//鼠标移到上面显示不同的样式			
+line.bind('mouseover',function(evt) {
+    this.style.stroke = 'rgba(39,72,188,0.5)';
+    this.cursor('pointer');
+    this.neadUpdate = true; //需要刷新
+});
+```
+
+#### 事件一览
+| 名称 | 说明 | 回调参数
+| :- | :- | :- | 
+| mousedown | 鼠标按下时触发 | -
+| mousemove | 鼠标在对象上移动时触发 |{target:当前元素,position: 当前位置}
+| mouseover | 鼠标从某元素移开 | {target:当前元素}
+| mouseleave | 某个鼠标按键被松开 | -
+| mouseup | 某个鼠标按键被松开 | -
+| dblclick | 鼠标双击某个对象 | -
+| click | 鼠标点击某个对象 | -
+| touchstart | 触控开始 | position: 当前位置
+| touchmove | 触控移动手指 | position: 当前位置
+| touchend | 触控结束 | position: 当前位置

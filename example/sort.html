@@ -113,7 +113,7 @@
 				var pos = [];
 				var count = rect.length;
 				for(var i=0;i<count;i++) {
-					pos[i] = rect[i].rect.position();
+					pos[i] = rect[i].rect.position;
 					//重新计算其x坐标
 					tox[i] = this.xStep * rect[i].index + 10;
 					offx[i] = (tox[i] - pos[i].x) / 20;
@@ -200,10 +200,10 @@
 				this.source = [];
 				this.frames = [];
 				var max = 100;
-				var offy = this.graph.height() - 20;
+				var offy = this.graph.height - 20;
 				this.graph.children.clear();
 				//当前 x轴分布单位宽度
-				this.xStep = (this.graph.width() - 20) / this.arrCount;
+				this.xStep = (this.graph.width - 20) / this.arrCount;
 
 				for(var i=0;i<this.arrCount;i++) {
 					var v = {};
@@ -215,7 +215,7 @@
 					this.source.push(v);
 				}
 				//画基准线
-				this.datumLine = this.graph.createLine({x:0,y:0},{x:this.graph.width(),y:0},this.datumRectStyle);
+				this.datumLine = this.graph.createLine({x:0,y:0},{x:this.graph.width,y:0},this.datumRectStyle);
 				this.datumLine.visible = false;
 				this.graph.children.add(this.datumLine);
 				this.refreshGraph(this.source);
@@ -234,7 +234,7 @@
 			jmSort.prototype.refreshGraph = function(arr) {
 				arr = arr || this.source;
 				//this.graph.children.clear();
-				var offy = this.graph.height() - 20;
+				var offy = this.graph.height - 20;
 				for(var i=0;i<arr.length;i++) {	
 					if(arr[i].rect) {
 						var pos = arr[i].rect.position();
@@ -753,7 +753,7 @@
 
 					//实时更新画布
 					function update() {
-						g.redraw();
+						if(g.neadUpdate) g.redraw();
 						requestAnimationFrame(update);
 					}
 					update();

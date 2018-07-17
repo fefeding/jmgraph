@@ -21,14 +21,22 @@ function jmLabel(graph,params) {
 	style.textBaseline = style.textBaseline || 'middle',
 	
 	this.graph = graph;
-	this.text(params.text||'');
-	this.position(params.position || {x:0,y:0});
-	this.width(params.width || 0);
-	this.height(params.height  || 0);
+	this.text = params.text||'';
+	this.position = params.position || {x:0,y:0};
+	this.width = params.width || 0;
+	this.height = params.height  || 0;
 
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmLabel,jmControl);//jmPath
+jmUtils.extend(jmLabel, jmControl);//jmPath
+
+
+/**
+ * 显示的内容
+ * @property text
+ * @type {string}
+ */
+jmUtils.createProperty(jmLabel.prototype, 'text');
 
 /**
  * 初始化图形点,主要用于限定控件边界。
@@ -61,7 +69,7 @@ jmLabel.prototype.testSize = function() {
 	this.setStyle();
 	//计算宽度
 	var textSize = this.context.measureText?
-						this.context.measureText(this.text()):
+						this.context.measureText(this.text):
 						{width:15};
 	this.context.restore();
 	textSize.height = 15;
@@ -107,7 +115,7 @@ jmLabel.prototype.draw = function() {
 
 	}
 
-	var txt = this.text();
+	var txt = this.text;
 	if(txt) {
 		if(this.style.fill && this.context.fillText) {
 			if(this.style.maxWidth) {
@@ -150,38 +158,4 @@ jmLabel.prototype.draw = function() {
 	}
 	
 }
-
-/**
- * 设置或获取宽度
- *
- * @method width
- * @param {number} w 宽度
- * @return {number} 当前宽度
- */
-jmLabel.prototype.width = function(w) {
-	if(w) {
-		return this.setValue('width',w);
-	}
-	else {
-		w = this.getValue('width');
-		if(w) return w;
-		else if(this.context) {
-			return this.testSize().width;
-		}		
-	}
-}
-/**
- * 显示文字
- *
- * @method text
- * @param {string} txt 文字
- * @return {string} 当前显示的文字
- */
-jmLabel.prototype.text = function(txt) {
-	if(typeof txt != 'undefined') {
-		return this.setValue('text',txt);
-	}
-	return this.getValue('text');
-}
-
 

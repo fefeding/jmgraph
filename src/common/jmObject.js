@@ -7,10 +7,43 @@
  */
 
 function jmObject(graph) {
-	if(graph && graph instanceof jmGraph) {
+	if(graph && graph.type == 'jmGraph') {
 		this.graph = graph;
 	}
 }
+
+/**
+ * id 控件唯一标识
+ * @property id
+ * @readonly
+ * @type {object}
+ */
+jmUtils.createProperty(jmObject.prototype, 'id', {
+	get: function() {
+		if(!this.__id) {
+			this.__id = Date.now().toString() + Math.floor(Math.random() * 1000);
+		}
+		return this.__id;
+	}	
+});
+
+/**
+ * 是否需要刷新画板，属性的改变会导致它变为true
+ * @property neadUpdate
+ * @type {object}
+ */
+jmUtils.createProperty(jmObject.prototype, 'neadUpdate', {
+	get: function() {
+		return this.__neadUpdate;
+	},
+	set: function(v) {
+		this.__neadUpdate = v;
+		//子控件属性改变，需要更新整个画板
+		if(v && !this.is('jmGraph') && this.graph) {
+			this.graph.__neadUpdate = true;
+		}
+	}
+});
 
 /**
  * 检 查对象是否为指定类型

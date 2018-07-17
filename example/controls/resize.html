@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+	<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<style>
+		html,body{
+			margin:0;
+			padding: 0;
+		}
+		#mycanvas_container{
+			overflow: hidden;		
+		}
+	</style>
+	<script type="text/javascript" src="../../src/jmGraph.js"></script>
+	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>-->	
+	</head>
+	<body>
+		<div id="mycanvas_container"></div>
+	</body>
+	<script type="text/javascript">	
+        var container = document.getElementById('mycanvas_container');
+        
+        //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
+		jmGraph('mycanvas_container', {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		}).then((g)=>{
+			init(g)
+		});
+		/*var g = new jmGraph(container, {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		});
+		init(g);*/
+			
+		function init(g){
+			//g.style.fill = '#000'; //画布背景
+			var style = {
+                stroke: 'red',
+                fill: 'yellow',
+                lineWidth: 2, //边线宽
+                //小方块样式
+                rectStyle: {
+                    stroke: 'green', //小方块边颜色
+                    fill: 'transparent',//小方块填充色
+                    lineWidth: 1, //小方块线宽
+                    close: true
+                }
+			};
+			//style.opacity = 0.2;		
+
+			//创建一个resize
+            var resize = g.createShape('resize', {
+                style: style,
+                position: {x:200, y:150},
+                width: 120,
+                height: 80
+            });		
+			resize.canMove(true);
+            g.children.add(resize);           
+            
+			function update() {
+				g.redraw();
+				requestAnimationFrame(update);
+			}
+
+			update();
+		}
+	</script>
+</html>

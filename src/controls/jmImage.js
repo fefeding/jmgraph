@@ -12,20 +12,66 @@
  */
 function jmImage(graph,params) {
 	var style = params && params.style ? params.style : {};
-	
+	style.fill = style.fill || 'transparent';//默认指定一个fill，为了可以鼠标选中
 	this.graph = graph;
-	this.width(params.width);
-	this.height(params.height);
+	
+	/**
+	 * 要使用的图像的宽度。（伸展或缩小图像）
+	 *
+	 * @method width
+	 * @type {number}
+	 */
+	this.width = params.width;
+	/**
+	 * 要使用的图像的高度。（伸展或缩小图像）
+	 *
+	 * @method height
+	 * @type {number}
+	 */
+	this.height = params.height;
+
 	this.type = 'jmImage';
-	this.position(params.position || {x:0,y:0});
-	this.sourceWidth(params.sourceWidth);
-	this.sourceHeight(params.sourceHeight);
-	this.sourcePosition(params.sourcePosition);
-	this.image(params.image || style.image);
-	this.initializing(graph.context,style);
+	this.position = params.position || {x:0,y:0};
+	this.sourceWidth = params.sourceWidth;
+	this.sourceHeight = params.sourceHeight;
+	this.sourcePosition = params.sourcePosition;
+	this.image = params.image || style.image;
+	this.initializing(graph.context, style);
 }
 
-jmUtils.extend(jmImage,jmControl);//继承基础图形
+jmUtils.extend(jmImage, jmControl);//继承基础图形
+
+/**
+ * 画图开始剪切位置
+ *
+ * @property sourcePosition
+ * @type {point}
+ */
+jmUtils.createProperty(jmImage.prototype, 'sourcePosition');
+
+/**
+ * 被剪切宽度
+ *
+ * @property sourceWidth
+ * @type {number}
+ */
+jmUtils.createProperty(jmImage.prototype, 'sourceWidth');
+
+/**
+ * 被剪切高度
+ *
+ * @method sourceHeight
+ * @type {number}
+ */
+jmUtils.createProperty(jmImage.prototype, 'sourceHeight');
+
+/**
+ * 设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
+ *
+ * @method image
+ * @type {number}
+ */
+jmUtils.createProperty(jmImage.prototype, 'image');
 
 /**
  * 重写控件绘制
@@ -41,25 +87,24 @@ jmImage.prototype.draw = function() {
 		p.left += bounds.left;
 		p.top += bounds.top;
 		
-		var sp = this.sourcePosition();
-		var sw = this.sourceWidth();
-		var sh = this.sourceHeight();
-		var img = this.image();
+		var sp = this.sourcePosition;
+		var sw = this.sourceWidth;
+		var sh = this.sourceHeight;
+		var img = this.getImage();
+			
+		if(sp || typeof sw != 'undefined' || typeof sh != 'undefined') {	
+			if(typeof sw == 'undefined') sw= p.width || img.width || 0;
+			if(typeof sh == 'undefined') sh= p.height || img.height || 0;
+			sp = sp || {x:0, y:0};
 
-		if(sw || sh) {
-			if(!sw) sw= p.width;
-			if(!sh) sh= p.height;
-			if(!sp) sp= {x:0,y:0};
-		}
-		if(sp) {		
 			if(p.width && p.height) this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
 			else if(p.width) {
-				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,img.height);
+				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,sh);
 			}		
 			else if(p.height) {
-				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,img.width,p.height);
+				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,p.height);
 			}		
-			else this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top);		
+			else this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,sh);		
 		}
 		else if(p) {
 			if(p.width && p.height) this.context.drawImage(img,p.left,p.top,p.width,p.height);
@@ -68,11 +113,11 @@ jmImage.prototype.draw = function() {
 			else this.context.drawImage(img,p.left,p.top);
 		}
 		else {
-			this.context.drawImage(this.image());
+			this.context.drawImage(img);
 		}
 	}
 	catch(e) {
-		console.log(e);
+		console.error && console.error(e);
 	}
 }
 
@@ -84,7 +129,7 @@ jmImage.prototype.draw = function() {
  */
 jmImage.prototype.getBounds = function() {
 	var rect = {};
-	var img = this.image();
+	var img = this.getImage();
 	var p = this.getLocation();
 	var w = p.width || img.width;
 	var h = p.height || img.height;
@@ -98,67 +143,22 @@ jmImage.prototype.getBounds = function() {
 }
 
 /**
- * 设定要绘制的图像或其它多媒体对象
+ * img对象
  *
- * @method image
- * @param {string/img} [img] 图片路径或图片控件对象
+ * @method getImage
  * @return {img} 图片对象
  */
-jmImage.prototype.image = function(img) {
-	if(img && typeof img == 'string') {
-		var g = this.getValue('image')||document.createElement('img');
-		g.src = img;
-		if(this.style) this.style.image = img;
-		img = g;
+jmImage.prototype.getImage = function() {
+	var src = this.image || this.style.src || this.style.image;
+	if(this.__img && this.__img.src.indexOf(src) != -1) {
+		return this.__img;
 	}
-	else if(typeof img == 'undefined') {
-		return this.getValue('image');
+	else if(src && src.src) {
+		this.__img = src;
 	}
-	return this.setValue('image',img);
+	else {
+		this.__img = document.createElement('img');
+		if(src && typeof src == 'string') this.__img.src = src;
+	}
+	return this.__img;
 }
-
-/**
- * 画图的起始位置
- *
- * @method position
- * @param {point} [p] 图片绘制的位置
- * @return {point} 当前图片位置
- */
-jmImage.prototype.position = function(p) {
-	return this.setValue('position',p);
-}
-
-/**
- * 画图开始剪切位置
- *
- * @method sourcePosition
- * @param {point} [p] 目标图片截取的位置
- * @return {point} 当前截取位置
- */
-jmImage.prototype.sourcePosition = function(p) {
-	return this.setValue('sourcePosition',p);
-}
-
-/**
- * 被剪切宽度
- *
- * @method sourceWidth
- * @param {number} [w] 图片剪切宽度
- * @return {number} 剪切宽度
- */
-jmImage.prototype.sourceWidth = function(w) {
-	return this.setValue('sourceWidth',w);
-}
-
-/**
- * 被剪切高度
- *
- * @method sourceHeight
- * @param {number} h 图片剪切高度
- * @return {number} 当前被剪切高度
- */
-jmImage.prototype.sourceHeight = function(h) {
-	return this.setValue('sourceHeight',h);
-}
-
-

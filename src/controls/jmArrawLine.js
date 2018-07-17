@@ -11,7 +11,7 @@ function jmArrawLine(graph,params) {
 	if(!params) params = {};
 	this.points = params.points || [];
 	var style = params.style || {};
-	style.lineJoin = 'miter';
+	style.lineJoin = style.lineJoin||'miter';
 	
 	this.graph = graph;
 	this.type = 'jmArrawLine';
@@ -20,11 +20,24 @@ function jmArrawLine(graph,params) {
 
 	this.initializing(graph.context,style);
 	
-	this.line = graph.createShape('line',params) ;
-	this.arraw = graph.createShape('arraw',params);
+	this.line = graph.createShape('line', params) ;
+	this.arraw = graph.createShape('arraw', params);
 }
-jmUtils.extend(jmArrawLine,jmPath);//jmPath
+jmUtils.extend(jmArrawLine, jmPath);//jmPath
 
+/**
+ * 结束点
+ * @property end
+ * @type {point}
+ */
+jmUtils.createProperty(jmArrawLine.prototype, 'end');
+
+/**
+ * 起点
+ * @property start
+ * @type {point}
+ */
+jmUtils.createProperty(jmArrawLine.prototype, 'start');
 
 /**
  * 初始化直线和箭头描点

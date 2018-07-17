@@ -18,19 +18,26 @@ function jmPrismatic(graph,params) {
 	this.type = 'jmPrismatic';
 	this.points = params.points || [];
 	var style = params.style || {};
-	
+	style.close = typeof style.close == 'undefined'? true : style.close;
 	this.graph = graph;
 		
-	this.center(params.center || {x:0,y:0});
-	this.width(params.width || 0);
+	this.center = params.center || {x:0,y:0};
+	this.width = params.width || 0;
 
 	//this.on('PropertyChange',this.initPoints);
-	this.height(params.height  || 0);
+	this.height = params.height  || 0;
 
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmPrismatic,jmPath);//继承path图形
+jmUtils.extend(jmPrismatic, jmPath);//继承path图形
 
+/**
+ * 中心点
+ * point格式：{x:0,y:0,m:true}
+ * @property center
+ * @type {point}
+ */
+jmUtils.createProperty(jmPrismatic.prototype, 'center');
 
 /**
  * 初始化图形点
@@ -55,15 +62,3 @@ jmPrismatic.prototype.initPoints = function() {
 	this.points.push({x:location.center.x + mw,y:location.center.y});
 	this.points.push({x:location.center.x,y:location.center.y - mh});
 }
-
-/**
- * 设定或获取宽度
- *
- * @method center
- * @param {point} p 图形中心点
- * @return {point} 当前中心坐标
- */
-jmPrismatic.prototype.center = function(p) {
-	return this.setValue('center',p);
-}
-

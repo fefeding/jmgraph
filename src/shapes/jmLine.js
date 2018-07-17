@@ -22,8 +22,8 @@ function jmLine(graph,params) {
 	
 	this.graph = graph;
 		
-	this.start(params.start || {x:0,y:0});
-	this.end(params.end || {x:0,y:0});
+	this.start = params.start || {x:0,y:0};
+	this.end = params.end || {x:0,y:0};
 	//this.points.push(this.start);
 	//this.points.push(this.end);
 
@@ -31,7 +31,25 @@ function jmLine(graph,params) {
 	style.dashLength = style.dashLength || 4;
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmLine,jmPath);//继承path图形
+jmUtils.extend(jmLine, jmPath);//继承path图形
+
+/**
+ * 控制起始点
+ * 
+ * @property start
+ * @for jmLine
+ * @type {point}
+ */
+jmUtils.createProperty(jmLine.prototype, 'start');
+
+/**
+ * 控制结束点
+ * 
+ * @property end
+ * @for jmLine
+ * @type {point}
+ */
+jmUtils.createProperty(jmLine.prototype, 'end');
 
 /**
  * 初始化图形点,如呆为虚线则根据跳跃间隔描点
@@ -39,8 +57,8 @@ jmUtils.extend(jmLine,jmPath);//继承path图形
  * @private
  */
 jmLine.prototype.initPoints = function() {	
-	var start = this.start();
-	var end = this.end();
+	var start = this.start;
+	var end = this.end;
 	this.points = [];	
 	this.points.push(start);
 
@@ -107,30 +125,3 @@ jmLine.prototype.draw = function() {
 	}
 		
 }*/
-
-/**
- * 控制起始点
- * 
- * @method start
- * @for jmLine
- * @param {point} p 起始点坐标
- * @return {point} 当前起始点坐标
- */
-jmLine.prototype.start = function(p) {
-	return this.setValue('start',p);
-}
-
-/**
- * 控制结束点
- * 
- * @method end
- * @for jmLine
- * @param {point} p 结束点坐标
- * @return {point} 当前结束点坐标
- */
-jmLine.prototype.end = function(p) {
-	return this.setValue('end',p);
-}
-
-
-

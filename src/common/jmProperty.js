@@ -15,7 +15,7 @@ var jmProperty = function() {
 	this.__eventHandles = {};
 };
 
-jmUtils.extend(jmProperty,jmObject);
+jmUtils.extend(jmProperty, jmObject);
 
 /**
  * 获取属性值
@@ -47,6 +47,19 @@ jmProperty.prototype.setValue = function(name,value) {
 		this.emit('PropertyChange',name,args);
 	}
 	return this.getValue(name);
+}
+
+/**
+ * 定义一个属性
+ *
+ * @method setValue
+ * @for createProperty
+ * @param {string} name 设置属性的名称
+ * @param {any} value 属性的值，可选, 如果直接指定为descriptor，也可以。可以传递get,set，按defineProperty第三个参数做参考
+ * @retunr {any} 当前属性的值
+ */
+jmProperty.prototype.createProperty = function(name, value) {	
+	return jmUtils.createProperty(this, name, value);
 }
 
 /**

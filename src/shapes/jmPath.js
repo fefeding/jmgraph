@@ -9,7 +9,7 @@
  * @param {object} params 路径参数 points=所有描点
  */
 
-function jmPath(graph,params) {
+function jmPath(graph, params) {
 	/**
 	 * 当前对象类型名jmPath
 	 *
@@ -24,6 +24,14 @@ function jmPath(graph,params) {
 	this.initializing(graph.context,style);
 }
 jmUtils.extend(jmPath,jmShape);//继承基础图形
+
+/**
+ * 描点集合
+ * point格式：{x:0,y:0,m:true}
+ * @property points
+ * @type {array}
+ */
+jmUtils.createProperty(jmPath.prototype, 'points');
 
 /**
  * 重写检查坐标是否在区域内

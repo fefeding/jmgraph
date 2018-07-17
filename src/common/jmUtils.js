@@ -19,7 +19,7 @@ var jmUtils = {
  * @param {class} target 派生类
  * @param {class} source 基类
  */
-jmUtils.extend =  function(target,source) {  
+jmUtils.extend =  function(target, source) {  
     if(typeof source === 'function') {//类式继承  
         var F = function() {}; //创建一个中间函数对象以获取父类的原型对象  
         F.prototype = source.prototype; //设置原型对象 
@@ -37,7 +37,7 @@ jmUtils.extend =  function(target,source) {
     else if(typeof source === 'object') { //方法的扩充  
             var pro = typeof target === 'function'?target.prototype:target;  
             for(var k in source) {  
-                if(!pro[k]) { //如果原型对象不存在这个属性，则复制  
+                if(typeof pro[k] == 'undefined') { //如果原型对象不存在这个属性，则复制  
                     pro[k] = source[k];  
                 }  
             }  
@@ -1282,5 +1282,72 @@ jmUtils.formatDate = function(date,format) {
     .replace('ss', (date.getSeconds() < 9 ? '0' : '') + date.getSeconds().toString());
 
     return result;
+}
+
+/**
+ * 定义一个属性
+ *
+ * @method createProperty
+ * @param {object} instance 被添加属性的对象
+ * @param {string} name 设置属性的名称
+ * @param {any} value 属性的值，可选, 如果直接指定为descriptor，也可以。可以传递get,set，按defineProperty第三个参数做参考
+ * @retunr {any} 当前属性的值
+ */
+jmUtils.createProperty = function(instance, name, value) {
+    var descriptor = {
+        configurable: false, //当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false。
+        enumerable: true,
+        valueMaps: {},
+        name: name,
+        defaultValue: value
+    };
+    if(value) {
+        if(!(value instanceof jmUtils.list) && (typeof value.set == 'function' || typeof value.get == 'function')) {
+            descriptor.set = value.set;
+            descriptor.get = value.get;
+            //descriptor.value = value.value; //赋值不能跟get/set同时存在
+        }
+        else if(typeof value == 'object' && ('value' in value || 'configurable' in value || 'enumerable' in value || 'writable' in value)) {
+            descriptor.value = value.value;
+            descriptor.configurable = typeof value.configurable == 'boolean'?value.configurable:true;
+            descriptor.enumerable = typeof value.enumerable == 'boolean'?value.enumerable:true;
+            descriptor.writable = typeof value.writable == 'boolean'?value.writable:true;
+        }
+        /*else {
+            descriptor.value = value;
+            descriptor.enumerable = true; //能否for in 默认false
+            descriptor.writable = true;
+        }*/
+    }
+    /*else {
+        descriptor.enumerable = true;
+        descriptor.writable = true;
+    }*/
+    //如果没有指定一些必要属性，则采用get/set方式初始化
+    if(!('get' in descriptor || 'set' in descriptor || 'value' in descriptor || 'writable' in descriptor)) {
+        descriptor.get = function() {
+            //如果是canvas对象，则直接返回
+            if(this.canvas && ('width' == descriptor.name || 'height' == descriptor.name )) {
+                return this.canvas[descriptor.name];
+            }
+
+            if(this.id in descriptor.valueMaps) {
+                return descriptor.valueMaps[this.id];
+            }
+            return descriptor.defaultValue;
+        };
+        descriptor.set = function(value) {
+            //如果是canvas 则修改其属性
+            if(this.canvas && ('width' == descriptor.name || 'height' == descriptor.name )) {
+                this.canvas[descriptor.name] = value;
+            }
+            else {
+                descriptor.valueMaps[this.id] = value;
+            }
+            this.neadUpdate = true;
+        };
+    }
+    //给对象定义一个属性
+	return Object.defineProperty(instance, name, descriptor);
 }
 

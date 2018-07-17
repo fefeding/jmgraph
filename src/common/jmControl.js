@@ -10,7 +10,54 @@ function jmControl(graph, option) {
 	
 };
 //继承属性绑定
-jmUtils.extend(jmControl,jmProperty);
+jmUtils.extend(jmControl, jmProperty);
+
+//# region 定义属性
+
+/**
+ * 样式
+ * @property style
+ * @type {object}
+ */
+jmUtils.createProperty(jmControl.prototype, 'style', {});
+
+/**
+ * 当前控件是否可见
+ * @property visible
+ * @default true
+ * @type {boolean}
+ */
+jmUtils.createProperty(jmControl.prototype, 'visible', true);
+
+/**
+ * 当前控件的子控件集合
+ * @property children
+ * @type {list}
+ */
+jmUtils.createProperty(jmControl.prototype, 'children', new jmUtils.list());
+
+/**
+ * 当前位置左上角
+ * @property position
+ * @type {point}
+ */
+jmUtils.createProperty(jmControl.prototype, 'position');
+
+/**
+ * 宽度
+ * @property width
+ * @type {number}
+ */
+jmUtils.createProperty(jmControl.prototype, 'width', 0);
+
+/**
+ * 高度
+ * @property height
+ * @type {number}
+ */
+jmUtils.createProperty(jmControl.prototype, 'height', 0);
+
+//# end region
 
 /**
  * 初始化对象，设定样式，初始化子控件对象
@@ -23,69 +70,73 @@ jmUtils.extend(jmControl,jmProperty);
  */
 jmControl.prototype.initializing = function(context,style) {
 	this.context = context;
-	this.style = style || {};
-	this.visible = true;
+
+	this.style = style||{};
 
 	var self = this;
 	//定义子元素集合
-	this.children = (function() {
-		var lst = new jmUtils.list();
-		var oadd = lst.add;
-		//当把对象添加到当前控件中时，设定其父节点
-		lst.add = function(obj) {
-			if(typeof obj === 'object') {
-				if(obj.parent && obj.parent != self && obj.parent.children) {
-					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
-				}
-				obj.parent = self;
-				//如果存在先移除
-				if(this.contain(obj)) {
-					this.oremove(obj);
-				}
-				oadd.call(this,obj);
-				obj.emit('add',obj);
-				return obj;
+	this.children = new jmUtils.list();
+	var oadd = this.children.add;
+	//当把对象添加到当前控件中时，设定其父节点
+	this.children.add = function(obj) {
+		if(typeof obj === 'object') {
+			if(obj.parent && obj.parent != self && obj.parent.children) {
+				obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
 			}
-		};
-		lst.oremove= lst.remove;
-		//当把对象从此控件中移除时，把其父节点置为空
-		lst.remove = function(obj) {
-			if(typeof obj === 'object') {				
-				obj.parent = null;
-				obj.remove(true);
+			obj.parent = self;
+			//如果存在先移除
+			if(this.contain(obj)) {
 				this.oremove(obj);
 			}
-		};
-		/**
-		 * 根据控件zIndex排序，越大的越高
-		 */
-		lst.sort = function() {
-			var levelItems = {};
-			//提取zindex大于0的元素
-			//为了保证0的层级不改变，只能把大于0的提出来。
-			lst.each(function(i,obj) {
-				var zindex = obj.zIndex;
-				if(!zindex && obj.style && obj.style.zIndex) {
-					zindex = Number(obj.style.zIndex);
-					if(isNaN(zindex)) zindex=obj.style.zIndex||0;
-				}
-				if(zindex) {
-					var items = levelItems[zindex] || (levelItems[zindex] = []);
-					items.push(obj);					
-				}
-			});
-			
-			for(var index in levelItems) {
-				oadd.call(this,levelItems[index]);
+			oadd.call(this,obj);
+			obj.emit('add',obj);
+
+			self.neadUpdate = true;
+			return obj;
+		}
+	};
+	this.children.oremove= this.children.remove;
+	//当把对象从此控件中移除时，把其父节点置为空
+	this.children.remove = function(obj) {
+		if(typeof obj === 'object') {				
+			obj.parent = null;
+			obj.remove(true);
+			this.oremove(obj);
+			self.neadUpdate = true;
+		}
+	};
+	/**
+	 * 根据控件zIndex排序，越大的越高
+	 */
+	this.children.sort = function() {
+		var levelItems = {};
+		//提取zindex大于0的元素
+		//为了保证0的层级不改变，只能把大于0的提出来。
+		this.each(function(i,obj) {
+			var zindex = obj.zIndex;
+			if(!zindex && obj.style && obj.style.zIndex) {
+				zindex = Number(obj.style.zIndex);
+				if(isNaN(zindex)) zindex=obj.style.zIndex||0;
 			}
+			if(zindex) {
+				var items = levelItems[zindex] || (levelItems[zindex] = []);
+				items.push(obj);					
+			}
+		});
+		
+		for(var index in levelItems) {
+			oadd.call(this,levelItems[index]);
 		}
-		lst.clear = function() {
-			lst.each(function(i,obj) {
-				this.remove(obj);
-			},true);
-		}
-		return lst;
-	})();
+
+		self.neadUpdate = true;
+	}
+	this.children.clear = function() {
+		this.each(function(i,obj) {
+			this.remove(obj);
+		},true);
+	}
+
+	this.neadUpdate = true;
 } 
 
 /**
@@ -287,9 +338,27 @@ jmControl.prototype.getBounds = function(isReset) {
 	//如果当次计算过，则不重复计算
 	if(this.bounds && !isReset) return this.bounds;
 
-	var rect = {};
-	
-	if(this.points && this.points.length > 0) {		
+	var rect = {
+		left: 0,
+		top: 0
+	};
+	//jmGraph，特殊处理
+	if(this.type == 'jmGraph' && this.canvas) {
+		if(typeof this.canvas.width === 'function') {
+			rect.right = this.canvas.width(); 
+		}
+		else {
+			rect.right = this.canvas.width; 
+		}
+		
+		if(typeof this.canvas.height === 'function') {
+			rect.bottom = this.canvas.height(); 
+		}
+		else {
+			rect.bottom = this.canvas.height; 
+		}
+	}
+	else if(this.points && this.points.length > 0) {		
 		for(var i in this.points) {
 			var p = this.points[i];
 			if(typeof rect.left === 'undefined' || rect.left > p.x) {
@@ -338,11 +407,11 @@ jmControl.prototype.getLocation = function(reset) {
 	//if(reset !== true && this.location) return this.location;
 
 	var local = this.location = {left:0,top:0,width:0,height:0};
-	var p = this.position();	
-	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()):null;//中心
-	local.radius = this.radius?this.radius():null;//半径
-	local.width = this.width() || 0;
-	local.height = this.height() || 0;
+	var p = typeof this.position == 'function'? this.position(): this.position;	
+	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()): this.center;//中心
+	local.radius = this.radius;//半径
+	local.width = this.width;
+	local.height = this.height;
 
 	var margin = this.style.margin || {};
 	margin.left = margin.left || 0;
@@ -391,7 +460,7 @@ jmControl.prototype.getLocation = function(reset) {
 	if(local.radius) {
 		//处理百分比参数
 		if(jmUtils.checkPercent(local.radius)) {
-			local.radius = jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width,parentBounds.height);
+			local.radius = jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
 		}		
 	}
 	return local;
@@ -442,39 +511,6 @@ jmControl.prototype.remove = function() {
 }
 
 /**
- * 获取或设定位置坐标
- *
- * @method position
- * @param {point} [p] 位置参数{x:1,y:1} ,如果为空则返回当前位置
- * @return {point} 当前控件的位置
- */
-jmControl.prototype.position = function(p) {
-	return this.setValue('position',p);
-}
-
-/**
- * 设定或获取宽度
- * 
- * @method width
- * @param {number} [w] 宽度，如果为空则返回当前宽度
- * @return {nubmer} 控件的当前宽度
- */
-jmControl.prototype.width = function(w) {
-	return this.setValue('width',w);
-}
-
-/**
- * 设定或获取高度
- *
- * @method height
- * @param {number} [h] 高度
- * @return {number} 当前控件的高度
- */
-jmControl.prototype.height = function(h) {
-	return this.setValue('height',h);
-}
-
-/**
  * 对控件进行平移
  * 遍历控件所有描点或位置，设置其偏移量。
  *
@@ -489,8 +525,8 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 	var location = this.getLocation(true);
 	
 	var offseted = false;
-	if(this.center && typeof this.center == 'function') {		
-		var center = this.center();
+	if(this.center) {		
+		var center = typeof this.center == 'function'?this.center():this.center;
 		if(center) {			
 			center.x = location.center.x + x;
 			center.y = location.center.y + y;
@@ -498,8 +534,8 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 			offseted = true;
 		}			
 	}
-	if(offseted == false && this.position && typeof this.position == 'function') {
-		var p = this.position();
+	if(offseted == false && this.position) {
+		var p = typeof this.position == 'function'?this.position():this.position;
 		if(p) {
 			location.left += x;
 			location.top += y;
@@ -509,8 +545,8 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 			offseted = true;
 		}			
 	}
-	if(offseted == false && this.cpoints && typeof this.cpoints == 'function') {
-		var p = this.cpoints();
+	if(offseted == false && this.cpoints) {
+		var p = typeof this.cpoints == 'function'?this.cpoints():this.cpoints;
 		if(p) {			
 			var len = p.length;
 			for(var i=0; i < len;i++) {
@@ -532,6 +568,8 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 	
 	//触发控件移动事件	
 	this.emit('move',{offsetX:x,offsetY:y,trans:trans,evt:evt});
+
+	this.neadUpdate = true;
 }
 
 /**
@@ -547,6 +585,8 @@ jmControl.prototype.rotate = function(angle, point) {
 		angle: angle,
 		point: point
 	};
+
+	this.neadUpdate = true;
 }
 
 /**
@@ -603,6 +643,7 @@ jmControl.prototype.endDraw = function() {
 	if(this.style['stroke'] || !this.style['fill']) {
 		this.context.stroke();
 	}
+	this.neadUpdate = false;
 }
 
 /**
@@ -662,6 +703,8 @@ jmControl.prototype.paint = function(v) {
 
 		this.emit('endDraw',this);	
 		this.context.restore();
+
+		this.neadUpdate = false;
 	}
 }
 
@@ -746,7 +789,20 @@ function runEventHandle(name,args) {
  * @return {boolean} 当前位置如果在区域内则为true,否则为false。
  */
 jmControl.prototype.checkPoint = function(p, pad) {
-	var bounds = this.getBounds();	
+	//jmGraph 需要判断dom位置
+	if(this.type == 'jmGraph') {
+		//获取dom位置
+		var position = this.getPosition();
+		if(p.pageX > position.right || p.pageX < position.left) {
+			return false;
+		}
+		if(p.pageY > position.bottom || p.pageY < position.top) {
+			return false;
+		}	
+		return true;
+	}
+	
+				var bounds = this.getBounds();	
 	var rotation = this.getRotation();//获取当前旋转参数
 	var ps = this.points;
 	//如果不是路径组成，则采用边界做为顶点
@@ -821,7 +877,7 @@ jmControl.prototype.checkPoint = function(p, pad) {
 jmControl.prototype.raiseEvent = function(name,args) {
 	if(this.visible === false) return ;//如果不显示则不响应事件	
 	if(!args.position) {		
-		var graph = this.findParent('jmGraph');
+		var graph = this.graph || this.findParent('jmGraph');
 		var position = jmUtils.getEventPosition(args,graph.scaleSize);//初始化事件位置		
 
 		var srcElement = args.srcElement || args.target;

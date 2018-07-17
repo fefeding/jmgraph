@@ -7,8 +7,7 @@
 		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
 	</head>
 	<body style="margin:10px auto;">
-		<div id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;		"></div>	
-		<!--<img src="http://demo.iflow.oa.com/content/index/images/gif.gif" />	-->
+		<div id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;"></div>
 	</body>
 </html>
 
@@ -23,7 +22,7 @@
 
 		//实时更新画布
 		function update() {
-			g.redraw();
+			if(g.neadUpdate) g.redraw();
 			requestAnimationFrame(update);
 		}
 		update();
@@ -71,7 +70,7 @@
 				var bluedir = 0;
 				var yellowstop = 0.8;
 				var yellowdir = 0;
-				var childarc = graph.createShape('arc',{style:style,center:{x:arc.width() / 2,y:arc.height() / 2},start:0,end: Math.PI / 3,radius:arc.width() / 2,anticlockwise:false});
+				var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});
 
 				style = jmUtils.clone(style);
 				style.close = true;
@@ -82,15 +81,15 @@
 				graph.children.add(harc);
 
 				function arcAni() {		
-					var s=childarc.startAngle() + step;
-					var e = childarc.endAngle() + step;
+					var s=childarc.startAngle + step;
+					var e = childarc.endAngle + step;
 					if(s > Math.PI * 2) {
 						s = 0;
 						e = Math.PI / 3;
 					}
-					childarc.startAngle(s);
-					childarc.endAngle(e);
-					harc.endAngle(s);
+					childarc.startAngle = s;
+					childarc.endAngle = e;
+					harc.endAngle = s;
 					
 					
 					if(bluestop >= yellowstop) {
@@ -101,23 +100,9 @@
 						bluedir = 0;
 					}
 					bluestop = bluedir == 0?bluestop + 0.01:bluestop-0.01;
-/*
-					if(yellowstop > 0.9) {
-						yellowdir = 1;
-					}
-					else if(yellowstop < 0.4) {
-						yellowdir = 0;
-					}
-					yellowstop = yellowdir == 0?yellowstop + 0.01:yellowstop-0.01;
-*/		
-					/*bg.stops.clear();
-					bg.addStop(0,'green');
-					bg.addStop(bluestop,'blue');
-					bg.addStop(yellowstop,'yellow');
-					bg.addStop(1,'red');*/
+
 					arc.style.fill='radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue '+bluestop+', yellow '+yellowstop+', red 1)';
-					//graph.redraw();	
-					//setTimeout(arcAni,1);				
+					graph.neadUpdate = true;		
 				}				
 				arc.children.add(childarc);				
 				childarc.animate(arcAni,10);

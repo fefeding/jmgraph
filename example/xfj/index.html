@@ -7,8 +7,8 @@
 	<meta content="yes" name="apple-mobile-web-app-capable">
 	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<script type="text/javascript" src="shake.js?2"></script>
-	<!--<script type="text/javascript" src="../../src/jmGraph.js"></script>-->
-	<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	
+	<script type="text/javascript" src="../../src/jmGraph.js"></script>
+	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	-->
 	<style>
 	html,body {
 		margin:0;
@@ -56,7 +56,13 @@ jmGraph('mycanvas').then((g)=>{
 
 	//实时更新画布
 	function update() {
-		g.redraw();
+		if(g.neadUpdate) {
+			var t1 = Date.now();
+			g.redraw();
+			
+		var t2 = Date.now();
+		console.log('update:'+(t2-t1));
+		}
 		requestAnimationFrame(update);
 	}
 	update();
@@ -67,7 +73,7 @@ function init(g) {
 	var bg1 = g.createShape('image',{
 		width: '100%',
 		height: '100%',
-		position: {x:0,y:-g.height()},
+		position: {x:0,y:-g.height},
 		image: sources[0]
 	});
 	g.children.add(bg1);
@@ -115,27 +121,28 @@ function init(g) {
 
 	var drCreateTime = Date.now();
 	setInterval(function(){
+		
 		if(Date.now()-drCreateTime > 100) {
 			new dr1(g, {
-				x: Math.random() * (g.width()-20),
+				x: Math.random() * (g.width-20),
 				y: -60
 			});
 			drCreateTime = Date.now();
 		}
 		var gbSpeed = 1;
 		//背景滚动
-		bg1.position().y += gbSpeed;
-		bg2.position().y += gbSpeed;
-		if(bg1.position().y >= g.height()) {
-			bg1.position().y = -g.height();
+		bg1.position.y += gbSpeed;
+		bg2.position.y += gbSpeed;
+		if(bg1.position.y >= g.height) {
+			bg1.position.y = -g.height;
 		}
-		if(bg2.position().y >= g.height()) {
-			bg2.position().y = -g.height();
+		if(bg2.position.y >= g.height) {
+			bg2.position.y = -g.height;
 		}
-
+		var t1 = Date.now();
 		g.children.each(function(i,dr){
 			if(dr && dr.isDR && dr.role.state == 1) {
-				if(dr.position().y > g.height()) {
+				if(dr.position.y > g.height) {
 					dr.die && dr.die();
 					return;
 				}
@@ -165,6 +172,9 @@ function init(g) {
 				}
 			}
 		},true);
+		var t2 = Date.now();
+		console.log('dr:' + (t2-t1));
+
 	}, 30);
 
 	
@@ -179,8 +189,8 @@ function init(g) {
 			var beta = opt.beta || (-opt.y*10);
 			var alpha = opt.alpha || (opt.z*10);
 			
-			var x =Math.floor((gamma+20)/40*g.width()/10) * 10;
-			var y = mainRole.shape.position().y;
+			var x =Math.floor((gamma+20)/40*g.width/10) * 10;
+			var y = mainRole.shape.position.y;
 
 			log.value = 'x:' + x + ',y:' + y;
 			if(!isNaN(x) && !isNaN(y)) mainRole.move(x,y);
@@ -199,7 +209,7 @@ function fj(g) {
 	this.shape = g.createShape('image',{
 		width: 60,
 		height: 60,
-		position: {x: g.width()/2-20, y: g.height()-100},
+		position: {x: g.width/2-20, y: g.height-100},
 		image: sources[1],
 		style: {
 			rotation: {
@@ -217,6 +227,7 @@ function fj(g) {
 	var bobTime = Date.now();//大炸弹出现时间
 	//不断地发射子弹
 	this.inter = setInterval(function(){
+		
 		if(self.state == '1' && Date.now() - lastZDTime > 160) {
 			var w = 20;
 			var h = 20;
@@ -227,7 +238,7 @@ function fj(g) {
 			var zd = g.createShape('image',{
 				width: w,
 				height: h,
-				position: {x: self.shape.position().x + 30 - w/2, y: self.shape.position().y - h},
+				position: {x: self.shape.position.x + 30 - w/2, y: self.shape.position.y - h},
 				image: sources[2]
 			});
 			
@@ -238,15 +249,18 @@ function fj(g) {
 			g.children.add(zd);
 			lastZDTime = Date.now();
 		}
+		var t1 = Date.now();
 		g.children.each(function(i,z){
 			if(z&&z.isZD) {
-				z.position().y -= 1;
-				if(z.position().y <= 0) {
+				z.position.y -= 1;
+				if(z.position.y <= 0) {
 					g.children.remove(z);
 				}
 			}
 
 		}, true);
+		var t2 = Date.now();
+		console.log('fire:' + (t2-t1));
 	}, 5);
 
 	this.die = function() {
@@ -258,13 +272,13 @@ function fj(g) {
 
 	//移动
 	this.move = function(x, y) {
-		var pos = this.shape.position();
+		var pos = this.shape.position;
 		
 		if(x <= -30) x = -30;
-		else if(x >= g.width()-30) x = g.width()-30;
+		else if(x >= g.width-30) x = g.width-30;
 
 		if(y <= 0) y = 0;
-		else if(y >= g.height() - 60) y = g.height() - 60;
+		else if(y >= g.height - 60) y = g.height - 60;
 		
 		pos.x = x;
 		pos.y = y;
@@ -298,7 +312,7 @@ function dr1(g, pos){
 		if(ms && ms.length>1){
 			index = Number(ms[1])+1;
 		} */
-		this.image('img/dr_die.gif');
+		this.image = 'img/dr_die.gif';
 
 		this.role.state = 0;
 		clearInterval(this.role.inter);
@@ -311,7 +325,7 @@ function dr1(g, pos){
 
 	var that = this;
 	this.move = function(){
-		this.shape.position().y+=this.speed;
+		this.shape.position.y+=this.speed;
 	}
 }
 </script>

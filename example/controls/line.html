@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/jmGraph.js"></script>
-		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
+		<script type="text/javascript" src="../../src/jmGraph.js"></script>
+		<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	-->
 	</head>
 	<body style="width:800px;margin:10px auto;border:1px solid blue;">
 		<div id="mycanvas" style="border:1px solid red;margin:10px;width:100%;height:600px;"></div>
@@ -27,14 +27,9 @@
 				stroke:'#CF781450',
 				lineWidth:5,
 				close:true
-				//,
-				//translate: {
-				//	x:300,
-				//	y:-300
-				//}
 			};
 			style.shadow = '0,0,5,#fff';
-			style.opacity = 0.2;
+			style.opacity = 0.8;
 			//graph.createShadow('shadow(0,0,10,#000)');//new jmShadow('shadow(10,10,20,#000)');
 			//style.shadow = graph.createShadow(4,4,6,'#000000');
 			style.lineCap = 'round';
@@ -56,19 +51,6 @@
 			graph.children.add(line);
 			line.canMove(true);
 			
-			style = jmUtils.clone(style);
-			delete style.opacity;//后面的不继承透明
-
-			style.rectStroke = 'green';
-			style.fill = '#0000';
-			var resize = graph.createShape('resize',{style:style,position:{x:100,y:100},width:100,height:100});
-			resize.style.rotation = {
-				angle: 1,
-				point: {x: '50%', y: '50%'}
-			}
-			graph.children.add(resize);
-			resize.canMove(true);
-
 
 			style = jmUtils.clone(style);
 			delete style['rotation'];
@@ -90,7 +72,7 @@
 				graph.refresh();
 			});
 			line.canMove(true);
-			//graph.children.remove(line);
+			
 
 
 			style = jmUtils.clone(style);	
@@ -134,63 +116,8 @@
 			
 			rect.canMove(true);
 			//line.canMove(true);
-			path.canMove(true);				
-
+			path.canMove(true);	
 			
-			
-			style = jmUtils.clone(style);
-			var arc = graph.createShape('circle',{style:style,center:{x:160,y:100},width:60,height: 40});				
-
-			arc.bind('mouseover',function(evt) {
-				this.style.stroke = 'rgba(39,72,188,0.5)';
-				//graph.canvas.style.cursor = 'pointer';
-			});
-			arc.bind('mouseleave',function(evt) {
-				this.style.stroke = 'rgb(120,20,80)';
-				//graph.canvas.style.cursor = 'default';
-			});
-
-			graph.children.add(arc);
-			arc.canMove(true);
-
-			var pri = graph.createShape('prismatic',{style:style,center:{x:160,y:100},width:60,height: 40});
-			graph.children.add(pri);
-			pri.canMove(true);
-
-			style = jmUtils.clone(style);
-			delete style.fill;
-			delete style.close;
-			var bezier = graph.createShape('bezier',{style:style,points:[{x:160,y:200},{x:200,y:80},{x:400,y:100},{x:420,y:210},{x:500,y:120}]});
-			graph.children.add(bezier);
-			bezier.canMove(true);
-
-			style = jmUtils.clone(style);
-			style.lineWidth = 10;
-			style.lineJoin = 'round';
-			var rect = graph.createShape('rect',{style:style,position:{x:300,y:300},width:100,height:100});
-			graph.children.add(rect);
-			rect.canMove(true);
-
-			style = jmUtils.clone(style);
-			style.lineWidth = 5;
-			var arr = graph.createShape('arrawline',{style:style,start:{x:150,y:200},end:{x:400,y:350}});
-			graph.children.add(arr);
-			arr.canMove(true);
-
-			style = jmUtils.clone(style);
-			style.textAlign = 'center';
-			style.textBaseline = 'middle',
-			style.font = '20px Arial';
-			style.border = {left:1,top:1,right:1,bottom:1};
-			var label = graph.createShape('label',{style:style,position:{x:300,y:350},value:'test label',width:120,height:80});
-			graph.children.add(label);
-			label.canMove(true);
-			
-			
-			//path.zIndex = 2;
-			//line.zIndex =1;
-			//var img = graph.toDataURL();
-			//document.getElementById('dataimg').src = img;
 
 			function update() {
 				graph.redraw();

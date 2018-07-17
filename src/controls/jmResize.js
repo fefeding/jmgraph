@@ -18,20 +18,28 @@ function jmResize(graph,params) {
 	 */
 	this.type = 'jmResize';	
 	//是否可拉伸
-	this.enabled = params.enabled === false?false:true;	
-	
+	this.enabled = params.enabled === false?false:true;		
 	
 	this.graph = graph;
+	this.position = params.position || {x:0, y:0};
+	this.width = params.width || 0;
+	this.height = params.height || 0;
 	this.points = params.points || [];
-	this.position(params.position || {x:0,y:0});
-	this.width(params.width || 0);
-	this.height(params.height  || 0);
-	this.rectSize(params.rectSize || 8);
-	this.initializing(graph.context,style);
+	this.rectSize = params.rectSize || 8;
+	style.close = style.close || true;
+	
+	this.initializing(graph.context, style);
 	this.init();
 }
 
-jmUtils.extend(jmResize,jmRect);//jmRect
+jmUtils.extend(jmResize, jmRect);//jmRect
+
+/**
+ * 拉动的小方块大小
+ * @property rectSize
+ * @type {number}
+ */
+jmUtils.createProperty(jmResize.prototype, 'rectSize', 8);
 
 /**
  * 初始化控件的8个拉伸方框
@@ -43,19 +51,25 @@ jmResize.prototype.init = function() {
 	//如果不可改变大小。则直接退出
 	if(this.params.resizable === false) return;
 	this.resizeRects = [];	
-	var rs = this.rectSize();
+	var rs = this.rectSize;
+	var rectStyle = this.style.rectStyle || {
+			stroke: 'red',
+			fill: 'transparent',
+			lineWidth: 2,
+			close: true,
+			zIndex:100
+		};
+	rectStyle.close = true;
+	rectStyle.fill = rectStyle.fill || 'transparent';
+	
 	for(var i = 0;i<8;i++) {
 		//生成改变大小方块
 		var r = this.graph.createShape('rect',{
 				position:{x:0,y:0},
-				width:rs,
-				height:rs,
-				style:{
-					stroke: this.style.rectStroke || 'red',
-					fill: this.style.rectFill || 'transparent',
-					close:true,
-					zIndex:100
-				}});
+				width: rs,
+				height: rs,
+				style: rectStyle
+			});
 		r.index = i;
 		r.visible = true;
 		this.resizeRects.push(r);	
@@ -147,14 +161,14 @@ jmResize.prototype.reset = function(px,py,dx,dy) {
 		var h = location.height + dy;
 		if(w >= minWidth || h >= minHeight) {
 			if(w >= minWidth) {
-				this.width(w);
+				this.width = w;
 			}
 			else {
 				px = 0;
 				dx = 0;
 			}
 			if(h >= minHeight) {
-				this.height(h);
+				this.height = h;
 			}
 			else {
 				py = 0;
@@ -162,10 +176,10 @@ jmResize.prototype.reset = function(px,py,dx,dy) {
 			}
 			//如果当前控件能移动才能改变其位置
 			if(this.params.movable !== false && (px||py)) {
-				var p = this.position();
+				var p = this.position;
 				p.x = location.left + px;
 				p.y = location.top + py;
-				this.position(p);
+				this.position = p;
 			}			
 			//触发大小改变事件
 			this.emit('resize',px,py,dx,dy);
@@ -176,68 +190,45 @@ jmResize.prototype.reset = function(px,py,dx,dy) {
 		var r = this.resizeRects[i];
 		switch(r.index) {
 			case 0: {
-				r.position().x = -r.width() / 2;
-				r.position().y = (location.height - r.height()) / 2;
+				r.position.x = -r.width / 2;
+				r.position.y = (location.height - r.height) / 2;
 				break;
 			}	
 			case 1: {
-				r.position().x = -r.width() / 2;
-				r.position().y = -r.height() / 2;
+				r.position.x = -r.width / 2;
+				r.position.y = -r.height / 2;
 				break;
 			}		
 			case 2: {
-				r.position().x = (location.width - r.width()) / 2;
-				r.position().y = -r.height() / 2;
+				r.position.x = (location.width - r.width) / 2;
+				r.position.y = -r.height / 2;
 				break;
 			}
 			case 3: {
-				r.position().x = location.width - r.width() / 2;
-				r.position().y = -r.height() / 2;
+				r.position.x = location.width - r.width / 2;
+				r.position.y = -r.height / 2;
 				break;
 			}
 			case 4: {
-				r.position().x = location.width - r.width() / 2;
-				r.position().y = (location.height - r.height()) / 2;
+				r.position.x = location.width - r.width / 2;
+				r.position.y = (location.height - r.height) / 2;
 				break;
 			}
 			case 5: {
-				r.position().x = location.width - r.width() / 2;
-				r.position().y = location.height - r.height() /2;
+				r.position.x = location.width - r.width / 2;
+				r.position.y = location.height - r.height /2;
 				break;
 			}
 			case 6: {
-				r.position().x = (location.width - r.height()) / 2;
-				r.position().y = location.height - r.height() / 2;
+				r.position.x = (location.width - r.height) / 2;
+				r.position.y = location.height - r.height / 2;
 				break;
 			}
 			case 7: {
-				r.position().x = -r.width() / 2;
-				r.position().y = location.height - r.height() / 2;
+				r.position.x = -r.width / 2;
+				r.position.y = location.height - r.height / 2;
 				break;
 			}
 		}
 	}
 }
-
-/**
- * 拉伸小方块边长
- *
- * @method rectSize
- * @param {number} s 边长
- * @return {number} 当前边长
- */
-jmResize.prototype.rectSize = function(s) {
-	return this.setValue('rectSize',s);
-}
-
-/**
- * 控制的目标控件
- *
- * @method target
- * @param {jmControl} target 边长
- * @return {jmControl} 控制的目标控件
- */
-jmResize.prototype.target = function(target) {
-	return this.setValue('target',target);
-}
-

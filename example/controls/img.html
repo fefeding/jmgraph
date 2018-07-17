@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+	<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<style>
+		html,body{
+			margin:0;
+			padding: 0;
+		}
+		#mycanvas_container{
+			overflow: hidden;		
+		}
+	</style>
+	<script type="text/javascript" src="../../src/jmGraph.js"></script>
+	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>-->	
+	</head>
+	<body>
+		<div id="mycanvas_container"></div>
+	</body>
+	<script type="text/javascript">	
+        var container = document.getElementById('mycanvas_container');
+        
+        //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
+		jmGraph('mycanvas_container', {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		}).then((g)=>{
+			init(g)
+		});
+		/*var g = new jmGraph(container, {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		});
+		init(g);*/
+			
+		function init(g){
+			//g.style.fill = '#000'; //画布背景
+			var style = {
+				src: 'http://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+			};
+			style.shadow = '0,0,10,#fff';
+			//style.opacity = 0.2;		
+
+			//创建一个image
+			var img = g.createShape('image',{
+				style:style,
+				position: {x:100,y:100}
+			});			
+			img.canMove(true);
+            g.children.add(img);
+            
+            //截取logo
+            var img2 = g.createShape('image',{
+				style:style,
+                position: {x:100,y:200},
+
+                //伸展或缩小图像
+                width: 100,
+                height: 40,
+                
+                sourcePosition: {x:0, y:0}, //截取起点
+                sourceWidth: 60,          //截取宽度，如果不填则用原图宽
+                sourceHeight: 60            //截取高度，如果不填则用原图高
+			});			
+			g.children.add(img2);
+
+			function update() {
+				g.redraw();
+				requestAnimationFrame(update);
+			}
+
+			update();
+		}
+	</script>
+</html>

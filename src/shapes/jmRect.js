@@ -16,20 +16,27 @@ function jmRect(graph,params) {
 	 * @type string
 	 */
 	this.type = 'jmRect';
-	this.points = params.points || [];
+	this.createProperty('points', params.points || []);
 	var style = params.style || {};
 	style.close = true;
 	
-	this.graph = graph;
+	this.createProperty('graph', graph);
 	
-	this.position(params.position || {x:0,y:0});
-	this.width(params.width || 0);
-	this.height(params.height  || 0);
-	this.radius(params.radius || style.radius || 0);
+	this.position = params.position || {x:0,y:0};
+	this.width = params.width || 0;
+	this.height = params.height  || 0;
+	this.radius = params.radius || style.radius || 0;
 
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmRect,jmPath);//jmPath
+jmUtils.extend(jmRect, jmPath);//jmPath
+
+/**
+ * 圆角半径
+ * @property radius
+ * @type {number}
+ */
+jmUtils.createProperty(jmRect.prototype, 'radius', 0);
 
 /**
  * 获取当前控件的边界
@@ -183,15 +190,4 @@ jmRect.prototype.draw = function() {
 		//this.context.lineTo(p1.x,p1.y);
 	}		
 }*/
-
-/**
- * 圆角半径
- *
- * @method radius
- * @param {number} r 边角圆弧半径
- * @return {number} 当前圆角半径
- */
-jmRect.prototype.radius = function(r) {
-	return this.setValue('radius',r);
-}
 

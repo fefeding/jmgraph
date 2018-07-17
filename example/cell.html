@@ -41,7 +41,7 @@
 
 				//实时更新画布
 				function update() {
-					g.redraw();
+					if(g.neadUpdate) g.redraw();
 					requestAnimationFrame(update);
 				}
 				update();
@@ -49,8 +49,8 @@
 			
 			function createPosition(radius,i) {
 				var canvas = document.getElementById('mycanvas');
-				var x = Math.random() * graph.width() + radius;
-				var y = Math.random() * graph.height() + radius;
+				var x = Math.random() * graph.width + radius;
+				var y = Math.random() * graph.height + radius;
 
 				for(var j=i+1;j<balls.length;j++) {
 					var b2= balls[j];
@@ -58,7 +58,7 @@
 					var ly = Math.abs(y - b2.y());
 					var l = Math.sqrt(lx * lx + ly * ly);
 					//如果二个球重叠则放 弃当前球
-					if(l < radius + b2.radius()) {
+					if(l < radius + b2.radius) {
 						return createPosition(radius);
 					}
 				}
@@ -95,7 +95,7 @@
 				style.fill.addStop(0,'rgb(112,154,22)');
 				style.fill.addStop(1,'rgb(49,95,118)');	
 
-				var count = graph.width() / 20;
+				var count = graph.width / 20;
 					
 				for(var i=0;i<count;i++) {
 					var radius = Math.random() * 10 + 4;
@@ -117,7 +117,7 @@
 
 				//主体细胞
 				
-				var myCell = createCell(graph.width() / 2,graph.height() / 2,14,styletmp);//new cell(graph,graph.width() / 2,graph.height() / 2,10,styletmp);
+				var myCell = createCell(graph.width / 2,graph.height / 2,14,styletmp);//new cell(graph,graph.width() / 2,graph.height() / 2,10,styletmp);
 
 				//balls.push(myCell);
 
@@ -135,12 +135,12 @@
 					//var mvy = 0;
 					for(var i=0;i<len;i++) {
 						var b1 = bs[i];
-						if(!b1 || !b1.visible()) continue;
+						if(!b1 || !b1.visible) continue;
 						b1.vx += b1.ax;
 						b1.vy += b1.ay;
 						for(var j=i+1;j<len;j++) {
 							var b2= bs[j];
-							if(!b2 || !b2.visible()) continue;
+							if(!b2 || !b2.visible) continue;
 							var lx = b1.x() - b2.x();
 							var ly = b1.y() - b2.y();
 							var l = Math.sqrt(lx * lx + ly * ly);
@@ -173,7 +173,7 @@
 								else {
 									darea = smallB.radius() * smallB.radius();
 									dr = smallB.radius();
-									smallB.visible(false);
+									smallB.visible = false;
 									balls.splice(smallindex,1);
 								}
 								var bigr = Math.sqrt(bigB.radius() * bigB.radius() + darea);
@@ -185,9 +185,9 @@
 							}
 						}
 
-						if(!b1.visible()) continue;
+						if(!b1.visible) continue;
 						var x = b1.x() + b1.vx;
-						var maxX = b1.graph.width() - b1.radius();
+						var maxX = b1.graph.width - b1.radius();
 						if(x <= b1.radius() || x >= maxX) {							
 							//b1.vy -= 0.4;
 							b1.vx *= -1;							
@@ -196,8 +196,8 @@
 						x = Math.min(maxX,x);
 						b1.x(x);
 						var y = b1.y() + b1.vy;
-						var maxY = b1.graph.height() - b1.radius();
-						if(y <= b1.radius() || y >= maxY) {
+						var maxY = b1.graph.height - b1.radius();
+						if(y <= b1.radius || y >= maxY) {
 							//if(y >= maxY && b1.vy > 0) {b1.vy -= 1;b1.vx -= 0.4;}
 							b1.vy *= -1;
 						}
@@ -205,7 +205,7 @@
 						y = Math.min(maxY,y);
 						b1.y(y);						
 					}	
-					graph.refresh();	
+					graph.neadUpdate = true;	
 					setTimeout(animate,20);				
 				};
 				animate();		
@@ -215,9 +215,9 @@
 				//canvas.height = window.innerHeight;
 
 				if(graph) {
-					graph.width(document.getElementById('mycanvas').clientWidth);
-					graph.height(document.getElementById('mycanvas').clientHeight);
-					graph.refresh();	
+					graph.width = document.getElementById('mycanvas').clientWidth;
+					graph.height = document.getElementById('mycanvas').clientHeight;
+					graph.neadUpdate = true;	
 				}	
 			}
 
@@ -257,6 +257,8 @@
 
 					this.vx = (this.vx * r - mc.vx * mc.radius()) / this.radius();
 					this.vy = (this.vy * r - mc.vy * mc.radius()) / this.radius();
+
+					this.graph.neadUpdate = true; 
 				}
 				this.x = function(x) {
 					if(typeof x !== 'undefined') this.center.x = x;	
@@ -268,7 +270,8 @@
 				}
 
 				this.radius = function(r) {
-					return this.shape.radius(r);
+					if(typeof r == 'undefined') return this.shape.radius;
+					return this.shape.radius = r;
 				}
 				this.visible = function(v) {
 					if(typeof v !== 'undefined') {

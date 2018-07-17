@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+	<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<style>
+		html,body{
+			margin:0;
+			padding: 0;
+		}
+		#mycanvas_container{
+			overflow: hidden;		
+		}
+	</style>
+	<script type="text/javascript" src="../../src/jmGraph.js"></script>
+	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>-->	
+	</head>
+	<body>
+		<div id="mycanvas_container"></div>
+	</body>
+	<script type="text/javascript">	
+        var container = document.getElementById('mycanvas_container');
+        
+        //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
+		jmGraph('mycanvas_container', {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		}).then((g)=>{
+			init(g)
+		});
+		/*var g = new jmGraph(container, {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		});
+		init(g);*/
+			
+		function init(g){
+			//g.style.fill = '#000'; //画布背景
+			var style = {
+                lineType: 'dotted', //虚线
+                dashLength: 10,                
+                stroke: '#48EA08'
+			};
+			style.shadow = '0,0,10,#fff';
+			//style.opacity = 0.2;		
+
+			//创建
+			var shape = g.createShape('arrawline',{
+				style:style,
+				start: {x:100,y:100},
+				end: {x: 200, y: 350}
+                //height:100
+            });	
+            
+			g.children.add(shape);
+			
+			style = jmUtils.clone(style);
+			style.fill = '#48EA08'; //实心箭头
+			//创建
+			//一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
+			var arraw = g.createShape('arraw',{
+				style:style,
+				start: {x:150, y:120},
+				end: {x: 160, y: 150},
+				//angle: Math.PI/2, //箭头角度  可以不填
+				//offsetX: 5, //箭头X偏移量
+				//offsetY: 8 //箭头Y偏移量
+            });	
+            
+            g.children.add(arraw);
+
+			function update() {
+				g.redraw();
+				//requestAnimationFrame(update);
+			}
+
+			update();
+		}
+	</script>
+</html>

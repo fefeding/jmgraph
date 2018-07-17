@@ -18,14 +18,23 @@ function jmBezier(graph,params) {
 	 * @type string
 	 */
 	this.type = 'jmBezier';
-	this.points = params.points || [];
+	this.cpoints = params.points || [];
+	this.points = [];
 	var style = params.style || {};
 	
 	this.graph = graph;
-	this.cpoints(this.points);
-	this.initializing(graph.context,style);
+	this.initializing(graph.context, style);
 }
-jmUtils.extend(jmBezier,jmPath);//继承path图形
+jmUtils.extend(jmBezier, jmPath);//继承path图形
+
+/**
+ * 控制点
+ *
+ * @property cpoints
+ * @for jmBezier
+ * @type {array}
+ */
+jmUtils.createProperty(jmBezier.prototype, 'cpoints');
 
 /**
  * 初始化图形点
@@ -40,7 +49,7 @@ jmBezier.prototype.initPoints = function() {
 	
 	this.points = [];
 	
-	var cps = this.cpoints();
+	var cps = this.cpoints;
 	/*var newps = cps;
 	if(bounds) {
 		newps = [];
@@ -95,7 +104,7 @@ jmBezier.prototype.getPoint = function(ps,t) {
  * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
  */
 jmBezier.prototype.offset = function(x,y,trans) {	
-	var p = this.cpoints();
+	var p = this.cpoints;
 	if(p) {			
 		var len = p.length;
 		for(var i=0; i < len;i++) {
@@ -108,26 +117,3 @@ jmBezier.prototype.offset = function(x,y,trans) {
 		this.getLocation(true);	//重置
 	}
 }
-
-/**
-* 获取当前控件的边界
-
-jmBezier.prototype.getBounds = function() {
-	this.initPoints();
-	return this.base.getBounds.call(this);
-}*/
-
-/**
- * 控制点
- *
- * @method cpoints
- * @param {array} p 所有控制点
- * @return {array} 当前控制点集合
- */
-jmBezier.prototype.cpoints = function(p) {
-	return this.setValue('cpoints',p);
-}
-
-
-
-

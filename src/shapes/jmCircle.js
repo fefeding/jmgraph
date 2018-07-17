@@ -22,20 +22,20 @@ function jmCircle(graph,params) {
 	
 	this.graph = graph;
 		
-	this.center(params.center || {x:0,y:0});
-	this.width(params.width || 0);
+	this.center = params.center || {x:0,y:0};
+	this.radius = params.radius || 0;
 
-	//this.on('PropertyChange',this.initPoints);
-	this.height(params.height  || 0);
-	this.radius(params.radius  || 0);
+	this.startAngle = params.start || params.startAngle || 0;
+	this.endAngle = params.end || params.endAngle || Math.PI * 2;
 
-	this.startAngle(params.start  || 0);
-	this.endAngle(params.end  || Math.PI * 2);
-	this.anticlockwise(params.anticlockwise  || 0);
+	this.width = params.width || 0;
+	this.height = params.height  || 0;
+
+	this.anticlockwise = params.anticlockwise  || 0;
 
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmCircle,jmArc);//继承path图形
+jmUtils.extend(jmCircle, jmArc);//继承path图形
 
 /**
  * 初始化图形点
@@ -45,22 +45,7 @@ jmUtils.extend(jmCircle,jmArc);//继承path图形
  * @for jmCircle
  */
 jmCircle.prototype.initPoints = function() {	
-	/*var mw = this.width() / 2;
-	var mh = this.height() / 2;
-	var center = this.center();
-	var cx = center.x ;//+ bounds.left;
-	var cy = center.y ;//+ bounds.top;
-	var r1 =  mw * mw;
-	var r2 = mh * mh;
-	this.points = [];
-	for(var x = -mw;x <= mw; x += 0.1) {
-		var y = Math.sqrt((1 - (x * x) / r1)) * mh;
-		this.points.push({x:x + cx,y:y + cy});
-	}
-	for(var i= this.points.length - 1;i >= 0;i--) {
-		var p = this.points[i];
-		this.points.push({x:p.x ,y:cy * 2 - p.y});
-	}*/
+	
 	var location = this.getLocation();
 	
 	if(!location.radius) {
@@ -85,44 +70,9 @@ jmCircle.prototype.draw = function() {
 	if(!location.radius) {
 		location.radius = Math.min(location.width , location.height) / 2;
 	}
-	var start = this.startAngle();
-	var end = this.endAngle();
-	var anticlockwise = this.anticlockwise();
+	var start = this.startAngle;
+	var end = this.endAngle;
+	var anticlockwise = this.anticlockwise;
 	//context.arc(x,y,r,sAngle,eAngle,counterclockwise);
-	this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top,location.radius, start,end,anticlockwise);
+	this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top, location.radius, start,end,anticlockwise);
 }
-
-/**
-* 获取当前控件的边界
-
-jmCircle.prototype.getBounds = function() {
-	this.initPoints();
-	return this.base.getBounds.call(this);
-}*/
-
-/**
- * 设定或获取中心点
- * 
- * @method center
- * @for jmCircle
- * @param {point} p 中心参数
- * @return {point} 当前中心点
- */
-jmCircle.prototype.center = function(p) {
-	return this.setValue('center',p);
-}
-
-/**
- * 设定或获取半径
- * 
- * @method radius
- * @for jmCircle
- * @param {number} p 半径
- * @return {number} 当前半径
- */
-jmCircle.prototype.radius = function(p) {
-	return this.setValue('radius',p);
-}
-
-
-

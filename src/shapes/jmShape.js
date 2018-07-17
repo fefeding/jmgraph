@@ -24,5 +24,5 @@ function jmShape(graph) {
 
 	this.initializing(graph.context,style);
 }
-jmUtils.extend(jmShape,jmControl);
+jmUtils.extend(jmShape, jmControl);
 

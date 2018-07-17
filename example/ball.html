@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/jmGraph.js"></script>
-		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
+		<!--<script type="text/javascript" src="../src/jmGraph.js"></script>-->
+		<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	
 		<style>
 		html,body {
 			margin:0;
@@ -31,25 +31,29 @@
 
 <script type="text/javascript">
 		
-			
+			var graph = new jmGraph('mycanvas');
 			//初始化jmgraph
-			jmGraph('mycanvas').then((g)=>{
-				
+			/*jmGraph('mycanvas').then((g)=>{
+				graph = g;
 				jmUtils.bindEvent(window,'resize',resize);			
 				refreshBall(g);
 
-				//实时更新画布
-				function update() {
-					g.redraw();
-					requestAnimationFrame(update);
-				}
-				update();
-			});	
+				
+			});	*/
 
-			var graph;
+			refreshBall(graph);
+
+			//实时更新画布
+			function update() {
+				if(graph && graph.neadUpdate) graph.redraw();
+				requestAnimationFrame(update);
+			}
+			update();
+
+			
 			function refreshBall(g) {
 				resize();
-				graph = g;	
+				
 				var style = {				
 					lineWidth:1,
 					close:true,
@@ -61,8 +65,8 @@
 
 				var balls = [];
 				function createPosition(radius,i) {
-					var x = Math.random() * graph.width() + radius;
-					var y = Math.random() * graph.height() + radius;
+					var x = Math.random() * graph.width + radius;
+					var y = Math.random() * graph.height + radius;
 
 					for(var j=i+1;j<balls.length;j++) {
 						var b2= balls[j];
@@ -164,7 +168,7 @@
 							}
 						}
 						var x = b1.x() + b1.vx;
-						var maxX = b1.graph.width() - b1.radius ;
+						var maxX = b1.graph.width - b1.radius ;
 						if(x <= b1.radius || x >= maxX) {							
 							//b1.vy -= 0.4;
 							b1.vx *= -1;							
@@ -173,7 +177,7 @@
 						x = Math.min(maxX,x);
 						b1.x(x);
 						var y = b1.y() + b1.vy;
-						var maxY = b1.graph.height() - b1.radius;
+						var maxY = b1.graph.height - b1.radius;
 						if(y <= b1.radius || y >= maxY) {
 							//if(y >= maxY && b1.vy > 0) {b1.vy -= 1;b1.vx -= 0.4;}
 							b1.vy *= -1;
@@ -182,14 +186,15 @@
 						y = Math.min(maxY,y);
 						b1.y(y);						
 					}
+					graph.neadUpdate = true;
 					setTimeout(animate,1);				
 				};
 				animate();		
 			}
 			function resize() {
 				if(graph) {
-					graph.width(window.innerWidth - 10);
-					graph.height(window.innerHeight - 10);
+					graph.width = window.innerWidth - 10;
+					graph.height = window.innerHeight - 10;
 				}	
 			}
 

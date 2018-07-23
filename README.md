@@ -1,7 +1,8 @@
 jmGraph
 =========
 
-基于CANVAS的简单画图组件
+基于CANVAS的简单画图组件  
+`让你用类似于dom的方式，在canvas上画图，感觉会不会很爽。`
 
 主页：[http://graph.jm47.com/](http://graph.jm47.com/)  
 示例：[http://graph.jm47.com/example/index.html](http://graph.jm47.com/example/index.html)

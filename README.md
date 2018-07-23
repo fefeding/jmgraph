@@ -99,7 +99,7 @@ function init(g){
 事件
 ---
 
-事件的绑定`jquery(bind/unbind)`。
+事件的绑定函数：`bind/unbind`  
 示例：
 ```javascript
 //创建一条线

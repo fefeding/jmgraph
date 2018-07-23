@@ -53,6 +53,15 @@
 				this.cursor('default');
 				this.neadUpdate = true;
 			});
+			line.bind('touchstart',function(evt) {
+				console.log('touchstart',evt);
+			});
+			line.bind('touchmove',function(evt) {
+				console.log('touchmove',evt);
+			});
+			line.bind('touchend',function(evt) {
+				console.log('touchend',evt);
+			});
 			line.canMove(true);
 
 			graph.children.add(line);

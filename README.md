@@ -3,7 +3,7 @@ jmGraph
 
 基于CANVAS的简单画图组件
 
-主页:[http://graph.jm47.com/](http://graph.jm47.com/)  
+主页：[http://graph.jm47.com/](http://graph.jm47.com/)  
 示例：[http://graph.jm47.com/example/index.html](http://graph.jm47.com/example/index.html)
 
 入门

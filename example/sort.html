@@ -179,9 +179,9 @@
 				}
 				else if(f.datum) {
 					if(this.datumLine) {
-						var start = this.datumLine.start();
-						var end = this.datumLine.end();
-						start.y = end.y = f.datum.rect.position().y;
+						var start = this.datumLine.start;
+						var end = this.datumLine.end;
+						start.y = end.y = f.datum.rect.position.y;
 						this.datumLine.visible = true;
 					}
 					this.play(callback);
@@ -237,7 +237,7 @@
 				var offy = this.graph.height - 20;
 				for(var i=0;i<arr.length;i++) {	
 					if(arr[i].rect) {
-						var pos = arr[i].rect.position();
+						var pos = arr[i].rect.position;
 						pos.x = this.xStep * i + 10;
 					}
 					else {	

@@ -1297,7 +1297,7 @@ jmUtils.createProperty = function(instance, name, value) {
     var descriptor = {
         configurable: false, //当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false。
         enumerable: true,
-        valueMaps: {},
+        //valueMaps: {},
         name: name,
         defaultValue: value
     };
@@ -1330,11 +1330,8 @@ jmUtils.createProperty = function(instance, name, value) {
             if(this.canvas && ('width' == descriptor.name || 'height' == descriptor.name )) {
                 return this.canvas[descriptor.name];
             }
-
-            if(this.id in descriptor.valueMaps) {
-                return descriptor.valueMaps[this.id];
-            }
-            return descriptor.defaultValue;
+            this.__properties = this.__properties||{};
+            return this.__properties[descriptor.name];
         };
         descriptor.set = function(value) {
             //如果是canvas 则修改其属性
@@ -1342,7 +1339,8 @@ jmUtils.createProperty = function(instance, name, value) {
                 this.canvas[descriptor.name] = value;
             }
             else {
-                descriptor.valueMaps[this.id] = value;
+                this.__properties = this.__properties||{};
+                this.__properties[descriptor.name] = value;
             }
             this.neadUpdate = true;
         };

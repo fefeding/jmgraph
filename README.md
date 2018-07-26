@@ -205,3 +205,12 @@ jmTest.prototype.initPoints = function() {
     return this.points;
 }
 ```
+
+
+
+
+  
+[npm-badge]: https://img.shields.io/npm/v/jmgraph.svg
+[npm-badge-url]: https://www.npmjs.com/package/jmgraph
+[license-badge]: https://img.shields.io/npm/l/jmgraph.svg
+[license-badge-url]: ./LICENSE

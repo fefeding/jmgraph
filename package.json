@@ -1,28 +1,42 @@
 {
-  "family": "jmGraph",
-  "name": "jmGraph",
-  "version": "1.1.0",
-  "description": "一个简单的html5画图库",
+  "family": "jmgraph",
+  "name": "jmgraph",
+  "version": "2.0.0",
+  "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
-  "keywords": ["canvas", "html5"],
-  "author": "fefeding <haofefe@163.com>",
+  "keywords": [
+    "canvas",
+    "html5"
+  ],
+  "author": "jiamao<haofefe@163.com>",
   "engines": {},
   "dependencies": {},
-  "devDependencies": {  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/jiamao/jmgraph.git"
+    "url": "git+https://github.com/jiamao/jmgraph.git"
   },
   "main": "./src/jmGraph.js",
   "spm": {
-    "alias": {
-    },
-    "output": ["main.js"]
+    "alias": {},
+    "output": [
+      "main.js"
+    ]
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": ""
+      "url": "https://github.com/jiamao/jmgraph/blob/master/LICENSE"
     }
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/jiamao/jmgraph/issues"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC"
 }

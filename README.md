@@ -126,3 +126,79 @@ line.bind('mouseover',function(evt) {
 | touchstart | 触控开始 | position: 当前位置
 | touchmove | 触控移动手指 | position: 当前位置
 | touchend | 触控结束 | position: 当前位置
+
+
+自定义控件
+---
+大多数控件直接继承`jmPath`即可，然后通过实现`initPoints`来绘制当前控件。  
+`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  
+
+
+#### 示例
+来画一个X  
+在线示例：[http://graph.jm47.com/example/controls/test.html](http://graph.jm47.com/example/controls/test.html)
+```javascript
+function jmTest(graph,params) {
+    if(!params) params = {};
+    this.points = params.points || [];
+    var style = params.style || {};
+    
+    this.type = 'jmTest';
+    this.graph = graph;
+        
+    this.center = params.center || {x:0,y:0};
+    this.radius = params.radius || 0;
+
+    this.initializing(graph.context, style);
+}
+jmUtils.extend(jmTest, jmPath);//jmPath
+
+//定义属性
+
+/**
+ * 中心点
+ * point格式：{x:0,y:0,m:true}
+ * @property center
+ * @type {point}
+ */
+jmUtils.createProperty(jmTest.prototype, 'center');
+
+/**
+ * 半径
+ * @property radius
+ * @type {number}
+ */
+jmUtils.createProperty(jmTest.prototype, 'radius', 0);
+
+
+/**
+ * 初始化图形点
+ * 控件都是由点形成
+ * 
+ * @method initPoint
+ * @private
+ * @for jmArc
+ */
+jmTest.prototype.initPoints = function() {
+    //可以获取当前控件的左上坐标，可以用来画相对位置
+    var location = this.getLocation();//获取位置参数
+    
+    var cx = location.center.x ;
+    var cy = location.center.y ;
+    
+    this.points = [];
+
+    //简单的画一个X
+
+    //根据半径计算x,y偏移量
+    //由于是圆，偏移量相同
+    var offw = Math.sqrt(location.radius * location.radius / 2);
+    //左上角到右下角对角线
+    this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
+
+    //左下角到右上角对角线
+    this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
+
+    return this.points;
+}
+```

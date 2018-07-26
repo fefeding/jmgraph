@@ -495,7 +495,7 @@ function jmGraphTypeInit(option, callback) {
 
 			//如果当前对象没有继承过，是直接继承
 			if(self.type == 'jmGraph') {
-				jmUtils.extend(self, new jmControl());	
+				self.__proto__.__proto__ = new jmControl();
 			}
 		}
 

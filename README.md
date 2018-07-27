@@ -200,6 +200,7 @@ jmTest.prototype.initPoints = function() {
     this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
 
     //左下角到右上角对角线
+    //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
     this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
 
     return this.points;

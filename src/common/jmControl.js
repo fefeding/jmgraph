@@ -407,8 +407,8 @@ jmControl.prototype.getLocation = function(reset) {
 	//if(reset !== true && this.location) return this.location;
 
 	var local = this.location = {left:0,top:0,width:0,height:0};
-	var p = typeof this.position == 'function'? this.position(): this.position;	
-	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center()): this.center;//中心
+	var p = typeof this.position == 'function'? this.position: this.position;	
+	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center): this.center;//中心
 	local.radius = this.radius;//半径
 	local.width = this.width;
 	local.height = this.height;
@@ -525,28 +525,30 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 	var location = this.getLocation(true);
 	
 	var offseted = false;
-	if(this.center) {		
-		var center = typeof this.center == 'function'?this.center():this.center;
-		if(center) {			
-			center.x = location.center.x + x;
-			center.y = location.center.y + y;
-			//this.center(center);
-			offseted = true;
-		}			
-	}
-	if(offseted == false && this.position) {
-		var p = typeof this.position == 'function'?this.position():this.position;
+	
+	if(this.position) {
+		var p = typeof this.position == 'function'?this.position:this.position;
 		if(p) {
 			location.left += x;
 			location.top += y;
 			p.x = location.left;
 			p.y = location.top;
-			//this.position(p);
 			offseted = true;
 		}			
 	}
+
+	if(offseted == false && this.center) {		
+		var center = typeof this.center == 'function'?this.center:this.center;
+		if(center) {			
+			center.x = location.center.x + x;
+			center.y = location.center.y + y;
+			offseted = true;
+		}			
+	}
+
+
 	if(offseted == false && this.cpoints) {
-		var p = typeof this.cpoints == 'function'?this.cpoints():this.cpoints;
+		var p = typeof this.cpoints == 'function'?this.cpoints:this.cpoints;
 		if(p) {			
 			var len = p.length;
 			for(var i=0; i < len;i++) {

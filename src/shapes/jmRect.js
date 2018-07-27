@@ -26,6 +26,7 @@ function jmRect(graph,params) {
 	this.width = params.width || 0;
 	this.height = params.height  || 0;
 	this.radius = params.radius || style.radius || 0;
+	this.graph = graph;
 
 	this.initializing(graph.context,style);
 }
@@ -103,27 +104,27 @@ jmRect.prototype.initPoints = function() {
 	if(location.radius && location.radius < location.width/2 && location.radius < location.height/2) {
 		var q = Math.PI / 2;
 		var arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
-		arc.center({x:location.left + location.radius,y:location.top+location.radius});
-		arc.startAngle(Math.PI);
-		arc.endAngle(Math.PI + q);
+		arc.center = {x:location.left + location.radius,y:location.top+location.radius};
+		arc.startAngle = Math.PI;
+		arc.endAngle = Math.PI + q;
 		var ps1 = arc.initPoints();
 		
 		arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
-		arc.center({x:p2.x - location.radius,y:p2.y + location.radius});
-		arc.startAngle(Math.PI + q);
-		arc.endAngle(Math.PI * 2);
+		arc.center = {x:p2.x - location.radius,y:p2.y + location.radius};
+		arc.startAngle = Math.PI + q;
+		arc.endAngle = Math.PI * 2;
 		var ps2 = arc.initPoints();
 		
 		arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
-		arc.center({x:p3.x - location.radius,y:p3.y - location.radius});
-		arc.startAngle(0);
-		arc.endAngle(q);
+		arc.center = {x:p3.x - location.radius,y:p3.y - location.radius};
+		arc.startAngle = 0;
+		arc.endAngle = q;
 		var ps3 = arc.initPoints();
 		
 		arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
-		arc.center({x:p4.x + location.radius,y:p4.y - location.radius});
-		arc.startAngle(q);
-		arc.endAngle(Math.PI);
+		arc.center = {x:p4.x + location.radius,y:p4.y - location.radius};
+		arc.startAngle = q;
+		arc.endAngle = Math.PI;
 		var ps4 = arc.initPoints();
 		this.points = ps1.concat(ps2,ps3,ps4);
 	}
@@ -132,29 +133,29 @@ jmRect.prototype.initPoints = function() {
 		this.points.push(p1);
 		//如果是虚线
 		if(this.dottedLine) {
-			this.dottedLine.start(p1);
-			this.dottedLine.end(p2);
+			this.dottedLine.start = p1;
+			this.dottedLine.end = p2;
 			this.points = this.points.concat(this.dottedLine.initPoints());
 		}
 		this.points.push(p2);
 		//如果是虚线
 		if(this.dottedLine) {
-			this.dottedLine.start(p2);
-			this.dottedLine.end(p3);
+			this.dottedLine.start = p2;
+			this.dottedLine.end = p3;
 			this.points = this.points.concat(this.dottedLine.initPoints());
 		}
 		this.points.push(p3);
 		//如果是虚线
 		if(this.dottedLine) {
-			this.dottedLine.start(p3);
-			this.dottedLine.end(p4);
+			this.dottedLine.start = p3;
+			this.dottedLine.end = p4;
 			this.points = this.points.concat(this.dottedLine.initPoints());
 		}
 		this.points.push(p4);
 		//如果是虚线
 		if(this.dottedLine) {
-			this.dottedLine.start(p4);
-			this.dottedLine.end(p1);
+			this.dottedLine.start = p4;
+			this.dottedLine.end = p1;
 			this.points = this.points.concat(this.dottedLine.initPoints());
 		}
 	}		

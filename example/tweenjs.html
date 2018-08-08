@@ -75,11 +75,12 @@
     arc.children.add(childarc);	
     
     createjs.Tween.get(childarc, { loop: true })
-        .to({ startAngle: Math.PI*2, endAngle: Math.PI*2 }, 1000, createjs.Ease.getPowInOut(4));
+        .to({ startAngle: Math.PI*2, endAngle: Math.PI*7/3 }, 5000, createjs.Ease.getPowInOut(2))
+        .to({ startAngle: 0, endAngle: Math.PI / 3 }, 5000, createjs.Ease.getPowInOut(4));
 
     createjs.Tween.get(arc.center, { loop: true })
-        .to({ x: graph.width - 200}, 2000, createjs.Ease.getPowInOut(2))
-        .to({ x: 250}, 2000, createjs.Ease.getPowInOut(2));
+        .to({ x: graph.width - 200}, 5000, createjs.Ease.getPowInOut(2))
+        .to({ x: 250}, 5000, createjs.Ease.getPowInOut(4));
     
 }
 </script>

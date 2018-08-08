@@ -98,6 +98,7 @@ function init(g){
 | textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
 | lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
 | lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
+| zIndex | - | 控件层级，同级节点值越大层级越高
 
 
 事件
@@ -130,14 +131,172 @@ line.bind('mouseover',function(evt) {
 | touchmove | 触控移动手指 | position: 当前位置
 | touchend | 触控结束 | position: 当前位置
 
-
-自定义控件
+控件
 ---
+
+#### Path
+`path`是多数图形的基类，可以指定一个points数组来绘制一个路径。  
+[在线示例](http://graph.jm47.com/example/controls/line.html)
+
+```javascript
+var path = graph.createPath(null,style);
+path.points.push({x:10,y:10});
+path.points.push({x:10,y:60});
+path.points.push({x:80,y:20});
+path.points.push({x:90,y:80});
+path.points.push({x:80,y:80});
+```
+#### 圆
+`arc`可以创建椭圆、圆弧和圆，circle调用的是原生的arc函数绘制，harc可以绘制一个圆环。
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/arc.html)
+
+```javascript
+//创建一个椭圆，指定不同的宽高就为椭圆。如果相同或指定半径则为圆。
+var arc1 = g.createShape('arc', {
+    style: style,
+    center: {x:100, y:150},
+    width: 120,
+    height: 80
+});		
+```
+
+#### 箭头
+`arraw`为创建一个箭头，
+`arrawline`是一条带箭头的直线。  
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/arrawline.html)
+
+```javascript
+//带箭头的直线
+var shape = g.createShape('arrawline',{
+    style:style,
+    start: {x:100,y:100},
+    end: {x: 200, y: 350}
+});	
+//一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
+var arraw = g.createShape('arraw',{
+    style:style,
+    start: {x:150, y:120},
+    end: {x: 160, y: 150}
+    //angle: Math.PI/2, //箭头角度  可以不填
+    //offsetX: 5, //箭头X偏移量
+    //offsetY: 8 //箭头Y偏移量
+});	
+```
+
+#### 贝塞尔曲线
+`bezier`可以指定无隐个控制点，绘制复杂的曲线。
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/bezier.html)
+
+```javascript
+//一个固定的bezier曲线
+var bezier = g.createShape('bezier', { style: style, points: [p0, p1, p2, p3, p4] });
+```
+
+#### 图片
+`img`是用来承载一张图片的控件，可以用style.src来指定图片url。
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/img.html)
+
+```javascript
+var style = {
+    src: 'http://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+};
+style.shadow = '0,0,10,#fff';
+//style.opacity = 0.2;		
+
+//创建一个image
+var img = g.createShape('image',{
+    style:style,
+    position: {x:100,y:100}
+});	
+//设置图片可以用鼠标移动		
+img.canMove(true);
+```
+
+#### 文字
+`label`可以用来绘制文字，通过style指定样式。
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/label.html)
+
+```javascript
+var style = {
+    stroke: '#effaaa',
+    fill: '#fff',
+    textAlign: 'center', //水平居中
+    textBaseline: 'middle', //垂直居中
+    font: '20px Arial',
+    border: {left:1,top:1,right:1,bottom:1}, //边框
+    shadow: '0,0,10,#fff'
+};
+//style.opacity = 0.2;		
+
+//创建一个label
+var label = g.createShape('label',{
+    style:style,
+    position:{x:200,y:150},
+    text:'test label',
+    width:120,
+    height:80
+});		
+```
+
+#### 棱形
+`prismatic`  
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/prismatic.html)
+
+```javascript
+var prismatic = g.createShape('prismatic',{
+    style:style,
+    center:{x:200,y:150},
+    width:120,
+    height:80
+});		
+```
+
+#### 可缩放控件
+`resize` 可以自由放大缩小的控件。 
+具体请参考示例。
+[在线示例](http://graph.jm47.com/example/controls/resize.html)
+
+```javascript
+var style = {
+    stroke: 'red',
+    fill: 'yellow',
+    lineWidth: 2, //边线宽
+    //小方块样式
+    rectStyle: {
+        stroke: 'green', //小方块边颜色
+        fill: 'transparent',//小方块填充色
+        lineWidth: 1, //小方块线宽
+        close: true
+    }
+};
+//style.opacity = 0.2;		
+
+//创建一个resize
+var resize = g.createShape('resize', {
+    style: style,
+    position: {x:200, y:150},
+    width: 120,
+    height: 80
+});	
+//大小改变事件
+resize.on('resize', function() {
+    console.log(arguments);
+});	
+```
+
+#### 自定义控件
+
 大多数控件直接继承`jmPath`即可，然后通过实现`initPoints`来绘制当前控件。  
 `当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  
 
 
-#### 示例
+##### 示例
 来画一个X  
 在线示例：[http://graph.jm47.com/example/controls/test.html](http://graph.jm47.com/example/controls/test.html)
 ```javascript

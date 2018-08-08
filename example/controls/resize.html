@@ -62,7 +62,11 @@
                 position: {x:200, y:150},
                 width: 120,
                 height: 80
-            });		
+			});	
+			//大小改变事件
+			resize.on('resize', function() {
+				console.log(arguments);
+			});	
 			resize.canMove(true);
             g.children.add(resize);           
             

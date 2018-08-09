@@ -10,6 +10,13 @@ jmGraph
 主页：[http://graph.jm47.com/](http://graph.jm47.com/)  
 示例：[http://graph.jm47.com/example/index.html](http://graph.jm47.com/example/index.html)
 
+安装
+---
+直接从github下载包或npm安装
+```
+npm install jmgraph
+```
+
 入门
 --------
 

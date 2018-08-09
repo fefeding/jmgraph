@@ -29,18 +29,18 @@ jmUtils.createProperty(jmObject.prototype, 'id', {
 
 /**
  * 是否需要刷新画板，属性的改变会导致它变为true
- * @property neadUpdate
+ * @property needUpdate
  * @type {object}
  */
-jmUtils.createProperty(jmObject.prototype, 'neadUpdate', {
+jmUtils.createProperty(jmObject.prototype, 'needUpdate', {
 	get: function() {
-		return this.__neadUpdate;
+		return this.__needUpdate;
 	},
 	set: function(v) {
-		this.__neadUpdate = v;
+		this.__needUpdate = v;
 		//子控件属性改变，需要更新整个画板
 		if(v && !this.is('jmGraph') && this.graph) {
-			this.graph.__neadUpdate = true;
+			this.graph.__needUpdate = true;
 		}
 	}
 });

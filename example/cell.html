@@ -41,7 +41,7 @@
 
 				//实时更新画布
 				function update() {
-					if(g.neadUpdate) g.redraw();
+					if(g.needUpdate) g.redraw();
 					requestAnimationFrame(update);
 				}
 				update();
@@ -205,7 +205,7 @@
 						y = Math.min(maxY,y);
 						b1.y(y);						
 					}	
-					graph.neadUpdate = true;	
+					graph.needUpdate = true;	
 					setTimeout(animate,20);				
 				};
 				animate();		
@@ -217,7 +217,7 @@
 				if(graph) {
 					graph.width = document.getElementById('mycanvas').clientWidth;
 					graph.height = document.getElementById('mycanvas').clientHeight;
-					graph.neadUpdate = true;	
+					graph.needUpdate = true;	
 				}	
 			}
 
@@ -258,7 +258,7 @@
 					this.vx = (this.vx * r - mc.vx * mc.radius()) / this.radius();
 					this.vy = (this.vy * r - mc.vy * mc.radius()) / this.radius();
 
-					this.graph.neadUpdate = true; 
+					this.graph.needUpdate = true; 
 				}
 				this.x = function(x) {
 					if(typeof x !== 'undefined') this.center.x = x;	

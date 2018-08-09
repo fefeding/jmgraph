@@ -22,7 +22,7 @@
 
 		//实时更新画布
 		function update() {
-			if(g.neadUpdate) g.redraw();
+			if(g.needUpdate) g.redraw();
 			requestAnimationFrame(update);
 		}
 		update();
@@ -102,7 +102,7 @@
 					bluestop = bluedir == 0?bluestop + 0.01:bluestop-0.01;
 
 					arc.style.fill='radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue '+bluestop+', yellow '+yellowstop+', red 1)';
-					graph.neadUpdate = true;		
+					graph.needUpdate = true;		
 				}				
 				arc.children.add(childarc);				
 				childarc.animate(arcAni,10);

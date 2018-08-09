@@ -672,8 +672,12 @@ jmUtils.getElementPosition = function(el) {
 jmUtils.getEventPosition = function(evt,scale) {
     evt = evt || event;
     
+    var isTouch = false;
     var touches = evt.changedTouches || evt.targetTouches || evt.touches;
-    if(touches) evt = touches[0];//兼容touch事件
+    if(touches) {
+        evt = touches[0];//兼容touch事件
+        isTouch = true;
+    }
     var px = evt.pageX || 
         (evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));    
     var py = evt.pageY || 
@@ -703,7 +707,8 @@ jmUtils.getEventPosition = function(evt,scale) {
         screenX:evt.screenX,
         screenY:evt.screenY,
         x : ox,
-        y : oy
+        y : oy,
+        isTouch: isTouch
     };
 }
 
@@ -1342,7 +1347,7 @@ jmUtils.createProperty = function(instance, name, value) {
                 this.__properties = this.__properties||{};
                 this.__properties[descriptor.name] = value;
             }
-            this.neadUpdate = true;
+            this.needUpdate = true;
         };
     }
     //给对象定义一个属性

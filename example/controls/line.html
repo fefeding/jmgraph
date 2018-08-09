@@ -21,7 +21,7 @@
 			init(g);
 
 			function update() {
-				if(g.neadUpdate) g.redraw();
+				if(g.needUpdate) g.redraw();
 				requestAnimationFrame(update);
 			}
 
@@ -46,12 +46,12 @@
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
 				this.cursor('pointer');
-				this.neadUpdate = true;
+				this.needUpdate = true;
 			});
 			line.bind('mouseleave',function(evt) {
 				this.style.stroke = 'rgb(120,20,80)';
 				this.cursor('default');
-				this.neadUpdate = true;
+				this.needUpdate = true;
 			});
 			line.bind('touchstart',function(evt) {
 				console.log('touchstart',evt);
@@ -80,12 +80,12 @@
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
 				//graph.canvas.style.cursor = 'pointer';
-				this.neadUpdate = true;
+				this.needUpdate = true;
 			});
 			line.bind('mouseleave',function(evt) {
 				this.style.stroke = 'rgb(120,20,80)';
 				//graph.canvas.style.cursor = 'default';
-				this.neadUpdate = true;
+				this.needUpdate = true;
 			});
 			line.canMove(true);
 			
@@ -122,13 +122,13 @@
 
 			path.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
-				this.neadUpdate = true;
+				this.needUpdate = true;
 				//graph.canvas.style.cursor = 'pointer';
 				
 			});
 			path.bind('mouseleave',function(evt) {					
 				this.style.stroke = 'rgb(120,20,80)';
-				this.neadUpdate = true;
+				this.needUpdate = true;
 				//graph.canvas.style.cursor = 'default';
 			});
 			

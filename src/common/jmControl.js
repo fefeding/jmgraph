@@ -91,7 +91,7 @@ jmControl.prototype.initializing = function(context,style) {
 			oadd.call(this,obj);
 			obj.emit('add',obj);
 
-			self.neadUpdate = true;
+			self.needUpdate = true;
 			return obj;
 		}
 	};
@@ -102,7 +102,7 @@ jmControl.prototype.initializing = function(context,style) {
 			obj.parent = null;
 			obj.remove(true);
 			this.oremove(obj);
-			self.neadUpdate = true;
+			self.needUpdate = true;
 		}
 	};
 	/**
@@ -128,7 +128,7 @@ jmControl.prototype.initializing = function(context,style) {
 			oadd.call(this,levelItems[index]);
 		}
 
-		self.neadUpdate = true;
+		self.needUpdate = true;
 	}
 	this.children.clear = function() {
 		this.each(function(i,obj) {
@@ -136,7 +136,7 @@ jmControl.prototype.initializing = function(context,style) {
 		},true);
 	}
 
-	this.neadUpdate = true;
+	this.needUpdate = true;
 } 
 
 /**
@@ -571,7 +571,7 @@ jmControl.prototype.offset = function(x, y, trans, evt) {
 	//触发控件移动事件	
 	this.emit('move',{offsetX:x,offsetY:y,trans:trans,evt:evt});
 
-	this.neadUpdate = true;
+	this.needUpdate = true;
 }
 
 /**
@@ -588,7 +588,7 @@ jmControl.prototype.rotate = function(angle, point) {
 		point: point
 	};
 
-	this.neadUpdate = true;
+	this.needUpdate = true;
 }
 
 /**
@@ -645,7 +645,7 @@ jmControl.prototype.endDraw = function() {
 	if(this.style['stroke'] || !this.style['fill']) {
 		this.context.stroke();
 	}
-	this.neadUpdate = false;
+	this.needUpdate = false;
 }
 
 /**
@@ -706,7 +706,7 @@ jmControl.prototype.paint = function(v) {
 		this.emit('endDraw',this);	
 		this.context.restore();
 
-		this.neadUpdate = false;
+		this.needUpdate = false;
 	}
 }
 
@@ -884,7 +884,7 @@ jmControl.prototype.raiseEvent = function(name,args) {
 
 		var srcElement = args.srcElement || args.target;
 		args = {position:position,
-			button:args.button == 0?1:args.button,
+			button:args.button == 0||position.isTouch?1:args.button,
 			keyCode:args.keyCode || args.charCode || args.which,
 			ctrlKey:args.ctrlKey,
 			cancel : false,

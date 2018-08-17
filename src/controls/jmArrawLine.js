@@ -53,3 +53,7 @@ jmArrawLine.prototype.initPoints = function() {
 	return this.points;
 }
 
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['arrawline'] = jmArrawLine;
+}
+

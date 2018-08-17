@@ -192,3 +192,6 @@ jmRect.prototype.draw = function() {
 	}		
 }*/
 
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['rect'] = jmRect;
+}

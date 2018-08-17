@@ -117,3 +117,7 @@ jmBezier.prototype.offset = function(x,y,trans) {
 		this.getLocation(true);	//重置
 	}
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['bezier'] = jmBezier;
+}

@@ -6,6 +6,9 @@
  * @for jmGraph
  */
 function jmEvents(container,target) {
+
+	var self = this;
+
 	/**
 	 * 鼠标事件勾子
 	 *
@@ -21,6 +24,48 @@ function jmEvents(container,target) {
 	 * @type {class}
 	 */
 	this.keyHandler = new keyEvent(container,target);
+
+	this.touchStart = function(evt) {
+		evt = evt || window.event;
+		container.raiseEvent('touchstart',evt);
+		var t = evt.target || evt.srcElement;
+		if(t == target) {
+			if(evt.preventDefault) evt.preventDefault();
+			return false;
+		}
+	};
+
+	this.touchMove = function(evt) {
+		evt = evt || window.event;
+		container.raiseEvent('touchmove',evt);
+		var t = evt.target || evt.srcElement;
+		if(t == target) {
+			if(evt.preventDefault) evt.preventDefault();
+			return false;
+		}
+	};
+
+	this.touchEnd = function(evt) {
+		evt = evt || window.event;
+		
+		container.raiseEvent('touchend',evt);
+		var t = evt.target || evt.srcElement;
+		if(t == target) {
+			if(evt.preventDefault) evt.preventDefault();
+			return false;
+		}
+	};
+
+	this.touchCancel = function(evt) {
+		evt = evt || window.event;
+		
+		container.raiseEvent('touchcancel',evt);
+		var t = evt.target || evt.srcElement;
+		if(t == target) {
+			if(evt.preventDefault) evt.preventDefault();
+			return false;
+		}
+	};	
 	
 	/**
 	 * 鼠标事件处理对象，container 为事件主体，target为响应事件对象
@@ -30,6 +75,7 @@ function jmEvents(container,target) {
 		this.target = target || container;
 		this.init = function() {
 			var canvas = this.target;	
+			var hasDocment = typeof document != 'undefined';
 			//禁用鼠标右健系统菜单
 			//canvas.oncontextmenu = function() {
 			//	return false;
@@ -44,7 +90,7 @@ function jmEvents(container,target) {
 				//}				
 			});
 			
-			jmUtils.bindEvent(window.document,'mousemove',function(evt) {	
+			hasDocment && jmUtils.bindEvent(document,'mousemove',function(evt) {	
 				evt = evt || window.event;		
 				var target = evt.target || evt.srcElement;
 				if(target == canvas) {
@@ -68,7 +114,7 @@ function jmEvents(container,target) {
 				evt = evt || window.event;
 				container.raiseEvent('mouseout',evt);
 			});
-			jmUtils.bindEvent(window.document,'mouseup',function(evt) {
+			hasDocment && jmUtils.bindEvent(document,'mouseup',function(evt) {
 				evt = evt || window.event;
 				//var target = evt.target || evt.srcElement;
 				//if(target == canvas) {						
@@ -89,43 +135,27 @@ function jmEvents(container,target) {
 				container.raiseEvent('click',evt);
 			});
 
-			jmUtils.bindEvent(document,'resize',function(evt) {
+			hasDocment && jmUtils.bindEvent(document,'resize',function(evt) {
 				evt = evt || window.event;
 				return container.raiseEvent('resize',evt);
 			});
 
 			// passive: false 为了让浏览器不告警并且preventDefault有效
 			// 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
-			jmUtils.bindEvent(window.document,'touchstart',function(evt) {
-				evt = evt || window.event;
-				//evt.preventDefault();
-				container.raiseEvent('touchstart',evt);
-				var target = evt.target || evt.srcElement;
-				if(target == canvas) {
-					if(evt.preventDefault) evt.preventDefault();
-					return false;
-				}
+			hasDocment && jmUtils.bindEvent(document,'touchstart', function(evt) {
+				return self.touchStart.call(this, evt);
 			},{ passive: false });
 
-			jmUtils.bindEvent(window.document,'touchmove',function(evt) {
-				evt = evt || window.event;
-				var target = evt.target || evt.srcElement;
-				if(target == canvas) {
-					container.raiseEvent('touchmove',evt);
-					if(evt.preventDefault) evt.preventDefault();
-					return false;
-				}
+			hasDocment && jmUtils.bindEvent(document,'touchmove', function(evt) {
+				return self.touchMove.call(this, evt);
 			},{ passive: false });
 
-			jmUtils.bindEvent(window.document,'touchend',function(evt) {
-				evt = evt || window.event;
-				
-				container.raiseEvent('touchend',evt);
-				var target = evt.target || evt.srcElement;
-				if(target == canvas) {
-					if(evt.preventDefault) evt.preventDefault();
-					return false;
-				}
+			hasDocment && jmUtils.bindEvent(document,'touchend', function(evt) {
+				return self.touchEnd.call(this, evt);
+			},{ passive: false });
+
+			hasDocment && jmUtils.bindEvent(document,'touchcancel', function(evt) {
+				return self.touchCancel.call(this, evt);
 			},{ passive: false });
 		}
 		this.init();
@@ -163,7 +193,9 @@ function jmEvents(container,target) {
 		 * 初始化健盘事件
 		 */
 		this.init = function() {
-			jmUtils.bindEvent(document,'keypress',function(evt) {
+			var hasDocment = typeof document != 'undefined';
+
+			hasDocment && jmUtils.bindEvent(document,'keypress',function(evt) {
 				evt = evt || window.event;
 				if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
 				var r = container.raiseEvent('keypress',evt);
@@ -171,7 +203,7 @@ function jmEvents(container,target) {
 					evt.preventDefault();
 				return r;
 			});
-			jmUtils.bindEvent(document,'keydown',function(evt) {
+			hasDocment && jmUtils.bindEvent(document,'keydown',function(evt) {
 				evt = evt || window.event;
 				if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
 				var r = container.raiseEvent('keydown',evt);
@@ -179,7 +211,7 @@ function jmEvents(container,target) {
 					evt.preventDefault();
 				return r;
 			});
-			jmUtils.bindEvent(document,'keyup',function(evt) {
+			hasDocment && jmUtils.bindEvent(document,'keyup',function(evt) {
 				evt = evt || window.event;
 				if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
 				var r = container.raiseEvent('keyup',evt);

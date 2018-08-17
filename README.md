@@ -374,7 +374,78 @@ jmTest.prototype.initPoints = function() {
 ```
 
 
+#### 微信小程序支持
+微信小程序稍有差别，因为无需压缩，请直接把`dist`中的`jmgraph.js`合并后的文件引用到你的小程序中。
 
+#####示例
+`wxml`
+```html
+<canvas style="width: 400px; height: 600px;background:#000;" canvas-id="mycanvas" bindtouchstart="canvastouchstart" bindtouchmove="canvastouchmove" bindtouchend="canvastouchend" bindtouchcancel="canvastouchcancel"></canvas>
+```
+`javascript`
+```javascript
+/**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    
+    //这里引用jmgraph
+    let jmGraph = require('../../utils/jmgraph');
+
+    var self = this;
+
+    jmGraph('mycanvas', {
+      width: 400,
+      height: 600
+    }).then((g) => {
+      init(g)
+    });
+
+    function init(g) {
+      //g.style.fill = '#000'; //画布背景
+      var style = {
+        stroke: '#46BF86',
+        fill: '#556662',
+        lineWidth: 2
+      };
+      style.shadow = '0,0,10,#fff';
+      //style.opacity = 0.2;			
+      //style.lineCap = 'round';
+
+      //创建一个方块
+      var rect = g.createShape('rect', {
+        style: style,
+        position: { x: 100, y: 100 },
+        width: 100,
+        height: 100
+      });
+      rect.canMove(true);
+      g.children.add(rect);
+
+      function update() {
+        if (g.needUpdate) g.redraw();
+        requestAnimationFrame(update);
+      }
+
+      update();
+
+      //初始化jmGraph事件
+      //把小程序中的canvas事件交给jmGraph处理
+      self.canvastouchstart = function() {
+        return g.eventHandler.touchStart.apply(this, arguments);
+      }
+      self.canvastouchmove = function() {
+        return g.eventHandler.touchMove.apply(this, arguments);
+      }
+      self.canvastouchend = function() {
+        return g.eventHandler.touchEnd.apply(this, arguments);
+      }
+      self.canvastouchcancel = function() {
+        return g.eventHandler.touchCancel.apply(this, arguments);
+      }
+    }
+  }
+```
 
   
 [npm-badge]: https://img.shields.io/npm/v/jmgraph.svg

@@ -162,3 +162,7 @@ jmImage.prototype.getImage = function() {
 	}
 	return this.__img;
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['image'] = jmImage;
+}

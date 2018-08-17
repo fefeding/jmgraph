@@ -76,3 +76,8 @@ jmCircle.prototype.draw = function() {
 	//context.arc(x,y,r,sAngle,eAngle,counterclockwise);
 	this.context.arc(location.center.x + bounds.left,location.center.y + bounds.top, location.radius, start,end,anticlockwise);
 }
+
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['circle'] = jmCircle;
+}

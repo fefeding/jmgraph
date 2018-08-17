@@ -159,3 +159,6 @@ jmLabel.prototype.draw = function() {
 	
 }
 
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['label'] = jmLabel;
+}

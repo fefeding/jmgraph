@@ -645,6 +645,9 @@ jmControl.prototype.endDraw = function() {
 	if(this.style['stroke'] || !this.style['fill']) {
 		this.context.stroke();
 	}
+	//兼容小程序
+	if(this.context.draw) this.context.draw();
+
 	this.needUpdate = false;
 }
 

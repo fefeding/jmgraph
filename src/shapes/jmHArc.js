@@ -139,3 +139,7 @@ jmHArc.prototype.initPoints = function() {
 	}		
 	this.points = minps.concat(maxps);
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['harc'] = jmHArc;
+}

@@ -133,3 +133,7 @@ jmArraw.prototype.initPoints = function(solid) {
     
 	return this.points;
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['arraw'] = jmArraw;
+}

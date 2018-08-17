@@ -30,22 +30,29 @@ function jmGraph(canvas, option, callback) {
 		
 		this.option = option||{};
 
-		if(typeof canvas === 'string') {
-			canvas = document.getElementById(canvas);
+		//如果是小程序
+		if(typeof wx != 'undefined' && wx.createCanvasContext) {
+			this.context = wx.createCanvasContext(canvas);
 		}
-		else if(canvas.length) {
-			canvas = canvas[0];
+		else {
+			if(typeof canvas === 'string' && typeof document != 'undefined') {
+				canvas = document.getElementById(canvas);
+			}
+			else if(canvas.length) {
+				canvas = canvas[0];
+			}
+			if(canvas.tagName != 'CANVAS') {
+				var cn = document.createElement('canvas');
+				canvas.appendChild(cn);
+				cn.width = canvas.offsetWidth||canvas.clientWidth;
+				cn.height = canvas.offsetHeight||canvas.clientHeight;
+				canvas = cn;
+			}	
+
+			this.context = canvas.getContext('2d');
 		}
-		if(canvas.tagName != 'CANVAS') {
-			var cn = document.createElement('canvas');
-			canvas.appendChild(cn);
-			cn.width = canvas.offsetWidth||canvas.clientWidth;
-			cn.height = canvas.offsetHeight||canvas.clientHeight;
-			canvas = cn;
-		}		
 
 		this.canvas = canvas;
-		this.context = canvas.getContext('2d');
 
 		jmGraphTypeInit.call(this, option, function() {
 			this.init(callback);
@@ -399,6 +406,12 @@ function jmGraphTypeInit(option, callback) {
 	var graphBaseUrl = option.baseUrl || '';//当前graph.js的路径
 	//加载组件
 	function loadComponent(obj, cb) {
+		//如果是小程序
+		if(typeof wx != 'undefined' && wx.createCanvasContext) {			
+			cb && cb(1);
+			return;
+		}
+
 		if(!graphBaseUrl) {
 			//获取当前graph路径
             var sc = document.getElementsByTagName('script');
@@ -494,13 +507,18 @@ function jmGraphTypeInit(option, callback) {
 			jmUtils.extend(jmGraph, jmControl);	
 
 			//如果当前对象没有继承过，是直接继承
-			if(self.type == 'jmGraph') {
+			if(self && self.type == 'jmGraph') {
 				self.__proto__.__proto__ = new jmControl();
 			}
 		}
 
 		callback && callback.call(self);
 	});
+}
+
+//如果是小程序
+if(typeof module != 'undefined') {
+	module.exports = jmGraph;
 }
 
 

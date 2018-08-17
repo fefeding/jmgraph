@@ -635,9 +635,11 @@ jmUtils.removeEvent = function(target,name,fun) {
  * @param {element} el 目标元素对象
  * @return {position} 位置对象(top,left)
  */
-jmUtils.getElementPosition = function(el) {
-    if(!el) return ;
+jmUtils.getElementPosition = function(el) {    
     var pos = {"top":0, "left":0};
+
+    if(!el) return pos;
+
     if(false && document.documentElement && el.getBoundingClientRect) {
         var rect = el.getBoundingClientRect();
         pos.top = document.documentElement.scrollTop + rect.top;
@@ -674,19 +676,21 @@ jmUtils.getEventPosition = function(evt,scale) {
     
     var isTouch = false;
     var touches = evt.changedTouches || evt.targetTouches || evt.touches;
+    var target = evt.target || evt.srcElement;
     if(touches) {
         evt = touches[0];//兼容touch事件
+        evt.target = target;
         isTouch = true;
     }
-    var px = evt.pageX || 
+    var px = evt.pageX || evt.x || 
         (evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));    
-    var py = evt.pageY || 
+    var py = evt.pageY || evt.y || 
         (evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop));
 
     var ox = evt.offsetX;
     var oy = evt.offsetY;
     if(typeof ox === 'undefined' && typeof oy === 'undefined') {
-        var p = jmUtils.getElementPosition(evt.target || evt.srcElement);
+        var p = jmUtils.getElementPosition(target);
         ox= px - p.left;
         oy = py - p.top;
     }

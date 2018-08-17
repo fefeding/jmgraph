@@ -62,3 +62,7 @@ jmPrismatic.prototype.initPoints = function() {
 	this.points.push({x:location.center.x + mw,y:location.center.y});
 	this.points.push({x:location.center.x,y:location.center.y - mh});
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['prismatic'] = jmPrismatic;
+}

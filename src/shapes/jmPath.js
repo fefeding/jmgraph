@@ -83,3 +83,8 @@ jmUtils.createProperty(jmPath.prototype, 'points');
 	return r;
 }*/
 
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['path'] = jmPath;
+}
+

@@ -232,3 +232,7 @@ jmResize.prototype.reset = function(px,py,dx,dy) {
 		}
 	}
 }
+
+if(typeof jmGraph != 'undefined') {
+	jmGraph.prototype.shapes['resize'] = jmResize;
+}

@@ -56,7 +56,8 @@ var config = {
                 "src/shapes/jmRect.js", 
                 "src/controls/*.js"         
             ],
-            "concat": "jmgraph.min.js"
+            "expand": 'min',
+            "concat": "jmgraph.js"
         }
     ],
     "css": [       

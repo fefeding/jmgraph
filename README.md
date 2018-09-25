@@ -2,7 +2,6 @@ jmGraph
 =========
 
 [![Latest NPM release][npm-badge]][npm-badge-url]
-[![License]][license-badge-url]
 
 基于CANVAS的简单画图组件  
 `让你用类似于dom的方式，在canvas上画图，感觉会不会很爽。`

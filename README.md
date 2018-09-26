@@ -429,7 +429,7 @@ jmTest.prototype.initPoints = function() {
 
       function update() {
         if (g.needUpdate) g.redraw();
-        requestAnimationFrame(update);
+        setTimeout(update, 20);
       }
 
       update();

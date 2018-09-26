@@ -29,6 +29,7 @@ function jmGraph(canvas, option, callback) {
 		this.mode = 'canvas';		
 		
 		this.option = option||{};
+		this.util = jmUtils;
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
@@ -3021,8 +3022,10 @@ jmControl.prototype.getLocation = function(reset) {
 	//if(reset !== true && this.location) return this.location;
 
 	var local = this.location = {left:0,top:0,width:0,height:0};
-	var p = typeof this.position == 'function'? this.position: this.position;	
-	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center): this.center;//中心
+	local.position = typeof this.position == 'function'? this.position(): this.position;	
+	local.center = this.center && typeof this.center === 'function'?this.center(): this.center;//中心
+	local.start = this.start && typeof this.start === 'function'?this.start(): this.start;//起点
+	local.end = this.end && typeof this.end === 'function'?this.end(): this.end;//起点
 	local.radius = this.radius;//半径
 	local.width = this.width;
 	local.height = this.height;
@@ -3034,9 +3037,9 @@ jmControl.prototype.getLocation = function(reset) {
 	margin.bottom = margin.bottom || 0;
 	
 	//如果没有指定位置，但指定了margin。则位置取margin偏移量
-	if(p) {
-		local.left = p.x;
-		local.top = p.y;
+	if(local.position) {
+		local.left = local.position.x;
+		local.top = local.position.y;
 	}
 	else {
 		local.left = margin.left;
@@ -3136,28 +3139,34 @@ jmControl.prototype.remove = function() {
  */
 jmControl.prototype.offset = function(x, y, trans, evt) {
 	trans = trans === false?false:true;	
-	var location = this.getLocation(true);
+	var local = this.getLocation(true);
 	
 	var offseted = false;
 	
-	if(this.position) {
-		var p = typeof this.position == 'function'?this.position:this.position;
-		if(p) {
-			location.left += x;
-			location.top += y;
-			p.x = location.left;
-			p.y = location.top;
-			offseted = true;
-		}			
+	if(local.position) {
+		local.left += x;
+		local.top += y;
+		local.position.x = local.left;
+		local.position.y = local.top;
+		offseted = true;
 	}
 
-	if(offseted == false && this.center) {		
-		var center = typeof this.center == 'function'?this.center:this.center;
-		if(center) {			
-			center.x = location.center.x + x;
-			center.y = location.center.y + y;
-			offseted = true;
-		}			
+	if(offseted == false && local.center) {		
+		local.center.x = local.center.x + x;
+		local.center.y = local.center.y + y;
+		offseted = true;
+	}
+
+	if(local.start && typeof local.start == 'object') {	
+		local.start.x = local.start.x + x;
+		local.start.y = local.start.y + y;
+		offseted = true;
+	}
+
+	if(local.end && typeof local.end == 'object') {		
+		local.end.x = local.end.x + x;
+		local.end.y = local.end.y + y;
+		offseted = true;
 	}
 
 

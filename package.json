@@ -1,7 +1,7 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": [

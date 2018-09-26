@@ -29,6 +29,7 @@ function jmGraph(canvas, option, callback) {
 		this.mode = 'canvas';		
 		
 		this.option = option||{};
+		this.util = jmUtils;
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {

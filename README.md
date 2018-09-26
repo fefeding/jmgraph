@@ -379,7 +379,13 @@ jmTest.prototype.initPoints = function() {
 #####示例
 `wxml`
 ```html
-<canvas style="width: 400px; height: 600px;background:#000;" canvas-id="mycanvas" bindtouchstart="canvastouchstart" bindtouchmove="canvastouchmove" bindtouchend="canvastouchend" bindtouchcancel="canvastouchcancel"></canvas>
+<canvas style="width: 400px; height: 600px;background:#000;" 
+    canvas-id="mycanvas" 
+    bindtouchstart="canvastouchstart" 
+    bindtouchmove="canvastouchmove" 
+    bindtouchend="canvastouchend" 
+    bindtouchcancel="canvastouchcancel">
+</canvas>
 ```
 `javascript`
 ```javascript

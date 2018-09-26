@@ -376,7 +376,7 @@ jmTest.prototype.initPoints = function() {
 #### 微信小程序支持
 微信小程序稍有差别，因为无需压缩，请直接把`dist`中的`jmgraph.js`合并后的文件引用到你的小程序中。
 
-#####示例
+##### 示例
 `wxml`
 ```html
 <canvas style="width: 400px; height: 600px;background:#000;" 

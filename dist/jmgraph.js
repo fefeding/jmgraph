@@ -34,6 +34,7 @@ function jmGraph(canvas, option, callback) {
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
 			this.context = wx.createCanvasContext(canvas);
+			canvas = wx.createSelectorQuery().select('#' + canvas);
 		}
 		else {
 			if(typeof canvas === 'string' && typeof document != 'undefined') {
@@ -606,10 +607,15 @@ jmGradient.prototype.toGradient = function(control) {
 	if(jmUtils.checkPercent(y2)) {
 		y2 = jmUtils.percentToNumber(y2) * (location.height || d);
 	}	
+
+	var sx1 = Number(x1) + bounds.left;
+	var sy1 = Number(y1) + bounds.top;
+	var sx2 = Number(x2) + bounds.left;
+	var sy2 = Number(y2) + bounds.top;
 	if(this.type === 'linear') {		
-		gradient = context.createLinearGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,Number(x2) + bounds.left,Number(y2) + bounds.top);	
-		var x = Math.abs(x2-x1);
-		var y = Math.abs(y2-y1);
+		gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);	
+		//var x = Math.abs(x2-x1);
+		//var y = Math.abs(y2-y1);
 		//offsetLine = Math.sqrt(x*x + y*y);
 	}
 	else if(this.type === 'radial') {
@@ -624,7 +630,13 @@ jmGradient.prototype.toGradient = function(control) {
 			r2 = d * r2;
 		}	
 		//offsetLine = Math.abs(r2 - r1);//二圆半径差
-		gradient = context.createRadialGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,r1,Number(x2) + bounds.left,Number(y2) + bounds.top,r2);		
+		//小程序的接口特殊
+		if(context.createCircularGradient) { 
+			gradient = context.createCircularGradient(sx1, sy1, sx2, sy2);
+		}
+		else {
+			gradient = context.createRadialGradient(sx1, sy1,r1, sx2, sy2,r2);	
+		}	
 	}
 	//颜色渐变
 	this.stops.each(function(i,s) {	
@@ -5104,15 +5116,18 @@ jmImage.prototype.getBounds = function() {
  */
 jmImage.prototype.getImage = function() {
 	var src = this.image || this.style.src || this.style.image;
-	if(this.__img && this.__img.src.indexOf(src) != -1) {
+	if(this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
 		return this.__img;
 	}
 	else if(src && src.src) {
 		this.__img = src;
 	}
-	else {
+	else if(document && document.createElement) {
 		this.__img = document.createElement('img');
 		if(src && typeof src == 'string') this.__img.src = src;
+	}
+	else {
+		this.__img = src;
 	}
 	return this.__img;
 }

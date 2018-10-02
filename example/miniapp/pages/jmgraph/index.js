@@ -5,7 +5,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    shapes: [
+      { name: 'rect', value: 'base', checked: 'true'},
+      { name: 'bezier', value: 'bezier'  },
+      { name: 'resize', value: 'resize' },
+      { name: 'ball', value: '球' },
+      { name: 'cell', value: '孢子' },
+      { name: 'sort', value: '排序' },
+    ]
   },
 
   /**
@@ -29,7 +36,7 @@ Page({
         fill: '#000'
       }
     }).then((g) => {
-      init(g)
+      self.initGraph(g);
     });
 		/*var g = new jmGraph(container, {
 			width: 800,
@@ -38,34 +45,49 @@ Page({
 				fill: '#000'
 			}
 		});
-		init(g);*/
+		this.initGraph(g);;*/
+  },
 
-    function init(g) {      
+  initGraph: function(g) {
+    function update() {
+      if (g.needUpdate) g.redraw();
+      setTimeout(update, 20);
+    }  
+    this.graph = g;    
+    update();
 
-      function update() {
-        if (g.needUpdate) g.redraw();
-        requestAnimationFrame(update);
-      }
+    this.changeShape('rect');//默认显示
 
-      var rect = require('rect');
-      rect.init(g);
-      update();
-
-      //初始化jmGraph事件
-      //把小程序中的canvas事件交给jmGraph处理
-      self.canvastouchstart = function() {
-        return g.eventHandler.touchStart.apply(this, arguments);
-      }
-      self.canvastouchmove = function() {
-        return g.eventHandler.touchMove.apply(this, arguments);
-      }
-      self.canvastouchend = function() {
-        return g.eventHandler.touchEnd.apply(this, arguments);
-      }
-      self.canvastouchcancel = function() {
-        return g.eventHandler.touchCancel.apply(this, arguments);
-      }
+    //初始化jmGraph事件
+    //把小程序中的canvas事件交给jmGraph处理
+    this.canvastouchstart = function () {
+      return g.eventHandler.touchStart.apply(this, arguments);
     }
+    this.canvastouchmove = function () {
+      return g.eventHandler.touchMove.apply(this, arguments);
+    }
+    this.canvastouchend = function () {
+      return g.eventHandler.touchEnd.apply(this, arguments);
+    }
+    this.canvastouchcancel = function () {
+      return g.eventHandler.touchCancel.apply(this, arguments);
+    }
+  },
+
+  radioChange: function(e) {
+    console.log(e);
+    //切换示例
+    this.changeShape(e.detail.value);
+  },
+
+  changeShape: function(s) {
+    this.graph.children.clear();
+    if (this.graphShape && this.graphShape.destory) {
+      this.graphShape.destory();
+    }
+    //切换示例
+    this.graphShape = require(s);
+    this.graphShape.init(this.graph);
   },
 
   /**

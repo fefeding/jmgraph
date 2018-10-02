@@ -150,15 +150,18 @@ jmImage.prototype.getBounds = function() {
  */
 jmImage.prototype.getImage = function() {
 	var src = this.image || this.style.src || this.style.image;
-	if(this.__img && this.__img.src.indexOf(src) != -1) {
+	if(this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
 		return this.__img;
 	}
 	else if(src && src.src) {
 		this.__img = src;
 	}
-	else {
+	else if(document && document.createElement) {
 		this.__img = document.createElement('img');
 		if(src && typeof src == 'string') this.__img.src = src;
+	}
+	else {
+		this.__img = src;
 	}
 	return this.__img;
 }

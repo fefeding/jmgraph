@@ -80,10 +80,15 @@ jmGradient.prototype.toGradient = function(control) {
 	if(jmUtils.checkPercent(y2)) {
 		y2 = jmUtils.percentToNumber(y2) * (location.height || d);
 	}	
+
+	var sx1 = Number(x1) + bounds.left;
+	var sy1 = Number(y1) + bounds.top;
+	var sx2 = Number(x2) + bounds.left;
+	var sy2 = Number(y2) + bounds.top;
 	if(this.type === 'linear') {		
-		gradient = context.createLinearGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,Number(x2) + bounds.left,Number(y2) + bounds.top);	
-		var x = Math.abs(x2-x1);
-		var y = Math.abs(y2-y1);
+		gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);	
+		//var x = Math.abs(x2-x1);
+		//var y = Math.abs(y2-y1);
 		//offsetLine = Math.sqrt(x*x + y*y);
 	}
 	else if(this.type === 'radial') {
@@ -98,7 +103,13 @@ jmGradient.prototype.toGradient = function(control) {
 			r2 = d * r2;
 		}	
 		//offsetLine = Math.abs(r2 - r1);//二圆半径差
-		gradient = context.createRadialGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,r1,Number(x2) + bounds.left,Number(y2) + bounds.top,r2);		
+		//小程序的接口特殊
+		if(context.createCircularGradient) { 
+			gradient = context.createCircularGradient(sx1, sy1, sx2, sy2);
+		}
+		else {
+			gradient = context.createRadialGradient(sx1, sy1,r1, sx2, sy2,r2);	
+		}	
 	}
 	//颜色渐变
 	this.stops.each(function(i,s) {	

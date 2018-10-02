@@ -29,10 +29,12 @@ function jmGraph(canvas, option, callback) {
 		this.mode = 'canvas';		
 		
 		this.option = option||{};
+		this.util = jmUtils;
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
 			this.context = wx.createCanvasContext(canvas);
+			canvas = wx.createSelectorQuery().select('#' + canvas);
 		}
 		else {
 			if(typeof canvas === 'string' && typeof document != 'undefined') {
@@ -605,10 +607,15 @@ jmGradient.prototype.toGradient = function(control) {
 	if(jmUtils.checkPercent(y2)) {
 		y2 = jmUtils.percentToNumber(y2) * (location.height || d);
 	}	
+
+	var sx1 = Number(x1) + bounds.left;
+	var sy1 = Number(y1) + bounds.top;
+	var sx2 = Number(x2) + bounds.left;
+	var sy2 = Number(y2) + bounds.top;
 	if(this.type === 'linear') {		
-		gradient = context.createLinearGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,Number(x2) + bounds.left,Number(y2) + bounds.top);	
-		var x = Math.abs(x2-x1);
-		var y = Math.abs(y2-y1);
+		gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);	
+		//var x = Math.abs(x2-x1);
+		//var y = Math.abs(y2-y1);
 		//offsetLine = Math.sqrt(x*x + y*y);
 	}
 	else if(this.type === 'radial') {
@@ -623,7 +630,13 @@ jmGradient.prototype.toGradient = function(control) {
 			r2 = d * r2;
 		}	
 		//offsetLine = Math.abs(r2 - r1);//二圆半径差
-		gradient = context.createRadialGradient(Number(x1) + bounds.left,Number(y1) + bounds.top,r1,Number(x2) + bounds.left,Number(y2) + bounds.top,r2);		
+		//小程序的接口特殊
+		if(context.createCircularGradient) { 
+			gradient = context.createCircularGradient(sx1, sy1, sx2, sy2);
+		}
+		else {
+			gradient = context.createRadialGradient(sx1, sy1,r1, sx2, sy2,r2);	
+		}	
 	}
 	//颜色渐变
 	this.stops.each(function(i,s) {	
@@ -3021,8 +3034,10 @@ jmControl.prototype.getLocation = function(reset) {
 	//if(reset !== true && this.location) return this.location;
 
 	var local = this.location = {left:0,top:0,width:0,height:0};
-	var p = typeof this.position == 'function'? this.position: this.position;	
-	local.center = this.center && typeof this.center === 'function'?jmUtils.clone(this.center): this.center;//中心
+	local.position = typeof this.position == 'function'? this.position(): this.position;	
+	local.center = this.center && typeof this.center === 'function'?this.center(): this.center;//中心
+	local.start = this.start && typeof this.start === 'function'?this.start(): this.start;//起点
+	local.end = this.end && typeof this.end === 'function'?this.end(): this.end;//起点
 	local.radius = this.radius;//半径
 	local.width = this.width;
 	local.height = this.height;
@@ -3034,9 +3049,9 @@ jmControl.prototype.getLocation = function(reset) {
 	margin.bottom = margin.bottom || 0;
 	
 	//如果没有指定位置，但指定了margin。则位置取margin偏移量
-	if(p) {
-		local.left = p.x;
-		local.top = p.y;
+	if(local.position) {
+		local.left = local.position.x;
+		local.top = local.position.y;
 	}
 	else {
 		local.left = margin.left;
@@ -3136,28 +3151,34 @@ jmControl.prototype.remove = function() {
  */
 jmControl.prototype.offset = function(x, y, trans, evt) {
 	trans = trans === false?false:true;	
-	var location = this.getLocation(true);
+	var local = this.getLocation(true);
 	
 	var offseted = false;
 	
-	if(this.position) {
-		var p = typeof this.position == 'function'?this.position:this.position;
-		if(p) {
-			location.left += x;
-			location.top += y;
-			p.x = location.left;
-			p.y = location.top;
-			offseted = true;
-		}			
+	if(local.position) {
+		local.left += x;
+		local.top += y;
+		local.position.x = local.left;
+		local.position.y = local.top;
+		offseted = true;
 	}
 
-	if(offseted == false && this.center) {		
-		var center = typeof this.center == 'function'?this.center:this.center;
-		if(center) {			
-			center.x = location.center.x + x;
-			center.y = location.center.y + y;
-			offseted = true;
-		}			
+	if(offseted == false && local.center) {		
+		local.center.x = local.center.x + x;
+		local.center.y = local.center.y + y;
+		offseted = true;
+	}
+
+	if(local.start && typeof local.start == 'object') {	
+		local.start.x = local.start.x + x;
+		local.start.y = local.start.y + y;
+		offseted = true;
+	}
+
+	if(local.end && typeof local.end == 'object') {		
+		local.end.x = local.end.x + x;
+		local.end.y = local.end.y + y;
+		offseted = true;
 	}
 
 
@@ -5095,15 +5116,18 @@ jmImage.prototype.getBounds = function() {
  */
 jmImage.prototype.getImage = function() {
 	var src = this.image || this.style.src || this.style.image;
-	if(this.__img && this.__img.src.indexOf(src) != -1) {
+	if(this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
 		return this.__img;
 	}
 	else if(src && src.src) {
 		this.__img = src;
 	}
-	else {
+	else if(document && document.createElement) {
 		this.__img = document.createElement('img');
 		if(src && typeof src == 'string') this.__img.src = src;
+	}
+	else {
+		this.__img = src;
 	}
 	return this.__img;
 }

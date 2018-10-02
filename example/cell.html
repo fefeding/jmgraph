@@ -197,7 +197,7 @@
 						b1.x(x);
 						var y = b1.y() + b1.vy;
 						var maxY = b1.graph.height - b1.radius();
-						if(y <= b1.radius || y >= maxY) {
+						if(y <= b1.radius() || y >= maxY) {
 							//if(y >= maxY && b1.vy > 0) {b1.vy -= 1;b1.vx -= 0.4;}
 							b1.vy *= -1;
 						}

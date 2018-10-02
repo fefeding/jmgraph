@@ -34,6 +34,7 @@ function jmGraph(canvas, option, callback) {
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
 			this.context = wx.createCanvasContext(canvas);
+			canvas = wx.createSelectorQuery().select('#' + canvas);
 		}
 		else {
 			if(typeof canvas === 'string' && typeof document != 'undefined') {

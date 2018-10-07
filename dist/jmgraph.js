@@ -5390,7 +5390,7 @@ jmResize.prototype.init = function() {
  */
 jmResize.prototype.bindRectEvents = function() {
 	
-	for(var i in this.resizeRects) {
+	for(var i =0;i<this.resizeRects.length;i++) {
 		var r = this.resizeRects[i];		
 		//小方块移动监听
 		r.on('move',function(arg) {				

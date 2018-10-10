@@ -105,10 +105,10 @@ jmGradient.prototype.toGradient = function(control) {
 		//offsetLine = Math.abs(r2 - r1);//二圆半径差
 		//小程序的接口特殊
 		if(context.createCircularGradient) { 
-			gradient = context.createCircularGradient(sx1, sy1, sx2, sy2);
+			gradient = context.createCircularGradient(sx1, sy1, r2);
 		}
 		else {
-			gradient = context.createRadialGradient(sx1, sy1,r1, sx2, sy2,r2);	
+			gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);	
 		}	
 	}
 	//颜色渐变

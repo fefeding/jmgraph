@@ -1,4 +1,4 @@
-<radio-group class="radio-group" bindchange="radioChange">
+<radio-group class="radio-group" bindchange="radioChange" style="font-size:12px;">
   <label class="radio" wx:for="{{shapes}}" wx:key="name" >
     <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
   </label>

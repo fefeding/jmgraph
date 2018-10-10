@@ -120,7 +120,7 @@ exports.init = function(g) {
   g.children.add(arraw);
 
   var style = {
-    src: 'http://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+    src: 'https://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
   };
   style.shadow = '0,0,10,#fff';
   //style.opacity = 0.2;		

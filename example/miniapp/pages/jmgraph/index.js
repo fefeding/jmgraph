@@ -1,4 +1,5 @@
 // pages/jmgraph/index.js
+//https://github.com/jiamao/jmgraph
 Page({
 
   /**
@@ -83,7 +84,7 @@ Page({
   changeShape: function(s) {
     this.graph.children.clear();
     if (this.graphShape && this.graphShape.destory) {
-      this.graphShape.destory();
+      this.graphShape.destory(this.graph);
     }
     //切换示例
     this.graphShape = require(s);

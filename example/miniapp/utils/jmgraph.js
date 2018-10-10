@@ -3392,10 +3392,11 @@ jmControl.prototype.bind = function(name,handle) {
  * @param {string} name 事件名称
  * @param {function} handle 从控件中移除事件的委托
  */
-jmControl.prototype.unbind = function(name,handle) {	
+jmControl.prototype.unbind = function(name, handle) {	
 	var eventCollection = this.getEvent(name) ;		
 	if(eventCollection) {
-		eventCollection.remove(handle);
+		if(handle) eventCollection.remove(handle);
+		else eventCollection.clear();
 	}
 }
 
@@ -5390,7 +5391,7 @@ jmResize.prototype.init = function() {
  */
 jmResize.prototype.bindRectEvents = function() {
 	
-	for(var i in this.resizeRects) {
+	for(var i =0;i<this.resizeRects.length;i++) {
 		var r = this.resizeRects[i];		
 		//小方块移动监听
 		r.on('move',function(arg) {				

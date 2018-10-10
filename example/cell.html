@@ -173,7 +173,7 @@
 								else {
 									darea = smallB.radius() * smallB.radius();
 									dr = smallB.radius();
-									smallB.visible = false;
+									smallB.visible(false);
 									balls.splice(smallindex,1);
 								}
 								var bigr = Math.sqrt(bigB.radius() * bigB.radius() + darea);
@@ -276,6 +276,9 @@
 				this.visible = function(v) {
 					if(typeof v !== 'undefined') {
 						this.shape.visible = v;
+						if(!v) {
+							this.graph.children.remove(this.shape);
+						}
 					}
 					return this.shape.visible;
 				}

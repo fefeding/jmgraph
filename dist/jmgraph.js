@@ -2974,15 +2974,21 @@ jmControl.prototype.getBounds = function(isReset) {
 		if(typeof this.canvas.width === 'function') {
 			rect.right = this.canvas.width(); 
 		}
-		else {
+		else if(this.canvas.width) {
 			rect.right = this.canvas.width; 
+		}
+		else if(this.width) {
+			rect.right = this.width;
 		}
 		
 		if(typeof this.canvas.height === 'function') {
 			rect.bottom = this.canvas.height(); 
 		}
-		else {
+		else if(this.canvas.height) {
 			rect.bottom = this.canvas.height; 
+		}
+		else if(this.height) {
+			rect.bottom = this.height;
 		}
 	}
 	else if(this.points && this.points.length > 0) {		
@@ -3443,7 +3449,7 @@ jmControl.prototype.checkPoint = function(p, pad) {
 		return true;
 	}
 	
-				var bounds = this.getBounds();	
+	var bounds = this.getBounds();	
 	var rotation = this.getRotation();//获取当前旋转参数
 	var ps = this.points;
 	//如果不是路径组成，则采用边界做为顶点

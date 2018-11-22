@@ -375,7 +375,8 @@ jmTest.prototype.initPoints = function() {
 
 #### 微信小程序支持
 线上体验小程序：
-![截图](https://raw.githubusercontent.com/jiamao/jmgraph/master/example/qrcode.jpg)
+![截图](https://raw.githubusercontent.com/jiamao/jmgraph/master/example/qrcode.jpg) 
+
 微信小程序稍有差别，因为无需压缩，请直接把`dist`中的`jmgraph.js`合并后的文件引用到你的小程序中。
 
 ##### 示例

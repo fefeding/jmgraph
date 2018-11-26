@@ -96,10 +96,13 @@ jmArc.prototype.initPoints = function() {
 	else {
 		mw = location.width / 2;
 		mh = location.height / 2;
-	}
+	}	
 	
 	var start = this.startAngle;
 	var end = this.endAngle;
+
+	if((mw == 0 && mh == 0) || start == end) return;
+
 	var anticlockwise = this.anticlockwise;
 	this.points = [];
 	var step = 1/Math.max(mw,mh);
@@ -113,15 +116,17 @@ jmArc.prototype.initPoints = function() {
 	if(start > end) step = -step;
 	
 	//椭圆方程x=a*cos(r) ,y=b*sin(r)	
-	for(var r=start;;r += step) {
-		if(step > 0 && r >= end) break;
-		else if(step < 0 && r <= end) break;
-		
+	for(var r=start;;r += step) {	
+		if(step > 0 && r > end) r = end;
+		else if(step < 0 && r < end) r = end;
+
 		var p = {
 			x : Math.cos(r) * mw + cx,
 			y : Math.sin(r) * mh + cy
 		};
 		this.points.push(p);
+
+		if(r == end) break;
 	}
 	return this.points;
 }

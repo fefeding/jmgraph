@@ -136,6 +136,11 @@ jmLabel.prototype.draw = function() {
 	}
 	//如果有指定边框，则画出边框
 	if(this.style.border) {
+		//如果指定了边框样式
+		if(this.style.border.style) {
+			this.context.save();
+			this.setStyle(this.style.border.style);
+		}
 		this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 		if(this.style.border.top) {
 			this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
@@ -154,6 +159,10 @@ jmLabel.prototype.draw = function() {
 		if(this.style.border.left) {
 			this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
 			this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+		}
+		//如果指定了边框颜色
+		if(this.style.border.stroke) {
+			this.context.restore();
 		}	
 	}
 	

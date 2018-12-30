@@ -234,7 +234,16 @@ var style = {
     textAlign: 'center', //水平居中
     textBaseline: 'middle', //垂直居中
     font: '20px Arial',
-    border: {left:1,top:1,right:1,bottom:1}, //边框
+    border: {
+        left:1,
+        top:1,
+        right:1,
+        bottom:1,
+        //边框样式
+        style: {
+            stroke: 'red' //颜色
+        }
+    }, //边框
     shadow: '0,0,10,#fff'
 };
 //style.opacity = 0.2;		

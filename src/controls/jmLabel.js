@@ -13,6 +13,8 @@ function jmLabel(graph,params) {
 	if(!params) params = {};		
 	var style = params.style || {};
 	style.font = style.font || "15px Arial";
+	style.fontFamily = style.fontFamily || 'Arial';
+	style.fontSize = style.fontSize || 15;
 	this.type = 'jmLabel';
 	// 显示不同的 textAlign 值
 	//文字水平对齐
@@ -46,15 +48,17 @@ jmUtils.createProperty(jmLabel.prototype, 'text');
  * @private
  */
 jmLabel.prototype.initPoints = function() {	
+	this.__size = null;
+	var size = this.testSize();	
 	var location = this.getLocation();
 	
-	var w = location.width;
-	var h = location.height;	
+	var w = location.width || size.width;
+	var h = location.height || size.height;	
 
 	this.points = [{x:location.left,y:location.top}];
-	this.points.push({x:location.left + location.width,y:location.top});
-	this.points.push({x:location.left + location.width,y:location.top + location.height});
-	this.points.push({x:location.left,y:location.top+ location.height});
+	this.points.push({x:location.left + w,y:location.top});
+	this.points.push({x:location.left + w,y:location.top + h});
+	this.points.push({x:location.left,y:location.top+ h});
 	return this.points;
 }
 
@@ -65,15 +69,19 @@ jmLabel.prototype.initPoints = function() {
  * @return {object} 含文本大小的对象
  */
 jmLabel.prototype.testSize = function() {
+	if(this.__size) return this.__size;
+	this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
 	this.context.save();
 	this.setStyle();
 	//计算宽度
-	var textSize = this.context.measureText?
+	this.__size = this.context.measureText?
 						this.context.measureText(this.text):
 						{width:15};
 	this.context.restore();
-	textSize.height = 15;
-	return textSize;
+	this.__size.height = this.style.fontSize?this.style.fontSize:15;
+	if(!this.width) this.width = this.__size.width;
+	if(!this.height) this.height = this.__size.height;
+	return this.__size;
 }
 
 /**
@@ -85,7 +93,7 @@ jmLabel.prototype.draw = function() {
 	
 	//获取当前控件的绝对位置
 	var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;		
-	
+	var size = this.testSize();
 	var location = this.getLocation();
 	var x = location.left + bounds.left;
 	var y = location.top + bounds.top;
@@ -161,7 +169,7 @@ jmLabel.prototype.draw = function() {
 			this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 		}
 		//如果指定了边框颜色
-		if(this.style.border.stroke) {
+		if(this.style.border.style) {
 			this.context.restore();
 		}	
 	}

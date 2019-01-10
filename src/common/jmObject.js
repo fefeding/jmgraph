@@ -20,10 +20,11 @@ function jmObject(graph) {
  */
 jmUtils.createProperty(jmObject.prototype, 'id', {
 	get: function() {
-		if(!this.__id) {
-			this.__id = Date.now().toString() + Math.floor(Math.random() * 1000);
+		this.__properties = this.__properties||{};
+		if(!this.__properties['id']) {
+			this.__properties['id'] = Date.now().toString() + Math.floor(Math.random() * 1000);
 		}
-		return this.__id;
+		return this.__properties['id'];
 	}	
 });
 
@@ -34,13 +35,15 @@ jmUtils.createProperty(jmObject.prototype, 'id', {
  */
 jmUtils.createProperty(jmObject.prototype, 'needUpdate', {
 	get: function() {
-		return this.__needUpdate;
+		this.__properties = this.__properties||{};
+		return this.__properties['needUpdate'];
 	},
 	set: function(v) {
-		this.__needUpdate = v;
+		this.__properties = this.__properties||{};
+		this.__properties['needUpdate'] = v;
 		//子控件属性改变，需要更新整个画板
 		if(v && !this.is('jmGraph') && this.graph) {
-			this.graph.__needUpdate = true;
+			this.graph.needUpdate = true;
 		}
 	}
 });

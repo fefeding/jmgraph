@@ -98,7 +98,9 @@ function init(g){
 | shadow.color | shadowColor | 阴影颜色，格式：'#000'、'#46BF86'、'rgb(255,255,255)'或'rgba(39,72,188,0.5)'
 | lineWidth | lineWidth | 当前的线条宽度
 | miterLimit | miterLimit | 最大斜接长度
-| font | font | 文本内容的当前字体属性
+| font | font | 请使用下面的 fontSize 和 fontFamily
+| fontSize | font | 字体大小
+| fontFamily | font | 字体
 | opacity | globalAlpha | 绘图的当前 alpha 或透明值
 | textAlign | textAlign | 文本内容的当前对齐方式
 | textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
@@ -233,7 +235,8 @@ var style = {
     fill: '#fff',
     textAlign: 'center', //水平居中
     textBaseline: 'middle', //垂直居中
-    font: '20px Arial',
+    fontSize: 20,
+    fontFamily: 'Arial',
     border: {
         left:1,
         top:1,

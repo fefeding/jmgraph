@@ -57,6 +57,27 @@ jmUtils.createProperty(jmControl.prototype, 'width', 0);
  */
 jmUtils.createProperty(jmControl.prototype, 'height', 0);
 
+/**
+ * 控件层级关系，发生改变时，需要重新调整排序
+ * @property zIndex
+ * @readonly
+ * @type {object}
+ */
+jmUtils.createProperty(jmControl.prototype, 'zIndex', {
+	get: function() {
+		this.__properties = this.__properties||{};
+		return this.__properties['zIndex'];
+	},
+	set: function(v) {
+		this.__properties['zIndex'] = v;
+		this.children.sort();//层级发生改变，需要重新排序
+		//子控件属性改变，需要更新整个画板
+		if(v && !this.is('jmGraph') && this.graph) {
+			this.graph.needUpdate = true;
+		}
+	}
+});
+
 //# end region
 
 /**
@@ -92,6 +113,9 @@ jmControl.prototype.initializing = function(context,style) {
 			obj.emit('add',obj);
 
 			self.needUpdate = true;
+			if(self.graph) obj.graph = self.graph;
+			this.sort();//先排序
+			//self.emit('addChild', obj);
 			return obj;
 		}
 	};
@@ -100,9 +124,11 @@ jmControl.prototype.initializing = function(context,style) {
 	this.children.remove = function(obj) {
 		if(typeof obj === 'object') {				
 			obj.parent = null;
+			obj.graph = null;
 			obj.remove(true);
 			this.oremove(obj);
 			self.needUpdate = true;
+			//self.emit('removeChild', obj, index);
 		}
 	};
 	/**
@@ -179,127 +205,125 @@ jmControl.prototype.setStyle = function(style) {
 	function __setStyle(control,style,name,mpkey) {
 		//var styleValue = style[mpkey||name]||style;
 		if(style) {
-			if(!control.mode || control.mode == 'canvas') {
-				//样式映射名
-				var styleMapCacheKey = 'jm_control_style_mapping';
-				var styleMap = jmUtils.cache.get(styleMapCacheKey);
-				if(!styleMap) {
-					//样式名称，也当做白名单使用					
-					styleMap = {
-						'fill':'fillStyle',
-						'stroke':'strokeStyle',
-						'shadow.blur':'shadowBlur',
-						'shadow.x':'shadowOffsetX',
-						'shadow.y':'shadowOffsetY',
-						'shadow.color':'shadowColor',
-						'lineWidth' : 'lineWidth',
-						'miterLimit': 'miterLimit',
-						'fillStyle' : 'fillStyle',
-						'strokeStyle' : 'strokeStyle',
-						'font' : 'font',
-						'opacity' : 'globalAlpha',
-						'textAlign' : 'textAlign',
-						'textBaseline' : 'textBaseline',
-						'shadowBlur' : 'shadowBlur',
-						'shadowOffsetX' : 'shadowOffsetX',
-						'shadowOffsetY' : 'shadowOffsetY',
-						'shadowColor' : 'shadowColor',
-						'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-						'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-					};
-					jmUtils.cache.add(styleMapCacheKey,styleMap);
-				}
-				var t = typeof style;	
-				var mpname = styleMap[mpkey || name];
+			//样式映射名
+			var styleMapCacheKey = 'jm_control_style_mapping';
+			var styleMap = jmUtils.cache.get(styleMapCacheKey);
+			if(!styleMap) {
+				//样式名称，也当做白名单使用					
+				styleMap = {
+					'fill':'fillStyle',
+					'stroke':'strokeStyle',
+					'shadow.blur':'shadowBlur',
+					'shadow.x':'shadowOffsetX',
+					'shadow.y':'shadowOffsetY',
+					'shadow.color':'shadowColor',
+					'lineWidth' : 'lineWidth',
+					'miterLimit': 'miterLimit',
+					'fillStyle' : 'fillStyle',
+					'strokeStyle' : 'strokeStyle',
+					'font' : 'font',
+					'opacity' : 'globalAlpha',
+					'textAlign' : 'textAlign',
+					'textBaseline' : 'textBaseline',
+					'shadowBlur' : 'shadowBlur',
+					'shadowOffsetX' : 'shadowOffsetX',
+					'shadowOffsetY' : 'shadowOffsetY',
+					'shadowColor' : 'shadowColor',
+					'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+					'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+				};
+				jmUtils.cache.add(styleMapCacheKey,styleMap);
+			}
+			var t = typeof style;	
+			var mpname = styleMap[mpkey || name];
 
-				//如果为渐变对象
-				if(jmUtils.isType(style,jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
-					//如果是渐变，则需要转换
-					if(t == 'string' && style.indexOf('-gradient') > -1) {
-						style = new jmGradient(style);
-					}
-					__setStyle(control,style.toGradient(control),mpname||name);	
+			//如果为渐变对象
+			if(jmUtils.isType(style,jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
+				//如果是渐变，则需要转换
+				if(t == 'string' && style.indexOf('-gradient') > -1) {
+					style = new jmGradient(style);
 				}
-				else if(t == 'function') {					
-					if(mpname) {
-						style = style.call(this, mpname);
-						if(style) {
-							__setStyle(control,style,mpname);	
-						}
+				__setStyle(control,style.toGradient(control),mpname||name);	
+			}
+			else if(t == 'function') {					
+				if(mpname) {
+					style = style.call(this, mpname);
+					if(style) {
+						__setStyle(control,style,mpname);	
 					}
 				}
-				else if(mpname) {
-					//只有存在白名单中才处理
-					//颜色转换
-					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-						style = jmUtils.toColor(style);
-					}					
-					control.context[mpname] = style;
-				}	
-				else {
-					switch(name) {
-						//阴影样式
-						case 'shadow' : {
-							if(t == 'string') {
-								__setStyle(control, new jmShadow(style), name);
-								break;
-							}
-							for(var k in style) {
-								__setStyle(control, style[k], k, name + '.' + k);
-							}
+			}
+			else if(mpname) {
+				//只有存在白名单中才处理
+				//颜色转换
+				if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+					style = jmUtils.toColor(style);
+				}					
+				control.context[mpname] = style;
+			}	
+			else {
+				switch(name) {
+					//阴影样式
+					case 'shadow' : {
+						if(t == 'string') {
+							__setStyle(control, new jmShadow(style), name);
 							break;
 						}
-						//平移
-						case 'translate' : {
-							control.context.translate(style.x,style.y);
-							break;
+						for(var k in style) {
+							__setStyle(control, style[k], k, name + '.' + k);
 						}
-						//旋转
-						case 'rotation' : {								
-							//旋 转先移位偏移量
-							var tranX = 0;
-							var tranY = 0;
-							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
-							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							if(style.point) {
-								var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
-								style = control.getRotation(style);
-								
-								tranX = style.rotateX + bounds.left;
-								tranY = style.rotateY + bounds.top;	
-							}
-												
-							if(tranX!=0 || tranY != 0) control.context.translate(tranX,tranY);
-							control.context.rotate(style.angle);
-							if(tranX!=0 || tranY != 0) control.context.translate(-tranX,-tranY);
-							break;
+						break;
+					}
+					//平移
+					case 'translate' : {
+						control.context.translate(style.x,style.y);
+						break;
+					}
+					//旋转
+					case 'rotation' : {								
+						//旋 转先移位偏移量
+						var tranX = 0;
+						var tranY = 0;
+						//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
+						//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
+						if(style.point) {
+							var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
+							style = control.getRotation(style);
+							
+							tranX = style.rotateX + bounds.left;
+							tranY = style.rotateY + bounds.top;	
 						}
-						case 'transform' : {
-							if(jmUtils.isArray(style)) {
-								control.context.transform.apply(control.context,style);
-							}
-							else if(typeof style == 'object') {
-								control.context.transform(style.scaleX,//水平缩放
-									style.skewX,//水平倾斜
-									style.skewY,//垂直倾斜
-									style.scaleY,//垂直缩放
-									style.offsetX,//水平位移
-									style.offsetY);//垂直位移
-							}								
-							break;
+											
+						if(tranX!=0 || tranY != 0) control.context.translate(tranX,tranY);
+						control.context.rotate(style.angle);
+						if(tranX!=0 || tranY != 0) control.context.translate(-tranX,-tranY);
+						break;
+					}
+					case 'transform' : {
+						if(jmUtils.isArray(style)) {
+							control.context.transform.apply(control.context,style);
 						}
-						//位移
-						case 'translate' : {
-							control.context.translate(style.x,style.y);			
-							break;
-						}
-						//鼠标指针
-						case 'cursor' : {
-							control.cursor(style);
-							break;
-						}
-					}							
-				}			
+						else if(typeof style == 'object') {
+							control.context.transform(style.scaleX,//水平缩放
+								style.skewX,//水平倾斜
+								style.skewY,//垂直倾斜
+								style.scaleY,//垂直缩放
+								style.offsetX,//水平位移
+								style.offsetY);//垂直位移
+						}								
+						break;
+					}
+					//位移
+					case 'translate' : {
+						control.context.translate(style.x,style.y);			
+						break;
+					}
+					//鼠标指针
+					case 'cursor' : {
+						control.cursor(style);
+						break;
+					}
+				}							
 			}
 		}
 	}	
@@ -711,8 +735,7 @@ jmControl.prototype.paint = function(v) {
 		if(this.draw) this.draw();	
 		if(this.endDraw) this.endDraw();
 
-		if(this.children) {	
-			this.children.sort();//先排序
+		if(this.children) {
 			this.children.each(function(i,item) {
 				if(item && item.paint) item.paint();
 			});
@@ -746,7 +769,8 @@ jmControl.prototype.getEvent = function(name) {
  * @param {string} name 事件名称
  * @param {function} handle 事件委托
  */
-jmControl.prototype.bind = function(name,handle) {
+jmControl.prototype.bind =
+jmControl.prototype.on = function(name,handle) {
 	
 	/**
 	 * 添加事件的集合

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--禁用x5的缓存，这里是因为内核有个BUG，使用缓存会回退到一个白屏页-->
+<meta name="x5-cache" content="disable">
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+<title>love</title>
+<style>
+    html,body{
+        margin:0;
+        padding:0;
+        overflow: hidden;
+    }
+    /*这里重构同学不要删掉，不然会引发ios点击事件失效*/
+    div,span,li,p,dd,dl,dt,h1,h2,h3,h4,h5,h6,legend,ol,td,ul,.js-tap-link{
+        cursor:pointer;
+    }
+    .hide{
+        display: none;
+    }
+    #mycanvas {
+        background-color:#000;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+</head>
+<body>
+    <div id="mycanvas">
+        </div>	
+</body>
+<script type="text/javascript" src="../../src/jmGraph.js"></script>
+<script src="js/game.js"></script>
+</html>

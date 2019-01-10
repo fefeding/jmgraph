@@ -19,14 +19,7 @@ function jmGraph(canvas, option, callback) {
 	option = option || {};
 
 	if(this instanceof jmGraph) {
-		this.type = 'jmGraph';
-		/**
-		 * 当前支持的画图类型 svg/canvas
-		 *
-		 * @property mode
-		 * @type {string}
-		 */
-		this.mode = 'canvas';		
+		this.type = 'jmGraph';		
 		
 		this.option = option||{};
 		this.util = jmUtils;
@@ -148,7 +141,6 @@ jmGraph.prototype.createShape = function(name,args) {
 	var shape = this.shapes[name];
 	if(shape) {
 		if(!args) args = {};
-		args.mode = this.mode;
 		var obj = new shape(this, args);
 		return obj;
 	}
@@ -389,7 +381,7 @@ jmGraph.prototype.toDataURL = function() {
 jmGraph.prototype.autoRefresh = function(callback) {
 	var self = this;
 	function update() {
-		self.redraw();
+		if(self.needUpdate) self.redraw();
 		requestAnimationFrame(update);
 		callback && callback();
 	}

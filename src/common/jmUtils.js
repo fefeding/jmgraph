@@ -119,15 +119,16 @@ jmUtils.apply = function(source,target) {
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */
-jmUtils.list = (function() {    
+jmUtils.list = (function() { 
     function __constructor(arr) {
         this.items = [];
+        this.option = {};
         if(arr) {
             if(jmUtils.isArray(arr)) {
                 this.items = arr.slice(0);
             }
             else {
-                this.items.push(arr);
+                this.option = arr||{};
             }
         }
     }
@@ -142,12 +143,13 @@ jmUtils.list = (function() {
     __constructor.prototype.add = function(obj) {        
         if(obj && jmUtils.isArray(obj)) {
             for(var i in obj) {
-                this.add(obj[i]);
+                arguments.callee.call(this, obj[i]);
             } 
             return obj;           
         }
         if(typeof obj == 'object' && this.contain(obj)) return obj;
         this.items.push(obj);
+        if(this.option.addHandler)  this.option.addHandler.call(this, obj);
         return obj;
     }
 
@@ -159,14 +161,8 @@ jmUtils.list = (function() {
      * @param {any} obj 将移除的对象
      */
     __constructor.prototype.remove = function(obj) {
-        for(var i = this.items.length -1;i>=0;i--) {
-            /*if(typeof obj == 'function') {
-                if(obj(this.items[i])) {
-                    this.removeAt(i);
-                }
-            }
-            else*/
-             if(this.items[i] == obj) {
+        for(var i = this.items.length -1;i>=0;i--) {            
+            if(this.items[i] == obj) {
                 this.removeAt(i);
             }
         }
@@ -181,8 +177,9 @@ jmUtils.list = (function() {
      */
     __constructor.prototype.removeAt = function (index) {
         if(this.items.length > index) {
-            //delete this.items[index];   
+            var obj = this.items[index];
             this.items.splice(index,1);
+            if(this.option.removeHandler)  this.option.removeHandler.call(this, obj, index);
         }
     }
 
@@ -1349,6 +1346,7 @@ jmUtils.createProperty = function(instance, name, value) {
             }
             else {
                 this.__properties = this.__properties||{};
+                var oldvalue = this.__properties[descriptor.name];
                 this.__properties[descriptor.name] = value;
             }
             this.needUpdate = true;

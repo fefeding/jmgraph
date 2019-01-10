@@ -19,14 +19,7 @@ function jmGraph(canvas, option, callback) {
 	option = option || {};
 
 	if(this instanceof jmGraph) {
-		this.type = 'jmGraph';
-		/**
-		 * 当前支持的画图类型 svg/canvas
-		 *
-		 * @property mode
-		 * @type {string}
-		 */
-		this.mode = 'canvas';		
+		this.type = 'jmGraph';		
 		
 		this.option = option||{};
 		this.util = jmUtils;
@@ -148,7 +141,6 @@ jmGraph.prototype.createShape = function(name,args) {
 	var shape = this.shapes[name];
 	if(shape) {
 		if(!args) args = {};
-		args.mode = this.mode;
 		var obj = new shape(this, args);
 		return obj;
 	}
@@ -389,7 +381,7 @@ jmGraph.prototype.toDataURL = function() {
 jmGraph.prototype.autoRefresh = function(callback) {
 	var self = this;
 	function update() {
-		self.redraw();
+		if(self.needUpdate) self.redraw();
 		requestAnimationFrame(update);
 		callback && callback();
 	}
@@ -913,15 +905,16 @@ jmUtils.apply = function(source,target) {
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */
-jmUtils.list = (function() {    
+jmUtils.list = (function() { 
     function __constructor(arr) {
         this.items = [];
+        this.option = {};
         if(arr) {
             if(jmUtils.isArray(arr)) {
                 this.items = arr.slice(0);
             }
             else {
-                this.items.push(arr);
+                this.option = arr||{};
             }
         }
     }
@@ -936,12 +929,13 @@ jmUtils.list = (function() {
     __constructor.prototype.add = function(obj) {        
         if(obj && jmUtils.isArray(obj)) {
             for(var i in obj) {
-                this.add(obj[i]);
+                arguments.callee.call(this, obj[i]);
             } 
             return obj;           
         }
         if(typeof obj == 'object' && this.contain(obj)) return obj;
         this.items.push(obj);
+        if(this.option.addHandler)  this.option.addHandler.call(this, obj);
         return obj;
     }
 
@@ -953,14 +947,8 @@ jmUtils.list = (function() {
      * @param {any} obj 将移除的对象
      */
     __constructor.prototype.remove = function(obj) {
-        for(var i = this.items.length -1;i>=0;i--) {
-            /*if(typeof obj == 'function') {
-                if(obj(this.items[i])) {
-                    this.removeAt(i);
-                }
-            }
-            else*/
-             if(this.items[i] == obj) {
+        for(var i = this.items.length -1;i>=0;i--) {            
+            if(this.items[i] == obj) {
                 this.removeAt(i);
             }
         }
@@ -975,8 +963,9 @@ jmUtils.list = (function() {
      */
     __constructor.prototype.removeAt = function (index) {
         if(this.items.length > index) {
-            //delete this.items[index];   
+            var obj = this.items[index];
             this.items.splice(index,1);
+            if(this.option.removeHandler)  this.option.removeHandler.call(this, obj, index);
         }
     }
 
@@ -2143,6 +2132,7 @@ jmUtils.createProperty = function(instance, name, value) {
             }
             else {
                 this.__properties = this.__properties||{};
+                var oldvalue = this.__properties[descriptor.name];
                 this.__properties[descriptor.name] = value;
             }
             this.needUpdate = true;
@@ -2401,10 +2391,11 @@ function jmObject(graph) {
  */
 jmUtils.createProperty(jmObject.prototype, 'id', {
 	get: function() {
-		if(!this.__id) {
-			this.__id = Date.now().toString() + Math.floor(Math.random() * 1000);
+		this.__properties = this.__properties||{};
+		if(!this.__properties['id']) {
+			this.__properties['id'] = Date.now().toString() + Math.floor(Math.random() * 1000);
 		}
-		return this.__id;
+		return this.__properties['id'];
 	}	
 });
 
@@ -2415,13 +2406,15 @@ jmUtils.createProperty(jmObject.prototype, 'id', {
  */
 jmUtils.createProperty(jmObject.prototype, 'needUpdate', {
 	get: function() {
-		return this.__needUpdate;
+		this.__properties = this.__properties||{};
+		return this.__properties['needUpdate'];
 	},
 	set: function(v) {
-		this.__needUpdate = v;
+		this.__properties = this.__properties||{};
+		this.__properties['needUpdate'] = v;
 		//子控件属性改变，需要更新整个画板
 		if(v && !this.is('jmGraph') && this.graph) {
-			this.graph.__needUpdate = true;
+			this.graph.needUpdate = true;
 		}
 	}
 });
@@ -2684,6 +2677,27 @@ jmUtils.createProperty(jmControl.prototype, 'width', 0);
  */
 jmUtils.createProperty(jmControl.prototype, 'height', 0);
 
+/**
+ * 控件层级关系，发生改变时，需要重新调整排序
+ * @property zIndex
+ * @readonly
+ * @type {object}
+ */
+jmUtils.createProperty(jmControl.prototype, 'zIndex', {
+	get: function() {
+		this.__properties = this.__properties||{};
+		return this.__properties['zIndex'];
+	},
+	set: function(v) {
+		this.__properties['zIndex'] = v;
+		this.children.sort();//层级发生改变，需要重新排序
+		//子控件属性改变，需要更新整个画板
+		if(v && !this.is('jmGraph') && this.graph) {
+			this.graph.needUpdate = true;
+		}
+	}
+});
+
 //# end region
 
 /**
@@ -2719,6 +2733,9 @@ jmControl.prototype.initializing = function(context,style) {
 			obj.emit('add',obj);
 
 			self.needUpdate = true;
+			if(self.graph) obj.graph = self.graph;
+			this.sort();//先排序
+			//self.emit('addChild', obj);
 			return obj;
 		}
 	};
@@ -2727,9 +2744,11 @@ jmControl.prototype.initializing = function(context,style) {
 	this.children.remove = function(obj) {
 		if(typeof obj === 'object') {				
 			obj.parent = null;
+			obj.graph = null;
 			obj.remove(true);
 			this.oremove(obj);
 			self.needUpdate = true;
+			//self.emit('removeChild', obj, index);
 		}
 	};
 	/**
@@ -2806,127 +2825,125 @@ jmControl.prototype.setStyle = function(style) {
 	function __setStyle(control,style,name,mpkey) {
 		//var styleValue = style[mpkey||name]||style;
 		if(style) {
-			if(!control.mode || control.mode == 'canvas') {
-				//样式映射名
-				var styleMapCacheKey = 'jm_control_style_mapping';
-				var styleMap = jmUtils.cache.get(styleMapCacheKey);
-				if(!styleMap) {
-					//样式名称，也当做白名单使用					
-					styleMap = {
-						'fill':'fillStyle',
-						'stroke':'strokeStyle',
-						'shadow.blur':'shadowBlur',
-						'shadow.x':'shadowOffsetX',
-						'shadow.y':'shadowOffsetY',
-						'shadow.color':'shadowColor',
-						'lineWidth' : 'lineWidth',
-						'miterLimit': 'miterLimit',
-						'fillStyle' : 'fillStyle',
-						'strokeStyle' : 'strokeStyle',
-						'font' : 'font',
-						'opacity' : 'globalAlpha',
-						'textAlign' : 'textAlign',
-						'textBaseline' : 'textBaseline',
-						'shadowBlur' : 'shadowBlur',
-						'shadowOffsetX' : 'shadowOffsetX',
-						'shadowOffsetY' : 'shadowOffsetY',
-						'shadowColor' : 'shadowColor',
-						'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-						'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-					};
-					jmUtils.cache.add(styleMapCacheKey,styleMap);
-				}
-				var t = typeof style;	
-				var mpname = styleMap[mpkey || name];
+			//样式映射名
+			var styleMapCacheKey = 'jm_control_style_mapping';
+			var styleMap = jmUtils.cache.get(styleMapCacheKey);
+			if(!styleMap) {
+				//样式名称，也当做白名单使用					
+				styleMap = {
+					'fill':'fillStyle',
+					'stroke':'strokeStyle',
+					'shadow.blur':'shadowBlur',
+					'shadow.x':'shadowOffsetX',
+					'shadow.y':'shadowOffsetY',
+					'shadow.color':'shadowColor',
+					'lineWidth' : 'lineWidth',
+					'miterLimit': 'miterLimit',
+					'fillStyle' : 'fillStyle',
+					'strokeStyle' : 'strokeStyle',
+					'font' : 'font',
+					'opacity' : 'globalAlpha',
+					'textAlign' : 'textAlign',
+					'textBaseline' : 'textBaseline',
+					'shadowBlur' : 'shadowBlur',
+					'shadowOffsetX' : 'shadowOffsetX',
+					'shadowOffsetY' : 'shadowOffsetY',
+					'shadowColor' : 'shadowColor',
+					'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+					'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+				};
+				jmUtils.cache.add(styleMapCacheKey,styleMap);
+			}
+			var t = typeof style;	
+			var mpname = styleMap[mpkey || name];
 
-				//如果为渐变对象
-				if(jmUtils.isType(style,jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
-					//如果是渐变，则需要转换
-					if(t == 'string' && style.indexOf('-gradient') > -1) {
-						style = new jmGradient(style);
-					}
-					__setStyle(control,style.toGradient(control),mpname||name);	
+			//如果为渐变对象
+			if(jmUtils.isType(style,jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
+				//如果是渐变，则需要转换
+				if(t == 'string' && style.indexOf('-gradient') > -1) {
+					style = new jmGradient(style);
 				}
-				else if(t == 'function') {					
-					if(mpname) {
-						style = style.call(this, mpname);
-						if(style) {
-							__setStyle(control,style,mpname);	
-						}
+				__setStyle(control,style.toGradient(control),mpname||name);	
+			}
+			else if(t == 'function') {					
+				if(mpname) {
+					style = style.call(this, mpname);
+					if(style) {
+						__setStyle(control,style,mpname);	
 					}
 				}
-				else if(mpname) {
-					//只有存在白名单中才处理
-					//颜色转换
-					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-						style = jmUtils.toColor(style);
-					}					
-					control.context[mpname] = style;
-				}	
-				else {
-					switch(name) {
-						//阴影样式
-						case 'shadow' : {
-							if(t == 'string') {
-								__setStyle(control, new jmShadow(style), name);
-								break;
-							}
-							for(var k in style) {
-								__setStyle(control, style[k], k, name + '.' + k);
-							}
+			}
+			else if(mpname) {
+				//只有存在白名单中才处理
+				//颜色转换
+				if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+					style = jmUtils.toColor(style);
+				}					
+				control.context[mpname] = style;
+			}	
+			else {
+				switch(name) {
+					//阴影样式
+					case 'shadow' : {
+						if(t == 'string') {
+							__setStyle(control, new jmShadow(style), name);
 							break;
 						}
-						//平移
-						case 'translate' : {
-							control.context.translate(style.x,style.y);
-							break;
+						for(var k in style) {
+							__setStyle(control, style[k], k, name + '.' + k);
 						}
-						//旋转
-						case 'rotation' : {								
-							//旋 转先移位偏移量
-							var tranX = 0;
-							var tranY = 0;
-							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
-							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							if(style.point) {
-								var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
-								style = control.getRotation(style);
-								
-								tranX = style.rotateX + bounds.left;
-								tranY = style.rotateY + bounds.top;	
-							}
-												
-							if(tranX!=0 || tranY != 0) control.context.translate(tranX,tranY);
-							control.context.rotate(style.angle);
-							if(tranX!=0 || tranY != 0) control.context.translate(-tranX,-tranY);
-							break;
+						break;
+					}
+					//平移
+					case 'translate' : {
+						control.context.translate(style.x,style.y);
+						break;
+					}
+					//旋转
+					case 'rotation' : {								
+						//旋 转先移位偏移量
+						var tranX = 0;
+						var tranY = 0;
+						//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
+						//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
+						if(style.point) {
+							var bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
+							style = control.getRotation(style);
+							
+							tranX = style.rotateX + bounds.left;
+							tranY = style.rotateY + bounds.top;	
 						}
-						case 'transform' : {
-							if(jmUtils.isArray(style)) {
-								control.context.transform.apply(control.context,style);
-							}
-							else if(typeof style == 'object') {
-								control.context.transform(style.scaleX,//水平缩放
-									style.skewX,//水平倾斜
-									style.skewY,//垂直倾斜
-									style.scaleY,//垂直缩放
-									style.offsetX,//水平位移
-									style.offsetY);//垂直位移
-							}								
-							break;
+											
+						if(tranX!=0 || tranY != 0) control.context.translate(tranX,tranY);
+						control.context.rotate(style.angle);
+						if(tranX!=0 || tranY != 0) control.context.translate(-tranX,-tranY);
+						break;
+					}
+					case 'transform' : {
+						if(jmUtils.isArray(style)) {
+							control.context.transform.apply(control.context,style);
 						}
-						//位移
-						case 'translate' : {
-							control.context.translate(style.x,style.y);			
-							break;
-						}
-						//鼠标指针
-						case 'cursor' : {
-							control.cursor(style);
-							break;
-						}
-					}							
-				}			
+						else if(typeof style == 'object') {
+							control.context.transform(style.scaleX,//水平缩放
+								style.skewX,//水平倾斜
+								style.skewY,//垂直倾斜
+								style.scaleY,//垂直缩放
+								style.offsetX,//水平位移
+								style.offsetY);//垂直位移
+						}								
+						break;
+					}
+					//位移
+					case 'translate' : {
+						control.context.translate(style.x,style.y);			
+						break;
+					}
+					//鼠标指针
+					case 'cursor' : {
+						control.cursor(style);
+						break;
+					}
+				}							
 			}
 		}
 	}	
@@ -3338,8 +3355,7 @@ jmControl.prototype.paint = function(v) {
 		if(this.draw) this.draw();	
 		if(this.endDraw) this.endDraw();
 
-		if(this.children) {	
-			this.children.sort();//先排序
+		if(this.children) {
 			this.children.each(function(i,item) {
 				if(item && item.paint) item.paint();
 			});
@@ -3373,7 +3389,8 @@ jmControl.prototype.getEvent = function(name) {
  * @param {string} name 事件名称
  * @param {function} handle 事件委托
  */
-jmControl.prototype.bind = function(name,handle) {
+jmControl.prototype.bind =
+jmControl.prototype.on = function(name,handle) {
 	
 	/**
 	 * 添加事件的集合
@@ -5162,6 +5179,8 @@ function jmLabel(graph,params) {
 	if(!params) params = {};		
 	var style = params.style || {};
 	style.font = style.font || "15px Arial";
+	style.fontFamily = style.fontFamily || 'Arial';
+	style.fontSize = style.fontSize || 15;
 	this.type = 'jmLabel';
 	// 显示不同的 textAlign 值
 	//文字水平对齐
@@ -5195,15 +5214,17 @@ jmUtils.createProperty(jmLabel.prototype, 'text');
  * @private
  */
 jmLabel.prototype.initPoints = function() {	
+	this.__size = null;
+	var size = this.testSize();	
 	var location = this.getLocation();
 	
-	var w = location.width;
-	var h = location.height;	
+	var w = location.width || size.width;
+	var h = location.height || size.height;	
 
 	this.points = [{x:location.left,y:location.top}];
-	this.points.push({x:location.left + location.width,y:location.top});
-	this.points.push({x:location.left + location.width,y:location.top + location.height});
-	this.points.push({x:location.left,y:location.top+ location.height});
+	this.points.push({x:location.left + w,y:location.top});
+	this.points.push({x:location.left + w,y:location.top + h});
+	this.points.push({x:location.left,y:location.top+ h});
 	return this.points;
 }
 
@@ -5214,15 +5235,19 @@ jmLabel.prototype.initPoints = function() {
  * @return {object} 含文本大小的对象
  */
 jmLabel.prototype.testSize = function() {
+	if(this.__size) return this.__size;
+	this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
 	this.context.save();
 	this.setStyle();
 	//计算宽度
-	var textSize = this.context.measureText?
+	this.__size = this.context.measureText?
 						this.context.measureText(this.text):
 						{width:15};
 	this.context.restore();
-	textSize.height = 15;
-	return textSize;
+	this.__size.height = this.style.fontSize?this.style.fontSize:15;
+	if(!this.width) this.width = this.__size.width;
+	if(!this.height) this.height = this.__size.height;
+	return this.__size;
 }
 
 /**
@@ -5234,7 +5259,7 @@ jmLabel.prototype.draw = function() {
 	
 	//获取当前控件的绝对位置
 	var bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;		
-	
+	var size = this.testSize();
 	var location = this.getLocation();
 	var x = location.left + bounds.left;
 	var y = location.top + bounds.top;
@@ -5310,7 +5335,7 @@ jmLabel.prototype.draw = function() {
 			this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 		}
 		//如果指定了边框颜色
-		if(this.style.border.stroke) {
+		if(this.style.border.style) {
 			this.context.restore();
 		}	
 	}

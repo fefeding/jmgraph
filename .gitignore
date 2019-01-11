@@ -1,0 +1,7 @@
+/build/node_modules
+/build/cache
+/out
+/site
+/Makefile
+/index.html
+/example/qrcode.jpg

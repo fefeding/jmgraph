@@ -29,7 +29,7 @@
 				function update() {
                     var delta = Date.now() - lastUpdateTime - stepTime;
                     lastUpdateTime = Date.now();
-                    if(delta >= 0) gameLoop(delta);
+                    gameLoop(delta);
 					if(g.needUpdate) g.redraw();
                     requestAnimationFrame(update);
                     
@@ -78,7 +78,7 @@
     //心形对象
     var heart = (function(){
         return {
-            vy: 4,
+            vy: 6,
             init: function(g, res){
                 if(!this.sprite) {                    
                     this.sprite = new sprite(g, res['heart.png']);
@@ -108,42 +108,44 @@
             },
             sprites: [], //所有地图精灵
             init: function(g, res){
-                //放置碗
-                for(var i=0;i<6;i++) {
-                    var p = new wan(g, res, 50*i+25, height * 3 + 400 + 10*i);
-                    this.sprites.push(p);
-                    g.children.add(p.sprite);
-                }
-                //放置花
-                for(var i=0;i<6;i++) {
-                    var p = new flower(g, res, 40*i+25, height * 2 + 10*i);
-                    this.sprites.push(p);
-                    g.children.add(p.sprite);
-                }
-                //放置bob
-                for(var i=0;i<6;i++) {
-                    var p = new bob(g, res, 45*i+25, height + 10*i);
-                    this.sprites.push(p);
-                    g.children.add(p.sprite);
-                }
-
-                this.endText = g.createShape('label',{
-                    text: 'END',
-                    position:{x: (this.width - 100)/2,y:60},
-                    style: {
-                        fontFamily: "Arial",
-                        fontSize: 46,
-                        fill: "blue",
-                        stroke: '#ff3300',
-                        textAlign : 'center',
-                        border: {
-                            left: 1,
-                            top: 1,
-                            right: 1,
-                            bottom: 1
-                        }
+                if(!this.endText) {
+                    //放置碗
+                    for(var i=0;i<6;i++) {
+                        var p = new wan(g, res, 50*i+25, height * 3 + 400 + 10*i);
+                        this.sprites.push(p);
+                        g.children.add(p.sprite);
                     }
-                  });
+                    //放置花
+                    for(var i=0;i<6;i++) {
+                        var p = new flower(g, res, 40*i+25, height * 2 + 10*i);
+                        this.sprites.push(p);
+                        g.children.add(p.sprite);
+                    }
+                    //放置bob
+                    for(var i=0;i<6;i++) {
+                        var p = new bob(g, res, 45*i+25, height + 10*i);
+                        this.sprites.push(p);
+                        g.children.add(p.sprite);
+                    }
+
+                    this.endText = g.createShape('label',{
+                        text: 'END',
+                        position:{x: (this.width - 100)/2,y:60},
+                        style: {
+                            fontFamily: "Arial",
+                            fontSize: 46,
+                            fill: "blue",
+                            stroke: '#ff3300',
+                            textAlign : 'center',
+                            border: {
+                                left: 1,
+                                top: 1,
+                                right: 1,
+                                bottom: 1
+                            }
+                        }
+                    });
+                }
                 this.endText.visible = false;
                 g.children.add(this.endText);
             },
@@ -153,7 +155,7 @@
                     x: 0,
                     y: 0
                 };
-                //this.endText.visible = false;
+                this.endText.visible = false;
                 for(var i=0;i<this.sprites.length;i++) {
                     this.sprites[i].sprite.visible = true;
                     this.sprites[i].update(0);
@@ -166,14 +168,14 @@
 
                     for(var i=0;i<this.sprites.length;i++) {
                         this.sprites[i].update(delta);
-                    }
-                    for(var i=tempSprites.length-1;i>=0; i--) {
-                        if(tempSprites[i].update) tempSprites[i].update(delta);
-                    }
+                    }                    
 
                     if(this.offsetPosition.y >= this.height - height) {
                         end();//结束游戏
                     }
+                }
+                for(var i=tempSprites.length-1;i>=0; i--) {
+                    if(tempSprites[i].update) tempSprites[i].update(delta);
                 }
             },
             //转为画布坐标

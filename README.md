@@ -235,7 +235,7 @@ var style = {
     fill: '#fff',
     textAlign: 'center', //水平居中
     textBaseline: 'middle', //垂直居中
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: 'Arial',
     border: {
         left:1,

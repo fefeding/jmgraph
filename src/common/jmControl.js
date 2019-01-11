@@ -725,15 +725,22 @@ jmControl.prototype.paint = function(v) {
 		//计算当前边界
 		this.bounds = null;
 		this.absoluteBounds = this.getAbsoluteBounds();
-
+		var needDraw = true;//是否需要绘制
+		if(!this.is('jmGraph') && this.graph) {
+			if(this.absoluteBounds.left >= this.graph.width) needDraw = false;
+			else if(this.absoluteBounds.top >= this.graph.height) needDraw = false;
+			else if(this.absoluteBounds.right <= 0) needDraw = false;
+			else if(this.absoluteBounds.bottom <= 0) needDraw = false;
+		}
+		
 		this.context.save();
 		
 		this.setStyle();//设定样式
 		this.emit('beginDraw',this);
 
-		if(this.beginDraw) this.beginDraw();
-		if(this.draw) this.draw();	
-		if(this.endDraw) this.endDraw();
+		if(needDraw && this.beginDraw) this.beginDraw();
+		if(needDraw && this.draw) this.draw();	
+		if(needDraw && this.endDraw) this.endDraw();
 
 		if(this.children) {
 			this.children.each(function(i,item) {

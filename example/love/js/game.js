@@ -325,6 +325,7 @@
         this.update = function(delta) {
             this.txt.position.x += this.vx;
             this.txt.position.y -= this.vy;
+            this.txt.needUpdate = true;
             if(this.txt.position.x >= width || this.txt.position.y <= 0) {
                 this.die();
             }

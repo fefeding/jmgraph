@@ -217,6 +217,7 @@
 				//画基准线
 				this.datumLine = this.graph.createLine({x:0,y:0},{x:this.graph.width,y:0},this.datumRectStyle);
 				this.datumLine.visible = false;
+				debugger
 				this.graph.children.add(this.datumLine);
 				this.refreshGraph(this.source);
 			}
@@ -249,6 +250,9 @@
 						var label = this.graph.createShape('label',{style:this.labelStyle,position:{x:0,y:arr[i].height},value:arr[i].value,width:10,height:20});
 						
 						arr[i].rect.children.add(label);
+						if(typeof arr[i].rect != 'object') {
+							debugger;
+						}
 						this.graph.children.add(arr[i].rect);
 					}
 					//this.graph.children.add(arr[i].rect);

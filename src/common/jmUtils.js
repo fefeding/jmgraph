@@ -142,7 +142,7 @@ jmUtils.list = (function() {
      */
     __constructor.prototype.add = function(obj) {        
         if(obj && jmUtils.isArray(obj)) {
-            for(var i in obj) {
+            for(var i=0;i<obj.length;i++) {
                 arguments.callee.call(this, obj[i]);
             } 
             return obj;           

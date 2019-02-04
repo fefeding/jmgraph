@@ -810,6 +810,28 @@ jmControl.prototype.unbind = function(name, handle) {
 	}
 }
 
+
+/**
+ * 执行监听回调
+ * 
+ * @method emit
+ * @for jmControl
+ * @param {string} name 触发事件的名称
+ * @param {array} args 事件参数数组
+ */
+jmControl.prototype.emit = function(name) {	
+	var args = [];
+	var len = arguments.length;
+	if(len > 1) {
+		//截取除name以后的所有参数
+		for(var i=1;i<len;i++) {
+			args.push(arguments[i]);
+		}
+	}
+	runEventHandle.call(this, name, args);
+	return this;
+}
+
 /**
  * 独立执行事件委托
  *
@@ -820,10 +842,11 @@ jmControl.prototype.unbind = function(name, handle) {
 function runEventHandle(name,args) {
 	var events = this.getEvent(name);		
 	if(events) {
-		var self = this;			
+		var self = this;
+		if(!jmUtils.isArray(args)) args = [args];	
 		events.each(function(i,handle) {
 			//只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
-			if(false === handle.call(self,args)) {
+			if(false === handle.apply(self,args)) {
 				args.cancel = true;
 			}
 		});		

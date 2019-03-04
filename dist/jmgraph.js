@@ -928,7 +928,7 @@ jmUtils.list = (function() {
      */
     __constructor.prototype.add = function(obj) {        
         if(obj && jmUtils.isArray(obj)) {
-            for(var i in obj) {
+            for(var i=0;i<obj.length;i++) {
                 arguments.callee.call(this, obj[i]);
             } 
             return obj;           
@@ -2549,7 +2549,7 @@ jmProperty.prototype.setValue = function(name,value) {
 		if(!this.__properties) this.__properties = {};
 		var args = {oldValue:this.getValue(name),newValue:value};
 		this.__properties[name] = value;
-		this.emit('PropertyChange',name,args);
+		this.emit && this.emit('PropertyChange',name,args);
 	}
 	return this.getValue(name);
 }
@@ -2567,55 +2567,6 @@ jmProperty.prototype.createProperty = function(name, value) {
 	return jmUtils.createProperty(this, name, value);
 }
 
-/**
- * 绑定事件监听
- *
- * @method on
- * @for jmProperty
- * @param {string} name 监听事件的名称
- * @param {function} handle 监听委托 
- */
-jmProperty.prototype.on = function(name,handle) {
-	if(!this.__eventHandles) this.__eventHandles = {};
-	var handles = this.__eventHandles[name];
-	if(!handles) {
-		handles = this.__eventHandles[name] = []
-	}
-	//如果已绑定相同的事件，则直接返回
-	for(var i in handles) {
-		if(handles[i] === handle) {
-			return;
-		}
-	}
-	handles.push(handle);
-	return this;
-}
-
-/**
- * 执行监听回调
- * 
- * @method emit
- * @for jmProperty
- * @param {string} name 触发事件的名称
- * @param {array} args 事件参数数组
- */
- jmProperty.prototype.emit = function(name) {
-	var handles = this.__eventHandles?this.__eventHandles[name]:null;
-	if(handles) {
-		var args = [];
-		var len = arguments.length;
-		if(len > 1) {
-			//截取除name以后的所有参数
-			for(var i=1;i<len;i++) {
-				args.push(arguments[i]);
-			}
-		}		
-		for(var i in handles) {
-			handles[i].apply(this,args);
-		}		
-	}
-	return this;
-}
 
 
 /**
@@ -3430,6 +3381,28 @@ jmControl.prototype.unbind = function(name, handle) {
 	}
 }
 
+
+/**
+ * 执行监听回调
+ * 
+ * @method emit
+ * @for jmControl
+ * @param {string} name 触发事件的名称
+ * @param {array} args 事件参数数组
+ */
+jmControl.prototype.emit = function(name) {	
+	var args = [];
+	var len = arguments.length;
+	if(len > 1) {
+		//截取除name以后的所有参数
+		for(var i=1;i<len;i++) {
+			args.push(arguments[i]);
+		}
+	}
+	runEventHandle.call(this, name, args);
+	return this;
+}
+
 /**
  * 独立执行事件委托
  *
@@ -3440,10 +3413,11 @@ jmControl.prototype.unbind = function(name, handle) {
 function runEventHandle(name,args) {
 	var events = this.getEvent(name);		
 	if(events) {
-		var self = this;			
+		var self = this;
+		if(!jmUtils.isArray(args)) args = [args];	
 		events.each(function(i,handle) {
 			//只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
-			if(false === handle.call(self,args)) {
+			if(false === handle.apply(self,args)) {
 				args.cancel = true;
 			}
 		});		

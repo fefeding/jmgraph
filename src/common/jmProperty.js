@@ -44,7 +44,7 @@ jmProperty.prototype.setValue = function(name,value) {
 		if(!this.__properties) this.__properties = {};
 		var args = {oldValue:this.getValue(name),newValue:value};
 		this.__properties[name] = value;
-		this.emit('PropertyChange',name,args);
+		this.emit && this.emit('PropertyChange',name,args);
 	}
 	return this.getValue(name);
 }
@@ -62,53 +62,4 @@ jmProperty.prototype.createProperty = function(name, value) {
 	return jmUtils.createProperty(this, name, value);
 }
 
-/**
- * 绑定事件监听
- *
- * @method on
- * @for jmProperty
- * @param {string} name 监听事件的名称
- * @param {function} handle 监听委托 
- */
-jmProperty.prototype.on = function(name,handle) {
-	if(!this.__eventHandles) this.__eventHandles = {};
-	var handles = this.__eventHandles[name];
-	if(!handles) {
-		handles = this.__eventHandles[name] = []
-	}
-	//如果已绑定相同的事件，则直接返回
-	for(var i in handles) {
-		if(handles[i] === handle) {
-			return;
-		}
-	}
-	handles.push(handle);
-	return this;
-}
-
-/**
- * 执行监听回调
- * 
- * @method emit
- * @for jmProperty
- * @param {string} name 触发事件的名称
- * @param {array} args 事件参数数组
- */
- jmProperty.prototype.emit = function(name) {
-	var handles = this.__eventHandles?this.__eventHandles[name]:null;
-	if(handles) {
-		var args = [];
-		var len = arguments.length;
-		if(len > 1) {
-			//截取除name以后的所有参数
-			for(var i=1;i<len;i++) {
-				args.push(arguments[i]);
-			}
-		}		
-		for(var i in handles) {
-			handles[i].apply(this,args);
-		}		
-	}
-	return this;
-}
 

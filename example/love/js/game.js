@@ -48,10 +48,17 @@
         map.update(delta);
     }
 
+    function start() {
+        gameState = 'play';
+        map.start();
+        heart.start();
+    }
+
     function end() {
         gameState = 'end';
         startButton.visible = true;
         map.endText.visible = true;
+        heart.end();
     }
 
     //初始化游戏，游戏界页，开始按钮等初始
@@ -63,8 +70,7 @@
             startButton.position = {x:(width-startButton.width)/2, y: (height-startButton.height)/2};
 
             startButton.on('touchend', function(e){
-                gameState = 'play';
-                map.start();
+                start();
                 this.visible = false;
             });
             g.children.add(startButton);
@@ -85,6 +91,13 @@
                     g.children.add(this.sprite);
                 }
                 this.sprite.position = {x: (width - this.sprite.width)/2, y:height - this.sprite.height};
+            },
+            start: function() {
+                this.sprite.position = {x: (width - this.sprite.width)/2, y:height - this.sprite.height};
+                this.sprite.canMove(true);
+            },
+            end: function() {
+                this.sprite.canMove(false);
             },
             //碰撞检测
             hitTest: function(role) {
@@ -312,6 +325,7 @@
         this.update = function(delta) {
             this.txt.position.x += this.vx;
             this.txt.position.y -= this.vy;
+            this.txt.needUpdate = true;
             if(this.txt.position.x >= width || this.txt.position.y <= 0) {
                 this.die();
             }

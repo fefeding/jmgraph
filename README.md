@@ -6,8 +6,8 @@ jmGraph
 基于CANVAS的简单画图组件  
 `让你用类似于dom的方式，在canvas上画图，感觉会不会很爽。`
 
-主页：[http://graph.jm47.com/](http://graph.jm47.com/)  
-示例：[http://graph.jm47.com/example/index.html](http://graph.jm47.com/example/index.html)
+主页：[https://jiamao.github.io/jmgraph/](https://jiamao.github.io/jmgraph/)  
+示例：[https://jiamao.github.io/jmgraph/example/index.html](https://jiamao.github.io/jmgraph/example/index.html)
 
 安装
 ---
@@ -144,7 +144,7 @@ line.bind('mouseover',function(evt) {
 
 #### Path
 `path`是多数图形的基类，可以指定一个points数组来绘制一个路径。  
-[在线示例](http://graph.jm47.com/example/controls/line.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/line.html)
 
 ```javascript
 var path = graph.createPath(null,style);
@@ -157,7 +157,7 @@ path.points.push({x:80,y:80});
 #### 圆
 `arc`可以创建椭圆、圆弧和圆，circle调用的是原生的arc函数绘制，harc可以绘制一个圆环。
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/arc.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/arc.html)
 
 ```javascript
 //创建一个椭圆，指定不同的宽高就为椭圆。如果相同或指定半径则为圆。
@@ -173,7 +173,7 @@ var arc1 = g.createShape('arc', {
 `arraw`为创建一个箭头，
 `arrawline`是一条带箭头的直线。  
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/arrawline.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/arrawline.html)
 
 ```javascript
 //带箭头的直线
@@ -196,7 +196,7 @@ var arraw = g.createShape('arraw',{
 #### 贝塞尔曲线
 `bezier`可以指定无隐个控制点，绘制复杂的曲线。
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/bezier.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/bezier.html)
 
 ```javascript
 //一个固定的bezier曲线
@@ -206,7 +206,7 @@ var bezier = g.createShape('bezier', { style: style, points: [p0, p1, p2, p3, p4
 #### 图片
 `img`是用来承载一张图片的控件，可以用style.src来指定图片url。
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/img.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/img.html)
 
 ```javascript
 var style = {
@@ -227,7 +227,7 @@ img.canMove(true);
 #### 文字
 `label`可以用来绘制文字，通过style指定样式。
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/label.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/label.html)
 
 ```javascript
 var style = {
@@ -235,7 +235,7 @@ var style = {
     fill: '#fff',
     textAlign: 'center', //水平居中
     textBaseline: 'middle', //垂直居中
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: 'Arial',
     border: {
         left:1,
@@ -264,7 +264,7 @@ var label = g.createShape('label',{
 #### 棱形
 `prismatic`  
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/prismatic.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/prismatic.html)
 
 ```javascript
 var prismatic = g.createShape('prismatic',{
@@ -278,7 +278,7 @@ var prismatic = g.createShape('prismatic',{
 #### 可缩放控件
 `resize` 可以自由放大缩小的控件。 
 具体请参考示例。
-[在线示例](http://graph.jm47.com/example/controls/resize.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/resize.html)
 
 ```javascript
 var style = {
@@ -316,7 +316,7 @@ resize.on('resize', function() {
 
 ##### 示例
 来画一个X  
-在线示例：[http://graph.jm47.com/example/controls/test.html](http://graph.jm47.com/example/controls/test.html)
+在线示例：[http://jiamao.github.io/jmgraph/example/controls/test.html](http://jiamao.github.io/jmgraph/example/controls/test.html)
 ```javascript
 function jmTest(graph,params) {
     if(!params) params = {};

@@ -28,86 +28,146 @@
 		update();
 	});	
 	function init(graph){
-				var style = {
-					stroke:'rgb(120,20,80)',					
-					lineWidth:6,
-					close:true,
-					zIndex:1
-				};				
-				var bg = graph.createRadialGradient('50%','50%',0,'50%','50%','50%');
-				bg.addStop(0,'green');
-				bg.addStop('0.2','blue');
-				bg.addStop(0.8,'yellow');
-				bg.addStop(1,'red');					
-				style.fill = 'radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue 0.2, yellow 0.8, red 1)';
-				style.shadow = graph.createShadow(0,0,20,'rgb(255,255,255)');	
-				var arc = graph.createShape('arc',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
+		var style = {
+			stroke:'rgb(120,20,80)',					
+			lineWidth:6,
+			close:true,
+			zIndex:1
+		};				
+		var bg = graph.createRadialGradient('50%','50%',0,'50%','50%','50%');
+		bg.addStop(0,'green');
+		bg.addStop('0.2','blue');
+		bg.addStop(0.8,'yellow');
+		bg.addStop(1,'red');					
+		style.fill = 'radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue 0.2, yellow 0.8, red 1)';
+		style.shadow = graph.createShadow(0,0,20,'rgb(255,255,255)');	
+		var arc = graph.createShape('arc',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
 
-				arc.bind('mouseover',function(evt) {
-					this.style.stroke = 'rgba(88,200,155,0.5)';
-				});				
-				arc.bind('mouseleave',function(evt) {
-					this.style.stroke = 'rgb(120,20,80)';
-				});
+		arc.bind('mouseover',function(evt) {
+			this.style.stroke = 'rgba(88,200,155,0.5)';
+		});				
+		arc.bind('mouseleave',function(evt) {
+			this.style.stroke = 'rgb(120,20,80)';
+		});
 
-				//arc.bind('touchstart',function(evt) {
-					//this.style.stroke = 'rgba(88,200,155,0.5)';
-					//graph.refresh();
-				//});
+		//arc.bind('touchstart',function(evt) {
+			//this.style.stroke = 'rgba(88,200,155,0.5)';
+			//graph.refresh();
+		//});
 
-				graph.children.add(arc);
-				arc.canMove(true);
+		graph.children.add(arc);
+		arc.canMove(true);
 
-				style = jmUtils.clone(style);
-				style.stroke = 'rgb(255,255,255)';
-				style.close=false;
-				style.zIndex = 3;
-				delete style.shadow;
-				delete style.fill;
-				
-				var step = Math.PI / 25;
-				var bluestop = 0.5;
-				var bluedir = 0;
-				var yellowstop = 0.8;
-				var yellowdir = 0;
-				var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});
+		style = jmUtils.clone(style);
+		style.stroke = 'rgb(255,255,255)';
+		style.close=false;
+		style.zIndex = 3;
+		delete style.shadow;
+		delete style.fill;
+		
+		var step = Math.PI / 25;
+		var bluestop = 0.5;
+		var bluedir = 0;
+		var yellowstop = 0.8;
+		var yellowdir = 0;
+		var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});
 
-				style = jmUtils.clone(style);
-				style.close = true;
-				style.lineWidth = 1;
-				style.fill = 'red';
-				style.zIndex = 4;
-				var harc = graph.createShape('harc',{style:style,center:{x:600,y:380},start:0,end: 0 ,minRadius:100,maxRadius:150,anticlockwise:false});
-				graph.children.add(harc);
+		style = jmUtils.clone(style);
+		style.close = true;
+		style.lineWidth = 1;
+		style.fill = 'red';
+		style.zIndex = 4;
+		var harc = graph.createShape('harc',{style:style,center:{x:600,y:380},start:0,end: 0 ,minRadius:100,maxRadius:150,anticlockwise:false});
+		graph.children.add(harc);
 
-				function arcAni() {		
-					var s=childarc.startAngle + step;
-					var e = childarc.endAngle + step;
-					if(s > Math.PI * 2) {
-						s = 0;
-						e = Math.PI / 3;
-					}
-					childarc.startAngle = s;
-					childarc.endAngle = e;
-					harc.endAngle = s;
-					
-					
-					if(bluestop >= yellowstop) {
-						bluedir = 1;
-						//return false;
-					}
-					else if(bluestop < 0.1) {
-						bluedir = 0;
-					}
-					bluestop = bluedir == 0?bluestop + 0.01:bluestop-0.01;
-
-					arc.style.fill='radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue '+bluestop+', yellow '+yellowstop+', red 1)';
-					graph.needUpdate = true;		
-				}				
-				arc.children.add(childarc);				
-				childarc.animate(arcAni,10);
-				
-				
-				harc.canMove(true);
+		function arcAni() {		
+			var s=childarc.startAngle + step;
+			var e = childarc.endAngle + step;
+			if(s > Math.PI * 2) {
+				s = 0;
+				e = Math.PI / 3;
 			}
+			childarc.startAngle = s;
+			childarc.endAngle = e;
+			harc.endAngle = s;
+			
+			
+			if(bluestop >= yellowstop) {
+				bluedir = 1;
+				//return false;
+			}
+			else if(bluestop < 0.1) {
+				bluedir = 0;
+			}
+			bluestop = bluedir == 0?bluestop + 0.01:bluestop-0.01;
+
+			arc.style.fill='radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue '+bluestop+', yellow '+yellowstop+', red 1)';
+			graph.needUpdate = true;		
+		}				
+		arc.children.add(childarc);				
+		childarc.animate(arcAni,10);
+		
+		
+		harc.canMove(true);
+
+
+		//画一个进度显示
+		var w = 100;
+		var h = 100;
+		var forceColor = '#037CFC';
+		//先画底层圆
+		var style = {
+			stroke: '#efeff4',
+			lineWidth: 4,
+			close: true,
+			zIndex: 1
+		};
+		var radius = (w - style.lineWidth) / 2 - 1;
+		var bgarc = graph.createShape('circle', { 
+			style: style, 
+			center: { x: 120, y: 120 }, 
+			radius: radius, 
+			start: 0, 
+			end: Math.PI * 2 
+		});
+		
+		style = graph.util.clone(style);
+		style.stroke = forceColor;
+		delete style.close; //进度圆不需要封闭
+		var progressArc = graph.createShape('arc', { 
+			style: style, 
+			center: { x: '50%', y: '50%' }, 
+			start: -Math.PI / 2, 
+			end: -Math.PI / 2, 
+			radius: radius, 
+			anticlockwise: false 
+		});
+		graph.children.add(bgarc);
+		bgarc.children.add(progressArc);
+
+		style = graph.util.clone(style);
+		style.fill = forceColor
+		style.textAlign = 'center';
+		style.textBaseline = 'middle';
+		style.font = '22px Arial';
+		//创建一个label
+		var progressLabel = graph.createShape('label', {
+			style: style,
+			position: { x: 0, y: 0 },
+			text: '0%',
+			width: w,
+			height: h
+		});	
+		bgarc.children.add(progressLabel);
+
+		//改变进度
+		var curprogress = 0;
+		setInterval(function(){					
+			progressArc.endAngle = curprogress/100 * Math.PI * 2 + progressArc.startAngle;//当前进度应该转到的角度 
+			progressLabel.text = Math.ceil(curprogress) + '%';
+
+			curprogress++;
+			if(curprogress >= 100) curprogress = 0;
+		}, 100);
+	}
 </script>

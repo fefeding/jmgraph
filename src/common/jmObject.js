@@ -1,3 +1,4 @@
+"use strict"
 /**
  *  所有jm对象的基础对象
  * 
@@ -76,7 +77,6 @@ jmObject.prototype.animate = function(handle,millisec) {
 		if(handle) {			
 			if(!this.animateHandles) this.animateHandles = new jmUtils.list();
 			
-			//var id = jmUtils.guid();
 			var params = [];
 			if(arguments.length > 2) {
 				for(var i=2;i<arguments.length;i++) {

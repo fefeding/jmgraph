@@ -207,33 +207,30 @@ jmControl.prototype.setStyle = function(style) {
 		if(style) {
 			//样式映射名
 			var styleMapCacheKey = 'jm_control_style_mapping';
-			var styleMap = jmUtils.cache.get(styleMapCacheKey);
-			if(!styleMap) {
-				//样式名称，也当做白名单使用					
-				styleMap = {
-					'fill':'fillStyle',
-					'stroke':'strokeStyle',
-					'shadow.blur':'shadowBlur',
-					'shadow.x':'shadowOffsetX',
-					'shadow.y':'shadowOffsetY',
-					'shadow.color':'shadowColor',
-					'lineWidth' : 'lineWidth',
-					'miterLimit': 'miterLimit',
-					'fillStyle' : 'fillStyle',
-					'strokeStyle' : 'strokeStyle',
-					'font' : 'font',
-					'opacity' : 'globalAlpha',
-					'textAlign' : 'textAlign',
-					'textBaseline' : 'textBaseline',
-					'shadowBlur' : 'shadowBlur',
-					'shadowOffsetX' : 'shadowOffsetX',
-					'shadowOffsetY' : 'shadowOffsetY',
-					'shadowColor' : 'shadowColor',
-					'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-					'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-				};
-				jmUtils.cache.add(styleMapCacheKey,styleMap);
-			}
+			
+			//样式名称，也当做白名单使用					
+			var styleMap = {
+				'fill':'fillStyle',
+				'stroke':'strokeStyle',
+				'shadow.blur':'shadowBlur',
+				'shadow.x':'shadowOffsetX',
+				'shadow.y':'shadowOffsetY',
+				'shadow.color':'shadowColor',
+				'lineWidth' : 'lineWidth',
+				'miterLimit': 'miterLimit',
+				'fillStyle' : 'fillStyle',
+				'strokeStyle' : 'strokeStyle',
+				'font' : 'font',
+				'opacity' : 'globalAlpha',
+				'textAlign' : 'textAlign',
+				'textBaseline' : 'textBaseline',
+				'shadowBlur' : 'shadowBlur',
+				'shadowOffsetX' : 'shadowOffsetX',
+				'shadowOffsetY' : 'shadowOffsetY',
+				'shadowColor' : 'shadowColor',
+				'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+				'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+			};
 			var t = typeof style;	
 			var mpname = styleMap[mpkey || name];
 
@@ -300,7 +297,7 @@ jmControl.prototype.setStyle = function(style) {
 						break;
 					}
 					case 'transform' : {
-						if(jmUtils.isArray(style)) {
+						if(Array.isArray(style)) {
 							control.context.transform.apply(control.context,style);
 						}
 						else if(typeof style == 'object') {
@@ -839,11 +836,11 @@ jmControl.prototype.emit = function(name) {
  * @param {string} 将执行的事件名称
  * @param {object} 事件执行的参数，包括触发事件的对象和位置
  */
-function runEventHandle(name,args) {
+function runEventHandle(name, args) {
 	var events = this.getEvent(name);		
 	if(events) {
 		var self = this;
-		if(!jmUtils.isArray(args)) args = [args];	
+		if(!Array.isArray(args)) args = [args];	
 		events.each(function(i,handle) {
 			//只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
 			if(false === handle.apply(self,args)) {

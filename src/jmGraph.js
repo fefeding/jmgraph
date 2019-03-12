@@ -153,8 +153,7 @@ jmGraph.prototype.createShape = function(name,args) {
  * @return {boolean} true=支持，false=不支持
  */
 jmGraph.prototype.isSupportedBrowser = function() {
-	var browser = jmUtils.browser();
-	return !browser.msie || browser.ver > 8.0;
+	return true;  //不再用这个函数了
 }
 
 /**

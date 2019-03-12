@@ -26,17 +26,17 @@ class jmUtils {
             else if(this.isArray(source)) {
                 //如果是深度复，则拷贝每个对象
                 if(deep) {
-                    var dest = [];
-                    for(var i=0;i<source.length;i++) {
+                    let dest = [];
+                    for(let i=0; i<source.length; i++) {
                         dest.push(this.clone(source[i]));
                     }
                     return dest;
                 }
                 return source.slice(0);
             }
-            var target = {};
+            let target = {};
             target.constructor = source.constructor;
-            for(var k in source) {
+            for(let k in source) {
                 target[k] = this.clone(source[k]);
             }
             return target;
@@ -55,8 +55,8 @@ class jmUtils {
      */
     static bindEvent(target, name, fun, opt) {
         if(name &&  name.indexOf && name.indexOf(' ') != -1) {
-            var ns = name.split(' ');
-            for(var i=0;i<ns.length;i++) {
+            let ns = name.split(' ');
+            for(let i=0;i<ns.length;i++) {
                 this.bindEvent(target, ns[i], fun, opt);
             }
             return;
@@ -104,7 +104,7 @@ class jmUtils {
      * @return {position} 位置对象(top,left)
      */
     getElementPosition(el) {    
-        var pos = {"top": 0, "left": 0};
+        let pos = {"top": 0, "left": 0};
         if(!el) return pos;
 
         if (el.offsetParent) {
@@ -134,23 +134,23 @@ class jmUtils {
     getEventPosition (evt, scale) {
         evt = evt || event;
         
-        var isTouch = false;
-        var touches = evt.changedTouches || evt.targetTouches || evt.touches;
-        var target = evt.target || evt.srcElement;
+        let isTouch = false;
+        let touches = evt.changedTouches || evt.targetTouches || evt.touches;
+        let target = evt.target || evt.srcElement;
         if(touches) {
             evt = touches[0];//兼容touch事件
             evt.target = target;
             isTouch = true;
         }
-        var px = evt.pageX || evt.x || 
-            (evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));    
-        var py = evt.pageY || evt.y || 
-            (evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop));
+        let px = evt.pageX || evt.x;
+        if(typeof px == 'undefined')  px = evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);    
+        let py = evt.pageY || evt.y;
+        if(typeof py == 'undefined')  py = evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop);
 
-        var ox = evt.offsetX;
-        var oy = evt.offsetY;
+        let ox = evt.offsetX;
+        let oy = evt.offsetY;
         if(typeof ox === 'undefined' && typeof oy === 'undefined') {
-            var p = this.getElementPosition(target);
+            let p = this.getElementPosition(target);
             ox= px - p.left;
             oy = py - p.top;
         }
@@ -211,8 +211,8 @@ class jmUtils {
     pointInPolygon(pt, polygon, offset) {
         offset = offset || 1;
         offset = offset / 2;
-        var i,j,n = polygon.length;
-        var inside = false,redo = true;
+        let i, j, n = polygon.length;
+        let inside = false, redo = true;
 
         if(!polygon || n == 0) return 0;
         if(n == 1) {
@@ -251,9 +251,9 @@ class jmUtils {
             //点到直线的距离小于宽度的一半，表示在线上
             if(pt.y != polygon[0].y && pt.y != polygon[1].y) {
 
-                var f = (polygon[1].x - polygon[0].x) / (polygon[1].y - polygon[0].y) * (pt.y - polygon[0].y);
-                var ff = (pt.y - polygon[0].y) / Math.sqrt(f * f + (pt.y - polygon[0].y) * (pt.y - polygon[0].y));
-                var l = ff * (pt.x - polygon[0].x - f );
+                let f = (polygon[1].x - polygon[0].x) / (polygon[1].y - polygon[0].y) * (pt.y - polygon[0].y);
+                let ff = (pt.y - polygon[0].y) / Math.sqrt(f * f + (pt.y - polygon[0].y) * (pt.y - polygon[0].y));
+                let l = ff * (pt.x - polygon[0].x - f );
                 
                 return Math.abs(l) <= offset ?1:0;
             }
@@ -327,7 +327,7 @@ class jmUtils {
      * @return {bound} 越界标识
      */
     checkOutSide(parentBounds, targetBounds, offset) {
-        var result = {left:0,right:0,top:0,bottom:0};
+        let result = {left:0,right:0,top:0,bottom:0};
         if(offset.x < 0 ) {
             result.left = targetBounds.left + offset.x - parentBounds.left;
         }
@@ -354,20 +354,20 @@ class jmUtils {
      */
     rotatePoints(p, rp, r) {
         if(!r || !p) return p;
-        var cos = Math.cos(r);
-        var sin = Math.sin(r);
+        let cos = Math.cos(r);
+        let sin = Math.sin(r);
         if(p.length) {
-            for(var i=0;i<p.length;i++) {
+            for(let i=0;i<p.length;i++) {
                 if(!p[i]) continue;
-                var x1 = p[i].x - rp.x;
-                var y1 = p[i].y - rp.y;
+                let x1 = p[i].x - rp.x;
+                let y1 = p[i].y - rp.y;
                 p[i].x = x1 * cos - y1 * sin + rp.x;
                 p[i].y = x1 * sin + y1 * cos + rp.y;
             }
         }
         else {
-            var x1 = p.x - rp.x;
-            var y1 = p.y - rp.y;
+            let x1 = p.x - rp.x;
+            let y1 = p.y - rp.y;
             p.x = x1 * cos - y1 * sin + rp.x;
             p.y = x1 * sin + y1 * cos + rp.y;
         }
@@ -386,7 +386,7 @@ class jmUtils {
     trimStart(source, c) {
         c = c || ' ';
         if(source && source.length > 0) {
-            var sc = source[0];
+            let sc = source[0];
             if(sc === c || c.indexOf(sc) >= 0) {
                 source = source.substring(1);
                 return this.trimStart(source,c);
@@ -407,7 +407,7 @@ class jmUtils {
     trimEnd(source, c) {
         c = c || ' ';
         if(source && source.length > 0) {
-            var sc = source[source.length - 1];
+            let sc = source[source.length - 1];
             if(sc === c || c.indexOf(sc) >= 0) {
                 source = source.substring(0,source.length - 1);
                 return this.trimStart(source,c);
@@ -456,7 +456,7 @@ class jmUtils {
      */
     percentToNumber(per) {
         if(typeof per === 'string') {
-            var tmp = this.checkPercent(per);
+            let tmp = this.checkPercent(per);
             if(tmp) {
                 per = this.trim(tmp,'% ');
                 per = per / 100;
@@ -477,14 +477,14 @@ class jmUtils {
         if(typeof h !== 'string') return h;
 
         h = h.toLowerCase();
-        var hex = '0123456789abcdef';
-        var v = 0;
-        var l = h.length;
-        for(var i=0;i<l;i++) {
-            var iv = hex.indexOf(h[i]);
+        let hex = '0123456789abcdef';
+        let v = 0;
+        let l = h.length;
+        for(let i=0;i<l;i++) {
+            let iv = hex.indexOf(h[i]);
             if(iv == 0) continue;
             
-            for(var j=1;j<l - i;j++) {
+            for(let j=1;j<l - i;j++) {
                 iv *= 16;
             }
             v += iv;
@@ -501,11 +501,11 @@ class jmUtils {
      * @return {string} 16进制表达
      */
     numberToHex(v) {
-        var hex = '0123456789abcdef';
+        let hex = '0123456789abcdef';
         
-        var h = '';
+        let h = '';
         while(v > 0) {
-            var t = v % 16;
+            let t = v % 16;
             h = hex[t] + h;
             v = Math.floor(v / 16);
         }
@@ -651,7 +651,7 @@ jmUtils.list = class extends Array {
      */
     add(obj) {        
         if(obj && Array.isArray(obj)) {
-            for(var i=0;i<obj.length;i++) {
+            for(let i=0;i<obj.length;i++) {
                 this.add(obj[i]);
             } 
             return obj;           
@@ -669,7 +669,7 @@ jmUtils.list = class extends Array {
      * @param {any} obj 将移除的对象
      */
     remove(obj) {
-        for(var i = this.length -1;i>=0;i--) {            
+        for(let i = this.length -1;i>=0;i--) {            
             if(this[i] == obj) {
                 this.removeAt(i);
             }
@@ -685,7 +685,7 @@ jmUtils.list = class extends Array {
      */
     removeAt(index) {
         if(this.length > index) {
-            var obj = this[index];
+            let obj = this[index];
             this.splice(index,1);
             if(this.option.removeHandler)  this.option.removeHandler.call(this, obj, index);
         }
@@ -731,15 +731,15 @@ jmUtils.list = class extends Array {
         if(cb && typeof cb == 'function') {
             //如果按倒序循环
             if(inverse) {
-                for(var i = this.length - 1;i>=0; i--) {
-                    var r = cb.call(this, i, this[i]);
+                for(let i = this.length - 1;i>=0; i--) {
+                    let r = cb.call(this, i, this[i]);
                     if(r === false) break;
                 }
             }
             else {
-                var len = this.length;
-               for(var i  = 0; i < len;i++) {
-                    var r = cb.call(this, i, this[i]);
+                let len = this.length;
+               for(let i  = 0; i < len;i++) {
+                    let r = cb.call(this, i, this[i]);
                     if(r === false) break;
                 } 
             }            
@@ -756,9 +756,9 @@ jmUtils.list = class extends Array {
      */
     count(handler) {
         if(handler && typeof handler == 'function') {
-            var count = 0;
-            var len = this.length;
-            for(var i  = 0; i<len;i++) {
+            let count = 0;
+            let len = this.length;
+            for(let i  = 0; i<len;i++) {
                 if(handler(this[i])) {
                     count ++;
                 }
@@ -778,3 +778,5 @@ jmUtils.list = class extends Array {
         this.splice(0, this.length);
     }
 }
+
+export default jmUtils;

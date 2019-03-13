@@ -1,3 +1,7 @@
+
+import jmUtils from "./jmUtils";
+import jmProperty from "./jmProperty";
+
 /**
  * 控件基础对象
  * 控件的基础属性和方法
@@ -6,164 +10,201 @@
  * @module jmGraph
  * @for jmGraph
  */	
-function jmControl(graph, option) {	
-	
-};
-//继承属性绑定
-jmUtils.extend(jmControl, jmProperty);
-
-//# region 定义属性
-
-/**
- * 样式
- * @property style
- * @type {object}
- */
-jmUtils.createProperty(jmControl.prototype, 'style', {});
-
-/**
- * 当前控件是否可见
- * @property visible
- * @default true
- * @type {boolean}
- */
-jmUtils.createProperty(jmControl.prototype, 'visible', true);
-
-/**
- * 当前控件的子控件集合
- * @property children
- * @type {list}
- */
-jmUtils.createProperty(jmControl.prototype, 'children', new jmUtils.list());
-
-/**
- * 当前位置左上角
- * @property position
- * @type {point}
- */
-jmUtils.createProperty(jmControl.prototype, 'position');
-
-/**
- * 宽度
- * @property width
- * @type {number}
- */
-jmUtils.createProperty(jmControl.prototype, 'width', 0);
-
-/**
- * 高度
- * @property height
- * @type {number}
- */
-jmUtils.createProperty(jmControl.prototype, 'height', 0);
-
-/**
- * 控件层级关系，发生改变时，需要重新调整排序
- * @property zIndex
- * @readonly
- * @type {object}
- */
-jmUtils.createProperty(jmControl.prototype, 'zIndex', {
-	get: function() {
-		this.__properties = this.__properties||{};
-		return this.__properties['zIndex'];
-	},
-	set: function(v) {
-		this.__properties['zIndex'] = v;
-		this.children.sort();//层级发生改变，需要重新排序
-		//子控件属性改变，需要更新整个画板
-		if(v && !this.is('jmGraph') && this.graph) {
-			this.graph.needUpdate = true;
-		}
+class jmControl extends jmProperty{	
+	constructor() {
+		super();
 	}
-});
 
-//# end region
+	//# region 定义属性
 
-/**
- * 初始化对象，设定样式，初始化子控件对象
- * 此方法为所有控件需调用的方法
- *
- * @method initializing
- * @for jmControl
- * @param {canvas} context 当前画布
- * @param {style} style 当前控件的样式
- */
-jmControl.prototype.initializing = function(context,style) {
-	this.context = context;
-
-	this.style = style||{};
-
-	var self = this;
-	//定义子元素集合
-	this.children = new jmUtils.list();
-	var oadd = this.children.add;
-	//当把对象添加到当前控件中时，设定其父节点
-	this.children.add = function(obj) {
-		if(typeof obj === 'object') {
-			if(obj.parent && obj.parent != self && obj.parent.children) {
-				obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
-			}
-			obj.parent = self;
-			//如果存在先移除
-			if(this.contain(obj)) {
-				this.oremove(obj);
-			}
-			oadd.call(this,obj);
-			obj.emit('add',obj);
-
-			self.needUpdate = true;
-			if(self.graph) obj.graph = self.graph;
-			this.sort();//先排序
-			//self.emit('addChild', obj);
-			return obj;
-		}
-	};
-	this.children.oremove= this.children.remove;
-	//当把对象从此控件中移除时，把其父节点置为空
-	this.children.remove = function(obj) {
-		if(typeof obj === 'object') {				
-			obj.parent = null;
-			obj.graph = null;
-			obj.remove(true);
-			this.oremove(obj);
-			self.needUpdate = true;
-			//self.emit('removeChild', obj, index);
-		}
-	};
 	/**
-	 * 根据控件zIndex排序，越大的越高
+	 * 样式
+	 * @property style
+	 * @type {object}
 	 */
-	this.children.sort = function() {
-		var levelItems = {};
-		//提取zindex大于0的元素
-		//为了保证0的层级不改变，只能把大于0的提出来。
-		this.each(function(i,obj) {
-			var zindex = obj.zIndex;
-			if(!zindex && obj.style && obj.style.zIndex) {
-				zindex = Number(obj.style.zIndex);
-				if(isNaN(zindex)) zindex=obj.style.zIndex||0;
+	get style() {
+		let s = this.__pro('style');
+		if(!s) s = this.__pro('style', {});
+		return s;
+	}
+	set style(v) {
+		return this.__pro('style', v);
+	}
+
+	/**
+	 * 当前控件是否可见
+	 * @property visible
+	 * @default true
+	 * @type {boolean}
+	 */
+	get visible() {
+		let s = this.__pro('visible');
+		if(typeof s == 'undefined') s = this.__pro('visible', true);
+		return s;
+	}
+	set visible(v) {
+		return this.__pro('visible', v);
+	}
+
+	/**
+	 * 当前控件的子控件集合
+	 * @property children
+	 * @type {list}
+	 */
+	get children() {
+		let s = this.__pro('children');
+		if(!s) s = this.__pro('children', new jmUtils.list());
+		return s;
+	}
+	set children(v) {
+		return this.__pro('children', v);
+	}
+
+	/**
+	 * 当前位置左上角
+	 * @property position
+	 * @type {point}
+	 */
+	get position() {
+		return this.__pro('position');
+	}
+	set position(v) {
+		return this.__pro('position', v);
+	}
+
+	/**
+	 * 宽度
+	 * @property width
+	 * @type {number}
+	 */
+	get width() {
+		let s = this.__pro('width');
+		if(typeof s == 'undefined') s = this.__pro('width', 0);
+		return s;
+	}
+	set width(v) {
+		return this.__pro('width', v);
+	}
+
+	/**
+	 * 高度
+	 * @property height
+	 * @type {number}
+	 */
+	get height() {
+		let s = this.__pro('height');
+		if(typeof s == 'undefined') s = this.__pro('height', 0);
+		return s;
+	}
+	set height(v) {
+		return this.__pro('height', v);
+	}
+
+	/**
+	 * 控件层级关系，发生改变时，需要重新调整排序
+	 * @property zIndex
+	 * @readonly
+	 * @type {object}
+	 */
+	get zIndex() {
+		let s = this.__pro('zIndex');
+		if(!s) s = this.__pro('zIndex', {});
+		return s;
+	}
+	set zIndex(v) {
+		this.__pro('zIndex', v);
+		this.children.sort();//层级发生改变，需要重新排序
+		this.needUpdate = true;
+		return v;
+	}
+	//# end region
+
+	/**
+	 * 初始化对象，设定样式，初始化子控件对象
+	 * 此方法为所有控件需调用的方法
+	 *
+	 * @method initializing
+	 * @for jmControl
+	 * @param {canvas} context 当前画布
+	 * @param {style} style 当前控件的样式
+	 */
+	initializing(context, style) {
+		this.context = context;
+
+		this.style = style||{};
+
+		var self = this;
+		//定义子元素集合
+		this.children = this.children || new jmUtils.list();
+		var oadd = this.children.add;
+		//当把对象添加到当前控件中时，设定其父节点
+		this.children.add = function(obj) {
+			if(typeof obj === 'object') {
+				if(obj.parent && obj.parent != self && obj.parent.children) {
+					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
+				}
+				obj.parent = self;
+				//如果存在先移除
+				if(this.contain(obj)) {
+					this.oremove(obj);
+				}
+				oadd.call(this, obj);
+				obj.emit('add', obj);
+
+				self.needUpdate = true;
+				if(self.graph) obj.graph = self.graph;
+				this.sort();//先排序
+				//self.emit('addChild', obj);
+				return obj;
 			}
-			if(zindex) {
-				var items = levelItems[zindex] || (levelItems[zindex] = []);
-				items.push(obj);					
+		};
+		this.children.oremove= this.children.remove;
+		//当把对象从此控件中移除时，把其父节点置为空
+		this.children.remove = function(obj) {
+			if(typeof obj === 'object') {				
+				obj.parent = null;
+				obj.graph = null;
+				obj.remove(true);
+				this.oremove(obj);
+				self.needUpdate = true;
+				//self.emit('removeChild', obj, index);
 			}
-		});
-		
-		for(var index in levelItems) {
-			oadd.call(this,levelItems[index]);
+		};
+		/**
+		 * 根据控件zIndex排序，越大的越高
+		 */
+		this.children.sort = function() {
+			var levelItems = {};
+			//提取zindex大于0的元素
+			//为了保证0的层级不改变，只能把大于0的提出来。
+			this.each(function(i,obj) {
+				let zindex = obj.zIndex;
+				if(!zindex && obj.style && obj.style.zIndex) {
+					zindex = Number(obj.style.zIndex);
+					if(isNaN(zindex)) zindex=obj.style.zIndex||0;
+				}
+				if(zindex) {
+					let items = levelItems[zindex] || (levelItems[zindex] = []);
+					items.push(obj);					
+				}
+			});
+			
+			for(let index in levelItems) {
+				oadd.call(this,levelItems[index]);
+			}
+
+			self.needUpdate = true;
 		}
+		this.children.clear = function() {
+			this.each(function(i,obj) {
+				this.remove(obj);
+			},true);
+		}
+		this.needUpdate = true;
+	} 
+};
 
-		self.needUpdate = true;
-	}
-	this.children.clear = function() {
-		this.each(function(i,obj) {
-			this.remove(obj);
-		},true);
-	}
 
-	this.needUpdate = true;
-} 
 
 /**
  * 设置鼠标指针

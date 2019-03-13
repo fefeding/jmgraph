@@ -1,7 +1,4 @@
-
-
-
-
+import jmObject from "./jmObject";
 /**
  * 对象属性管理
  * 
@@ -9,57 +6,66 @@
  * @for jmGraph
  * @require jmObject
  */
-
-var jmProperty = function() {	
-	this.__properties = {};
-	this.__eventHandles = {};
-};
-
-jmUtils.extend(jmProperty, jmObject);
-
-/**
- * 获取属性值
- * 
- * @method getValue
- * @for jmProperty
- * @param {string} name 获取属性的名称
- * @return {any} 获取属性的值
- */
-jmProperty.prototype.getValue = function(name) {
-	if(!this.__properties) this.__properties = {};
-	return this.__properties[name];
-}
-
-/**
- * 设置属性值
- *
- * @method setValue
- * @for jmProperty
- * @param {string} name 设置属性的名称
- * @param {any} value 设置属性的值
- * @retunr {any} 当前属性的值
- */
-jmProperty.prototype.setValue = function(name,value) {
-	if(typeof value !== 'undefined') {
-		if(!this.__properties) this.__properties = {};
-		var args = {oldValue:this.getValue(name),newValue:value};
-		this.__properties[name] = value;
-		this.emit && this.emit('PropertyChange',name,args);
+class jmProperty extends jmObject {	
+	__properties = {};
+	__eventHandles = {};
+	constructor() {
+		super();
 	}
-	return this.getValue(name);
+
+	/**
+	 * 基础属性读写接口
+	 * @method __pro
+	 * @param {string} name 属性名
+	 * @param {any} value 属性的值
+	 * @returns {any} 属性的值
+	 */
+	__pro(...pars) {
+		if(pars) {
+			let name = pars[0];
+			if(pars.length > 1) {
+				let value = pars[1];
+				let args = {oldValue: this.__properties[name], newValue: value};
+				this.__properties[name] = pars[1];
+				this.emit && this.emit('propertyChange', name, args);
+			}
+			else if(pars.length == 1) {
+				return this.__properties[name];
+			}
+		}
+	}
+
+	/**
+	 * 是否需要刷新画板，属性的改变会导致它变为true
+	 * @property needUpdate
+	 * @type {boolean}
+	 */
+	get needUpdate() {
+		return this.__pro('needUpdate');
+	}
+	set needUpdate(v) {
+		this.__pro('needUpdate', v);
+		//子控件属性改变，需要更新整个画板
+		if(v && !this.is('jmGraph') && this.graph) {
+			this.graph.needUpdate = true;
+		}
+	}
+
+	/**
+	 * 当前所在的画布对象 jmGraph
+	 * @property graph
+	 * @type {jmGraph}
+	 */
+	get graph() {
+		let g = this.__pro('graph');
+		g = g || (this.__pro('graph', this.findParent('jmGraph')));
+		return g;
+	}
+	set graph(v) {
+		return this.__pro('graph', v);
+	}
 }
 
-/**
- * 定义一个属性
- *
- * @method setValue
- * @for createProperty
- * @param {string} name 设置属性的名称
- * @param {any} value 属性的值，可选, 如果直接指定为descriptor，也可以。可以传递get,set，按defineProperty第三个参数做参考
- * @retunr {any} 当前属性的值
- */
-jmProperty.prototype.createProperty = function(name, value) {	
-	return jmUtils.createProperty(this, name, value);
-}
+export default jmProperty;
 
 

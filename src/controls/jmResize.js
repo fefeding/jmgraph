@@ -135,10 +135,10 @@ jmResize.prototype.bindRectEvents = function() {
 		//鼠标指针
 		r.bind('mousemove',function() {	
 			var rectCursors = ['w-resize','nw-resize','n-resize','ne-resize','e-resize','se-resize','s-resize','sw-resize'];		
-			this.cursor(rectCursors[this.index]);
+			this.cursor = rectCursors[this.index];
 		});
 		r.bind('mouseleave',function() {
-			this.cursor('default');
+			this.cursor = 'default';
 		});
 	}
 }

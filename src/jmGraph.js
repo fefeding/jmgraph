@@ -275,9 +275,10 @@ jmGraph.prototype.clear = function(w,h) {
 * @param {string} name 样式名
 * @param {string} value 样式值
 */
-jmGraph.prototype.css = function(name,value) {
+jmGraph.prototype.css = function(name, value) {
 	if(this.canvas) {
-		this.canvas.style[name] = value;
+		if(typeof value != 'undefined') this.canvas.style[name] = value;
+		return this.canvas.style[name];
 	}
 }
 

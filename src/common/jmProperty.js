@@ -6,7 +6,7 @@ import jmObject from "./jmObject";
  * @for jmGraph
  * @require jmObject
  */
-class jmProperty extends jmObject {	
+class jmProperty extends jmObject {		
 	__properties = {};
 	__eventHandles = {};
 	constructor() {

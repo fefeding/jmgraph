@@ -1,4 +1,4 @@
-import jmUtils from "../common/jmUtils";
+import jmUtils from "../common/jmUtils.js";
 /**
  * 渐变类
  *

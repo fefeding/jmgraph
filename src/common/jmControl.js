@@ -1,8 +1,8 @@
 
-import jmUtils from "./jmUtils";
-import jmGradient from "../models/jmGradient";
-import jmShadow from "../models/jmShadow";
-import jmProperty from "./jmProperty";
+import jmUtils from "./jmUtils.js";
+import jmGradient from "../models/jmGradient.js";
+import jmShadow from "../models/jmShadow.js";
+import jmProperty from "./jmProperty.js";
 
 /**
  * 控件基础对象
@@ -37,10 +37,23 @@ class jmControl extends jmProperty{
 		'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
 	};
 
+	/**
+	 * 当前对象类型名jmRect
+	 *
+	 * @property type
+	 * @type string
+	 */
+	type = 'jmControl';
+
 	constructor(params) {
 		super();
 		this.style = params && params.style ? params.style : {};
-		this.initializing();		
+		this.position = params.position || {x:0,y:0};
+		this.width = params.width || 0;
+		this.height = params.height  || 0;
+		this.initializing();	
+		
+		this.on = this.bind;
 	}
 
 	//# region 定义属性
@@ -51,9 +64,17 @@ class jmControl extends jmProperty{
 	 * @type {object}
 	 */
 	get context() {
+		let s = this.__pro('context');
+		if(s) return s;
+		else if(this.is('jmGraph') && this.canvas) {
+			return this.context = this.canvas.getContext('2d');
+		}
 		let g = this.graph;
 		if(g) return g.context;
-		return null;
+		return g.canvas.getContext('2d');
+	}
+	set context(v) {
+		return this.__pro('context', v);
 	}
 
 	/**
@@ -232,7 +253,8 @@ class jmControl extends jmProperty{
 			var levelItems = {};
 			//提取zindex大于0的元素
 			//为了保证0的层级不改变，只能把大于0的提出来。
-			this.each(function(i,obj) {
+			this.each(function(i, obj) {
+				if(!obj) return;
 				let zindex = obj.zIndex;
 				if(!zindex && obj.style && obj.style.zIndex) {
 					zindex = Number(obj.style.zIndex);
@@ -289,7 +311,7 @@ class jmControl extends jmProperty{
 				let mpname = jmControl.StyleMap[mpkey || name];
 
 				//如果为渐变对象
-				if(jmUtils.isType(style, jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
+				if((style instanceof jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
 					//如果是渐变，则需要转换
 					if(t == 'string' && style.indexOf('-gradient') > -1) {
 						style = new jmGradient(style);
@@ -812,9 +834,7 @@ class jmControl extends jmProperty{
 	 * @param {string} name 事件名称
 	 * @param {function} handle 事件委托
 	 */
-	bind =
-	on = function(name, handle) {
-		
+	bind(name, handle) {		
 		/**
 		 * 添加事件的集合
 		 *
@@ -1026,7 +1046,7 @@ class jmControl extends jmProperty{
 
 			if(args.cancel !== true) {
 				//如果返回true则阻断冒泡
-				runEventHandle.call(this,name,args);//执行事件		
+				this.runEventHandle(name, args);//执行事件		
 			}
 			if(!this.focused && name == 'mousemove') {
 				this.focused = true;//表明当前焦点在此控件中
@@ -1037,7 +1057,7 @@ class jmControl extends jmProperty{
 			//如果焦点不在，且原焦点在，则触发mouseleave事件
 			if(this.focused && name == 'mousemove') {
 				this.focused = false;//表明当前焦点离开
-				runEventHandle.call(this,'mouseleave',args);//执行事件	
+				this.runEventHandle(this,'mouseleave', args);//执行事件	
 			}	
 		}
 			

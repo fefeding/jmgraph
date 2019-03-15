@@ -1,4 +1,4 @@
-import jmUtils from "./jmUtils";
+import jmUtils from "./jmUtils.js";
 /**
  * 事件模型
  *
@@ -23,13 +23,15 @@ class jmEvents {
 	keyHandler;
 
 	constructor(container,target) {
-		this.mouseHandler = new jmMouseEvent(container,target);
-		this.keyHandler = new jmKeyEvent(container,target);
+		this.container = container;
+		this.target = target || container;
+		this.mouseHandler = new jmMouseEvent(container, target);
+		this.keyHandler = new jmKeyEvent(container, target);
 	}
 
 	touchStart(evt) {
 		evt = evt || window.event;
-		container.raiseEvent('touchstart',evt);
+		this.container.raiseEvent('touchstart',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == target) {
 			if(evt.preventDefault) evt.preventDefault();
@@ -39,7 +41,7 @@ class jmEvents {
 
 	touchMove(evt) {
 		evt = evt || window.event;
-		container.raiseEvent('touchmove',evt);
+		this.container.raiseEvent('touchmove',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == target) {
 			if(evt.preventDefault) evt.preventDefault();
@@ -50,7 +52,7 @@ class jmEvents {
 	touchEnd(evt) {
 		evt = evt || window.event;
 		
-		container.raiseEvent('touchend',evt);
+		this.container.raiseEvent('touchend',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == target) {
 			if(evt.preventDefault) evt.preventDefault();
@@ -61,7 +63,7 @@ class jmEvents {
 	touchCancel(evt) {
 		evt = evt || window.event;
 		
-		container.raiseEvent('touchcancel',evt);
+		this.container.raiseEvent('touchcancel',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == target) {
 			if(evt.preventDefault) evt.preventDefault();
@@ -78,10 +80,10 @@ class jmMouseEvent {
 		this.container = container;
 		this.target = target || container;
 
-		this.init();
+		this.init(container, target);
 	}
 	
-	init() {
+	init(container, target) {
 		let canvas = this.target;	
 		let doc = typeof typeof document != 'undefined'?document:null;
 		//禁用鼠标右健系统菜单
@@ -176,7 +178,7 @@ class jmKeyEvent {
 		this.container = container;
 		this.target = target || container;
 
-		this.init();
+		this.init(container, target);
 	}
 	
 
@@ -204,7 +206,7 @@ class jmKeyEvent {
 	/**
 	 * 初始化健盘事件
 	 */
-	init() {
+	init(container, target) {
 		let doc = typeof typeof document != 'undefined'?document:null;
 
 		doc && jmUtils.bindEvent(doc,'keypress',function(evt) {

@@ -1,4 +1,4 @@
-import jmPath from "./jmPath";
+import jmPath from "./jmPath.js";
 /**
  * 圆弧图型 继承自jmPath
  * 参数params说明:center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
@@ -27,10 +27,7 @@ class jmArc extends jmPath {
 		this.radius = params.radius || 0;
 
 		this.startAngle = params.start || params.startAngle || 0;
-		this.endAngle = params.end || params.endAngle || Math.PI * 2;
-
-		this.width = params.width || 0;
-		this.height = params.height  || 0;
+		this.endAngle = params.end || params.endAngle || Math.PI * 2;		
 
 		this.anticlockwise = params.anticlockwise  || 0;
 	}	

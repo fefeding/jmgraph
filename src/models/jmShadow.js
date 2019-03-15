@@ -1,4 +1,4 @@
-import jmUtils from "../common/jmUtils";
+import jmUtils from "../common/jmUtils.js";
 
 /**
  * 画图阴影对象表示法

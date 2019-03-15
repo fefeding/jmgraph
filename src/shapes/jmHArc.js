@@ -1,4 +1,4 @@
-import jmArc from "./jmArc";
+import jmArc from "./jmArc.js";
 /**
  * 画空心圆弧,继承自jmPath
  *
@@ -9,7 +9,7 @@ import jmArc from "./jmArc";
  * @param {object} params 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针
  */
 
-class jmHArc extends jmPath {
+class jmHArc extends jmArc {
 	/**
 	 * 当前对象类型名jmHarc
 	 *

@@ -1,4 +1,4 @@
-import jmPath from "./jmPath";
+import jmPath from "./jmPath.js";
 /**
  * 画箭头,继承自jmPath
  *

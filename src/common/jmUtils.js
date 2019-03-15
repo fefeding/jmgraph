@@ -23,7 +23,7 @@ class jmUtils {
             if(this.isType(source, this.list)) {
                 return new this.list(source.items);
             }
-            else if(this.isArray(source)) {
+            else if(Array.isArray(source)) {
                 //如果是深度复，则拷贝每个对象
                 if(deep) {
                     let dest = [];
@@ -82,7 +82,7 @@ class jmUtils {
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
      */
-    removeEvent(target, name, fun) {
+    static removeEvent(target, name, fun) {
         if(target.removeEventListener) {
             return target.removeEventListener(name, fun, false);
         }    
@@ -103,7 +103,7 @@ class jmUtils {
      * @param {element} el 目标元素对象
      * @return {position} 位置对象(top,left)
      */
-    getElementPosition(el) {    
+    static getElementPosition(el) {    
         let pos = {"top": 0, "left": 0};
         if(!el) return pos;
 
@@ -131,7 +131,7 @@ class jmUtils {
      * @param {point} [scale] 当前画布的缩放比例
      * @return {point} 事件触发的位置 
      */
-    getEventPosition (evt, scale) {
+    static getEventPosition (evt, scale) {
         evt = evt || event;
         
         let isTouch = false;
@@ -185,7 +185,7 @@ class jmUtils {
      * @param {class} type 对象类型
      * @return {boolean} 返回对象是否为指定类型 
      */
-    isType(target, type) {
+    static isType(target, type) {
         if(!target || typeof target !== 'object') return false;
         if(target.constructor === type) return true;
         /*if(target.__baseType) {        
@@ -208,7 +208,7 @@ class jmUtils {
      * @param {number} offset 判断可偏移值
      * @return {integer} 0= 不在图形内和线上，1=在边上，2=在图形内部
      */
-    pointInPolygon(pt, polygon, offset) {
+    static pointInPolygon(pt, polygon, offset) {
         offset = offset || 1;
         offset = offset / 2;
         let i, j, n = polygon.length;
@@ -326,7 +326,7 @@ class jmUtils {
      * @param {number} offset 判断是否越界可容偏差
      * @return {bound} 越界标识
      */
-    checkOutSide(parentBounds, targetBounds, offset) {
+    static checkOutSide(parentBounds, targetBounds, offset) {
         let result = {left:0,right:0,top:0,bottom:0};
         if(offset.x < 0 ) {
             result.left = targetBounds.left + offset.x - parentBounds.left;
@@ -352,7 +352,7 @@ class jmUtils {
      * @param {*} rp 旋转中心点
      * @param {*} r 旋转角度
      */
-    rotatePoints(p, rp, r) {
+    static rotatePoints(p, rp, r) {
         if(!r || !p) return p;
         let cos = Math.cos(r);
         let sin = Math.sin(r);
@@ -383,7 +383,7 @@ class jmUtils {
      * @param {char} [c] 要去除字符串的前置字符
      * @return {string} 去除前置字符后的字符串
      */
-    trimStart(source, c) {
+    static trimStart(source, c) {
         c = c || ' ';
         if(source && source.length > 0) {
             let sc = source[0];
@@ -404,7 +404,7 @@ class jmUtils {
      * @param {char} [c] 要去除字符串的后置字符
      * @return {string} 去除后置字符后的字符串
      */
-    trimEnd(source, c) {
+    static trimEnd(source, c) {
         c = c || ' ';
         if(source && source.length > 0) {
             let sc = source[source.length - 1];
@@ -425,7 +425,7 @@ class jmUtils {
      * @param {char} [c] 要去除字符串的字符
      * @return {string} 去除字符后的字符串
      */
-    trim(source,c) {
+    static trim(source,c) {
         return this.trimEnd(this.trimStart(source,c),c);
     }
 
@@ -437,7 +437,7 @@ class jmUtils {
      * @param {string} 字符串参数
      * @return {boolean} true=当前字符串为百分比参数,false=不是
      */
-    checkPercent(per) {
+    static checkPercent(per) {
         if(typeof per === 'string') {
             per = this.trim(per);
             if(per[per.length - 1] == '%') {
@@ -454,7 +454,7 @@ class jmUtils {
      * @param {string} per 把百分比转为数值的参数
      * @return {number} 百分比对应的数值
      */
-    percentToNumber(per) {
+    static percentToNumber(per) {
         if(typeof per === 'string') {
             let tmp = this.checkPercent(per);
             if(tmp) {
@@ -473,7 +473,7 @@ class jmUtils {
      * @param {string} h 16进制颜色表达
      * @return {number} 10进制表达
      */
-    hexToNumber(h) {
+    static hexToNumber(h) {
         if(typeof h !== 'string') return h;
 
         h = h.toLowerCase();
@@ -500,7 +500,7 @@ class jmUtils {
      * @param {number} v 数值
      * @return {string} 16进制表达
      */
-    numberToHex(v) {
+    static numberToHex(v) {
         let hex = '0123456789abcdef';
         
         let h = '';
@@ -520,7 +520,7 @@ class jmUtils {
      * @param {string} hex 16进制颜色表达
      * @return {string} 颜色字符串
      */
-    toColor(r, g, b, a) {    
+    static toColor(r, g, b, a) {    
         if(typeof r == 'string' && r) {
             r = this.trim(r);
             //当为7位时，表示需要转为带透明度的rgba
@@ -572,7 +572,7 @@ class jmUtils {
      * @param {any} value 属性的值，可选, 如果直接指定为descriptor，也可以。可以传递get,set，按defineProperty第三个参数做参考
      * @retunr {any} 当前属性的值
      */
-    createProperty(instance, name, value) {
+    static createProperty(instance, name, value) {
         var descriptor = {
             configurable: false, //当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false。
             enumerable: true,
@@ -639,8 +639,8 @@ class jmUtils {
  */
 jmUtils.list = class extends Array {
     option = {}; //选项
-    constructor(arr) {
-        super(arr);
+    constructor(...arg) {
+        super(...arg);
     }
     /**
      * 往集合中添加对象
@@ -651,8 +651,8 @@ jmUtils.list = class extends Array {
      */
     add(obj) {        
         if(obj && Array.isArray(obj)) {
-            for(let i=0;i<obj.length;i++) {
-                this.add(obj[i]);
+            for(let i=0; i < obj.length; i++) {
+                if(!this.includes(obj[i])) this.push(obj[i]);
             } 
             return obj;           
         }
@@ -669,7 +669,7 @@ jmUtils.list = class extends Array {
      * @param {any} obj 将移除的对象
      */
     remove(obj) {
-        for(let i = this.length -1;i>=0;i--) {            
+        for(let i = this.length -1; i>=0; i--) {            
             if(this[i] == obj) {
                 this.removeAt(i);
             }

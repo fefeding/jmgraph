@@ -1,4 +1,4 @@
-import jmUtils from "./jmUtils";
+import jmUtils from "./jmUtils.js";
 
 /**
  *  所有jm对象的基础对象
@@ -13,7 +13,7 @@ class jmObject {
 		if(g && g.type == 'jmGraph') {
 			this.graph = g;
 		}
-		id = Symbol("id"); //生成一个唯一id
+		this.id = Symbol("id"); //生成一个唯一id
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-import jmArc from "./jmArc";
+import jmArc from "./jmArc.js";
 /**
  * 画规则的圆弧
  *

@@ -1,4 +1,4 @@
-import jmControl from "../common/jmControl";
+import jmControl from "../common/jmControl.js";
 /**
  * 基础路径,大部分图型的基类
  * 指定一系列点，画出图形

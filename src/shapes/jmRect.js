@@ -1,3 +1,4 @@
+import jmPath from "./jmPath";
 /**
  * 画矩形
  *

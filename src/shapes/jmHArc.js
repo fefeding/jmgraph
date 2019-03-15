@@ -1,3 +1,4 @@
+import jmArc from "./jmArc";
 /**
  * 画空心圆弧,继承自jmPath
  *
@@ -8,19 +9,15 @@
  * @param {object} params 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针
  */
 
-function jmHArc(graph,params) {
-	if(!params) params = {};
+class jmHArc extends jmPath {
 	/**
 	 * 当前对象类型名jmHarc
 	 *
 	 * @property type
 	 * @type string
 	 */
-	this.type = 'jmHArc';
-	this.points = params.points || [];
-	var style = params.style || {};
+	type = 'jmHArc';
 	
-	this.graph = graph;
 		
 	this.center = params.center || {x:0,y:0};
 	this.minRadius = params.minRadius || style.minRadius || 0;

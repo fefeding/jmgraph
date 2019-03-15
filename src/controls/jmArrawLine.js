@@ -1,3 +1,4 @@
+import jmPath from "../shapes/jmPath";
 /**
  * 带箭头的直线,继承jmPath
  *

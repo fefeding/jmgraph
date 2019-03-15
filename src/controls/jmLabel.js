@@ -1,4 +1,4 @@
-
+import jmControl from "../common/jmControl";
 /**
  * 显示文字控件
  * params参数:style=样式，value=显示的文字

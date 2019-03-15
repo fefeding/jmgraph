@@ -1,4 +1,4 @@
-
+import jmRect from "../shapes/jmRect";
 /**
  * 可拉伸的缩放控件
  * 继承jmRect

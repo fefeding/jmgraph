@@ -12,7 +12,7 @@ import jmUtils from "../common/jmUtils";
  */
 
 class jmShadow {
-	constructor(x,y,blur,color) {
+	constructor(x, y, blur, color) {
 		if(typeof x == 'string' && !y && !blur && !color) {
 			this.fromString(x);
 		}

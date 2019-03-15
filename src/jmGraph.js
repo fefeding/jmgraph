@@ -133,6 +133,35 @@ class jmGraph extends jmControl {
 
 		callback && callback(this);		
 	}
+
+	/**
+	 * 宽度
+	 * @property width
+	 * @type {number}
+	 */
+	get width() {
+		if(this.canvas) return this.canvas.width;
+		return 0;
+	}
+	set width(v) {
+		if(!this.canvas) return v;
+		return this.canvas.width = v;
+	}
+
+	/**
+	 * 高度
+	 * @property height
+	 * @type {number}
+	 */
+	get height() {
+		if(this.canvas) return this.canvas.height;
+		return 0;
+	}
+	set height(v) {
+		if(!this.canvas) return v;
+		return this.canvas.height = v;
+	}
+
 	/**
 	 * 获取当前画布在浏览器中的绝对定位
 	 *

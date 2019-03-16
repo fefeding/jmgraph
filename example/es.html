@@ -21,15 +21,7 @@
     <script type="module">
         import jmGraph from "../src/jmGraph.js";
 		var container = document.getElementById('mycanvas_container');
-		/*jmGraph('mycanvas_container', {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
-		}).then((g)=>{
-			init(g)
-		});*/
+		
 		var g = new jmGraph(container, {
 			width: 800,
 			height: 600,
@@ -51,7 +43,7 @@
 			//style.lineCap = 'round';
 
 			//创建一个方块
-			var rect = g.createShape('rect',{
+			var rect = g.createShape('rect', {
 				style:style,
 				position: {x:100,y:100},
 				width:100,

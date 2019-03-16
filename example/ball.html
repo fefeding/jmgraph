@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<!--<script type="text/javascript" src="../src/jmGraph.js"></script>-->
-		<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	
+		<!--<script type="text/javascript" src="../src/jmGraph.js"></script>
+		<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
 		<style>
 		html,body {
 			margin:0;
@@ -29,8 +29,8 @@
 	</body>
 </html>
 
-<script type="text/javascript">
-		
+<script type="module">
+		import jmGraph from "../src/jmGraph.js";
 			var graph = new jmGraph('mycanvas');
 			//初始化jmgraph
 			/*jmGraph('mycanvas').then((g)=>{
@@ -84,7 +84,7 @@
 				
 				for(var i=0;i<10;i++) {
 					var radius = Math.random() * 10 + 8;
-					var styletmp = jmUtils.clone(style);
+					var styletmp = graph.util.clone(style);
 					styletmp.fill = graph.createRadialGradient(radius,radius,0,radius,radius,radius);
 					var rr1 = Math.floor(Math.random() * 255);
 					var gg1 = Math.floor(Math.random() * 255);
@@ -92,8 +92,8 @@
 					var rr2 = Math.floor(Math.random() * 255);
 					var gg2 = Math.floor(Math.random() * 255);
 					var bb2 = Math.floor(Math.random() * 255);
-					styletmp.fill.addStop(0,jmUtils.toColor(rr1,gg1,bb1));
-					styletmp.fill.addStop(1,jmUtils.toColor(rr2,gg2,bb2));
+					styletmp.fill.addStop(0,graph.util.toColor(rr1,gg1,bb1));
+					styletmp.fill.addStop(1,graph.util.toColor(rr2,gg2,bb2));
 					//styletmp.fill = 'r(0.5,0.1)#ccc-#ccc';
 					var p = createPosition(radius);
 					var b = new ball(graph,p.x,p.y,radius,styletmp);
@@ -105,10 +105,10 @@
 				}
 	
 				var radius = Math.random() * 10 + 6;
-				var styletmp = jmUtils.clone(style);
+				var styletmp = graph.util.clone(style);
 				styletmp.fill = graph.createRadialGradient(radius,radius,0,radius,radius,radius);
 				styletmp.fill.addStop(0,'#fff');
-				styletmp.fill.addStop(1,jmUtils.toColor(255,149,255));	
+				styletmp.fill.addStop(1, graph.util.toColor(255,149,255));	
 				var p = createPosition(radius,0);
 				var b = new ball(graph,p.x,p.y,radius,styletmp);
 				b.vx = 6;
@@ -208,8 +208,7 @@
 				this.vx = 0;
 				this.vy = 0;
 				this.ax = 0;
-				this.ay = 0;
-				
+				this.ay = 0;				
 
 				this.x = function(x) {
 					if(typeof x !== 'undefined') this.center.x = x;	

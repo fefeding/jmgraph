@@ -67,11 +67,9 @@ class jmGraph extends jmControl {
 
 		//不是用new实例化的话，返回一个promise
 		if(new.target !== jmGraph) {
-			return new Promise(function(resolve, reject){
-				jmGraphTypeInit(option, function() {
-					var g = new jmGraph(canvas, option, callback);
-					resolve && resolve(g);
-				});
+			return new Promise(function(resolve, reject){				
+				var g = new jmGraph(canvas, option, callback);
+				resolve && resolve(g);				
 			});
 		}
 		super(option);
@@ -201,7 +199,7 @@ class jmGraph extends jmControl {
 		let shape = jmGraph.shapes[name];
 		if(shape) {
 			if(!args) args = {};
-			let obj = new shape(this, args);
+			let obj = new shape(args);
 			return obj;
 		}
 	}
@@ -290,7 +288,7 @@ class jmGraph extends jmControl {
 	 * @param {number} [h] 清除画布的高度
 	 */
 	redraw(w, h) {	
-		this.clear(w, h);
+		this.clear(w||this.width, h||this.height);
 		this.paint();
 	}
 

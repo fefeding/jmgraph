@@ -11,16 +11,16 @@ class jmGradient {
 	constructor(opt) {
 		this.stops = new jmUtils.list();
 
-		if(op && typeof op == 'object') {
-			for(let k in op) {
-				this[k] = op[k];
+		if(opt && typeof opt == 'object') {
+			for(let k in opt) {
+				this[k] = opt[k];
 			}
 		}
 		//解析字符串格式
 		//linear-gradient(direction, color-stop1, color-stop2, ...);
 		//radial-gradient(center, shape size, start-color, ..., last-color);
-		else if(typeof op == 'string') {
-			this.fromString(op);
+		else if(typeof opt == 'string') {
+			this.fromString(opt);
 		}
 	}
 	/**
@@ -31,8 +31,7 @@ class jmGradient {
 	 * @param {number} offset 放射渐变颜色偏移,可为百分比参数。
 	 * @param {string} color 当前偏移颜色值
 	 */
-	addColorStop =
-	addStop = function(offset,color) {
+	addStop(offset, color) {
 		this.stops.add({
 			offset:offset,
 			color:color

@@ -768,7 +768,23 @@ class jmControl extends jmProperty{
 	 * @method draw
 	 */
 	draw() {	
-		
+		if(this.points && this.points.length > 0) {
+			//获取当前控件的绝对位置
+			let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+			
+			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+			let len = this.points.length;			
+			for(let i=1; i < len;i++) {
+				let p = this.points[i];
+				//移至当前坐标
+				if(p.m) {
+					this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
+				}
+				else {
+					this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
+				}			
+			}		
+		}	
 	}
 
 	/**

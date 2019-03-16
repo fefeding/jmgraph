@@ -73,7 +73,7 @@ class jmArc extends jmPath {
 	 * @property endAngle
 	 * @type {number}
 	 */
-	get endAngleius() {
+	get endAngle() {
 		return this.__pro('endAngle');
 	}
 	set endAngle(v) {

@@ -21,7 +21,7 @@ class jmUtils {
         if(source && typeof source === 'object') {
             //如果为当前泛型，则直接new
             if(this.isType(source, this.list)) {
-                return new this.list(source.items);
+                return new this.list(source);
             }
             else if(Array.isArray(source)) {
                 //如果是深度复，则拷贝每个对象
@@ -640,7 +640,14 @@ class jmUtils {
 jmUtils.list = class extends Array {
     option = {}; //选项
     constructor(...arg) {
-        super(...arg);
+        let ps = [];
+        if(arg && arg.length && Array.isArray(arg[0])) {
+            for(let i=0; i< arg[0].length; i++) ps.push(arg[0][i]);
+            super(...ps);
+        }
+        else {
+            super();
+        }
     }
     /**
      * 往集合中添加对象

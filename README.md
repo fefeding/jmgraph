@@ -11,7 +11,8 @@ jmGraph
 
 安装
 ---
-直接从github下载包或npm安装
+直接从github下载包或npm安装。
+如需要构建，直接在项目录下执行`npm run build`即可。
 ```
 npm install jmgraph
 ```
@@ -35,7 +36,21 @@ npm install jmgraph
     });
 </script>
 ```
-##### commonjs
+##### es6模块引用
+也可以直接用es6中的import来引用
+```html
+<script type="module">
+    import jmGraph from "../dist/jmgraph.es6.js";
+		var container = document.getElementById('mycanvas_container');		
+		var g = new jmGraph(container, {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+    });
+</script>
+```
 
 
 在dom中添加一个`div或canvas`，然后初始化jmGraph。

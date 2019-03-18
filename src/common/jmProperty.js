@@ -7,10 +7,11 @@ import jmObject from "./jmObject.js";
  * @require jmObject
  */
 class jmProperty extends jmObject {		
-	__properties = {};
-	__eventHandles = {};
+	
 	constructor() {
 		super();
+		this.__properties = {};
+		this.__eventHandles = {};
 	}
 
 	/**

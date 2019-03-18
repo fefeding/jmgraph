@@ -7,20 +7,6 @@ import jmUtils from "./jmUtils.js";
  * @for jmGraph
  */
 class jmEvents {
-	/**
-	 * 鼠标事件勾子
-	 *
-	 * @property mouseHandler
-	 * @type {class}
-	 */
-	mouseHandler;
-	/**
-	 * 健盘事件勾子
-	 *
-	 * @property keyHandler
-	 * @type {class}
-	 */
-	keyHandler;
 
 	constructor(container,target) {
 		this.container = container;

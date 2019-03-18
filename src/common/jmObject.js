@@ -9,12 +9,12 @@ import jmList from "../models/jmList.js";
  * @for jmGraph
  */
 class jmObject {
-	id;
+	//id;
 	constructor(g) {
 		if(g && g.type == 'jmGraph') {
 			this.graph = g;
 		}
-		this.id = Symbol("id"); //生成一个唯一id
+		//this.id = Symbol("id"); //生成一个唯一id
 	}
 	
 	/**

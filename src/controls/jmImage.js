@@ -1,4 +1,4 @@
-import jmControl from "../common/jmControl.js";
+import jmControl from "../shapes/jmControl.js";
 /**
  * 图片控件，继承自jmControl
  * params参数中image为指定的图片源地址或图片img对象，

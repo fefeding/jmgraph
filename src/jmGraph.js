@@ -2,7 +2,7 @@ import jmUtils from "./common/jmUtils.js";
 import jmShadow from "./models/jmShadow.js";
 import jmGradient from "./models/jmGradient.js";
 import jmEvents from "./common/jmEvents.js";
-import jmControl from "./common/jmControl.js";
+import jmControl from "./shapes/jmControl.js";
 import jmPath from "./shapes/jmPath.js";
 import jmArc from "./shapes/jmArc.js";
 import jmArraw from "./shapes/jmArraw.js";

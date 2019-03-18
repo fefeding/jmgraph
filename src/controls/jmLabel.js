@@ -1,4 +1,4 @@
-import jmControl from "../common/jmControl.js";
+import jmControl from "../shapes/jmControl.js";
 /**
  * 显示文字控件
  * params参数:style=样式，value=显示的文字

@@ -40,15 +40,15 @@ npm install jmgraph
 也可以直接用es6中的import来引用
 ```html
 <script type="module">
-    import jmGraph from "../dist/jmgraph.es6.js";
-		var container = document.getElementById('mycanvas_container');		
-		var g = new jmGraph(container, {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
-    });
+  import jmGraph from "../dist/jmgraph.es6.js";
+  var container = document.getElementById('mycanvas_container');		
+  var g = new jmGraph(container, {
+    width: 800,
+    height: 600,
+    style: {
+      fill: '#000'
+    }
+  });
 </script>
 ```
 

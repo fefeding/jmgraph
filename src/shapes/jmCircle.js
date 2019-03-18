@@ -8,14 +8,7 @@ import jmArc from "./jmArc.js";
  * @param {jmGraph} graph 画布
  * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
  */
-class jmCircle extends jmArc {	
-	/**
-	 * 当前对象类型名jmCircle
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmCircle';
+class jmCircle extends jmArc {		
 	
 	constructor(params) {
 		super(params);		

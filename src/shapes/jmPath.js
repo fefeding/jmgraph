@@ -10,14 +10,7 @@ import jmControl from "./jmControl.js";
  * @param {object} params 路径参数 points=所有描点
  */
 
-class jmPath extends jmControl {
-	/**
-	 * 当前对象类型名jmPath
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmPath';
+class jmPath extends jmControl {	
 
 	constructor(params) {
 		super(params);		

@@ -13,20 +13,19 @@
     "name": "jiamao",
     "email": "haofefe@163.com"
   },
+  "es6": true,
+  "modules": true,
   "engines": {},
   "dependencies": {
-    "cmd-util": "^0.3.13",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.9.4",
-    "gulp-concat": "^2.6.1",
-    "gulp-jmbuild": "^1.2.78",
     "gulp-jshint": "^2.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
-    "jshint": "^2.9.5",
-    "q": "^1.5.1"
+    "jshint": "^2.10.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "gulp-babel": "^8.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jiamao/jmgraph.git"

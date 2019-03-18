@@ -9,14 +9,7 @@ import jmPath from "./jmPath.js";
  * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
  */
 class jmLine extends jmPath {	
-	/**
-	 * 当前对象类型名jmLine
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmLine';
-
+	
 	constructor(params) {
 		super(params);
 

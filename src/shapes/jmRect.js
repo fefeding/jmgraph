@@ -7,14 +7,7 @@ import jmPath from "./jmPath.js";
  * @param {jmGraph} graph 画布
  * @param {object} params 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度
  */ 
-class jmRect extends jmPath {	
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmRect';
+class jmRect extends jmPath {		
 
 	constructor(params) {
 		params = params||{};

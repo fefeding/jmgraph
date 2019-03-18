@@ -10,13 +10,7 @@ import jmPath from "./jmPath.js";
  * @param {object} params 参数
  */ 
 class jmBezier extends jmPath {	
-	/**
-	 * 当前对象类型名
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmBezier';
+	
 	constructor(params) {
 		super(params);
 		this.cpoints = params.points || [];

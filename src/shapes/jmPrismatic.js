@@ -8,14 +8,7 @@ import jmPath from "./jmPath.js";
  * @param {object} params 参数 center=棱形中心点，width=棱形宽,height=棱形高
  */
 class jmPrismatic extends jmPath {	
-	/**
-	 * 当前对象类型名jmPrismatic
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmPrismatic';
-
+	
 	constructor(params) {
 		super(params);
 		this.style.close = typeof this.style.close == 'undefined'? true : this.style.close;

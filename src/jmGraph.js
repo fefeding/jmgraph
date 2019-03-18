@@ -16,6 +16,7 @@ import jmArrawLine from "./controls/jmArrawLine.js";
 import jmImage from "./controls/jmImage.js";
 import jmLabel from "./controls/jmLabel.js";
 import jmResize from "./controls/jmResize.js";
+
 /**
  * jmGraph画图类库
  * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
@@ -27,35 +28,6 @@ import jmResize from "./controls/jmResize.js";
  * @param {function} callback 初始化后的回调
  */
 class jmGraph extends jmControl {
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = "jmGraph";
-	
-	/**
-	 * 当前所有图形类型
-	 * @property shapes
-	 * @type {object}
-	 */
-	static shapes = {
-		"path": jmPath,
-		"arc": jmArc,
-		"arraw": jmArraw,
-		"bezier": jmBezier,
-		"circle": jmCircle,
-		"harc": jmHArc,
-		"line": jmLine,
-		"prismatic": jmPrismatic,
-		"rect": jmRect,
-		"arrawline": jmArrawLine,
-		"image": jmImage,
-		"img": jmImage,
-		"label": jmLabel,
-		"resize": jmResize
-	};
 
 	constructor(canvas, option, callback) {
 		if(typeof option == 'function') {
@@ -108,6 +80,27 @@ class jmGraph extends jmControl {
 	 * @method init
 	 */
 	init(callback) {
+		/**
+		 * 当前所有图形类型
+		 * @property shapes
+		 * @type {object}
+		 */
+		this.shapes = {
+			"path": jmPath,
+			"arc": jmArc,
+			"arraw": jmArraw,
+			"bezier": jmBezier,
+			"circle": jmCircle,
+			"harc": jmHArc,
+			"line": jmLine,
+			"prismatic": jmPrismatic,
+			"rect": jmRect,
+			"arrawline": jmArrawLine,
+			"image": jmImage,
+			"img": jmImage,
+			"label": jmLabel,
+			"resize": jmResize
+		};
 		
 		/**
 		 * 画控件前初始化
@@ -183,7 +176,7 @@ class jmGraph extends jmControl {
 	 * @param {class} shape 图形控件类型
 	 */
 	registerShape(name, shape) {
-		jmGraph.shapes[name] = shape;
+		this.shapes[name] = shape;
 	}
 
 	/**
@@ -196,7 +189,7 @@ class jmGraph extends jmControl {
 	 * @return {object} 已实例化控件的对象
 	 */
 	createShape(name, args) {
-		let shape = jmGraph.shapes[name];
+		let shape = this.shapes[name];
 		if(shape) {
 			if(!args) args = {};
 			let obj = new shape(args);

@@ -11,13 +11,6 @@ import jmPath from "./jmPath.js";
  * @param {object} params 圆弧参数
  */
 class jmArc extends jmPath {
-	/**
-	 * 当前对象类型名
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmArc';
 
 	constructor(params) {
 		if(!params) params = {};
@@ -31,6 +24,7 @@ class jmArc extends jmPath {
 
 		this.anticlockwise = params.anticlockwise  || 0;
 	}	
+
 	/**
 	 * 中心点
 	 * point格式：{x:0,y:0,m:true}

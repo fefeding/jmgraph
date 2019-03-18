@@ -10,14 +10,7 @@ import jmArc from "./jmArc.js";
  */
 
 class jmHArc extends jmArc {
-	/**
-	 * 当前对象类型名jmHarc
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmHArc';
-	
+		
 	constructor(params) {
 		super(params);
 

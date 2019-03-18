@@ -8,13 +8,6 @@ import jmRect from "../shapes/jmRect.js";
  * @for jmGraph
  */
 class jmResize extends jmRect {	
-	/**
-	 * 当前对象类型名jmResize
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmResize';	
 
 	constructor(params) {
 		params = params || {};

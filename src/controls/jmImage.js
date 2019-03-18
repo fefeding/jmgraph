@@ -12,13 +12,6 @@ import jmControl from "../shapes/jmControl.js";
  * @param {object} params 控件参数
  */
 class jmImage extends jmControl {
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmImage';
 
 	constructor(params) {
 		params = params || {};

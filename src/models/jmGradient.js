@@ -1,5 +1,5 @@
 import jmUtils from "../common/jmUtils.js";
-import jmList from "../models/jmList.js";
+import jmList from "./jmList.js";
 
 /**
  * 渐变类

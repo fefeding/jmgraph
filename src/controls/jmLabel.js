@@ -10,13 +10,6 @@ import jmControl from "../shapes/jmControl.js";
  * @param {object} params 文字控件参数
  */
 class jmLabel extends jmControl {
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmLabel';
 
 	constructor(params) {
 		params = params || {};

@@ -9,14 +9,7 @@ import jmArraw from "../shapes/jmArraw.js";
  * @param {jmGraph} graph 当前画布
  * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
  */	
-class jmArrawLine extends jmLine {
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmArrawLine';
+class jmArrawLine extends jmLine {	
 
 	constructor(params) {
 		super(params);

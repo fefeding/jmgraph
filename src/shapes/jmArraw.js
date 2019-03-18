@@ -8,14 +8,7 @@ import jmPath from "./jmPath.js";
  * @param {jmGraph} graph 当前画布
  * @param {object} 生成箭头所需的参数
  */
-class jmArraw extends jmPath {
-	/**
-	 * 当前对象类型名
-	 *
-	 * @property type
-	 * @type string
-	 */
-	type = 'jmArraw';
+class jmArraw extends jmPath {	
 
 	constructor(params) {
 		super(params);

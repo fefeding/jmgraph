@@ -5,9 +5,7 @@
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */
-class jmList extends Array {
-    option = {}; //选项
-    type = 'jmList';
+class jmList extends Array {    
     constructor(...arg) {
         let ps = [];
         if(arg && arg.length && Array.isArray(arg[0])) {
@@ -17,6 +15,8 @@ class jmList extends Array {
         else {
             super();
         }
+        this.option = {}; //选项
+        this.type = 'jmList';
     }
     /**
      * 往集合中添加对象

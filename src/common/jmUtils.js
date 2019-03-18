@@ -41,7 +41,7 @@ class jmUtils {
             }
             return target;
         }
-        return source
+        return source;
     }
 
     /**
@@ -70,7 +70,7 @@ class jmUtils {
         }
         else {
             return false;
-        };
+        }
     }
 
     /**
@@ -92,7 +92,7 @@ class jmUtils {
         }
         else {
             target['on' + name] = null;
-        };
+        }
     }
 
     /**
@@ -260,26 +260,20 @@ class jmUtils {
             return 0;
         }
 
-        for (i = 0;i < n;++i)
-        {
+        for (i = 0;i < n;++i) {
             if (polygon[i].x == pt.x &&    // 是否在顶点上
-                polygon[i].y == pt.y )
-            {
+                polygon[i].y == pt.y ) {
                 return 1;
             }
         }
         pt = this.clone(pt);
-        while (redo)
-        {
+        while (redo) {
             redo = false;
             inside = false;
-            for (i = 0,j = n - 1;i < n;j = i++) 
-            {
+            for (i = 0,j = n - 1;i < n;j = i++) {
                 if ( (polygon[i].y < pt.y && pt.y < polygon[j].y) || 
-                    (polygon[j].y < pt.y && pt.y < polygon[i].y) ) 
-                {
-                    if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) 
-                    {
+                    (polygon[j].y < pt.y && pt.y < polygon[i].y) ) {
+                    if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
                         var _x = (pt.y-polygon[i].y)*(polygon[j].x-polygon[i].x)/(polygon[j].y-polygon[i].y)+polygon[i].x;
                         if (pt.x < _x)          // 在线的左侧
                             inside = !inside;
@@ -289,11 +283,14 @@ class jmUtils {
                         }
                     }
                 }
-                else if ( pt.y == polygon[i].y) 
-                {
-                    if (pt.x < polygon[i].x)    // 交点在顶点上
-                    {
-                        polygon[i].y > polygon[j].y ? --pt.y : ++pt.y;
+                else if ( pt.y == polygon[i].y) {
+                    if (pt.x < polygon[i].x) {    // 交点在顶点上                    
+                        if(polygon[i].y > polygon[j].y) {
+                            --pt.y
+                        }
+                        else {
+                            ++pt.y;
+                        }
                         redo = true;
                         break;
                     }
@@ -301,8 +298,7 @@ class jmUtils {
                 else if ( polygon[i].y ==  polygon[j].y && // 在水平的边界线上
                     pt.y == polygon[i].y &&
                     ( (polygon[i].x < pt.x && pt.x < polygon[j].x) || 
-                    (polygon[j].x < pt.x && pt.x < polygon[i].x) ) )
-                {
+                    (polygon[j].x < pt.x && pt.x < polygon[i].x) ) ) {
                     inside = true;
                     break;
                 }

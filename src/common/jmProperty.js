@@ -27,7 +27,7 @@ class jmProperty extends jmObject {
 				let value = pars[1];
 				let args = {oldValue: this.__properties[name], newValue: value};
 				this.__properties[name] = pars[1];
-				this.emit && this.emit('propertyChange', name, args);
+				if(this.emit) this.emit('propertyChange', name, args);
 				return pars[1];
 			}
 			else if(pars.length == 1) {

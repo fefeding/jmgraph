@@ -69,7 +69,7 @@ class jmGraph extends jmControl {
 		if(new.target !== jmGraph) {
 			return new Promise(function(resolve, reject){				
 				var g = new jmGraph(canvas, option, callback);
-				resolve && resolve(g);				
+				if(resolve) resolve(g);				
 			});
 		}
 		super(option);
@@ -129,7 +129,7 @@ class jmGraph extends jmControl {
 		//绑定事件
 		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
 
-		callback && callback(this);		
+		if(callback) callback(this);		
 	}
 
 	/**
@@ -142,8 +142,8 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set width(v) {
-		if(!this.canvas) return v;
-		return this.canvas.width = v;
+		if(this.canvas) this.canvas.width = v;		
+		return v;
 	}
 
 	/**
@@ -156,8 +156,8 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set height(v) {
-		if(!this.canvas) return v;
-		return this.canvas.height = v;
+		if(this.canvas) this.canvas.height = v;
+		return v;
 	}
 
 	/**
@@ -455,7 +455,7 @@ class jmGraph extends jmControl {
 		function update() {
 			if(self.needUpdate) self.redraw();
 			requestAnimationFrame(update);
-			callback && callback();
+			if(callback) callback();
 		}
 		update();
 		return this;

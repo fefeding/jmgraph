@@ -16,15 +16,29 @@
   "es6": true,
   "modules": true,
   "engines": {},
-  "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-jshint": "^2.1.0",
-    "jshint": "^2.10.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
-    "gulp-babel": "^8.0.0"
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.1.0",
+    "jshint": "^2.10.2",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
   },
   "repository": {
     "type": "git",

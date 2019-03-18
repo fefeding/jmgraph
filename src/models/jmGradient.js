@@ -1,5 +1,5 @@
-import jmUtils from "../common/jmUtils.js";
-import jmList from "./jmList.js";
+import {jmUtils} from "../common/jmUtils.js";
+import {jmList} from "../common/jmList.js";
 
 /**
  * 渐变类
@@ -205,7 +205,7 @@ class jmGradient {
 	}
 }
 
-export default jmGradient;
+export { jmGradient };
 
 
 

@@ -1,4 +1,4 @@
-import jmPath from "./jmPath.js";
+import {jmPath} from "./jmPath.js";
 /**
  * 贝塞尔曲线,继承jmPath
  * N阶，参数points中为控制点
@@ -11,8 +11,8 @@ import jmPath from "./jmPath.js";
  */ 
 class jmBezier extends jmPath {	
 	
-	constructor(params) {
-		super(params);
+	constructor(params, t='jmBezier') {
+		super(params, t);
 		this.cpoints = params.points || [];
 	}	
 	
@@ -104,4 +104,4 @@ class jmBezier extends jmPath {
 	}
 }
 
-export default jmBezier;
+export { jmBezier };

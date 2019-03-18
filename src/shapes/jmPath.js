@@ -1,4 +1,4 @@
-import jmControl from "./jmControl.js";
+import {jmControl} from "./jmControl.js";
 /**
  * 基础路径,大部分图型的基类
  * 指定一系列点，画出图形
@@ -12,8 +12,8 @@ import jmControl from "./jmControl.js";
 
 class jmPath extends jmControl {	
 
-	constructor(params) {
-		super(params);		
+	constructor(params, t='jmPath') {
+		super(params, t);		
 		this.points = params && params.points ? params.points : [];		
 	}
 	
@@ -32,4 +32,4 @@ class jmPath extends jmControl {
 	}
 }
 
-export default jmPath;
+export { jmPath };

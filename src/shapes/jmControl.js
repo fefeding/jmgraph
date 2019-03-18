@@ -1,9 +1,9 @@
 
-import jmUtils from "../common/jmUtils.js";
-import jmList from "../models/jmList.js";
-import jmGradient from "../models/jmGradient.js";
-import jmShadow from "../models/jmShadow.js";
-import jmProperty from "../common/jmProperty.js";
+import {jmUtils} from "../common/jmUtils.js";
+import {jmList} from "../common/jmList.js";
+import {jmGradient} from "../models/jmGradient.js";
+import {jmShadow} from "../models/jmShadow.js";
+import {jmProperty} from "../common/jmProperty.js";
 
 //样式名称，也当做白名单使用		
 const jmStyleMap = {
@@ -41,7 +41,7 @@ class jmControl extends jmProperty{
 
 	constructor(params, t) {
 		super();
-		this.__pro('type', t || new.target.name);
+		this.__pro('type', t || 'jmControl');
 		this.style = params && params.style ? params.style : {};
 		this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
@@ -1264,4 +1264,4 @@ class jmControl extends jmProperty{
 	}
 };
 
-export default jmControl;
+export { jmControl };

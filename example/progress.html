@@ -3,8 +3,8 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/jmGraph.js"></script>
-		<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
+		<!--<script type="text/javascript" src="../src/jmGraph.js"></script>-->
+		<script type="text/javascript" src="../dist/jmgraph.js"></script>	
 	</head>
 	<body style="margin:10px auto;">
 		<div id="mycanvas" width="1200" height="600" style="border:1px solid red;margin:10px;background-color:#000;"></div>
@@ -13,20 +13,20 @@
 
 <script type="text/javascript">
 	//初始化jmgraph
-	jmGraph('mycanvas', {
+	var g = new jmGraph('mycanvas', {
 		width: 800,
 		height: 600
-	}).then((g)=>{
-				
-		init(g);
+	});
 
-		//实时更新画布
-		function update() {
-			if(g.needUpdate) g.redraw();
-			requestAnimationFrame(update);
-		}
-		update();
-	});	
+	//实时更新画布
+	function update() {
+		if(g.needUpdate) g.redraw();
+		requestAnimationFrame(update);
+	}
+	update();
+
+	init(g);
+
 	function init(graph){
 		var style = {
 			stroke:'rgb(120,20,80)',					
@@ -58,7 +58,7 @@
 		graph.children.add(arc);
 		arc.canMove(true);
 
-		style = jmUtils.clone(style);
+		style = g.util.clone(style);
 		style.stroke = 'rgb(255,255,255)';
 		style.close=false;
 		style.zIndex = 3;
@@ -72,7 +72,7 @@
 		var yellowdir = 0;
 		var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});
 
-		style = jmUtils.clone(style);
+		style = g.util.clone(style);
 		style.close = true;
 		style.lineWidth = 1;
 		style.fill = 'red';

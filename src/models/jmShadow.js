@@ -1,4 +1,4 @@
-import jmUtils from "../common/jmUtils.js";
+import {jmUtils} from "../common/jmUtils.js";
 
 /**
  * 画图阴影对象表示法
@@ -64,4 +64,4 @@ class jmShadow {
 	}
 }
 
-export default jmShadow;
+export { jmShadow };

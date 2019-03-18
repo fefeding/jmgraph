@@ -1,4 +1,4 @@
-import jmPath from "./jmPath.js";
+import {jmPath} from "./jmPath.js";
 /**
  * 画矩形
  *
@@ -9,9 +9,9 @@ import jmPath from "./jmPath.js";
  */ 
 class jmRect extends jmPath {		
 
-	constructor(params) {
+	constructor(params, t='jmRect') {
 		params = params||{};
-		super(params);
+		super(params, t);
 
 		this.style.close = true;
 		this.radius = params.radius || this.style.radius || 0;
@@ -153,4 +153,4 @@ class jmRect extends jmPath {
 	}
 }
 
-export default jmRect;
+export { jmRect };

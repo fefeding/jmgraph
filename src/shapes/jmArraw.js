@@ -1,4 +1,4 @@
-import jmPath from "./jmPath.js";
+import {jmPath} from "./jmPath.js";
 /**
  * 画箭头,继承自jmPath
  *
@@ -10,8 +10,8 @@ import jmPath from "./jmPath.js";
  */
 class jmArraw extends jmPath {	
 
-	constructor(params) {
-		super(params);
+	constructor(params, t='jmArraw') {
+		super(params, t);
 		this.style.lineJoin = 'miter';
 		this.style.lineCap = 'square';
 
@@ -147,4 +147,4 @@ class jmArraw extends jmPath {
 
 }
 
-export default jmArraw;
+export { jmArraw };

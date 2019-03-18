@@ -1,4 +1,4 @@
-import jmPath from "./jmPath.js";
+import {jmPath} from "./jmPath.js";
 /**
  * 画一条直线
  *
@@ -10,8 +10,8 @@ import jmPath from "./jmPath.js";
  */
 class jmLine extends jmPath {	
 	
-	constructor(params) {
-		super(params);
+	constructor(params, t='jmLine') {
+		super(params, t);
 
 		this.start = params.start || {x:0,y:0};
 		this.end = params.end || {x:0,y:0};
@@ -85,4 +85,4 @@ class jmLine extends jmPath {
 	}
 }
 
-export default jmLine;
+export { jmLine };

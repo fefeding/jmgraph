@@ -1,4 +1,4 @@
-import jmRect from "../shapes/jmRect.js";
+import {jmRect} from "../shapes/jmRect.js";
 /**
  * 可拉伸的缩放控件
  * 继承jmRect
@@ -9,9 +9,9 @@ import jmRect from "../shapes/jmRect.js";
  */
 class jmResize extends jmRect {	
 
-	constructor(params) {
+	constructor(params, t='jmResize') {
 		params = params || {};
-		super(params);
+		super(params, t);
 		//是否可拉伸
 		this.enabled = params.enabled === false?false:true;		
 		this.rectSize = params.rectSize || 8;
@@ -223,4 +223,4 @@ class jmResize extends jmRect {
 	}
 }
 
-export default jmResize;
+export { jmResize };

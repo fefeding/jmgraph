@@ -1,4 +1,4 @@
-import jmArc from "./jmArc.js";
+import {jmArc} from "./jmArc.js";
 /**
  * 画空心圆弧,继承自jmPath
  *
@@ -11,8 +11,8 @@ import jmArc from "./jmArc.js";
 
 class jmHArc extends jmArc {
 		
-	constructor(params) {
-		super(params);
+	constructor(params, t='jmHArc') {
+		super(params, t);
 
 		this.minRadius = params.minRadius || style.minRadius || 0;
 		this.maxRadius = params.maxRadius || style.maxRadius || 0;
@@ -101,4 +101,4 @@ class jmHArc extends jmArc {
 	}
 }
 
-export default jmHArc;
+export { jmHArc };

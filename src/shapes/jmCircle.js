@@ -1,4 +1,4 @@
-import jmArc from "./jmArc.js";
+import {jmArc} from "./jmArc.js";
 /**
  * 画规则的圆弧
  *
@@ -10,8 +10,8 @@ import jmArc from "./jmArc.js";
  */
 class jmCircle extends jmArc {		
 	
-	constructor(params) {
-		super(params);		
+	constructor(params, t='jmCircle') {
+		super(params, t);		
 	}
 	/**
 	 * 初始化图形点
@@ -53,4 +53,4 @@ class jmCircle extends jmArc {
 	}
 }
 
-export default jmCircle;
+export { jmCircle };

@@ -1,4 +1,4 @@
-import jmPath from "./jmPath.js";
+import {jmPath} from "./jmPath.js";
 /**
  * 画棱形
  *
@@ -9,8 +9,8 @@ import jmPath from "./jmPath.js";
  */
 class jmPrismatic extends jmPath {	
 	
-	constructor(params) {
-		super(params);
+	constructor(params, t='jmPrismatic') {
+		super(params, t);
 		this.style.close = typeof this.style.close == 'undefined'? true : this.style.close;
 
 		this.center = params.center || {x:0,y:0};
@@ -53,4 +53,4 @@ class jmPrismatic extends jmPath {
 	}
 }
 
-export default jmPrismatic;
+export { jmPrismatic };

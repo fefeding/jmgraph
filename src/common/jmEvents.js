@@ -1,4 +1,4 @@
-import jmUtils from "./jmUtils.js";
+import {jmUtils} from "./jmUtils.js";
 /**
  * 事件模型
  *
@@ -224,4 +224,4 @@ class jmKeyEvent {
 	}
 }
 
-export default jmEvents;
+export { jmEvents };

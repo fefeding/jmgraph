@@ -1,4 +1,4 @@
-import jmControl from "../shapes/jmControl.js";
+import {jmControl} from "../shapes/jmControl.js";
 /**
  * 显示文字控件
  * params参数:style=样式，value=显示的文字
@@ -11,9 +11,9 @@ import jmControl from "../shapes/jmControl.js";
  */
 class jmLabel extends jmControl {
 
-	constructor(params) {
+	constructor(params, t) {
 		params = params || {};
-		super(params);
+		super(params, t||'jmLabel');
 
 		this.style.font = this.style.font || "15px Arial";
 		this.style.fontFamily = this.style.fontFamily || 'Arial';
@@ -175,4 +175,4 @@ class jmLabel extends jmControl {
 	}
 }
 
-export default jmLabel;
+export { jmLabel };

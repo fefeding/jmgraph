@@ -559,4 +559,4 @@ class jmUtils {
         return r;
     }
 }
-export default jmUtils;
+export { jmUtils };

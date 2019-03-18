@@ -1,21 +1,21 @@
-import jmUtils from "./common/jmUtils.js";
-import jmShadow from "./models/jmShadow.js";
-import jmGradient from "./models/jmGradient.js";
-import jmEvents from "./common/jmEvents.js";
-import jmControl from "./shapes/jmControl.js";
-import jmPath from "./shapes/jmPath.js";
-import jmArc from "./shapes/jmArc.js";
-import jmArraw from "./shapes/jmArraw.js";
-import jmBezier from "./shapes/jmBezier.js";
-import jmCircle from "./shapes/jmCircle.js";
-import jmHArc from "./shapes/jmHArc.js";
-import jmLine from "./shapes/jmLine.js";
-import jmPrismatic from "./shapes/jmPrismatic.js";
-import jmRect from "./shapes/jmRect.js";
-import jmArrawLine from "./controls/jmArrawLine.js";
-import jmImage from "./controls/jmImage.js";
-import jmLabel from "./controls/jmLabel.js";
-import jmResize from "./controls/jmResize.js";
+import {jmUtils} from "./common/jmUtils.js";
+import {jmShadow} from "./models/jmShadow.js";
+import {jmGradient} from "./models/jmGradient.js";
+import {jmEvents} from "./common/jmEvents.js";
+import {jmControl} from "./shapes/jmControl.js";
+import {jmPath} from "./shapes/jmPath.js";
+import {jmArc} from "./shapes/jmArc.js";
+import {jmArraw} from "./shapes/jmArraw.js";
+import {jmBezier} from "./shapes/jmBezier.js";
+import {jmCircle} from "./shapes/jmCircle.js";
+import {jmHArc} from "./shapes/jmHArc.js";
+import {jmLine} from "./shapes/jmLine.js";
+import {jmPrismatic} from "./shapes/jmPrismatic.js";
+import {jmRect} from "./shapes/jmRect.js";
+import {jmArrawLine} from "./controls/jmArrawLine.js";
+import {jmImage} from "./controls/jmImage.js";
+import {jmLabel} from "./controls/jmLabel.js";
+import {jmResize} from "./controls/jmResize.js";
 
 /**
  * jmGraph画图类库
@@ -44,7 +44,7 @@ class jmGraph extends jmControl {
 				if(resolve) resolve(g);				
 			});
 		}
-		super(option);
+		super(option, 'jmGraph');
 
 		this.option = option||{};
 		this.util = jmUtils;		
@@ -454,7 +454,9 @@ class jmGraph extends jmControl {
 		return this;
 	}
 }
-
+export { jmGraph };
 export default jmGraph;
 
-
+if(typeof window != 'undefined' && !window.jmGraph) {
+	window.jmGraph = jmGraph;
+}

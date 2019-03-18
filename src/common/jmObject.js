@@ -1,5 +1,5 @@
 
-import jmList from "../models/jmList.js";
+import {jmList} from "./jmList.js";
 
 /**
  *  所有jm对象的基础对象
@@ -42,7 +42,7 @@ class jmObject {
 	 */
 	animate(...args) {	
 		if(this.is('jmGraph')) {
-			if(handle) {			
+			if(args.length > 1) {			
 				if(!this.animateHandles) this.animateHandles = new jmList();
 				
 				var params = [];
@@ -51,7 +51,11 @@ class jmObject {
 						params.push(args[i]);
 					}
 				}		
-				this.animateHandles.add({millisec:args[0] || 20,handle:args[1], params:params});//id:id,
+				this.animateHandles.add({
+					millisec: args[1] || 20, 
+					handle: args[0], 
+					params:params
+				});
 			}
 			if(this.animateHandles) {
 				if(this.animateHandles.count() > 0) {
@@ -91,10 +95,10 @@ class jmObject {
 		else {
 			var graph = this.graph;
 			if(graph) {
-				graph.animate.apply(graph, arguments);
+				graph.animate(...args);
 			}
 		}
 	}
 }
 
-export default jmObject;
+export { jmObject };

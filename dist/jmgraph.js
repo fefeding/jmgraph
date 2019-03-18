@@ -1,13 +1,12 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmEvents = void 0;
 
-var _jmUtils = _interopRequireDefault(require("./jmUtils.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmUtils = require("./jmUtils.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -93,6 +92,8 @@ function () {
  */
 
 
+exports.jmEvents = jmEvents;
+
 var jmMouseEvent =
 /*#__PURE__*/
 function () {
@@ -114,7 +115,7 @@ function () {
       //	return false;
       //};
 
-      _jmUtils.default.bindEvent(this.target, 'mousedown', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'mousedown', function (evt) {
         evt = evt || window.event;
         var r = container.raiseEvent('mousedown', evt); //if(r === false) {
         //if(evt.preventDefault) evt.preventDefault();
@@ -122,7 +123,7 @@ function () {
         //}				
       });
 
-      doc && _jmUtils.default.bindEvent(doc, 'mousemove', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'mousemove', function (evt) {
         evt = evt || window.event;
         var target = evt.target || evt.srcElement;
 
@@ -134,22 +135,22 @@ function () {
         }
       });
 
-      _jmUtils.default.bindEvent(this.target, 'mouseover', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseover', evt);
       });
 
-      _jmUtils.default.bindEvent(this.target, 'mouseleave', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'mouseleave', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseleave', evt);
       });
 
-      _jmUtils.default.bindEvent(this.target, 'mouseout', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'mouseout', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseout', evt);
       });
 
-      doc && _jmUtils.default.bindEvent(doc, 'mouseup', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'mouseup', function (evt) {
         evt = evt || window.event; //let target = evt.target || evt.srcElement;
         //if(target == canvas) {						
 
@@ -162,38 +163,38 @@ function () {
 
       });
 
-      _jmUtils.default.bindEvent(this.target, 'dblclick', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'dblclick', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('dblclick', evt);
       });
 
-      _jmUtils.default.bindEvent(this.target, 'click', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'click', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('click', evt);
       });
 
-      doc && _jmUtils.default.bindEvent(doc, 'resize', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'resize', function (evt) {
         evt = evt || window.event;
         return container.raiseEvent('resize', evt);
       }); // passive: false 为了让浏览器不告警并且preventDefault有效
       // 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 
-      doc && _jmUtils.default.bindEvent(doc, 'touchstart', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchstart', function (evt) {
         return instance.touchStart(evt);
       }, {
         passive: false
       });
-      doc && _jmUtils.default.bindEvent(doc, 'touchmove', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchmove', function (evt) {
         return instance.touchMove(evt);
       }, {
         passive: false
       });
-      doc && _jmUtils.default.bindEvent(doc, 'touchend', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
         return instance.touchEnd(evt);
       }, {
         passive: false
       });
-      doc && _jmUtils.default.bindEvent(doc, 'touchcancel', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchcancel', function (evt) {
         return instance.touchCancel(evt);
       }, {
         passive: false
@@ -245,7 +246,7 @@ function () {
     key: "init",
     value: function init(container, target) {
       var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null;
-      doc && _jmUtils.default.bindEvent(doc, 'keypress', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
@@ -253,7 +254,7 @@ function () {
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
       });
-      doc && _jmUtils.default.bindEvent(doc, 'keydown', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
@@ -261,7 +262,7 @@ function () {
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
       });
-      doc && _jmUtils.default.bindEvent(doc, 'keyup', function (evt) {
+      doc && _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
@@ -275,18 +276,254 @@ function () {
   return jmKeyEvent;
 }();
 
-var _default = jmEvents;
-exports.default = _default;
+},{"./jmUtils.js":5}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmList = void 0;
 
-var _jmList = _interopRequireDefault(require("../models/jmList.js"));
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 自定义集合
+ * 
+ * @class list
+ * @for jmUtils
+ * @param {array} [arr] 数组，可转为当前list元素
+ */
+var jmList =
+/*#__PURE__*/
+function (_Array) {
+  _inherits(jmList, _Array);
+
+  function jmList() {
+    var _this;
+
+    _classCallCheck(this, jmList);
+
+    var ps = [];
+
+    for (var _len = arguments.length, arg = new Array(_len), _key = 0; _key < _len; _key++) {
+      arg[_key] = arguments[_key];
+    }
+
+    if (arg && arg.length && Array.isArray(arg[0])) {
+      var _getPrototypeOf2;
+
+      for (var i = 0; i < arg[0].length; i++) {
+        ps.push(arg[0][i]);
+      }
+
+      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(jmList)).call.apply(_getPrototypeOf2, [this].concat(ps)));
+    } else {
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(jmList).call(this));
+    }
+
+    _this.option = {}; //选项
+
+    _this.type = 'jmList';
+    return _possibleConstructorReturn(_this);
+  }
+  /**
+   * 往集合中添加对象
+   *
+   * @method add
+   * @for list
+   * @param {any} obj 往集合中添加的对象
+   */
+
+
+  _createClass(jmList, [{
+    key: "add",
+    value: function add(obj) {
+      if (obj && Array.isArray(obj)) {
+        for (var i = 0; i < obj.length; i++) {
+          if (!this.includes(obj[i])) this.push(obj[i]);
+        }
+
+        return obj;
+      }
+
+      if (_typeof(obj) == 'object' && this.includes(obj)) return obj;
+      this.push(obj);
+      return obj;
+    }
+    /**
+     * 从集合中移除指定对象
+     * 
+     * @method remove
+     * @for list
+     * @param {any} obj 将移除的对象
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(obj) {
+      for (var i = this.length - 1; i >= 0; i--) {
+        if (this[i] == obj) {
+          this.removeAt(i);
+        }
+      }
+    }
+    /**
+     * 按索引移除对象
+     * 
+     * @method removeAt
+     * @for list
+     * @param {integer} index 移除对象的索引
+     */
+
+  }, {
+    key: "removeAt",
+    value: function removeAt(index) {
+      if (this.length > index) {
+        var obj = this[index];
+        this.splice(index, 1);
+        if (this.option.removeHandler) this.option.removeHandler.call(this, obj, index);
+      }
+    }
+    /**
+     * 判断是否包含某个对象
+     * 
+     * @method contain
+     * @for list
+     * @param {any} obj 判断当前集合中是否包含此对象
+     */
+
+  }, {
+    key: "contain",
+    value: function contain(obj) {
+      return this.includes(obj);
+    }
+    /**
+     * 从集合中获取某个对象
+     * 
+     * @method get
+     * @for list
+     * @param {integer/function} index 如果为整型则表示为获取此索引的对象，如果为function为则通过此委托获取对象
+     * @return {any} 集合中的对象
+     */
+
+  }, {
+    key: "get",
+    value: function get(index) {
+      if (typeof index == 'function') {
+        return this.find(index);
+      } else {
+        return this[index];
+      }
+    }
+    /**
+     * 遍历当前集合 
+     *
+     * @method each
+     * @for list
+     * @param {function} cb 遍历当前集合的委托
+     * @param {boolean} inverse 是否按逆序遍历
+     */
+
+  }, {
+    key: "each",
+    value: function each(cb, inverse) {
+      if (cb && typeof cb == 'function') {
+        //如果按倒序循环
+        if (inverse) {
+          for (var i = this.length - 1; i >= 0; i--) {
+            var r = cb.call(this, i, this[i]);
+            if (r === false) break;
+          }
+        } else {
+          var len = this.length;
+
+          for (var _i = 0; _i < len; _i++) {
+            var _r = cb.call(this, _i, this[_i]);
+
+            if (_r === false) break;
+          }
+        }
+      }
+    }
+    /**
+     * 获取当前集合对象个数
+     *
+     * @method count
+     * @param {function} [handler] 检查对象是否符合计算的条件
+     * @for list
+     * @return {integer} 当前集合的个数
+     */
+
+  }, {
+    key: "count",
+    value: function count(handler) {
+      if (handler && typeof handler == 'function') {
+        var count = 0;
+        var len = this.length;
+
+        for (var i = 0; i < len; i++) {
+          if (handler(this[i])) {
+            count++;
+          }
+        }
+
+        return count;
+      }
+
+      return this.length;
+    }
+    /**
+     * 清空当前集合
+     *
+     * @method clear
+     * @for list
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.splice(0, this.length);
+    }
+  }]);
+
+  return jmList;
+}(_wrapNativeSuper(Array));
+
+exports.jmList = jmList;
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmObject = void 0;
+
+var _jmList = require("./jmList.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -344,26 +581,22 @@ function () {
   }, {
     key: "animate",
     value: function animate() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
       if (this.is('jmGraph')) {
-        if (handle) {
-          if (!this.animateHandles) this.animateHandles = new _jmList.default();
+        if (arguments.length > 1) {
+          if (!this.animateHandles) this.animateHandles = new _jmList.jmList();
           var params = [];
 
-          if (args.length > 2) {
-            for (var i = 2; i < args.length; i++) {
-              params.push(args[i]);
+          if (arguments.length > 2) {
+            for (var i = 2; i < arguments.length; i++) {
+              params.push(i < 0 || arguments.length <= i ? undefined : arguments[i]);
             }
           }
 
           this.animateHandles.add({
-            millisec: args[0] || 20,
-            handle: args[1],
+            millisec: (arguments.length <= 1 ? undefined : arguments[1]) || 20,
+            handle: arguments.length <= 0 ? undefined : arguments[0],
             params: params
-          }); //id:id,
+          });
         }
 
         if (this.animateHandles) {
@@ -418,18 +651,17 @@ function () {
   return jmObject;
 }();
 
-var _default = jmObject;
-exports.default = _default;
+exports.jmObject = jmObject;
+
+},{"./jmList.js":2}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmProperty = void 0;
 
-var _jmObject2 = _interopRequireDefault(require("./jmObject.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmObject2 = require("./jmObject.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -543,16 +775,17 @@ function (_jmObject) {
   }]);
 
   return jmProperty;
-}(_jmObject2.default);
+}(_jmObject2.jmObject);
 
-var _default = jmProperty;
-exports.default = _default;
+exports.jmProperty = jmProperty;
+
+},{"./jmObject.js":3}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmUtils = void 0;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1201,20 +1434,1439 @@ function () {
   return jmUtils;
 }();
 
-var _default = jmUtils;
-exports.default = _default;
+exports.jmUtils = jmUtils;
+
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmArrawLine = void 0;
 
-var _jmUtils = _interopRequireDefault(require("../common/jmUtils.js"));
+var _jmLine2 = require("../shapes/jmLine.js");
 
-var _jmList = _interopRequireDefault(require("./jmList.js"));
+var _jmArraw = require("../shapes/jmArraw.js");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * 带箭头的直线,继承jmPath
+ *
+ * @class jmArrawLine
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
+ */
+var jmArrawLine =
+/*#__PURE__*/
+function (_jmLine) {
+  _inherits(jmArrawLine, _jmLine);
+
+  function jmArrawLine(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmArrawLine);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArrawLine).call(this, params, t || 'jmArrawLine'));
+    _this.style.lineJoin = _this.style.lineJoin || 'miter';
+    _this.arraw = new _jmArraw.jmArraw(params);
+    return _this;
+  }
+  /**
+   * 初始化直线和箭头描点
+   *
+   * @method initPoints
+   * @private
+   */
+
+
+  _createClass(jmArrawLine, [{
+    key: "initPoints",
+    value: function initPoints() {
+      this.points = _get(_getPrototypeOf(jmArrawLine.prototype), "initPoints", this).call(this);
+
+      if (this.arrawVisible !== false) {
+        this.points = this.points.concat(this.arraw.initPoints());
+      }
+
+      return this.points;
+    }
+  }]);
+
+  return jmArrawLine;
+}(_jmLine2.jmLine);
+
+exports.jmArrawLine = jmArrawLine;
+
+},{"../shapes/jmArraw.js":14,"../shapes/jmLine.js":19}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmImage = void 0;
+
+var _jmControl2 = require("../shapes/jmControl.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * 图片控件，继承自jmControl
+ * params参数中image为指定的图片源地址或图片img对象，
+ * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
+ * 
+ * @class jmImage
+ * @for jmGraph
+ * @module jmGraph
+ * @require jmControl
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 控件参数
+ */
+var jmImage =
+/*#__PURE__*/
+function (_jmControl) {
+  _inherits(jmImage, _jmControl);
+
+  function jmImage(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmImage);
+
+    params = params || {};
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmImage).call(this, params, t || 'jmImage'));
+    _this.style.fill = _this.fill || 'transparent'; //默认指定一个fill，为了可以鼠标选中
+
+    _this.sourceWidth = params.sourceWidth;
+    _this.sourceHeight = params.sourceHeight;
+    _this.sourcePosition = params.sourcePosition;
+    _this.image = params.image || _this.style.image;
+    return _this;
+  }
+  /**
+   * 画图开始剪切位置
+   *
+   * @property sourcePosition
+   * @type {point}
+   */
+
+
+  _createClass(jmImage, [{
+    key: "draw",
+
+    /**
+     * 重写控件绘制
+     * 根据父边界偏移和此控件参数绘制图片
+     *
+     * @method draw
+     */
+    value: function draw() {
+      try {
+        var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+        if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
+        var p = this.getLocation();
+        p.left += bounds.left;
+        p.top += bounds.top;
+        var sp = this.sourcePosition;
+        var sw = this.sourceWidth;
+        var sh = this.sourceHeight;
+        var img = this.getImage();
+
+        if (sp || typeof sw != 'undefined' || typeof sh != 'undefined') {
+          if (typeof sw == 'undefined') sw = p.width || img.width || 0;
+          if (typeof sh == 'undefined') sh = p.height || img.height || 0;
+          sp = sp || {
+            x: 0,
+            y: 0
+          };
+          if (p.width && p.height) this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, p.height);else if (p.width) {
+            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, sh);
+          } else if (p.height) {
+            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, p.height);
+          } else this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, sh);
+        } else if (p) {
+          if (p.width && p.height) this.context.drawImage(img, p.left, p.top, p.width, p.height);else if (p.width) this.context.drawImage(img, p.left, p.top, p.width, img.height);else if (p.height) this.context.drawImage(img, p.left, p.top, img.width, p.height);else this.context.drawImage(img, p.left, p.top);
+        } else {
+          this.context.drawImage(img);
+        }
+      } catch (e) {
+        console.error && console.error(e);
+      }
+    }
+    /**
+     * 获取当前控件的边界 
+     * 
+     * @method getBounds
+     * @return {object} 边界对象(left,top,right,bottom,width,height)
+     */
+
+  }, {
+    key: "getBounds",
+    value: function getBounds() {
+      var rect = {};
+      var img = this.getImage();
+      var p = this.getLocation();
+      var w = p.width || img.width;
+      var h = p.height || img.height;
+      rect.left = p.left;
+      rect.top = p.top;
+      rect.right = p.left + w;
+      rect.bottom = p.top + h;
+      rect.width = w;
+      rect.height = h;
+      return rect;
+    }
+    /**
+     * img对象
+     *
+     * @method getImage
+     * @return {img} 图片对象
+     */
+
+  }, {
+    key: "getImage",
+    value: function getImage() {
+      var src = this.image || this.style.src || this.style.image;
+
+      if (this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
+        return this.__img;
+      } else if (src && src.src) {
+        this.__img = src;
+      } else if (document && document.createElement) {
+        this.__img = document.createElement('img');
+        if (src && typeof src == 'string') this.__img.src = src;
+      } else {
+        this.__img = src;
+      }
+
+      return this.__img;
+    }
+  }, {
+    key: "sourcePosition",
+    get: function get() {
+      return this.__pro('sourcePosition');
+    },
+    set: function set(v) {
+      return this.__pro('sourcePosition', v);
+    }
+    /**
+     * 被剪切宽度
+     *
+     * @property sourceWidth
+     * @type {number}
+     */
+
+  }, {
+    key: "sourceWidth",
+    get: function get() {
+      return this.__pro('sourceWidth');
+    },
+    set: function set(v) {
+      return this.__pro('sourceWidth', v);
+    }
+    /**
+     * 被剪切高度
+     *
+     * @method sourceHeight
+     * @type {number}
+     */
+
+  }, {
+    key: "sourceHeight",
+    get: function get() {
+      return this.__pro('sourceHeight');
+    },
+    set: function set(v) {
+      return this.__pro('sourceHeight', v);
+    }
+    /**
+     * 设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
+     *
+     * @method image
+     * @type {img}
+     */
+
+  }, {
+    key: "image",
+    get: function get() {
+      return this.__pro('image');
+    },
+    set: function set(v) {
+      return this.__pro('image', v);
+    }
+  }]);
+
+  return jmImage;
+}(_jmControl2.jmControl);
+
+exports.jmImage = jmImage;
+
+},{"../shapes/jmControl.js":17}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmLabel = void 0;
+
+var _jmControl2 = require("../shapes/jmControl.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * 显示文字控件
+ * params参数:style=样式，value=显示的文字
+ *
+ * @class jmLabel
+ * @for jmGraph
+ * @module jmGraph
+ * @param {jmGraph} graph 当前画布
+ * @param {object} params 文字控件参数
+ */
+var jmLabel =
+/*#__PURE__*/
+function (_jmControl) {
+  _inherits(jmLabel, _jmControl);
+
+  function jmLabel(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmLabel);
+
+    params = params || {};
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmLabel).call(this, params, t || 'jmLabel'));
+    _this.style.font = _this.style.font || "15px Arial";
+    _this.style.fontFamily = _this.style.fontFamily || 'Arial';
+    _this.style.fontSize = _this.style.fontSize || 15; // 显示不同的 textAlign 值
+    //文字水平对齐
+
+    _this.style.textAlign = _this.style.textAlign || 'left'; //文字垂直对齐
+
+    _this.style.textBaseline = _this.style.textBaseline || 'middle';
+    _this.text = params.text || '';
+    return _this;
+  }
+  /**
+   * 显示的内容
+   * @property text
+   * @type {string}
+   */
+
+
+  _createClass(jmLabel, [{
+    key: "initPoints",
+
+    /**
+     * 初始化图形点,主要用于限定控件边界。
+     *
+     * @method initPoints
+     * @return {array} 所有边界点数组
+     * @private
+     */
+    value: function initPoints() {
+      this.__size = null;
+      var size = this.testSize();
+      var location = this.getLocation();
+      var w = location.width || size.width;
+      var h = location.height || size.height;
+      this.points = [{
+        x: location.left,
+        y: location.top
+      }];
+      this.points.push({
+        x: location.left + w,
+        y: location.top
+      });
+      this.points.push({
+        x: location.left + w,
+        y: location.top + h
+      });
+      this.points.push({
+        x: location.left,
+        y: location.top + h
+      });
+      return this.points;
+    }
+    /**
+     * 测试获取文本所占大小
+     *
+     * @method testSize
+     * @return {object} 含文本大小的对象
+     */
+
+  }, {
+    key: "testSize",
+    value: function testSize() {
+      if (this.__size) return this.__size;
+      this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
+      this.context.save();
+      this.setStyle(); //计算宽度
+
+      this.__size = this.context.measureText ? this.context.measureText(this.text) : {
+        width: 15
+      };
+      this.context.restore();
+      this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+      if (!this.width) this.width = this.__size.width;
+      if (!this.height) this.height = this.__size.height;
+      return this.__size;
+    }
+    /**
+     * 根据位置偏移画字符串
+     * 
+     * @method draw
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      //获取当前控件的绝对位置
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      var size = this.testSize();
+      var location = this.getLocation();
+      var x = location.left + bounds.left;
+      var y = location.top + bounds.top; //通过文字对齐方式计算起始X位置
+
+      switch (this.style.textAlign) {
+        case 'right':
+          {
+            x += location.width;
+            break;
+          }
+
+        case 'center':
+          {
+            x += location.width / 2;
+            break;
+          }
+      } //通过垂直对齐方式计算起始Y值
+
+
+      switch (this.style.textBaseline) {
+        case 'bottom':
+          {
+            y += location.height;
+            break;
+          }
+
+        case 'hanging':
+        case 'alphabetic':
+        case 'middle':
+          {
+            y += location.height / 2;
+            break;
+          }
+      }
+
+      var txt = this.text;
+
+      if (txt) {
+        if (this.style.fill && this.context.fillText) {
+          if (this.style.maxWidth) {
+            this.context.fillText(txt, x, y, this.style.maxWidth);
+          } else {
+            this.context.fillText(txt, x, y);
+          }
+        } else if (this.context.strokeText) {
+          if (this.style.maxWidth) {
+            this.context.strokeText(txt, x, y, this.style.maxWidth);
+          } else {
+            this.context.strokeText(txt, x, y);
+          }
+        }
+      } //如果有指定边框，则画出边框
+
+
+      if (this.style.border) {
+        //如果指定了边框样式
+        if (this.style.border.style) {
+          this.context.save();
+          this.setStyle(this.style.border.style);
+        }
+
+        this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+
+        if (this.style.border.top) {
+          this.context.lineTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
+        }
+
+        if (this.style.border.right) {
+          this.context.moveTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
+          this.context.lineTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
+        }
+
+        if (this.style.border.bottom) {
+          this.context.moveTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
+          this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+        }
+
+        if (this.style.border.left) {
+          this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+          this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+        } //如果指定了边框颜色
+
+
+        if (this.style.border.style) {
+          this.context.restore();
+        }
+      }
+    }
+  }, {
+    key: "text",
+    get: function get() {
+      return this.__pro('text');
+    },
+    set: function set(v) {
+      return this.__pro('text', v);
+    }
+  }]);
+
+  return jmLabel;
+}(_jmControl2.jmControl);
+
+exports.jmLabel = jmLabel;
+
+},{"../shapes/jmControl.js":17}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmResize = void 0;
+
+var _jmRect2 = require("../shapes/jmRect.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * 可拉伸的缩放控件
+ * 继承jmRect
+ * 如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
+ *
+ * @class jmResize
+ * @for jmGraph
+ */
+var jmResize =
+/*#__PURE__*/
+function (_jmRect) {
+  _inherits(jmResize, _jmRect);
+
+  function jmResize(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmResize';
+
+    _classCallCheck(this, jmResize);
+
+    params = params || {};
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmResize).call(this, params, t)); //是否可拉伸
+
+    _this.enabled = params.enabled === false ? false : true;
+    _this.rectSize = params.rectSize || 8;
+    _this.style.close = _this.style.close || true;
+
+    _this.init();
+
+    return _this;
+  }
+  /**
+   * 拉动的小方块大小
+   * @property rectSize
+   * @type {number}
+   */
+
+
+  _createClass(jmResize, [{
+    key: "init",
+
+    /**
+     * 初始化控件的8个拉伸方框
+     *
+     * @method init
+     * @private
+     */
+    value: function init() {
+      //如果不可改变大小。则直接退出
+      if (this.params.resizable === false) return;
+      this.resizeRects = [];
+      var rs = this.rectSize;
+      var rectStyle = this.style.rectStyle || {
+        stroke: 'red',
+        fill: 'transparent',
+        lineWidth: 2,
+        close: true,
+        zIndex: 100
+      };
+      rectStyle.close = true;
+      rectStyle.fill = rectStyle.fill || 'transparent';
+
+      for (var i = 0; i < 8; i++) {
+        //生成改变大小方块
+        var r = this.graph.createShape('rect', {
+          position: {
+            x: 0,
+            y: 0
+          },
+          width: rs,
+          height: rs,
+          style: rectStyle
+        });
+        r.index = i;
+        r.visible = true;
+        this.resizeRects.push(r);
+        this.children.add(r);
+        r.canMove(true, this.graph);
+      }
+
+      this.reset(0, 0, 0, 0); //初始化位置
+      //绑定其事件
+
+      this.bindRectEvents();
+    }
+    /**
+     * 绑定周边拉伸的小方块事件
+     *
+     * @method bindRectEvents
+     * @private
+     */
+
+  }, {
+    key: "bindRectEvents",
+    value: function bindRectEvents() {
+      for (var i = 0; i < this.resizeRects.length; i++) {
+        var r = this.resizeRects[i]; //小方块移动监听
+
+        r.on('move', function (arg) {
+          var px = 0,
+              py = 0,
+              dx = 0,
+              dy = 0;
+
+          if (this.index == 0) {
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+          } else if (this.index == 1) {
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 2) {
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 3) {
+            dx = arg.offsetX;
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 4) {
+            dx = arg.offsetX;
+          } else if (this.index == 5) {
+            dx = arg.offsetX;
+            dy = arg.offsetY;
+          } else if (this.index == 6) {
+            dy = arg.offsetY;
+          } else if (this.index == 7) {
+            dx = -arg.offsetX;
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+            dy = arg.offsetY;
+          } //重新定位
+
+
+          this.parent.reset(px, py, dx, dy);
+        }); //鼠标指针
+
+        r.bind('mousemove', function () {
+          var rectCursors = ['w-resize', 'nw-resize', 'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize', 'sw-resize'];
+          this.cursor = rectCursors[this.index];
+        });
+        r.bind('mouseleave', function () {
+          this.cursor = 'default';
+        });
+      }
+    }
+    /**
+     * 按移动偏移量重置当前对象，并触发大小和位置改变事件
+     * @method reset
+     * @param {number} px 位置X轴偏移
+     * @param {number} py 位置y轴偏移
+     * @param {number} dx 大小x轴偏移
+     * @param {number} dy 大小y轴偏移
+     */
+
+  }, {
+    key: "reset",
+    value: function reset(px, py, dx, dy) {
+      var minWidth = typeof this.style.minWidth == 'undefined' ? 5 : this.style.minWidth;
+      var minHeight = typeof this.style.minHeight == 'undefined' ? 5 : this.style.minHeight;
+      var location = this.getLocation();
+
+      if (dx != 0 || dy != 0) {
+        var w = location.width + dx;
+        var h = location.height + dy;
+
+        if (w >= minWidth || h >= minHeight) {
+          if (w >= minWidth) {
+            this.width = w;
+          } else {
+            px = 0;
+            dx = 0;
+          }
+
+          if (h >= minHeight) {
+            this.height = h;
+          } else {
+            py = 0;
+            dy = 0;
+          } //如果当前控件能移动才能改变其位置
+
+
+          if (this.params.movable !== false && (px || py)) {
+            var p = this.position;
+            p.x = location.left + px;
+            p.y = location.top + py;
+            this.position = p;
+          } //触发大小改变事件
+
+
+          this.emit('resize', px, py, dx, dy);
+        }
+      }
+
+      for (var i in this.resizeRects) {
+        var r = this.resizeRects[i];
+
+        switch (r.index) {
+          case 0:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = (location.height - r.height) / 2;
+              break;
+            }
+
+          case 1:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 2:
+            {
+              r.position.x = (location.width - r.width) / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 3:
+            {
+              r.position.x = location.width - r.width / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 4:
+            {
+              r.position.x = location.width - r.width / 2;
+              r.position.y = (location.height - r.height) / 2;
+              break;
+            }
+
+          case 5:
+            {
+              r.position.x = location.width - r.width / 2;
+              r.position.y = location.height - r.height / 2;
+              break;
+            }
+
+          case 6:
+            {
+              r.position.x = (location.width - r.height) / 2;
+              r.position.y = location.height - r.height / 2;
+              break;
+            }
+
+          case 7:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = location.height - r.height / 2;
+              break;
+            }
+        }
+      }
+    }
+  }, {
+    key: "rectSize",
+    get: function get() {
+      return this.__pro('rectSize');
+    },
+    set: function set(v) {
+      return this.__pro('rectSize', v);
+    }
+  }]);
+
+  return jmResize;
+}(_jmRect2.jmRect);
+
+exports.jmResize = jmResize;
+
+},{"../shapes/jmRect.js":22}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.jmGraph = void 0;
+
+var _jmUtils = require("./common/jmUtils.js");
+
+var _jmShadow = require("./models/jmShadow.js");
+
+var _jmGradient = require("./models/jmGradient.js");
+
+var _jmEvents = require("./common/jmEvents.js");
+
+var _jmControl2 = require("./shapes/jmControl.js");
+
+var _jmPath = require("./shapes/jmPath.js");
+
+var _jmArc = require("./shapes/jmArc.js");
+
+var _jmArraw = require("./shapes/jmArraw.js");
+
+var _jmBezier = require("./shapes/jmBezier.js");
+
+var _jmCircle = require("./shapes/jmCircle.js");
+
+var _jmHArc = require("./shapes/jmHArc.js");
+
+var _jmLine = require("./shapes/jmLine.js");
+
+var _jmPrismatic = require("./shapes/jmPrismatic.js");
+
+var _jmRect = require("./shapes/jmRect.js");
+
+var _jmArrawLine = require("./controls/jmArrawLine.js");
+
+var _jmImage = require("./controls/jmImage.js");
+
+var _jmLabel = require("./controls/jmLabel.js");
+
+var _jmResize = require("./controls/jmResize.js");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * jmGraph画图类库
+ * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
+ *
+ * @module jmGraph
+ * @class jmGraph
+ * @param {element} canvas 标签canvas
+ * @param {object} option 参数：{width:宽,height:高}
+ * @param {function} callback 初始化后的回调
+ */
+var jmGraph =
+/*#__PURE__*/
+function (_jmControl) {
+  _inherits(jmGraph, _jmControl);
+
+  function jmGraph(canvas, option, callback) {
+    var _this;
+
+    _classCallCheck(this, jmGraph);
+
+    if (typeof option == 'function') {
+      callback = option;
+      option = {};
+    }
+
+    option = option || {}; //不是用new实例化的话，返回一个promise
+
+    if ((this instanceof jmGraph ? this.constructor : void 0) !== jmGraph) {
+      return _possibleConstructorReturn(_this, new Promise(function (resolve, reject) {
+        var g = new jmGraph(canvas, option, callback);
+        if (resolve) resolve(g);
+      }));
+    }
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmGraph).call(this, option, 'jmGraph'));
+    _this.option = option || {};
+    _this.util = _jmUtils.jmUtils; //如果是小程序
+
+    if (typeof wx != 'undefined' && wx.createCanvasContext) {
+      _this.context = wx.createCanvasContext(canvas);
+      canvas = wx.createSelectorQuery().select('#' + canvas);
+    } else {
+      if (typeof canvas === 'string' && typeof document != 'undefined') {
+        canvas = document.getElementById(canvas);
+      } else if (canvas.length) {
+        canvas = canvas[0];
+      }
+
+      if (canvas.tagName != 'CANVAS') {
+        var cn = document.createElement('canvas');
+        canvas.appendChild(cn);
+        cn.width = canvas.offsetWidth || canvas.clientWidth;
+        cn.height = canvas.offsetHeight || canvas.clientHeight;
+        canvas = cn;
+      }
+
+      _this.context = canvas.getContext('2d');
+    }
+
+    _this.canvas = canvas;
+
+    _this.init(callback);
+
+    return _this;
+  }
+  /**
+   * 初始化画布
+   * @method init
+   */
+
+
+  _createClass(jmGraph, [{
+    key: "init",
+    value: function init(callback) {
+      /**
+       * 当前所有图形类型
+       * @property shapes
+       * @type {object}
+       */
+      this.shapes = {
+        "path": _jmPath.jmPath,
+        "arc": _jmArc.jmArc,
+        "arraw": _jmArraw.jmArraw,
+        "bezier": _jmBezier.jmBezier,
+        "circle": _jmCircle.jmCircle,
+        "harc": _jmHArc.jmHArc,
+        "line": _jmLine.jmLine,
+        "prismatic": _jmPrismatic.jmPrismatic,
+        "rect": _jmRect.jmRect,
+        "arrawline": _jmArrawLine.jmArrawLine,
+        "image": _jmImage.jmImage,
+        "img": _jmImage.jmImage,
+        "label": _jmLabel.jmLabel,
+        "resize": _jmResize.jmResize
+      };
+      /**
+       * 画控件前初始化
+       * 为了解决一像素线条问题
+       */
+
+      this.on('beginDraw', function () {
+        this.context.translate(0.5, 0.5);
+      });
+      /**
+       * 结束控件绘制 为了解决一像素线条问题
+       */
+
+      this.on('endDraw', function () {
+        this.context.translate(-0.5, -0.5);
+      });
+      if (this.option.width > 0) this.width = this.option.width;
+      if (this.option.height > 0) this.height = this.option.height; //绑定事件
+
+      this.eventHandler = new _jmEvents.jmEvents(this, this.canvas.canvas || this.canvas);
+      if (callback) callback(this);
+    }
+    /**
+     * 宽度
+     * @property width
+     * @type {number}
+     */
+
+  }, {
+    key: "getPosition",
+
+    /**
+     * 获取当前画布在浏览器中的绝对定位
+     *
+     * @method getPosition
+     * @return {postion} 返回定位坐标
+     */
+    value: function getPosition() {
+      var p = _jmUtils.jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+
+      p.width = this.canvas.width;
+      p.height = this.canvas.height;
+      p.right = p.left + p.width;
+      p.bottom = p.top + p.height;
+      return p;
+    }
+    /**
+     * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
+     *
+     * @method registerShape 
+     * @param {string} name 控件图形名称
+     * @param {class} shape 图形控件类型
+     */
+
+  }, {
+    key: "registerShape",
+    value: function registerShape(name, shape) {
+      this.shapes[name] = shape;
+    }
+    /**
+     * 从已注册的图形类创建图形
+     * 简单直观创建对象
+     *
+     * @method createShape 
+     * @param {string} name 注册控件的名称
+     * @param {object} args 实例化控件的参数
+     * @return {object} 已实例化控件的对象
+     */
+
+  }, {
+    key: "createShape",
+    value: function createShape(name, args) {
+      var shape = this.shapes[name];
+
+      if (shape) {
+        if (!args) args = {};
+        var obj = new shape(args);
+        return obj;
+      }
+    }
+    /**
+     * 生成阴影对象
+     *
+     * @method createShadow
+     * @param {number} x x偏移量
+     * @param {number} y y偏移量
+     * @param {number} blur 模糊值
+     * @param {string} color 颜色
+     * @return {jmShadow} 阴影对象
+     */
+
+  }, {
+    key: "createShadow",
+    value: function createShadow(x, y, blur, color) {
+      var sh = new _jmShadow.jmShadow(x, y, blur, color);
+      return sh;
+    }
+    /**
+     * 生成线性渐变对象
+     *
+     * @method createLinearGradient
+     * @param {number} x1 线性渐变起始点X坐标
+     * @param {number} y1 线性渐变起始点Y坐标
+     * @param {number} x2 线性渐变结束点X坐标
+     * @param {number} y2 线性渐变结束点Y坐标
+     * @return {jmGradient} 线性渐变对象
+     */
+
+  }, {
+    key: "createLinearGradient",
+    value: function createLinearGradient(x1, y1, x2, y2) {
+      var gradient = new _jmGradient.jmGradient({
+        type: 'linear',
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2
+      });
+      return gradient;
+    }
+    /**
+     * 生成放射渐变对象
+     *
+     * @method createRadialGradient
+     * @param {number} x1 放射渐变小圆中心X坐标
+     * @param {number} y1 放射渐变小圆中心Y坐标
+     * @param {number} r1 放射渐变小圆半径
+     * @param {number} x2 放射渐变大圆中心X坐标
+     * @param {number} y2 放射渐变大圆中心Y坐标
+     * @param {number} r2 放射渐变大圆半径
+     * @return {jmGradient} 放射渐变对象
+     */
+
+  }, {
+    key: "createRadialGradient",
+    value: function createRadialGradient(x1, y1, r1, x2, y2, r2) {
+      var gradient = new _jmGradient.jmGradient({
+        type: 'radial',
+        x1: x1,
+        y1: y1,
+        r1: r1,
+        x2: x2,
+        y2: y2,
+        r2: r2
+      });
+      return gradient;
+    }
+    /**
+     * 重新刷新整个画板
+     * 以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+     *
+     * @method refresh
+     */
+
+  }, {
+    key: "refresh",
+    value: function refresh() {
+      //加入动画，触发redraw，会导致多次refresh只redraw一次
+
+      /*this.animate(function() {
+      	return false;
+      },100,'jmgraph_refresh');*/
+      this.redraw();
+    }
+    /**
+     * 重新刷新整个画板
+     * 此方法直接重画，与refresh效果类似
+     *
+     * @method redraw
+     * @param {number} [w] 清除画布的宽度
+     * @param {number} [h] 清除画布的高度
+     */
+
+  }, {
+    key: "redraw",
+    value: function redraw(w, h) {
+      this.clear(w || this.width, h || this.height);
+      this.paint();
+    }
+    /**
+     * 清除画布
+     * 
+     * @method clear
+     * @param {number} [w] 清除画布的宽度
+     * @param {number} [h] 清除画布的高度
+     */
+
+  }, {
+    key: "clear",
+    value: function clear(w, h) {
+      //this.canvas.width = this.canvas.width;
+      if (w && h) {
+        //this.zoomActual();//恢复比例缩放
+        this.canvas.width = w;
+        this.canvas.height = h; //保留原有缩放比例
+
+        if (this.scaleSize) {
+          if (this.context.scale) this.context.scale(this.scaleSize.x, this.scaleSize.y);
+        }
+      } else {
+        w = this.canvas.width;
+        h = this.canvas.height;
+
+        if (this.scaleSize) {
+          w = w / this.scaleSize.x;
+          h = h / this.scaleSize.y;
+        }
+      } //如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
+
+
+      if (this.style && this.style.fill) {
+        this.points = [{
+          x: 0,
+          y: 0
+        }, {
+          x: w,
+          y: 0
+        }, {
+          x: w,
+          y: h
+        }, {
+          x: 0,
+          y: h
+        }];
+      } else if (this.context.clearRect) this.context.clearRect(0, 0, w, h);
+    }
+    /**
+    * 设置画布样式，此处只是设置其css样式
+    *
+    * @method css
+    * @param {string} name 样式名
+    * @param {string} value 样式值
+    */
+
+  }, {
+    key: "css",
+    value: function css(name, value) {
+      if (this.canvas) {
+        if (typeof value != 'undefined') this.canvas.style[name] = value;
+        return this.canvas.style[name];
+      }
+    }
+    /**
+     * 生成路径对象
+     *
+     * @method createPath
+     * @param {array} points 路径中的描点集合
+     * @param {style} style 当前路径的样式
+     * @return {jmPath} 路径对象jmPath
+     */
+
+  }, {
+    key: "createPath",
+    value: function createPath(points, style) {
+      var path = this.createShape('path', {
+        points: points,
+        style: style
+      });
+      return path;
+    }
+    /**
+     * 生成直线
+     * 
+     * @method createLine
+     * @param {point} start 直线的起点
+     * @param {point} end 直线的终点
+     * @param {style} 直线的样式
+     * @return {jmLine} 直线对象
+     */
+
+  }, {
+    key: "createLine",
+    value: function createLine(start, end, style) {
+      var line = this.createShape('line', {
+        start: start,
+        end: end,
+        style: style
+      });
+      return line;
+    }
+    /**
+     * 缩小整个画布按比例0.9
+     * 
+     * @method zoomOut
+     */
+
+  }, {
+    key: "zoomOut",
+    value: function zoomOut() {
+      this.scale(0.9, 0.9);
+    }
+    /**
+     * 放大 每次增大0.1的比例
+     * 
+     * @method zoomIn
+     */
+
+  }, {
+    key: "zoomIn",
+    value: function zoomIn() {
+      this.scale(1.1, 1.1);
+    }
+    /**
+     * 大小复原
+     * 
+     * @method zoomActual
+     */
+
+  }, {
+    key: "zoomActual",
+    value: function zoomActual() {
+      if (this.scaleSize) {
+        this.scale(1 / this.scaleSize.x, 1 / this.scaleSize.y);
+      } else {
+        this.scale(1, 1);
+      }
+    }
+    /**
+     * 放大缩小画布
+     * 
+     * @method scale
+     * @param {number} dx 缩放X轴比例
+     * @param {number} dy 缩放Y轴比例
+     */
+
+  }, {
+    key: "scale",
+    value: function scale(dx, dy) {
+      if (!this.normalSize) {
+        this.normalSize = {
+          width: this.canvas.width,
+          height: this.canvas.height
+        };
+      }
+
+      this.context.scale(dx, dy);
+
+      if (!this.scaleSize) {
+        this.scaleSize = {
+          x: dx,
+          y: dy
+        };
+      } else {
+        this.scaleSize = {
+          x: dx * this.scaleSize.x,
+          y: dy * this.scaleSize.y
+        };
+      }
+
+      this.refresh();
+    }
+    /**
+     * 保存为base64图形数据
+     * 
+     * @method toDataURL
+     * @return {string} 当前画布图的base64字符串
+     */
+
+  }, {
+    key: "toDataURL",
+    value: function toDataURL() {
+      var data = this.canvas.toDataURL ? this.canvas.toDataURL() : '';
+      return data;
+    }
+    /** 
+     * 自动刷新画版
+     * @param {function} callback 执行回调
+     */
+
+  }, {
+    key: "autoRefresh",
+    value: function autoRefresh(callback) {
+      var self = this;
+
+      function update() {
+        if (self.needUpdate) self.redraw();
+        requestAnimationFrame(update);
+        if (callback) callback();
+      }
+
+      update();
+      return this;
+    }
+  }, {
+    key: "width",
+    get: function get() {
+      if (this.canvas) return this.canvas.width;
+      return 0;
+    },
+    set: function set(v) {
+      if (this.canvas) this.canvas.width = v;
+      return v;
+    }
+    /**
+     * 高度
+     * @property height
+     * @type {number}
+     */
+
+  }, {
+    key: "height",
+    get: function get() {
+      if (this.canvas) return this.canvas.height;
+      return 0;
+    },
+    set: function set(v) {
+      if (this.canvas) this.canvas.height = v;
+      return v;
+    }
+  }]);
+
+  return jmGraph;
+}(_jmControl2.jmControl);
+
+exports.jmGraph = jmGraph;
+var _default = jmGraph;
+exports.default = _default;
+
+if (typeof window != 'undefined' && !window.jmGraph) {
+  window.jmGraph = jmGraph;
+}
+
+},{"./common/jmEvents.js":1,"./common/jmUtils.js":5,"./controls/jmArrawLine.js":6,"./controls/jmImage.js":7,"./controls/jmLabel.js":8,"./controls/jmResize.js":9,"./models/jmGradient.js":11,"./models/jmShadow.js":12,"./shapes/jmArc.js":13,"./shapes/jmArraw.js":14,"./shapes/jmBezier.js":15,"./shapes/jmCircle.js":16,"./shapes/jmControl.js":17,"./shapes/jmHArc.js":18,"./shapes/jmLine.js":19,"./shapes/jmPath.js":20,"./shapes/jmPrismatic.js":21,"./shapes/jmRect.js":22}],11:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmGradient = void 0;
+
+var _jmUtils = require("../common/jmUtils.js");
+
+var _jmList = require("../common/jmList.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1238,7 +2890,7 @@ function () {
   function jmGradient(opt) {
     _classCallCheck(this, jmGradient);
 
-    this.stops = new _jmList.default();
+    this.stops = new _jmList.jmList();
 
     if (opt && _typeof(opt) == 'object') {
       for (var k in opt) {
@@ -1301,20 +2953,20 @@ function () {
       //处理百分比参数
 
 
-      if (_jmUtils.default.checkPercent(x1)) {
-        x1 = _jmUtils.default.percentToNumber(x1) * (location.width || d);
+      if (_jmUtils.jmUtils.checkPercent(x1)) {
+        x1 = _jmUtils.jmUtils.percentToNumber(x1) * (location.width || d);
       }
 
-      if (_jmUtils.default.checkPercent(x2)) {
-        x2 = _jmUtils.default.percentToNumber(x2) * (location.width || d);
+      if (_jmUtils.jmUtils.checkPercent(x2)) {
+        x2 = _jmUtils.jmUtils.percentToNumber(x2) * (location.width || d);
       }
 
-      if (_jmUtils.default.checkPercent(y1)) {
-        y1 = _jmUtils.default.percentToNumber(y1) * (location.height || d);
+      if (_jmUtils.jmUtils.checkPercent(y1)) {
+        y1 = _jmUtils.jmUtils.percentToNumber(y1) * (location.height || d);
       }
 
-      if (_jmUtils.default.checkPercent(y2)) {
-        y2 = _jmUtils.default.percentToNumber(y2) * (location.height || d);
+      if (_jmUtils.jmUtils.checkPercent(y2)) {
+        y2 = _jmUtils.jmUtils.percentToNumber(y2) * (location.height || d);
       }
 
       var sx1 = Number(x1) + bounds.left;
@@ -1330,13 +2982,13 @@ function () {
         var r1 = this.r1 || 0;
         var r2 = this.r2;
 
-        if (_jmUtils.default.checkPercent(r1)) {
-          r1 = _jmUtils.default.percentToNumber(r1);
+        if (_jmUtils.jmUtils.checkPercent(r1)) {
+          r1 = _jmUtils.jmUtils.percentToNumber(r1);
           r1 = d * r1;
         }
 
-        if (_jmUtils.default.checkPercent(r2)) {
-          r2 = _jmUtils.default.percentToNumber(r2);
+        if (_jmUtils.jmUtils.checkPercent(r2)) {
+          r2 = _jmUtils.jmUtils.percentToNumber(r2);
           r2 = d * r2;
         } //offsetLine = Math.abs(r2 - r1);//二圆半径差
         //小程序的接口特殊
@@ -1351,7 +3003,7 @@ function () {
 
 
       this.stops.each(function (i, s) {
-        var c = _jmUtils.default.toColor(s.color); //s.offset 0.0 ~ 1.0
+        var c = _jmUtils.jmUtils.toColor(s.color); //s.offset 0.0 ~ 1.0
 
 
         gradient.addColorStop(s.offset, c);
@@ -1379,7 +3031,7 @@ function () {
       var pars = ms[2].split(',');
 
       if (pars.length) {
-        var ps = _jmUtils.default.trim(pars[0]).split(/\s+/); //线性渐变
+        var ps = _jmUtils.jmUtils.trim(pars[0]).split(/\s+/); //线性渐变
 
 
         if (this.type == 'linear') {
@@ -1412,7 +3064,7 @@ function () {
 
         if (pars.length > 1) {
           for (var i = 1; i < pars.length; i++) {
-            var cs = _jmUtils.default.trim(pars[i]).split(/\s+/);
+            var cs = _jmUtils.jmUtils.trim(pars[i]).split(/\s+/);
 
             if (cs.length) {
               this.addStop(cs[1] || 0, cs[0]);
@@ -1451,256 +3103,17 @@ function () {
   return jmGradient;
 }();
 
-var _default = jmGradient;
-exports.default = _default;
+exports.jmGradient = jmGradient;
+
+},{"../common/jmList.js":2,"../common/jmUtils.js":5}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmShadow = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
-
-function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
-
-function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-/**
- * 自定义集合
- * 
- * @class list
- * @for jmUtils
- * @param {array} [arr] 数组，可转为当前list元素
- */
-var jmList =
-/*#__PURE__*/
-function (_Array) {
-  _inherits(jmList, _Array);
-
-  function jmList() {
-    var _this;
-
-    _classCallCheck(this, jmList);
-
-    var ps = [];
-
-    for (var _len = arguments.length, arg = new Array(_len), _key = 0; _key < _len; _key++) {
-      arg[_key] = arguments[_key];
-    }
-
-    if (arg && arg.length && Array.isArray(arg[0])) {
-      var _getPrototypeOf2;
-
-      for (var i = 0; i < arg[0].length; i++) {
-        ps.push(arg[0][i]);
-      }
-
-      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(jmList)).call.apply(_getPrototypeOf2, [this].concat(ps)));
-    } else {
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(jmList).call(this));
-    }
-
-    _this.option = {}; //选项
-
-    _this.type = 'jmList';
-    return _possibleConstructorReturn(_this);
-  }
-  /**
-   * 往集合中添加对象
-   *
-   * @method add
-   * @for list
-   * @param {any} obj 往集合中添加的对象
-   */
-
-
-  _createClass(jmList, [{
-    key: "add",
-    value: function add(obj) {
-      if (obj && Array.isArray(obj)) {
-        for (var i = 0; i < obj.length; i++) {
-          if (!this.includes(obj[i])) this.push(obj[i]);
-        }
-
-        return obj;
-      }
-
-      if (_typeof(obj) == 'object' && this.includes(obj)) return obj;
-      this.push(obj);
-      return obj;
-    }
-    /**
-     * 从集合中移除指定对象
-     * 
-     * @method remove
-     * @for list
-     * @param {any} obj 将移除的对象
-     */
-
-  }, {
-    key: "remove",
-    value: function remove(obj) {
-      for (var i = this.length - 1; i >= 0; i--) {
-        if (this[i] == obj) {
-          this.removeAt(i);
-        }
-      }
-    }
-    /**
-     * 按索引移除对象
-     * 
-     * @method removeAt
-     * @for list
-     * @param {integer} index 移除对象的索引
-     */
-
-  }, {
-    key: "removeAt",
-    value: function removeAt(index) {
-      if (this.length > index) {
-        var obj = this[index];
-        this.splice(index, 1);
-        if (this.option.removeHandler) this.option.removeHandler.call(this, obj, index);
-      }
-    }
-    /**
-     * 判断是否包含某个对象
-     * 
-     * @method contain
-     * @for list
-     * @param {any} obj 判断当前集合中是否包含此对象
-     */
-
-  }, {
-    key: "contain",
-    value: function contain(obj) {
-      return this.includes(obj);
-    }
-    /**
-     * 从集合中获取某个对象
-     * 
-     * @method get
-     * @for list
-     * @param {integer/function} index 如果为整型则表示为获取此索引的对象，如果为function为则通过此委托获取对象
-     * @return {any} 集合中的对象
-     */
-
-  }, {
-    key: "get",
-    value: function get(index) {
-      if (typeof index == 'function') {
-        return this.find(index);
-      } else {
-        return this[index];
-      }
-    }
-    /**
-     * 遍历当前集合 
-     *
-     * @method each
-     * @for list
-     * @param {function} cb 遍历当前集合的委托
-     * @param {boolean} inverse 是否按逆序遍历
-     */
-
-  }, {
-    key: "each",
-    value: function each(cb, inverse) {
-      if (cb && typeof cb == 'function') {
-        //如果按倒序循环
-        if (inverse) {
-          for (var i = this.length - 1; i >= 0; i--) {
-            var r = cb.call(this, i, this[i]);
-            if (r === false) break;
-          }
-        } else {
-          var len = this.length;
-
-          for (var _i = 0; _i < len; _i++) {
-            var _r = cb.call(this, _i, this[_i]);
-
-            if (_r === false) break;
-          }
-        }
-      }
-    }
-    /**
-     * 获取当前集合对象个数
-     *
-     * @method count
-     * @param {function} [handler] 检查对象是否符合计算的条件
-     * @for list
-     * @return {integer} 当前集合的个数
-     */
-
-  }, {
-    key: "count",
-    value: function count(handler) {
-      if (handler && typeof handler == 'function') {
-        var count = 0;
-        var len = this.length;
-
-        for (var i = 0; i < len; i++) {
-          if (handler(this[i])) {
-            count++;
-          }
-        }
-
-        return count;
-      }
-
-      return this.length;
-    }
-    /**
-     * 清空当前集合
-     *
-     * @method clear
-     * @for list
-     */
-
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.splice(0, this.length);
-    }
-  }]);
-
-  return jmList;
-}(_wrapNativeSuper(Array));
-
-var _default = jmList;
-exports.default = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmUtils = _interopRequireDefault(require("../common/jmUtils.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmUtils = require("../common/jmUtils.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1751,17 +3164,17 @@ function () {
         this.y = ms[2] || 0;
 
         if (ms[3]) {
-          ms[3] = _jmUtils.default.trim(ms[3], ', '); //如果第三位是颜色格式，则表示为颜色
+          ms[3] = _jmUtils.jmUtils.trim(ms[3], ', '); //如果第三位是颜色格式，则表示为颜色
 
           if (ms[3].indexOf('#') === 0 || /^rgb/i.test(ms[3])) {
             this.color = ms[3];
           } else {
-            this.blur = _jmUtils.default.trim(ms[3], ', ');
+            this.blur = _jmUtils.jmUtils.trim(ms[3], ', ');
           }
         }
 
         if (ms[4]) {
-          this.color = _jmUtils.default.trim(ms[4], ', ');
+          this.color = _jmUtils.jmUtils.trim(ms[4], ', ');
         }
       }
 
@@ -1786,18 +3199,17 @@ function () {
   return jmShadow;
 }();
 
-var _default = jmShadow;
-exports.default = _default;
+exports.jmShadow = jmShadow;
+
+},{"../common/jmUtils.js":5}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmArc = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1836,10 +3248,12 @@ function (_jmPath) {
   function jmArc(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmArc';
+
     _classCallCheck(this, jmArc);
 
     if (!params) params = {};
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArc).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArc).call(this, params, t));
     _this.center = params.center || {
       x: 0,
       y: 0
@@ -1978,20 +3392,19 @@ function (_jmPath) {
   }]);
 
   return jmArc;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmArc;
-exports.default = _default;
+exports.jmArc = jmArc;
+
+},{"./jmPath.js":20}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmArraw = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -2028,9 +3441,11 @@ function (_jmPath) {
   function jmArraw(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmArraw';
+
     _classCallCheck(this, jmArraw);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArraw).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArraw).call(this, params, t));
     _this.style.lineJoin = 'miter';
     _this.style.lineCap = 'square';
     _this.angle = params.angle || 0;
@@ -2190,20 +3605,19 @@ function (_jmPath) {
   }]);
 
   return jmArraw;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmArraw;
-exports.default = _default;
+exports.jmArraw = jmArraw;
+
+},{"./jmPath.js":20}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmBezier = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -2241,9 +3655,11 @@ function (_jmPath) {
   function jmBezier(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmBezier';
+
     _classCallCheck(this, jmBezier);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmBezier).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmBezier).call(this, params, t));
     _this.cpoints = params.points || [];
     return _this;
   }
@@ -2353,20 +3769,19 @@ function (_jmPath) {
   }]);
 
   return jmBezier;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmBezier;
-exports.default = _default;
+exports.jmBezier = jmBezier;
+
+},{"./jmPath.js":20}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmCircle = void 0;
 
-var _jmArc2 = _interopRequireDefault(require("./jmArc.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmArc2 = require("./jmArc.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -2401,9 +3816,11 @@ function (_jmArc) {
   _inherits(jmCircle, _jmArc);
 
   function jmCircle(params) {
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmCircle';
+
     _classCallCheck(this, jmCircle);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(jmCircle).call(this, params));
+    return _possibleConstructorReturn(this, _getPrototypeOf(jmCircle).call(this, params, t));
   }
   /**
    * 初始化图形点
@@ -2466,28 +3883,27 @@ function (_jmArc) {
   }]);
 
   return jmCircle;
-}(_jmArc2.default);
+}(_jmArc2.jmArc);
 
-var _default = jmCircle;
-exports.default = _default;
+exports.jmCircle = jmCircle;
+
+},{"./jmArc.js":13}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmControl = void 0;
 
-var _jmUtils = _interopRequireDefault(require("../common/jmUtils.js"));
+var _jmUtils = require("../common/jmUtils.js");
 
-var _jmList = _interopRequireDefault(require("../models/jmList.js"));
+var _jmList = require("../common/jmList.js");
 
-var _jmGradient = _interopRequireDefault(require("../models/jmGradient.js"));
+var _jmGradient = require("../models/jmGradient.js");
 
-var _jmShadow = _interopRequireDefault(require("../models/jmShadow.js"));
+var _jmShadow = require("../models/jmShadow.js");
 
-var _jmProperty2 = _interopRequireDefault(require("../common/jmProperty.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmProperty2 = require("../common/jmProperty.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -2553,7 +3969,7 @@ function (_jmProperty) {
 
     _this2 = _possibleConstructorReturn(this, _getPrototypeOf(jmControl).call(this));
 
-    _this2.__pro('type', t || (this instanceof jmControl ? this.constructor : void 0).name);
+    _this2.__pro('type', t || 'jmControl');
 
     _this2.style = params && params.style ? params.style : {};
     _this2.position = params.position || {
@@ -2591,7 +4007,7 @@ function (_jmProperty) {
     value: function initializing() {
       var self = this; //定义子元素集合
 
-      this.children = this.children || new _jmList.default();
+      this.children = this.children || new _jmList.jmList();
       var oadd = this.children.add; //当把对象添加到当前控件中时，设定其父节点
 
       this.children.add = function (obj) {
@@ -2702,10 +4118,10 @@ function (_jmProperty) {
 
           var mpname = jmStyleMap[mpkey || name]; //如果为渐变对象
 
-          if (style instanceof _jmGradient.default || t == 'string' && style.indexOf('-gradient') > -1) {
+          if (style instanceof _jmGradient.jmGradient || t == 'string' && style.indexOf('-gradient') > -1) {
             //如果是渐变，则需要转换
             if (t == 'string' && style.indexOf('-gradient') > -1) {
-              style = new _jmGradient.default(style);
+              style = new _jmGradient.jmGradient(style);
             }
 
             __setStyle(style.toGradient(_this3), mpname || name);
@@ -2721,7 +4137,7 @@ function (_jmProperty) {
             //只有存在白名单中才处理
             //颜色转换
             if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-              style = _jmUtils.default.toColor(style);
+              style = _jmUtils.jmUtils.toColor(style);
             }
 
             _this3.context[mpname] = style;
@@ -2731,7 +4147,7 @@ function (_jmProperty) {
               case 'shadow':
                 {
                   if (t == 'string') {
-                    __setStyle(new _jmShadow.default(style), name);
+                    __setStyle(new _jmShadow.jmShadow(style), name);
 
                     break;
                   }
@@ -2829,9 +4245,9 @@ function (_jmProperty) {
 
 
         if (t == 'string' && style[k].indexOf('-gradient') > -1) {
-          style[k] = new _jmGradient.default(style[k]);
+          style[k] = new _jmGradient.jmGradient(style[k]);
         } else if (t == 'string' && k == 'shadow') {
-          style[k] = new _jmShadow.default(style[k]);
+          style[k] = new _jmShadow.jmShadow(style[k]);
         }
 
         __setStyle(style[k], k);
@@ -2959,39 +4375,39 @@ function (_jmProperty) {
 
       var parentBounds = this.parent.getBounds(); //处理百分比参数
 
-      if (_jmUtils.default.checkPercent(local.left)) {
-        local.left = _jmUtils.default.percentToNumber(local.left) * parentBounds.width;
+      if (_jmUtils.jmUtils.checkPercent(local.left)) {
+        local.left = _jmUtils.jmUtils.percentToNumber(local.left) * parentBounds.width;
       }
 
-      if (_jmUtils.default.checkPercent(local.top)) {
-        local.top = _jmUtils.default.percentToNumber(local.top) * parentBounds.height;
+      if (_jmUtils.jmUtils.checkPercent(local.top)) {
+        local.top = _jmUtils.jmUtils.percentToNumber(local.top) * parentBounds.height;
       } //如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
 
 
-      if (_jmUtils.default.checkPercent(local.width)) {
-        local.width = _jmUtils.default.percentToNumber(local.width) * parentBounds.width;
+      if (_jmUtils.jmUtils.checkPercent(local.width)) {
+        local.width = _jmUtils.jmUtils.percentToNumber(local.width) * parentBounds.width;
       }
 
-      if (_jmUtils.default.checkPercent(local.height)) {
-        local.height = _jmUtils.default.percentToNumber(local.height) * parentBounds.height;
+      if (_jmUtils.jmUtils.checkPercent(local.height)) {
+        local.height = _jmUtils.jmUtils.percentToNumber(local.height) * parentBounds.height;
       } //处理中心点
 
 
       if (local.center) {
         //处理百分比参数
-        if (_jmUtils.default.checkPercent(local.center.x)) {
-          local.center.x = _jmUtils.default.percentToNumber(local.center.x) * parentBounds.width;
+        if (_jmUtils.jmUtils.checkPercent(local.center.x)) {
+          local.center.x = _jmUtils.jmUtils.percentToNumber(local.center.x) * parentBounds.width;
         }
 
-        if (_jmUtils.default.checkPercent(local.center.y)) {
-          local.center.y = _jmUtils.default.percentToNumber(local.center.y) * parentBounds.height;
+        if (_jmUtils.jmUtils.checkPercent(local.center.y)) {
+          local.center.y = _jmUtils.jmUtils.percentToNumber(local.center.y) * parentBounds.height;
         }
       }
 
       if (local.radius) {
         //处理百分比参数
-        if (_jmUtils.default.checkPercent(local.radius)) {
-          local.radius = _jmUtils.default.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
+        if (_jmUtils.jmUtils.checkPercent(local.radius)) {
+          local.radius = _jmUtils.jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
         }
       }
 
@@ -3021,14 +4437,14 @@ function (_jmProperty) {
 
         rotation.rotateX = rotation.point.x;
 
-        if (_jmUtils.default.checkPercent(rotation.rotateX)) {
-          rotation.rotateX = _jmUtils.default.percentToNumber(rotation.rotateX) * _bounds.width;
+        if (_jmUtils.jmUtils.checkPercent(rotation.rotateX)) {
+          rotation.rotateX = _jmUtils.jmUtils.percentToNumber(rotation.rotateX) * _bounds.width;
         }
 
         rotation.rotateY = rotation.point.y;
 
-        if (_jmUtils.default.checkPercent(rotation.rotateY)) {
-          rotation.rotateY = _jmUtils.default.percentToNumber(rotation.rotateY) * _bounds.height;
+        if (_jmUtils.jmUtils.checkPercent(rotation.rotateY)) {
+          rotation.rotateY = _jmUtils.jmUtils.percentToNumber(rotation.rotateY) * _bounds.height;
         }
       }
 
@@ -3317,7 +4733,7 @@ function (_jmProperty) {
         return this.__events[name] = events;
       }
 
-      var eventCollection = this.getEvent(name) || _setEvent.call(this, name, new _jmList.default());
+      var eventCollection = this.getEvent(name) || _setEvent.call(this, name, new _jmList.jmList());
 
       if (!eventCollection.contain(handle)) {
         eventCollection.add(handle);
@@ -3452,10 +4868,10 @@ function (_jmProperty) {
       if (ps && ps.length) {
         //如果有旋转参数，则需要转换坐标再处理
         if (rotation && rotation.angle != 0) {
-          ps = _jmUtils.default.clone(ps, true); //拷贝一份数据
+          ps = _jmUtils.jmUtils.clone(ps, true); //拷贝一份数据
           //rotateX ,rotateY 是相对当前控件的位置
 
-          ps = _jmUtils.default.rotatePoints(ps, {
+          ps = _jmUtils.jmUtils.rotatePoints(ps, {
             x: rotation.rotateX + bounds.left,
             y: rotation.rotateY + bounds.top
           }, rotation.angle);
@@ -3472,13 +4888,13 @@ function (_jmProperty) {
             //则当为封闭图形时跟第一点连线处理.否则直接返回false
             if (j == count) {
               if (this.style.close) {
-                var _r = _jmUtils.default.pointInPolygon(p, [ps[i], ps[0]], pad);
+                var _r = _jmUtils.jmUtils.pointInPolygon(p, [ps[i], ps[0]], pad);
 
                 if (_r) return true;
               }
             } else {
               //判断是否在点i,j连成的线上
-              var s = _jmUtils.default.pointInPolygon(p, [ps[i], ps[j]], pad);
+              var s = _jmUtils.jmUtils.pointInPolygon(p, [ps[i], ps[j]], pad);
 
               if (s) return true;
             }
@@ -3488,7 +4904,7 @@ function (_jmProperty) {
           if (!this.style['fill']) return false;
         }
 
-        var r = _jmUtils.default.pointInPolygon(p, ps, pad);
+        var r = _jmUtils.jmUtils.pointInPolygon(p, ps, pad);
 
         return r;
       }
@@ -3520,7 +4936,7 @@ function (_jmProperty) {
       if (!args.position) {
         var graph = this.graph;
 
-        var position = _jmUtils.default.getEventPosition(args, graph.scaleSize); //初始化事件位置		
+        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize); //初始化事件位置		
 
 
         var srcElement = args.srcElement || args.target;
@@ -3679,7 +5095,7 @@ function (_jmProperty) {
               var thisbounds = _this.bounds || _this.getAbsoluteBounds(); //检查边界出界
 
 
-              var outside = _jmUtils.default.checkOutSide(parentbounds, thisbounds, {
+              var outside = _jmUtils.jmUtils.checkOutSide(parentbounds, thisbounds, {
                 x: offsetx,
                 y: offsety
               });
@@ -3869,7 +5285,7 @@ function (_jmProperty) {
     get: function get() {
       var s = this.__pro('children');
 
-      if (!s) s = this.__pro('children', new _jmList.default());
+      if (!s) s = this.__pro('children', new _jmList.jmList());
       return s;
     },
     set: function set(v) {
@@ -3973,21 +5389,20 @@ function (_jmProperty) {
   }]);
 
   return jmControl;
-}(_jmProperty2.default);
+}(_jmProperty2.jmProperty);
 
+exports.jmControl = jmControl;
 ;
-var _default = jmControl;
-exports.default = _default;
+
+},{"../common/jmList.js":2,"../common/jmProperty.js":4,"../common/jmUtils.js":5,"../models/jmGradient.js":11,"../models/jmShadow.js":12}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmHArc = void 0;
 
-var _jmArc2 = _interopRequireDefault(require("./jmArc.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmArc2 = require("./jmArc.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4024,9 +5439,11 @@ function (_jmArc) {
   function jmHArc(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmHArc';
+
     _classCallCheck(this, jmHArc);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmHArc).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmHArc).call(this, params, t));
     _this.minRadius = params.minRadius || style.minRadius || 0;
     _this.maxRadius = params.maxRadius || style.maxRadius || 0;
     return _this;
@@ -4120,20 +5537,19 @@ function (_jmArc) {
   }]);
 
   return jmHArc;
-}(_jmArc2.default);
+}(_jmArc2.jmArc);
 
-var _default = jmHArc;
-exports.default = _default;
+exports.jmHArc = jmHArc;
+
+},{"./jmArc.js":13}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmLine = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4170,9 +5586,11 @@ function (_jmPath) {
   function jmLine(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmLine';
+
     _classCallCheck(this, jmLine);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmLine).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmLine).call(this, params, t));
     _this.start = params.start || {
       x: 0,
       y: 0
@@ -4268,20 +5686,19 @@ function (_jmPath) {
   }]);
 
   return jmLine;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmLine;
-exports.default = _default;
+exports.jmLine = jmLine;
+
+},{"./jmPath.js":20}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmPath = void 0;
 
-var _jmControl2 = _interopRequireDefault(require("./jmControl.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmControl2 = require("./jmControl.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4319,9 +5736,11 @@ function (_jmControl) {
   function jmPath(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmPath';
+
     _classCallCheck(this, jmPath);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmPath).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmPath).call(this, params, t));
     _this.points = params && params.points ? params.points : [];
     return _this;
   }
@@ -4346,20 +5765,19 @@ function (_jmControl) {
   }]);
 
   return jmPath;
-}(_jmControl2.default);
+}(_jmControl2.jmControl);
 
-var _default = jmPath;
-exports.default = _default;
+exports.jmPath = jmPath;
+
+},{"./jmControl.js":17}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmPrismatic = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4395,9 +5813,11 @@ function (_jmPath) {
   function jmPrismatic(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmPrismatic';
+
     _classCallCheck(this, jmPrismatic);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmPrismatic).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmPrismatic).call(this, params, t));
     _this.style.close = typeof _this.style.close == 'undefined' ? true : _this.style.close;
     _this.center = params.center || {
       x: 0,
@@ -4459,20 +5879,19 @@ function (_jmPath) {
   }]);
 
   return jmPrismatic;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmPrismatic;
-exports.default = _default;
+exports.jmPrismatic = jmPrismatic;
+
+},{"./jmPath.js":20}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.jmRect = void 0;
 
-var _jmPath2 = _interopRequireDefault(require("./jmPath.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmPath2 = require("./jmPath.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4508,10 +5927,12 @@ function (_jmPath) {
   function jmRect(params) {
     var _this;
 
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmRect';
+
     _classCallCheck(this, jmRect);
 
     params = params || {};
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmRect).call(this, params));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmRect).call(this, params, t));
     _this.style.close = true;
     _this.radius = params.radius || _this.style.radius || 0;
     return _this;
@@ -4697,1424 +6118,8 @@ function (_jmPath) {
   }]);
 
   return jmRect;
-}(_jmPath2.default);
+}(_jmPath2.jmPath);
 
-var _default = jmRect;
-exports.default = _default;
-"use strict";
+exports.jmRect = jmRect;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmLine2 = _interopRequireDefault(require("../shapes/jmLine.js"));
-
-var _jmArraw = _interopRequireDefault(require("../shapes/jmArraw.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
- * 带箭头的直线,继承jmPath
- *
- * @class jmArrawLine
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
- * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
- */
-var jmArrawLine =
-/*#__PURE__*/
-function (_jmLine) {
-  _inherits(jmArrawLine, _jmLine);
-
-  function jmArrawLine(params) {
-    var _this;
-
-    _classCallCheck(this, jmArrawLine);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmArrawLine).call(this, params));
-    _this.style.lineJoin = _this.style.lineJoin || 'miter';
-    _this.arraw = new _jmArraw.default(params);
-    return _this;
-  }
-  /**
-   * 初始化直线和箭头描点
-   *
-   * @method initPoints
-   * @private
-   */
-
-
-  _createClass(jmArrawLine, [{
-    key: "initPoints",
-    value: function initPoints() {
-      this.points = _get(_getPrototypeOf(jmArrawLine.prototype), "initPoints", this).call(this);
-
-      if (this.arrawVisible !== false) {
-        this.points = this.points.concat(this.arraw.initPoints());
-      }
-
-      return this.points;
-    }
-  }]);
-
-  return jmArrawLine;
-}(_jmLine2.default);
-
-var _default = jmArrawLine;
-exports.default = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmControl2 = _interopRequireDefault(require("../shapes/jmControl.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
- * 图片控件，继承自jmControl
- * params参数中image为指定的图片源地址或图片img对象，
- * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
- * 
- * @class jmImage
- * @for jmGraph
- * @module jmGraph
- * @require jmControl
- * @param {jmGraph} graph 当前画布
- * @param {object} params 控件参数
- */
-var jmImage =
-/*#__PURE__*/
-function (_jmControl) {
-  _inherits(jmImage, _jmControl);
-
-  function jmImage(params) {
-    var _this;
-
-    _classCallCheck(this, jmImage);
-
-    params = params || {};
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmImage).call(this, params));
-    _this.style.fill = _this.fill || 'transparent'; //默认指定一个fill，为了可以鼠标选中
-
-    _this.sourceWidth = params.sourceWidth;
-    _this.sourceHeight = params.sourceHeight;
-    _this.sourcePosition = params.sourcePosition;
-    _this.image = params.image || _this.style.image;
-    return _this;
-  }
-  /**
-   * 画图开始剪切位置
-   *
-   * @property sourcePosition
-   * @type {point}
-   */
-
-
-  _createClass(jmImage, [{
-    key: "draw",
-
-    /**
-     * 重写控件绘制
-     * 根据父边界偏移和此控件参数绘制图片
-     *
-     * @method draw
-     */
-    value: function draw() {
-      try {
-        var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
-        if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
-        var p = this.getLocation();
-        p.left += bounds.left;
-        p.top += bounds.top;
-        var sp = this.sourcePosition;
-        var sw = this.sourceWidth;
-        var sh = this.sourceHeight;
-        var img = this.getImage();
-
-        if (sp || typeof sw != 'undefined' || typeof sh != 'undefined') {
-          if (typeof sw == 'undefined') sw = p.width || img.width || 0;
-          if (typeof sh == 'undefined') sh = p.height || img.height || 0;
-          sp = sp || {
-            x: 0,
-            y: 0
-          };
-          if (p.width && p.height) this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, p.height);else if (p.width) {
-            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, sh);
-          } else if (p.height) {
-            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, p.height);
-          } else this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, sh);
-        } else if (p) {
-          if (p.width && p.height) this.context.drawImage(img, p.left, p.top, p.width, p.height);else if (p.width) this.context.drawImage(img, p.left, p.top, p.width, img.height);else if (p.height) this.context.drawImage(img, p.left, p.top, img.width, p.height);else this.context.drawImage(img, p.left, p.top);
-        } else {
-          this.context.drawImage(img);
-        }
-      } catch (e) {
-        console.error && console.error(e);
-      }
-    }
-    /**
-     * 获取当前控件的边界 
-     * 
-     * @method getBounds
-     * @return {object} 边界对象(left,top,right,bottom,width,height)
-     */
-
-  }, {
-    key: "getBounds",
-    value: function getBounds() {
-      var rect = {};
-      var img = this.getImage();
-      var p = this.getLocation();
-      var w = p.width || img.width;
-      var h = p.height || img.height;
-      rect.left = p.left;
-      rect.top = p.top;
-      rect.right = p.left + w;
-      rect.bottom = p.top + h;
-      rect.width = w;
-      rect.height = h;
-      return rect;
-    }
-    /**
-     * img对象
-     *
-     * @method getImage
-     * @return {img} 图片对象
-     */
-
-  }, {
-    key: "getImage",
-    value: function getImage() {
-      var src = this.image || this.style.src || this.style.image;
-
-      if (this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
-        return this.__img;
-      } else if (src && src.src) {
-        this.__img = src;
-      } else if (document && document.createElement) {
-        this.__img = document.createElement('img');
-        if (src && typeof src == 'string') this.__img.src = src;
-      } else {
-        this.__img = src;
-      }
-
-      return this.__img;
-    }
-  }, {
-    key: "sourcePosition",
-    get: function get() {
-      return this.__pro('sourcePosition');
-    },
-    set: function set(v) {
-      return this.__pro('sourcePosition', v);
-    }
-    /**
-     * 被剪切宽度
-     *
-     * @property sourceWidth
-     * @type {number}
-     */
-
-  }, {
-    key: "sourceWidth",
-    get: function get() {
-      return this.__pro('sourceWidth');
-    },
-    set: function set(v) {
-      return this.__pro('sourceWidth', v);
-    }
-    /**
-     * 被剪切高度
-     *
-     * @method sourceHeight
-     * @type {number}
-     */
-
-  }, {
-    key: "sourceHeight",
-    get: function get() {
-      return this.__pro('sourceHeight');
-    },
-    set: function set(v) {
-      return this.__pro('sourceHeight', v);
-    }
-    /**
-     * 设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
-     *
-     * @method image
-     * @type {img}
-     */
-
-  }, {
-    key: "image",
-    get: function get() {
-      return this.__pro('image');
-    },
-    set: function set(v) {
-      return this.__pro('image', v);
-    }
-  }]);
-
-  return jmImage;
-}(_jmControl2.default);
-
-var _default = jmImage;
-exports.default = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmControl2 = _interopRequireDefault(require("../shapes/jmControl.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
- * 显示文字控件
- * params参数:style=样式，value=显示的文字
- *
- * @class jmLabel
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
- * @param {object} params 文字控件参数
- */
-var jmLabel =
-/*#__PURE__*/
-function (_jmControl) {
-  _inherits(jmLabel, _jmControl);
-
-  function jmLabel(params) {
-    var _this;
-
-    _classCallCheck(this, jmLabel);
-
-    params = params || {};
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmLabel).call(this, params));
-    _this.style.font = _this.style.font || "15px Arial";
-    _this.style.fontFamily = _this.style.fontFamily || 'Arial';
-    _this.style.fontSize = _this.style.fontSize || 15; // 显示不同的 textAlign 值
-    //文字水平对齐
-
-    _this.style.textAlign = _this.style.textAlign || 'left'; //文字垂直对齐
-
-    _this.style.textBaseline = _this.style.textBaseline || 'middle';
-    _this.text = params.text || '';
-    return _this;
-  }
-  /**
-   * 显示的内容
-   * @property text
-   * @type {string}
-   */
-
-
-  _createClass(jmLabel, [{
-    key: "initPoints",
-
-    /**
-     * 初始化图形点,主要用于限定控件边界。
-     *
-     * @method initPoints
-     * @return {array} 所有边界点数组
-     * @private
-     */
-    value: function initPoints() {
-      this.__size = null;
-      var size = this.testSize();
-      var location = this.getLocation();
-      var w = location.width || size.width;
-      var h = location.height || size.height;
-      this.points = [{
-        x: location.left,
-        y: location.top
-      }];
-      this.points.push({
-        x: location.left + w,
-        y: location.top
-      });
-      this.points.push({
-        x: location.left + w,
-        y: location.top + h
-      });
-      this.points.push({
-        x: location.left,
-        y: location.top + h
-      });
-      return this.points;
-    }
-    /**
-     * 测试获取文本所占大小
-     *
-     * @method testSize
-     * @return {object} 含文本大小的对象
-     */
-
-  }, {
-    key: "testSize",
-    value: function testSize() {
-      if (this.__size) return this.__size;
-      this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
-      this.context.save();
-      this.setStyle(); //计算宽度
-
-      this.__size = this.context.measureText ? this.context.measureText(this.text) : {
-        width: 15
-      };
-      this.context.restore();
-      this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
-      if (!this.width) this.width = this.__size.width;
-      if (!this.height) this.height = this.__size.height;
-      return this.__size;
-    }
-    /**
-     * 根据位置偏移画字符串
-     * 
-     * @method draw
-     */
-
-  }, {
-    key: "draw",
-    value: function draw() {
-      //获取当前控件的绝对位置
-      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
-      var size = this.testSize();
-      var location = this.getLocation();
-      var x = location.left + bounds.left;
-      var y = location.top + bounds.top; //通过文字对齐方式计算起始X位置
-
-      switch (this.style.textAlign) {
-        case 'right':
-          {
-            x += location.width;
-            break;
-          }
-
-        case 'center':
-          {
-            x += location.width / 2;
-            break;
-          }
-      } //通过垂直对齐方式计算起始Y值
-
-
-      switch (this.style.textBaseline) {
-        case 'bottom':
-          {
-            y += location.height;
-            break;
-          }
-
-        case 'hanging':
-        case 'alphabetic':
-        case 'middle':
-          {
-            y += location.height / 2;
-            break;
-          }
-      }
-
-      var txt = this.text;
-
-      if (txt) {
-        if (this.style.fill && this.context.fillText) {
-          if (this.style.maxWidth) {
-            this.context.fillText(txt, x, y, this.style.maxWidth);
-          } else {
-            this.context.fillText(txt, x, y);
-          }
-        } else if (this.context.strokeText) {
-          if (this.style.maxWidth) {
-            this.context.strokeText(txt, x, y, this.style.maxWidth);
-          } else {
-            this.context.strokeText(txt, x, y);
-          }
-        }
-      } //如果有指定边框，则画出边框
-
-
-      if (this.style.border) {
-        //如果指定了边框样式
-        if (this.style.border.style) {
-          this.context.save();
-          this.setStyle(this.style.border.style);
-        }
-
-        this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-
-        if (this.style.border.top) {
-          this.context.lineTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
-        }
-
-        if (this.style.border.right) {
-          this.context.moveTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
-          this.context.lineTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
-        }
-
-        if (this.style.border.bottom) {
-          this.context.moveTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
-          this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-        }
-
-        if (this.style.border.left) {
-          this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-          this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-        } //如果指定了边框颜色
-
-
-        if (this.style.border.style) {
-          this.context.restore();
-        }
-      }
-    }
-  }, {
-    key: "text",
-    get: function get() {
-      return this.__pro('text');
-    },
-    set: function set(v) {
-      return this.__pro('text', v);
-    }
-  }]);
-
-  return jmLabel;
-}(_jmControl2.default);
-
-var _default = jmLabel;
-exports.default = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmRect2 = _interopRequireDefault(require("../shapes/jmRect.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
- * 可拉伸的缩放控件
- * 继承jmRect
- * 如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
- *
- * @class jmResize
- * @for jmGraph
- */
-var jmResize =
-/*#__PURE__*/
-function (_jmRect) {
-  _inherits(jmResize, _jmRect);
-
-  function jmResize(params) {
-    var _this;
-
-    _classCallCheck(this, jmResize);
-
-    params = params || {};
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmResize).call(this, params)); //是否可拉伸
-
-    _this.enabled = params.enabled === false ? false : true;
-    _this.rectSize = params.rectSize || 8;
-    _this.style.close = _this.style.close || true;
-
-    _this.init();
-
-    return _this;
-  }
-  /**
-   * 拉动的小方块大小
-   * @property rectSize
-   * @type {number}
-   */
-
-
-  _createClass(jmResize, [{
-    key: "init",
-
-    /**
-     * 初始化控件的8个拉伸方框
-     *
-     * @method init
-     * @private
-     */
-    value: function init() {
-      //如果不可改变大小。则直接退出
-      if (this.params.resizable === false) return;
-      this.resizeRects = [];
-      var rs = this.rectSize;
-      var rectStyle = this.style.rectStyle || {
-        stroke: 'red',
-        fill: 'transparent',
-        lineWidth: 2,
-        close: true,
-        zIndex: 100
-      };
-      rectStyle.close = true;
-      rectStyle.fill = rectStyle.fill || 'transparent';
-
-      for (var i = 0; i < 8; i++) {
-        //生成改变大小方块
-        var r = this.graph.createShape('rect', {
-          position: {
-            x: 0,
-            y: 0
-          },
-          width: rs,
-          height: rs,
-          style: rectStyle
-        });
-        r.index = i;
-        r.visible = true;
-        this.resizeRects.push(r);
-        this.children.add(r);
-        r.canMove(true, this.graph);
-      }
-
-      this.reset(0, 0, 0, 0); //初始化位置
-      //绑定其事件
-
-      this.bindRectEvents();
-    }
-    /**
-     * 绑定周边拉伸的小方块事件
-     *
-     * @method bindRectEvents
-     * @private
-     */
-
-  }, {
-    key: "bindRectEvents",
-    value: function bindRectEvents() {
-      for (var i = 0; i < this.resizeRects.length; i++) {
-        var r = this.resizeRects[i]; //小方块移动监听
-
-        r.on('move', function (arg) {
-          var px = 0,
-              py = 0,
-              dx = 0,
-              dy = 0;
-
-          if (this.index == 0) {
-            dx = -arg.offsetX;
-            px = arg.offsetX;
-          } else if (this.index == 1) {
-            dx = -arg.offsetX;
-            px = arg.offsetX;
-            dy = -arg.offsetY;
-            py = arg.offsetY;
-          } else if (this.index == 2) {
-            dy = -arg.offsetY;
-            py = arg.offsetY;
-          } else if (this.index == 3) {
-            dx = arg.offsetX;
-            dy = -arg.offsetY;
-            py = arg.offsetY;
-          } else if (this.index == 4) {
-            dx = arg.offsetX;
-          } else if (this.index == 5) {
-            dx = arg.offsetX;
-            dy = arg.offsetY;
-          } else if (this.index == 6) {
-            dy = arg.offsetY;
-          } else if (this.index == 7) {
-            dx = -arg.offsetX;
-            dx = -arg.offsetX;
-            px = arg.offsetX;
-            dy = arg.offsetY;
-          } //重新定位
-
-
-          this.parent.reset(px, py, dx, dy);
-        }); //鼠标指针
-
-        r.bind('mousemove', function () {
-          var rectCursors = ['w-resize', 'nw-resize', 'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize', 'sw-resize'];
-          this.cursor = rectCursors[this.index];
-        });
-        r.bind('mouseleave', function () {
-          this.cursor = 'default';
-        });
-      }
-    }
-    /**
-     * 按移动偏移量重置当前对象，并触发大小和位置改变事件
-     * @method reset
-     * @param {number} px 位置X轴偏移
-     * @param {number} py 位置y轴偏移
-     * @param {number} dx 大小x轴偏移
-     * @param {number} dy 大小y轴偏移
-     */
-
-  }, {
-    key: "reset",
-    value: function reset(px, py, dx, dy) {
-      var minWidth = typeof this.style.minWidth == 'undefined' ? 5 : this.style.minWidth;
-      var minHeight = typeof this.style.minHeight == 'undefined' ? 5 : this.style.minHeight;
-      var location = this.getLocation();
-
-      if (dx != 0 || dy != 0) {
-        var w = location.width + dx;
-        var h = location.height + dy;
-
-        if (w >= minWidth || h >= minHeight) {
-          if (w >= minWidth) {
-            this.width = w;
-          } else {
-            px = 0;
-            dx = 0;
-          }
-
-          if (h >= minHeight) {
-            this.height = h;
-          } else {
-            py = 0;
-            dy = 0;
-          } //如果当前控件能移动才能改变其位置
-
-
-          if (this.params.movable !== false && (px || py)) {
-            var p = this.position;
-            p.x = location.left + px;
-            p.y = location.top + py;
-            this.position = p;
-          } //触发大小改变事件
-
-
-          this.emit('resize', px, py, dx, dy);
-        }
-      }
-
-      for (var i in this.resizeRects) {
-        var r = this.resizeRects[i];
-
-        switch (r.index) {
-          case 0:
-            {
-              r.position.x = -r.width / 2;
-              r.position.y = (location.height - r.height) / 2;
-              break;
-            }
-
-          case 1:
-            {
-              r.position.x = -r.width / 2;
-              r.position.y = -r.height / 2;
-              break;
-            }
-
-          case 2:
-            {
-              r.position.x = (location.width - r.width) / 2;
-              r.position.y = -r.height / 2;
-              break;
-            }
-
-          case 3:
-            {
-              r.position.x = location.width - r.width / 2;
-              r.position.y = -r.height / 2;
-              break;
-            }
-
-          case 4:
-            {
-              r.position.x = location.width - r.width / 2;
-              r.position.y = (location.height - r.height) / 2;
-              break;
-            }
-
-          case 5:
-            {
-              r.position.x = location.width - r.width / 2;
-              r.position.y = location.height - r.height / 2;
-              break;
-            }
-
-          case 6:
-            {
-              r.position.x = (location.width - r.height) / 2;
-              r.position.y = location.height - r.height / 2;
-              break;
-            }
-
-          case 7:
-            {
-              r.position.x = -r.width / 2;
-              r.position.y = location.height - r.height / 2;
-              break;
-            }
-        }
-      }
-    }
-  }, {
-    key: "rectSize",
-    get: function get() {
-      return this.__pro('rectSize');
-    },
-    set: function set(v) {
-      return this.__pro('rectSize', v);
-    }
-  }]);
-
-  return jmResize;
-}(_jmRect2.default);
-
-var _default = jmResize;
-exports.default = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jmUtils = _interopRequireDefault(require("./common/jmUtils.js"));
-
-var _jmShadow = _interopRequireDefault(require("./models/jmShadow.js"));
-
-var _jmGradient = _interopRequireDefault(require("./models/jmGradient.js"));
-
-var _jmEvents = _interopRequireDefault(require("./common/jmEvents.js"));
-
-var _jmControl2 = _interopRequireDefault(require("./shapes/jmControl.js"));
-
-var _jmPath = _interopRequireDefault(require("./shapes/jmPath.js"));
-
-var _jmArc = _interopRequireDefault(require("./shapes/jmArc.js"));
-
-var _jmArraw = _interopRequireDefault(require("./shapes/jmArraw.js"));
-
-var _jmBezier = _interopRequireDefault(require("./shapes/jmBezier.js"));
-
-var _jmCircle = _interopRequireDefault(require("./shapes/jmCircle.js"));
-
-var _jmHArc = _interopRequireDefault(require("./shapes/jmHArc.js"));
-
-var _jmLine = _interopRequireDefault(require("./shapes/jmLine.js"));
-
-var _jmPrismatic = _interopRequireDefault(require("./shapes/jmPrismatic.js"));
-
-var _jmRect = _interopRequireDefault(require("./shapes/jmRect.js"));
-
-var _jmArrawLine = _interopRequireDefault(require("./controls/jmArrawLine.js"));
-
-var _jmImage = _interopRequireDefault(require("./controls/jmImage.js"));
-
-var _jmLabel = _interopRequireDefault(require("./controls/jmLabel.js"));
-
-var _jmResize = _interopRequireDefault(require("./controls/jmResize.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-/**
- * jmGraph画图类库
- * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
- *
- * @module jmGraph
- * @class jmGraph
- * @param {element} canvas 标签canvas
- * @param {object} option 参数：{width:宽,height:高}
- * @param {function} callback 初始化后的回调
- */
-var jmGraph =
-/*#__PURE__*/
-function (_jmControl) {
-  _inherits(jmGraph, _jmControl);
-
-  function jmGraph(canvas, option, callback) {
-    var _this;
-
-    _classCallCheck(this, jmGraph);
-
-    if (typeof option == 'function') {
-      callback = option;
-      option = {};
-    }
-
-    option = option || {}; //不是用new实例化的话，返回一个promise
-
-    if ((this instanceof jmGraph ? this.constructor : void 0) !== jmGraph) {
-      return _possibleConstructorReturn(_this, new Promise(function (resolve, reject) {
-        var g = new jmGraph(canvas, option, callback);
-        if (resolve) resolve(g);
-      }));
-    }
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(jmGraph).call(this, option));
-    _this.option = option || {};
-    _this.util = _jmUtils.default; //如果是小程序
-
-    if (typeof wx != 'undefined' && wx.createCanvasContext) {
-      _this.context = wx.createCanvasContext(canvas);
-      canvas = wx.createSelectorQuery().select('#' + canvas);
-    } else {
-      if (typeof canvas === 'string' && typeof document != 'undefined') {
-        canvas = document.getElementById(canvas);
-      } else if (canvas.length) {
-        canvas = canvas[0];
-      }
-
-      if (canvas.tagName != 'CANVAS') {
-        var cn = document.createElement('canvas');
-        canvas.appendChild(cn);
-        cn.width = canvas.offsetWidth || canvas.clientWidth;
-        cn.height = canvas.offsetHeight || canvas.clientHeight;
-        canvas = cn;
-      }
-
-      _this.context = canvas.getContext('2d');
-    }
-
-    _this.canvas = canvas;
-
-    _this.init(callback);
-
-    return _this;
-  }
-  /**
-   * 初始化画布
-   * @method init
-   */
-
-
-  _createClass(jmGraph, [{
-    key: "init",
-    value: function init(callback) {
-      /**
-       * 当前所有图形类型
-       * @property shapes
-       * @type {object}
-       */
-      this.shapes = {
-        "path": _jmPath.default,
-        "arc": _jmArc.default,
-        "arraw": _jmArraw.default,
-        "bezier": _jmBezier.default,
-        "circle": _jmCircle.default,
-        "harc": _jmHArc.default,
-        "line": _jmLine.default,
-        "prismatic": _jmPrismatic.default,
-        "rect": _jmRect.default,
-        "arrawline": _jmArrawLine.default,
-        "image": _jmImage.default,
-        "img": _jmImage.default,
-        "label": _jmLabel.default,
-        "resize": _jmResize.default
-      };
-      /**
-       * 画控件前初始化
-       * 为了解决一像素线条问题
-       */
-
-      this.on('beginDraw', function () {
-        this.context.translate(0.5, 0.5);
-      });
-      /**
-       * 结束控件绘制 为了解决一像素线条问题
-       */
-
-      this.on('endDraw', function () {
-        this.context.translate(-0.5, -0.5);
-      });
-      if (this.option.width > 0) this.width = this.option.width;
-      if (this.option.height > 0) this.height = this.option.height; //绑定事件
-
-      this.eventHandler = new _jmEvents.default(this, this.canvas.canvas || this.canvas);
-      if (callback) callback(this);
-    }
-    /**
-     * 宽度
-     * @property width
-     * @type {number}
-     */
-
-  }, {
-    key: "getPosition",
-
-    /**
-     * 获取当前画布在浏览器中的绝对定位
-     *
-     * @method getPosition
-     * @return {postion} 返回定位坐标
-     */
-    value: function getPosition() {
-      var p = _jmUtils.default.getElementPosition(this.canvas.canvas || this.canvas);
-
-      p.width = this.canvas.width;
-      p.height = this.canvas.height;
-      p.right = p.left + p.width;
-      p.bottom = p.top + p.height;
-      return p;
-    }
-    /**
-     * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
-     *
-     * @method registerShape 
-     * @param {string} name 控件图形名称
-     * @param {class} shape 图形控件类型
-     */
-
-  }, {
-    key: "registerShape",
-    value: function registerShape(name, shape) {
-      this.shapes[name] = shape;
-    }
-    /**
-     * 从已注册的图形类创建图形
-     * 简单直观创建对象
-     *
-     * @method createShape 
-     * @param {string} name 注册控件的名称
-     * @param {object} args 实例化控件的参数
-     * @return {object} 已实例化控件的对象
-     */
-
-  }, {
-    key: "createShape",
-    value: function createShape(name, args) {
-      var shape = this.shapes[name];
-
-      if (shape) {
-        if (!args) args = {};
-        var obj = new shape(args);
-        return obj;
-      }
-    }
-    /**
-     * 生成阴影对象
-     *
-     * @method createShadow
-     * @param {number} x x偏移量
-     * @param {number} y y偏移量
-     * @param {number} blur 模糊值
-     * @param {string} color 颜色
-     * @return {jmShadow} 阴影对象
-     */
-
-  }, {
-    key: "createShadow",
-    value: function createShadow(x, y, blur, color) {
-      var sh = new _jmShadow.default(x, y, blur, color);
-      return sh;
-    }
-    /**
-     * 生成线性渐变对象
-     *
-     * @method createLinearGradient
-     * @param {number} x1 线性渐变起始点X坐标
-     * @param {number} y1 线性渐变起始点Y坐标
-     * @param {number} x2 线性渐变结束点X坐标
-     * @param {number} y2 线性渐变结束点Y坐标
-     * @return {jmGradient} 线性渐变对象
-     */
-
-  }, {
-    key: "createLinearGradient",
-    value: function createLinearGradient(x1, y1, x2, y2) {
-      var gradient = new _jmGradient.default({
-        type: 'linear',
-        x1: x1,
-        y1: y1,
-        x2: x2,
-        y2: y2
-      });
-      return gradient;
-    }
-    /**
-     * 生成放射渐变对象
-     *
-     * @method createRadialGradient
-     * @param {number} x1 放射渐变小圆中心X坐标
-     * @param {number} y1 放射渐变小圆中心Y坐标
-     * @param {number} r1 放射渐变小圆半径
-     * @param {number} x2 放射渐变大圆中心X坐标
-     * @param {number} y2 放射渐变大圆中心Y坐标
-     * @param {number} r2 放射渐变大圆半径
-     * @return {jmGradient} 放射渐变对象
-     */
-
-  }, {
-    key: "createRadialGradient",
-    value: function createRadialGradient(x1, y1, r1, x2, y2, r2) {
-      var gradient = new _jmGradient.default({
-        type: 'radial',
-        x1: x1,
-        y1: y1,
-        r1: r1,
-        x2: x2,
-        y2: y2,
-        r2: r2
-      });
-      return gradient;
-    }
-    /**
-     * 重新刷新整个画板
-     * 以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
-     *
-     * @method refresh
-     */
-
-  }, {
-    key: "refresh",
-    value: function refresh() {
-      //加入动画，触发redraw，会导致多次refresh只redraw一次
-
-      /*this.animate(function() {
-      	return false;
-      },100,'jmgraph_refresh');*/
-      this.redraw();
-    }
-    /**
-     * 重新刷新整个画板
-     * 此方法直接重画，与refresh效果类似
-     *
-     * @method redraw
-     * @param {number} [w] 清除画布的宽度
-     * @param {number} [h] 清除画布的高度
-     */
-
-  }, {
-    key: "redraw",
-    value: function redraw(w, h) {
-      this.clear(w || this.width, h || this.height);
-      this.paint();
-    }
-    /**
-     * 清除画布
-     * 
-     * @method clear
-     * @param {number} [w] 清除画布的宽度
-     * @param {number} [h] 清除画布的高度
-     */
-
-  }, {
-    key: "clear",
-    value: function clear(w, h) {
-      //this.canvas.width = this.canvas.width;
-      if (w && h) {
-        //this.zoomActual();//恢复比例缩放
-        this.canvas.width = w;
-        this.canvas.height = h; //保留原有缩放比例
-
-        if (this.scaleSize) {
-          if (this.context.scale) this.context.scale(this.scaleSize.x, this.scaleSize.y);
-        }
-      } else {
-        w = this.canvas.width;
-        h = this.canvas.height;
-
-        if (this.scaleSize) {
-          w = w / this.scaleSize.x;
-          h = h / this.scaleSize.y;
-        }
-      } //如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
-
-
-      if (this.style && this.style.fill) {
-        this.points = [{
-          x: 0,
-          y: 0
-        }, {
-          x: w,
-          y: 0
-        }, {
-          x: w,
-          y: h
-        }, {
-          x: 0,
-          y: h
-        }];
-      } else if (this.context.clearRect) this.context.clearRect(0, 0, w, h);
-    }
-    /**
-    * 设置画布样式，此处只是设置其css样式
-    *
-    * @method css
-    * @param {string} name 样式名
-    * @param {string} value 样式值
-    */
-
-  }, {
-    key: "css",
-    value: function css(name, value) {
-      if (this.canvas) {
-        if (typeof value != 'undefined') this.canvas.style[name] = value;
-        return this.canvas.style[name];
-      }
-    }
-    /**
-     * 生成路径对象
-     *
-     * @method createPath
-     * @param {array} points 路径中的描点集合
-     * @param {style} style 当前路径的样式
-     * @return {jmPath} 路径对象jmPath
-     */
-
-  }, {
-    key: "createPath",
-    value: function createPath(points, style) {
-      var path = this.createShape('path', {
-        points: points,
-        style: style
-      });
-      return path;
-    }
-    /**
-     * 生成直线
-     * 
-     * @method createLine
-     * @param {point} start 直线的起点
-     * @param {point} end 直线的终点
-     * @param {style} 直线的样式
-     * @return {jmLine} 直线对象
-     */
-
-  }, {
-    key: "createLine",
-    value: function createLine(start, end, style) {
-      var line = this.createShape('line', {
-        start: start,
-        end: end,
-        style: style
-      });
-      return line;
-    }
-    /**
-     * 缩小整个画布按比例0.9
-     * 
-     * @method zoomOut
-     */
-
-  }, {
-    key: "zoomOut",
-    value: function zoomOut() {
-      this.scale(0.9, 0.9);
-    }
-    /**
-     * 放大 每次增大0.1的比例
-     * 
-     * @method zoomIn
-     */
-
-  }, {
-    key: "zoomIn",
-    value: function zoomIn() {
-      this.scale(1.1, 1.1);
-    }
-    /**
-     * 大小复原
-     * 
-     * @method zoomActual
-     */
-
-  }, {
-    key: "zoomActual",
-    value: function zoomActual() {
-      if (this.scaleSize) {
-        this.scale(1 / this.scaleSize.x, 1 / this.scaleSize.y);
-      } else {
-        this.scale(1, 1);
-      }
-    }
-    /**
-     * 放大缩小画布
-     * 
-     * @method scale
-     * @param {number} dx 缩放X轴比例
-     * @param {number} dy 缩放Y轴比例
-     */
-
-  }, {
-    key: "scale",
-    value: function scale(dx, dy) {
-      if (!this.normalSize) {
-        this.normalSize = {
-          width: this.canvas.width,
-          height: this.canvas.height
-        };
-      }
-
-      this.context.scale(dx, dy);
-
-      if (!this.scaleSize) {
-        this.scaleSize = {
-          x: dx,
-          y: dy
-        };
-      } else {
-        this.scaleSize = {
-          x: dx * this.scaleSize.x,
-          y: dy * this.scaleSize.y
-        };
-      }
-
-      this.refresh();
-    }
-    /**
-     * 保存为base64图形数据
-     * 
-     * @method toDataURL
-     * @return {string} 当前画布图的base64字符串
-     */
-
-  }, {
-    key: "toDataURL",
-    value: function toDataURL() {
-      var data = this.canvas.toDataURL ? this.canvas.toDataURL() : '';
-      return data;
-    }
-    /** 
-     * 自动刷新画版
-     * @param {function} callback 执行回调
-     */
-
-  }, {
-    key: "autoRefresh",
-    value: function autoRefresh(callback) {
-      var self = this;
-
-      function update() {
-        if (self.needUpdate) self.redraw();
-        requestAnimationFrame(update);
-        if (callback) callback();
-      }
-
-      update();
-      return this;
-    }
-  }, {
-    key: "width",
-    get: function get() {
-      if (this.canvas) return this.canvas.width;
-      return 0;
-    },
-    set: function set(v) {
-      if (this.canvas) this.canvas.width = v;
-      return v;
-    }
-    /**
-     * 高度
-     * @property height
-     * @type {number}
-     */
-
-  }, {
-    key: "height",
-    get: function get() {
-      if (this.canvas) return this.canvas.height;
-      return 0;
-    },
-    set: function set(v) {
-      if (this.canvas) this.canvas.height = v;
-      return v;
-    }
-  }]);
-
-  return jmGraph;
-}(_jmControl2.default);
-
-var _default = jmGraph;
-exports.default = _default;
+},{"./jmPath.js":20}]},{},[10]);

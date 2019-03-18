@@ -1,5 +1,5 @@
-import jmLine from "../shapes/jmLine.js";
-import jmArraw from "../shapes/jmArraw.js";
+import {jmLine} from "../shapes/jmLine.js";
+import {jmArraw} from "../shapes/jmArraw.js";
 /**
  * 带箭头的直线,继承jmPath
  *
@@ -11,8 +11,8 @@ import jmArraw from "../shapes/jmArraw.js";
  */	
 class jmArrawLine extends jmLine {	
 
-	constructor(params) {
-		super(params);
+	constructor(params, t) {
+		super(params, t||'jmArrawLine');
 		this.style.lineJoin = this.style.lineJoin || 'miter';
 		this.arraw = new jmArraw(params);
 	}
@@ -32,4 +32,4 @@ class jmArrawLine extends jmLine {
 	}
 }
 
-export default jmArrawLine;
+export { jmArrawLine };

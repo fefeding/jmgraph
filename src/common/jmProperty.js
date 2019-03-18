@@ -1,4 +1,4 @@
-import jmObject from "./jmObject.js";
+import { jmObject } from "./jmObject.js";
 /**
  * 对象属性管理
  * 
@@ -68,6 +68,6 @@ class jmProperty extends jmObject {
 	}
 }
 
-export default jmProperty;
+export { jmProperty };
 
 

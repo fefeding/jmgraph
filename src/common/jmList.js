@@ -155,4 +155,4 @@ class jmList extends Array {
     }
 }
 
-export default jmList;
+export { jmList };

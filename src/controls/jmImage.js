@@ -1,4 +1,4 @@
-import jmControl from "../shapes/jmControl.js";
+import {jmControl} from "../shapes/jmControl.js";
 /**
  * 图片控件，继承自jmControl
  * params参数中image为指定的图片源地址或图片img对象，
@@ -13,9 +13,9 @@ import jmControl from "../shapes/jmControl.js";
  */
 class jmImage extends jmControl {
 
-	constructor(params) {
+	constructor(params, t) {
 		params = params || {};
-		super(params);
+		super(params, t||'jmImage');
 
 		this.style.fill = this.fill || 'transparent';//默认指定一个fill，为了可以鼠标选中
 
@@ -171,4 +171,4 @@ class jmImage extends jmControl {
 	}
 }
 
-export default jmImage;
+export { jmImage };

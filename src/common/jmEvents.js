@@ -25,15 +25,15 @@ class jmEvents {
 	constructor(container,target) {
 		this.container = container;
 		this.target = target || container;
-		this.mouseHandler = new jmMouseEvent(container, target);
-		this.keyHandler = new jmKeyEvent(container, target);
+		this.mouseHandler = new jmMouseEvent(this, container, target);
+		this.keyHandler = new jmKeyEvent(this, container, target);
 	}
 
 	touchStart(evt) {
 		evt = evt || window.event;
 		this.container.raiseEvent('touchstart',evt);
 		let t = evt.target || evt.srcElement;
-		if(t == target) {
+		if(t == this.target) {
 			if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
@@ -43,7 +43,7 @@ class jmEvents {
 		evt = evt || window.event;
 		this.container.raiseEvent('touchmove',evt);
 		let t = evt.target || evt.srcElement;
-		if(t == target) {
+		if(t == this.target) {
 			if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
@@ -54,7 +54,7 @@ class jmEvents {
 		
 		this.container.raiseEvent('touchend',evt);
 		let t = evt.target || evt.srcElement;
-		if(t == target) {
+		if(t == this.target) {
 			if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
@@ -76,14 +76,15 @@ class jmEvents {
  * 鼠标事件处理对象，container 为事件主体，target为响应事件对象
  */
 class jmMouseEvent {
-	constructor(container, target) {
+	constructor(instance, container, target) {
+		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 
-		this.init(container, target);
+		this.init(instance, container, target);
 	}
 	
-	init(container, target) {
+	init(instance, container, target) {
 		let canvas = this.target;	
 		let doc = typeof typeof document != 'undefined'?document:null;
 		//禁用鼠标右健系统菜单
@@ -153,19 +154,19 @@ class jmMouseEvent {
 		// passive: false 为了让浏览器不告警并且preventDefault有效
 		// 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 		doc && jmUtils.bindEvent(doc,'touchstart', function(evt) {
-			return self.touchStart.call(this, evt);
+			return instance.touchStart(evt);
 		},{ passive: false });
 
 		doc && jmUtils.bindEvent(doc,'touchmove', function(evt) {
-			return self.touchMove.call(this, evt);
+			return instance.touchMove(evt);
 		},{ passive: false });
 
 		doc && jmUtils.bindEvent(doc,'touchend', function(evt) {
-			return self.touchEnd.call(this, evt);
+			return instance.touchEnd(evt);
 		},{ passive: false });
 
 		doc && jmUtils.bindEvent(doc,'touchcancel', function(evt) {
-			return self.touchCancel.call(this, evt);
+			return instance.touchCancel(evt);
 		},{ passive: false });
 	}
 }
@@ -174,7 +175,8 @@ class jmMouseEvent {
  * 健盘事件处理对象，container 为事件主体，target为响应事件对象
  */
 class jmKeyEvent {
-	constructor(container,target) {
+	constructor(instance, container,target) {
+		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 

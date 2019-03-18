@@ -1,4 +1,6 @@
 import jmUtils from "../common/jmUtils.js";
+import jmList from "../models/jmList.js";
+
 /**
  * 渐变类
  *
@@ -9,7 +11,7 @@ import jmUtils from "../common/jmUtils.js";
  */
 class jmGradient {
 	constructor(opt) {
-		this.stops = new jmUtils.list();
+		this.stops = new jmList();
 
 		if(opt && typeof opt == 'object') {
 			for(let k in opt) {

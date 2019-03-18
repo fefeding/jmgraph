@@ -1,5 +1,6 @@
 
 import jmUtils from "./jmUtils.js";
+import jmList from "../models/jmList.js";
 import jmGradient from "../models/jmGradient.js";
 import jmShadow from "../models/jmShadow.js";
 import jmProperty from "./jmProperty.js";
@@ -113,7 +114,7 @@ class jmControl extends jmProperty{
 	 */
 	get children() {
 		let s = this.__pro('children');
-		if(!s) s = this.__pro('children', new jmUtils.list());
+		if(!s) s = this.__pro('children', new jmList());
 		return s;
 	}
 	set children(v) {
@@ -211,7 +212,7 @@ class jmControl extends jmProperty{
 
 		var self = this;
 		//定义子元素集合
-		this.children = this.children || new jmUtils.list();
+		this.children = this.children || new jmList();
 		var oadd = this.children.add;
 		//当把对象添加到当前控件中时，设定其父节点
 		this.children.add = function(obj) {
@@ -861,7 +862,7 @@ class jmControl extends jmProperty{
 			if(!this.__events) this.__events = {};
 			return this.__events[name] = events;
 		}
-		let eventCollection = this.getEvent(name) || _setEvent.call(this,name, new jmUtils.list());
+		let eventCollection = this.getEvent(name) || _setEvent.call(this,name, new jmList());
 		if(!eventCollection.contain(handle)) {
 			eventCollection.add(handle);
 		}

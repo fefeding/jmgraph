@@ -1,4 +1,5 @@
-import jmUtils from "./jmUtils.js";
+
+import jmList from "../models/jmList.js";
 
 /**
  *  所有jm对象的基础对象
@@ -42,7 +43,7 @@ class jmObject {
 	animate(...args) {	
 		if(this.is('jmGraph')) {
 			if(handle) {			
-				if(!this.animateHandles) this.animateHandles = new jmUtils.list();
+				if(!this.animateHandles) this.animateHandles = new jmList();
 				
 				var params = [];
 				if(args.length > 2) {

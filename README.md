@@ -19,10 +19,24 @@ npm install jmgraph
 入门
 --------
 
-下载jmGraph.min.js代码，并引用到你的html中。
+### es5引用办法
+
+下载`dist/jmgraph.min.js`代码，并引用到你的html中。
 ```html
-<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	
+<script type="text/javascript" src="../dist/jmgraph.min.js"></script>	
 ```
+也可以用commonjs、requirejs等模块化库。
+##### requirejs
+```html
+<script type="text/javascript" src="js/require.js"></script>
+<script>
+    require(['../dist/jmgraph.js'], function(m) {
+        var g = new m.jmGraph();
+    });
+</script>
+```
+##### commonjs
+
 
 在dom中添加一个`div或canvas`，然后初始化jmGraph。
 ```html

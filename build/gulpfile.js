@@ -6,6 +6,7 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const uglifyes = require('gulp-terser');
 const babelify = require('babelify');
+const standalonify = require('standalonify');
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
@@ -38,7 +39,7 @@ gulp.task('jshint', function () {
         .pipe(jshint.reporter('default'));
 });
 
-//创建任务，用于执行前面创建的任务
+//编译成es6版本
 gulp.task('build-js-es6', [], function () {     
     return gulp.src(jsSources) 
     .pipe(cleanimport())
@@ -49,13 +50,15 @@ gulp.task('build-js-es6', [], function () {
     .pipe(gulp.dest('../dist'));
 });
 
-//创建任务，用于执行前面创建的任务
+//编译成es5版本
 gulp.task('build-js-cmd', function () {
     return browserify({
         entries: [
             '../src/jmGraph.js'
         ]
-      }) 
+      }).plugin(standalonify, {
+          name: 'jmGraph'   //转为umd规范
+      })
     .transform("babelify", {
         presets: ['@babel/preset-env']
     })  //使用babel转换es6代码

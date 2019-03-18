@@ -60,15 +60,6 @@ npm install jmgraph
     //也可以是一个dom对象或一个jquery对象 
     //例如：$('#mycanvas_container') || document.getElementById('mycanvas_container')
     var container = 'mycanvas_container';
-
-    // 用Promise方式
-    /*jmGraph(container, {
-        width: 800,
-        height: 600
-    }).then((g)=>{
-        //g就是一个jmGraph实例
-        init(g);
-    });	*/
     
     var g = new jmGraph(container, {
         width: 800,

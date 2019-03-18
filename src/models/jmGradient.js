@@ -148,7 +148,7 @@ class jmGradient {
 					this.x1 = ps[0];
 					this.y1 = ps[1];
 					this.x2 = ps[2];
-					this.y2 = ps[3]
+					this.y2 = ps[3];
 				}
 			}
 			//径向渐变

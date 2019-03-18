@@ -1066,34 +1066,32 @@ class jmKeyEvent {
 
 		this.init(container, target);
 	}
-	
-
-	/**
-	 * 检查是否触发健盘事件至画布
-	 * 如果触发对象为输入框等对象则不响应事件
-	 *  
-	 */
-	checkKeyEvent(evt) {
-		let target = evt.srcElement || evt.target;
-		if(target && (target.tagName == 'INPUT' 
-			|| target.tagName == 'TEXTAREA'
-			|| target.tagName == 'ANCHOR' 
-			|| target.tagName == 'FORM' 
-			|| target.tagName == 'FILE'
-			|| target.tagName == 'IMG'
-			|| target.tagName == 'HIDDEN'
-			|| target.tagName == 'RADIO'
-			|| target.tagName == 'TEXT'	)) {
-			return false;
-		}
-		return true;
-	}
 
 	/**
 	 * 初始化健盘事件
 	 */
 	init(container, target) {
 		let doc = typeof typeof document != 'undefined'?document:null;
+		/**
+		 * 检查是否触发健盘事件至画布
+		 * 如果触发对象为输入框等对象则不响应事件
+		 *  
+		 */
+		let checkKeyEvent = (evt) => {
+			let target = evt.srcElement || evt.target;
+			if(target && (target.tagName == 'INPUT' 
+				|| target.tagName == 'TEXTAREA'
+				|| target.tagName == 'ANCHOR' 
+				|| target.tagName == 'FORM' 
+				|| target.tagName == 'FILE'
+				|| target.tagName == 'IMG'
+				|| target.tagName == 'HIDDEN'
+				|| target.tagName == 'RADIO'
+				|| target.tagName == 'TEXT'	)) {
+				return false;
+			}
+			return true;
+		}
 
 		doc && jmUtils.bindEvent(doc,'keypress',function(evt) {
 			evt = evt || window.event;

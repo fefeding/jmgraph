@@ -221,31 +221,30 @@ function () {
     this.init(container, target);
   }
   /**
-   * 检查是否触发健盘事件至画布
-   * 如果触发对象为输入框等对象则不响应事件
-   *  
+   * 初始化健盘事件
    */
 
 
   _createClass(jmKeyEvent, [{
-    key: "checkKeyEvent",
-    value: function checkKeyEvent(evt) {
-      var target = evt.srcElement || evt.target;
-
-      if (target && (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA' || target.tagName == 'ANCHOR' || target.tagName == 'FORM' || target.tagName == 'FILE' || target.tagName == 'IMG' || target.tagName == 'HIDDEN' || target.tagName == 'RADIO' || target.tagName == 'TEXT')) {
-        return false;
-      }
-
-      return true;
-    }
-    /**
-     * 初始化健盘事件
-     */
-
-  }, {
     key: "init",
     value: function init(container, target) {
       var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null;
+      /**
+       * 检查是否触发健盘事件至画布
+       * 如果触发对象为输入框等对象则不响应事件
+       *  
+       */
+
+      var checkKeyEvent = function checkKeyEvent(evt) {
+        var target = evt.srcElement || evt.target;
+
+        if (target && (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA' || target.tagName == 'ANCHOR' || target.tagName == 'FORM' || target.tagName == 'FILE' || target.tagName == 'IMG' || target.tagName == 'HIDDEN' || target.tagName == 'RADIO' || target.tagName == 'TEXT')) {
+          return false;
+        }
+
+        return true;
+      };
+
       doc && _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应

@@ -35,7 +35,7 @@
 		function init(g){
 			//g.style.fill = '#000'; //画布背景
 			var style = {
-				src: 'http://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+				//src: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
 			};
 			style.shadow = '0,0,10,#fff';
 			//style.opacity = 0.2;		
@@ -43,8 +43,10 @@
 			//创建一个image
 			var img = g.createShape('image',{
 				style:style,
-				position: {x:100,y:100}
+				position: {x:100,y:100},
+				image: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
 			});	
+			//img.image = '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png';
             g.children.add(img);		
 			img.canMove(true);
             

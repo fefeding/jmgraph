@@ -27,6 +27,7 @@ class jmBezier extends jmPath {
 		return this.__pro('cpoints');
 	}
 	set cpoints(v) {
+		this.needUpdate = true;
 		return this.__pro('cpoints', v);
 	}
 	

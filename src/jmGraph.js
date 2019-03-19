@@ -46,8 +46,14 @@ class jmGraph extends jmControl {
 		}
 		super(option, 'jmGraph');
 
-		this.option = option||{};
-		this.util = jmUtils;		
+		this.option = option || {};
+
+		/**
+		 * 工具类
+		 * @property utils/util
+		 * @type {jmUtils}
+		 */
+		this.util = this.utils = jmUtils;		
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
@@ -135,6 +141,7 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set width(v) {
+		this.needUpdate = true;
 		if(this.canvas) this.canvas.width = v;		
 		return v;
 	}
@@ -149,8 +156,19 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set height(v) {
+		this.needUpdate = true;
 		if(this.canvas) this.canvas.height = v;
 		return v;
+	}
+
+	/**
+	 * 创建jmGraph的静态对象
+	 *
+	 * @method create
+	 * @return {jmGraph} jmGraph实例对象
+	 */
+	static create(...args) {
+		return new jmGraph(...args);
 	}
 
 	/**
@@ -192,6 +210,7 @@ class jmGraph extends jmControl {
 		let shape = this.shapes[name];
 		if(shape) {
 			if(!args) args = {};
+			args.graph = this;
 			let obj = new shape(args);
 			return obj;
 		}
@@ -454,9 +473,11 @@ class jmGraph extends jmControl {
 		return this;
 	}
 }
-export { jmGraph };
-export default jmGraph;
 
-if(typeof window != 'undefined' && !window.jmGraph) {
-	window.jmGraph = jmGraph;
+//创建实例
+const createJmGraph = (...args) => {
+	return new jmGraph(...args);
 }
+
+export { jmGraph, createJmGraph as create };
+export default jmGraph;

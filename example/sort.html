@@ -217,7 +217,6 @@
 				//画基准线
 				this.datumLine = this.graph.createLine({x:0,y:0},{x:this.graph.width,y:0},this.datumRectStyle);
 				this.datumLine.visible = false;
-				debugger
 				this.graph.children.add(this.datumLine);
 				this.refreshGraph(this.source);
 			}
@@ -743,25 +742,26 @@
 				container.style.height = h + 'px';
 
 				//初始化jmgraph
-				jmGraph('mycanvas', {
+				var g = new jmGraph.create('mycanvas', {
 					width: w,
 					height: h
-				}).then((g)=>{
+				});
+				
 					
-					sort = new jmSort(g);
-					
-					sort.init();
-					sort.heapSort(function(ret){
-						console.log(ret);
-					});	
-
-					//实时更新画布
-					function update() {
-						if(g.needUpdate) g.redraw();
-						requestAnimationFrame(update);
-					}
-					update();
+				sort = new jmSort(g);
+				
+				sort.init();
+				sort.heapSort(function(ret){
+					console.log(ret);
 				});	
+
+				//实时更新画布
+				function update() {
+					if(g.needUpdate) g.redraw();
+					requestAnimationFrame(update);
+				}
+				update();
+				
 					
 
 				$('#btn_quick').click(function(){

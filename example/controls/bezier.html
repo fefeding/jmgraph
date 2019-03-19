@@ -5,8 +5,7 @@
 	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>贝塞尔曲线</title>
-	<script type="text/javascript" src="../../src/jmGraph.js"></script>
-	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	-->
+	<script type="text/javascript" src="../../dist/jmgraph.js"></script>
 </head>
 
 <body style="width:100%;margin:10px auto;border:1px solid blue;">
@@ -30,22 +29,15 @@
 	
 
 	//初始化jmgraph
-	jmGraph('mycanvas').then((g1) => {
+	var g1 = jmGraph.create('mycanvas');
 
-		init1(g1);
-
-		//实时更新画布
-		function update() {
-			if(g1.needUpdate) g1.redraw();
-			requestAnimationFrame(update);
-		}
-		update();
-	});
+	init1(g1);
+	
 	function init1(graph1) {
-		var lstyle = jmUtils.clone(style);
+		var lstyle = graph1.util.clone(style);
 		lstyle.stroke = 'rgba(131,237,111,0.7)';
 		lstyle.lineWidth = 1;
-		var pstyle = jmUtils.clone(style);
+		var pstyle = graph1.util.clone(style);
 		pstyle.fill = 'rgb(191,216,44)';
 
 		var p0 = { x: 160, y: 200 };
@@ -85,23 +77,15 @@
 
 
 	//初始化jmgraph
-	jmGraph('mycanvas2').then((g2) => {
+	var g2 = jmGraph.create('mycanvas2');
 
-		init2(g2);
-
-		//实时更新画布
-		function update() {
-			if(g2.needUpdate) g2.redraw();
-			requestAnimationFrame(update);
-		}
-		update();
-	});
+	
 
 	function init2(graph2) {
-		var lstyle = jmUtils.clone(style);
+		var lstyle = graph2.util.clone(style);
 		lstyle.stroke = 'rgba(131,237,111,0.7)';
 		lstyle.lineWidth = 1;
-		var pstyle = jmUtils.clone(style);
+		var pstyle = graph2.util.clone(style);
 		pstyle.fill = 'rgb(191,216,44)';
 
 		//动画部分
@@ -115,7 +99,7 @@
 		var mp7 = { x: 650, y: 320 };
 		var mp8 = { x: 760, y: 350 };
 		var mp9 = { x: 800, y: 60 };
-		var mlstyle = jmUtils.clone(lstyle);
+		var mlstyle = graph2.util.clone(lstyle);
 		mlstyle.lineWidth = 2;
 		mlstyle.stroke = '#086C0A';
 		delete mlstyle.shadow;
@@ -157,12 +141,12 @@
 		var mbezierpath = graph2.createShape('path', { style: style });
 		graph2.children.add(mbezierpath);
 
-		var arrstyle = jmUtils.clone(style);
+		var arrstyle = graph2.util.clone(style);
 		var arr = graph2.createShape('arraw', { style: arrstyle });
 		graph2.children.add(arr);
 
 		var chplines = [];
-		var chpstyle = jmUtils.clone(mlstyle);
+		var chpstyle = graph2.util.clone(mlstyle);
 		chpstyle.lineWidth = 1;
 		chpstyle.stroke = 'rgb(142,142,15)';
 		function getpoint(ps, t, index) {
@@ -222,4 +206,14 @@
 			t = dir == 0 ? (t + speed) : (t - speed);
 		}, 50);
 	}
+
+	init2(g2);
+
+	//实时更新画布
+	function update() {
+		if(g1.needUpdate) g1.redraw();
+		if(g2.needUpdate) g2.redraw();
+		requestAnimationFrame(update);
+	}
+	update();
 </script>

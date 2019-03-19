@@ -36,6 +36,7 @@ class jmLabel extends jmControl {
 		return this.__pro('text');
 	}
 	set text(v) {
+		this.needUpdate = true;
 		return this.__pro('text', v);
 	}
 

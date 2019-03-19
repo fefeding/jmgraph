@@ -1698,6 +1698,7 @@ function (_jmControl) {
       return this.__pro('sourceWidth');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('sourceWidth', v);
     }
     /**
@@ -1713,6 +1714,7 @@ function (_jmControl) {
       return this.__pro('sourceHeight');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('sourceHeight', v);
     }
     /**
@@ -1728,6 +1730,7 @@ function (_jmControl) {
       return this.__pro('image');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('image', v);
     }
   }]);
@@ -1969,6 +1972,7 @@ function (_jmControl) {
       return this.__pro('text');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('text', v);
     }
   }]);
@@ -2029,11 +2033,12 @@ function (_jmRect) {
     params = params || {};
     _this = _possibleConstructorReturn(this, _getPrototypeOf(jmResize).call(this, params, t)); //是否可拉伸
 
-    _this.enabled = params.enabled === false ? false : true;
+    _this.resizable = params.resizable === false ? false : true;
+    _this.movable = params.movable;
     _this.rectSize = params.rectSize || 8;
     _this.style.close = _this.style.close || true;
 
-    _this.init();
+    _this.init(params);
 
     return _this;
   }
@@ -2053,9 +2058,9 @@ function (_jmRect) {
      * @method init
      * @private
      */
-    value: function init() {
+    value: function init(params) {
       //如果不可改变大小。则直接退出
-      if (this.params.resizable === false) return;
+      if (this.resizable === false) return;
       this.resizeRects = [];
       var rs = this.rectSize;
       var rectStyle = this.style.rectStyle || {
@@ -2070,7 +2075,7 @@ function (_jmRect) {
 
       for (var i = 0; i < 8; i++) {
         //生成改变大小方块
-        var r = this.graph.createShape('rect', {
+        var r = (this.graph || params.graph).createShape('rect', {
           position: {
             x: 0,
             y: 0
@@ -2141,6 +2146,7 @@ function (_jmRect) {
 
 
           this.parent.reset(px, py, dx, dy);
+          this.needUpdate = true;
         }); //鼠标指针
 
         r.bind('mousemove', function () {
@@ -2188,7 +2194,7 @@ function (_jmRect) {
           } //如果当前控件能移动才能改变其位置
 
 
-          if (this.params.movable !== false && (px || py)) {
+          if (this.movable !== false && (px || py)) {
             var p = this.position;
             p.x = location.left + px;
             p.y = location.top + py;
@@ -2270,6 +2276,20 @@ function (_jmRect) {
     set: function set(v) {
       return this.__pro('rectSize', v);
     }
+    /**
+     * 是否可以拉大缩小
+     * @property resizable
+     * @type {boolean}
+     */
+
+  }, {
+    key: "resizable",
+    get: function get() {
+      return this.__pro('resizable');
+    },
+    set: function set(v) {
+      return this.__pro('resizable', v);
+    }
   }]);
 
   return jmResize;
@@ -2283,7 +2303,7 @@ exports.jmResize = jmResize;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.jmGraph = void 0;
+exports.default = exports.create = exports.jmGraph = void 0;
 
 var _jmUtils = require("./common/jmUtils.js");
 
@@ -2322,6 +2342,10 @@ var _jmLabel = require("./controls/jmLabel.js");
 var _jmResize = require("./controls/jmResize.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2375,7 +2399,13 @@ function (_jmControl) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(jmGraph).call(this, option, 'jmGraph'));
     _this.option = option || {};
-    _this.util = _jmUtils.jmUtils; //如果是小程序
+    /**
+     * 工具类
+     * @property utils/util
+     * @type {jmUtils}
+     */
+
+    _this.util = _this.utils = _jmUtils.jmUtils; //如果是小程序
 
     if (typeof wx != 'undefined' && wx.createCanvasContext) {
       _this.context = wx.createCanvasContext(canvas);
@@ -2509,6 +2539,7 @@ function (_jmControl) {
 
       if (shape) {
         if (!args) args = {};
+        args.graph = this;
         var obj = new shape(args);
         return obj;
       }
@@ -2823,6 +2854,7 @@ function (_jmControl) {
       return 0;
     },
     set: function set(v) {
+      this.needUpdate = true;
       if (this.canvas) this.canvas.width = v;
       return v;
     }
@@ -2839,21 +2871,45 @@ function (_jmControl) {
       return 0;
     },
     set: function set(v) {
+      this.needUpdate = true;
       if (this.canvas) this.canvas.height = v;
       return v;
+    }
+    /**
+     * 创建jmGraph的静态对象
+     *
+     * @method create
+     * @return {jmGraph} jmGraph实例对象
+     */
+
+  }], [{
+    key: "create",
+    value: function create() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _construct(jmGraph, args);
     }
   }]);
 
   return jmGraph;
-}(_jmControl2.jmControl);
+}(_jmControl2.jmControl); //创建实例
+
 
 exports.jmGraph = jmGraph;
+
+var createJmGraph = function createJmGraph() {
+  for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  return _construct(jmGraph, args);
+};
+
+exports.create = createJmGraph;
 var _default = jmGraph;
 exports.default = _default;
-
-if (typeof window != 'undefined' && !window.jmGraph) {
-  window.jmGraph = jmGraph;
-}
 
 },{"./common/jmEvents.js":1,"./common/jmUtils.js":5,"./controls/jmArrawLine.js":6,"./controls/jmImage.js":7,"./controls/jmLabel.js":8,"./controls/jmResize.js":9,"./models/jmGradient.js":11,"./models/jmShadow.js":12,"./shapes/jmArc.js":13,"./shapes/jmArraw.js":14,"./shapes/jmBezier.js":15,"./shapes/jmCircle.js":16,"./shapes/jmControl.js":17,"./shapes/jmHArc.js":18,"./shapes/jmLine.js":19,"./shapes/jmPath.js":20,"./shapes/jmPrismatic.js":21,"./shapes/jmRect.js":22}],11:[function(require,module,exports){
 "use strict";
@@ -3329,6 +3385,7 @@ function (_jmPath) {
       return this.__pro('center');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('center', v);
     }
     /**
@@ -3343,6 +3400,7 @@ function (_jmPath) {
       return this.__pro('radius');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('radius', v);
     }
     /**
@@ -3357,6 +3415,7 @@ function (_jmPath) {
       return this.__pro('startAngle');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('startAngle', v);
     }
     /**
@@ -3371,6 +3430,7 @@ function (_jmPath) {
       return this.__pro('endAngle');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('endAngle', v);
     }
     /**
@@ -3386,6 +3446,7 @@ function (_jmPath) {
       return this.__pro('anticlockwise');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('anticlockwise', v);
     }
   }]);
@@ -3404,6 +3465,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.jmArraw = void 0;
 
 var _jmPath2 = require("./jmPath.js");
+
+var _jmUtils = require("../common/jmUtils.js");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -3514,7 +3577,9 @@ function (_jmPath) {
         x: end.x - xstep,
         y: end.y - ystep
       };
-      var s = jmUtils.clone(end);
+
+      var s = _jmUtils.jmUtils.clone(end);
+
       s.m = true;
       this.points.push(s);
       this.points.push(p1); //如果实心箭头则封闭路线
@@ -3535,6 +3600,7 @@ function (_jmPath) {
       return this.__pro('start');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('start', v);
     }
     /**
@@ -3551,6 +3617,7 @@ function (_jmPath) {
       return this.__pro('end');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('end', v);
     }
     /**
@@ -3567,6 +3634,7 @@ function (_jmPath) {
       return this.__pro('angle');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('angle', v);
     }
     /**
@@ -3583,6 +3651,7 @@ function (_jmPath) {
       return this.__pro('offsetX');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('offsetX', v);
     }
     /**
@@ -3599,6 +3668,7 @@ function (_jmPath) {
       return this.__pro('offsetY');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('offsetY', v);
     }
   }]);
@@ -3608,7 +3678,7 @@ function (_jmPath) {
 
 exports.jmArraw = jmArraw;
 
-},{"./jmPath.js":20}],15:[function(require,module,exports){
+},{"../common/jmUtils.js":5,"./jmPath.js":20}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3763,6 +3833,7 @@ function (_jmPath) {
       return this.__pro('cpoints');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('cpoints', v);
     }
   }]);
@@ -3966,9 +4037,10 @@ function (_jmProperty) {
 
     _classCallCheck(this, jmControl);
 
+    params = params || {};
     _this2 = _possibleConstructorReturn(this, _getPrototypeOf(jmControl).call(this));
 
-    _this2.__pro('type', t || 'jmControl');
+    _this2.__pro('type', t || (this instanceof jmControl ? this.constructor : void 0).name);
 
     _this2.style = params && params.style ? params.style : {};
     _this2.position = params.position || {
@@ -3977,6 +4049,7 @@ function (_jmProperty) {
     };
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
+    _this2.graph = params.graph || null;
 
     _this2.initializing();
 
@@ -4489,7 +4562,7 @@ function (_jmProperty) {
         offseted = true;
       }
 
-      if (offseted == false && local.center) {
+      if (local.center) {
         local.center.x = local.center.x + x;
         local.center.y = local.center.y + y;
         offseted = true;
@@ -5253,6 +5326,7 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('style', v);
     }
     /**
@@ -5271,6 +5345,7 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('visible', v);
     }
     /**
@@ -5288,6 +5363,7 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('children', v);
     }
     /**
@@ -5302,6 +5378,7 @@ function (_jmProperty) {
       return this.__pro('position');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('position', v);
     }
     /**
@@ -5319,6 +5396,7 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('width', v);
     }
     /**
@@ -5336,6 +5414,7 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('height', v);
     }
     /**
@@ -5354,6 +5433,8 @@ function (_jmProperty) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
+
       this.__pro('zIndex', v);
 
       this.children.sort(); //层级发生改变，需要重新排序
@@ -5515,6 +5596,7 @@ function (_jmArc) {
       return this.__pro('minRadius');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('minRadius', v);
     }
     /**
@@ -5531,6 +5613,7 @@ function (_jmArc) {
       return this.__pro('maxRadius');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('maxRadius', v);
     }
   }]);
@@ -5664,6 +5747,7 @@ function (_jmPath) {
       return this.__pro('start');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('start', v);
     }
     /**
@@ -5680,6 +5764,7 @@ function (_jmPath) {
       return this.__pro('end');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('end', v);
     }
   }]);
@@ -5759,6 +5844,7 @@ function (_jmControl) {
       return s;
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('points', v);
     }
   }]);
@@ -5873,6 +5959,7 @@ function (_jmPath) {
       return this.__pro('center');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('center', v);
     }
   }]);
@@ -6112,6 +6199,7 @@ function (_jmPath) {
       return this.__pro('radius');
     },
     set: function set(v) {
+      this.needUpdate = true;
       return this.__pro('radius', v);
     }
   }]);

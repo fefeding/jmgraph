@@ -29,6 +29,7 @@ class jmHArc extends jmArc {
 		return this.__pro('minRadius');
 	}
 	set minRadius(v) {
+		this.needUpdate = true;
 		return this.__pro('minRadius', v);
 	}
 
@@ -43,6 +44,7 @@ class jmHArc extends jmArc {
 		return this.__pro('maxRadius');
 	}
 	set maxRadius(v) {
+		this.needUpdate = true;
 		return this.__pro('maxRadius', v);
 	}
 

@@ -35,6 +35,7 @@ class jmArc extends jmPath {
 		return this.__pro('center');
 	}
 	set center(v) {
+		this.needUpdate = true;
 		return this.__pro('center', v);
 	}
 
@@ -47,6 +48,7 @@ class jmArc extends jmPath {
 		return this.__pro('radius');
 	}
 	set radius(v) {
+		this.needUpdate = true;
 		return this.__pro('radius', v);
 	}
 
@@ -59,6 +61,7 @@ class jmArc extends jmPath {
 		return this.__pro('startAngle');
 	}
 	set startAngle(v) {
+		this.needUpdate = true;
 		return this.__pro('startAngle', v);
 	}
 
@@ -71,6 +74,7 @@ class jmArc extends jmPath {
 		return this.__pro('endAngle');
 	}
 	set endAngle(v) {
+		this.needUpdate = true;
 		return this.__pro('endAngle', v);
 	}
 
@@ -84,6 +88,7 @@ class jmArc extends jmPath {
 		return this.__pro('anticlockwise');
 	}
 	set anticlockwise(v) {
+		this.needUpdate = true;
 		return this.__pro('anticlockwise', v);
 	}
 

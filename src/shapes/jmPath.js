@@ -28,6 +28,7 @@ class jmPath extends jmControl {
 		return s;
 	}
 	set points(v) {
+		this.needUpdate = true;
 		return this.__pro('points', v);
 	}
 }

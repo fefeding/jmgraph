@@ -13,11 +13,12 @@ class jmResize extends jmRect {
 		params = params || {};
 		super(params, t);
 		//是否可拉伸
-		this.enabled = params.enabled === false?false:true;		
+		this.resizable = params.resizable === false?false:true;	
+		this.movable = params.movable;
 		this.rectSize = params.rectSize || 8;
 		this.style.close = this.style.close || true;
 
-		this.init();
+		this.init(params);
 	}
 	/**
 	 * 拉动的小方块大小
@@ -32,14 +33,26 @@ class jmResize extends jmRect {
 	}
 
 	/**
+	 * 是否可以拉大缩小
+	 * @property resizable
+	 * @type {boolean}
+	 */
+	get resizable() {
+		return this.__pro('resizable');
+	}
+	set resizable(v) {
+		return this.__pro('resizable', v);
+	}
+
+	/**
 	 * 初始化控件的8个拉伸方框
 	 *
 	 * @method init
 	 * @private
 	 */
-	init() {
+	init(params) {
 		//如果不可改变大小。则直接退出
-		if(this.params.resizable === false) return;
+		if(this.resizable === false) return;
 		this.resizeRects = [];	
 		let rs = this.rectSize;
 		let rectStyle = this.style.rectStyle || {
@@ -54,7 +67,7 @@ class jmResize extends jmRect {
 		
 		for(let i = 0;i<8;i++) {
 			//生成改变大小方块
-			let r = this.graph.createShape('rect',{
+			let r = (this.graph || params.graph).createShape('rect',{
 					position:{x:0,y:0},
 					width: rs,
 					height: rs,
@@ -120,6 +133,7 @@ class jmResize extends jmRect {
 				}
 				//重新定位
 				this.parent.reset(px,py,dx,dy);
+				this.needUpdate = true;
 			});
 			//鼠标指针
 			r.bind('mousemove',function() {	
@@ -164,7 +178,7 @@ class jmResize extends jmRect {
 					dy = 0;
 				}
 				//如果当前控件能移动才能改变其位置
-				if(this.params.movable !== false && (px||py)) {
+				if(this.movable !== false && (px||py)) {
 					let p = this.position;
 					p.x = location.left + px;
 					p.y = location.top + py;

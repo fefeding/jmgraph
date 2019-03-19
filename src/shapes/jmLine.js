@@ -30,6 +30,7 @@ class jmLine extends jmPath {
 		return this.__pro('start');
 	}
 	set start(v) {
+		this.needUpdate = true;
 		return this.__pro('start', v);
 	}
 
@@ -44,6 +45,7 @@ class jmLine extends jmPath {
 		return this.__pro('end');
 	}
 	set end(v) {
+		this.needUpdate = true;
 		return this.__pro('end', v);
 	}
 

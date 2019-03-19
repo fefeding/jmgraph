@@ -40,12 +40,14 @@ const jmStyleMap = {
 class jmControl extends jmProperty{	
 
 	constructor(params, t) {
+		params = params||{};
 		super();
-		this.__pro('type', t || 'jmControl');
+		this.__pro('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
 		this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+		this.graph = params.graph || null;
 		this.initializing();	
 		
 		this.on = this.bind;		
@@ -92,6 +94,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set style(v) {
+		this.needUpdate = true;
 		return this.__pro('style', v);
 	}
 
@@ -107,6 +110,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set visible(v) {
+		this.needUpdate = true;
 		return this.__pro('visible', v);
 	}
 
@@ -121,6 +125,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set children(v) {
+		this.needUpdate = true;
 		return this.__pro('children', v);
 	}
 
@@ -133,6 +138,7 @@ class jmControl extends jmProperty{
 		return this.__pro('position');
 	}
 	set position(v) {
+		this.needUpdate = true;
 		return this.__pro('position', v);
 	}
 
@@ -147,6 +153,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set width(v) {
+		this.needUpdate = true;
 		return this.__pro('width', v);
 	}
 
@@ -161,6 +168,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set height(v) {
+		this.needUpdate = true;
 		return this.__pro('height', v);
 	}
 
@@ -176,6 +184,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set zIndex(v) {
+		this.needUpdate = true;
 		this.__pro('zIndex', v);
 		this.children.sort();//层级发生改变，需要重新排序
 		this.needUpdate = true;
@@ -639,7 +648,7 @@ class jmControl extends jmProperty{
 			offseted = true;
 		}
 
-		if(offseted == false && local.center) {		
+		if(local.center) {		
 			local.center.x = local.center.x + x;
 			local.center.y = local.center.y + y;
 			offseted = true;

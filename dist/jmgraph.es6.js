@@ -1443,12 +1443,14 @@ const jmStyleMap = {
 class jmControl extends jmProperty{	
 
 	constructor(params, t) {
+		params = params||{};
 		super();
-		this.__pro('type', t || 'jmControl');
+		this.__pro('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
 		this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+		this.graph = params.graph || null;
 		this.initializing();	
 		
 		this.on = this.bind;		
@@ -1495,6 +1497,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set style(v) {
+		this.needUpdate = true;
 		return this.__pro('style', v);
 	}
 
@@ -1510,6 +1513,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set visible(v) {
+		this.needUpdate = true;
 		return this.__pro('visible', v);
 	}
 
@@ -1524,6 +1528,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set children(v) {
+		this.needUpdate = true;
 		return this.__pro('children', v);
 	}
 
@@ -1536,6 +1541,7 @@ class jmControl extends jmProperty{
 		return this.__pro('position');
 	}
 	set position(v) {
+		this.needUpdate = true;
 		return this.__pro('position', v);
 	}
 
@@ -1550,6 +1556,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set width(v) {
+		this.needUpdate = true;
 		return this.__pro('width', v);
 	}
 
@@ -1564,6 +1571,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set height(v) {
+		this.needUpdate = true;
 		return this.__pro('height', v);
 	}
 
@@ -1579,6 +1587,7 @@ class jmControl extends jmProperty{
 		return s;
 	}
 	set zIndex(v) {
+		this.needUpdate = true;
 		this.__pro('zIndex', v);
 		this.children.sort();//层级发生改变，需要重新排序
 		this.needUpdate = true;
@@ -2042,7 +2051,7 @@ class jmControl extends jmProperty{
 			offseted = true;
 		}
 
-		if(offseted == false && local.center) {		
+		if(local.center) {		
 			local.center.x = local.center.x + x;
 			local.center.y = local.center.y + y;
 			offseted = true;
@@ -2698,6 +2707,7 @@ class jmPath extends jmControl {
 		return s;
 	}
 	set points(v) {
+		this.needUpdate = true;
 		return this.__pro('points', v);
 	}
 }
@@ -2741,6 +2751,7 @@ class jmArc extends jmPath {
 		return this.__pro('center');
 	}
 	set center(v) {
+		this.needUpdate = true;
 		return this.__pro('center', v);
 	}
 
@@ -2753,6 +2764,7 @@ class jmArc extends jmPath {
 		return this.__pro('radius');
 	}
 	set radius(v) {
+		this.needUpdate = true;
 		return this.__pro('radius', v);
 	}
 
@@ -2765,6 +2777,7 @@ class jmArc extends jmPath {
 		return this.__pro('startAngle');
 	}
 	set startAngle(v) {
+		this.needUpdate = true;
 		return this.__pro('startAngle', v);
 	}
 
@@ -2777,6 +2790,7 @@ class jmArc extends jmPath {
 		return this.__pro('endAngle');
 	}
 	set endAngle(v) {
+		this.needUpdate = true;
 		return this.__pro('endAngle', v);
 	}
 
@@ -2790,6 +2804,7 @@ class jmArc extends jmPath {
 		return this.__pro('anticlockwise');
 	}
 	set anticlockwise(v) {
+		this.needUpdate = true;
 		return this.__pro('anticlockwise', v);
 	}
 
@@ -2852,6 +2867,7 @@ class jmArc extends jmPath {
 
 export { jmArc };
 
+
 /**
  * 画箭头,继承自jmPath
  *
@@ -2886,6 +2902,7 @@ class jmArraw extends jmPath {
 		return this.__pro('start');
 	}
 	set start(v) {
+		this.needUpdate = true;
 		return this.__pro('start', v);
 	}
 
@@ -2900,6 +2917,7 @@ class jmArraw extends jmPath {
 		return this.__pro('end');
 	}
 	set end(v) {
+		this.needUpdate = true;
 		return this.__pro('end', v);
 	}
 
@@ -2914,6 +2932,7 @@ class jmArraw extends jmPath {
 		return this.__pro('angle');
 	}
 	set angle(v) {
+		this.needUpdate = true;
 		return this.__pro('angle', v);
 	}
 
@@ -2928,6 +2947,7 @@ class jmArraw extends jmPath {
 		return this.__pro('offsetX');
 	}
 	set offsetX(v) {
+		this.needUpdate = true;
 		return this.__pro('offsetX', v);
 	}
 
@@ -2942,6 +2962,7 @@ class jmArraw extends jmPath {
 		return this.__pro('offsetY');
 	}
 	set offsetY(v) {
+		this.needUpdate = true;
 		return this.__pro('offsetY', v);
 	}
 
@@ -2974,13 +2995,19 @@ class jmArraw extends jmPath {
 		let ystep = rsin * sq;
 		let xstep = rcos * sq;
 		
-		let p1 = {x:end.x - xstep,y:end.y - ystep};
+		let p1 = {
+			x:end.x - xstep,
+			y:end.y - ystep
+		};
 		let r2 = rotate - r;
 		rsin = Math.sin(r2);
 		rcos = Math.cos(r2);
 		ystep = rsin * sq;
 		xstep = rcos * sq;
-		let p2 = {x:end.x - xstep,y:end.y - ystep};
+		let p2 = {
+			x:end.x - xstep,
+			y:end.y - ystep
+		};
 
 		let s = jmUtils.clone(end);  
 		s.m = true;  
@@ -3030,6 +3057,7 @@ class jmBezier extends jmPath {
 		return this.__pro('cpoints');
 	}
 	set cpoints(v) {
+		this.needUpdate = true;
 		return this.__pro('cpoints', v);
 	}
 	
@@ -3196,6 +3224,7 @@ class jmHArc extends jmArc {
 		return this.__pro('minRadius');
 	}
 	set minRadius(v) {
+		this.needUpdate = true;
 		return this.__pro('minRadius', v);
 	}
 
@@ -3210,6 +3239,7 @@ class jmHArc extends jmArc {
 		return this.__pro('maxRadius');
 	}
 	set maxRadius(v) {
+		this.needUpdate = true;
 		return this.__pro('maxRadius', v);
 	}
 
@@ -3301,6 +3331,7 @@ class jmLine extends jmPath {
 		return this.__pro('start');
 	}
 	set start(v) {
+		this.needUpdate = true;
 		return this.__pro('start', v);
 	}
 
@@ -3315,6 +3346,7 @@ class jmLine extends jmPath {
 		return this.__pro('end');
 	}
 	set end(v) {
+		this.needUpdate = true;
 		return this.__pro('end', v);
 	}
 
@@ -3389,6 +3421,7 @@ class jmPrismatic extends jmPath {
 		return this.__pro('center');
 	}
 	set center(v) {
+		this.needUpdate = true;
 		return this.__pro('center', v);
 	}
 	
@@ -3440,6 +3473,7 @@ class jmRect extends jmPath {
 		return this.__pro('radius');
 	}
 	set radius(v) {
+		this.needUpdate = true;
 		return this.__pro('radius', v);
 	}
 
@@ -3655,6 +3689,7 @@ class jmImage extends jmControl {
 		return this.__pro('sourceWidth');
 	}
 	set sourceWidth(v) {
+		this.needUpdate = true;
 		return this.__pro('sourceWidth', v);
 	}
 
@@ -3668,6 +3703,7 @@ class jmImage extends jmControl {
 		return this.__pro('sourceHeight');
 	}
 	set sourceHeight(v) {
+		this.needUpdate = true;
 		return this.__pro('sourceHeight', v);
 	}
 
@@ -3681,6 +3717,7 @@ class jmImage extends jmControl {
 		return this.__pro('image');
 	}
 	set image(v) {
+		this.needUpdate = true;
 		return this.__pro('image', v);
 	}
 
@@ -3817,6 +3854,7 @@ class jmLabel extends jmControl {
 		return this.__pro('text');
 	}
 	set text(v) {
+		this.needUpdate = true;
 		return this.__pro('text', v);
 	}
 
@@ -3972,11 +4010,12 @@ class jmResize extends jmRect {
 		params = params || {};
 		super(params, t);
 		//是否可拉伸
-		this.enabled = params.enabled === false?false:true;		
+		this.resizable = params.resizable === false?false:true;	
+		this.movable = params.movable;
 		this.rectSize = params.rectSize || 8;
 		this.style.close = this.style.close || true;
 
-		this.init();
+		this.init(params);
 	}
 	/**
 	 * 拉动的小方块大小
@@ -3991,14 +4030,26 @@ class jmResize extends jmRect {
 	}
 
 	/**
+	 * 是否可以拉大缩小
+	 * @property resizable
+	 * @type {boolean}
+	 */
+	get resizable() {
+		return this.__pro('resizable');
+	}
+	set resizable(v) {
+		return this.__pro('resizable', v);
+	}
+
+	/**
 	 * 初始化控件的8个拉伸方框
 	 *
 	 * @method init
 	 * @private
 	 */
-	init() {
+	init(params) {
 		//如果不可改变大小。则直接退出
-		if(this.params.resizable === false) return;
+		if(this.resizable === false) return;
 		this.resizeRects = [];	
 		let rs = this.rectSize;
 		let rectStyle = this.style.rectStyle || {
@@ -4013,7 +4064,7 @@ class jmResize extends jmRect {
 		
 		for(let i = 0;i<8;i++) {
 			//生成改变大小方块
-			let r = this.graph.createShape('rect',{
+			let r = (this.graph || params.graph).createShape('rect',{
 					position:{x:0,y:0},
 					width: rs,
 					height: rs,
@@ -4079,6 +4130,7 @@ class jmResize extends jmRect {
 				}
 				//重新定位
 				this.parent.reset(px,py,dx,dy);
+				this.needUpdate = true;
 			});
 			//鼠标指针
 			r.bind('mousemove',function() {	
@@ -4123,7 +4175,7 @@ class jmResize extends jmRect {
 					dy = 0;
 				}
 				//如果当前控件能移动才能改变其位置
-				if(this.params.movable !== false && (px||py)) {
+				if(this.movable !== false && (px||py)) {
 					let p = this.position;
 					p.x = location.left + px;
 					p.y = location.top + py;
@@ -4231,8 +4283,14 @@ class jmGraph extends jmControl {
 		}
 		super(option, 'jmGraph');
 
-		this.option = option||{};
-		this.util = jmUtils;		
+		this.option = option || {};
+
+		/**
+		 * 工具类
+		 * @property utils/util
+		 * @type {jmUtils}
+		 */
+		this.util = this.utils = jmUtils;		
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
@@ -4320,6 +4378,7 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set width(v) {
+		this.needUpdate = true;
 		if(this.canvas) this.canvas.width = v;		
 		return v;
 	}
@@ -4334,8 +4393,19 @@ class jmGraph extends jmControl {
 		return 0;
 	}
 	set height(v) {
+		this.needUpdate = true;
 		if(this.canvas) this.canvas.height = v;
 		return v;
+	}
+
+	/**
+	 * 创建jmGraph的静态对象
+	 *
+	 * @method create
+	 * @return {jmGraph} jmGraph实例对象
+	 */
+	static create(...args) {
+		return new jmGraph(...args);
 	}
 
 	/**
@@ -4377,6 +4447,7 @@ class jmGraph extends jmControl {
 		let shape = this.shapes[name];
 		if(shape) {
 			if(!args) args = {};
+			args.graph = this;
 			let obj = new shape(args);
 			return obj;
 		}
@@ -4639,9 +4710,11 @@ class jmGraph extends jmControl {
 		return this;
 	}
 }
-export { jmGraph };
-export default jmGraph;
 
-if(typeof window != 'undefined' && !window.jmGraph) {
-	window.jmGraph = jmGraph;
+//创建实例
+const createJmGraph = (...args) => {
+	return new jmGraph(...args);
 }
+
+export { jmGraph, createJmGraph as create };
+export default jmGraph;

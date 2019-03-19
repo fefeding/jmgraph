@@ -30,6 +30,7 @@ class jmPrismatic extends jmPath {
 		return this.__pro('center');
 	}
 	set center(v) {
+		this.needUpdate = true;
 		return this.__pro('center', v);
 	}
 	

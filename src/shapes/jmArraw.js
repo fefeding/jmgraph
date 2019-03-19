@@ -1,4 +1,5 @@
 import {jmPath} from "./jmPath.js";
+import {jmUtils} from "../common/jmUtils.js";
 /**
  * 画箭头,继承自jmPath
  *
@@ -33,6 +34,7 @@ class jmArraw extends jmPath {
 		return this.__pro('start');
 	}
 	set start(v) {
+		this.needUpdate = true;
 		return this.__pro('start', v);
 	}
 
@@ -47,6 +49,7 @@ class jmArraw extends jmPath {
 		return this.__pro('end');
 	}
 	set end(v) {
+		this.needUpdate = true;
 		return this.__pro('end', v);
 	}
 
@@ -61,6 +64,7 @@ class jmArraw extends jmPath {
 		return this.__pro('angle');
 	}
 	set angle(v) {
+		this.needUpdate = true;
 		return this.__pro('angle', v);
 	}
 
@@ -75,6 +79,7 @@ class jmArraw extends jmPath {
 		return this.__pro('offsetX');
 	}
 	set offsetX(v) {
+		this.needUpdate = true;
 		return this.__pro('offsetX', v);
 	}
 
@@ -89,6 +94,7 @@ class jmArraw extends jmPath {
 		return this.__pro('offsetY');
 	}
 	set offsetY(v) {
+		this.needUpdate = true;
 		return this.__pro('offsetY', v);
 	}
 
@@ -121,13 +127,19 @@ class jmArraw extends jmPath {
 		let ystep = rsin * sq;
 		let xstep = rcos * sq;
 		
-		let p1 = {x:end.x - xstep,y:end.y - ystep};
+		let p1 = {
+			x:end.x - xstep,
+			y:end.y - ystep
+		};
 		let r2 = rotate - r;
 		rsin = Math.sin(r2);
 		rcos = Math.cos(r2);
 		ystep = rsin * sq;
 		xstep = rcos * sq;
-		let p2 = {x:end.x - xstep,y:end.y - ystep};
+		let p2 = {
+			x:end.x - xstep,
+			y:end.y - ystep
+		};
 
 		let s = jmUtils.clone(end);  
 		s.m = true;  

@@ -25,6 +25,7 @@ class jmRect extends jmPath {
 		return this.__pro('radius');
 	}
 	set radius(v) {
+		this.needUpdate = true;
 		return this.__pro('radius', v);
 	}
 

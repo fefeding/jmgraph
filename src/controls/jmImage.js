@@ -48,6 +48,7 @@ class jmImage extends jmControl {
 		return this.__pro('sourceWidth');
 	}
 	set sourceWidth(v) {
+		this.needUpdate = true;
 		return this.__pro('sourceWidth', v);
 	}
 
@@ -61,6 +62,7 @@ class jmImage extends jmControl {
 		return this.__pro('sourceHeight');
 	}
 	set sourceHeight(v) {
+		this.needUpdate = true;
 		return this.__pro('sourceHeight', v);
 	}
 
@@ -74,6 +76,7 @@ class jmImage extends jmControl {
 		return this.__pro('image');
 	}
 	set image(v) {
+		this.needUpdate = true;
 		return this.__pro('image', v);
 	}
 

@@ -446,12 +446,14 @@ class jmTest extends jmPath {
 
     var self = this;
 
-    jmGraph('mycanvas', {
-      width: 400,
-      height: 600
-    }).then((g) => {
-      init(g)
-    });
+    var g = jmGraph.create('firstCanvas', {
+        style: {
+          fill: '#000'
+        },
+        width: 400,
+        height: 600
+      });
+    init(g);
 
     function init(g) {
       //g.style.fill = '#000'; //画布背景
@@ -483,17 +485,17 @@ class jmTest extends jmPath {
 
       //初始化jmGraph事件
       //把小程序中的canvas事件交给jmGraph处理
-      self.canvastouchstart = function() {
-        return g.eventHandler.touchStart.apply(this, arguments);
+      this.canvastouchstart = function (...arg) {
+        return g.eventHandler.touchStart(...arg);
       }
-      self.canvastouchmove = function() {
-        return g.eventHandler.touchMove.apply(this, arguments);
+      this.canvastouchmove = function (...arg) {
+        return g.eventHandler.touchMove(...arg);
       }
-      self.canvastouchend = function() {
-        return g.eventHandler.touchEnd.apply(this, arguments);
+      this.canvastouchend = function (...arg) {
+        return g.eventHandler.touchEnd(...arg);
       }
-      self.canvastouchcancel = function() {
-        return g.eventHandler.touchCancel.apply(this, arguments);
+      this.canvastouchcancel = function (...arg) {
+        return g.eventHandler.touchCancel(...arg);
       }
     }
   }

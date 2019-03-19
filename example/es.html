@@ -12,15 +12,14 @@
 			overflow: hidden;		
 		}
 	</style>
-	
-	<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>-->	
+	<!--<script type="text/javascript" src="../src/jmGraph.js"></script>
+	<script type="text/javascript" src="../dist/jmGraph.min.js"></script>-->	
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-	<script type="module">	
-		import jmGraph from "../src/jmGraph.js";
-
+    <script type="module">
+        import jmGraph from "../dist/jmgraph.es6.js";
 		var container = document.getElementById('mycanvas_container');
 		
 		var g = new jmGraph(container, {
@@ -44,7 +43,7 @@
 			//style.lineCap = 'round';
 
 			//创建一个方块
-			var rect = g.createShape('rect',{
+			var rect = g.createShape('rect', {
 				style:style,
 				position: {x:100,y:100},
 				width:100,

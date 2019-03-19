@@ -1,7 +1,7 @@
-﻿{
+{
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": [
@@ -11,7 +11,12 @@
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jiamao/jmgraph.git"
@@ -36,7 +41,12 @@
     "example": "example"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cd build & npm i & gulp & cd .."
   },
-  "license": "MIT"
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

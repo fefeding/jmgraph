@@ -15,8 +15,7 @@
 			overflow: scroll;		
 		}
 	</style>
-	<script type="text/javascript" src="../../src/jmGraph.js"></script>
-	<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>-->	
+	<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
@@ -25,23 +24,16 @@
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
-		jmGraph('mycanvas_container', {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
-		}).then((g)=>{
-			init(g)
-		});
-		/*var g = new jmGraph(container, {
+		var g = jmGraph.create('mycanvas_container', {
 			width: 800,
 			height: 600,
 			style: {
 				fill: '#000'
 			}
 		});
-		init(g);*/
+
+		init(g);
+		
 			
 		function init(g){
 			//g.style.fill = '#000'; //画布背景
@@ -58,14 +50,14 @@
                 center: {x:100, y:150},
                 width: 120,
                 height: 80
-            });		
-			arc1.canMove(true);
-			g.children.add(arc1);   
+            });	
+			g.children.add(arc1);  	
+			arc1.canMove(true); 
 			
 			
             
             //实圆 
-            style = jmUtils.clone(style);
+            style =  g.util.clone(style);
             style.stroke = 'red';
             //创建一个全圆
             var arc2 = g.createShape('arc', {
@@ -76,7 +68,7 @@
             g.children.add(arc2);   
             
             //圆弧
-            style = jmUtils.clone(style);
+            style = g.util.clone(style);
             style.stroke = 'green';
             delete style.fill;//圆弧不设为实心
             //创建一个圆弧
@@ -107,7 +99,7 @@
 			g.children.add(circle);   
 			
 			//圆环
-			style = jmUtils.clone(style);
+			style = g.util.clone(style);
 			style.fill = 'blue';
 			style.close = true; //如果是满圆，即end = Math.PI*2 时，把这个设为false
             var harc = g.createShape('harc', {

@@ -11,7 +11,8 @@ jmGraph
 
 安装
 ---
-直接从github下载包或npm安装
+直接从github下载包或npm安装。
+如需要构建，直接在项目录下执行`npm run build`即可。
 ```
 npm install jmgraph
 ```
@@ -19,10 +20,38 @@ npm install jmgraph
 入门
 --------
 
-下载jmGraph.min.js代码，并引用到你的html中。
+### es5引用办法
+
+下载`dist/jmgraph.min.js`代码，并引用到你的html中。
 ```html
-<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	
+<script type="text/javascript" src="../dist/jmgraph.min.js"></script>	
 ```
+也可以用commonjs、requirejs等模块化库。
+##### requirejs
+```html
+<script type="text/javascript" src="js/require.js"></script>
+<script>
+    require(['../dist/jmgraph.js'], function(m) {
+        var g = new m.jmGraph();
+    });
+</script>
+```
+##### es6模块引用
+也可以直接用es6中的import来引用
+```html
+<script type="module">
+  import jmGraph from "../dist/jmgraph.es6.js";
+  var container = document.getElementById('mycanvas_container');		
+  var g = new jmGraph(container, {
+    width: 800,
+    height: 600,
+    style: {
+      fill: '#000'
+    }
+  });
+</script>
+```
+
 
 在dom中添加一个`div或canvas`，然后初始化jmGraph。
 ```html
@@ -31,17 +60,8 @@ npm install jmgraph
     //也可以是一个dom对象或一个jquery对象 
     //例如：$('#mycanvas_container') || document.getElementById('mycanvas_container')
     var container = 'mycanvas_container';
-
-    // 用Promise方式
-    /*jmGraph(container, {
-        width: 800,
-        height: 600
-    }).then((g)=>{
-        //g就是一个jmGraph实例
-        init(g);
-    });	*/
     
-    var g = new jmGraph(container, {
+    var g = jmGraph.create(container, {
         width: 800,
         height: 600,
         //样式，规则请参照样式说明
@@ -311,83 +331,95 @@ resize.on('resize', function() {
 #### 自定义控件
 
 大多数控件直接继承`jmPath`即可，然后通过实现`initPoints`来绘制当前控件。  
-`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  
+`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  。
+
+继承这里需要用到`es6`的模块，所以当你用的是`script标签`时，记得给`type="module"`。
+或写一个class的js文件，构建成es5的。
 
 
 ##### 示例
 来画一个X  
 在线示例：[http://jiamao.github.io/jmgraph/example/controls/test.html](http://jiamao.github.io/jmgraph/example/controls/test.html)
 ```javascript
-function jmTest(graph,params) {
-    if(!params) params = {};
-    this.points = params.points || [];
-    var style = params.style || {};
-    
-    this.type = 'jmTest';
-    this.graph = graph;
+import {jmGraph} from "../../src/jmGraph.js";
+import {jmPath} from "../../src/shapes/jmPath.js";
+/**
+ * 测试
+ */
+class jmTest extends jmPath {
+    constructor(params) {
+        if(!params) params = {};
+        super(params);
+        this.center = params.center || {x:0, y:0};
+        this.radius = params.radius || 0;
+    }   
+
+    //定义属性 
+    /**
+     * 中心点
+     * point格式：{x:0,y:0,m:true}
+     * @property center
+     * @type {point}
+     */
+    get center() {
+        return this.__pro('center');
+    }
+    set center(v) {
+        return this.__pro('center', v);
+    }
+    /**
+    * 中心点
+    * point格式：{x:0,y:0,m:true}
+    * @property center
+    * @type {point}
+    */
+    get radius() {
+        return this.__pro('radius');
+    }
+    set radius(v) {
+        return this.__pro('radius', v);
+    }
+
+    /**
+    * 初始化图形点
+    * 控件都是由点形成
+    * 
+    * @method initPoint
+    * @private
+    * @for jmArc
+    */
+    initPoints() {
+        //可以获取当前控件的左上坐标，可以用来画相对位置
+        var location = this.getLocation();//获取位置参数
         
-    this.center = params.center || {x:0,y:0};
-    this.radius = params.radius || 0;
-
-    this.initializing(graph.context, style);
-}
-jmUtils.extend(jmTest, jmPath);//jmPath
-
-//定义属性
-
-/**
- * 中心点
- * point格式：{x:0,y:0,m:true}
- * @property center
- * @type {point}
- */
-jmUtils.createProperty(jmTest.prototype, 'center');
-
-/**
- * 半径
- * @property radius
- * @type {number}
- */
-jmUtils.createProperty(jmTest.prototype, 'radius', 0);
-
-
-/**
- * 初始化图形点
- * 控件都是由点形成
- * 
- * @method initPoint
- * @private
- * @for jmArc
- */
-jmTest.prototype.initPoints = function() {
-    //可以获取当前控件的左上坐标，可以用来画相对位置
-    var location = this.getLocation();//获取位置参数
+        var cx = location.center.x ;
+        var cy = location.center.y ;
     
-    var cx = location.center.x ;
-    var cy = location.center.y ;
-    
-    this.points = [];
+        this.points = [];
 
-    //简单的画一个X
+        //简单的画一个X
 
-    //根据半径计算x,y偏移量
-    //由于是圆，偏移量相同
-    var offw = Math.sqrt(location.radius * location.radius / 2);
-    //左上角到右下角对角线
-    this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
+        //根据半径计算x,y偏移量
+        //由于是圆，偏移量相同
+        var offw = Math.sqrt(location.radius * location.radius / 2);
+        //左上角到右下角对角线
+        this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
 
-    //左下角到右上角对角线
-    //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
-    this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
+        //左下角到右上角对角线
+        //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
+        this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
 
-    return this.points;
-}
+        return this.points;
+    }
+} 
 ```
 
 
 #### 微信小程序支持
 线上体验小程序：
 ![截图](https://raw.githubusercontent.com/jiamao/jmgraph/master/example/qrcode.jpg) 
+
+源码：[https://github.com/jiamao/mini-jmchart](https://github.com/jiamao/mini-jmchart)
 
 微信小程序稍有差别，因为无需压缩，请直接把`dist`中的`jmgraph.js`合并后的文件引用到你的小程序中。
 

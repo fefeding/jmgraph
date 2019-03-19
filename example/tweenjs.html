@@ -3,8 +3,7 @@
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../src/jmGraph.js"></script>
-        <!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
+		<script type="text/javascript" src="../dist/jmgraph.min.js"></script>
         <script src="//code.createjs.com/1.0.0/tweenjs.min.js"></script>
 	</head>
 	<body style="margin:10px auto;">
@@ -14,73 +13,72 @@
 
 <script type="text/javascript">
 	//初始化jmgraph
-	jmGraph('mycanvas', {
+	var g = jmGraph.create('mycanvas', {
 		height: 600
-	}).then((g)=>{
-				
-		init(g);
-
-		//实时更新画布
-		function update() {
-
-			if(g.needUpdate) g.redraw();
-			requestAnimationFrame(update);
-		}
-		update();
-	});	
-	function init(graph){
-    var style = {
-        stroke:'rgb(120,20,80)',					
-        lineWidth:6,
-        close:true,
-        zIndex:1
-    };				
-    var bg = graph.createRadialGradient('50%','50%',0,'50%','50%','50%');
-    bg.addStop(0,'green');
-    bg.addStop('0.2','blue');
-    bg.addStop(0.8,'yellow');
-    bg.addStop(1,'red');					
-    style.fill = 'radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue 0.2, yellow 0.8, red 1)';
-    style.shadow = graph.createShadow(0,0,20,'rgb(255,255,255)');	
-    var arc = graph.createShape('arc',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
-
-    arc.bind('mouseover',function(evt) {
-        this.style.stroke = 'rgba(88,200,155,0.5)';
-    });				
-    arc.bind('mouseleave',function(evt) {
-        this.style.stroke = 'rgb(120,20,80)';
     });
+    init(g);
 
-    //arc.bind('touchstart',function(evt) {
-        //this.style.stroke = 'rgba(88,200,155,0.5)';
-        //graph.refresh();
-    //});
+    //实时更新画布
+    function update() {
 
-    graph.children.add(arc);
-    arc.canMove(true);
+        if(g.needUpdate) g.redraw();
+        requestAnimationFrame(update);
+    }
+    update();
+        
+	function init(graph){
+        var style = {
+            stroke:'rgb(120,20,80)',					
+            lineWidth:6,
+            close:true,
+            zIndex:1
+        };				
+        var bg = graph.createRadialGradient('50%','50%',0,'50%','50%','50%');
+        bg.addStop(0,'green');
+        bg.addStop('0.2','blue');
+        bg.addStop(0.8,'yellow');
+        bg.addStop(1,'red');					
+        style.fill = 'radial-gradient(50% 50% 0 50% 50% 50%, green 0,blue 0.2, yellow 0.8, red 1)';
+        style.shadow = graph.createShadow(0,0,20,'rgb(255,255,255)');	
+        var arc = graph.createShape('arc',{style:style,center:{x:250,y:250},width:200,height: 200,start:0,end:Math.PI * 2});			
 
-    style = jmUtils.clone(style);
-    style.stroke = 'rgb(255,255,255)';
-    style.close=false;
-    style.zIndex = 3;
-    delete style.shadow;
-    delete style.fill;
-    
-    var step = Math.PI / 25;
-    var bluestop = 0.5;
-    var bluedir = 0;
-    var yellowstop = 0.8;
-    var yellowdir = 0;
-    var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});    
-    arc.children.add(childarc);	
-    
-    createjs.Tween.get(childarc, { loop: true })
-        .to({ startAngle: Math.PI*2, endAngle: Math.PI*7/3 }, 5000, createjs.Ease.getPowInOut(2))
-        .to({ startAngle: 0, endAngle: Math.PI / 3 }, 5000, createjs.Ease.getPowInOut(4));
+        arc.bind('mouseover',function(evt) {
+            this.style.stroke = 'rgba(88,200,155,0.5)';
+        });				
+        arc.bind('mouseleave',function(evt) {
+            this.style.stroke = 'rgb(120,20,80)';
+        });
 
-    createjs.Tween.get(arc.center, { loop: true })
-        .to({ x: graph.width - 200}, 5000, createjs.Ease.getPowInOut(2))
-        .to({ x: 250}, 5000, createjs.Ease.getPowInOut(4));
-    
-}
+        //arc.bind('touchstart',function(evt) {
+            //this.style.stroke = 'rgba(88,200,155,0.5)';
+            //graph.refresh();
+        //});
+
+        graph.children.add(arc);
+        arc.canMove(true);
+
+        style = g.util.clone(style);
+        style.stroke = 'rgb(255,255,255)';
+        style.close=false;
+        style.zIndex = 3;
+        delete style.shadow;
+        delete style.fill;
+        
+        var step = Math.PI / 25;
+        var bluestop = 0.5;
+        var bluedir = 0;
+        var yellowstop = 0.8;
+        var yellowdir = 0;
+        var childarc = graph.createShape('arc',{style:style,center:{x:arc.width / 2,y:arc.height / 2},start:0,end: Math.PI / 3,radius:arc.width / 2,anticlockwise:false});    
+        arc.children.add(childarc);	
+        
+        createjs.Tween.get(childarc, { loop: true })
+            .to({ startAngle: Math.PI*2, endAngle: Math.PI*7/3 }, 5000, createjs.Ease.getPowInOut(2))
+            .to({ startAngle: 0, endAngle: Math.PI / 3 }, 5000, createjs.Ease.getPowInOut(4));
+
+        createjs.Tween.get(arc.center, { loop: true })
+            .to({ x: graph.width - 200}, 5000, createjs.Ease.getPowInOut(2))
+            .to({ x: 250}, 5000, createjs.Ease.getPowInOut(4));
+        
+    }
 </script>

@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-<meta name="viewport" content="width=device-width,initial-scale=1">
-		<script type="text/javascript" src="../../src/jmGraph.js"></script>
-		<!--<script type="text/javascript" src="../../dist/jmGraph.min.js"></script>	-->
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		
+		<script type="text/javascript" src="../../dist/jmgraph.js"></script>
 	</head>
 	<body style="width:800px;margin:10px auto;border:1px solid blue;">
 		<div id="mycanvas" style="border:1px solid red;margin:10px;width:100%;height:600px;"></div>
@@ -14,19 +14,20 @@
 	</body>
 	<script type="text/javascript">	
 		
-		jmGraph('mycanvas', {
+		var g = jmGraph.create('mycanvas', {
 			width: 800,
 			height: 600
-		}).then((g)=>{
-			init(g);
+		});
 
-			function update() {
-				if(g.needUpdate) g.redraw();
-				requestAnimationFrame(update);
-			}
+		init(g);
 
-			update();
-		});	
+		function update() {
+			if(g.needUpdate) g.redraw();
+			requestAnimationFrame(update);
+		}
+
+		update();
+		
 			
 		function init(graph){
 			graph.style.fill = '#000';
@@ -45,12 +46,12 @@
 			
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';
-				this.cursor('pointer');
+				this.cursor = 'pointer';
 				this.needUpdate = true;
 			});
 			line.bind('mouseleave',function(evt) {
 				this.style.stroke = 'rgb(120,20,80)';
-				this.cursor('default');
+				this.cursor = 'default';
 				this.needUpdate = true;
 			});
 			line.bind('touchstart',function(evt) {
@@ -62,13 +63,12 @@
 			line.bind('touchend',function(evt) {
 				console.log('touchend',evt);
 			});
-			line.canMove(true);
-
+			
 			graph.children.add(line);
 			line.canMove(true);
 			
 
-			style = jmUtils.clone(style);
+			style = graph.utils.clone(style);
 			delete style['rotation'];
 			
 			style.lineType = "dotted";
@@ -91,10 +91,10 @@
 			
 
 
-			style = jmUtils.clone(style);	
+			style = graph.utils.clone(style);	
 			/*var bg = graph.createLinearGradient(0,0,0,100);
-			bg.addColorStop(0,'rgb(0,0,0)');
-			bg.addColorStop(1,'rgb(150,200,180)');*/
+			bg.addStop(0,'rgb(0,0,0)');
+			bg.addStop(1,'rgb(150,200,180)');*/
 			style.fill = 'linear-gradient(0 0 0 100,#000 0,#73998A 1)';
 			style.close = true;
 			var rect = 	graph.createPath(null,style);
@@ -104,7 +104,7 @@
 			rect.points.push({x:100,y:20});
 			graph.children.add(rect);
 
-			style = jmUtils.clone(style);
+			style = graph.utils.clone(style);
 			//style.fill = 'rgba(220,100,80,1)';
 			//delete style.fill;
 			//style.close = true;

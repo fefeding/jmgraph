@@ -11,7 +11,7 @@ const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const gulp = require('gulp');
-const cleanimport = require('../../gulp-clean-import/index.js');
+const cleanimport = require('gulp-clean-import');
 
 const jsSources = [
     "../src/common/jmList.js",

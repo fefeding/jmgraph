@@ -12,133 +12,124 @@
 			overflow: hidden;		
 		}
 	</style>
-	<!--<script type="text/javascript" src="../../src/jmGraph.js"></script>-->	
-	<script type="text/javascript" src="../../dist/jmgraph.min.js"></script>
+	
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-    <script type="text/javascript">	
-    
+    <script type="module">	
+        import {jmGraph} from "../../src/jmGraph.js";
+        import {jmPath} from "../../src/shapes/jmPath.js";
     /**
      * 测试
      */
 
-    function jmTest(graph,params) {
-        if(!params) params = {};
-        this.points = params.points || [];
-        var style = params.style || {};
-       
-        this.type = 'jmTest';
-        this.graph = graph;
+    class jmTest extends jmPath {
+        constructor(params) {
+            if(!params) params = {};
+            super(params);
+            this.center = params.center || {x:0, y:0};
+            this.radius = params.radius || 0;
+        }   
+
+        //定义属性 
+        /**
+         * 中心点
+         * point格式：{x:0,y:0,m:true}
+         * @property center
+         * @type {point}
+         */
+        get center() {
+            return this.__pro('center');
+        }
+        set center(v) {
+            return this.__pro('center', v);
+        }
+        /**
+        * 中心点
+        * point格式：{x:0,y:0,m:true}
+        * @property center
+        * @type {point}
+        */
+        get radius() {
+            return this.__pro('radius');
+        }
+        set radius(v) {
+            return this.__pro('radius', v);
+        }
+
+        /**
+        * 初始化图形点
+        * 控件都是由点形成
+        * 
+        * @method initPoint
+        * @private
+        * @for jmArc
+        */
+        initPoints() {
+            //可以获取当前控件的左上坐标，可以用来画相对位置
+            var location = this.getLocation();//获取位置参数
             
-        this.center = params.center || {x:0,y:0};
-        this.radius = params.radius || 0;
-
-        this.initializing(graph.context, style);
-    }
-    jmUtils.extend(jmTest, jmPath);//jmPath
-
-    //定义属性
-
-    /**
-     * 中心点
-     * point格式：{x:0,y:0,m:true}
-     * @property center
-     * @type {point}
-     */
-    jmUtils.createProperty(jmTest.prototype, 'center');
-
-    /**
-     * 半径
-     * @property radius
-     * @type {number}
-     */
-    jmUtils.createProperty(jmTest.prototype, 'radius', 0);
-
-
-    /**
-     * 初始化图形点
-     * 控件都是由点形成
-     * 
-     * @method initPoint
-     * @private
-     * @for jmArc
-     */
-    jmTest.prototype.initPoints = function() {
-        //可以获取当前控件的左上坐标，可以用来画相对位置
-        var location = this.getLocation();//获取位置参数
+            var cx = location.center.x ;
+            var cy = location.center.y ;
         
-        var cx = location.center.x ;
-        var cy = location.center.y ;
-       
-        this.points = [];
+            this.points = [];
 
-        //简单的画一个X
+            //简单的画一个X
 
-        //根据半径计算x,y偏移量
-        //由于是圆，偏移量相同
-        var offw = Math.sqrt(location.radius * location.radius / 2);
-        //左上角到右下角对角线
-        this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
+            //根据半径计算x,y偏移量
+            //由于是圆，偏移量相同
+            var offw = Math.sqrt(location.radius * location.radius / 2);
+            //左上角到右下角对角线
+            this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
 
-        //左下角到右上角对角线
-        //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
-        this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
+            //左下角到右上角对角线
+            //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
+            this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
 
-        return this.points;
-    }
+            return this.points;
+        }
+    } 
 
 
+    var container = document.getElementById('mycanvas_container');
 
-        var container = document.getElementById('mycanvas_container');
+    var g = jmGraph.create(container, {
+        width: 800,
+        height: 600,
+        style: {
+            fill: '#000'
+        }
+    });
+    
+    init(g);
         
-        //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
-		/*jmGraph('mycanvas_container', {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
-		}).then((g)=>{
-			init(g)
-        });*/
+    function init(g){
         
-		var g = new jmGraph(container, {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
+        var style = {
+            stroke: '#23f24e',
+            lineWidth: 5,
+            shadow: '0,0,10,#fff'
+        };
+        
+        //style.opacity = 0.2;		
+
+        //创建一个自定义的控件
+        var t = new jmTest({
+            style: style,
+            center: {x:100,y:100},
+            radius: 20
         });
         
-		init(g);
-			
-		function init(g){
-			
-			var style = {
-                stroke: '#23f24e',
-                lineWidth: 5,
-                shadow: '0,0,10,#fff'
-			};
-			
-			//style.opacity = 0.2;		
+        g.children.add(t);            
+        t.canMove(true);
 
-			//创建一个自定义的控件
-			var t = new jmTest(g, {
-                style: style,
-                center: {x:100,y:100},
-                radius: 20
-            });
-			t.canMove(true);
-            g.children.add(t);            
+        function update() {
+            if(g.needUpdate) g.redraw();
+            requestAnimationFrame(update);
+        }
 
-			function update() {
-				if(g.needUpdate) g.redraw();
-				requestAnimationFrame(update);
-			}
-
-			update();
-		}
+        update();
+    }
 	</script>
 </html>

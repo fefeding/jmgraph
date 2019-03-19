@@ -331,77 +331,87 @@ resize.on('resize', function() {
 #### 自定义控件
 
 大多数控件直接继承`jmPath`即可，然后通过实现`initPoints`来绘制当前控件。  
-`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  
+`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  。
+
+继承这里需要用到`es6`的模块，所以当你用的是`script标签`时，记得给`type="module"`。
+或写一个class的js文件，构建成es5的。
 
 
 ##### 示例
 来画一个X  
 在线示例：[http://jiamao.github.io/jmgraph/example/controls/test.html](http://jiamao.github.io/jmgraph/example/controls/test.html)
 ```javascript
-function jmTest(graph,params) {
-    if(!params) params = {};
-    this.points = params.points || [];
-    var style = params.style || {};
-    
-    this.type = 'jmTest';
-    this.graph = graph;
+import {jmGraph} from "../../src/jmGraph.js";
+import {jmPath} from "../../src/shapes/jmPath.js";
+/**
+ * 测试
+ */
+class jmTest extends jmPath {
+    constructor(params) {
+        if(!params) params = {};
+        super(params);
+        this.center = params.center || {x:0, y:0};
+        this.radius = params.radius || 0;
+    }   
+
+    //定义属性 
+    /**
+     * 中心点
+     * point格式：{x:0,y:0,m:true}
+     * @property center
+     * @type {point}
+     */
+    get center() {
+        return this.__pro('center');
+    }
+    set center(v) {
+        return this.__pro('center', v);
+    }
+    /**
+    * 中心点
+    * point格式：{x:0,y:0,m:true}
+    * @property center
+    * @type {point}
+    */
+    get radius() {
+        return this.__pro('radius');
+    }
+    set radius(v) {
+        return this.__pro('radius', v);
+    }
+
+    /**
+    * 初始化图形点
+    * 控件都是由点形成
+    * 
+    * @method initPoint
+    * @private
+    * @for jmArc
+    */
+    initPoints() {
+        //可以获取当前控件的左上坐标，可以用来画相对位置
+        var location = this.getLocation();//获取位置参数
         
-    this.center = params.center || {x:0,y:0};
-    this.radius = params.radius || 0;
-
-    this.initializing(graph.context, style);
-}
-jmUtils.extend(jmTest, jmPath);//jmPath
-
-//定义属性
-
-/**
- * 中心点
- * point格式：{x:0,y:0,m:true}
- * @property center
- * @type {point}
- */
-jmUtils.createProperty(jmTest.prototype, 'center');
-
-/**
- * 半径
- * @property radius
- * @type {number}
- */
-jmUtils.createProperty(jmTest.prototype, 'radius', 0);
-
-
-/**
- * 初始化图形点
- * 控件都是由点形成
- * 
- * @method initPoint
- * @private
- * @for jmArc
- */
-jmTest.prototype.initPoints = function() {
-    //可以获取当前控件的左上坐标，可以用来画相对位置
-    var location = this.getLocation();//获取位置参数
+        var cx = location.center.x ;
+        var cy = location.center.y ;
     
-    var cx = location.center.x ;
-    var cy = location.center.y ;
-    
-    this.points = [];
+        this.points = [];
 
-    //简单的画一个X
+        //简单的画一个X
 
-    //根据半径计算x,y偏移量
-    //由于是圆，偏移量相同
-    var offw = Math.sqrt(location.radius * location.radius / 2);
-    //左上角到右下角对角线
-    this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
+        //根据半径计算x,y偏移量
+        //由于是圆，偏移量相同
+        var offw = Math.sqrt(location.radius * location.radius / 2);
+        //左上角到右下角对角线
+        this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
 
-    //左下角到右上角对角线
-    //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
-    this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
+        //左下角到右上角对角线
+        //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
+        this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
 
-    return this.points;
-}
+        return this.points;
+    }
+} 
 ```
 
 

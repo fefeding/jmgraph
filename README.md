@@ -61,7 +61,7 @@ npm install jmgraph
     //例如：$('#mycanvas_container') || document.getElementById('mycanvas_container')
     var container = 'mycanvas_container';
     
-    var g = new jmGraph(container, {
+    var g = jmGraph.create(container, {
         width: 800,
         height: 600,
         //样式，规则请参照样式说明

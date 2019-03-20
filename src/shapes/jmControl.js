@@ -34,8 +34,7 @@ const jmStyleMap = {
  * 控件的基础属性和方法
  *
  * @class jmControl
- * @module jmGraph
- * @for jmGraph
+ * @extends jmProperty
  */	
 class jmControl extends jmProperty{	
 

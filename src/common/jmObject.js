@@ -5,7 +5,6 @@ import {jmList} from "./jmList.js";
  *  所有jm对象的基础对象
  * 
  * @class jmObject
- * @module jmGraph
  * @for jmGraph
  */
 class jmObject {

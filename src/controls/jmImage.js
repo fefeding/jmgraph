@@ -5,10 +5,7 @@ import {jmControl} from "../shapes/jmControl.js";
  * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
  * 
  * @class jmImage
- * @for jmGraph
- * @module jmGraph
- * @require jmControl
- * @param {jmGraph} graph 当前画布
+ * @extends jmControl
  * @param {object} params 控件参数
  */
 class jmImage extends jmControl {

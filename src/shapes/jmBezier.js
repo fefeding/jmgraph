@@ -4,9 +4,7 @@ import {jmPath} from "./jmPath.js";
  * N阶，参数points中为控制点
  *
  * @class jmBezier
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmPath
  * @param {object} params 参数
  */ 
 class jmBezier extends jmPath {	

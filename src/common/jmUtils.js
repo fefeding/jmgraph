@@ -4,7 +4,6 @@
  * 当前库的工具类
  * 
  * @class jmUtils
- * @module jmUtils
  * @static
  */
 class jmUtils {
@@ -12,7 +11,7 @@ class jmUtils {
      * 复制一个对象
      * 
      * @method clone
-     * @for jmUtils
+     * @static
      * @param {object} source 被复制的对象
      * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
      * @return {object} 参数source的拷贝对象
@@ -48,7 +47,7 @@ class jmUtils {
      * 绑定事件到html对象
      * 
      * @method bindEvent
-     * @for jmUtils
+     * @static
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
@@ -77,7 +76,7 @@ class jmUtils {
      * 从对象中移除事件到
      * 
      * @method removeEvent
-     * @for jmUtils
+     * @static
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
@@ -99,7 +98,7 @@ class jmUtils {
      * 获取元素的绝对定位
      *
      * @method getElementPosition
-     * @for jmUtils
+     * @static
      * @param {element} el 目标元素对象
      * @return {position} 位置对象(top,left)
      */
@@ -126,7 +125,7 @@ class jmUtils {
      * 获取元素事件触发的位置
      *
      * @method getEventPosition
-     * @for jmUtils
+     * @static
      * @param {eventArg} evt 当前触发事件的参数
      * @param {point} [scale] 当前画布的缩放比例
      * @return {point} 事件触发的位置 
@@ -180,7 +179,7 @@ class jmUtils {
      * 检 查对象是否为指定的类型,不包括继承
      * 
      * @method isType
-     * @for jmUtils
+     * @static
      * @param {object} target 需要判断类型的对象
      * @param {class} type 对象类型
      * @return {boolean} 返回对象是否为指定类型 
@@ -202,7 +201,7 @@ class jmUtils {
      * 利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
      * 
      * @method pointInPolygon
-     * @for jmUtils
+     * @static
      * @param {point} pt 坐标对象
      * @param {array} polygon 多边型角坐标对象数组
      * @param {number} offset 判断可偏移值
@@ -316,7 +315,7 @@ class jmUtils {
      * 如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
      *
      * @method checkOutSide
-     * @for jmUtils
+     * @static
      * @param {bound} parentBounds 父对象的边界
      * @param {bound} targetBounds 对象的边界
      * @param {number} offset 判断是否越界可容偏差
@@ -344,6 +343,7 @@ class jmUtils {
      * 把一个或多个点绕某个点旋转一定角度
      * 先把坐标原点移到旋转中心点，计算后移回
      * @method rotatePoints
+     * @static
      * @param {Array/object} p 一个或多个点
      * @param {*} rp 旋转中心点
      * @param {*} r 旋转角度
@@ -374,7 +374,7 @@ class jmUtils {
      * 去除字符串开始字符
      * 
      * @method trimStart
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的前置字符
      * @return {string} 去除前置字符后的字符串
@@ -395,7 +395,7 @@ class jmUtils {
      * 去除字符串结束的字符c
      *
      * @method trimEnd
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的后置字符
      * @return {string} 去除后置字符后的字符串
@@ -416,7 +416,7 @@ class jmUtils {
      * 去除字符串开始与结束的字符
      *
      * @method trim
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的字符
      * @return {string} 去除字符后的字符串
@@ -429,7 +429,7 @@ class jmUtils {
      * 检查是否为百分比参数
      *
      * @method checkPercent
-     * @for jmUtils
+     * @static
      * @param {string} 字符串参数
      * @return {boolean} true=当前字符串为百分比参数,false=不是
      */
@@ -446,7 +446,7 @@ class jmUtils {
      * 转换百分数为数值类型
      *
      * @method percentToNumber
-     * @for jmUtils
+     * @static
      * @param {string} per 把百分比转为数值的参数
      * @return {number} 百分比对应的数值
      */
@@ -465,7 +465,7 @@ class jmUtils {
      * 转换16进制为数值
      *
      * @method hexToNumber
-     * @for jmUtils
+     * @static
      * @param {string} h 16进制颜色表达
      * @return {number} 10进制表达
      */
@@ -492,7 +492,7 @@ class jmUtils {
      * 转换数值为16进制字符串表达
      *
      * @method hex
-     * @for jmUtils
+     * @static
      * @param {number} v 数值
      * @return {string} 16进制表达
      */
@@ -512,7 +512,7 @@ class jmUtils {
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
      *
      * @method toColor
-     * @for jmUtils
+     * @static
      * @param {string} hex 16进制颜色表达
      * @return {string} 颜色字符串
      */

@@ -4,7 +4,6 @@ import {jmUtils} from "../common/jmUtils.js";
  * 画图阴影对象表示法
  *
  * @class jmShadow
- * @for jmGraph
  * @param {number} x 横坐标偏移量
  * @param {number} y 纵坐标编移量
  * @param {number} blur 模糊值

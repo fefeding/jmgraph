@@ -4,9 +4,7 @@ import {jmUtils} from "../common/jmUtils.js";
  * 画箭头,继承自jmPath
  *
  * @class jmArraw
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
+ * @extends jmPath
  * @param {object} 生成箭头所需的参数
  */
 class jmArraw extends jmPath {	

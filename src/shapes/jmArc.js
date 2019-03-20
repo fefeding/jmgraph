@@ -1,14 +1,10 @@
 import {jmPath} from "./jmPath.js";
 /**
  * 圆弧图型 继承自jmPath
- * 参数params说明:center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
  *
  * @class jmArc
- * @for jmGraph
- * @require jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
- * @param {object} params 圆弧参数
+ * @extends jmPath
+ * @param {object} params center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
  */
 class jmArc extends jmPath {
 

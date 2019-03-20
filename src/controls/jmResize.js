@@ -5,7 +5,7 @@ import {jmRect} from "../shapes/jmRect.js";
  * 如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
  *
  * @class jmResize
- * @for jmGraph
+ * @extends jmRect
  */
 class jmResize extends jmRect {	
 

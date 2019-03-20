@@ -3,8 +3,7 @@ import {jmPath} from "./jmPath.js";
  * 画棱形
  *
  * @class jmPrismatic
- * @for jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmPath
  * @param {object} params 参数 center=棱形中心点，width=棱形宽,height=棱形高
  */
 class jmPrismatic extends jmPath {	

@@ -1,7 +1,7 @@
 /**
  * 自定义集合
  * 
- * @class list
+ * @class jmList
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */
@@ -162,7 +162,6 @@ export { jmList };
  * 当前库的工具类
  * 
  * @class jmUtils
- * @module jmUtils
  * @static
  */
 class jmUtils {
@@ -170,7 +169,7 @@ class jmUtils {
      * 复制一个对象
      * 
      * @method clone
-     * @for jmUtils
+     * @static
      * @param {object} source 被复制的对象
      * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
      * @return {object} 参数source的拷贝对象
@@ -206,7 +205,7 @@ class jmUtils {
      * 绑定事件到html对象
      * 
      * @method bindEvent
-     * @for jmUtils
+     * @static
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
@@ -235,7 +234,7 @@ class jmUtils {
      * 从对象中移除事件到
      * 
      * @method removeEvent
-     * @for jmUtils
+     * @static
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
@@ -257,7 +256,7 @@ class jmUtils {
      * 获取元素的绝对定位
      *
      * @method getElementPosition
-     * @for jmUtils
+     * @static
      * @param {element} el 目标元素对象
      * @return {position} 位置对象(top,left)
      */
@@ -284,7 +283,7 @@ class jmUtils {
      * 获取元素事件触发的位置
      *
      * @method getEventPosition
-     * @for jmUtils
+     * @static
      * @param {eventArg} evt 当前触发事件的参数
      * @param {point} [scale] 当前画布的缩放比例
      * @return {point} 事件触发的位置 
@@ -338,7 +337,7 @@ class jmUtils {
      * 检 查对象是否为指定的类型,不包括继承
      * 
      * @method isType
-     * @for jmUtils
+     * @static
      * @param {object} target 需要判断类型的对象
      * @param {class} type 对象类型
      * @return {boolean} 返回对象是否为指定类型 
@@ -360,7 +359,7 @@ class jmUtils {
      * 利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
      * 
      * @method pointInPolygon
-     * @for jmUtils
+     * @static
      * @param {point} pt 坐标对象
      * @param {array} polygon 多边型角坐标对象数组
      * @param {number} offset 判断可偏移值
@@ -474,7 +473,7 @@ class jmUtils {
      * 如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
      *
      * @method checkOutSide
-     * @for jmUtils
+     * @static
      * @param {bound} parentBounds 父对象的边界
      * @param {bound} targetBounds 对象的边界
      * @param {number} offset 判断是否越界可容偏差
@@ -502,6 +501,7 @@ class jmUtils {
      * 把一个或多个点绕某个点旋转一定角度
      * 先把坐标原点移到旋转中心点，计算后移回
      * @method rotatePoints
+     * @static
      * @param {Array/object} p 一个或多个点
      * @param {*} rp 旋转中心点
      * @param {*} r 旋转角度
@@ -532,7 +532,7 @@ class jmUtils {
      * 去除字符串开始字符
      * 
      * @method trimStart
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的前置字符
      * @return {string} 去除前置字符后的字符串
@@ -553,7 +553,7 @@ class jmUtils {
      * 去除字符串结束的字符c
      *
      * @method trimEnd
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的后置字符
      * @return {string} 去除后置字符后的字符串
@@ -574,7 +574,7 @@ class jmUtils {
      * 去除字符串开始与结束的字符
      *
      * @method trim
-     * @for jmUtils
+     * @static
      * @param {string} source 需要处理的字符串
      * @param {char} [c] 要去除字符串的字符
      * @return {string} 去除字符后的字符串
@@ -587,7 +587,7 @@ class jmUtils {
      * 检查是否为百分比参数
      *
      * @method checkPercent
-     * @for jmUtils
+     * @static
      * @param {string} 字符串参数
      * @return {boolean} true=当前字符串为百分比参数,false=不是
      */
@@ -604,7 +604,7 @@ class jmUtils {
      * 转换百分数为数值类型
      *
      * @method percentToNumber
-     * @for jmUtils
+     * @static
      * @param {string} per 把百分比转为数值的参数
      * @return {number} 百分比对应的数值
      */
@@ -623,7 +623,7 @@ class jmUtils {
      * 转换16进制为数值
      *
      * @method hexToNumber
-     * @for jmUtils
+     * @static
      * @param {string} h 16进制颜色表达
      * @return {number} 10进制表达
      */
@@ -650,7 +650,7 @@ class jmUtils {
      * 转换数值为16进制字符串表达
      *
      * @method hex
-     * @for jmUtils
+     * @static
      * @param {number} v 数值
      * @return {string} 16进制表达
      */
@@ -670,7 +670,7 @@ class jmUtils {
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
      *
      * @method toColor
-     * @for jmUtils
+     * @static
      * @param {string} hex 16进制颜色表达
      * @return {string} 颜色字符串
      */
@@ -725,7 +725,6 @@ export { jmUtils };
  *  所有jm对象的基础对象
  * 
  * @class jmObject
- * @module jmGraph
  * @for jmGraph
  */
 class jmObject {
@@ -827,7 +826,6 @@ export { jmObject };
  * 对象属性管理
  * 
  * @class jmProperty
- * @for jmGraph
  * @require jmObject
  */
 class jmProperty extends jmObject {		
@@ -901,7 +899,6 @@ export { jmProperty };
  * 事件模型
  *
  * @class jmEvents
- * @module jmGraph
  * @for jmGraph
  */
 class jmEvents {
@@ -1129,8 +1126,6 @@ export { jmEvents };
  * 渐变类
  *
  * @class jmGradient
- * @module jmGraph
- * @for jmGraph
  * @param {object} op 渐变参数,type:[linear= 线性渐变,radial=放射性渐变] 
  */
 class jmGradient {
@@ -1340,7 +1335,6 @@ export { jmGradient };
  * 画图阴影对象表示法
  *
  * @class jmShadow
- * @for jmGraph
  * @param {number} x 横坐标偏移量
  * @param {number} y 纵坐标编移量
  * @param {number} blur 模糊值
@@ -1437,8 +1431,7 @@ const jmStyleMap = {
  * 控件的基础属性和方法
  *
  * @class jmControl
- * @module jmGraph
- * @for jmGraph
+ * @extends jmProperty
  */	
 class jmControl extends jmProperty{	
 
@@ -2683,9 +2676,7 @@ export { jmControl };
  * 指定一系列点，画出图形
  *
  * @class jmPath
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmControl
  * @param {object} params 路径参数 points=所有描点
  */
 
@@ -2717,14 +2708,10 @@ export { jmPath };
 
 /**
  * 圆弧图型 继承自jmPath
- * 参数params说明:center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
  *
  * @class jmArc
- * @for jmGraph
- * @require jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
- * @param {object} params 圆弧参数
+ * @extends jmPath
+ * @param {object} params center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
  */
 class jmArc extends jmPath {
 
@@ -2872,9 +2859,7 @@ export { jmArc };
  * 画箭头,继承自jmPath
  *
  * @class jmArraw
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
+ * @extends jmPath
  * @param {object} 生成箭头所需的参数
  */
 class jmArraw extends jmPath {	
@@ -3034,9 +3019,7 @@ export { jmArraw };
  * N阶，参数points中为控制点
  *
  * @class jmBezier
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmPath
  * @param {object} params 参数
  */ 
 class jmBezier extends jmPath {	
@@ -3143,7 +3126,7 @@ export { jmBezier };
  * @class jmCircle
  * @for jmGraph
  * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmArc
  * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
  */
 class jmCircle extends jmArc {		
@@ -3198,9 +3181,7 @@ export { jmCircle };
  * 画空心圆弧,继承自jmPath
  *
  * @class jmHArc
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmArc
  * @param {object} params 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针
  */
 
@@ -3304,9 +3285,7 @@ export { jmHArc };
  * 画一条直线
  *
  * @class jmLine
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
+ * @extends jmPath
  * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
  */
 class jmLine extends jmPath {	
@@ -3394,8 +3373,7 @@ export { jmLine };
  * 画棱形
  *
  * @class jmPrismatic
- * @for jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmPath
  * @param {object} params 参数 center=棱形中心点，width=棱形宽,height=棱形高
  */
 class jmPrismatic extends jmPath {	
@@ -3451,8 +3429,7 @@ export { jmPrismatic };
  * 画矩形
  *
  * @class jmRect
- * @for jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmPath
  * @param {object} params 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度
  */ 
 class jmRect extends jmPath {		
@@ -3610,9 +3587,6 @@ export { jmRect };
  * 带箭头的直线,继承jmPath
  *
  * @class jmArrawLine
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
  * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
  */	
 class jmArrawLine extends jmLine {	
@@ -3646,10 +3620,7 @@ export { jmArrawLine };
  * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
  * 
  * @class jmImage
- * @for jmGraph
- * @module jmGraph
- * @require jmControl
- * @param {jmGraph} graph 当前画布
+ * @extends jmControl
  * @param {object} params 控件参数
  */
 class jmImage extends jmControl {
@@ -3819,13 +3790,10 @@ export { jmImage };
 
 /**
  * 显示文字控件
- * params参数:style=样式，value=显示的文字
  *
  * @class jmLabel
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
- * @param {object} params 文字控件参数
+ * @extends jmControl
+ * @param {object} params params参数:style=样式，value=显示的文字
  */
 class jmLabel extends jmControl {
 
@@ -4002,7 +3970,7 @@ export { jmLabel };
  * 如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
  *
  * @class jmResize
- * @for jmGraph
+ * @extends jmRect
  */
 class jmResize extends jmRect {	
 

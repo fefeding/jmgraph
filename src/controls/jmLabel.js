@@ -1,13 +1,10 @@
 import {jmControl} from "../shapes/jmControl.js";
 /**
  * 显示文字控件
- * params参数:style=样式，value=显示的文字
  *
  * @class jmLabel
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
- * @param {object} params 文字控件参数
+ * @extends jmControl
+ * @param {object} params params参数:style=样式，value=显示的文字
  */
 class jmLabel extends jmControl {
 

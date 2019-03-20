@@ -5,8 +5,6 @@ import {jmList} from "../common/jmList.js";
  * 渐变类
  *
  * @class jmGradient
- * @module jmGraph
- * @for jmGraph
  * @param {object} op 渐变参数,type:[linear= 线性渐变,radial=放射性渐变] 
  */
 class jmGradient {

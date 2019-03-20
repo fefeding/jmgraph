@@ -12,6 +12,7 @@ const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const gulp = require('gulp');
 const cleanimport = require('gulp-clean-import');
+const gulpJsdoc2md = require('gulp-jsdoc-to-markdown')
 
 const jsSources = [
     "../src/common/jmList.js",
@@ -37,6 +38,20 @@ gulp.task('jshint', function () {
             "esversion": 6
         }))
         .pipe(jshint.reporter('default'));
+});
+
+//生成文档
+gulp.task('docs', function () { 
+    return gulp.src(jsSources)
+        .pipe(concat('jmGraph.md'))
+        .pipe(gulpJsdoc2md({}))
+        .on('error', function (err) {
+            gutil.log(gutil.colors.red('jsdoc2md failed'), err.message)
+        })
+        .pipe(rename(function (path) {
+        path.extname = '.md'
+        }))
+        .pipe(gulp.dest('../api'));
 });
 
 //编译成es6版本
@@ -71,6 +86,6 @@ gulp.task('build-js-cmd', function () {
     .pipe(gulp.dest('../dist'));
 });
 
-let tasks = ['build-js-es6', 'build-js-cmd'];
+let tasks = ['docs', 'build-js-es6', 'build-js-cmd'];
 
 gulp.task('default', tasks);  

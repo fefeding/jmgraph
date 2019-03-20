@@ -25,6 +25,8 @@
     "gulp": "^3.9.1",
     "gulp-clean-import": "^1.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-jsdoc-to-markdown": "^1.2.2",
+    "gulp-jsdoc3": "^2.0.0",
     "gulp-jshint": "^2.1.0",
     "gulp-rename": "^1.4.0",
     "gulp-terser": "^1.1.7",

@@ -3,9 +3,7 @@ import {jmPath} from "./jmPath.js";
  * 画一条直线
  *
  * @class jmLine
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 当前画布
+ * @extends jmPath
  * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
  */
 class jmLine extends jmPath {	

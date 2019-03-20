@@ -1,7 +1,7 @@
 /**
  * 自定义集合
  * 
- * @class list
+ * @class jmList
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */

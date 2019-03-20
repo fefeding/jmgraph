@@ -4,9 +4,7 @@ import {jmControl} from "./jmControl.js";
  * 指定一系列点，画出图形
  *
  * @class jmPath
- * @for jmGraph
- * @module jmGraph
- * @param {jmGraph} graph 画布
+ * @extends jmControl
  * @param {object} params 路径参数 points=所有描点
  */
 

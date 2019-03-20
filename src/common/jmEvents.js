@@ -3,7 +3,6 @@ import {jmUtils} from "./jmUtils.js";
  * 事件模型
  *
  * @class jmEvents
- * @module jmGraph
  * @for jmGraph
  */
 class jmEvents {

@@ -2482,7 +2482,7 @@ class jmControl extends jmProperty{
 			//如果焦点不在，且原焦点在，则触发mouseleave事件
 			if(this.focused && name == 'mousemove') {
 				this.focused = false;//表明当前焦点离开
-				this.runEventHandle(this,'mouseleave', args);//执行事件	
+				this.runEventHandle('mouseleave', args);//执行事件	
 			}	
 		}
 			

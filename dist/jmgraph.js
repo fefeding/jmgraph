@@ -5042,7 +5042,7 @@ function (_jmProperty) {
         if (this.focused && name == 'mousemove') {
           this.focused = false; //表明当前焦点离开
 
-          this.runEventHandle(this, 'mouseleave', args); //执行事件	
+          this.runEventHandle('mouseleave', args); //执行事件	
         }
       }
 

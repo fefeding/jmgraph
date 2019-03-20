@@ -1,11 +1,3 @@
-## Modules
-
-<dl>
-<dt><a href="#module_jmGraph">jmGraph</a> ⇐ <code><a href="#jmArc">jmArc</a></code></dt>
-<dd><p>画规则的圆弧</p>
-</dd>
-</dl>
-
 ## Classes
 
 <dl>
@@ -36,6 +28,26 @@
 <dt><a href="#jmArraw">jmArraw</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
 <dt><a href="#jmBezier">jmBezier</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
+<dt><a href="#jmCircle">jmCircle</a></dt>
+<dd></dd>
+<dt><a href="#jmHArc">jmHArc</a> ⇐ <code><a href="#jmArc">jmArc</a></code></dt>
+<dd></dd>
+<dt><a href="#jmLine">jmLine</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
+<dt><a href="#jmPrismatic">jmPrismatic</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
+<dt><a href="#jmRect">jmRect</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
+<dt><a href="#jmArrawLine">jmArrawLine</a></dt>
+<dd></dd>
+<dt><a href="#jmImage">jmImage</a> ⇐ <code><a href="#jmControl">jmControl</a></code></dt>
+<dd></dd>
+<dt><a href="#jmLabel">jmLabel</a> ⇐ <code><a href="#jmControl">jmControl</a></code></dt>
+<dd></dd>
+<dt><a href="#jmResize">jmResize</a> ⇐ <code><a href="#jmRect">jmRect</a></code></dt>
+<dd></dd>
+<dt><a href="#jmGraph">jmGraph</a></dt>
 <dd></dd>
 </dl>
 
@@ -174,2068 +186,102 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <dd><p>对控件进行平移
 遍历控件所有描点或位置，设置其偏移量。</p>
 </dd>
+<dt><a href="#draw">draw()</a></dt>
+<dd><p>重写基类画图，此处为画一个完整的圆</p>
+</dd>
+<dt><a href="#getBounds">getBounds()</a> ⇒ <code>bound</code></dt>
+<dd><p>获取当前控件的边界</p>
+</dd>
+<dt><a href="#checkPoint">checkPoint(p)</a> ⇒ <code>boolean</code></dt>
+<dd><p>重写检查坐标是否在区域内</p>
+</dd>
+<dt><a href="#sourceHeight">sourceHeight()</a> ⇒ <code>number</code></dt>
+<dd><p>被剪切高度</p>
+</dd>
+<dt><a href="#image">image()</a> ⇒ <code>img</code></dt>
+<dd><p>设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象</p>
+</dd>
+<dt><a href="#draw">draw()</a></dt>
+<dd><p>重写控件绘制
+根据父边界偏移和此控件参数绘制图片</p>
+</dd>
+<dt><a href="#getBounds">getBounds()</a> ⇒ <code>object</code></dt>
+<dd><p>获取当前控件的边界</p>
+</dd>
+<dt><a href="#getImage">getImage()</a> ⇒ <code>img</code></dt>
+<dd><p>img对象</p>
+</dd>
+<dt><a href="#testSize">testSize()</a> ⇒ <code>object</code></dt>
+<dd><p>测试获取文本所占大小</p>
+</dd>
+<dt><a href="#draw">draw()</a></dt>
+<dd><p>根据位置偏移画字符串</p>
+</dd>
+<dt><a href="#reset">reset(px, py, dx, dy)</a></dt>
+<dd><p>按移动偏移量重置当前对象，并触发大小和位置改变事件</p>
+</dd>
+<dt><a href="#init">init()</a></dt>
+<dd><p>初始化画布</p>
+</dd>
+<dt><a href="#create">create()</a> ⇒ <code><a href="#jmGraph">jmGraph</a></code></dt>
+<dd><p>创建jmGraph的静态对象</p>
+</dd>
+<dt><a href="#getPosition">getPosition()</a> ⇒ <code>postion</code></dt>
+<dd><p>获取当前画布在浏览器中的绝对定位</p>
+</dd>
+<dt><a href="#registerShape">registerShape(name, shape)</a></dt>
+<dd><p>注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。</p>
+</dd>
+<dt><a href="#createShape">createShape(name, args)</a> ⇒ <code>object</code></dt>
+<dd><p>从已注册的图形类创建图形
+简单直观创建对象</p>
+</dd>
+<dt><a href="#createShadow">createShadow(x, y, blur, color)</a> ⇒ <code><a href="#jmShadow">jmShadow</a></code></dt>
+<dd><p>生成阴影对象</p>
+</dd>
+<dt><a href="#createLinearGradient">createLinearGradient(x1, y1, x2, y2)</a> ⇒ <code><a href="#jmGradient">jmGradient</a></code></dt>
+<dd><p>生成线性渐变对象</p>
+</dd>
+<dt><a href="#createRadialGradient">createRadialGradient(x1, y1, r1, x2, y2, r2)</a> ⇒ <code><a href="#jmGradient">jmGradient</a></code></dt>
+<dd><p>生成放射渐变对象</p>
+</dd>
+<dt><a href="#refresh">refresh()</a></dt>
+<dd><p>重新刷新整个画板
+以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。</p>
+</dd>
+<dt><a href="#redraw">redraw([w], [h])</a></dt>
+<dd><p>重新刷新整个画板
+此方法直接重画，与refresh效果类似</p>
+</dd>
+<dt><a href="#clear">clear([w], [h])</a></dt>
+<dd><p>清除画布</p>
+</dd>
+<dt><a href="#css">css(name, value)</a></dt>
+<dd><p>设置画布样式，此处只是设置其css样式</p>
+</dd>
+<dt><a href="#createPath">createPath(points, style)</a> ⇒ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd><p>生成路径对象</p>
+</dd>
+<dt><a href="#createLine">createLine(start, end, 直线的样式)</a> ⇒ <code><a href="#jmLine">jmLine</a></code></dt>
+<dd><p>生成直线</p>
+</dd>
+<dt><a href="#zoomOut">zoomOut()</a></dt>
+<dd><p>缩小整个画布按比例0.9</p>
+</dd>
+<dt><a href="#zoomIn">zoomIn()</a></dt>
+<dd><p>放大 每次增大0.1的比例</p>
+</dd>
+<dt><a href="#zoomActual">zoomActual()</a></dt>
+<dd><p>大小复原</p>
+</dd>
+<dt><a href="#scale">scale(dx, dy)</a></dt>
+<dd><p>放大缩小画布</p>
+</dd>
+<dt><a href="#toDataURL">toDataURL()</a> ⇒ <code>string</code></dt>
+<dd><p>保存为base64图形数据</p>
+</dd>
 </dl>
 
-<a name="module_jmGraph"></a>
-
-## jmGraph ⇐ <code>[jmArc](#jmArc)</code>
-画规则的圆弧
-
-**Extends:** <code>[jmArc](#jmArc)</code>  
-**For**: jmGraph  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高 |
-
-
-* [jmGraph](#module_jmGraph) ⇐ <code>[jmArc](#jmArc)</code>
-    * [~jmHArc](#module_jmGraph..jmHArc) ⇐ <code>[jmArc](#jmArc)</code>
-        * [new jmHArc(params)](#new_module_jmGraph..jmHArc_new)
-        * [.minRadius](#module_jmGraph..jmHArc+minRadius) : <code>number</code>
-        * [.maxRadius](#module_jmGraph..jmHArc+maxRadius) : <code>number</code>
-        * [.center](#jmArc+center) : <code>point</code>
-        * [.radius](#jmArc+radius) : <code>number</code>
-        * [.startAngle](#jmArc+startAngle) : <code>number</code>
-        * [.endAngle](#jmArc+endAngle) : <code>number</code>
-        * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
-        * [.points](#jmPath+points) : <code>array</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmLine](#module_jmGraph..jmLine) ⇐ <code>[jmPath](#jmPath)</code>
-        * [new jmLine(params)](#new_module_jmGraph..jmLine_new)
-        * [.start](#module_jmGraph..jmLine+start) : <code>point</code>
-        * [.end](#module_jmGraph..jmLine+end) : <code>point</code>
-        * [.points](#jmPath+points) : <code>array</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmPrismatic](#module_jmGraph..jmPrismatic) ⇐ <code>[jmPath](#jmPath)</code>
-        * [new jmPrismatic(params)](#new_module_jmGraph..jmPrismatic_new)
-        * [.center](#module_jmGraph..jmPrismatic+center) : <code>point</code>
-        * [.points](#jmPath+points) : <code>array</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmRect](#module_jmGraph..jmRect) ⇐ <code>[jmPath](#jmPath)</code>
-        * [new jmRect(params)](#new_module_jmGraph..jmRect_new)
-        * [.radius](#module_jmGraph..jmRect+radius) : <code>number</code>
-        * [.points](#jmPath+points) : <code>array</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmArrawLine](#module_jmGraph..jmArrawLine)
-        * [new jmArrawLine(params)](#new_module_jmGraph..jmArrawLine_new)
-    * [~jmImage](#module_jmGraph..jmImage) ⇐ <code>[jmControl](#jmControl)</code>
-        * [new jmImage(params)](#new_module_jmGraph..jmImage_new)
-        * [.sourcePosition](#module_jmGraph..jmImage+sourcePosition) : <code>point</code>
-        * [.sourceWidth](#module_jmGraph..jmImage+sourceWidth) : <code>number</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmLabel](#module_jmGraph..jmLabel) ⇐ <code>[jmControl](#jmControl)</code>
-        * [new jmLabel(params)](#new_module_jmGraph..jmLabel_new)
-        * [.text](#module_jmGraph..jmLabel+text) : <code>string</code>
-        * [.type](#jmControl+type) : <code>string</code>
-        * [.context](#jmControl+context) : <code>object</code>
-        * [.style](#jmControl+style) : <code>object</code>
-        * [.visible](#jmControl+visible) : <code>boolean</code>
-        * [.children](#jmControl+children) : <code>list</code>
-        * [.position](#jmControl+position) : <code>point</code>
-        * [.width](#jmControl+width) : <code>number</code>
-        * [.height](#jmControl+height) : <code>number</code>
-        * [.zIndex](#jmControl+zIndex) : <code>object</code>
-        * [.cursor](#jmControl+cursor)
-        * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-        * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-        * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-        * [.rotate(angle, point)](#jmControl+rotate)
-    * [~jmResize](#module_jmGraph..jmResize) ⇐ <code>jmRect</code>
-        * [new jmResize()](#new_module_jmGraph..jmResize_new)
-        * [.rectSize](#module_jmGraph..jmResize+rectSize) : <code>number</code>
-        * [.resizable](#module_jmGraph..jmResize+resizable) : <code>boolean</code>
-    * [~jmGraph](#module_jmGraph..jmGraph)
-        * [new jmGraph(canvas, option, callback)](#new_module_jmGraph..jmGraph_new)
-        * [.util](#module_jmGraph..jmGraph.jmGraph+util) : <code>[jmUtils](#jmUtils)</code>
-        * [.shapes](#module_jmGraph..jmGraph+shapes) : <code>object</code>
-        * [.width](#module_jmGraph..jmGraph+width) : <code>number</code>
-        * [.height](#module_jmGraph..jmGraph+height) : <code>number</code>
-        * [.autoRefresh(callback)](#module_jmGraph..jmGraph+autoRefresh)
-    * [~draw()](#module_jmGraph..draw)
-    * [~getBounds()](#module_jmGraph..getBounds) ⇒ <code>bound</code>
-    * [~checkPoint(p)](#module_jmGraph..checkPoint) ⇒ <code>boolean</code>
-    * [~sourceHeight()](#module_jmGraph..sourceHeight) ⇒ <code>number</code>
-    * [~image()](#module_jmGraph..image) ⇒ <code>img</code>
-    * [~draw()](#module_jmGraph..draw)
-    * [~getBounds()](#module_jmGraph..getBounds) ⇒ <code>object</code>
-    * [~getImage()](#module_jmGraph..getImage) ⇒ <code>img</code>
-    * [~testSize()](#module_jmGraph..testSize) ⇒ <code>object</code>
-    * [~draw()](#module_jmGraph..draw)
-    * [~reset(px, py, dx, dy)](#module_jmGraph..reset)
-    * [~init()](#module_jmGraph..init)
-    * [~create()](#module_jmGraph..create) ⇒ <code>jmGraph</code>
-    * [~getPosition()](#module_jmGraph..getPosition) ⇒ <code>postion</code>
-    * [~registerShape(name, shape)](#module_jmGraph..registerShape)
-    * [~createShape(name, args)](#module_jmGraph..createShape) ⇒ <code>object</code>
-    * [~createShadow(x, y, blur, color)](#module_jmGraph..createShadow) ⇒ <code>[jmShadow](#jmShadow)</code>
-    * [~createLinearGradient(x1, y1, x2, y2)](#module_jmGraph..createLinearGradient) ⇒ <code>[jmGradient](#jmGradient)</code>
-    * [~createRadialGradient(x1, y1, r1, x2, y2, r2)](#module_jmGraph..createRadialGradient) ⇒ <code>[jmGradient](#jmGradient)</code>
-    * [~refresh()](#module_jmGraph..refresh)
-    * [~redraw([w], [h])](#module_jmGraph..redraw)
-    * [~clear([w], [h])](#module_jmGraph..clear)
-    * [~css(name, value)](#module_jmGraph..css)
-    * [~createPath(points, style)](#module_jmGraph..createPath) ⇒ <code>[jmPath](#jmPath)</code>
-    * [~createLine(start, end, 直线的样式)](#module_jmGraph..createLine) ⇒ <code>jmLine</code>
-    * [~zoomOut()](#module_jmGraph..zoomOut)
-    * [~zoomIn()](#module_jmGraph..zoomIn)
-    * [~zoomActual()](#module_jmGraph..zoomActual)
-    * [~scale(dx, dy)](#module_jmGraph..scale)
-    * [~toDataURL()](#module_jmGraph..toDataURL) ⇒ <code>string</code>
-
-<a name="module_jmGraph..jmHArc"></a>
-
-### jmGraph~jmHArc ⇐ <code>[jmArc](#jmArc)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmArc](#jmArc)</code>  
-
-* [~jmHArc](#module_jmGraph..jmHArc) ⇐ <code>[jmArc](#jmArc)</code>
-    * [new jmHArc(params)](#new_module_jmGraph..jmHArc_new)
-    * [.minRadius](#module_jmGraph..jmHArc+minRadius) : <code>number</code>
-    * [.maxRadius](#module_jmGraph..jmHArc+maxRadius) : <code>number</code>
-    * [.center](#jmArc+center) : <code>point</code>
-    * [.radius](#jmArc+radius) : <code>number</code>
-    * [.startAngle](#jmArc+startAngle) : <code>number</code>
-    * [.endAngle](#jmArc+endAngle) : <code>number</code>
-    * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
-    * [.points](#jmPath+points) : <code>array</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmHArc_new"></a>
-
-#### new jmHArc(params)
-画空心圆弧,继承自jmPath
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针 |
-
-<a name="module_jmGraph..jmHArc+minRadius"></a>
-
-#### jmHArc.minRadius : <code>number</code>
-设定或获取内空心圆半径
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**For**: jmHArc  
-**Properties**
-
-| Name |
-| --- |
-| minRadius | 
-
-<a name="module_jmGraph..jmHArc+maxRadius"></a>
-
-#### jmHArc.maxRadius : <code>number</code>
-设定或获取外空心圆半径
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**For**: jmHArc  
-**Properties**
-
-| Name |
-| --- |
-| maxRadius | 
-
-<a name="jmArc+center"></a>
-
-#### jmHArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| center | 
-
-<a name="jmArc+radius"></a>
-
-#### jmHArc.radius : <code>number</code>
-半径
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| radius | 
-
-<a name="jmArc+startAngle"></a>
-
-#### jmHArc.startAngle : <code>number</code>
-扇形起始角度
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| startAngle | 
-
-<a name="jmArc+endAngle"></a>
-
-#### jmHArc.endAngle : <code>number</code>
-扇形结束角度
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| endAngle | 
-
-<a name="jmArc+anticlockwise"></a>
-
-#### jmHArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| anticlockwise | 
-
-<a name="jmPath+points"></a>
-
-#### jmHArc.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Overrides:** <code>[points](#jmPath+points)</code>  
-**Properties**
-
-| Name |
-| --- |
-| points | 
-
-<a name="jmControl+type"></a>
-
-#### jmHArc.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmHArc.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmHArc.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmHArc.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmHArc.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmHArc.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmHArc.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmHArc.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmHArc.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmHArc.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmHArc.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmHArc.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmHArc.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmHArc.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmHArc](#module_jmGraph..jmHArc)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmLine"></a>
-
-### jmGraph~jmLine ⇐ <code>[jmPath](#jmPath)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmPath](#jmPath)</code>  
-
-* [~jmLine](#module_jmGraph..jmLine) ⇐ <code>[jmPath](#jmPath)</code>
-    * [new jmLine(params)](#new_module_jmGraph..jmLine_new)
-    * [.start](#module_jmGraph..jmLine+start) : <code>point</code>
-    * [.end](#module_jmGraph..jmLine+end) : <code>point</code>
-    * [.points](#jmPath+points) : <code>array</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmLine_new"></a>
-
-#### new jmLine(params)
-画一条直线
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4) |
-
-<a name="module_jmGraph..jmLine+start"></a>
-
-#### jmLine.start : <code>point</code>
-控制起始点
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**For**: jmLine  
-**Properties**
-
-| Name |
-| --- |
-| start | 
-
-<a name="module_jmGraph..jmLine+end"></a>
-
-#### jmLine.end : <code>point</code>
-控制结束点
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**For**: jmLine  
-**Properties**
-
-| Name |
-| --- |
-| end | 
-
-<a name="jmPath+points"></a>
-
-#### jmLine.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Overrides:** <code>[points](#jmPath+points)</code>  
-**Properties**
-
-| Name |
-| --- |
-| points | 
-
-<a name="jmControl+type"></a>
-
-#### jmLine.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmLine.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmLine.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmLine.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmLine.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmLine.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmLine.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmLine.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmLine.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmLine.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmLine.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmLine.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmLine.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmLine.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmLine](#module_jmGraph..jmLine)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmPrismatic"></a>
-
-### jmGraph~jmPrismatic ⇐ <code>[jmPath](#jmPath)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmPath](#jmPath)</code>  
-
-* [~jmPrismatic](#module_jmGraph..jmPrismatic) ⇐ <code>[jmPath](#jmPath)</code>
-    * [new jmPrismatic(params)](#new_module_jmGraph..jmPrismatic_new)
-    * [.center](#module_jmGraph..jmPrismatic+center) : <code>point</code>
-    * [.points](#jmPath+points) : <code>array</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmPrismatic_new"></a>
-
-#### new jmPrismatic(params)
-画棱形
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 参数 center=棱形中心点，width=棱形宽,height=棱形高 |
-
-<a name="module_jmGraph..jmPrismatic+center"></a>
-
-#### jmPrismatic.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| center | 
-
-<a name="jmPath+points"></a>
-
-#### jmPrismatic.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Overrides:** <code>[points](#jmPath+points)</code>  
-**Properties**
-
-| Name |
-| --- |
-| points | 
-
-<a name="jmControl+type"></a>
-
-#### jmPrismatic.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmPrismatic.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmPrismatic.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmPrismatic.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmPrismatic.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmPrismatic.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmPrismatic.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmPrismatic.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmPrismatic.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmPrismatic.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmPrismatic.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmPrismatic.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmPrismatic.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmPrismatic.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmPrismatic](#module_jmGraph..jmPrismatic)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmRect"></a>
-
-### jmGraph~jmRect ⇐ <code>[jmPath](#jmPath)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmPath](#jmPath)</code>  
-
-* [~jmRect](#module_jmGraph..jmRect) ⇐ <code>[jmPath](#jmPath)</code>
-    * [new jmRect(params)](#new_module_jmGraph..jmRect_new)
-    * [.radius](#module_jmGraph..jmRect+radius) : <code>number</code>
-    * [.points](#jmPath+points) : <code>array</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmRect_new"></a>
-
-#### new jmRect(params)
-画矩形
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度 |
-
-<a name="module_jmGraph..jmRect+radius"></a>
-
-#### jmRect.radius : <code>number</code>
-圆角半径
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| radius | 
-
-<a name="jmPath+points"></a>
-
-#### jmRect.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Overrides:** <code>[points](#jmPath+points)</code>  
-**Properties**
-
-| Name |
-| --- |
-| points | 
-
-<a name="jmControl+type"></a>
-
-#### jmRect.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmRect.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmRect.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmRect.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmRect.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmRect.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmRect.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmRect.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmRect.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmRect.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmRect.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmRect.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmRect.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmRect.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmRect](#module_jmGraph..jmRect)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmArrawLine"></a>
-
-### jmGraph~jmArrawLine
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="new_module_jmGraph..jmArrawLine_new"></a>
-
-#### new jmArrawLine(params)
-带箭头的直线,继承jmPath
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点) |
-
-<a name="module_jmGraph..jmImage"></a>
-
-### jmGraph~jmImage ⇐ <code>[jmControl](#jmControl)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmControl](#jmControl)</code>  
-
-* [~jmImage](#module_jmGraph..jmImage) ⇐ <code>[jmControl](#jmControl)</code>
-    * [new jmImage(params)](#new_module_jmGraph..jmImage_new)
-    * [.sourcePosition](#module_jmGraph..jmImage+sourcePosition) : <code>point</code>
-    * [.sourceWidth](#module_jmGraph..jmImage+sourceWidth) : <code>number</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmImage_new"></a>
-
-#### new jmImage(params)
-图片控件，继承自jmControlparams参数中image为指定的图片源地址或图片img对象，postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | 控件参数 |
-
-<a name="module_jmGraph..jmImage+sourcePosition"></a>
-
-#### jmImage.sourcePosition : <code>point</code>
-画图开始剪切位置
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| sourcePosition | 
-
-<a name="module_jmGraph..jmImage+sourceWidth"></a>
-
-#### jmImage.sourceWidth : <code>number</code>
-被剪切宽度
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| sourceWidth | 
-
-<a name="jmControl+type"></a>
-
-#### jmImage.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmImage.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmImage.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmImage.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmImage.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmImage.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmImage.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmImage.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmImage.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmImage.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmImage.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmImage.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmImage.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmImage.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmImage](#module_jmGraph..jmImage)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmLabel"></a>
-
-### jmGraph~jmLabel ⇐ <code>[jmControl](#jmControl)</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>[jmControl](#jmControl)</code>  
-
-* [~jmLabel](#module_jmGraph..jmLabel) ⇐ <code>[jmControl](#jmControl)</code>
-    * [new jmLabel(params)](#new_module_jmGraph..jmLabel_new)
-    * [.text](#module_jmGraph..jmLabel+text) : <code>string</code>
-    * [.type](#jmControl+type) : <code>string</code>
-    * [.context](#jmControl+context) : <code>object</code>
-    * [.style](#jmControl+style) : <code>object</code>
-    * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
-    * [.width](#jmControl+width) : <code>number</code>
-    * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
-    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
-    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
-    * [.rotate(angle, point)](#jmControl+rotate)
-
-<a name="new_module_jmGraph..jmLabel_new"></a>
-
-#### new jmLabel(params)
-显示文字控件
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| params | <code>object</code> | params参数:style=样式，value=显示的文字 |
-
-<a name="module_jmGraph..jmLabel+text"></a>
-
-#### jmLabel.text : <code>string</code>
-显示的内容
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| text | 
-
-<a name="jmControl+type"></a>
-
-#### jmLabel.type : <code>string</code>
-当前对象类型名jmRect
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| type | 
-
-<a name="jmControl+context"></a>
-
-#### jmLabel.context : <code>object</code>
-当前canvas的context
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| context | 
-
-<a name="jmControl+style"></a>
-
-#### jmLabel.style : <code>object</code>
-样式
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| style | 
-
-<a name="jmControl+visible"></a>
-
-#### jmLabel.visible : <code>boolean</code>
-当前控件是否可见
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Default**: <code>true</code>  
-**Properties**
-
-| Name |
-| --- |
-| visible | 
-
-<a name="jmControl+children"></a>
-
-#### jmLabel.children : <code>list</code>
-当前控件的子控件集合
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| children | 
-
-<a name="jmControl+position"></a>
-
-#### jmLabel.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
-<a name="jmControl+width"></a>
-
-#### jmLabel.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Overrides:** <code>[width](#jmControl+width)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="jmControl+height"></a>
-
-#### jmLabel.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Overrides:** <code>[height](#jmControl+height)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="jmControl+zIndex"></a>
-
-#### jmLabel.zIndex : <code>object</code>
-控件层级关系，发生改变时，需要重新调整排序
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Read only**: true  
-**Properties**
-
-| Name |
-| --- |
-| zIndex | 
-
-<a name="jmControl+cursor"></a>
-
-#### jmLabel.cursor
-设置鼠标指针
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
-**Properties**
-
-| Name |
-| --- |
-| cursor | 
-
-<a name="jmProperty+needUpdate"></a>
-
-#### jmLabel.needUpdate : <code>boolean</code>
-是否需要刷新画板，属性的改变会导致它变为true
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| needUpdate | 
-
-<a name="jmProperty+graph"></a>
-
-#### jmLabel.graph : <code>jmGraph</code>
-当前所在的画布对象 jmGraph
-
-**Kind**: instance property of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Properties**
-
-| Name |
-| --- |
-| graph | 
-
-<a name="jmControl+getRotation"></a>
-
-#### jmLabel.getRotation() ⇒ <code>object</code>
-获取当前控制的旋转信息
-
-**Kind**: instance method of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-**Returns**: <code>object</code> - 旋转中心和角度  
-<a name="jmControl+rotate"></a>
-
-#### jmLabel.rotate(angle, point)
-把图形旋转一个角度
-
-**Kind**: instance method of <code>[jmLabel](#module_jmGraph..jmLabel)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| angle | <code>number</code> | 旋转角度 |
-| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
-
-<a name="module_jmGraph..jmResize"></a>
-
-### jmGraph~jmResize ⇐ <code>jmRect</code>
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-**Extends:** <code>jmRect</code>  
-
-* [~jmResize](#module_jmGraph..jmResize) ⇐ <code>jmRect</code>
-    * [new jmResize()](#new_module_jmGraph..jmResize_new)
-    * [.rectSize](#module_jmGraph..jmResize+rectSize) : <code>number</code>
-    * [.resizable](#module_jmGraph..jmResize+resizable) : <code>boolean</code>
-
-<a name="new_module_jmGraph..jmResize_new"></a>
-
-#### new jmResize()
-可拉伸的缩放控件继承jmRect如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
-
-<a name="module_jmGraph..jmResize+rectSize"></a>
-
-#### jmResize.rectSize : <code>number</code>
-拉动的小方块大小
-
-**Kind**: instance property of <code>[jmResize](#module_jmGraph..jmResize)</code>  
-**Properties**
-
-| Name |
-| --- |
-| rectSize | 
-
-<a name="module_jmGraph..jmResize+resizable"></a>
-
-#### jmResize.resizable : <code>boolean</code>
-是否可以拉大缩小
-
-**Kind**: instance property of <code>[jmResize](#module_jmGraph..jmResize)</code>  
-**Properties**
-
-| Name |
-| --- |
-| resizable | 
-
-<a name="module_jmGraph..jmGraph"></a>
-
-### jmGraph~jmGraph
-**Kind**: inner class of <code>[jmGraph](#module_jmGraph)</code>  
-
-* [~jmGraph](#module_jmGraph..jmGraph)
-    * [new jmGraph(canvas, option, callback)](#new_module_jmGraph..jmGraph_new)
-    * [.util](#module_jmGraph..jmGraph.jmGraph+util) : <code>[jmUtils](#jmUtils)</code>
-    * [.shapes](#module_jmGraph..jmGraph+shapes) : <code>object</code>
-    * [.width](#module_jmGraph..jmGraph+width) : <code>number</code>
-    * [.height](#module_jmGraph..jmGraph+height) : <code>number</code>
-    * [.autoRefresh(callback)](#module_jmGraph..jmGraph+autoRefresh)
-
-<a name="new_module_jmGraph..jmGraph_new"></a>
-
-#### new jmGraph(canvas, option, callback)
-jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| canvas | <code>element</code> | 标签canvas |
-| option | <code>object</code> | 参数：{width:宽,height:高} |
-| callback | <code>function</code> | 初始化后的回调 |
-
-<a name="module_jmGraph..jmGraph.jmGraph+util"></a>
-
-#### jmGraph.util : <code>[jmUtils](#jmUtils)</code>
-工具类
-
-**Kind**: instance property of <code>[jmGraph](#module_jmGraph..jmGraph)</code>  
-**Properties**
-
-| Name |
-| --- |
-| utils/util | 
-
-<a name="module_jmGraph..jmGraph+shapes"></a>
-
-#### jmGraph.shapes : <code>object</code>
-当前所有图形类型
-
-**Kind**: instance property of <code>[jmGraph](#module_jmGraph..jmGraph)</code>  
-**Properties**
-
-| Name |
-| --- |
-| shapes | 
-
-<a name="module_jmGraph..jmGraph+width"></a>
-
-#### jmGraph.width : <code>number</code>
-宽度
-
-**Kind**: instance property of <code>[jmGraph](#module_jmGraph..jmGraph)</code>  
-**Properties**
-
-| Name |
-| --- |
-| width | 
-
-<a name="module_jmGraph..jmGraph+height"></a>
-
-#### jmGraph.height : <code>number</code>
-高度
-
-**Kind**: instance property of <code>[jmGraph](#module_jmGraph..jmGraph)</code>  
-**Properties**
-
-| Name |
-| --- |
-| height | 
-
-<a name="module_jmGraph..jmGraph+autoRefresh"></a>
-
-#### jmGraph.autoRefresh(callback)
-自动刷新画版
-
-**Kind**: instance method of <code>[jmGraph](#module_jmGraph..jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| callback | <code>function</code> | 执行回调 |
-
-<a name="module_jmGraph..draw"></a>
-
-### jmGraph~draw()
-重写基类画图，此处为画一个完整的圆
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..getBounds"></a>
-
-### jmGraph~getBounds() ⇒ <code>bound</code>
-获取当前控件的边界
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>bound</code> - 当前控件边界  
-<a name="module_jmGraph..checkPoint"></a>
-
-### jmGraph~checkPoint(p) ⇒ <code>boolean</code>
-重写检查坐标是否在区域内
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>boolean</code> - 如果在则返回true,否则返回false  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| p | <code>point</code> | 待检查的坐标 |
-
-<a name="module_jmGraph..sourceHeight"></a>
-
-### jmGraph~sourceHeight() ⇒ <code>number</code>
-被剪切高度
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..image"></a>
-
-### jmGraph~image() ⇒ <code>img</code>
-设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..draw"></a>
-
-### jmGraph~draw()
-重写控件绘制根据父边界偏移和此控件参数绘制图片
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..getBounds"></a>
-
-### jmGraph~getBounds() ⇒ <code>object</code>
-获取当前控件的边界
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>object</code> - 边界对象(left,top,right,bottom,width,height)  
-<a name="module_jmGraph..getImage"></a>
-
-### jmGraph~getImage() ⇒ <code>img</code>
-img对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>img</code> - 图片对象  
-<a name="module_jmGraph..testSize"></a>
-
-### jmGraph~testSize() ⇒ <code>object</code>
-测试获取文本所占大小
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>object</code> - 含文本大小的对象  
-<a name="module_jmGraph..draw"></a>
-
-### jmGraph~draw()
-根据位置偏移画字符串
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..reset"></a>
-
-### jmGraph~reset(px, py, dx, dy)
-按移动偏移量重置当前对象，并触发大小和位置改变事件
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| px | <code>number</code> | 位置X轴偏移 |
-| py | <code>number</code> | 位置y轴偏移 |
-| dx | <code>number</code> | 大小x轴偏移 |
-| dy | <code>number</code> | 大小y轴偏移 |
-
-<a name="module_jmGraph..init"></a>
-
-### jmGraph~init()
-初始化画布
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..create"></a>
-
-### jmGraph~create() ⇒ <code>jmGraph</code>
-创建jmGraph的静态对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>jmGraph</code> - jmGraph实例对象  
-<a name="module_jmGraph..getPosition"></a>
-
-### jmGraph~getPosition() ⇒ <code>postion</code>
-获取当前画布在浏览器中的绝对定位
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>postion</code> - 返回定位坐标  
-<a name="module_jmGraph..registerShape"></a>
-
-### jmGraph~registerShape(name, shape)
-注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | 控件图形名称 |
-| shape | <code>class</code> | 图形控件类型 |
-
-<a name="module_jmGraph..createShape"></a>
-
-### jmGraph~createShape(name, args) ⇒ <code>object</code>
-从已注册的图形类创建图形简单直观创建对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>object</code> - 已实例化控件的对象  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | 注册控件的名称 |
-| args | <code>object</code> | 实例化控件的参数 |
-
-<a name="module_jmGraph..createShadow"></a>
-
-### jmGraph~createShadow(x, y, blur, color) ⇒ <code>[jmShadow](#jmShadow)</code>
-生成阴影对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>[jmShadow](#jmShadow)</code> - 阴影对象  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x | <code>number</code> | x偏移量 |
-| y | <code>number</code> | y偏移量 |
-| blur | <code>number</code> | 模糊值 |
-| color | <code>string</code> | 颜色 |
-
-<a name="module_jmGraph..createLinearGradient"></a>
-
-### jmGraph~createLinearGradient(x1, y1, x2, y2) ⇒ <code>[jmGradient](#jmGradient)</code>
-生成线性渐变对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>[jmGradient](#jmGradient)</code> - 线性渐变对象  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x1 | <code>number</code> | 线性渐变起始点X坐标 |
-| y1 | <code>number</code> | 线性渐变起始点Y坐标 |
-| x2 | <code>number</code> | 线性渐变结束点X坐标 |
-| y2 | <code>number</code> | 线性渐变结束点Y坐标 |
-
-<a name="module_jmGraph..createRadialGradient"></a>
-
-### jmGraph~createRadialGradient(x1, y1, r1, x2, y2, r2) ⇒ <code>[jmGradient](#jmGradient)</code>
-生成放射渐变对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>[jmGradient](#jmGradient)</code> - 放射渐变对象  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| x1 | <code>number</code> | 放射渐变小圆中心X坐标 |
-| y1 | <code>number</code> | 放射渐变小圆中心Y坐标 |
-| r1 | <code>number</code> | 放射渐变小圆半径 |
-| x2 | <code>number</code> | 放射渐变大圆中心X坐标 |
-| y2 | <code>number</code> | 放射渐变大圆中心Y坐标 |
-| r2 | <code>number</code> | 放射渐变大圆半径 |
-
-<a name="module_jmGraph..refresh"></a>
-
-### jmGraph~refresh()
-重新刷新整个画板以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..redraw"></a>
-
-### jmGraph~redraw([w], [h])
-重新刷新整个画板此方法直接重画，与refresh效果类似
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [w] | <code>number</code> | 清除画布的宽度 |
-| [h] | <code>number</code> | 清除画布的高度 |
-
-<a name="module_jmGraph..clear"></a>
-
-### jmGraph~clear([w], [h])
-清除画布
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [w] | <code>number</code> | 清除画布的宽度 |
-| [h] | <code>number</code> | 清除画布的高度 |
-
-<a name="module_jmGraph..css"></a>
-
-### jmGraph~css(name, value)
-设置画布样式，此处只是设置其css样式
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>string</code> | 样式名 |
-| value | <code>string</code> | 样式值 |
-
-<a name="module_jmGraph..createPath"></a>
-
-### jmGraph~createPath(points, style) ⇒ <code>[jmPath](#jmPath)</code>
-生成路径对象
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>[jmPath](#jmPath)</code> - 路径对象jmPath  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| points | <code>array</code> | 路径中的描点集合 |
-| style | <code>style</code> | 当前路径的样式 |
-
-<a name="module_jmGraph..createLine"></a>
-
-### jmGraph~createLine(start, end, 直线的样式) ⇒ <code>jmLine</code>
-生成直线
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>jmLine</code> - 直线对象  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| start | <code>point</code> | 直线的起点 |
-| end | <code>point</code> | 直线的终点 |
-| 直线的样式 | <code>style</code> |  |
-
-<a name="module_jmGraph..zoomOut"></a>
-
-### jmGraph~zoomOut()
-缩小整个画布按比例0.9
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..zoomIn"></a>
-
-### jmGraph~zoomIn()
-放大 每次增大0.1的比例
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..zoomActual"></a>
-
-### jmGraph~zoomActual()
-大小复原
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-<a name="module_jmGraph..scale"></a>
-
-### jmGraph~scale(dx, dy)
-放大缩小画布
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dx | <code>number</code> | 缩放X轴比例 |
-| dy | <code>number</code> | 缩放Y轴比例 |
-
-<a name="module_jmGraph..toDataURL"></a>
-
-### jmGraph~toDataURL() ⇒ <code>string</code>
-保存为base64图形数据
-
-**Kind**: inner method of <code>[jmGraph](#module_jmGraph)</code>  
-**Returns**: <code>string</code> - 当前画布图的base64字符串  
 <a name="jmList"></a>
 
 ## jmList
@@ -2270,7 +316,7 @@ img对象
 * [jmProperty](#jmProperty)
     * [new jmProperty()](#new_jmProperty_new)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
 
 <a name="new_jmProperty_new"></a>
 
@@ -2291,7 +337,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmProperty.graph : <code>jmGraph</code>
+### jmProperty.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmProperty](#jmProperty)</code>  
@@ -2380,7 +426,7 @@ img对象
     * [.zIndex](#jmControl+zIndex) : <code>object</code>
     * [.cursor](#jmControl+cursor)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
 
@@ -2538,7 +584,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmControl.graph : <code>jmGraph</code>
+### jmControl.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
@@ -2588,7 +634,7 @@ img对象
     * [.zIndex](#jmControl+zIndex) : <code>object</code>
     * [.cursor](#jmControl+cursor)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
 
@@ -2756,7 +802,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmPath.graph : <code>jmGraph</code>
+### jmPath.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
@@ -2810,7 +856,7 @@ img对象
     * [.zIndex](#jmControl+zIndex) : <code>object</code>
     * [.cursor](#jmControl+cursor)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
 
@@ -3039,7 +1085,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmArc.graph : <code>jmGraph</code>
+### jmArc.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
@@ -3093,7 +1139,7 @@ img对象
     * [.zIndex](#jmControl+zIndex) : <code>object</code>
     * [.cursor](#jmControl+cursor)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
 
@@ -3327,7 +1373,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmArraw.graph : <code>jmGraph</code>
+### jmArraw.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
@@ -3377,7 +1423,7 @@ img对象
     * [.zIndex](#jmControl+zIndex) : <code>object</code>
     * [.cursor](#jmControl+cursor)
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
-    * [.graph](#jmProperty+graph) : <code>jmGraph</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
 
@@ -3559,7 +1605,7 @@ img对象
 
 <a name="jmProperty+graph"></a>
 
-### jmBezier.graph : <code>jmGraph</code>
+### jmBezier.graph : <code>[jmGraph](#jmGraph)</code>
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
@@ -3587,6 +1633,1844 @@ img对象
 | --- | --- | --- |
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmCircle"></a>
+
+## jmCircle
+**Kind**: global class  
+<a name="new_jmCircle_new"></a>
+
+### new jmCircle(params)
+画规则的圆弧
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高 |
+
+<a name="jmHArc"></a>
+
+## jmHArc ⇐ <code>[jmArc](#jmArc)</code>
+**Kind**: global class  
+**Extends:** <code>[jmArc](#jmArc)</code>  
+
+* [jmHArc](#jmHArc) ⇐ <code>[jmArc](#jmArc)</code>
+    * [new jmHArc(params)](#new_jmHArc_new)
+    * [.minRadius](#jmHArc+minRadius) : <code>number</code>
+    * [.maxRadius](#jmHArc+maxRadius) : <code>number</code>
+    * [.center](#jmArc+center) : <code>point</code>
+    * [.radius](#jmArc+radius) : <code>number</code>
+    * [.startAngle](#jmArc+startAngle) : <code>number</code>
+    * [.endAngle](#jmArc+endAngle) : <code>number</code>
+    * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmHArc_new"></a>
+
+### new jmHArc(params)
+画空心圆弧,继承自jmPath
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针 |
+
+<a name="jmHArc+minRadius"></a>
+
+### jmHArc.minRadius : <code>number</code>
+设定或获取内空心圆半径
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**For**: jmHArc  
+**Properties**
+
+| Name |
+| --- |
+| minRadius | 
+
+<a name="jmHArc+maxRadius"></a>
+
+### jmHArc.maxRadius : <code>number</code>
+设定或获取外空心圆半径
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**For**: jmHArc  
+**Properties**
+
+| Name |
+| --- |
+| maxRadius | 
+
+<a name="jmArc+center"></a>
+
+### jmHArc.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
+
+<a name="jmArc+radius"></a>
+
+### jmHArc.radius : <code>number</code>
+半径
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmArc+startAngle"></a>
+
+### jmHArc.startAngle : <code>number</code>
+扇形起始角度
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| startAngle | 
+
+<a name="jmArc+endAngle"></a>
+
+### jmHArc.endAngle : <code>number</code>
+扇形结束角度
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| endAngle | 
+
+<a name="jmArc+anticlockwise"></a>
+
+### jmHArc.anticlockwise : <code>boolean</code>
+可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| anticlockwise | 
+
+<a name="jmPath+points"></a>
+
+### jmHArc.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[points](#jmPath+points)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmHArc.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmHArc.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmHArc.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmHArc.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmHArc.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmHArc.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmHArc.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmHArc.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmHArc.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmHArc.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmHArc.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmHArc.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmHArc.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmHArc](#jmHArc)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmHArc.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmHArc](#jmHArc)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmLine"></a>
+
+## jmLine ⇐ <code>[jmPath](#jmPath)</code>
+**Kind**: global class  
+**Extends:** <code>[jmPath](#jmPath)</code>  
+
+* [jmLine](#jmLine) ⇐ <code>[jmPath](#jmPath)</code>
+    * [new jmLine(params)](#new_jmLine_new)
+    * [.start](#jmLine+start) : <code>point</code>
+    * [.end](#jmLine+end) : <code>point</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmLine_new"></a>
+
+### new jmLine(params)
+画一条直线
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4) |
+
+<a name="jmLine+start"></a>
+
+### jmLine.start : <code>point</code>
+控制起始点
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**For**: jmLine  
+**Properties**
+
+| Name |
+| --- |
+| start | 
+
+<a name="jmLine+end"></a>
+
+### jmLine.end : <code>point</code>
+控制结束点
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**For**: jmLine  
+**Properties**
+
+| Name |
+| --- |
+| end | 
+
+<a name="jmPath+points"></a>
+
+### jmLine.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Overrides:** <code>[points](#jmPath+points)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmLine.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmLine.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmLine.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmLine.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmLine.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmLine.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmLine.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmLine.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmLine.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmLine.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmLine.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmLine.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmLine.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmLine](#jmLine)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmLine.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmLine](#jmLine)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmPrismatic"></a>
+
+## jmPrismatic ⇐ <code>[jmPath](#jmPath)</code>
+**Kind**: global class  
+**Extends:** <code>[jmPath](#jmPath)</code>  
+
+* [jmPrismatic](#jmPrismatic) ⇐ <code>[jmPath](#jmPath)</code>
+    * [new jmPrismatic(params)](#new_jmPrismatic_new)
+    * [.center](#jmPrismatic+center) : <code>point</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmPrismatic_new"></a>
+
+### new jmPrismatic(params)
+画棱形
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 参数 center=棱形中心点，width=棱形宽,height=棱形高 |
+
+<a name="jmPrismatic+center"></a>
+
+### jmPrismatic.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
+
+<a name="jmPath+points"></a>
+
+### jmPrismatic.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Overrides:** <code>[points](#jmPath+points)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmPrismatic.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmPrismatic.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmPrismatic.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmPrismatic.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmPrismatic.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmPrismatic.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmPrismatic.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmPrismatic.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmPrismatic.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmPrismatic.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmPrismatic.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmPrismatic.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmPrismatic.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmPrismatic.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmPrismatic](#jmPrismatic)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmRect"></a>
+
+## jmRect ⇐ <code>[jmPath](#jmPath)</code>
+**Kind**: global class  
+**Extends:** <code>[jmPath](#jmPath)</code>  
+
+* [jmRect](#jmRect) ⇐ <code>[jmPath](#jmPath)</code>
+    * [new jmRect(params)](#new_jmRect_new)
+    * [.radius](#jmRect+radius) : <code>number</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmRect_new"></a>
+
+### new jmRect(params)
+画矩形
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度 |
+
+<a name="jmRect+radius"></a>
+
+### jmRect.radius : <code>number</code>
+圆角半径
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmPath+points"></a>
+
+### jmRect.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Overrides:** <code>[points](#jmPath+points)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmRect.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmRect.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmRect.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmRect.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmRect.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmRect.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmRect.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmRect.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmRect.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmRect.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmRect.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmRect.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmRect.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmRect](#jmRect)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmRect.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmRect](#jmRect)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmArrawLine"></a>
+
+## jmArrawLine
+**Kind**: global class  
+<a name="new_jmArrawLine_new"></a>
+
+### new jmArrawLine(params)
+带箭头的直线,继承jmPath
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点) |
+
+<a name="jmImage"></a>
+
+## jmImage ⇐ <code>[jmControl](#jmControl)</code>
+**Kind**: global class  
+**Extends:** <code>[jmControl](#jmControl)</code>  
+
+* [jmImage](#jmImage) ⇐ <code>[jmControl](#jmControl)</code>
+    * [new jmImage(params)](#new_jmImage_new)
+    * [.sourcePosition](#jmImage+sourcePosition) : <code>point</code>
+    * [.sourceWidth](#jmImage+sourceWidth) : <code>number</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmImage_new"></a>
+
+### new jmImage(params)
+图片控件，继承自jmControlparams参数中image为指定的图片源地址或图片img对象，postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 控件参数 |
+
+<a name="jmImage+sourcePosition"></a>
+
+### jmImage.sourcePosition : <code>point</code>
+画图开始剪切位置
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| sourcePosition | 
+
+<a name="jmImage+sourceWidth"></a>
+
+### jmImage.sourceWidth : <code>number</code>
+被剪切宽度
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| sourceWidth | 
+
+<a name="jmControl+type"></a>
+
+### jmImage.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmImage.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmImage.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmImage.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmImage.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmImage.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmImage.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmImage.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmImage.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmImage.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmImage.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmImage.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmImage.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmImage](#jmImage)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmImage.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmImage](#jmImage)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmLabel"></a>
+
+## jmLabel ⇐ <code>[jmControl](#jmControl)</code>
+**Kind**: global class  
+**Extends:** <code>[jmControl](#jmControl)</code>  
+
+* [jmLabel](#jmLabel) ⇐ <code>[jmControl](#jmControl)</code>
+    * [new jmLabel(params)](#new_jmLabel_new)
+    * [.text](#jmLabel+text) : <code>string</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmLabel_new"></a>
+
+### new jmLabel(params)
+显示文字控件
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | params参数:style=样式，value=显示的文字 |
+
+<a name="jmLabel+text"></a>
+
+### jmLabel.text : <code>string</code>
+显示的内容
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| text | 
+
+<a name="jmControl+type"></a>
+
+### jmLabel.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmLabel.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmLabel.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmLabel.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmLabel.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmLabel.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmLabel.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmLabel.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmLabel.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmLabel.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmLabel.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmLabel.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmLabel.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmLabel](#jmLabel)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmLabel.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmLabel](#jmLabel)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmResize"></a>
+
+## jmResize ⇐ <code>[jmRect](#jmRect)</code>
+**Kind**: global class  
+**Extends:** <code>[jmRect](#jmRect)</code>  
+
+* [jmResize](#jmResize) ⇐ <code>[jmRect](#jmRect)</code>
+    * [new jmResize()](#new_jmResize_new)
+    * [.rectSize](#jmResize+rectSize) : <code>number</code>
+    * [.resizable](#jmResize+resizable) : <code>boolean</code>
+    * [.radius](#jmRect+radius) : <code>number</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>object</code>
+    * [.cursor](#jmControl+cursor)
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmResize_new"></a>
+
+### new jmResize()
+可拉伸的缩放控件继承jmRect如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
+
+<a name="jmResize+rectSize"></a>
+
+### jmResize.rectSize : <code>number</code>
+拉动的小方块大小
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| rectSize | 
+
+<a name="jmResize+resizable"></a>
+
+### jmResize.resizable : <code>boolean</code>
+是否可以拉大缩小
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| resizable | 
+
+<a name="jmRect+radius"></a>
+
+### jmResize.radius : <code>number</code>
+圆角半径
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmPath+points"></a>
+
+### jmResize.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmResize.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmResize.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmResize.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmResize.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmResize.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmResize.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmResize.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmResize.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmResize.zIndex : <code>object</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Read only**: true  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmResize.cursor
+设置鼠标指针
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
+
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmResize.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmResize.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmResize.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmResize](#jmResize)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmResize.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmResize](#jmResize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmGraph"></a>
+
+## jmGraph
+**Kind**: global class  
+
+* [jmGraph](#jmGraph)
+    * [new jmGraph(canvas, option, callback)](#new_jmGraph_new)
+    * [.util](#jmGraph+util) : <code>[jmUtils](#jmUtils)</code>
+    * [.shapes](#jmGraph+shapes) : <code>object</code>
+    * [.width](#jmGraph+width) : <code>number</code>
+    * [.height](#jmGraph+height) : <code>number</code>
+    * [.autoRefresh(callback)](#jmGraph+autoRefresh)
+
+<a name="new_jmGraph_new"></a>
+
+### new jmGraph(canvas, option, callback)
+jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| canvas | <code>element</code> | 标签canvas |
+| option | <code>object</code> | 参数：{width:宽,height:高} |
+| callback | <code>function</code> | 初始化后的回调 |
+
+<a name="jmGraph+util"></a>
+
+### jmGraph.util : <code>[jmUtils](#jmUtils)</code>
+工具类
+
+**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| utils/util | 
+
+<a name="jmGraph+shapes"></a>
+
+### jmGraph.shapes : <code>object</code>
+当前所有图形类型
+
+**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| shapes | 
+
+<a name="jmGraph+width"></a>
+
+### jmGraph.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmGraph+height"></a>
+
+### jmGraph.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmGraph+autoRefresh"></a>
+
+### jmGraph.autoRefresh(callback)
+自动刷新画版
+
+**Kind**: instance method of <code>[jmGraph](#jmGraph)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| callback | <code>function</code> | 执行回调 |
 
 <a name="add"></a>
 
@@ -3978,7 +3862,7 @@ img对象
 | Param | Type | Description |
 | --- | --- | --- |
 | m | <code>boolean</code> | true=可以移动，false=不可移动或清除移动。 |
-| [graph] | <code>jmGraph</code> | 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。 |
+| [graph] | <code>[jmGraph](#jmGraph)</code> | 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。 |
 
 <a name="getPoint"></a>
 
@@ -4006,6 +3890,288 @@ img对象
 | y | <code>number</code> | y轴偏移量 |
 | [trans] | <code>boolean</code> | 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true |
 
+<a name="draw"></a>
+
+## draw()
+重写基类画图，此处为画一个完整的圆
+
+**Kind**: global function  
+<a name="getBounds"></a>
+
+## getBounds() ⇒ <code>bound</code>
+获取当前控件的边界
+
+**Kind**: global function  
+**Returns**: <code>bound</code> - 当前控件边界  
+<a name="checkPoint"></a>
+
+## checkPoint(p) ⇒ <code>boolean</code>
+重写检查坐标是否在区域内
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - 如果在则返回true,否则返回false  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| p | <code>point</code> | 待检查的坐标 |
+
+<a name="sourceHeight"></a>
+
+## sourceHeight() ⇒ <code>number</code>
+被剪切高度
+
+**Kind**: global function  
+<a name="image"></a>
+
+## image() ⇒ <code>img</code>
+设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
+
+**Kind**: global function  
+<a name="draw"></a>
+
+## draw()
+重写控件绘制根据父边界偏移和此控件参数绘制图片
+
+**Kind**: global function  
+<a name="getBounds"></a>
+
+## getBounds() ⇒ <code>object</code>
+获取当前控件的边界
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 边界对象(left,top,right,bottom,width,height)  
+<a name="getImage"></a>
+
+## getImage() ⇒ <code>img</code>
+img对象
+
+**Kind**: global function  
+**Returns**: <code>img</code> - 图片对象  
+<a name="testSize"></a>
+
+## testSize() ⇒ <code>object</code>
+测试获取文本所占大小
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 含文本大小的对象  
+<a name="draw"></a>
+
+## draw()
+根据位置偏移画字符串
+
+**Kind**: global function  
+<a name="reset"></a>
+
+## reset(px, py, dx, dy)
+按移动偏移量重置当前对象，并触发大小和位置改变事件
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| px | <code>number</code> | 位置X轴偏移 |
+| py | <code>number</code> | 位置y轴偏移 |
+| dx | <code>number</code> | 大小x轴偏移 |
+| dy | <code>number</code> | 大小y轴偏移 |
+
+<a name="init"></a>
+
+## init()
+初始化画布
+
+**Kind**: global function  
+<a name="create"></a>
+
+## create() ⇒ <code>[jmGraph](#jmGraph)</code>
+创建jmGraph的静态对象
+
+**Kind**: global function  
+**Returns**: <code>[jmGraph](#jmGraph)</code> - jmGraph实例对象  
+<a name="getPosition"></a>
+
+## getPosition() ⇒ <code>postion</code>
+获取当前画布在浏览器中的绝对定位
+
+**Kind**: global function  
+**Returns**: <code>postion</code> - 返回定位坐标  
+<a name="registerShape"></a>
+
+## registerShape(name, shape)
+注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 控件图形名称 |
+| shape | <code>class</code> | 图形控件类型 |
+
+<a name="createShape"></a>
+
+## createShape(name, args) ⇒ <code>object</code>
+从已注册的图形类创建图形简单直观创建对象
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 已实例化控件的对象  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 注册控件的名称 |
+| args | <code>object</code> | 实例化控件的参数 |
+
+<a name="createShadow"></a>
+
+## createShadow(x, y, blur, color) ⇒ <code>[jmShadow](#jmShadow)</code>
+生成阴影对象
+
+**Kind**: global function  
+**Returns**: <code>[jmShadow](#jmShadow)</code> - 阴影对象  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | x偏移量 |
+| y | <code>number</code> | y偏移量 |
+| blur | <code>number</code> | 模糊值 |
+| color | <code>string</code> | 颜色 |
+
+<a name="createLinearGradient"></a>
+
+## createLinearGradient(x1, y1, x2, y2) ⇒ <code>[jmGradient](#jmGradient)</code>
+生成线性渐变对象
+
+**Kind**: global function  
+**Returns**: <code>[jmGradient](#jmGradient)</code> - 线性渐变对象  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x1 | <code>number</code> | 线性渐变起始点X坐标 |
+| y1 | <code>number</code> | 线性渐变起始点Y坐标 |
+| x2 | <code>number</code> | 线性渐变结束点X坐标 |
+| y2 | <code>number</code> | 线性渐变结束点Y坐标 |
+
+<a name="createRadialGradient"></a>
+
+## createRadialGradient(x1, y1, r1, x2, y2, r2) ⇒ <code>[jmGradient](#jmGradient)</code>
+生成放射渐变对象
+
+**Kind**: global function  
+**Returns**: <code>[jmGradient](#jmGradient)</code> - 放射渐变对象  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x1 | <code>number</code> | 放射渐变小圆中心X坐标 |
+| y1 | <code>number</code> | 放射渐变小圆中心Y坐标 |
+| r1 | <code>number</code> | 放射渐变小圆半径 |
+| x2 | <code>number</code> | 放射渐变大圆中心X坐标 |
+| y2 | <code>number</code> | 放射渐变大圆中心Y坐标 |
+| r2 | <code>number</code> | 放射渐变大圆半径 |
+
+<a name="refresh"></a>
+
+## refresh()
+重新刷新整个画板以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+
+**Kind**: global function  
+<a name="redraw"></a>
+
+## redraw([w], [h])
+重新刷新整个画板此方法直接重画，与refresh效果类似
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [w] | <code>number</code> | 清除画布的宽度 |
+| [h] | <code>number</code> | 清除画布的高度 |
+
+<a name="clear"></a>
+
+## clear([w], [h])
+清除画布
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [w] | <code>number</code> | 清除画布的宽度 |
+| [h] | <code>number</code> | 清除画布的高度 |
+
+<a name="css"></a>
+
+## css(name, value)
+设置画布样式，此处只是设置其css样式
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 样式名 |
+| value | <code>string</code> | 样式值 |
+
+<a name="createPath"></a>
+
+## createPath(points, style) ⇒ <code>[jmPath](#jmPath)</code>
+生成路径对象
+
+**Kind**: global function  
+**Returns**: <code>[jmPath](#jmPath)</code> - 路径对象jmPath  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| points | <code>array</code> | 路径中的描点集合 |
+| style | <code>style</code> | 当前路径的样式 |
+
+<a name="createLine"></a>
+
+## createLine(start, end, 直线的样式) ⇒ <code>[jmLine](#jmLine)</code>
+生成直线
+
+**Kind**: global function  
+**Returns**: <code>[jmLine](#jmLine)</code> - 直线对象  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| start | <code>point</code> | 直线的起点 |
+| end | <code>point</code> | 直线的终点 |
+| 直线的样式 | <code>style</code> |  |
+
+<a name="zoomOut"></a>
+
+## zoomOut()
+缩小整个画布按比例0.9
+
+**Kind**: global function  
+<a name="zoomIn"></a>
+
+## zoomIn()
+放大 每次增大0.1的比例
+
+**Kind**: global function  
+<a name="zoomActual"></a>
+
+## zoomActual()
+大小复原
+
+**Kind**: global function  
+<a name="scale"></a>
+
+## scale(dx, dy)
+放大缩小画布
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dx | <code>number</code> | 缩放X轴比例 |
+| dy | <code>number</code> | 缩放Y轴比例 |
+
+<a name="toDataURL"></a>
+
+## toDataURL() ⇒ <code>string</code>
+保存为base64图形数据
+
+**Kind**: global function  
+**Returns**: <code>string</code> - 当前画布图的base64字符串  
 <a name="jmUtils"></a>
 
 ## .jmUtils

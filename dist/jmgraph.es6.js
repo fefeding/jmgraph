@@ -3124,9 +3124,6 @@ export { jmBezier };
  * 画规则的圆弧
  *
  * @class jmCircle
- * @for jmGraph
- * @module jmGraph
- * @extends jmArc
  * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
  */
 class jmCircle extends jmArc {		

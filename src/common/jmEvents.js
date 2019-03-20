@@ -7,7 +7,7 @@ import {jmUtils} from "./jmUtils.js";
  */
 class jmEvents {
 
-	constructor(container,target) {
+	constructor(container, target) {
 		this.container = container;
 		this.target = target || container;
 		this.mouseHandler = new jmMouseEvent(this, container, target);

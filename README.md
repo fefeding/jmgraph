@@ -8,7 +8,7 @@ jmGraph
 
 - 主页：[https://jiamao.github.io/jmgraph/](https://jiamao.github.io/jmgraph/)  
 - 示例：[https://jiamao.github.io/jmgraph/example/index.html](https://jiamao.github.io/jmgraph/example/index.html)
-- API: [jmGraph](./jmGraph.md)
+- API: [https://github.com/jiamao/jmgraph/blob/master/api/jmGraph.md](https://github.com/jiamao/jmgraph/blob/master/api/jmGraph.md)
 
 安装
 ---

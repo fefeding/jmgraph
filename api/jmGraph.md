@@ -423,8 +423,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -540,11 +540,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmControl.zIndex : <code>object</code>
+### jmControl.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -553,16 +552,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmControl.cursor
-设置鼠标指针
+### jmControl.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -631,8 +624,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -759,11 +752,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmPath.zIndex : <code>object</code>
+### jmPath.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -772,16 +764,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmPath.cursor
-设置鼠标指针
+### jmPath.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -853,8 +839,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -1042,11 +1028,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmArc.zIndex : <code>object</code>
+### jmArc.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -1055,16 +1040,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmArc.cursor
-设置鼠标指针
+### jmArc.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -1136,8 +1115,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -1330,11 +1309,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmArraw.zIndex : <code>object</code>
+### jmArraw.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -1343,16 +1321,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmArraw.cursor
-设置鼠标指针
+### jmArraw.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -1420,8 +1392,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -1562,11 +1534,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmBezier.zIndex : <code>object</code>
+### jmBezier.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -1575,16 +1546,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmBezier.cursor
-设置鼠标指针
+### jmBezier.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -1672,8 +1637,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -1887,11 +1852,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmHArc.zIndex : <code>object</code>
+### jmHArc.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -1900,16 +1864,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmHArc.cursor
-设置鼠标指针
+### jmHArc.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -1978,8 +1936,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -2133,11 +2091,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmLine.zIndex : <code>object</code>
+### jmLine.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmLine](#jmLine)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -2146,16 +2103,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmLine.cursor
-设置鼠标指针
+### jmLine.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmLine](#jmLine)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -2223,8 +2174,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -2366,11 +2317,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmPrismatic.zIndex : <code>object</code>
+### jmPrismatic.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -2379,16 +2329,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmPrismatic.cursor
-设置鼠标指针
+### jmPrismatic.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -2456,8 +2400,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -2597,11 +2541,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmRect.zIndex : <code>object</code>
+### jmRect.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmRect](#jmRect)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -2610,16 +2553,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmRect.cursor
-设置鼠标指针
+### jmRect.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmRect](#jmRect)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -2701,8 +2638,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -2841,11 +2778,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmImage.zIndex : <code>object</code>
+### jmImage.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -2854,16 +2790,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmImage.cursor
-设置鼠标指针
+### jmImage.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -2930,8 +2860,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -3060,11 +2990,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmLabel.zIndex : <code>object</code>
+### jmLabel.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -3073,16 +3002,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmLabel.cursor
-设置鼠标指针
+### jmLabel.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |
@@ -3152,8 +3075,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
-    * [.zIndex](#jmControl+zIndex) : <code>object</code>
-    * [.cursor](#jmControl+cursor)
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
@@ -3314,11 +3237,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+zIndex"></a>
 
-### jmResize.zIndex : <code>object</code>
+### jmResize.zIndex : <code>number</code>
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmResize](#jmResize)</code>  
-**Read only**: true  
 **Properties**
 
 | Name |
@@ -3327,17 +3249,11 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 <a name="jmControl+cursor"></a>
 
-### jmResize.cursor
-设置鼠标指针
+### jmResize.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmResize](#jmResize)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
-**For**: jmControl  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| cur | <code>string</code> | css鼠标指针标识,例如:pointer,move等 |
-
 **Properties**
 
 | Name |

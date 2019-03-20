@@ -174,8 +174,7 @@ class jmControl extends jmProperty{
 	/**
 	 * 控件层级关系，发生改变时，需要重新调整排序
 	 * @property zIndex
-	 * @readonly
-	 * @type {object}
+	 * @type {number}
 	 */
 	get zIndex() {
 		let s = this.__pro('zIndex');
@@ -192,10 +191,10 @@ class jmControl extends jmProperty{
 
 	/**
 	 * 设置鼠标指针
+	 * css鼠标指针标识,例如:pointer,move等
 	 * 
 	 * @property cursor
-	 * @for jmControl
-	 * @param {string} cur css鼠标指针标识,例如:pointer,move等
+	 * @type {string}
 	 */
 	set cursor(cur) {	
 		var graph = this.graph ;

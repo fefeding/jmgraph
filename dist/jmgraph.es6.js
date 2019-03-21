@@ -826,6 +826,7 @@ export { jmObject };
  * 对象属性管理
  * 
  * @class jmProperty
+ * @extends jmObject
  * @require jmObject
  */
 class jmProperty extends jmObject {		
@@ -3123,6 +3124,7 @@ export { jmBezier };
  * 画规则的圆弧
  *
  * @class jmCircle
+ * @extends jmArc
  * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
  */
 class jmCircle extends jmArc {		
@@ -3583,6 +3585,7 @@ export { jmRect };
  * 带箭头的直线,继承jmPath
  *
  * @class jmArrawLine
+ * @extends jmLine
  * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
  */	
 class jmArrawLine extends jmLine {	
@@ -4224,6 +4227,7 @@ export { jmResize };
  *
  * @module jmGraph
  * @class jmGraph
+ * @extends jmControl
  * @param {element} canvas 标签canvas
  * @param {object} option 参数：{width:宽,height:高}
  * @param {function} callback 初始化后的回调

@@ -23,6 +23,7 @@ import {jmResize} from "./controls/jmResize.js";
  *
  * @module jmGraph
  * @class jmGraph
+ * @extends jmControl
  * @param {element} canvas 标签canvas
  * @param {object} option 参数：{width:宽,height:高}
  * @param {function} callback 初始化后的回调

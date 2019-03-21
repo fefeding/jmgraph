@@ -3,6 +3,7 @@ import { jmObject } from "./jmObject.js";
  * 对象属性管理
  * 
  * @class jmProperty
+ * @extends jmObject
  * @require jmObject
  */
 class jmProperty extends jmObject {		

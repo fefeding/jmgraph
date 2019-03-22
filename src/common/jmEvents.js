@@ -19,7 +19,7 @@ class jmEvents {
 		this.container.raiseEvent('touchstart',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			if(evt.preventDefault) evt.preventDefault();
+			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -29,7 +29,7 @@ class jmEvents {
 		this.container.raiseEvent('touchmove',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			if(evt.preventDefault) evt.preventDefault();
+			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -40,7 +40,7 @@ class jmEvents {
 		this.container.raiseEvent('touchend',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			if(evt.preventDefault) evt.preventDefault();
+			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -51,7 +51,7 @@ class jmEvents {
 		this.container.raiseEvent('touchcancel',evt);
 		let t = evt.target || evt.srcElement;
 		if(t == target) {
-			if(evt.preventDefault) evt.preventDefault();
+			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};

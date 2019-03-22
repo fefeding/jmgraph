@@ -8,18 +8,20 @@
 			margin:0;
 			padding: 0;
 		}
+		canvas {
+			cursor: pointer;
+		}
 		#mycanvas_container{
 			overflow: hidden;		
-		}
+		}		
 	</style>
-	<!--<script type="text/javascript" src="../src/jmGraph.js"></script>
-	<script type="text/javascript" src="../dist/jmGraph.min.js"></script>-->	
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
     <script type="module">
-        import jmGraph from "../dist/jmgraph.es6.js";
+        //import jmGraph from "../dist/jmgraph.es6.js";
+        import jmGraph from "../src/jmGraph.js";
 		var container = document.getElementById('mycanvas_container');
 		
 		var g = new jmGraph(container, {
@@ -51,6 +53,10 @@
 			});
 			g.children.add(rect);
 			rect.canMove(true);
+
+			rect.on('click', function(e) {
+				alert('click');
+			});
 
 			function update() {
 				if(g.needUpdate) g.redraw();

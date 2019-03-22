@@ -42,7 +42,7 @@ function () {
       var t = evt.target || evt.srcElement;
 
       if (t == this.target) {
-        if (evt.preventDefault) evt.preventDefault();
+        //if(evt.preventDefault) evt.preventDefault();
         return false;
       }
     }
@@ -54,7 +54,7 @@ function () {
       var t = evt.target || evt.srcElement;
 
       if (t == this.target) {
-        if (evt.preventDefault) evt.preventDefault();
+        //if(evt.preventDefault) evt.preventDefault();
         return false;
       }
     }
@@ -66,7 +66,7 @@ function () {
       var t = evt.target || evt.srcElement;
 
       if (t == this.target) {
-        if (evt.preventDefault) evt.preventDefault();
+        //if(evt.preventDefault) evt.preventDefault();
         return false;
       }
     }
@@ -78,7 +78,7 @@ function () {
       var t = evt.target || evt.srcElement;
 
       if (t == target) {
-        if (evt.preventDefault) evt.preventDefault();
+        //if(evt.preventDefault) evt.preventDefault();
         return false;
       }
     }
@@ -4027,6 +4027,7 @@ function (_jmProperty) {
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
     _this2.graph = params.graph || null;
+    _this2.zIndex = params.zIndex || 0;
 
     _this2.initializing();
 
@@ -4135,6 +4136,26 @@ function (_jmProperty) {
     /**
      * 设定样式到context
      * 处理样式映射，转换渐变和阴影对象为标准canvas属性
+     * 样式一览
+    	| 简化名称 | 原生名称 | 说明
+    	| :- | :- | :- | 
+    	| fill | fillStyle | 用于填充绘画的颜色、渐变或模式
+    	| stroke | strokeStyle | 用于笔触的颜色、渐变或模式
+    	| shadow | 没有对应的 | 最终会解析成以下几个属性，格式：'0,0,10,#fff'或g.createShadow(0,0,20,'#000');
+    	| shadow.blur | shadowBlur | 用于阴影的模糊级别
+    	| shadow.x | shadowOffsetX | 阴影距形状的水平距离
+    	| shadow.y | shadowOffsetY | 阴影距形状的垂直距离
+    	| shadow.color | shadowColor | 阴影颜色，格式：'#000'、'#46BF86'、'rgb(255,255,255)'或'rgba(39,72,188,0.5)'
+    	| lineWidth | lineWidth | 当前的线条宽度
+    	| miterLimit | miterLimit | 最大斜接长度
+    	| font | font | 请使用下面的 fontSize 和 fontFamily
+    	| fontSize | font | 字体大小
+    	| fontFamily | font | 字体
+    	| opacity | globalAlpha | 绘图的当前 alpha 或透明值
+    	| textAlign | textAlign | 文本内容的当前对齐方式
+    	| textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
+    	| lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
+    	| lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
      * 
      * @method setStyle
      * @for jmControl
@@ -5405,7 +5426,7 @@ function (_jmProperty) {
     get: function get() {
       var s = this.__pro('zIndex');
 
-      if (!s) s = this.__pro('zIndex', {});
+      if (!s) s = this.__pro('zIndex', 0);
       return s;
     },
     set: function set(v) {

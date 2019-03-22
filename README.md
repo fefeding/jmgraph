@@ -127,7 +127,6 @@ function init(g){
 | textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
 | lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
 | lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
-| zIndex | - | 控件层级，同级节点值越大层级越高
 
 
 事件
@@ -168,7 +167,7 @@ line.bind('mouseover',function(evt) {
 [在线示例](http://jiamao.github.io/jmgraph/example/controls/line.html)
 
 ```javascript
-var path = graph.createPath(null,style);
+var path = graph.createPath(null, style);
 path.points.push({x:10,y:10});
 path.points.push({x:10,y:60});
 path.points.push({x:80,y:20});
@@ -198,13 +197,13 @@ var arc1 = g.createShape('arc', {
 
 ```javascript
 //带箭头的直线
-var shape = g.createShape('arrawline',{
+var shape = g.createShape('arrawline', {
     style:style,
     start: {x:100,y:100},
     end: {x: 200, y: 350}
 });	
 //一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
-var arraw = g.createShape('arraw',{
+var arraw = g.createShape('arraw', {
     style:style,
     start: {x:150, y:120},
     end: {x: 160, y: 150}

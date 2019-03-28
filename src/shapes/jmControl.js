@@ -36,7 +36,7 @@ const jmStyleMap = {
  * @class jmControl
  * @extends jmProperty
  */	
-class jmControl extends jmProperty{	
+class jmControl extends jmProperty {	
 
 	constructor(params, t) {
 		params = params||{};

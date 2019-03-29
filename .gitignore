@@ -3,7 +3,6 @@
 /out
 /site
 /Makefile
-/index.html
 /example/qrcode.jpg
 node_modules
 build/package-lock.json

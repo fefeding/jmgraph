@@ -1,0 +1,131 @@
+/* basic */
+html, body, div, span, h1, h2, h3, h4, img, strong, ol, ul, li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+body {
+  background: #F4F4F4;
+  min-width: 1000px;
+}
+
+body, button, input, select, textarea {
+  font: 16px/1.62 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #444;
+  text-rendering: optimizelegibility;
+}
+
+h2 {
+  color: #323A41;
+  font-size: 36px;
+  padding: 1em 0 5px;
+  font-weight: normal;
+}
+
+h3 {
+  margin: 1.2em 0 .6em 0;
+  font-size: 28px;
+  font-weight: normal;
+}
+
+ul, ol { list-style-position: inside; margin-left: 2em; }
+ul { list-style: circle inline; }
+a { color: #83867E; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.clearfix:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.clearfix { display: inline-block; }
+html[xmlns] .clearfix { display: block; }
+* html .clearfix { height: 1%; }
+.clear {clear:both;}
+
+
+html,body {
+	background-color: #000;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAEVSURBVDhPnZNLDsUgDANzJFr6uf/J+jSRBrldvgWFQuI4xtR5ns++78+2bT1YM+acaybmuq6H2fV93yunTAKAAA9N4B9AQBwWPI6jC1UmEyQb1gQJxlo2xIwxOpa5+IBmADOVCSCRwRpGguY+8d2O9AwWVDZ5DrP8B7CZUNmKJLJHMPuySiHVwpySpv0pNAGAcW51AdVDCUoWBuYNCaBOimub2mBdsd7QNwDk9ZoAQIpMB2V/MklTaawsICvt0CAaSA2SOnupmZ7RfM7djtWlrLjpUK2guOrSjhVdMCt/rx7aX0Fl2rej1UlM5wKc/pGZjF8gHpKU16rx7F02+mQ9wHzyesa3ASjt2tr3ARrfmvwrqO3/ANjLzlibEGAmAAAAAElFTkSuQmCC);
+}
+
+
+/* #header */
+#header {
+  height: 80px;
+  margin-top: 4px;
+  background: -moz-linear-gradient(top, #4D4D4B, #343434);
+  background: -webkit-gradient(linear, center top, center bottom, from(#4D4D4B), to(#343434));
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#4D4D4B, endColorstr=#343434);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#4D4D4B, endColorstr=#343434)";
+  background-color: #4D4D4B;
+  box-shadow: 0 2px 6px #000;
+  -webkit-box-shadow:0 2px 6px #000;
+  -moz-box-shadow:0 2px 6px #000;
+}
+
+#header-content {
+	width: 950px;
+	margin: 0 auto;
+}
+
+#logo {
+  float:left;
+  margin: 10px 0;
+  color: #61AE95;
+  font-size: 36px;
+}
+
+/* 头部导航 */
+#nav {
+	margin: 30px 0 0 60px;
+	list-style: none;
+}
+#nav li {
+	float: left;
+	margin: 0 10px;
+	font-size: 22px;
+}
+#nav li a {
+	color: #71765A;
+}
+#nav li a:hover {
+	color: #626F90;
+}
+#nav li a.current {
+	color: #626F90;
+}
+
+/* 页面标题 */
+#pageTitle {
+  border-bottom: 1px solid #E0E0E0;
+  box-shadow: 0 1px #fff;
+}
+
+#pageTitle h1 {
+  margin: 0 auto;
+  color: #323A41;
+  font-size: 36px;
+  padding: 1em 0 5px;
+  font-weight: normal;
+}
+
+/* 主页部分 */
+#content-body {
+  background: #F4F4F4;
+  height: 100%;
+  margin-bottom: 50px;
+}
+#content {	
+	min-height: 600px;
+  width: 950px;
+  margin: 0 auto;
+}
+
+#example-image a img {
+  width: 200px;
+  border:2px solid transparent;
+}
+#example-image a:hover img {
+  border:2px solid #1ce;
+}

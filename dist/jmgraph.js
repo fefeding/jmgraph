@@ -678,6 +678,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+var PROPERTY_KEY = Symbol("properties");
 /**
  * 对象属性管理
  * 
@@ -685,6 +686,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
  * @extends jmObject
  * @require jmObject
  */
+
 var jmProperty =
 /*#__PURE__*/
 function (_jmObject) {
@@ -696,8 +698,7 @@ function (_jmObject) {
     _classCallCheck(this, jmProperty);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(jmProperty).call(this));
-    _this.__properties = {};
-    _this.__eventHandles = {};
+    _this[PROPERTY_KEY] = {};
     return _this;
   }
   /**
@@ -717,19 +718,20 @@ function (_jmObject) {
       }
 
       if (pars) {
+        var pros = this[PROPERTY_KEY];
         var name = pars[0];
 
         if (pars.length > 1) {
           var value = pars[1];
           var args = {
-            oldValue: this.__properties[name],
+            oldValue: pros[name],
             newValue: value
           };
-          this.__properties[name] = pars[1];
+          pros[name] = pars[1];
           if (this.emit) this.emit('propertyChange', name, args);
           return pars[1];
         } else if (pars.length == 1) {
-          return this.__properties[name];
+          return pros[name];
         }
       }
     }

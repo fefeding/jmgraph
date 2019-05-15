@@ -822,6 +822,9 @@ class jmObject {
 
 export { jmObject };
 
+
+const PROPERTY_KEY = Symbol("properties");
+
 /**
  * 对象属性管理
  * 
@@ -833,8 +836,8 @@ class jmProperty extends jmObject {
 	
 	constructor() {
 		super();
-		this.__properties = {};
-		this.__eventHandles = {};
+		
+		this[PROPERTY_KEY] = {};
 	}
 
 	/**
@@ -846,16 +849,17 @@ class jmProperty extends jmObject {
 	 */
 	__pro(...pars) {
 		if(pars) {
+			let pros = this[PROPERTY_KEY];
 			let name = pars[0];
 			if(pars.length > 1) {
 				let value = pars[1];
-				let args = {oldValue: this.__properties[name], newValue: value};
-				this.__properties[name] = pars[1];
+				let args = {oldValue: pros[name], newValue: value};
+				pros[name] = pars[1];
 				if(this.emit) this.emit('propertyChange', name, args);
 				return pars[1];
 			}
 			else if(pars.length == 1) {
-				return this.__properties[name];
+				return pros[name];
 			}
 		}
 	}

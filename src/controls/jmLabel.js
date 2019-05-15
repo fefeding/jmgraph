@@ -22,6 +22,8 @@ class jmLabel extends jmControl {
 		//文字垂直对齐
 		this.style.textBaseline = this.style.textBaseline || 'middle';
 		this.text = params.text || '';
+
+		this.center = params.center || null;
 	}
 
 	/**
@@ -38,6 +40,41 @@ class jmLabel extends jmControl {
 	}
 
 	/**
+	 * 中心点
+	 * point格式：{x:0,y:0,m:true}
+	 * @property center
+	 * @type {point}
+	 */
+	get center() {
+		return this.__pro('center');
+	}
+	set center(v) {
+		this.needUpdate = true;
+		return this.__pro('center', v);
+	}
+
+	/**
+	 * 在基础的getLocation上，再加上一个特殊的center处理
+	 * 
+	 * @method getLocation
+	 * @returns {Object}
+	 */
+	getLocation() {
+		let location = super.getLocation();
+		let size = this.testSize();	
+		
+		location.width = location.width || size.width;
+		location.height = location.height || size.height;	
+
+		//如果没有指定位置，但指定了中心，则用中心来计算坐标
+		if(!location.left && !location.top && location.center) {
+			location.left = location.center.x - location.width / 2;
+			location.top = location.center.y - location.height / 2;
+		}
+		return location;
+	}
+
+	/**
 	 * 初始化图形点,主要用于限定控件边界。
 	 *
 	 * @method initPoints
@@ -46,16 +83,12 @@ class jmLabel extends jmControl {
 	 */
 	initPoints() {	
 		this.__size = null;
-		let size = this.testSize();	
 		let location = this.getLocation();
-		
-		let w = location.width || size.width;
-		let h = location.height || size.height;	
 
-		this.points = [{x:location.left,y:location.top}];
-		this.points.push({x:location.left + w,y:location.top});
-		this.points.push({x:location.left + w,y:location.top + h});
-		this.points.push({x:location.left,y:location.top+ h});
+		this.points = [{x: location.left, y: location.top}];
+		this.points.push({x: location.left + location.width, y: location.top});
+		this.points.push({x: location.left + location.width, y: location.top + location.height});
+		this.points.push({x: location.left, y: location.top + location.height});
 		return this.points;
 	}
 
@@ -91,7 +124,7 @@ class jmLabel extends jmControl {
 		//获取当前控件的绝对位置
 		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;		
 		let size = this.testSize();
-		let location = this.getLocation();
+		let location = this.location;
 		let x = location.left + bounds.left;
 		let y = location.top + bounds.top;
 		//通过文字对齐方式计算起始X位置

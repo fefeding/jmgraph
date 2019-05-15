@@ -1755,6 +1755,10 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
@@ -1789,6 +1793,7 @@ function (_jmControl) {
 
     _this.style.textBaseline = _this.style.textBaseline || 'middle';
     _this.text = params.text || '';
+    _this.center = params.center || null;
     return _this;
   }
   /**
@@ -1799,8 +1804,28 @@ function (_jmControl) {
 
 
   _createClass(jmLabel, [{
-    key: "initPoints",
+    key: "getLocation",
 
+    /**
+     * 在基础的getLocation上，再加上一个特殊的center处理
+     * 
+     * @method getLocation
+     * @returns {Object}
+     */
+    value: function getLocation() {
+      var location = _get(_getPrototypeOf(jmLabel.prototype), "getLocation", this).call(this);
+
+      var size = this.testSize();
+      location.width = location.width || size.width;
+      location.height = location.height || size.height; //如果没有指定位置，但指定了中心，则用中心来计算坐标
+
+      if (!location.left && !location.top && location.center) {
+        location.left = location.center.x - location.width / 2;
+        location.top = location.center.y - location.height / 2;
+      }
+
+      return location;
+    }
     /**
      * 初始化图形点,主要用于限定控件边界。
      *
@@ -1808,27 +1833,27 @@ function (_jmControl) {
      * @return {array} 所有边界点数组
      * @private
      */
+
+  }, {
+    key: "initPoints",
     value: function initPoints() {
       this.__size = null;
-      var size = this.testSize();
       var location = this.getLocation();
-      var w = location.width || size.width;
-      var h = location.height || size.height;
       this.points = [{
         x: location.left,
         y: location.top
       }];
       this.points.push({
-        x: location.left + w,
+        x: location.left + location.width,
         y: location.top
       });
       this.points.push({
-        x: location.left + w,
-        y: location.top + h
+        x: location.left + location.width,
+        y: location.top + location.height
       });
       this.points.push({
         x: location.left,
-        y: location.top + h
+        y: location.top + location.height
       });
       return this.points;
     }
@@ -1868,7 +1893,7 @@ function (_jmControl) {
       //获取当前控件的绝对位置
       var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
       var size = this.testSize();
-      var location = this.getLocation();
+      var location = this.location;
       var x = location.left + bounds.left;
       var y = location.top + bounds.top; //通过文字对齐方式计算起始X位置
 
@@ -1964,6 +1989,22 @@ function (_jmControl) {
     set: function set(v) {
       this.needUpdate = true;
       return this.__pro('text', v);
+    }
+    /**
+     * 中心点
+     * point格式：{x:0,y:0,m:true}
+     * @property center
+     * @type {point}
+     */
+
+  }, {
+    key: "center",
+    get: function get() {
+      return this.__pro('center');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.__pro('center', v);
     }
   }]);
 

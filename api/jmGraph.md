@@ -211,6 +211,9 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <dt><a href="#getImage">getImage()</a> ⇒ <code>img</code></dt>
 <dd><p>img对象</p>
 </dd>
+<dt><a href="#getLocation">getLocation()</a> ⇒ <code>Object</code></dt>
+<dd><p>在基础的getLocation上，再加上一个特殊的center处理</p>
+</dd>
 <dt><a href="#testSize">testSize()</a> ⇒ <code>object</code></dt>
 <dd><p>测试获取文本所占大小</p>
 </dd>
@@ -3340,6 +3343,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 * [jmLabel](#jmLabel) ⇐ <code>[jmControl](#jmControl)</code>
     * [new jmLabel(params)](#new_jmLabel_new)
     * [.text](#jmLabel+text) : <code>string</code>
+    * [.center](#jmLabel+center) : <code>point</code>
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
@@ -3376,6 +3380,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | text | 
+
+<a name="jmLabel+center"></a>
+
+### jmLabel.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
 
 <a name="jmControl+type"></a>
 
@@ -4507,6 +4523,12 @@ img对象
 
 **Kind**: global function  
 **Returns**: <code>img</code> - 图片对象  
+<a name="getLocation"></a>
+
+## getLocation() ⇒ <code>Object</code>
+在基础的getLocation上，再加上一个特殊的center处理
+
+**Kind**: global function  
 <a name="testSize"></a>
 
 ## testSize() ⇒ <code>object</code>

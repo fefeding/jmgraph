@@ -27,7 +27,7 @@ npm install jmgraph
 ```html
 <script type="text/javascript" src="../dist/jmgraph.min.js"></script>	
 ```
-也可以用commonjs、requirejs等模块化库。
+也可以用`commonjs`、`requirejs`等模块化库。
 ##### requirejs
 ```html
 <script type="text/javascript" src="js/require.js"></script>

@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - "10.16.0"
+
+branches:
+  only:
+    - master
+
+before_install:
+  - npm install gulp-cli -g
+  - npm install gulp --save-dev
+
+script: 
+  - npm install
+  - cd ./test/buildtool
+  - gulp
+  - cd ../../
+
+cache:
+  directories:
+  - node_modules
+
+notifications:
+  email:
+    - haofefe@163.com

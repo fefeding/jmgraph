@@ -4014,31 +4014,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-//样式名称，也当做白名单使用		
-var jmStyleMap = {
-  'fill': 'fillStyle',
-  'stroke': 'strokeStyle',
-  'shadow.blur': 'shadowBlur',
-  'shadow.x': 'shadowOffsetX',
-  'shadow.y': 'shadowOffsetY',
-  'shadow.color': 'shadowColor',
-  'lineWidth': 'lineWidth',
-  'miterLimit': 'miterLimit',
-  'fillStyle': 'fillStyle',
-  'strokeStyle': 'strokeStyle',
-  'font': 'font',
-  'opacity': 'globalAlpha',
-  'textAlign': 'textAlign',
-  'textBaseline': 'textBaseline',
-  'shadowBlur': 'shadowBlur',
-  'shadowOffsetX': 'shadowOffsetX',
-  'shadowOffsetY': 'shadowOffsetY',
-  'shadowColor': 'shadowColor',
-  'lineJoin': 'lineJoin',
-  //线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-  'lineCap': 'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-
-};
 /**
  * 控件基础对象
  * 控件的基础属性和方法
@@ -4046,7 +4021,6 @@ var jmStyleMap = {
  * @class jmControl
  * @extends jmProperty
  */
-
 var jmControl =
 /*#__PURE__*/
 function (_jmProperty) {
@@ -4070,7 +4044,32 @@ function (_jmProperty) {
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
     _this2.graph = params.graph || null;
-    _this2.zIndex = params.zIndex || 0;
+    _this2.zIndex = params.zIndex || 0; //样式名称，也当做白名单使用		
+
+    _this2.jmStyleMap = {
+      'fill': 'fillStyle',
+      'stroke': 'strokeStyle',
+      'shadow.blur': 'shadowBlur',
+      'shadow.x': 'shadowOffsetX',
+      'shadow.y': 'shadowOffsetY',
+      'shadow.color': 'shadowColor',
+      'lineWidth': 'lineWidth',
+      'miterLimit': 'miterLimit',
+      'fillStyle': 'fillStyle',
+      'strokeStyle': 'strokeStyle',
+      'font': 'font',
+      'opacity': 'globalAlpha',
+      'textAlign': 'textAlign',
+      'textBaseline': 'textBaseline',
+      'shadowBlur': 'shadowBlur',
+      'shadowOffsetX': 'shadowOffsetX',
+      'shadowOffsetY': 'shadowOffsetY',
+      'shadowColor': 'shadowColor',
+      'lineJoin': 'lineJoin',
+      //线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+      'lineCap': 'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+
+    };
 
     _this2.initializing();
 
@@ -4229,7 +4228,7 @@ function (_jmProperty) {
         if (style) {
           var t = _typeof(style);
 
-          var mpname = jmStyleMap[mpkey || name]; //如果为渐变对象
+          var mpname = _this3.jmStyleMap[mpkey || name]; //如果为渐变对象
 
           if (style instanceof _jmGradient.jmGradient || t == 'string' && style.indexOf('-gradient') > -1) {
             //如果是渐变，则需要转换

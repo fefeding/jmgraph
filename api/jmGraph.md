@@ -25,15 +25,21 @@
 <dd></dd>
 <dt><a href="#jmArc">jmArc</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
+<dt><a href="#jmArc">jmArc</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
 <dt><a href="#jmArraw">jmArraw</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
 <dt><a href="#jmBezier">jmBezier</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
 <dt><a href="#jmCircle">jmCircle</a> ⇐ <code><a href="#jmArc">jmArc</a></code></dt>
 <dd></dd>
+<dt><a href="#jmControl">jmControl</a> ⇐ <code><a href="#jmProperty">jmProperty</a></code></dt>
+<dd></dd>
 <dt><a href="#jmHArc">jmHArc</a> ⇐ <code><a href="#jmArc">jmArc</a></code></dt>
 <dd></dd>
 <dt><a href="#jmLine">jmLine</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dd></dd>
+<dt><a href="#jmPath">jmPath</a> ⇐ <code><a href="#jmControl">jmControl</a></code></dt>
 <dd></dd>
 <dt><a href="#jmPrismatic">jmPrismatic</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
@@ -188,6 +194,77 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 </dd>
 <dt><a href="#draw">draw()</a></dt>
 <dd><p>重写基类画图，此处为画一个完整的圆</p>
+</dd>
+<dt><a href="#initializing">initializing()</a></dt>
+<dd><p>初始化对象，设定样式，初始化子控件对象
+此方法为所有控件需调用的方法</p>
+</dd>
+<dt><a href="#getBounds">getBounds([isReset])</a> ⇒ <code>object</code></dt>
+<dd><p>获取当前控件的边界
+通过分析控件的描点或位置加宽高得到为方形的边界</p>
+</dd>
+<dt><a href="#getLocation">getLocation()</a> ⇒ <code>object</code></dt>
+<dd><p>获取当前控件的位置相关参数
+解析百分比和margin参数</p>
+</dd>
+<dt><a href="#remove">remove()</a></dt>
+<dd><p>移除当前控件
+如果是VML元素，则调用其删除元素</p>
+</dd>
+<dt><a href="#offset">offset(x, y, [trans], [evt])</a></dt>
+<dd><p>对控件进行平移
+遍历控件所有描点或位置，设置其偏移量。</p>
+</dd>
+<dt><a href="#getAbsoluteBounds">getAbsoluteBounds()</a> ⇒ <code>object</code></dt>
+<dd><p>获取控件相对于画布的绝对边界，
+与getBounds不同的是：getBounds获取的是相对于父容器的边界.</p>
+</dd>
+<dt><a href="#beginDraw">beginDraw()</a></dt>
+<dd><p>画控件前初始化
+执行beginPath开始控件的绘制</p>
+</dd>
+<dt><a href="#endDraw">endDraw()</a></dt>
+<dd><p>结束控件绘制</p>
+</dd>
+<dt><a href="#draw">draw()</a></dt>
+<dd><p>绘制控件
+在画布上描点</p>
+</dd>
+<dt><a href="#paint">paint()</a></dt>
+<dd><p>绘制当前控件
+协调控件的绘制，先从其子控件开始绘制，再往上冒。</p>
+</dd>
+<dt><a href="#getEvent">getEvent(name)</a> ⇒ <code>list</code></dt>
+<dd><p>获取指定事件的集合
+比如mousedown,mouseup等</p>
+</dd>
+<dt><a href="#bind">bind(name, handle)</a></dt>
+<dd><p>绑定控件的事件</p>
+</dd>
+<dt><a href="#unbind">unbind(name, handle)</a></dt>
+<dd><p>移除控件的事件</p>
+</dd>
+<dt><a href="#emit">emit(name, args)</a></dt>
+<dd><p>执行监听回调</p>
+</dd>
+<dt><a href="#runEventHandle">runEventHandle(将执行的事件名称, 事件执行的参数，包括触发事件的对象和位置)</a></dt>
+<dd><p>独立执行事件委托</p>
+</dd>
+<dt><a href="#checkPoint">checkPoint(p, [pad])</a> ⇒ <code>boolean</code></dt>
+<dd><p>检 查坐标是否落在当前控件区域中..true=在区域内</p>
+</dd>
+<dt><a href="#raiseEvent">raiseEvent(name, args)</a> ⇒ <code>boolean</code></dt>
+<dd><p>触发控件事件，组合参数并按控件层级关系执行事件冒泡。</p>
+</dd>
+<dt><a href="#clearEvents">clearEvents(name)</a></dt>
+<dd><p>清空控件指定事件</p>
+</dd>
+<dt><a href="#findParent">findParent(类型名称或类型对象)</a> ⇒ <code>object</code></dt>
+<dd><p>查找其父级类型为type的元素，直到找到指定的对象或到最顶级控件后返回空。</p>
+</dd>
+<dt><a href="#canMove">canMove(m, [graph])</a></dt>
+<dd><p>设定是否可以移动
+此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。</p>
 </dd>
 <dt><a href="#getBounds">getBounds()</a> ⇒ <code>bound</code></dt>
 <dd><p>获取当前控件的边界</p>
@@ -418,11 +495,25 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 * [jmControl](#jmControl) ⇐ <code>[jmProperty](#jmProperty)</code>
     * [new jmControl()](#new_jmControl_new)
+    * [new jmControl()](#new_jmControl_new)
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
+        * [.sort()](#jmControl+children.sort)
+        * [.sort()](#jmControl+children.sort)
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+        * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
     * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
@@ -433,6 +524,13 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmControl_new"></a>
+
+### new jmControl()
+控件基础对象控件的基础属性和方法
 
 <a name="new_jmControl_new"></a>
 
@@ -500,6 +598,155 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
+
+* [.children](#jmControl+children) : <code>list</code>
+    * [.sort()](#jmControl+children.sort)
+    * [.sort()](#jmControl+children.sort)
+
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+position"></a>
+
+### jmControl.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmControl.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmControl.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmControl.zIndex : <code>number</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmControl.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmControl+type"></a>
+
+### jmControl.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmControl.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmControl.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmControl.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmControl.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+
+* [.children](#jmControl+children) : <code>list</code>
+    * [.sort()](#jmControl+children.sort)
+    * [.sort()](#jmControl+children.sort)
+
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
 <a name="jmControl+children.sort"></a>
 
 #### children.sort()
@@ -611,6 +858,25 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+getRotation"></a>
+
+### jmControl.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmControl.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
 <a name="jmPath"></a>
 
 ## jmPath ⇐ <code>[jmControl](#jmControl)</code>
@@ -619,6 +885,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 * [jmPath](#jmPath) ⇐ <code>[jmControl](#jmControl)</code>
     * [new jmPath(params)](#new_jmPath_new)
+    * [new jmPath(params)](#new_jmPath_new)
+    * [.points](#jmPath+points) : <code>array</code>
     * [.points](#jmPath+points) : <code>array</code>
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
@@ -645,6 +913,28 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- | --- | --- |
 | params | <code>object</code> | 路径参数 points=所有描点 |
 
+<a name="new_jmPath_new"></a>
+
+### new jmPath(params)
+基础路径,大部分图型的基类指定一系列点，画出图形
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 路径参数 points=所有描点 |
+
+<a name="jmPath+points"></a>
+
+### jmPath.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
 <a name="jmPath+points"></a>
 
 ### jmPath.points : <code>array</code>
@@ -663,6 +953,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前对象类型名jmRect
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
 **Properties**
 
 | Name |
@@ -675,6 +966,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前canvas的context
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
 **Properties**
 
 | Name |
@@ -687,6 +979,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 样式
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
 **Properties**
 
 | Name |
@@ -700,6 +993,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
 **Properties**
 
 | Name |
@@ -712,6 +1006,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前控件的子控件集合
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
 **Properties**
 
 | Name |
@@ -724,6 +1019,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前位置左上角
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
 **Properties**
 
 | Name |
@@ -736,6 +1032,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 宽度
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
 **Properties**
 
 | Name |
@@ -748,6 +1045,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 高度
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
 **Properties**
 
 | Name |
@@ -760,6 +1058,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
 **Properties**
 
 | Name |
@@ -772,6 +1071,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
 **Properties**
 
 | Name |
@@ -784,6 +1084,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 是否需要刷新画板，属性的改变会导致它变为true
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
 **Properties**
 
 | Name |
@@ -796,6 +1097,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[graph](#jmProperty+graph)</code>  
 **Properties**
 
 | Name |
@@ -808,6 +1110,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 获取当前控制的旋转信息
 
 **Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
 **Returns**: <code>object</code> - 旋转中心和角度  
 <a name="jmControl+rotate"></a>
 
@@ -815,6 +1118,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -829,6 +1133,12 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 * [jmArc](#jmArc) ⇐ <code>[jmPath](#jmPath)</code>
     * [new jmArc(params)](#new_jmArc_new)
+    * [new jmArc(params)](#new_jmArc_new)
+    * [.center](#jmArc+center) : <code>point</code>
+    * [.radius](#jmArc+radius) : <code>number</code>
+    * [.startAngle](#jmArc+startAngle) : <code>number</code>
+    * [.endAngle](#jmArc+endAngle) : <code>number</code>
+    * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
     * [.center](#jmArc+center) : <code>point</code>
     * [.radius](#jmArc+radius) : <code>number</code>
     * [.startAngle](#jmArc+startAngle) : <code>number</code>
@@ -859,6 +1169,76 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Param | Type | Description |
 | --- | --- | --- |
 | params | <code>object</code> | center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针 |
+
+<a name="new_jmArc_new"></a>
+
+### new jmArc(params)
+圆弧图型 继承自jmPath
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针 |
+
+<a name="jmArc+center"></a>
+
+### jmArc.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
+
+<a name="jmArc+radius"></a>
+
+### jmArc.radius : <code>number</code>
+半径
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmArc+startAngle"></a>
+
+### jmArc.startAngle : <code>number</code>
+扇形起始角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| startAngle | 
+
+<a name="jmArc+endAngle"></a>
+
+### jmArc.endAngle : <code>number</code>
+扇形结束角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| endAngle | 
+
+<a name="jmArc+anticlockwise"></a>
+
+### jmArc.anticlockwise : <code>boolean</code>
+可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| anticlockwise | 
 
 <a name="jmArc+center"></a>
 
@@ -939,6 +1319,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前对象类型名jmRect
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
 **Properties**
 
 | Name |
@@ -951,6 +1332,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前canvas的context
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
 **Properties**
 
 | Name |
@@ -963,6 +1345,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 样式
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
 **Properties**
 
 | Name |
@@ -976,6 +1359,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
 **Properties**
 
 | Name |
@@ -988,6 +1372,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前控件的子控件集合
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
 **Properties**
 
 | Name |
@@ -1000,6 +1385,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前位置左上角
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
 **Properties**
 
 | Name |
@@ -1012,6 +1398,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 宽度
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
 **Properties**
 
 | Name |
@@ -1024,6 +1411,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 高度
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
 **Properties**
 
 | Name |
@@ -1036,6 +1424,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
 **Properties**
 
 | Name |
@@ -1048,6 +1437,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
 **Properties**
 
 | Name |
@@ -1060,6 +1450,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 是否需要刷新画板，属性的改变会导致它变为true
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
 **Properties**
 
 | Name |
@@ -1072,6 +1463,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前所在的画布对象 jmGraph
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[graph](#jmProperty+graph)</code>  
 **Properties**
 
 | Name |
@@ -1084,6 +1476,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 获取当前控制的旋转信息
 
 **Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
 **Returns**: <code>object</code> - 旋转中心和角度  
 <a name="jmControl+rotate"></a>
 
@@ -1091,6 +1484,373 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmArc"></a>
+
+## jmArc ⇐ <code>[jmPath](#jmPath)</code>
+**Kind**: global class  
+**Extends:** <code>[jmPath](#jmPath)</code>  
+
+* [jmArc](#jmArc) ⇐ <code>[jmPath](#jmPath)</code>
+    * [new jmArc(params)](#new_jmArc_new)
+    * [new jmArc(params)](#new_jmArc_new)
+    * [.center](#jmArc+center) : <code>point</code>
+    * [.radius](#jmArc+radius) : <code>number</code>
+    * [.startAngle](#jmArc+startAngle) : <code>number</code>
+    * [.endAngle](#jmArc+endAngle) : <code>number</code>
+    * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
+    * [.center](#jmArc+center) : <code>point</code>
+    * [.radius](#jmArc+radius) : <code>number</code>
+    * [.startAngle](#jmArc+startAngle) : <code>number</code>
+    * [.endAngle](#jmArc+endAngle) : <code>number</code>
+    * [.anticlockwise](#jmArc+anticlockwise) : <code>boolean</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmArc_new"></a>
+
+### new jmArc(params)
+圆弧图型 继承自jmPath
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针 |
+
+<a name="new_jmArc_new"></a>
+
+### new jmArc(params)
+圆弧图型 继承自jmPath
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针 |
+
+<a name="jmArc+center"></a>
+
+### jmArc.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
+
+<a name="jmArc+radius"></a>
+
+### jmArc.radius : <code>number</code>
+半径
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmArc+startAngle"></a>
+
+### jmArc.startAngle : <code>number</code>
+扇形起始角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| startAngle | 
+
+<a name="jmArc+endAngle"></a>
+
+### jmArc.endAngle : <code>number</code>
+扇形结束角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| endAngle | 
+
+<a name="jmArc+anticlockwise"></a>
+
+### jmArc.anticlockwise : <code>boolean</code>
+可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| anticlockwise | 
+
+<a name="jmArc+center"></a>
+
+### jmArc.center : <code>point</code>
+中心点point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| center | 
+
+<a name="jmArc+radius"></a>
+
+### jmArc.radius : <code>number</code>
+半径
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| radius | 
+
+<a name="jmArc+startAngle"></a>
+
+### jmArc.startAngle : <code>number</code>
+扇形起始角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| startAngle | 
+
+<a name="jmArc+endAngle"></a>
+
+### jmArc.endAngle : <code>number</code>
+扇形结束角度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| endAngle | 
+
+<a name="jmArc+anticlockwise"></a>
+
+### jmArc.anticlockwise : <code>boolean</code>
+可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Properties**
+
+| Name |
+| --- |
+| anticlockwise | 
+
+<a name="jmPath+points"></a>
+
+### jmArc.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[points](#jmPath+points)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmArc.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmArc.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmArc.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmArc.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmArc.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmArc.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmArc.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmArc.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmArc.zIndex : <code>number</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmArc.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmArc.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmArc.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[graph](#jmProperty+graph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmArc.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmArc.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1648,6 +2408,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 中心点point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Overrides:** <code>[center](#jmArc+center)</code>  
 **Properties**
 
 | Name |
@@ -1660,6 +2421,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 半径
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Overrides:** <code>[radius](#jmArc+radius)</code>  
 **Properties**
 
 | Name |
@@ -1672,6 +2434,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 扇形起始角度
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Overrides:** <code>[startAngle](#jmArc+startAngle)</code>  
 **Properties**
 
 | Name |
@@ -1684,6 +2447,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 扇形结束角度
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Overrides:** <code>[endAngle](#jmArc+endAngle)</code>  
 **Properties**
 
 | Name |
@@ -1696,6 +2460,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Overrides:** <code>[anticlockwise](#jmArc+anticlockwise)</code>  
 **Properties**
 
 | Name |
@@ -1879,6 +2644,396 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl"></a>
+
+## jmControl ⇐ <code>[jmProperty](#jmProperty)</code>
+**Kind**: global class  
+**Extends:** <code>[jmProperty](#jmProperty)</code>  
+
+* [jmControl](#jmControl) ⇐ <code>[jmProperty](#jmProperty)</code>
+    * [new jmControl()](#new_jmControl_new)
+    * [new jmControl()](#new_jmControl_new)
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+        * [.sort()](#jmControl+children.sort)
+        * [.sort()](#jmControl+children.sort)
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+        * [.sort()](#jmControl+children.sort)
+        * [.sort()](#jmControl+children.sort)
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmControl_new"></a>
+
+### new jmControl()
+控件基础对象控件的基础属性和方法
+
+<a name="new_jmControl_new"></a>
+
+### new jmControl()
+控件基础对象控件的基础属性和方法
+
+<a name="jmControl+type"></a>
+
+### jmControl.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmControl.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmControl.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmControl.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmControl.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+
+* [.children](#jmControl+children) : <code>list</code>
+    * [.sort()](#jmControl+children.sort)
+    * [.sort()](#jmControl+children.sort)
+
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+position"></a>
+
+### jmControl.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmControl.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmControl.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmControl.zIndex : <code>number</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmControl.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmControl+type"></a>
+
+### jmControl.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmControl.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmControl.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmControl.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>true</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmControl.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+
+* [.children](#jmControl+children) : <code>list</code>
+    * [.sort()](#jmControl+children.sort)
+    * [.sort()](#jmControl+children.sort)
+
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+children.sort"></a>
+
+#### children.sort()
+根据控件zIndex排序，越大的越高
+
+**Kind**: static method of <code>[children](#jmControl+children)</code>  
+<a name="jmControl+position"></a>
+
+### jmControl.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmControl.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmControl.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmControl.zIndex : <code>number</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmControl.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmControl.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmControl.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Overrides:** <code>[graph](#jmProperty+graph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmControl.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmControl.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmControl+getRotation"></a>
+
+### jmControl.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmControl.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
 <a name="jmHArc"></a>
 
 ## jmHArc ⇐ <code>[jmArc](#jmArc)</code>
@@ -1952,6 +3107,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 中心点point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[center](#jmArc+center)</code>  
 **Properties**
 
 | Name |
@@ -1964,6 +3120,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 半径
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[radius](#jmArc+radius)</code>  
 **Properties**
 
 | Name |
@@ -1976,6 +3133,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 扇形起始角度
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[startAngle](#jmArc+startAngle)</code>  
 **Properties**
 
 | Name |
@@ -1988,6 +3146,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 扇形结束角度
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[endAngle](#jmArc+endAngle)</code>  
 **Properties**
 
 | Name |
@@ -2000,6 +3159,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Overrides:** <code>[anticlockwise](#jmArc+anticlockwise)</code>  
 **Properties**
 
 | Name |
@@ -2416,6 +3576,254 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmLine](#jmLine)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| angle | <code>number</code> | 旋转角度 |
+| point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmPath"></a>
+
+## jmPath ⇐ <code>[jmControl](#jmControl)</code>
+**Kind**: global class  
+**Extends:** <code>[jmControl](#jmControl)</code>  
+
+* [jmPath](#jmPath) ⇐ <code>[jmControl](#jmControl)</code>
+    * [new jmPath(params)](#new_jmPath_new)
+    * [new jmPath(params)](#new_jmPath_new)
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.points](#jmPath+points) : <code>array</code>
+    * [.type](#jmControl+type) : <code>string</code>
+    * [.context](#jmControl+context) : <code>object</code>
+    * [.style](#jmControl+style) : <code>object</code>
+    * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.children](#jmControl+children) : <code>list</code>
+    * [.position](#jmControl+position) : <code>point</code>
+    * [.width](#jmControl+width) : <code>number</code>
+    * [.height](#jmControl+height) : <code>number</code>
+    * [.zIndex](#jmControl+zIndex) : <code>number</code>
+    * [.cursor](#jmControl+cursor) : <code>string</code>
+    * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
+    * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
+    * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
+    * [.rotate(angle, point)](#jmControl+rotate)
+
+<a name="new_jmPath_new"></a>
+
+### new jmPath(params)
+基础路径,大部分图型的基类指定一系列点，画出图形
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 路径参数 points=所有描点 |
+
+<a name="new_jmPath_new"></a>
+
+### new jmPath(params)
+基础路径,大部分图型的基类指定一系列点，画出图形
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>object</code> | 路径参数 points=所有描点 |
+
+<a name="jmPath+points"></a>
+
+### jmPath.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmPath+points"></a>
+
+### jmPath.points : <code>array</code>
+描点集合point格式：{x:0,y:0,m:true}
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Properties**
+
+| Name |
+| --- |
+| points | 
+
+<a name="jmControl+type"></a>
+
+### jmPath.type : <code>string</code>
+当前对象类型名jmRect
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
+**Properties**
+
+| Name |
+| --- |
+| type | 
+
+<a name="jmControl+context"></a>
+
+### jmPath.context : <code>object</code>
+当前canvas的context
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
+**Properties**
+
+| Name |
+| --- |
+| context | 
+
+<a name="jmControl+style"></a>
+
+### jmPath.style : <code>object</code>
+样式
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
+**Properties**
+
+| Name |
+| --- |
+| style | 
+
+<a name="jmControl+visible"></a>
+
+### jmPath.visible : <code>boolean</code>
+当前控件是否可见
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
+**Properties**
+
+| Name |
+| --- |
+| visible | 
+
+<a name="jmControl+children"></a>
+
+### jmPath.children : <code>list</code>
+当前控件的子控件集合
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
+**Properties**
+
+| Name |
+| --- |
+| children | 
+
+<a name="jmControl+position"></a>
+
+### jmPath.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
+
+<a name="jmControl+width"></a>
+
+### jmPath.width : <code>number</code>
+宽度
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
+**Properties**
+
+| Name |
+| --- |
+| width | 
+
+<a name="jmControl+height"></a>
+
+### jmPath.height : <code>number</code>
+高度
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
+**Properties**
+
+| Name |
+| --- |
+| height | 
+
+<a name="jmControl+zIndex"></a>
+
+### jmPath.zIndex : <code>number</code>
+控件层级关系，发生改变时，需要重新调整排序
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
+**Properties**
+
+| Name |
+| --- |
+| zIndex | 
+
+<a name="jmControl+cursor"></a>
+
+### jmPath.cursor : <code>string</code>
+设置鼠标指针css鼠标指针标识,例如:pointer,move等
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
+**Properties**
+
+| Name |
+| --- |
+| cursor | 
+
+<a name="jmProperty+needUpdate"></a>
+
+### jmPath.needUpdate : <code>boolean</code>
+是否需要刷新画板，属性的改变会导致它变为true
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[needUpdate](#jmProperty+needUpdate)</code>  
+**Properties**
+
+| Name |
+| --- |
+| needUpdate | 
+
+<a name="jmProperty+graph"></a>
+
+### jmPath.graph : <code>[jmGraph](#jmGraph)</code>
+当前所在的画布对象 jmGraph
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[graph](#jmProperty+graph)</code>  
+**Properties**
+
+| Name |
+| --- |
+| graph | 
+
+<a name="jmControl+getRotation"></a>
+
+### jmPath.getRotation() ⇒ <code>object</code>
+获取当前控制的旋转信息
+
+**Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
+**Returns**: <code>object</code> - 旋转中心和角度  
+<a name="jmControl+rotate"></a>
+
+### jmPath.rotate(angle, point)
+把图形旋转一个角度
+
+**Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -3176,6 +4584,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前对象类型名jmRect
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
 **Properties**
 
 | Name |
@@ -3188,6 +4597,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前canvas的context
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
 **Properties**
 
 | Name |
@@ -3200,6 +4610,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 样式
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
 **Properties**
 
 | Name |
@@ -3213,6 +4624,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
 **Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
 **Properties**
 
 | Name |
@@ -3225,6 +4637,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前控件的子控件集合
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
 **Properties**
 
 | Name |
@@ -3237,6 +4650,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前位置左上角
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
 **Properties**
 
 | Name |
@@ -3249,6 +4663,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 宽度
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[width](#jmControl+width)</code>  
 **Properties**
 
 | Name |
@@ -3261,6 +4676,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 高度
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[height](#jmControl+height)</code>  
 **Properties**
 
 | Name |
@@ -3273,6 +4689,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
 **Properties**
 
 | Name |
@@ -3285,6 +4702,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
 **Properties**
 
 | Name |
@@ -3321,6 +4739,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 获取当前控制的旋转信息
 
 **Kind**: instance method of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
 **Returns**: <code>object</code> - 旋转中心和角度  
 <a name="jmControl+rotate"></a>
 
@@ -3328,6 +4747,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -3399,6 +4819,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前对象类型名jmRect
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
 **Properties**
 
 | Name |
@@ -3411,6 +4832,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前canvas的context
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[context](#jmControl+context)</code>  
 **Properties**
 
 | Name |
@@ -3423,6 +4845,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 样式
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
 **Properties**
 
 | Name |
@@ -3436,6 +4859,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
 **Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
 **Properties**
 
 | Name |
@@ -3448,6 +4872,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前控件的子控件集合
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
 **Properties**
 
 | Name |
@@ -3460,6 +4885,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 当前位置左上角
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
 **Properties**
 
 | Name |
@@ -3498,6 +4924,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
 **Properties**
 
 | Name |
@@ -3510,6 +4937,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
 **Properties**
 
 | Name |
@@ -3546,6 +4974,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 获取当前控制的旋转信息
 
 **Kind**: instance method of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
 **Returns**: <code>object</code> - 旋转中心和角度  
 <a name="jmControl+rotate"></a>
 
@@ -3553,6 +4982,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -3902,6 +5332,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 当前对象类型名jmRect
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[type](#jmControl+type)</code>  
 **Properties**
 
 | Name |
@@ -3927,6 +5358,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 样式
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[style](#jmControl+style)</code>  
 **Properties**
 
 | Name |
@@ -3940,6 +5372,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
 **Default**: <code>true</code>  
+**Overrides:** <code>[visible](#jmControl+visible)</code>  
 **Properties**
 
 | Name |
@@ -3952,6 +5385,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 当前控件的子控件集合
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[children](#jmControl+children)</code>  
 **Properties**
 
 | Name |
@@ -3964,6 +5398,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 当前位置左上角
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[position](#jmControl+position)</code>  
 **Properties**
 
 | Name |
@@ -3976,6 +5411,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 控件层级关系，发生改变时，需要重新调整排序
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[zIndex](#jmControl+zIndex)</code>  
 **Properties**
 
 | Name |
@@ -3988,6 +5424,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 设置鼠标指针css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[cursor](#jmControl+cursor)</code>  
 **Properties**
 
 | Name |
@@ -4035,6 +5472,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 获取当前控制的旋转信息
 
 **Kind**: instance method of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[getRotation](#jmControl+getRotation)</code>  
 **Returns**: <code>object</code> - 旋转中心和角度  
 <a name="jmControl+rotate"></a>
 
@@ -4042,6 +5480,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 把图形旋转一个角度
 
 **Kind**: instance method of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[rotate](#jmControl+rotate)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -4472,6 +5911,206 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 重写基类画图，此处为画一个完整的圆
 
 **Kind**: global function  
+<a name="initializing"></a>
+
+## initializing()
+初始化对象，设定样式，初始化子控件对象此方法为所有控件需调用的方法
+
+**Kind**: global function  
+**For**: jmControl  
+<a name="getBounds"></a>
+
+## getBounds([isReset]) ⇒ <code>object</code>
+获取当前控件的边界通过分析控件的描点或位置加宽高得到为方形的边界
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 控件的边界描述对象(left,top,right,bottom,width,height)  
+**For**: jmControl  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [isReset] | <code>boolean</code> | <code>false</code> | 是否强制重新计算 |
+
+<a name="getLocation"></a>
+
+## getLocation() ⇒ <code>object</code>
+获取当前控件的位置相关参数解析百分比和margin参数
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 当前控件位置参数，包括中心点坐标，右上角坐标，宽高  
+<a name="remove"></a>
+
+## remove()
+移除当前控件如果是VML元素，则调用其删除元素
+
+**Kind**: global function  
+<a name="offset"></a>
+
+## offset(x, y, [trans], [evt])
+对控件进行平移遍历控件所有描点或位置，设置其偏移量。
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>number</code> | x轴偏移量 |
+| y | <code>number</code> | y轴偏移量 |
+| [trans] | <code>boolean</code> | 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true |
+| [evt] | <code>object</code> | 如果是事件触发，则传递move事件参数 |
+
+<a name="getAbsoluteBounds"></a>
+
+## getAbsoluteBounds() ⇒ <code>object</code>
+获取控件相对于画布的绝对边界，与getBounds不同的是：getBounds获取的是相对于父容器的边界.
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 边界对象(left,top,right,bottom,width,height)  
+<a name="beginDraw"></a>
+
+## beginDraw()
+画控件前初始化执行beginPath开始控件的绘制
+
+**Kind**: global function  
+<a name="endDraw"></a>
+
+## endDraw()
+结束控件绘制
+
+**Kind**: global function  
+<a name="draw"></a>
+
+## draw()
+绘制控件在画布上描点
+
+**Kind**: global function  
+<a name="paint"></a>
+
+## paint()
+绘制当前控件协调控件的绘制，先从其子控件开始绘制，再往上冒。
+
+**Kind**: global function  
+<a name="getEvent"></a>
+
+## getEvent(name) ⇒ <code>list</code>
+获取指定事件的集合比如mousedown,mouseup等
+
+**Kind**: global function  
+**Returns**: <code>list</code> - 事件委托的集合  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+
+<a name="bind"></a>
+
+## bind(name, handle)
+绑定控件的事件
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| handle | <code>function</code> | 事件委托 |
+
+<a name="unbind"></a>
+
+## unbind(name, handle)
+移除控件的事件
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| handle | <code>function</code> | 从控件中移除事件的委托 |
+
+<a name="emit"></a>
+
+## emit(name, args)
+执行监听回调
+
+**Kind**: global function  
+**For**: jmControl  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 触发事件的名称 |
+| args | <code>array</code> | 事件参数数组 |
+
+<a name="runEventHandle"></a>
+
+## runEventHandle(将执行的事件名称, 事件执行的参数，包括触发事件的对象和位置)
+独立执行事件委托
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| 将执行的事件名称 | <code>string</code> | 
+| 事件执行的参数，包括触发事件的对象和位置 | <code>object</code> | 
+
+<a name="checkPoint"></a>
+
+## checkPoint(p, [pad]) ⇒ <code>boolean</code>
+检 查坐标是否落在当前控件区域中..true=在区域内
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - 当前位置如果在区域内则为true,否则为false。  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| p | <code>point</code> | 位置参数 |
+| [pad] | <code>number</code> | 可选参数，表示线条多远内都算在线上 |
+
+<a name="raiseEvent"></a>
+
+## raiseEvent(name, args) ⇒ <code>boolean</code>
+触发控件事件，组合参数并按控件层级关系执行事件冒泡。
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - 如果事件被组止冒泡则返回false,否则返回true  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件执行参数 |
+
+<a name="clearEvents"></a>
+
+## clearEvents(name)
+清空控件指定事件
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 需要清除的事件名称 |
+
+<a name="findParent"></a>
+
+## findParent(类型名称或类型对象) ⇒ <code>object</code>
+查找其父级类型为type的元素，直到找到指定的对象或到最顶级控件后返回空。
+
+**Kind**: global function  
+**Returns**: <code>object</code> - 指定类型的实例  
+
+| Param | Type |
+| --- | --- |
+| 类型名称或类型对象 | <code>object</code> | 
+
+<a name="canMove"></a>
+
+## canMove(m, [graph])
+设定是否可以移动此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| m | <code>boolean</code> | true=可以移动，false=不可移动或清除移动。 |
+| [graph] | <code>[jmGraph](#jmGraph)</code> | 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。 |
+
 <a name="getBounds"></a>
 
 ## getBounds() ⇒ <code>bound</code>

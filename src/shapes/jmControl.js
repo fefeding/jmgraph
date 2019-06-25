@@ -5,30 +5,6 @@ import {jmGradient} from "../models/jmGradient.js";
 import {jmShadow} from "../models/jmShadow.js";
 import {jmProperty} from "../common/jmProperty.js";
 
-//样式名称，也当做白名单使用		
-const jmStyleMap = {
-	'fill':'fillStyle',
-	'stroke':'strokeStyle',
-	'shadow.blur':'shadowBlur',
-	'shadow.x':'shadowOffsetX',
-	'shadow.y':'shadowOffsetY',
-	'shadow.color':'shadowColor',
-	'lineWidth' : 'lineWidth',
-	'miterLimit': 'miterLimit',
-	'fillStyle' : 'fillStyle',
-	'strokeStyle' : 'strokeStyle',
-	'font' : 'font',
-	'opacity' : 'globalAlpha',
-	'textAlign' : 'textAlign',
-	'textBaseline' : 'textBaseline',
-	'shadowBlur' : 'shadowBlur',
-	'shadowOffsetX' : 'shadowOffsetX',
-	'shadowOffsetY' : 'shadowOffsetY',
-	'shadowColor' : 'shadowColor',
-	'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-	'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-};
-
 /**
  * 控件基础对象
  * 控件的基础属性和方法
@@ -48,6 +24,31 @@ class jmControl extends jmProperty {
 		this.height = params.height  || 0;
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
+
+		//样式名称，也当做白名单使用		
+		this.jmStyleMap = {
+			'fill':'fillStyle',
+			'stroke':'strokeStyle',
+			'shadow.blur':'shadowBlur',
+			'shadow.x':'shadowOffsetX',
+			'shadow.y':'shadowOffsetY',
+			'shadow.color':'shadowColor',
+			'lineWidth' : 'lineWidth',
+			'miterLimit': 'miterLimit',
+			'fillStyle' : 'fillStyle',
+			'strokeStyle' : 'strokeStyle',
+			'font' : 'font',
+			'opacity' : 'globalAlpha',
+			'textAlign' : 'textAlign',
+			'textBaseline' : 'textBaseline',
+			'shadowBlur' : 'shadowBlur',
+			'shadowOffsetX' : 'shadowOffsetX',
+			'shadowOffsetY' : 'shadowOffsetY',
+			'shadowColor' : 'shadowColor',
+			'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+			'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+		};
+
 		this.initializing();	
 		
 		this.on = this.bind;		
@@ -340,7 +341,7 @@ class jmControl extends jmProperty {
 			if(style) {				
 				
 				let t = typeof style;	
-				let mpname = jmStyleMap[mpkey || name];
+				let mpname = this.jmStyleMap[mpkey || name];
 
 				//如果为渐变对象
 				if((style instanceof jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {

@@ -2,6 +2,7 @@ jmGraph
 =========
 
 [![Latest NPM release][npm-badge]][npm-badge-url]
+[![Build Status](https://travis-ci.org/jiamao/jmgraph.svg?branch=master)](https://travis-ci.org/jiamao/jmgraph)
 
 基于CANVAS的简单画图组件  
 `让你用类似于dom的方式，在canvas上画图，感觉会不会很爽。`

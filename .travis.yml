@@ -10,10 +10,10 @@ before_install:
   - npm install gulp-cli -g
 
 script: 
-  - cd ./test/buildtool
+  - cd ./build
   - npm install
   - gulp
-  - cd ../../
+  - cd ../
 
 cache:
   directories:

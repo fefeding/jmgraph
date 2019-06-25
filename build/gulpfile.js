@@ -55,7 +55,7 @@ gulp.task('docs', function () {
 });
 
 //编译成es6版本
-gulp.task('build-js-es6', [], function () {     
+gulp.task('build-js-es6', function () {     
     return gulp.src(jsSources) 
     .pipe(cleanimport())
     .pipe(concat('jmgraph.es6.js'))
@@ -88,4 +88,6 @@ gulp.task('build-js-cmd', function () {
 
 let tasks = ['docs', 'build-js-es6', 'build-js-cmd'];
 
-gulp.task('default', tasks);  
+gulp.task('default', gulp.parallel(tasks, function(done) {
+    done();
+}));  

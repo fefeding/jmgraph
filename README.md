@@ -43,7 +43,7 @@ npm install jmgraph
 ```html
 <script type="module">
   // import jmGraph from "../dist/jmgraph.es6.js";
-  // import jmGraph from "./node_modules/jmgraph/jmGraph.js";
+  // import jmGraph from "./node_modules/jmgraph/index.js";
   import jmGraph from "jmgraph";
   var container = document.getElementById('mycanvas_container');		
   var g = new jmGraph(container, {

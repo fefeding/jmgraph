@@ -42,7 +42,9 @@ npm install jmgraph
 也可以直接用es6中的import来引用
 ```html
 <script type="module">
-  import jmGraph from "../dist/jmgraph.es6.js";
+  // import jmGraph from "../dist/jmgraph.es6.js";
+  // import jmGraph from "./node_modules/jmgraph/jmGraph.js";
+  import jmGraph from "jmgraph";
   var container = document.getElementById('mycanvas_container');		
   var g = new jmGraph(container, {
     width: 800,

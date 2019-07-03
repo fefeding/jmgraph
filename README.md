@@ -15,8 +15,11 @@ jmGraph
 ---
 直接从github下载包或npm安装。
 如需要构建，直接在项目录下执行`npm run build`即可。
-```
+```shell
 npm install jmgraph
+```
+```shell
+yarn add jmgraph
 ```
 
 入门

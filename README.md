@@ -375,7 +375,7 @@ class jmTest extends jmPath {
     }
     /**
     * 半径
-    * @property center
+    * @property radius
     * @type {number}
     */
     get radius() {

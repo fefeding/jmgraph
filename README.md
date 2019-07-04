@@ -374,10 +374,9 @@ class jmTest extends jmPath {
         return this.__pro('center', v);
     }
     /**
-    * 中心点
-    * point格式：{x:0,y:0,m:true}
+    * 半径
     * @property center
-    * @type {point}
+    * @type {number}
     */
     get radius() {
         return this.__pro('radius');

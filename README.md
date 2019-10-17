@@ -451,7 +451,7 @@ class jmTest extends jmPath {
 
     var self = this;
 
-    var g = jmGraph.create('firstCanvas', {
+    var g = jmGraph.create('mycanvas', {
         style: {
           fill: '#000'
         },

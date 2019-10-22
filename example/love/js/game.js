@@ -14,28 +14,28 @@
             crossOrigin: true
         }).load(function(){
             //初始化jmgraph
-			(jmGraph.default||jmGraph)('mycanvas', {
+			var g = jmGraph.create('mycanvas', {
                 width: width,
                 height: height,
                 style: {
                     fill: '#fff'
                 }
-            }).then((g)=>{				
-                init(g);
+            })			
+            init(g);
+            
+            var lastUpdateTime = Date.now();
+            var stepTime = 1000 / 60;
+            //实时更新画布
+            function update() {
+                var delta = Date.now() - lastUpdateTime - stepTime;
+                lastUpdateTime = Date.now();
+                gameLoop(delta);
+                if(g.needUpdate) g.redraw();
+                requestAnimationFrame(update);
                 
-                var lastUpdateTime = Date.now();
-                var stepTime = 1000 / 60;
-				//实时更新画布
-				function update() {
-                    var delta = Date.now() - lastUpdateTime - stepTime;
-                    lastUpdateTime = Date.now();
-                    gameLoop(delta);
-					if(g.needUpdate) g.redraw();
-                    requestAnimationFrame(update);
-                    
-				}
-				update();
-			});	
+            }
+            update();
+			
         });
 
     //游戏渲染逻辑

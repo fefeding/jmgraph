@@ -9,12 +9,12 @@
     var startButton = null;
     var tempSprites = [];//临时的精灵，很快就会消失的   
     var resources = new resourcesLoader(); 
-
+    var jmGraph = window.jmGraph.jmGraph || window.jmGraph;
     resources.add('love', "img/love.json", {
             crossOrigin: true
         }).load(function(){
             //初始化jmgraph
-			jmGraph('mycanvas', {
+			jmGraph.create('mycanvas', {
                 width: width,
                 height: height,
                 style: {

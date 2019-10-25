@@ -19,7 +19,7 @@ class jmControl extends jmProperty {
 		super();
 		this.__pro('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
-		this.position = params.position || {x:0,y:0};
+		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
 		this.graph = params.graph || null;
@@ -128,19 +128,6 @@ class jmControl extends jmProperty {
 	set children(v) {
 		this.needUpdate = true;
 		return this.__pro('children', v);
-	}
-
-	/**
-	 * 当前位置左上角
-	 * @property position
-	 * @type {point}
-	 */
-	get position() {
-		return this.__pro('position');
-	}
-	set position(v) {
-		this.needUpdate = true;
-		return this.__pro('position', v);
 	}
 
 	/**

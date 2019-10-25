@@ -51,6 +51,19 @@ class jmLabel extends jmControl {
 	set center(v) {
 		this.needUpdate = true;
 		return this.__pro('center', v);
+	}	
+
+	/**
+	 * 当前位置左上角
+	 * @property position
+	 * @type {point}
+	 */
+	get position() {
+		return this.__pro('position');
+	}
+	set position(v) {
+		this.needUpdate = true;
+		return this.__pro('position', v);
 	}
 
 	/**

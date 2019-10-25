@@ -265,7 +265,7 @@ class jmUtils {
                 return 1;
             }
         }
-        pt = this.clone(pt);
+        /*pt = this.clone(pt);
         while (redo) {
             redo = false;
             inside = false;
@@ -302,9 +302,69 @@ class jmUtils {
                     break;
                 }
             }
-        }
+        }*/
 
-        return inside ? 2:0;
+        return this.judge(pt, polygon, 1) ? 2:0;
+    }
+
+    /**
+     * @method judge 判断点是否在多边形中
+     * @param {point} dot {{x,y}} 需要判断的点
+     * @param {array} coordinates {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
+     *        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 
+     * @param  {number} 是否为实心 1= 是
+     * @returns {boolean} 结果 true=在形状内
+     */
+    static judge(dot,coordinates,noneZeroMode) {
+        // 默认启动none zero mode
+        noneZeroMode=noneZeroMode||1;
+        var x = dot.x,y=dot.y;
+        var crossNum = 0;
+        // 点在线段的左侧数目
+        var leftCount = 0;
+        // 点在线段的右侧数目
+        var rightCount = 0;
+        for(var i=0;i<coordinates.length-1;i++){
+        var start = coordinates[i];
+        var end = coordinates[i+1];
+            
+        // 起点、终点斜率不存在的情况
+        if(start.x===end.x) {
+            // 因为射线向右水平，此处说明不相交
+            if(x>start.x) continue;
+            
+            // 从左侧贯穿
+            if((end.y>start.y&&y>=start.y && y<=end.y)){
+                leftCount++;
+                crossNum++;
+            }
+            // 从右侧贯穿
+            if((end.y<start.y&&y>=end.y && y<=start.y)) {
+                rightCount++;
+                crossNum++;
+            }
+            continue;
+        }
+        // 斜率存在的情况，计算斜率
+        var k=(end.y-start.y)/(end.x-start.x);
+        // 交点的x坐标
+        var x0 = (y-start.y)/k+start.x;
+        // 因为射线向右水平，此处说明不相交
+        if(x>x0) continue;
+            
+        if((end.x>start.x&&x0>=start.x && x0<=end.x)){
+            crossNum++;
+            if(k>=0) leftCount++;
+            else rightCount++;
+        }
+        if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
+            crossNum++;
+            if(k>=0) rightCount++;
+            else leftCount++;
+        }
+        }
+        
+        return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;
     }
 
     /**

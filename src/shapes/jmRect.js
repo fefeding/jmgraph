@@ -26,6 +26,19 @@ class jmRect extends jmPath {
 	set radius(v) {
 		this.needUpdate = true;
 		return this.__pro('radius', v);
+	}	
+
+	/**
+	 * 当前位置左上角
+	 * @property position
+	 * @type {point}
+	 */
+	get position() {
+		return this.__pro('position');
+	}
+	set position(v) {
+		this.needUpdate = true;
+		return this.__pro('position', v);
 	}
 
 	/**

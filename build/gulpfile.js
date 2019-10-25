@@ -46,7 +46,7 @@ gulp.task('docs', function () {
         .pipe(concat('jmGraph.md'))
         .pipe(gulpJsdoc2md({}))
         .on('error', function (err) {
-            gutil.log(gutil.colors.red('jsdoc2md failed'), err.message)
+            console.error('jsdoc2md failed', err.message);
         })
         .pipe(rename(function (path) {
         path.extname = '.md'

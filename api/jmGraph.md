@@ -84,6 +84,8 @@
 <dt><a href="#clear">clear()</a></dt>
 <dd><p>清空当前集合</p>
 </dd>
+<dt><a href="#judge 判断点是否在多边形中">judge 判断点是否在多边形中(dot, coordinates, 是否为实心)</a> ⇒ <code>boolean</code></dt>
+<dd></dd>
 <dt><a href="#is">is(type)</a> ⇒ <code>boolean</code></dt>
 <dd><p>检 查对象是否为指定类型</p>
 </dd>
@@ -503,7 +505,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -515,7 +516,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -615,18 +615,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 根据控件zIndex排序，越大的越高
 
 **Kind**: static method of <code>[children](#jmControl+children)</code>  
-<a name="jmControl+position"></a>
-
-### jmControl.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmControl.width : <code>number</code>
@@ -753,18 +741,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 根据控件zIndex排序，越大的越高
 
 **Kind**: static method of <code>[children](#jmControl+children)</code>  
-<a name="jmControl+position"></a>
-
-### jmControl.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmControl.width : <code>number</code>
@@ -893,7 +869,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -1012,19 +987,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmPath.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -1150,7 +1112,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -1378,19 +1339,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmArc.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -1516,7 +1464,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -1745,19 +1692,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmArc.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmArc.width : <code>number</code>
@@ -1876,7 +1810,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -2035,18 +1968,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmArraw.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmArraw.width : <code>number</code>
@@ -2153,7 +2074,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -2259,18 +2179,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmBezier.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -2382,7 +2290,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -2541,18 +2448,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmCircle.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmCircle.width : <code>number</code>
@@ -2660,7 +2555,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -2672,7 +2566,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -2772,18 +2665,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 根据控件zIndex排序，越大的越高
 
 **Kind**: static method of <code>[children](#jmControl+children)</code>  
-<a name="jmControl+position"></a>
-
-### jmControl.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmControl.width : <code>number</code>
@@ -2910,18 +2791,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 根据控件zIndex排序，越大的越高
 
 **Kind**: static method of <code>[children](#jmControl+children)</code>  
-<a name="jmControl+position"></a>
-
-### jmControl.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmControl.width : <code>number</code>
@@ -3055,7 +2924,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -3240,18 +3108,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmHArc.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmHArc.width : <code>number</code>
@@ -3359,7 +3215,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -3479,18 +3334,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmLine.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmLine.width : <code>number</code>
@@ -3598,7 +3441,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -3718,19 +3560,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmPath.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmPath.width : <code>number</code>
@@ -3845,7 +3674,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -3951,18 +3779,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmPrismatic.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmPrismatic.width : <code>number</code>
@@ -4065,13 +3881,13 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 * [jmRect](#jmRect) ⇐ <code>[jmPath](#jmPath)</code>
     * [new jmRect(params)](#new_jmRect_new)
     * [.radius](#jmRect+radius) : <code>number</code>
+    * [.position](#jmRect+position) : <code>point</code>
     * [.points](#jmPath+points) : <code>array</code>
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -4102,6 +3918,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | radius | 
+
+<a name="jmRect+position"></a>
+
+### jmRect.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
 
 <a name="jmPath+points"></a>
 
@@ -4176,18 +4004,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmRect.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -4296,7 +4112,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -4416,18 +4231,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmArrawLine.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmArrawLine.width : <code>number</code>
@@ -4534,7 +4337,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -4644,19 +4446,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | children | 
 
-<a name="jmControl+position"></a>
-
-### jmImage.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
-
 <a name="jmControl+width"></a>
 
 ### jmImage.width : <code>number</code>
@@ -4764,12 +4553,12 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [new jmLabel(params)](#new_jmLabel_new)
     * [.text](#jmLabel+text) : <code>string</code>
     * [.center](#jmLabel+center) : <code>point</code>
+    * [.position](#jmLabel+position) : <code>point</code>
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -4812,6 +4601,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | center | 
+
+<a name="jmLabel+position"></a>
+
+### jmLabel.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
 
 <a name="jmControl+type"></a>
 
@@ -4878,19 +4679,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmLabel.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -5000,13 +4788,13 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.rectSize](#jmResize+rectSize) : <code>number</code>
     * [.resizable](#jmResize+resizable) : <code>boolean</code>
     * [.radius](#jmRect+radius) : <code>number</code>
+    * [.position](#jmRect+position) : <code>point</code>
     * [.points](#jmPath+points) : <code>array</code>
     * [.type](#jmControl+type) : <code>string</code>
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
@@ -5056,6 +4844,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | radius | 
+
+<a name="jmRect+position"></a>
+
+### jmResize.position : <code>point</code>
+当前位置左上角
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Overrides:** <code>[position](#jmRect+position)</code>  
+**Properties**
+
+| Name |
+| --- |
+| position | 
 
 <a name="jmPath+points"></a>
 
@@ -5129,19 +4930,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmResize.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+width"></a>
 
@@ -5255,7 +5043,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
-    * [.position](#jmControl+position) : <code>point</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
     * [.cursor](#jmControl+cursor) : <code>string</code>
     * [.needUpdate](#jmProperty+needUpdate) : <code>boolean</code>
@@ -5391,19 +5178,6 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | Name |
 | --- |
 | children | 
-
-<a name="jmControl+position"></a>
-
-### jmGraph.position : <code>point</code>
-当前位置左上角
-
-**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
-**Overrides:** <code>[position](#jmControl+position)</code>  
-**Properties**
-
-| Name |
-| --- |
-| position | 
 
 <a name="jmControl+zIndex"></a>
 
@@ -5581,6 +5355,18 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 
 **Kind**: global function  
 **For**: list  
+<a name="judge 判断点是否在多边形中"></a>
+
+## judge 判断点是否在多边形中(dot, coordinates, 是否为实心) ⇒ <code>boolean</code>
+**Kind**: global function  
+**Returns**: <code>boolean</code> - 结果 true=在形状内  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dot | <code>point</code> | {{x,y}} 需要判断的点 |
+| coordinates | <code>array</code> | {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 |
+| 是否为实心 | <code>number</code> | 1= 是 |
+
 <a name="is"></a>
 
 ## is(type) ⇒ <code>boolean</code>

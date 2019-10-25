@@ -46,15 +46,52 @@
 			//创建一个方块
 			var rect = g.createShape('rect',{
 				style:style,
-				position: {x:100,y:100},
+				position: {x:300,y:100},
 				width:100,
 				height:100
 			});
-			g.children.add(rect);
+			//g.children.add(rect);
 			rect.canMove(true);
 
+			// 画二个五角星
+			var coordinates = [
+				{x:50,y:100},
+				{x:250,y:100},
+				{x:100,y:150},
+				{x:150,y:50},
+				{x:200,y:150},
+				{x:50,y:100},
+			];
+			style = g.utils.clone(style);
+			var star1 = g.createShape('path',{
+				style:style,
+				points: coordinates
+			});
+			g.children.add(star1);
+			star1.canMove(true);
+
+			var coordinates2 = [
+				{x:50,y:300},
+				{x:250,y:300},
+				{x:100,y:350},
+				{x:150,y:250},
+				{x:200,y:350},
+				{x:50,y:300},
+			];
+			style = g.utils.clone(style);
+			delete style.fill;
+			var star2 = g.createShape('path',{
+				style:style,
+				points: coordinates2
+			});
+			g.children.add(star2);
+			star2.canMove(true);
+
 			function update() {
-				if(g.needUpdate) g.redraw();
+				if(g.needUpdate) {
+					console.log(coordinates);
+					g.redraw();
+				}
 				requestAnimationFrame(update);
 			}
 

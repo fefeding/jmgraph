@@ -1097,45 +1097,111 @@ function () {
           return 1;
         }
       }
-
-      pt = this.clone(pt);
-
+      /*pt = this.clone(pt);
       while (redo) {
-        redo = false;
-        inside = false;
-
-        for (i = 0, j = n - 1; i < n; j = i++) {
-          if (polygon[i].y < pt.y && pt.y < polygon[j].y || polygon[j].y < pt.y && pt.y < polygon[i].y) {
-            if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
-              var _x = (pt.y - polygon[i].y) * (polygon[j].x - polygon[i].x) / (polygon[j].y - polygon[i].y) + polygon[i].x;
-
-              if (pt.x < _x) // 在线的左侧
-                inside = !inside;else if (pt.x == _x) // 在线上
-                {
-                  return 1;
-                }
-            }
-          } else if (pt.y == polygon[i].y) {
-            if (pt.x < polygon[i].x) {
-              // 交点在顶点上                    
-              if (polygon[i].y > polygon[j].y) {
-                --pt.y;
-              } else {
-                ++pt.y;
+          redo = false;
+          inside = false;
+          for (i = 0,j = n - 1;i < n;j = i++) {
+              if ( (polygon[i].y < pt.y && pt.y < polygon[j].y) || 
+                  (polygon[j].y < pt.y && pt.y < polygon[i].y) ) {
+                  if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
+                      var _x = (pt.y-polygon[i].y)*(polygon[j].x-polygon[i].x)/(polygon[j].y-polygon[i].y)+polygon[i].x;
+                      if (pt.x < _x)          // 在线的左侧
+                          inside = !inside;
+                      else if (pt.x == _x)    // 在线上
+                      {
+                          return 1;
+                      }
+                  }
               }
-
-              redo = true;
-              break;
-            }
-          } else if (polygon[i].y == polygon[j].y && // 在水平的边界线上
-          pt.y == polygon[i].y && (polygon[i].x < pt.x && pt.x < polygon[j].x || polygon[j].x < pt.x && pt.x < polygon[i].x)) {
-            inside = true;
-            break;
+              else if ( pt.y == polygon[i].y) {
+                  if (pt.x < polygon[i].x) {    // 交点在顶点上                    
+                      if(polygon[i].y > polygon[j].y) {
+                          --pt.y
+                      }
+                      else {
+                          ++pt.y;
+                      }
+                      redo = true;
+                      break;
+                  }
+              }
+              else if ( polygon[i].y ==  polygon[j].y && // 在水平的边界线上
+                  pt.y == polygon[i].y &&
+                  ( (polygon[i].x < pt.x && pt.x < polygon[j].x) || 
+                  (polygon[j].x < pt.x && pt.x < polygon[i].x) ) ) {
+                  inside = true;
+                  break;
+              }
           }
+      }*/
+
+
+      return this.judge(pt, polygon, 1) ? 2 : 0;
+    }
+    /**
+     * @method judge 判断点是否在多边形中
+     * @param {point} dot {{x,y}} 需要判断的点
+     * @param {array} coordinates {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
+     *        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 
+     * @param  {number} 是否为实心 1= 是
+     * @returns {boolean} 结果 true=在形状内
+     */
+
+  }, {
+    key: "judge",
+    value: function judge(dot, coordinates, noneZeroMode) {
+      // 默认启动none zero mode
+      noneZeroMode = noneZeroMode || 1;
+      var x = dot.x,
+          y = dot.y;
+      var crossNum = 0; // 点在线段的左侧数目
+
+      var leftCount = 0; // 点在线段的右侧数目
+
+      var rightCount = 0;
+
+      for (var i = 0; i < coordinates.length - 1; i++) {
+        var start = coordinates[i];
+        var end = coordinates[i + 1]; // 起点、终点斜率不存在的情况
+
+        if (start.x === end.x) {
+          // 因为射线向右水平，此处说明不相交
+          if (x > start.x) continue; // 从左侧贯穿
+
+          if (end.y > start.y && y >= start.y && y <= end.y) {
+            leftCount++;
+            crossNum++;
+          } // 从右侧贯穿
+
+
+          if (end.y < start.y && y >= end.y && y <= start.y) {
+            rightCount++;
+            crossNum++;
+          }
+
+          continue;
+        } // 斜率存在的情况，计算斜率
+
+
+        var k = (end.y - start.y) / (end.x - start.x); // 交点的x坐标
+
+        var x0 = (y - start.y) / k + start.x; // 因为射线向右水平，此处说明不相交
+
+        if (x > x0) continue;
+
+        if (end.x > start.x && x0 >= start.x && x0 <= end.x) {
+          crossNum++;
+          if (k >= 0) leftCount++;else rightCount++;
+        }
+
+        if (end.x < start.x && x0 >= end.x && x0 <= start.x) {
+          crossNum++;
+          if (k >= 0) rightCount++;else leftCount++;
         }
       }
 
-      return inside ? 2 : 0;
+      return noneZeroMode === 1 ? leftCount - rightCount !== 0 : crossNum % 2 === 1;
     }
     /**
      * 检查边界，子对象是否超出父容器边界
@@ -1202,12 +1268,12 @@ function () {
           p[i].y = x1 * sin + y1 * cos + rp.y;
         }
       } else {
-        var _x2 = p.x - rp.x;
+        var _x = p.x - rp.x;
 
         var _y = p.y - rp.y;
 
-        p.x = _x2 * cos - _y * sin + rp.x;
-        p.y = _x2 * sin + _y * cos + rp.y;
+        p.x = _x * cos - _y * sin + rp.x;
+        p.y = _x * sin + _y * cos + rp.y;
       }
 
       return p;
@@ -2007,6 +2073,21 @@ function (_jmControl) {
     set: function set(v) {
       this.needUpdate = true;
       return this.__pro('center', v);
+    }
+    /**
+     * 当前位置左上角
+     * @property position
+     * @type {point}
+     */
+
+  }, {
+    key: "position",
+    get: function get() {
+      return this.__pro('position');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.__pro('position', v);
     }
   }]);
 
@@ -4036,11 +4117,8 @@ function (_jmProperty) {
 
     _this2.__pro('type', t || (this instanceof jmControl ? this.constructor : void 0).name);
 
-    _this2.style = params && params.style ? params.style : {};
-    _this2.position = params.position || {
-      x: 0,
-      y: 0
-    };
+    _this2.style = params && params.style ? params.style : {}; //this.position = params.position || {x:0,y:0};
+
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
     _this2.graph = params.graph || null;
@@ -5407,21 +5485,6 @@ function (_jmProperty) {
       return this.__pro('children', v);
     }
     /**
-     * 当前位置左上角
-     * @property position
-     * @type {point}
-     */
-
-  }, {
-    key: "position",
-    get: function get() {
-      return this.__pro('position');
-    },
-    set: function set(v) {
-      this.needUpdate = true;
-      return this.__pro('position', v);
-    }
-    /**
      * 宽度
      * @property width
      * @type {number}
@@ -6232,6 +6295,21 @@ function (_jmPath) {
     set: function set(v) {
       this.needUpdate = true;
       return this.__pro('radius', v);
+    }
+    /**
+     * 当前位置左上角
+     * @property position
+     * @type {point}
+     */
+
+  }, {
+    key: "position",
+    get: function get() {
+      return this.__pro('position');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.__pro('position', v);
     }
   }]);
 

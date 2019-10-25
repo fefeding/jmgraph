@@ -6,6 +6,7 @@
     var width = win.innerWidth;
     var height = win.innerHeight;
     var gameState = 'init';//游戏状态，init=等待开始，play=进行中,pause=暂停, end=已结束
+    var maxScore = 520;//最高得分
     var startButton = null;
     var tempSprites = [];//临时的精灵，很快就会消失的   
     var resources = new resourcesLoader(); 
@@ -486,54 +487,64 @@
         return xmlHttp;
     }
 
+    //二个矩形是否有碰撞
     function hitTestRectangle(r1, r2) {
-
-        //Define the variables we'll need to calculate
-        var hitFlag, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-        //hit will determine whether there's a collision
+        var hitFlag, combinedHalfWidths, combinedHalfHeights, vx, vy, x1, y1, x2, y2, width1, height1, width2, height2;
         hitFlag = false;
 
-        //Find the center points of each sprite
-        r1.centerX = r1.position.x + r1.width / 2;
-        r1.centerY = r1.position.y + r1.height / 2;
-        r2.centerX = r2.position.x + r2.width / 2;
-        r2.centerY = r2.position.y + r2.height / 2;
+        x1 = r1.x;
+        x2 = r2.x;
+        y1 = r1.y;
+        y2 = r2.y;
+        width1 = r1.width;
+        width2 = r2.width;
+        height1 = r1.height;
+        height2 = r2.height;
+        //如果对象有指定碰撞区域，则我们采用指定的坐标计算
+        if(r1.hitArea) {
+            x1 += r1.hitArea.x * map.scale;
+            y1 += r1.hitArea.y * map.scale;
+            width1 = r1.hitArea.width * map.scale;
+            height1 = r1.hitArea.height * map.scale;
+        }
+        if(r2.hitArea) {
+            x2 += r2.hitArea.x * map.scale;
+            y2 += r2.hitArea.y * map.scale;
+            width2 = r2.hitArea.width * map.scale;
+            height2 = r2.hitArea.height * map.scale;
+        }
 
-        //Find the half-widths and half-heights of each sprite
-        r1.halfWidth = r1.width / 2;
-        r1.halfHeight = r1.height / 2;
-        r2.halfWidth = r2.width / 2;
-        r2.halfHeight = r2.height / 2;
+        //中心坐标点
+        r1.centerX = x1 + width1 / 2;
+        r1.centerY = y1 + height1 / 2;
+        r2.centerX = x2 + width2 / 2;
+        r2.centerY = y2 + height2 / 2;
 
-        //Calculate the distance vector between the sprites
+        //半宽高
+        r1.halfWidth = width1 / 2;
+        r1.halfHeight = height1 / 2;
+        r2.halfWidth = width2 / 2;
+        r2.halfHeight = height2 / 2;
+
+        //中心点的X和Y偏移值
         vx = r1.centerX - r2.centerX;
         vy = r1.centerY - r2.centerY;
 
-        //Figure out the combined half-widths and half-heights
+        //计算宽高一半的和
         combinedHalfWidths = r1.halfWidth + r2.halfWidth;
         combinedHalfHeights = r1.halfHeight + r2.halfHeight;
 
-        //Check for a collision on the x axis
+        //如果中心X距离小于二者的一半宽和
         if (Math.abs(vx) < combinedHalfWidths) {
-
-        //A collision might be occuring. Check for a collision on the y axis
-        if (Math.abs(vy) < combinedHalfHeights) {
-
-            //There's definitely a collision happening
-            hitFlag = true;
+            //如果中心V偏移量也小于半高的和，则二者碰撞
+            if (Math.abs(vy) < combinedHalfHeights) {
+                hitFlag = true;
+            } else {
+                hitFlag = false;
+            }
         } else {
-
-            //There's no collision on the y axis
             hitFlag = false;
         }
-        } else {
-
-        //There's no collision on the x axis
-        hitFlag = false;
-        }
-
-        //`hit` will be either `true` or `false`
         return hitFlag;
     };
 })(window, document);

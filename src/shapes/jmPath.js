@@ -12,7 +12,8 @@ class jmPath extends jmControl {
 
 	constructor(params, t='jmPath') {
 		super(params, t);		
-		this.points = params && params.points ? params.points : [];		
+		this.points = params && params.points ? params.points : [];	
+		
 	}
 	
 	/**

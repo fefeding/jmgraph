@@ -220,7 +220,7 @@ var arraw = g.createShape('arraw', {
 ```
 
 #### 贝塞尔曲线
-`bezier`可以指定无隐个控制点，绘制复杂的曲线。
+`bezier`可以指定无数个控制点，绘制复杂的曲线。
 具体请参考示例。
 [在线示例](http://jiamao.github.io/jmgraph/example/controls/bezier.html)
 

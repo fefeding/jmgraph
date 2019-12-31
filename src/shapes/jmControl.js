@@ -22,6 +22,11 @@ class jmControl extends jmProperty {
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+
+		if(params.position) {
+			this.position = params.position;
+		}
+
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
 

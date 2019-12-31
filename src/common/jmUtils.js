@@ -1,4 +1,6 @@
 
+import { jmList } from './jmList.js';
+
 /**
  * 画图基础对象
  * 当前库的工具类
@@ -19,8 +21,8 @@ class jmUtils {
     static clone(source, deep = false) {
         if(source && typeof source === 'object') {
             //如果为当前泛型，则直接new
-            if(this.isType(source, this.list)) {
-                return new this.list(source);
+            if(this.isType(source, jmList)) {
+                return new jmList(source);
             }
             else if(Array.isArray(source)) {
                 //如果是深度复，则拷贝每个对象
@@ -265,7 +267,8 @@ class jmUtils {
                 return 1;
             }
         }
-        /*pt = this.clone(pt);
+
+        //pt = this.clone(pt);
         while (redo) {
             redo = false;
             inside = false;
@@ -302,9 +305,9 @@ class jmUtils {
                     break;
                 }
             }
-        }*/
+        }
 
-        return this.judge(pt, polygon, 1) ? 2:0;
+        return inside ? 2:0;
     }
 
     /**
@@ -325,43 +328,43 @@ class jmUtils {
         // 点在线段的右侧数目
         var rightCount = 0;
         for(var i=0;i<coordinates.length-1;i++){
-        var start = coordinates[i];
-        var end = coordinates[i+1];
-            
-        // 起点、终点斜率不存在的情况
-        if(start.x===end.x) {
+            var start = coordinates[i];
+            var end = coordinates[i+1];
+                
+            // 起点、终点斜率不存在的情况
+            if(start.x===end.x) {
+                // 因为射线向右水平，此处说明不相交
+                if(x>start.x) continue;
+                
+                // 从左侧贯穿
+                if((end.y>start.y&&y>=start.y && y<=end.y)){
+                    leftCount++;
+                    crossNum++;
+                }
+                // 从右侧贯穿
+                if((end.y<start.y&&y>=end.y && y<=start.y)) {
+                    rightCount++;
+                    crossNum++;
+                }
+                continue;
+            }
+            // 斜率存在的情况，计算斜率
+            var k=(end.y-start.y)/(end.x-start.x);
+            // 交点的x坐标
+            var x0 = (y-start.y)/k+start.x;
             // 因为射线向右水平，此处说明不相交
-            if(x>start.x) continue;
-            
-            // 从左侧贯穿
-            if((end.y>start.y&&y>=start.y && y<=end.y)){
-                leftCount++;
+            if(x>x0) continue;
+                
+            if((end.x>start.x&&x0>=start.x && x0<=end.x)){
                 crossNum++;
+                if(k>=0) leftCount++;
+                else rightCount++;
             }
-            // 从右侧贯穿
-            if((end.y<start.y&&y>=end.y && y<=start.y)) {
-                rightCount++;
+            if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
                 crossNum++;
+                if(k>=0) rightCount++;
+                else leftCount++;
             }
-            continue;
-        }
-        // 斜率存在的情况，计算斜率
-        var k=(end.y-start.y)/(end.x-start.x);
-        // 交点的x坐标
-        var x0 = (y-start.y)/k+start.x;
-        // 因为射线向右水平，此处说明不相交
-        if(x>x0) continue;
-            
-        if((end.x>start.x&&x0>=start.x && x0<=end.x)){
-            crossNum++;
-            if(k>=0) leftCount++;
-            else rightCount++;
-        }
-        if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
-            crossNum++;
-            if(k>=0) rightCount++;
-            else leftCount++;
-        }
         }
         
         return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;

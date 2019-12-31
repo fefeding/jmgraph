@@ -1,4 +1,6 @@
 import {jmUtils} from "./common/jmUtils.js";
+import {jmList} from "./common/jmList.js";
+import {jmProperty} from './common/jmProperty.js';
 import {jmShadow} from "./models/jmShadow.js";
 import {jmGradient} from "./models/jmGradient.js";
 import {jmEvents} from "./common/jmEvents.js";
@@ -480,5 +482,28 @@ const createJmGraph = (...args) => {
 	return new jmGraph(...args);
 }
 
-export { jmGraph, createJmGraph as create };
+export { 
+	jmGraph, 
+	createJmGraph as create,
+	jmUtils,
+	jmList,
+	jmProperty,
+	jmShadow,
+	jmGradient,
+	jmEvents,
+	jmControl,
+	jmPath,
+	jmArc,
+	jmArraw,
+	jmBezier,
+	jmCircle,
+	jmHArc,
+	jmLine,
+	jmPrismatic,
+	jmRect,
+	jmArrawLine,
+	jmImage,
+	jmLabel,
+	jmResize
+ };
 export default jmGraph;

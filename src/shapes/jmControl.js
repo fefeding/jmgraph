@@ -526,16 +526,16 @@ class jmControl extends jmProperty {
 	 * @method getLocation
 	 * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
 	 */
-	getLocation(reset) {
+	getLocation(clone=true) {
 		//如果已经计算过则直接返回
 		//在开画之前会清空此对象
 		//if(reset !== true && this.location) return this.location;
 
 		let local = this.location = {left: 0,top: 0,width: 0,height: 0};
-		local.position = typeof this.position == 'function'? this.position(): this.position;	
-		local.center = this.center && typeof this.center === 'function'?this.center(): this.center;//中心
-		local.start = this.start && typeof this.start === 'function'?this.start(): this.start;//起点
-		local.end = this.end && typeof this.end === 'function'?this.end(): this.end;//起点
+		local.position = typeof this.position == 'function'? this.position(): jmUtils.clone(this.position);	
+		local.center = this.center && typeof this.center === 'function'?this.center(): jmUtils.clone(this.center);//中心
+		local.start = this.start && typeof this.start === 'function'?this.start(): jmUtils.clone(this.start);//起点
+		local.end = this.end && typeof this.end === 'function'?this.end(): jmUtils.clone(this.end);//起点
 		local.radius = this.radius;//半径
 		local.width = this.width;
 		local.height = this.height;
@@ -655,26 +655,27 @@ class jmControl extends jmProperty {
 		if(local.position) {
 			local.left += x;
 			local.top += y;
-			local.position.x = local.left;
-			local.position.y = local.top;
+			// 由于local是clone出来的对象，为了保留位移，则要修改原属性
+			this.position.x = local.left;
+			this.position.y = local.top;
 			offseted = true;
 		}
 
 		if(local.center) {		
-			local.center.x = local.center.x + x;
-			local.center.y = local.center.y + y;
+			this.center.x = local.center.x + x;
+			this.center.y = local.center.y + y;
 			offseted = true;
 		}
 
 		if(local.start && typeof local.start == 'object') {	
-			local.start.x = local.start.x + x;
-			local.start.y = local.start.y + y;
+			this.start.x = local.start.x + x;
+			this.start.y = local.start.y + y;
 			offseted = true;
 		}
 
 		if(local.end && typeof local.end == 'object') {		
-			local.end.x = local.end.x + x;
-			local.end.y = local.end.y + y;
+			this.end.x = local.end.x + x;
+			this.end.y = local.end.y + y;
 			offseted = true;
 		}
 

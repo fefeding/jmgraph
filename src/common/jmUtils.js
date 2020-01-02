@@ -29,7 +29,7 @@ class jmUtils {
                 if(deep) {
                     let dest = [];
                     for(let i=0; i<source.length; i++) {
-                        dest.push(this.clone(source[i]));
+                        dest.push(this.clone(source[i], deep));
                     }
                     return dest;
                 }
@@ -38,7 +38,7 @@ class jmUtils {
             let target = {};
             target.constructor = source.constructor;
             for(let k in source) {
-                target[k] = this.clone(source[k]);
+                target[k] = this.clone(source[k], deep);
             }
             return target;
         }

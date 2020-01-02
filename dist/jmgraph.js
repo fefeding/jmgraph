@@ -786,6 +786,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.jmUtils = void 0;
 
+var _jmList = require("./jmList.js");
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -825,15 +827,15 @@ function () {
 
       if (source && _typeof(source) === 'object') {
         //如果为当前泛型，则直接new
-        if (this.isType(source, this.list)) {
-          return new this.list(source);
+        if (this.isType(source, _jmList.jmList)) {
+          return new _jmList.jmList(source);
         } else if (Array.isArray(source)) {
           //如果是深度复，则拷贝每个对象
           if (deep) {
             var dest = [];
 
             for (var i = 0; i < source.length; i++) {
-              dest.push(this.clone(source[i]));
+              dest.push(this.clone(source[i], deep));
             }
 
             return dest;
@@ -846,7 +848,7 @@ function () {
         target.constructor = source.constructor;
 
         for (var k in source) {
-          target[k] = this.clone(source[k]);
+          target[k] = this.clone(source[k], deep);
         }
 
         return target;
@@ -1096,48 +1098,45 @@ function () {
         polygon[i].y == pt.y) {
           return 1;
         }
-      }
-      /*pt = this.clone(pt);
+      } //pt = this.clone(pt);
+
+
       while (redo) {
-          redo = false;
-          inside = false;
-          for (i = 0,j = n - 1;i < n;j = i++) {
-              if ( (polygon[i].y < pt.y && pt.y < polygon[j].y) || 
-                  (polygon[j].y < pt.y && pt.y < polygon[i].y) ) {
-                  if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
-                      var _x = (pt.y-polygon[i].y)*(polygon[j].x-polygon[i].x)/(polygon[j].y-polygon[i].y)+polygon[i].x;
-                      if (pt.x < _x)          // 在线的左侧
-                          inside = !inside;
-                      else if (pt.x == _x)    // 在线上
-                      {
-                          return 1;
-                      }
-                  }
+        redo = false;
+        inside = false;
+
+        for (i = 0, j = n - 1; i < n; j = i++) {
+          if (polygon[i].y < pt.y && pt.y < polygon[j].y || polygon[j].y < pt.y && pt.y < polygon[i].y) {
+            if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
+              var _x = (pt.y - polygon[i].y) * (polygon[j].x - polygon[i].x) / (polygon[j].y - polygon[i].y) + polygon[i].x;
+
+              if (pt.x < _x) // 在线的左侧
+                inside = !inside;else if (pt.x == _x) // 在线上
+                {
+                  return 1;
+                }
+            }
+          } else if (pt.y == polygon[i].y) {
+            if (pt.x < polygon[i].x) {
+              // 交点在顶点上                    
+              if (polygon[i].y > polygon[j].y) {
+                --pt.y;
+              } else {
+                ++pt.y;
               }
-              else if ( pt.y == polygon[i].y) {
-                  if (pt.x < polygon[i].x) {    // 交点在顶点上                    
-                      if(polygon[i].y > polygon[j].y) {
-                          --pt.y
-                      }
-                      else {
-                          ++pt.y;
-                      }
-                      redo = true;
-                      break;
-                  }
-              }
-              else if ( polygon[i].y ==  polygon[j].y && // 在水平的边界线上
-                  pt.y == polygon[i].y &&
-                  ( (polygon[i].x < pt.x && pt.x < polygon[j].x) || 
-                  (polygon[j].x < pt.x && pt.x < polygon[i].x) ) ) {
-                  inside = true;
-                  break;
-              }
+
+              redo = true;
+              break;
+            }
+          } else if (polygon[i].y == polygon[j].y && // 在水平的边界线上
+          pt.y == polygon[i].y && (polygon[i].x < pt.x && pt.x < polygon[j].x || polygon[j].x < pt.x && pt.x < polygon[i].x)) {
+            inside = true;
+            break;
           }
-      }*/
+        }
+      }
 
-
-      return this.judge(pt, polygon, 1) ? 2 : 0;
+      return inside ? 2 : 0;
     }
     /**
      * @method judge 判断点是否在多边形中
@@ -1268,12 +1267,12 @@ function () {
           p[i].y = x1 * sin + y1 * cos + rp.y;
         }
       } else {
-        var _x = p.x - rp.x;
+        var _x2 = p.x - rp.x;
 
         var _y = p.y - rp.y;
 
-        p.x = _x * cos - _y * sin + rp.x;
-        p.y = _x * sin + _y * cos + rp.y;
+        p.x = _x2 * cos - _y * sin + rp.x;
+        p.y = _x2 * sin + _y * cos + rp.y;
       }
 
       return p;
@@ -1501,7 +1500,7 @@ function () {
 
 exports.jmUtils = jmUtils;
 
-},{}],6:[function(require,module,exports){
+},{"./jmList.js":2}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2417,9 +2416,133 @@ exports.jmResize = jmResize;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+Object.defineProperty(exports, "jmUtils", {
+  enumerable: true,
+  get: function get() {
+    return _jmUtils.jmUtils;
+  }
+});
+Object.defineProperty(exports, "jmList", {
+  enumerable: true,
+  get: function get() {
+    return _jmList.jmList;
+  }
+});
+Object.defineProperty(exports, "jmProperty", {
+  enumerable: true,
+  get: function get() {
+    return _jmProperty.jmProperty;
+  }
+});
+Object.defineProperty(exports, "jmShadow", {
+  enumerable: true,
+  get: function get() {
+    return _jmShadow.jmShadow;
+  }
+});
+Object.defineProperty(exports, "jmGradient", {
+  enumerable: true,
+  get: function get() {
+    return _jmGradient.jmGradient;
+  }
+});
+Object.defineProperty(exports, "jmEvents", {
+  enumerable: true,
+  get: function get() {
+    return _jmEvents.jmEvents;
+  }
+});
+Object.defineProperty(exports, "jmControl", {
+  enumerable: true,
+  get: function get() {
+    return _jmControl2.jmControl;
+  }
+});
+Object.defineProperty(exports, "jmPath", {
+  enumerable: true,
+  get: function get() {
+    return _jmPath.jmPath;
+  }
+});
+Object.defineProperty(exports, "jmArc", {
+  enumerable: true,
+  get: function get() {
+    return _jmArc.jmArc;
+  }
+});
+Object.defineProperty(exports, "jmArraw", {
+  enumerable: true,
+  get: function get() {
+    return _jmArraw.jmArraw;
+  }
+});
+Object.defineProperty(exports, "jmBezier", {
+  enumerable: true,
+  get: function get() {
+    return _jmBezier.jmBezier;
+  }
+});
+Object.defineProperty(exports, "jmCircle", {
+  enumerable: true,
+  get: function get() {
+    return _jmCircle.jmCircle;
+  }
+});
+Object.defineProperty(exports, "jmHArc", {
+  enumerable: true,
+  get: function get() {
+    return _jmHArc.jmHArc;
+  }
+});
+Object.defineProperty(exports, "jmLine", {
+  enumerable: true,
+  get: function get() {
+    return _jmLine.jmLine;
+  }
+});
+Object.defineProperty(exports, "jmPrismatic", {
+  enumerable: true,
+  get: function get() {
+    return _jmPrismatic.jmPrismatic;
+  }
+});
+Object.defineProperty(exports, "jmRect", {
+  enumerable: true,
+  get: function get() {
+    return _jmRect.jmRect;
+  }
+});
+Object.defineProperty(exports, "jmArrawLine", {
+  enumerable: true,
+  get: function get() {
+    return _jmArrawLine.jmArrawLine;
+  }
+});
+Object.defineProperty(exports, "jmImage", {
+  enumerable: true,
+  get: function get() {
+    return _jmImage.jmImage;
+  }
+});
+Object.defineProperty(exports, "jmLabel", {
+  enumerable: true,
+  get: function get() {
+    return _jmLabel.jmLabel;
+  }
+});
+Object.defineProperty(exports, "jmResize", {
+  enumerable: true,
+  get: function get() {
+    return _jmResize.jmResize;
+  }
+});
 exports.default = exports.create = exports.jmGraph = void 0;
 
 var _jmUtils = require("./common/jmUtils.js");
+
+var _jmList = require("./common/jmList.js");
+
+var _jmProperty = require("./common/jmProperty.js");
 
 var _jmShadow = require("./models/jmShadow.js");
 
@@ -3026,7 +3149,7 @@ exports.create = createJmGraph;
 var _default = jmGraph;
 exports.default = _default;
 
-},{"./common/jmEvents.js":1,"./common/jmUtils.js":5,"./controls/jmArrawLine.js":6,"./controls/jmImage.js":7,"./controls/jmLabel.js":8,"./controls/jmResize.js":9,"./models/jmGradient.js":11,"./models/jmShadow.js":12,"./shapes/jmArc.js":13,"./shapes/jmArraw.js":14,"./shapes/jmBezier.js":15,"./shapes/jmCircle.js":16,"./shapes/jmControl.js":17,"./shapes/jmHArc.js":18,"./shapes/jmLine.js":19,"./shapes/jmPath.js":20,"./shapes/jmPrismatic.js":21,"./shapes/jmRect.js":22}],11:[function(require,module,exports){
+},{"./common/jmEvents.js":1,"./common/jmList.js":2,"./common/jmProperty.js":4,"./common/jmUtils.js":5,"./controls/jmArrawLine.js":6,"./controls/jmImage.js":7,"./controls/jmLabel.js":8,"./controls/jmResize.js":9,"./models/jmGradient.js":11,"./models/jmShadow.js":12,"./shapes/jmArc.js":13,"./shapes/jmArraw.js":14,"./shapes/jmBezier.js":15,"./shapes/jmCircle.js":16,"./shapes/jmControl.js":17,"./shapes/jmHArc.js":18,"./shapes/jmLine.js":19,"./shapes/jmPath.js":20,"./shapes/jmPrismatic.js":21,"./shapes/jmRect.js":22}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4121,6 +4244,11 @@ function (_jmProperty) {
 
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
+
+    if (params.position) {
+      _this2.position = params.position;
+    }
+
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0; //样式名称，也当做白名单使用		
 
@@ -4526,7 +4654,8 @@ function (_jmProperty) {
 
   }, {
     key: "getLocation",
-    value: function getLocation(reset) {
+    value: function getLocation() {
+      var clone = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       //如果已经计算过则直接返回
       //在开画之前会清空此对象
       //if(reset !== true && this.location) return this.location;
@@ -4536,12 +4665,12 @@ function (_jmProperty) {
         width: 0,
         height: 0
       };
-      local.position = typeof this.position == 'function' ? this.position() : this.position;
-      local.center = this.center && typeof this.center === 'function' ? this.center() : this.center; //中心
+      local.position = typeof this.position == 'function' ? this.position() : _jmUtils.jmUtils.clone(this.position);
+      local.center = this.center && typeof this.center === 'function' ? this.center() : _jmUtils.jmUtils.clone(this.center); //中心
 
-      local.start = this.start && typeof this.start === 'function' ? this.start() : this.start; //起点
+      local.start = this.start && typeof this.start === 'function' ? this.start() : _jmUtils.jmUtils.clone(this.start); //起点
 
-      local.end = this.end && typeof this.end === 'function' ? this.end() : this.end; //起点
+      local.end = this.end && typeof this.end === 'function' ? this.end() : _jmUtils.jmUtils.clone(this.end); //起点
 
       local.radius = this.radius; //半径
 
@@ -4674,27 +4803,28 @@ function (_jmProperty) {
 
       if (local.position) {
         local.left += x;
-        local.top += y;
-        local.position.x = local.left;
-        local.position.y = local.top;
+        local.top += y; // 由于local是clone出来的对象，为了保留位移，则要修改原属性
+
+        this.position.x = local.left;
+        this.position.y = local.top;
         offseted = true;
       }
 
       if (local.center) {
-        local.center.x = local.center.x + x;
-        local.center.y = local.center.y + y;
+        this.center.x = local.center.x + x;
+        this.center.y = local.center.y + y;
         offseted = true;
       }
 
       if (local.start && _typeof(local.start) == 'object') {
-        local.start.x = local.start.x + x;
-        local.start.y = local.start.y + y;
+        this.start.x = local.start.x + x;
+        this.start.y = local.start.y + y;
         offseted = true;
       }
 
       if (local.end && _typeof(local.end) == 'object') {
-        local.end.x = local.end.x + x;
-        local.end.y = local.end.y + y;
+        this.end.x = local.end.x + x;
+        this.end.y = local.end.y + y;
         offseted = true;
       }
 

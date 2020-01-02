@@ -157,6 +157,8 @@ class jmList extends Array {
 
 export { jmList };
 
+
+
 /**
  * 画图基础对象
  * 当前库的工具类
@@ -177,15 +179,15 @@ class jmUtils {
     static clone(source, deep = false) {
         if(source && typeof source === 'object') {
             //如果为当前泛型，则直接new
-            if(this.isType(source, this.list)) {
-                return new this.list(source);
+            if(this.isType(source, jmList)) {
+                return new jmList(source);
             }
             else if(Array.isArray(source)) {
                 //如果是深度复，则拷贝每个对象
                 if(deep) {
                     let dest = [];
                     for(let i=0; i<source.length; i++) {
-                        dest.push(this.clone(source[i]));
+                        dest.push(this.clone(source[i], deep));
                     }
                     return dest;
                 }
@@ -194,7 +196,7 @@ class jmUtils {
             let target = {};
             target.constructor = source.constructor;
             for(let k in source) {
-                target[k] = this.clone(source[k]);
+                target[k] = this.clone(source[k], deep);
             }
             return target;
         }
@@ -423,7 +425,8 @@ class jmUtils {
                 return 1;
             }
         }
-        /*pt = this.clone(pt);
+
+        //pt = this.clone(pt);
         while (redo) {
             redo = false;
             inside = false;
@@ -460,9 +463,9 @@ class jmUtils {
                     break;
                 }
             }
-        }*/
+        }
 
-        return this.judge(pt, polygon, 1) ? 2:0;
+        return inside ? 2:0;
     }
 
     /**
@@ -483,43 +486,43 @@ class jmUtils {
         // 点在线段的右侧数目
         var rightCount = 0;
         for(var i=0;i<coordinates.length-1;i++){
-        var start = coordinates[i];
-        var end = coordinates[i+1];
-            
-        // 起点、终点斜率不存在的情况
-        if(start.x===end.x) {
+            var start = coordinates[i];
+            var end = coordinates[i+1];
+                
+            // 起点、终点斜率不存在的情况
+            if(start.x===end.x) {
+                // 因为射线向右水平，此处说明不相交
+                if(x>start.x) continue;
+                
+                // 从左侧贯穿
+                if((end.y>start.y&&y>=start.y && y<=end.y)){
+                    leftCount++;
+                    crossNum++;
+                }
+                // 从右侧贯穿
+                if((end.y<start.y&&y>=end.y && y<=start.y)) {
+                    rightCount++;
+                    crossNum++;
+                }
+                continue;
+            }
+            // 斜率存在的情况，计算斜率
+            var k=(end.y-start.y)/(end.x-start.x);
+            // 交点的x坐标
+            var x0 = (y-start.y)/k+start.x;
             // 因为射线向右水平，此处说明不相交
-            if(x>start.x) continue;
-            
-            // 从左侧贯穿
-            if((end.y>start.y&&y>=start.y && y<=end.y)){
-                leftCount++;
+            if(x>x0) continue;
+                
+            if((end.x>start.x&&x0>=start.x && x0<=end.x)){
                 crossNum++;
+                if(k>=0) leftCount++;
+                else rightCount++;
             }
-            // 从右侧贯穿
-            if((end.y<start.y&&y>=end.y && y<=start.y)) {
-                rightCount++;
+            if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
                 crossNum++;
+                if(k>=0) rightCount++;
+                else leftCount++;
             }
-            continue;
-        }
-        // 斜率存在的情况，计算斜率
-        var k=(end.y-start.y)/(end.x-start.x);
-        // 交点的x坐标
-        var x0 = (y-start.y)/k+start.x;
-        // 因为射线向右水平，此处说明不相交
-        if(x>x0) continue;
-            
-        if((end.x>start.x&&x0>=start.x && x0<=end.x)){
-            crossNum++;
-            if(k>=0) leftCount++;
-            else rightCount++;
-        }
-        if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
-            crossNum++;
-            if(k>=0) rightCount++;
-            else leftCount++;
-        }
         }
         
         return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;
@@ -1484,6 +1487,11 @@ class jmControl extends jmProperty {
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+
+		if(params.position) {
+			this.position = params.position;
+		}
+
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
 
@@ -1983,16 +1991,16 @@ class jmControl extends jmProperty {
 	 * @method getLocation
 	 * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
 	 */
-	getLocation(reset) {
+	getLocation(clone=true) {
 		//如果已经计算过则直接返回
 		//在开画之前会清空此对象
 		//if(reset !== true && this.location) return this.location;
 
 		let local = this.location = {left: 0,top: 0,width: 0,height: 0};
-		local.position = typeof this.position == 'function'? this.position(): this.position;	
-		local.center = this.center && typeof this.center === 'function'?this.center(): this.center;//中心
-		local.start = this.start && typeof this.start === 'function'?this.start(): this.start;//起点
-		local.end = this.end && typeof this.end === 'function'?this.end(): this.end;//起点
+		local.position = typeof this.position == 'function'? this.position(): jmUtils.clone(this.position);	
+		local.center = this.center && typeof this.center === 'function'?this.center(): jmUtils.clone(this.center);//中心
+		local.start = this.start && typeof this.start === 'function'?this.start(): jmUtils.clone(this.start);//起点
+		local.end = this.end && typeof this.end === 'function'?this.end(): jmUtils.clone(this.end);//起点
 		local.radius = this.radius;//半径
 		local.width = this.width;
 		local.height = this.height;
@@ -2112,26 +2120,27 @@ class jmControl extends jmProperty {
 		if(local.position) {
 			local.left += x;
 			local.top += y;
-			local.position.x = local.left;
-			local.position.y = local.top;
+			// 由于local是clone出来的对象，为了保留位移，则要修改原属性
+			this.position.x = local.left;
+			this.position.y = local.top;
 			offseted = true;
 		}
 
 		if(local.center) {		
-			local.center.x = local.center.x + x;
-			local.center.y = local.center.y + y;
+			this.center.x = local.center.x + x;
+			this.center.y = local.center.y + y;
 			offseted = true;
 		}
 
 		if(local.start && typeof local.start == 'object') {	
-			local.start.x = local.start.x + x;
-			local.start.y = local.start.y + y;
+			this.start.x = local.start.x + x;
+			this.start.y = local.start.y + y;
 			offseted = true;
 		}
 
 		if(local.end && typeof local.end == 'object') {		
-			local.end.x = local.end.x + x;
-			local.end.y = local.end.y + y;
+			this.end.x = local.end.x + x;
+			this.end.y = local.end.y + y;
 			offseted = true;
 		}
 
@@ -3420,6 +3429,11 @@ class jmControl extends jmProperty {
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+
+		if(params.position) {
+			this.position = params.position;
+		}
+
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
 
@@ -3919,16 +3933,16 @@ class jmControl extends jmProperty {
 	 * @method getLocation
 	 * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
 	 */
-	getLocation(reset) {
+	getLocation(clone=true) {
 		//如果已经计算过则直接返回
 		//在开画之前会清空此对象
 		//if(reset !== true && this.location) return this.location;
 
 		let local = this.location = {left: 0,top: 0,width: 0,height: 0};
-		local.position = typeof this.position == 'function'? this.position(): this.position;	
-		local.center = this.center && typeof this.center === 'function'?this.center(): this.center;//中心
-		local.start = this.start && typeof this.start === 'function'?this.start(): this.start;//起点
-		local.end = this.end && typeof this.end === 'function'?this.end(): this.end;//起点
+		local.position = typeof this.position == 'function'? this.position(): jmUtils.clone(this.position);	
+		local.center = this.center && typeof this.center === 'function'?this.center(): jmUtils.clone(this.center);//中心
+		local.start = this.start && typeof this.start === 'function'?this.start(): jmUtils.clone(this.start);//起点
+		local.end = this.end && typeof this.end === 'function'?this.end(): jmUtils.clone(this.end);//起点
 		local.radius = this.radius;//半径
 		local.width = this.width;
 		local.height = this.height;
@@ -4048,26 +4062,27 @@ class jmControl extends jmProperty {
 		if(local.position) {
 			local.left += x;
 			local.top += y;
-			local.position.x = local.left;
-			local.position.y = local.top;
+			// 由于local是clone出来的对象，为了保留位移，则要修改原属性
+			this.position.x = local.left;
+			this.position.y = local.top;
 			offseted = true;
 		}
 
 		if(local.center) {		
-			local.center.x = local.center.x + x;
-			local.center.y = local.center.y + y;
+			this.center.x = local.center.x + x;
+			this.center.y = local.center.y + y;
 			offseted = true;
 		}
 
 		if(local.start && typeof local.start == 'object') {	
-			local.start.x = local.start.x + x;
-			local.start.y = local.start.y + y;
+			this.start.x = local.start.x + x;
+			this.start.y = local.start.y + y;
 			offseted = true;
 		}
 
 		if(local.end && typeof local.end == 'object') {		
-			local.end.x = local.end.x + x;
-			local.end.y = local.end.y + y;
+			this.end.x = local.end.x + x;
+			this.end.y = local.end.y + y;
 			offseted = true;
 		}
 
@@ -5821,6 +5836,8 @@ export { jmResize };
 
 
 
+
+
 /**
  * jmGraph画图类库
  * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
@@ -6284,5 +6301,28 @@ const createJmGraph = (...args) => {
 	return new jmGraph(...args);
 }
 
-export { jmGraph, createJmGraph as create };
+export { 
+	jmGraph, 
+	createJmGraph as create,
+	jmUtils,
+	jmList,
+	jmProperty,
+	jmShadow,
+	jmGradient,
+	jmEvents,
+	jmControl,
+	jmPath,
+	jmArc,
+	jmArraw,
+	jmBezier,
+	jmCircle,
+	jmHArc,
+	jmLine,
+	jmPrismatic,
+	jmRect,
+	jmArrawLine,
+	jmImage,
+	jmLabel,
+	jmResize
+ };
 export default jmGraph;

@@ -10,6 +10,11 @@ import {jmPath} from "./jmPath.js";
 class jmBezier extends jmPath {	
 	
 	constructor(params, t='jmBezier') {
+		// 典线默认不封闭
+		if(params.style && typeof params.style.close !== true) {
+			params.style.close = false;
+		}
+
 		super(params, t);
 		this.cpoints = params.points || [];
 	}	

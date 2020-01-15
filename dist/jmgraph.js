@@ -2773,7 +2773,13 @@ function (_jmControl) {
   }, {
     key: "createShape",
     value: function createShape(name, args) {
-      var shape = this.shapes[name];
+      var shape;
+
+      if (typeof name === 'function') {
+        shape = name;
+      } else {
+        shape = this.shapes[name];
+      }
 
       if (shape) {
         if (!args) args = {};
@@ -3954,6 +3960,11 @@ function (_jmPath) {
     var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmBezier';
 
     _classCallCheck(this, jmBezier);
+
+    // 典线默认不封闭
+    if (params.style && typeof params.style.close !== true) {
+      params.style.close = false;
+    }
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(jmBezier).call(this, params, t));
     _this.cpoints = params.points || [];

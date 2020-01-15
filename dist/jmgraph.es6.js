@@ -3256,6 +3256,11 @@ export { jmArraw };
 class jmBezier extends jmPath {	
 	
 	constructor(params, t='jmBezier') {
+		// 典线默认不封闭
+		if(params.style && typeof params.style.close !== true) {
+			params.style.close = false;
+		}
+
 		super(params, t);
 		this.cpoints = params.points || [];
 	}	
@@ -6029,7 +6034,13 @@ class jmGraph extends jmControl {
 	 * @return {object} 已实例化控件的对象
 	 */
 	createShape(name, args) {
-		let shape = this.shapes[name];
+		let shape;
+		if(typeof name === 'function') {
+			shape = name;
+		}
+		else {
+			shape = this.shapes[name];
+		}
 		if(shape) {
 			if(!args) args = {};
 			args.graph = this;

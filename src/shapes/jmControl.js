@@ -29,6 +29,7 @@ class jmControl extends jmProperty {
 
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
+		this.interactive = params.interactive || false;
 
 		//样式名称，也当做白名单使用		
 		this.jmStyleMap = {
@@ -120,6 +121,22 @@ class jmControl extends jmProperty {
 		return this.__pro('visible', v);
 	}
 
+	/**
+	 * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+	 * 如果false则不会主动响应，但冒泡的事件依然会得到回调
+	 * @property interactive
+	 * @default false
+	 * @type {boolean}
+	 */
+	get interactive() {
+		let s = this.__pro('interactive');
+		return s;
+	}
+	set interactive(v) {
+		return this.__pro('interactive', v);
+	}
+
+	
 	/**
 	 * 当前控件的子控件集合
 	 * @property children
@@ -1078,7 +1095,8 @@ class jmControl extends jmProperty {
 		args.position.y = args.position.offsetY - abounds.top;
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
-		if(this.checkPoint(args.position)) {
+		//interactive 表示当前元素会响应事件
+		if(this.interactive && this.checkPoint(args.position)) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
 			if(!args.target) {
 				args.target = this;

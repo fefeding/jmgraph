@@ -71,7 +71,8 @@ class jmResize extends jmRect {
 					position:{x:0,y:0},
 					width: rs,
 					height: rs,
-					style: rectStyle
+					style: rectStyle,
+					interactive: true
 				});
 			r.index = i;
 			r.visible = true;

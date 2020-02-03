@@ -47,6 +47,8 @@ class jmGraph extends jmControl {
 				if(resolve) resolve(g);				
 			});
 		}
+		option.interactive = true;
+		
 		super(option, 'jmGraph');
 
 		this.option = option || {};

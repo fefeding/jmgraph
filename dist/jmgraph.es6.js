@@ -2754,7 +2754,7 @@ class jmControl extends jmProperty {
 			graph.bind('touchmove',this.__mvMonitor.mv);
 			graph.bind('touchend',this.__mvMonitor.mu);
 			this.bind('touchstart',this.__mvMonitor.md);	
-				
+			this.interactive = true; // 响应事件	
 		}
 		else {			
 			graph.unbind('mousemove',this.__mvMonitor.mv);
@@ -4719,7 +4719,7 @@ class jmControl extends jmProperty {
 			graph.bind('touchmove',this.__mvMonitor.mv);
 			graph.bind('touchend',this.__mvMonitor.mu);
 			this.bind('touchstart',this.__mvMonitor.md);	
-				
+			this.interactive = true; // 响应事件	
 		}
 		else {			
 			graph.unbind('mousemove',this.__mvMonitor.mv);
@@ -5908,6 +5908,8 @@ class jmGraph extends jmControl {
 				if(resolve) resolve(g);				
 			});
 		}
+		option.interactive = true;
+		
 		super(option, 'jmGraph');
 
 		this.option = option || {};

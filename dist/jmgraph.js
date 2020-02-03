@@ -2636,6 +2636,7 @@ function (_jmControl) {
       }));
     }
 
+    option.interactive = true;
     _this = _possibleConstructorReturn(this, _getPrototypeOf(jmGraph).call(this, option, 'jmGraph'));
     _this.option = option || {};
     /**
@@ -5535,6 +5536,7 @@ function (_jmProperty) {
         graph.bind('touchmove', this.__mvMonitor.mv);
         graph.bind('touchend', this.__mvMonitor.mu);
         this.bind('touchstart', this.__mvMonitor.md);
+        this.interactive = true; // 响应事件	
       } else {
         graph.unbind('mousemove', this.__mvMonitor.mv);
         graph.unbind('mouseup', this.__mvMonitor.mu);

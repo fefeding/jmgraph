@@ -151,6 +151,7 @@ line.bind('mouseover',function(evt) {
 });
 ```
 
+> 如果要某个控件不响用操作事件，设置其`interactive`为`false`即可。
 
 #### 事件一览
 | 名称 | 说明 | 回调参数

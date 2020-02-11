@@ -29,7 +29,7 @@ class jmControl extends jmProperty {
 
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
-		this.interactive = params.interactive || false;
+		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
 
 		//样式名称，也当做白名单使用		
 		this.jmStyleMap = {
@@ -119,6 +119,21 @@ class jmControl extends jmProperty {
 	set visible(v) {
 		this.needUpdate = true;
 		return this.__pro('visible', v);
+	}	
+
+	/**
+	 * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+	 * 如果false则不会主动响应，但冒泡的事件依然会得到回调
+	 * @property interactive
+	 * @default false
+	 * @type {boolean}
+	 */
+	get interactive() {
+		let s = this.__pro('interactive');
+		return s;
+	}
+	set interactive(v) {
+		return this.__pro('interactive', v);
 	}
 		
 	/**
@@ -1083,7 +1098,7 @@ class jmControl extends jmProperty {
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
 		// 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
-		if(!args.target && this.checkPoint(args.position)) {
+		if(this.interactive !== false && !args.target && this.checkPoint(args.position)) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
 			if(!args.target) {
 				args.target = this;
@@ -1098,7 +1113,7 @@ class jmControl extends jmProperty {
 		}
 		else {
 			//如果焦点不在，且原焦点在，则触发mouseleave事件
-			if(this.type != 'jmGraph' && this.focused && name == 'mousemove') {
+			if(this.interactive !== false && this.type != 'jmGraph' && this.focused && name == 'mousemove') {
 				this.focused = false;//表明当前焦点离开
 				this.runEventHandle('mouseleave', args);//执行事件	
 			}	

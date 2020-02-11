@@ -502,6 +502,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -513,6 +514,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -587,6 +589,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmControl.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -713,6 +728,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmControl.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -894,6 +922,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1001,6 +1030,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmPath.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -1151,6 +1194,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1367,6 +1411,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmArc.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -1517,6 +1575,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1734,6 +1793,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
+<a name="jmControl+interactive"></a>
+
+### jmArc.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
+
 <a name="jmControl+children"></a>
 
 ### jmArc.children : <code>list</code>
@@ -1877,6 +1950,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -2025,6 +2099,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
+<a name="jmControl+interactive"></a>
+
+### jmArraw.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
+
 <a name="jmControl+children"></a>
 
 ### jmArraw.children : <code>list</code>
@@ -2154,6 +2241,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -2249,6 +2337,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmBezier.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -2383,6 +2484,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -2531,6 +2633,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
+<a name="jmControl+interactive"></a>
+
+### jmCircle.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
+
 <a name="jmControl+children"></a>
 
 ### jmCircle.children : <code>list</code>
@@ -2659,6 +2774,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -2670,6 +2786,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -2744,6 +2861,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmControl.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -2870,6 +3000,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmControl.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3056,6 +3199,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3230,6 +3374,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
+<a name="jmControl+interactive"></a>
+
+### jmHArc.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
+
 <a name="jmControl+children"></a>
 
 ### jmHArc.children : <code>list</code>
@@ -3360,6 +3517,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3468,6 +3626,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmLine.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3599,6 +3770,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3706,6 +3878,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmPath.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3846,6 +4032,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3940,6 +4127,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmPrismatic.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4073,6 +4273,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4179,6 +4380,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmRect.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4310,6 +4524,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4418,6 +4633,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmArrawLine.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4548,6 +4776,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4645,6 +4874,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmImage.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4784,6 +5027,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4893,6 +5137,20 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmLabel.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -5034,6 +5292,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -5159,6 +5418,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmResize.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
+**Default**: <code>false</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -5295,6 +5567,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
+    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
     * [.cursor](#jmControl+cursor) : <code>string</code>
@@ -5419,6 +5692,20 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | Name |
 | --- |
 | visible | 
+
+<a name="jmControl+interactive"></a>
+
+### jmGraph.interactive : <code>boolean</code>
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+
+**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
+**Default**: <code>false</code>  
+**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
+**Properties**
+
+| Name |
+| --- |
+| interactive | 
 
 <a name="jmControl+children"></a>
 

@@ -4264,7 +4264,7 @@ function (_jmProperty) {
 
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0;
-    _this2.interactive = params.interactive || false; //样式名称，也当做白名单使用		
+    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive; //样式名称，也当做白名单使用		
 
     _this2.jmStyleMap = {
       'fill': 'fillStyle',
@@ -5312,7 +5312,7 @@ function (_jmProperty) {
       args.position.y = args.position.offsetY - abounds.top; //事件发生在边界内或健盘事件发生在画布中才触发
       // 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
 
-      if (!args.target && this.checkPoint(args.position)) {
+      if (this.interactive !== false && !args.target && this.checkPoint(args.position)) {
         //如果没有指定触发对象，则认为当前为第一触发对象
         if (!args.target) {
           args.target = this;
@@ -5327,7 +5327,7 @@ function (_jmProperty) {
         }
       } else {
         //如果焦点不在，且原焦点在，则触发mouseleave事件
-        if (this.type != 'jmGraph' && this.focused && name == 'mousemove') {
+        if (this.interactive !== false && this.type != 'jmGraph' && this.focused && name == 'mousemove') {
           this.focused = false; //表明当前焦点离开
 
           this.runEventHandle('mouseleave', args); //执行事件	
@@ -5638,6 +5638,24 @@ function (_jmProperty) {
     set: function set(v) {
       this.needUpdate = true;
       return this.__pro('visible', v);
+    }
+    /**
+     * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+     * 如果false则不会主动响应，但冒泡的事件依然会得到回调
+     * @property interactive
+     * @default false
+     * @type {boolean}
+     */
+
+  }, {
+    key: "interactive",
+    get: function get() {
+      var s = this.__pro('interactive');
+
+      return s;
+    },
+    set: function set(v) {
+      return this.__pro('interactive', v);
     }
     /**
      * 当前控件的子控件集合

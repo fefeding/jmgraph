@@ -120,23 +120,7 @@ class jmControl extends jmProperty {
 		this.needUpdate = true;
 		return this.__pro('visible', v);
 	}
-
-	/**
-	 * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
-	 * 如果false则不会主动响应，但冒泡的事件依然会得到回调
-	 * @property interactive
-	 * @default false
-	 * @type {boolean}
-	 */
-	get interactive() {
-		let s = this.__pro('interactive');
-		return s;
-	}
-	set interactive(v) {
-		return this.__pro('interactive', v);
-	}
-
-	
+		
 	/**
 	 * 当前控件的子控件集合
 	 * @property children
@@ -1068,14 +1052,18 @@ class jmControl extends jmProperty {
 				keyCode: args.keyCode || args.charCode || args.which,
 				ctrlKey: args.ctrlKey,
 				cancel : false,
+				event: args, // 原生事件
 				srcElement : srcElement
 			};		
 		}
 		args.path = args.path||[]; //事件冒泡路径
+
 		//先执行子元素事件，如果事件没有被阻断，则向上冒泡
 		//var stoped = false;
 		if(this.children) {
 			this.children.each(function(j, el) {	
+				// 如果同级已有命中，则不再需要处理兄弟节点
+				if(args.target) return false;
 				//未被阻止才执行			
 				if(args.cancel !== true) {
 					//如果被阻止冒泡，
@@ -1084,8 +1072,7 @@ class jmControl extends jmProperty {
 				}
 			}, true);//按逆序处理
 		}
-		//if(stoped) return false;
-
+		
 		//获取当前对象的父元素绝对位置
 		//生成当前坐标对应的父级元素的相对位置
 		let abounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds : this.absoluteBounds;
@@ -1095,19 +1082,15 @@ class jmControl extends jmProperty {
 		args.position.y = args.position.offsetY - abounds.top;
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
-		//interactive 表示当前元素会响应事件
-		if(this.interactive && this.checkPoint(args.position)) {
+		// 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
+		if(!args.target && this.checkPoint(args.position)) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
 			if(!args.target) {
 				args.target = this;
 			}
 			
-			args.path.push(this);
+			this.runEventAndPopEvent(name, args);
 
-			if(args.cancel !== true) {
-				//如果返回true则阻断冒泡
-				this.runEventHandle(name, args);//执行事件		
-			}
 			if(!this.focused && name == 'mousemove') {
 				this.focused = true;//表明当前焦点在此控件中
 				this.raiseEvent('mouseover',args);
@@ -1115,13 +1098,40 @@ class jmControl extends jmProperty {
 		}
 		else {
 			//如果焦点不在，且原焦点在，则触发mouseleave事件
-			if(this.focused && name == 'mousemove') {
+			if(this.type != 'jmGraph' && this.focused && name == 'mousemove') {
 				this.focused = false;//表明当前焦点离开
 				this.runEventHandle('mouseleave', args);//执行事件	
 			}	
 		}
 			
 		return args.cancel == false;//如果被阻止则返回false,否则返回true
+	}
+
+	/**
+	 * 执行事件，并进行冒泡
+	 * @param {string} name 事件名称 
+	 * @param {object} args 事件参数
+	 */
+	runEventAndPopEvent(name, args) {	
+
+		if(args.cancel !== true) {
+			// 添加到触发路径
+			args.path.push(this);
+
+			//如果返回true则阻断冒泡
+			this.runEventHandle(name, args);//执行事件
+
+			// 向父节点冒泡事件		
+			if(args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
+				// 相对位置需要改为父节点的
+				if(args.position) {
+					let bounds = this.parent.getBounds();
+					args.position.x += bounds.left;
+					args.position.y += bounds.top;
+				}
+				this.parent.runEventAndPopEvent(name, args);
+			}		
+		}
 	}
 
 	/**
@@ -1268,9 +1278,9 @@ class jmControl extends jmProperty {
 				if(evt.button == 0 || evt.button == 1) {
 					this.__mvMonitor.mouseDown = true;
 					//this.cursor('move');
-					var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();	
-					this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
-					this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top;
+					//var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();	
+					this.__mvMonitor.curposition.x = evt.position.offsetX;//evt.position.x + parentbounds.left;
+					this.__mvMonitor.curposition.y = evt.position.offsetY;//evt.position.y + parentbounds.top;
 					//触发控件移动事件
 					this.emit('movestart',{position:this.__mvMonitor.curposition});
 					
@@ -1288,8 +1298,7 @@ class jmControl extends jmProperty {
 			this.bind('mousedown',this.__mvMonitor.md);
 			graph.bind('touchmove',this.__mvMonitor.mv);
 			graph.bind('touchend',this.__mvMonitor.mu);
-			this.bind('touchstart',this.__mvMonitor.md);	
-			this.interactive = true; // 响应事件	
+			this.bind('touchstart',this.__mvMonitor.md);
 		}
 		else {			
 			graph.unbind('mousemove',this.__mvMonitor.mv);

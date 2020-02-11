@@ -502,7 +502,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -514,7 +513,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -526,8 +524,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmControl_new"></a>
 
@@ -587,19 +587,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -726,19 +713,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -862,6 +836,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmControl.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmControl+getRotation"></a>
 
 ### jmControl.getRotation() ⇒ <code>object</code>
@@ -881,6 +867,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmControl.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmPath"></a>
 
 ## jmPath ⇐ <code>[jmControl](#jmControl)</code>
@@ -896,7 +894,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -906,6 +903,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmPath_new"></a>
 
@@ -1003,20 +1001,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmPath.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -1130,6 +1114,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmPath.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmArc"></a>
 
 ## jmArc ⇐ <code>[jmPath](#jmPath)</code>
@@ -1154,7 +1151,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1164,6 +1160,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmArc_new"></a>
 
@@ -1371,20 +1368,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmArc.children : <code>list</code>
@@ -1497,6 +1480,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmArc.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmArc"></a>
 
 ## jmArc ⇐ <code>[jmPath](#jmPath)</code>
@@ -1521,7 +1517,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1531,6 +1526,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmArc_new"></a>
 
@@ -1738,20 +1734,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmArc](#jmArc)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmArc.children : <code>list</code>
@@ -1863,6 +1845,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- | --- | --- |
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmArc.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmArc](#jmArc)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
 
 <a name="jmArraw"></a>
 
@@ -1882,7 +1877,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -1892,6 +1886,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmArraw_new"></a>
 
@@ -2030,19 +2025,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmArraw.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmArraw.children : <code>list</code>
@@ -2146,6 +2128,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmArraw.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmArraw](#jmArraw)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmBezier"></a>
 
 ## jmBezier ⇐ <code>[jmPath](#jmPath)</code>
@@ -2160,7 +2154,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -2170,6 +2163,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmBezier_new"></a>
 
@@ -2255,19 +2249,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmBezier.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -2372,6 +2353,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmBezier.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmBezier](#jmBezier)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmCircle"></a>
 
 ## jmCircle ⇐ <code>[jmArc](#jmArc)</code>
@@ -2390,7 +2383,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -2400,6 +2392,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmCircle_new"></a>
 
@@ -2538,19 +2531,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmCircle.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmCircle.children : <code>list</code>
@@ -2654,6 +2634,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmCircle.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmCircle](#jmCircle)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmControl"></a>
 
 ## jmControl ⇐ <code>[jmProperty](#jmProperty)</code>
@@ -2667,7 +2659,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -2679,7 +2670,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
         * [.sort()](#jmControl+children.sort)
         * [.sort()](#jmControl+children.sort)
@@ -2691,8 +2681,10 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmControl_new"></a>
 
@@ -2752,19 +2744,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -2891,19 +2870,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmControl](#jmControl)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3027,6 +2993,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmControl.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmControl+getRotation"></a>
 
 ### jmControl.getRotation() ⇒ <code>object</code>
@@ -3045,6 +3023,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- | --- | --- |
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmControl.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmControl](#jmControl)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
 
 <a name="jmHArc"></a>
 
@@ -3066,7 +3056,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3076,6 +3065,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmHArc_new"></a>
 
@@ -3240,19 +3230,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmHArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmHArc.children : <code>list</code>
@@ -3356,6 +3333,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmHArc.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmHArc](#jmHArc)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmLine"></a>
 
 ## jmLine ⇐ <code>[jmPath](#jmPath)</code>
@@ -3371,7 +3360,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3381,6 +3369,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmLine_new"></a>
 
@@ -3479,19 +3468,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmLine.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmLine](#jmLine)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3596,6 +3572,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmLine.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmLine](#jmLine)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmPath"></a>
 
 ## jmPath ⇐ <code>[jmControl](#jmControl)</code>
@@ -3611,7 +3599,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3621,6 +3608,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmPath_new"></a>
 
@@ -3718,20 +3706,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmPath.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmPath](#jmPath)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -3845,6 +3819,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmPath.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmPath](#jmPath)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmPrismatic"></a>
 
 ## jmPrismatic ⇐ <code>[jmPath](#jmPath)</code>
@@ -3859,7 +3846,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -3869,6 +3855,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmPrismatic_new"></a>
 
@@ -3953,19 +3940,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmPrismatic.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4072,6 +4046,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmPrismatic.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmPrismatic](#jmPrismatic)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmRect"></a>
 
 ## jmRect ⇐ <code>[jmPath](#jmPath)</code>
@@ -4087,7 +4073,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4097,6 +4082,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmRect_new"></a>
 
@@ -4193,19 +4179,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmRect.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmRect](#jmRect)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4310,6 +4283,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmRect.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmRect](#jmRect)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmArrawLine"></a>
 
 ## jmArrawLine ⇐ <code>[jmLine](#jmLine)</code>
@@ -4325,7 +4310,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4335,6 +4319,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmArrawLine_new"></a>
 
@@ -4433,19 +4418,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmArrawLine.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4550,6 +4522,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmArrawLine.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmArrawLine](#jmArrawLine)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmImage"></a>
 
 ## jmImage ⇐ <code>[jmControl](#jmControl)</code>
@@ -4564,7 +4548,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4574,6 +4557,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmImage_new"></a>
 
@@ -4661,20 +4645,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmImage.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmImage](#jmImage)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -4786,6 +4756,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmImage.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmImage](#jmImage)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmLabel"></a>
 
 ## jmLabel ⇐ <code>[jmControl](#jmControl)</code>
@@ -4801,7 +4784,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -4811,6 +4793,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmLabel_new"></a>
 
@@ -4910,20 +4893,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | Name |
 | --- |
 | visible | 
-
-<a name="jmControl+interactive"></a>
-
-### jmLabel.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
 
 <a name="jmControl+children"></a>
 
@@ -5035,6 +5004,19 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmLabel.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmLabel](#jmLabel)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmResize"></a>
 
 ## jmResize ⇐ <code>[jmRect](#jmRect)</code>
@@ -5052,7 +5034,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.width](#jmControl+width) : <code>number</code>
     * [.height](#jmControl+height) : <code>number</code>
@@ -5062,6 +5043,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.graph](#jmProperty+graph) : <code>[jmGraph](#jmGraph)</code>
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmResize_new"></a>
 
@@ -5178,19 +5160,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmResize.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmResize](#jmResize)</code>  
-**Default**: <code>false</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmResize.children : <code>list</code>
@@ -5298,6 +5267,18 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
 
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmResize.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmResize](#jmResize)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
+
 <a name="jmGraph"></a>
 
 ## jmGraph ⇐ <code>[jmControl](#jmControl)</code>
@@ -5314,7 +5295,6 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.context](#jmControl+context) : <code>object</code>
     * [.style](#jmControl+style) : <code>object</code>
     * [.visible](#jmControl+visible) : <code>boolean</code>
-    * [.interactive](#jmControl+interactive) : <code>boolean</code>
     * [.children](#jmControl+children) : <code>list</code>
     * [.zIndex](#jmControl+zIndex) : <code>number</code>
     * [.cursor](#jmControl+cursor) : <code>string</code>
@@ -5323,6 +5303,7 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
     * [.autoRefresh(callback)](#jmGraph+autoRefresh)
     * [.getRotation()](#jmControl+getRotation) ⇒ <code>object</code>
     * [.rotate(angle, point)](#jmControl+rotate)
+    * [.runEventAndPopEvent(name, args)](#jmControl+runEventAndPopEvent)
 
 <a name="new_jmGraph_new"></a>
 
@@ -5439,20 +5420,6 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | --- |
 | visible | 
 
-<a name="jmControl+interactive"></a>
-
-### jmGraph.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
-
-**Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
-**Default**: <code>false</code>  
-**Overrides:** <code>[interactive](#jmControl+interactive)</code>  
-**Properties**
-
-| Name |
-| --- |
-| interactive | 
-
 <a name="jmControl+children"></a>
 
 ### jmGraph.children : <code>list</code>
@@ -5547,6 +5514,19 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | --- | --- | --- |
 | angle | <code>number</code> | 旋转角度 |
 | point | <code>object</code> | 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'} |
+
+<a name="jmControl+runEventAndPopEvent"></a>
+
+### jmGraph.runEventAndPopEvent(name, args)
+执行事件，并进行冒泡
+
+**Kind**: instance method of <code>[jmGraph](#jmGraph)</code>  
+**Overrides:** <code>[runEventAndPopEvent](#jmControl+runEventAndPopEvent)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | 事件名称 |
+| args | <code>object</code> | 事件参数 |
 
 <a name="add"></a>
 

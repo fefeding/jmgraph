@@ -143,7 +143,6 @@ function init(g){
 ```javascript
 //创建一条线
 var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
-line.interactive = true;// 指定线可以响应事件
 //鼠标移到上面显示不同的样式			
 line.bind('mouseover',function(evt) {
     this.style.stroke = 'rgba(39,72,188,0.5)';
@@ -152,7 +151,6 @@ line.bind('mouseover',function(evt) {
 });
 ```
 
-> 如果想控件支持鼠标和touch事件，需要把控件的`interactive`指定为true。
 
 #### 事件一览
 | 名称 | 说明 | 回调参数

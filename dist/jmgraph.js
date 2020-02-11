@@ -5280,6 +5280,8 @@ function (_jmProperty) {
           keyCode: args.keyCode || args.charCode || args.which,
           ctrlKey: args.ctrlKey,
           cancel: false,
+          event: args,
+          // 原生事件
           srcElement: srcElement
         };
       }
@@ -5290,15 +5292,16 @@ function (_jmProperty) {
 
       if (this.children) {
         this.children.each(function (j, el) {
-          //未被阻止才执行			
+          // 如果同级已有命中，则不再需要处理兄弟节点
+          if (args.target) return false; //未被阻止才执行			
+
           if (args.cancel !== true) {
             //如果被阻止冒泡，
             //stoped = el.raiseEvent(name,args) === false?true:stoped;
             el.raiseEvent(name, args);
           }
         }, true); //按逆序处理
-      } //if(stoped) return false;
-      //获取当前对象的父元素绝对位置
+      } //获取当前对象的父元素绝对位置
       //生成当前坐标对应的父级元素的相对位置
 
 
@@ -5307,20 +5310,15 @@ function (_jmProperty) {
 
       args.position.x = args.position.offsetX - abounds.left;
       args.position.y = args.position.offsetY - abounds.top; //事件发生在边界内或健盘事件发生在画布中才触发
-      //interactive 表示当前元素会响应事件
+      // 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
 
-      if (this.interactive && this.checkPoint(args.position)) {
+      if (!args.target && this.checkPoint(args.position)) {
         //如果没有指定触发对象，则认为当前为第一触发对象
         if (!args.target) {
           args.target = this;
         }
 
-        args.path.push(this);
-
-        if (args.cancel !== true) {
-          //如果返回true则阻断冒泡
-          this.runEventHandle(name, args); //执行事件		
-        }
+        this.runEventAndPopEvent(name, args);
 
         if (!this.focused && name == 'mousemove') {
           this.focused = true; //表明当前焦点在此控件中
@@ -5329,7 +5327,7 @@ function (_jmProperty) {
         }
       } else {
         //如果焦点不在，且原焦点在，则触发mouseleave事件
-        if (this.focused && name == 'mousemove') {
+        if (this.type != 'jmGraph' && this.focused && name == 'mousemove') {
           this.focused = false; //表明当前焦点离开
 
           this.runEventHandle('mouseleave', args); //执行事件	
@@ -5337,6 +5335,34 @@ function (_jmProperty) {
       }
 
       return args.cancel == false; //如果被阻止则返回false,否则返回true
+    }
+    /**
+     * 执行事件，并进行冒泡
+     * @param {string} name 事件名称 
+     * @param {object} args 事件参数
+     */
+
+  }, {
+    key: "runEventAndPopEvent",
+    value: function runEventAndPopEvent(name, args) {
+      if (args.cancel !== true) {
+        // 添加到触发路径
+        args.path.push(this); //如果返回true则阻断冒泡
+
+        this.runEventHandle(name, args); //执行事件
+        // 向父节点冒泡事件		
+
+        if (args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
+          // 相对位置需要改为父节点的
+          if (args.position) {
+            var bounds = this.parent.getBounds();
+            args.position.x += bounds.left;
+            args.position.y += bounds.top;
+          }
+
+          this.parent.runEventAndPopEvent(name, args);
+        }
+      }
     }
     /**
      * 清空控件指定事件
@@ -5512,10 +5538,12 @@ function (_jmProperty) {
 
           if (evt.button == 0 || evt.button == 1) {
             this.__mvMonitor.mouseDown = true; //this.cursor('move');
+            //var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();	
 
-            var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();
-            this.__mvMonitor.curposition.x = evt.position.x + parentbounds.left;
-            this.__mvMonitor.curposition.y = evt.position.y + parentbounds.top; //触发控件移动事件
+            this.__mvMonitor.curposition.x = evt.position.offsetX; //evt.position.x + parentbounds.left;
+
+            this.__mvMonitor.curposition.y = evt.position.offsetY; //evt.position.y + parentbounds.top;
+            //触发控件移动事件
 
             this.emit('movestart', {
               position: this.__mvMonitor.curposition
@@ -5536,7 +5564,6 @@ function (_jmProperty) {
         graph.bind('touchmove', this.__mvMonitor.mv);
         graph.bind('touchend', this.__mvMonitor.mu);
         this.bind('touchstart', this.__mvMonitor.md);
-        this.interactive = true; // 响应事件	
       } else {
         graph.unbind('mousemove', this.__mvMonitor.mv);
         graph.unbind('mouseup', this.__mvMonitor.mu);
@@ -5611,24 +5638,6 @@ function (_jmProperty) {
     set: function set(v) {
       this.needUpdate = true;
       return this.__pro('visible', v);
-    }
-    /**
-     * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
-     * 如果false则不会主动响应，但冒泡的事件依然会得到回调
-     * @property interactive
-     * @default false
-     * @type {boolean}
-     */
-
-  }, {
-    key: "interactive",
-    get: function get() {
-      var s = this.__pro('interactive');
-
-      return s;
-    },
-    set: function set(v) {
-      return this.__pro('interactive', v);
     }
     /**
      * 当前控件的子控件集合

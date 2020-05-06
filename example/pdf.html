@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+	<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<style>
+		html,body{
+			margin:0;
+			padding: 0;
+		}
+		#mycanvas_container{
+			overflow: hidden;		
+		}
+	</style>
+	
+	<script type="text/javascript" src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>	
+	</head>
+	<body>
+		<div id="mycanvas_container"></div>
+	</body>
+	<script type="module">	
+        import jmGraph from "../src/jmGraph.js";
+        
+        var pdfDocument,pdfPages;
+
+		var container = document.getElementById('mycanvas_container');
+		
+		var graph = new jmGraph(container, {
+			width: 800,
+			height: 600,
+			style: {
+				fill: '#000'
+			}
+		});
+		init(graph);
+			
+		function init(g){
+			// 初始化pdf组件  这里的worker请下到你站点内，不能跨域
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';//'//qian-img.tenpay.com/static/pdfjs/pdf.worker.min.js';
+            loadPdf('//qian-img.tenpay.com/resources/vtools/img/201906/20ff3e6197e118dcb82fac4cf5a5feeb.pdf');
+        }
+        
+        // 加载PDF
+        function loadPdf(url) {
+            const loadingTask = pdfjsLib.getDocument(url);
+            loadingTask.promise.then((pdf) => {
+                pdfDocument = pdf;
+                const pages = [];
+                if (pdf.numPages > 0) {
+                    for (var i = 0; i < pdf.numPages; i++) {
+                        pages.push({
+                            value: i,
+                            label: '第' + (i + 1) + '页'
+                        });
+                    }
+                    pdfPages = pages;
+                    renderPage(0);// 默认打开第一页
+                }
+            }).catch((e) => {
+                console.error(e);
+            });
+        }
+        // 打开当前PDF指定页
+        function renderPage(page) {
+            
+            graph.children.clear();
+            // this.pdfGraph.children.add(this.pdfImage);
+            pdfDocument.getPage(page + 1).then((page) => {
+                var scale = 1;
+                var viewport = page.getViewport({scale});// 旧版本中是要用数字  而非一个object的
+                //
+                // Prepare canvas using PDF page dimensions
+                //
+                graph.height = (viewport.height || viewport.viewBox[3]); /* viewport.height is NaN */
+                graph.width = (viewport.width || viewport.viewBox[2]);  /* viewport.width is also NaN */
+
+                //
+                // Render PDF page into canvas context
+                /*{
+                    canvasContext,
+                    viewport,
+                    intent = "display",
+                    enableWebGL = false,
+                    renderInteractiveForms = false,
+                    transform = null,
+                    imageLayer = null,
+                    canvasFactory = null,
+                    background = null,
+                }*/
+                //
+                var renderContext = {
+                    canvasContext: graph.canvas.getContext('2d'),
+                    viewport: viewport
+                };
+                page.render(renderContext).promise.then(() => {
+                    let bg = new Image();
+                    bg.onload = () => {
+                        //this.pdfImage.image = bg;
+                        //this.renderSigns();// 绘制当前页所有签章
+                    }
+                    //bg.src = pdfViewer.toDataURL('image/png');
+                });
+            });
+        }
+	</script>
+</html>

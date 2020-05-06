@@ -21,7 +21,7 @@
 	<script type="module">	
         import jmGraph from "../src/jmGraph.js";
         
-        var pdfDocument,pdfPages;
+        var pdfDocument, pdfImage;
 
 		var container = document.getElementById('mycanvas_container');
 		
@@ -35,6 +35,19 @@
 		init(graph);
 			
 		function init(g){
+
+            //创建一个image
+			pdfImage = g.createShape('image',{
+				style: {
+
+                },
+                position: {x:0,y:0},
+				//image: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+			});	
+			
+            g.children.add(pdfImage);		
+            pdfImage.canMove(true);
+            
 			// 初始化pdf组件  这里的worker请下到你站点内，不能跨域
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';//'//qian-img.tenpay.com/static/pdfjs/pdf.worker.min.js';
             loadPdf('//qian-img.tenpay.com/resources/vtools/img/201906/20ff3e6197e118dcb82fac4cf5a5feeb.pdf');
@@ -53,7 +66,6 @@
                             label: '第' + (i + 1) + '页'
                         });
                     }
-                    pdfPages = pages;
                     renderPage(0);// 默认打开第一页
                 }
             }).catch((e) => {
@@ -62,17 +74,15 @@
         }
         // 打开当前PDF指定页
         function renderPage(page) {
-            
-            graph.children.clear();
-            // this.pdfGraph.children.add(this.pdfImage);
             pdfDocument.getPage(page + 1).then((page) => {
                 var scale = 1;
                 var viewport = page.getViewport({scale});// 旧版本中是要用数字  而非一个object的
                 //
                 // Prepare canvas using PDF page dimensions
                 //
-                graph.height = (viewport.height || viewport.viewBox[3]); /* viewport.height is NaN */
-                graph.width = (viewport.width || viewport.viewBox[2]);  /* viewport.width is also NaN */
+                var canvas = document.createElement('canvas');
+                canvas.height = (viewport.height || viewport.viewBox[3]); /* viewport.height is NaN */
+                canvas.width = (viewport.width || viewport.viewBox[2]);  /* viewport.width is also NaN */
 
                 //
                 // Render PDF page into canvas context
@@ -89,16 +99,17 @@
                 }*/
                 //
                 var renderContext = {
-                    canvasContext: graph.canvas.getContext('2d'),
+                    canvasContext: canvas.getContext('2d'),
                     viewport: viewport
                 };
                 page.render(renderContext).promise.then(() => {
                     let bg = new Image();
                     bg.onload = () => {
-                        //this.pdfImage.image = bg;
-                        //this.renderSigns();// 绘制当前页所有签章
+                        pdfImage.image = bg;
+                        //pdfImage.needUpdate = true;;
+                        graph.refresh();
                     }
-                    //bg.src = pdfViewer.toDataURL('image/png');
+                    bg.src = canvas.toDataURL('image/png');
                 });
             });
         }

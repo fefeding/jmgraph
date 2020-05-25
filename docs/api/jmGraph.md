@@ -534,12 +534,14 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmControl_new"></a>
 
 ### new jmControl()
-控件基础对象控件的基础属性和方法
+控件基础对象
+控件的基础属性和方法
 
 <a name="new_jmControl_new"></a>
 
 ### new jmControl()
-控件基础对象控件的基础属性和方法
+控件基础对象
+控件的基础属性和方法
 
 <a name="jmControl+type"></a>
 
@@ -593,7 +595,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Default**: <code>false</code>  
@@ -671,7 +674,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmControl.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Properties**
@@ -732,7 +736,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Default**: <code>false</code>  
@@ -810,7 +815,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmControl.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Properties**
@@ -937,7 +943,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmPath_new"></a>
 
 ### new jmPath(params)
-基础路径,大部分图型的基类指定一系列点，画出图形
+基础路径,大部分图型的基类
+指定一系列点，画出图形
 
 
 | Param | Type | Description |
@@ -947,7 +954,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmPath_new"></a>
 
 ### new jmPath(params)
-基础路径,大部分图型的基类指定一系列点，画出图形
+基础路径,大部分图型的基类
+指定一系列点，画出图形
 
 
 | Param | Type | Description |
@@ -957,7 +965,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmPath.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Properties**
@@ -969,7 +978,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmPath.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Properties**
@@ -1034,7 +1044,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmPath.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Default**: <code>false</code>  
@@ -1100,7 +1111,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmPath.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -1229,7 +1241,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1277,7 +1290,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1289,7 +1303,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1337,7 +1352,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1349,7 +1365,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmArc.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -1415,7 +1432,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Default**: <code>false</code>  
@@ -1481,7 +1499,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmArc.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -1610,7 +1629,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1658,7 +1678,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1670,7 +1691,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1718,7 +1740,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Properties**
@@ -1730,7 +1753,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmArc.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -1796,7 +1820,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Default**: <code>false</code>  
@@ -1862,7 +1887,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmArc.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArc](#jmArc)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -2040,7 +2066,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmArraw.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -2102,7 +2129,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmArraw.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
 **Default**: <code>false</code>  
@@ -2163,7 +2191,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmArraw.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArraw](#jmArraw)</code>  
 **Properties**
@@ -2256,7 +2285,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmBezier_new"></a>
 
 ### new jmBezier(params)
-贝塞尔曲线,继承jmPathN阶，参数points中为控制点
+贝塞尔曲线,继承jmPath
+N阶，参数points中为控制点
 
 
 | Param | Type | Description |
@@ -2279,7 +2309,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmBezier.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -2341,7 +2372,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmBezier.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
 **Default**: <code>false</code>  
@@ -2402,7 +2434,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmBezier.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmBezier](#jmBezier)</code>  
 **Properties**
@@ -2509,7 +2542,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmCircle.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
 **Overrides:** <code>[center](#jmArc+center)</code>  
@@ -2561,7 +2595,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmCircle.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
 **Overrides:** <code>[anticlockwise](#jmArc+anticlockwise)</code>  
@@ -2574,7 +2609,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmCircle.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -2636,7 +2672,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmCircle.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
 **Default**: <code>false</code>  
@@ -2697,7 +2734,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmCircle.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmCircle](#jmCircle)</code>  
 **Properties**
@@ -2806,12 +2844,14 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmControl_new"></a>
 
 ### new jmControl()
-控件基础对象控件的基础属性和方法
+控件基础对象
+控件的基础属性和方法
 
 <a name="new_jmControl_new"></a>
 
 ### new jmControl()
-控件基础对象控件的基础属性和方法
+控件基础对象
+控件的基础属性和方法
 
 <a name="jmControl+type"></a>
 
@@ -2865,7 +2905,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Default**: <code>false</code>  
@@ -2943,7 +2984,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmControl.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Properties**
@@ -3004,7 +3046,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmControl.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Default**: <code>false</code>  
@@ -3082,7 +3125,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmControl.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmControl](#jmControl)</code>  
 **Properties**
@@ -3250,7 +3294,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+center"></a>
 
 ### jmHArc.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
 **Overrides:** <code>[center](#jmArc+center)</code>  
@@ -3302,7 +3347,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmArc+anticlockwise"></a>
 
 ### jmHArc.anticlockwise : <code>boolean</code>
-可选。规定应该逆时针还是顺时针绘图false  顺时针，true 逆时针
+可选。规定应该逆时针还是顺时针绘图
+false  顺时针，true 逆时针
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
 **Overrides:** <code>[anticlockwise](#jmArc+anticlockwise)</code>  
@@ -3315,7 +3361,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmHArc.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -3377,7 +3424,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmHArc.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
 **Default**: <code>false</code>  
@@ -3438,7 +3486,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmHArc.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmHArc](#jmHArc)</code>  
 **Properties**
@@ -3568,7 +3617,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmLine.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmLine](#jmLine)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -3630,7 +3680,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmLine.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmLine](#jmLine)</code>  
 **Default**: <code>false</code>  
@@ -3691,7 +3742,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmLine.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmLine](#jmLine)</code>  
 **Properties**
@@ -3785,7 +3837,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmPath_new"></a>
 
 ### new jmPath(params)
-基础路径,大部分图型的基类指定一系列点，画出图形
+基础路径,大部分图型的基类
+指定一系列点，画出图形
 
 
 | Param | Type | Description |
@@ -3795,7 +3848,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmPath_new"></a>
 
 ### new jmPath(params)
-基础路径,大部分图型的基类指定一系列点，画出图形
+基础路径,大部分图型的基类
+指定一系列点，画出图形
 
 
 | Param | Type | Description |
@@ -3805,7 +3859,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmPath.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Properties**
@@ -3817,7 +3872,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmPath.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Properties**
@@ -3882,7 +3938,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmPath.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Default**: <code>false</code>  
@@ -3948,7 +4005,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmPath.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPath](#jmPath)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -4057,7 +4115,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPrismatic+center"></a>
 
 ### jmPrismatic.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
 **Properties**
@@ -4069,7 +4128,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmPrismatic.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -4131,7 +4191,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmPrismatic.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
 **Default**: <code>false</code>  
@@ -4194,7 +4255,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmPrismatic.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmPrismatic](#jmPrismatic)</code>  
 **Properties**
@@ -4322,7 +4384,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmRect.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmRect](#jmRect)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -4384,7 +4447,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmRect.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmRect](#jmRect)</code>  
 **Default**: <code>false</code>  
@@ -4445,7 +4509,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmRect.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmRect](#jmRect)</code>  
 **Properties**
@@ -4575,7 +4640,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmArrawLine.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
 **Overrides:** <code>[points](#jmPath+points)</code>  
@@ -4637,7 +4703,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmArrawLine.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
 **Default**: <code>false</code>  
@@ -4698,7 +4765,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmArrawLine.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmArrawLine](#jmArrawLine)</code>  
 **Properties**
@@ -4791,7 +4859,9 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmImage_new"></a>
 
 ### new jmImage(params)
-图片控件，继承自jmControlparams参数中image为指定的图片源地址或图片img对象，postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
+图片控件，继承自jmControl
+params参数中image为指定的图片源地址或图片img对象，
+postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
 
 
 | Param | Type | Description |
@@ -4878,7 +4948,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmImage.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
 **Default**: <code>false</code>  
@@ -4944,7 +5015,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmImage.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmImage](#jmImage)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -5064,7 +5136,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmLabel+center"></a>
 
 ### jmLabel.center : <code>point</code>
-中心点point格式：{x:0,y:0,m:true}
+中心点
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
 **Properties**
@@ -5141,7 +5214,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmLabel.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
 **Default**: <code>false</code>  
@@ -5207,7 +5281,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmLabel.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmLabel](#jmLabel)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -5307,7 +5382,9 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmResize_new"></a>
 
 ### new jmResize()
-可拉伸的缩放控件继承jmRect如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
+可拉伸的缩放控件
+继承jmRect
+如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
 
 <a name="jmResize+rectSize"></a>
 
@@ -5361,7 +5438,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmPath+points"></a>
 
 ### jmResize.points : <code>array</code>
-描点集合point格式：{x:0,y:0,m:true}
+描点集合
+point格式：{x:0,y:0,m:true}
 
 **Kind**: instance property of <code>[jmResize](#jmResize)</code>  
 **Properties**
@@ -5422,7 +5500,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+interactive"></a>
 
 ### jmResize.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmResize](#jmResize)</code>  
 **Default**: <code>false</code>  
@@ -5485,7 +5564,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="jmControl+cursor"></a>
 
 ### jmResize.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmResize](#jmResize)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -5581,7 +5661,8 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 <a name="new_jmGraph_new"></a>
 
 ### new jmGraph(canvas, option, callback)
-jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
+jmGraph画图类库
+对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
 
 
 | Param | Type | Description |
@@ -5696,7 +5777,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="jmControl+interactive"></a>
 
 ### jmGraph.interactive : <code>boolean</code>
-当前控件是否是交互式的，如果是则会响应鼠标或touch事件。如果false则不会主动响应，但冒泡的事件依然会得到回调
+当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
+如果false则不会主动响应，但冒泡的事件依然会得到回调
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
 **Default**: <code>false</code>  
@@ -5736,7 +5818,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="jmControl+cursor"></a>
 
 ### jmGraph.cursor : <code>string</code>
-设置鼠标指针css鼠标指针标识,例如:pointer,move等
+设置鼠标指针
+css鼠标指针标识,例如:pointer,move等
 
 **Kind**: instance property of <code>[jmGraph](#jmGraph)</code>  
 **Overrides:** <code>[cursor](#jmControl+cursor)</code>  
@@ -5918,7 +6001,7 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | Param | Type | Description |
 | --- | --- | --- |
 | dot | <code>point</code> | {{x,y}} 需要判断的点 |
-| coordinates | <code>array</code> | {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 |
+| coordinates | <code>array</code> | Array {{x,y}} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 |
 | 是否为实心 | <code>number</code> | 1= 是 |
 
 <a name="is"></a>
@@ -5989,7 +6072,10 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="fromString"></a>
 
 ## fromString() ⇒ <code>string</code>
-变换为字条串格式linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);linear-gradient线性渐变，x1 y1表示起点，x2 y2表示结束点,color表颜色，step为当前颜色偏移radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2为结束圆 中心和半径，颜色例似线性渐变 step为0-1之间
+变换为字条串格式
+linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
+linear-gradient线性渐变，x1 y1表示起点，x2 y2表示结束点,color表颜色，step为当前颜色偏移
+radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2为结束圆 中心和半径，颜色例似线性渐变 step为0-1之间
 
 **Kind**: global function  
 **For**: jmGradient  
@@ -6022,14 +6108,16 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="initializing"></a>
 
 ## initializing()
-初始化对象，设定样式，初始化子控件对象此方法为所有控件需调用的方法
+初始化对象，设定样式，初始化子控件对象
+此方法为所有控件需调用的方法
 
 **Kind**: global function  
 **For**: jmControl  
 <a name="getBounds"></a>
 
 ## getBounds([isReset]) ⇒ <code>object</code>
-获取当前控件的边界通过分析控件的描点或位置加宽高得到为方形的边界
+获取当前控件的边界
+通过分析控件的描点或位置加宽高得到为方形的边界
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 控件的边界描述对象(left,top,right,bottom,width,height)  
@@ -6042,20 +6130,23 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="getLocation"></a>
 
 ## getLocation() ⇒ <code>object</code>
-获取当前控件的位置相关参数解析百分比和margin参数
+获取当前控件的位置相关参数
+解析百分比和margin参数
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 当前控件位置参数，包括中心点坐标，右上角坐标，宽高  
 <a name="remove"></a>
 
 ## remove()
-移除当前控件如果是VML元素，则调用其删除元素
+移除当前控件
+如果是VML元素，则调用其删除元素
 
 **Kind**: global function  
 <a name="offset"></a>
 
 ## offset(x, y, [trans], [evt])
-对控件进行平移遍历控件所有描点或位置，设置其偏移量。
+对控件进行平移
+遍历控件所有描点或位置，设置其偏移量。
 
 **Kind**: global function  
 
@@ -6069,14 +6160,16 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="getAbsoluteBounds"></a>
 
 ## getAbsoluteBounds() ⇒ <code>object</code>
-获取控件相对于画布的绝对边界，与getBounds不同的是：getBounds获取的是相对于父容器的边界.
+获取控件相对于画布的绝对边界，
+与getBounds不同的是：getBounds获取的是相对于父容器的边界.
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 边界对象(left,top,right,bottom,width,height)  
 <a name="beginDraw"></a>
 
 ## beginDraw()
-画控件前初始化执行beginPath开始控件的绘制
+画控件前初始化
+执行beginPath开始控件的绘制
 
 **Kind**: global function  
 <a name="endDraw"></a>
@@ -6088,19 +6181,22 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="draw"></a>
 
 ## draw()
-绘制控件在画布上描点
+绘制控件
+在画布上描点
 
 **Kind**: global function  
 <a name="paint"></a>
 
 ## paint()
-绘制当前控件协调控件的绘制，先从其子控件开始绘制，再往上冒。
+绘制当前控件
+协调控件的绘制，先从其子控件开始绘制，再往上冒。
 
 **Kind**: global function  
 <a name="getEvent"></a>
 
 ## getEvent(name) ⇒ <code>list</code>
-获取指定事件的集合比如mousedown,mouseup等
+获取指定事件的集合
+比如mousedown,mouseup等
 
 **Kind**: global function  
 **Returns**: <code>list</code> - 事件委托的集合  
@@ -6210,7 +6306,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="canMove"></a>
 
 ## canMove(m, [graph])
-设定是否可以移动此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
+设定是否可以移动
+此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
 
 **Kind**: global function  
 
@@ -6235,7 +6332,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="offset"></a>
 
 ## offset(x, y, [trans])
-对控件进行平移遍历控件所有描点或位置，设置其偏移量。
+对控件进行平移
+遍历控件所有描点或位置，设置其偏移量。
 
 **Kind**: global function  
 
@@ -6254,14 +6352,16 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="initializing"></a>
 
 ## initializing()
-初始化对象，设定样式，初始化子控件对象此方法为所有控件需调用的方法
+初始化对象，设定样式，初始化子控件对象
+此方法为所有控件需调用的方法
 
 **Kind**: global function  
 **For**: jmControl  
 <a name="getBounds"></a>
 
 ## getBounds([isReset]) ⇒ <code>object</code>
-获取当前控件的边界通过分析控件的描点或位置加宽高得到为方形的边界
+获取当前控件的边界
+通过分析控件的描点或位置加宽高得到为方形的边界
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 控件的边界描述对象(left,top,right,bottom,width,height)  
@@ -6274,20 +6374,23 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="getLocation"></a>
 
 ## getLocation() ⇒ <code>object</code>
-获取当前控件的位置相关参数解析百分比和margin参数
+获取当前控件的位置相关参数
+解析百分比和margin参数
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 当前控件位置参数，包括中心点坐标，右上角坐标，宽高  
 <a name="remove"></a>
 
 ## remove()
-移除当前控件如果是VML元素，则调用其删除元素
+移除当前控件
+如果是VML元素，则调用其删除元素
 
 **Kind**: global function  
 <a name="offset"></a>
 
 ## offset(x, y, [trans], [evt])
-对控件进行平移遍历控件所有描点或位置，设置其偏移量。
+对控件进行平移
+遍历控件所有描点或位置，设置其偏移量。
 
 **Kind**: global function  
 
@@ -6301,14 +6404,16 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="getAbsoluteBounds"></a>
 
 ## getAbsoluteBounds() ⇒ <code>object</code>
-获取控件相对于画布的绝对边界，与getBounds不同的是：getBounds获取的是相对于父容器的边界.
+获取控件相对于画布的绝对边界，
+与getBounds不同的是：getBounds获取的是相对于父容器的边界.
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 边界对象(left,top,right,bottom,width,height)  
 <a name="beginDraw"></a>
 
 ## beginDraw()
-画控件前初始化执行beginPath开始控件的绘制
+画控件前初始化
+执行beginPath开始控件的绘制
 
 **Kind**: global function  
 <a name="endDraw"></a>
@@ -6320,19 +6425,22 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="draw"></a>
 
 ## draw()
-绘制控件在画布上描点
+绘制控件
+在画布上描点
 
 **Kind**: global function  
 <a name="paint"></a>
 
 ## paint()
-绘制当前控件协调控件的绘制，先从其子控件开始绘制，再往上冒。
+绘制当前控件
+协调控件的绘制，先从其子控件开始绘制，再往上冒。
 
 **Kind**: global function  
 <a name="getEvent"></a>
 
 ## getEvent(name) ⇒ <code>list</code>
-获取指定事件的集合比如mousedown,mouseup等
+获取指定事件的集合
+比如mousedown,mouseup等
 
 **Kind**: global function  
 **Returns**: <code>list</code> - 事件委托的集合  
@@ -6442,7 +6550,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="canMove"></a>
 
 ## canMove(m, [graph])
-设定是否可以移动此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
+设定是否可以移动
+此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
 
 **Kind**: global function  
 
@@ -6485,7 +6594,8 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 <a name="draw"></a>
 
 ## draw()
-重写控件绘制根据父边界偏移和此控件参数绘制图片
+重写控件绘制
+根据父边界偏移和此控件参数绘制图片
 
 **Kind**: global function  
 <a name="getBounds"></a>
@@ -6570,7 +6680,8 @@ img对象
 <a name="createShape"></a>
 
 ## createShape(name, args) ⇒ <code>object</code>
-从已注册的图形类创建图形简单直观创建对象
+从已注册的图形类创建图形
+简单直观创建对象
 
 **Kind**: global function  
 **Returns**: <code>object</code> - 已实例化控件的对象  
@@ -6630,13 +6741,15 @@ img对象
 <a name="refresh"></a>
 
 ## refresh()
-重新刷新整个画板以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+重新刷新整个画板
+以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
 
 **Kind**: global function  
 <a name="redraw"></a>
 
 ## redraw([w], [h])
-重新刷新整个画板此方法直接重画，与refresh效果类似
+重新刷新整个画板
+此方法直接重画，与refresh效果类似
 
 **Kind**: global function  
 
@@ -6740,7 +6853,8 @@ img对象
 <a name="new_jmUtils_new"></a>
 
 ### new jmUtils()
-画图基础对象当前库的工具类
+画图基础对象
+当前库的工具类
 
 <a name="clone"></a>
 
@@ -6822,7 +6936,10 @@ img对象
 <a name="pointInPolygon"></a>
 
 ## .pointInPolygon(pt, polygon, offset) ⇒ <code>integer</code>
-判断点是否在多边形内如果一个点在多边形内部，任意角度做射线肯定会与多边形要么有一个交点，要么有与多边形边界线重叠。如果一个点在多边形外部，任意角度做射线要么与多边形有一个交点，要么有两个交点，要么没有交点，要么有与多边形边界线重叠。利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
+判断点是否在多边形内
+如果一个点在多边形内部，任意角度做射线肯定会与多边形要么有一个交点，要么有与多边形边界线重叠。
+如果一个点在多边形外部，任意角度做射线要么与多边形有一个交点，要么有两个交点，要么没有交点，要么有与多边形边界线重叠。
+利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
 
 **Kind**: static function  
 **Returns**: <code>integer</code> - 0= 不在图形内和线上，1=在边上，2=在图形内部  
@@ -6836,7 +6953,11 @@ img对象
 <a name="checkOutSide"></a>
 
 ## .checkOutSide(parentBounds, targetBounds, offset) ⇒ <code>bound</code>
-检查边界，子对象是否超出父容器边界当对象偏移offset后是否出界返回(left:0,right:0,top:0,bottom:0)如果right>0表示右边出界right偏移量,left<0则表示左边出界left偏移量如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
+检查边界，子对象是否超出父容器边界
+当对象偏移offset后是否出界
+返回(left:0,right:0,top:0,bottom:0)
+如果right>0表示右边出界right偏移量,left<0则表示左边出界left偏移量
+如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
 
 **Kind**: static function  
 **Returns**: <code>bound</code> - 越界标识  
@@ -6850,7 +6971,8 @@ img对象
 <a name="rotatePoints"></a>
 
 ## .rotatePoints(p, rp, r)
-把一个或多个点绕某个点旋转一定角度先把坐标原点移到旋转中心点，计算后移回
+把一个或多个点绕某个点旋转一定角度
+先把坐标原点移到旋转中心点，计算后移回
 
 **Kind**: static function  
 

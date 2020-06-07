@@ -1,5 +1,5 @@
-import {jmPath} from "./jmPath.js";
-import {jmUtils} from "../common/jmUtils.js";
+import {jmPath} from "../core/jmPath.js";
+import {jmUtils} from "../core/jmUtils.js";
 /**
  * 画箭头,继承自jmPath
  *

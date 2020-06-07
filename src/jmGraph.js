@@ -1,10 +1,10 @@
-import {jmUtils} from "./common/jmUtils.js";
-import {jmList} from "./common/jmList.js";
-import {jmProperty} from './common/jmProperty.js';
-import {jmShadow} from "./models/jmShadow.js";
-import {jmGradient} from "./models/jmGradient.js";
-import {jmEvents} from "./common/jmEvents.js";
-import {jmControl} from "./shapes/jmControl.js";
+import {jmUtils} from "./core/jmUtils.js";
+import {jmList} from "./core/jmList.js";
+import {jmProperty} from './core/jmProperty.js';
+import {jmShadow} from "./core/jmShadow.js";
+import {jmGradient} from "./core/jmGradient.js";
+import {jmEvents} from "./core/jmEvents.js";
+import {jmControl} from "./core/jmControl.js";
 import {jmPath} from "./shapes/jmPath.js";
 import {jmArc} from "./shapes/jmArc.js";
 import {jmArraw} from "./shapes/jmArraw.js";
@@ -14,10 +14,10 @@ import {jmHArc} from "./shapes/jmHArc.js";
 import {jmLine} from "./shapes/jmLine.js";
 import {jmPrismatic} from "./shapes/jmPrismatic.js";
 import {jmRect} from "./shapes/jmRect.js";
-import {jmArrawLine} from "./controls/jmArrawLine.js";
-import {jmImage} from "./controls/jmImage.js";
-import {jmLabel} from "./controls/jmLabel.js";
-import {jmResize} from "./controls/jmResize.js";
+import {jmArrawLine} from "./shapes/jmArrawLine.js";
+import {jmImage} from "./shapes/jmImage.js";
+import {jmLabel} from "./shapes/jmLabel.js";
+import {jmResize} from "./shapes/jmResize.js";
 
 /**
  * jmGraph画图类库

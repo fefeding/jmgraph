@@ -1,4 +1,4 @@
-import {jmPath} from "./jmPath.js";
+import {jmPath} from "../core/jmPath.js";
 /**
  * 贝塞尔曲线,继承jmPath
  * N阶，参数points中为控制点

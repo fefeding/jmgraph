@@ -1,9 +1,9 @@
 
-import {jmUtils} from "../common/jmUtils.js";
-import {jmList} from "../common/jmList.js";
-import {jmGradient} from "../models/jmGradient.js";
-import {jmShadow} from "../models/jmShadow.js";
-import {jmProperty} from "../common/jmProperty.js";
+import {jmUtils} from "../jmUtils.js";
+import {jmList} from "../jmList.js";
+import {jmGradient} from "../jmGradient.js";
+import {jmShadow} from "../jmShadow.js";
+import {jmProperty} from "../jmProperty.js";
 
 /**
  * 控件基础对象

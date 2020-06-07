@@ -1,4 +1,4 @@
-import {jmPath} from "./jmPath.js";
+import {jmPath} from "../core/jmPath.js";
 /**
  * 圆弧图型 继承自jmPath
  *

@@ -1,4 +1,4 @@
-import {jmPath} from "./jmPath.js";
+import {jmPath} from "../core/jmPath.js";
 /**
  * 画一条直线
  *

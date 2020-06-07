@@ -8,7 +8,7 @@ import { jmList } from './jmList.js';
  * @class jmUtils
  * @static
  */
-class jmUtils {
+export default class jmUtils {
     /**
      * 复制一个对象
      * 

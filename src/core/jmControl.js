@@ -1,9 +1,9 @@
 
-import {jmUtils} from "../jmUtils.js";
-import {jmList} from "../jmList.js";
-import {jmGradient} from "../jmGradient.js";
-import {jmShadow} from "../jmShadow.js";
-import {jmProperty} from "../jmProperty.js";
+import {jmUtils} from "./jmUtils.js";
+import {jmList} from "./jmList.js";
+import {jmGradient} from "./jmGradient.js";
+import {jmShadow} from "./jmShadow.js";
+import {jmProperty} from "./jmProperty.js";
 
 /**
  * 控件基础对象
@@ -12,7 +12,7 @@ import {jmProperty} from "../jmProperty.js";
  * @class jmControl
  * @extends jmProperty
  */	
-class jmControl extends jmProperty {	
+export default class jmControl extends jmProperty {	
 
 	constructor(params, t) {
 		params = params||{};

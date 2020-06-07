@@ -6,7 +6,7 @@ import {jmControl} from "../core/jmControl.js";
  * @extends jmControl
  * @param {object} params params参数:style=样式，value=显示的文字
  */
-class jmLabel extends jmControl {
+export default class jmLabel extends jmControl {
 
 	constructor(params, t) {
 		params = params || {};

@@ -7,7 +7,7 @@ import {jmArc} from "./jmArc.js";
  * @param {object} params 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针
  */
 
-class jmHArc extends jmArc {
+export default class jmHArc extends jmArc {
 		
 	constructor(params, t='jmHArc') {
 		super(params, t);

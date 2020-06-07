@@ -9,7 +9,7 @@ const PROPERTY_KEY = Symbol("properties");
  * @extends jmObject
  * @require jmObject
  */
-class jmProperty extends jmObject {		
+export default class jmProperty extends jmObject {		
 	
 	constructor() {
 		super();

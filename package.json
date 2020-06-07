@@ -14,7 +14,8 @@
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",
-    "cz-conventional-changelog": "^2.1.0"
+    "cz-conventional-changelog": "^2.1.0",
+    "express": "^4.17.1"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,8 @@
     "example": "example"
   },
   "scripts": {
-    "build": "cd build & npm i & gulp & cd .."
+    "build": "cd build & npm i & gulp & cd ..",
+    "dev": "node dev"
   },
   "license": "MIT",
   "config": {

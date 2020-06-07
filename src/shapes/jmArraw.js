@@ -7,7 +7,7 @@ import {jmUtils} from "../core/jmUtils.js";
  * @extends jmPath
  * @param {object} 生成箭头所需的参数
  */
-class jmArraw extends jmPath {	
+export default class jmArraw extends jmPath {	
 
 	constructor(params, t='jmArraw') {
 		super(params, t);

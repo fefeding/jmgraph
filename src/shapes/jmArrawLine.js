@@ -7,7 +7,7 @@ import {jmArraw} from "./jmArraw.js";
  * @extends jmLine
  * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
  */	
-class jmArrawLine extends jmLine {	
+export default class jmArrawLine extends jmLine {	
 
 	constructor(params, t) {
 		super(params, t||'jmArrawLine');

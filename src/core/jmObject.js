@@ -7,7 +7,7 @@ import {jmList} from "./jmList.js";
  * @class jmObject
  * @for jmGraph
  */
-class jmObject {
+export default class jmObject {
 	//id;
 	constructor(g) {
 		if(g && g.type == 'jmGraph') {

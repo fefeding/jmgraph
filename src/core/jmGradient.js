@@ -1,5 +1,5 @@
-import {jmUtils} from "../jmUtils.js";
-import {jmList} from "../jmList.js";
+import {jmUtils} from "./jmUtils.js";
+import {jmList} from "./jmList.js";
 
 /**
  * 渐变类
@@ -7,7 +7,7 @@ import {jmList} from "../jmList.js";
  * @class jmGradient
  * @param {object} op 渐变参数,type:[linear= 线性渐变,radial=放射性渐变] 
  */
-class jmGradient {
+export default class jmGradient {
 	constructor(opt) {
 		this.stops = new jmList();
 

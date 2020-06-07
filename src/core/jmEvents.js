@@ -5,7 +5,7 @@ import {jmUtils} from "./jmUtils.js";
  * @class jmEvents
  * @for jmGraph
  */
-class jmEvents {
+export default class jmEvents {
 
 	constructor(container, target) {
 		this.container = container;

@@ -6,7 +6,7 @@ import {jmPath} from "../core/jmPath.js";
  * @extends jmPath
  * @param {object} params center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
  */
-class jmArc extends jmPath {
+export default class jmArc extends jmPath {
 
 	constructor(params, t='jmArc') {
 		if(!params) params = {};

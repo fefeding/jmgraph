@@ -5,7 +5,7 @@
  * @for jmUtils
  * @param {array} [arr] 数组，可转为当前list元素
  */
-class jmList extends Array {    
+export default class jmList extends Array {    
     constructor(...arg) {
         let ps = [];
         if(arg && arg.length && Array.isArray(arg[0])) {

@@ -6,7 +6,7 @@ import {jmPath} from "../core/jmPath.js";
  * @extends jmPath
  * @param {object} params 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度
  */ 
-class jmRect extends jmPath {		
+export default class jmRect extends jmPath {		
 
 	constructor(params, t='jmRect') {
 		params = params||{};

@@ -1,4 +1,4 @@
-import {jmUtils} from "../jmUtils.js";
+import {jmUtils} from "./jmUtils.js";
 
 /**
  * 画图阴影对象表示法
@@ -10,7 +10,7 @@ import {jmUtils} from "../jmUtils.js";
  * @param {string} color 阴影的颜色
  */
 
-class jmShadow {
+export default class jmShadow {
 	constructor(x, y, blur, color) {
 		if(typeof x == 'string' && !y && !blur && !color) {
 			this.fromString(x);

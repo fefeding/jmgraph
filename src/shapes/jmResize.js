@@ -7,7 +7,7 @@ import {jmRect} from "./jmRect.js";
  * @class jmResize
  * @extends jmRect
  */
-class jmResize extends jmRect {	
+export default class jmResize extends jmRect {	
 
 	constructor(params, t='jmResize') {
 		params = params || {};

@@ -15,18 +15,17 @@ const cleanimport = require('gulp-clean-import');
 const gulpJsdoc2md = require('gulp-jsdoc-to-markdown')
 
 const jsSources = [
-    "../src/common/jmList.js",
-    "../src/common/jmUtils.js",
-    "../src/common/jmObject.js",
-    "../src/common/jmProperty.js",
-    "../src/common/jmEvents.js",
-    "../src/models/*.js",
-    "../src/shapes/jmControl.js",
-    "../src/shapes/jmPath.js",
-    "../src/shapes/jmArc.js",
+    "../src/core/jmList.js",
+    "../src/core/jmUtils.js",
+    "../src/core/jmObject.js",
+    "../src/core/jmProperty.js",
+    "../src/core/jmEvents.js",
+    "../src/core/jmGradient.js",
+    "../src/core/jmShadow.js",
+    "../src/core/jmControl.js",
+    "../src/core/jmPath.js",
     "../src/shapes/*.js",
-    "../src/controls/*.js",
-    "../src/jmGraph.js"
+    "../src/core/jmGraph.js"
    ];
 
 //语法检测
@@ -65,11 +64,32 @@ gulp.task('build-js-es6', function () {
     .pipe(gulp.dest('../dist'));
 });
 
+//编译core成es5版本
+gulp.task('build-js-core', function () {
+    return browserify({
+        entries: [
+            '../src/core/jmGraph.js'
+        ]
+      }).plugin(standalonify, {
+          name: 'jmGraph'   //转为umd规范
+      })
+    .transform("babelify", {
+        presets: ['@babel/preset-env']
+    })  //使用babel转换es6代码
+    .bundle()  //合并打包
+    .pipe(source('jmgraph.core.js'))
+    .pipe(buffer())
+    .pipe(gulp.dest('../dist'))
+    .pipe(rename('jmgraph.core.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('../dist'));
+});
+
 //编译成es5版本
 gulp.task('build-js-cmd', function () {
     return browserify({
         entries: [
-            '../src/jmGraph.js'
+            '../index.js'
         ]
       }).plugin(standalonify, {
           name: 'jmGraph'   //转为umd规范
@@ -86,7 +106,7 @@ gulp.task('build-js-cmd', function () {
     .pipe(gulp.dest('../dist'));
 });
 
-let tasks = ['docs', 'build-js-es6', 'build-js-cmd'];
+let tasks = ['docs', 'build-js-core', 'build-js-cmd'];
 
 gulp.task('default', gulp.parallel(tasks, function(done) {
     done();

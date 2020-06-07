@@ -8,7 +8,7 @@ import {jmControl} from "../core/jmControl.js";
  * @extends jmControl
  * @param {object} params 控件参数
  */
-class jmImage extends jmControl {
+export default class jmImage extends jmControl {
 
 	constructor(params, t) {
 		params = params || {};

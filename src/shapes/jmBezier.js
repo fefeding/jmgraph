@@ -7,7 +7,7 @@ import {jmPath} from "../core/jmPath.js";
  * @extends jmPath
  * @param {object} params 参数
  */ 
-class jmBezier extends jmPath {	
+export default class jmBezier extends jmPath {	
 	
 	constructor(params, t='jmBezier') {
 		// 典线默认不封闭

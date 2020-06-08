@@ -318,7 +318,7 @@ export default class jmUtils {
      * @param  {number} 是否为实心 1= 是
      * @returns {boolean} 结果 true=在形状内
      */
-    static judge(dot,coordinates,noneZeroMode) {
+    /*static judge(dot,coordinates,noneZeroMode) {
         // 默认启动none zero mode
         noneZeroMode=noneZeroMode||1;
         var x = dot.x,y=dot.y;
@@ -368,7 +368,7 @@ export default class jmUtils {
         }
         
         return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;
-    }
+    }*/
 
     /**
      * 检查边界，子对象是否超出父容器边界

@@ -64,14 +64,14 @@ export default class jmGraph extends jmControl {
 			this.context = canvas.getContext('2d');
 		}
 		this.canvas = canvas;
-		this.init(callback);
+		this.__init(callback);
 	}
 
 	/**
 	 * 初始化画布
 	 * @method init
 	 */
-	init(callback) {
+	__init(callback) {
 		/**
 		 * 当前所有图形类型
 		 * @property shapes

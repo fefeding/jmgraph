@@ -10,9 +10,9 @@ import {jmArraw} from "./jmArraw.js";
 export default class jmArrawLine extends jmLine {	
 
 	constructor(params, t) {
-		
-		this.start = params.start || {x:0,y:0};
-		this.end = params.end || {x:0,y:0};
+
+		params.start = params.start || {x:0,y:0};
+		params.end = params.end || {x:0,y:0};
 
 		super(params, t||'jmArrawLine');
 		this.style.lineJoin = this.style.lineJoin || 'miter';

@@ -115,7 +115,10 @@ export default class jmLabel extends jmControl {
 		if(this.__size) return this.__size;
 		this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
 		this.context.save();
-		this.setStyle();
+		// 修改字体，用来计算
+		this.setStyle({
+			font: this.style.font
+		});
 		//计算宽度
 		this.__size = this.context.measureText?
 							this.context.measureText(this.text):

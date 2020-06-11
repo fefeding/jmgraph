@@ -394,7 +394,8 @@ export default class jmControl extends jmProperty {
 							break;
 						}
 						//旋转
-						case 'rotation' : {								
+						case 'rotation' : {	
+							if(!style.angle) break;							
 							//旋 转先移位偏移量
 							let tranX = 0;
 							let tranY = 0;

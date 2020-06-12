@@ -852,8 +852,9 @@ export default class jmControl extends jmProperty {
 			
 			this.context.save();
 			
-			this.setStyle();//设定样式
 			this.emit('beginDraw', this);
+			
+			this.setStyle();//设定样式
 
 			if(needDraw && this.beginDraw) this.beginDraw();
 			if(needDraw && this.draw) this.draw();	

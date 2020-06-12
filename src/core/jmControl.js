@@ -851,7 +851,7 @@ export default class jmControl extends jmProperty {
 			}
 			
 			this.context.save();
-			
+
 			this.emit('beginDraw', this);
 			
 			this.setStyle();//设定样式
@@ -894,7 +894,14 @@ export default class jmControl extends jmProperty {
 	 * @param {string} name 事件名称
 	 * @param {function} handle 事件委托
 	 */
-	bind(name, handle) {		
+	bind(name, handle) {	
+		if(name && name.indexOf(' ') > -1) {
+			name = name.split(' ');
+			for(let n of name) {
+				n && this.bind(n, handle);
+			}
+			return;
+		}	
 		/**
 		 * 添加事件的集合
 		 *
@@ -905,7 +912,7 @@ export default class jmControl extends jmProperty {
 			if(!this.__events) this.__events = {};
 			return this.__events[name] = events;
 		}
-		let eventCollection = this.getEvent(name) || _setEvent.call(this,name, new jmList());
+		let eventCollection = this.getEvent(name) || _setEvent.call(this, name, new jmList());
 		if(!eventCollection.contain(handle)) {
 			eventCollection.add(handle);
 		}
@@ -919,6 +926,13 @@ export default class jmControl extends jmProperty {
 	 * @param {function} handle 从控件中移除事件的委托
 	 */
 	unbind(name, handle) {	
+		if(name && name.indexOf(' ') > -1) {
+			name = name.split(' ');
+			for(let n of name) {
+				n && this.unbind(n, handle);
+			}
+			return;
+		}	
 		let eventCollection = this.getEvent(name) ;		
 		if(eventCollection) {
 			if(handle) eventCollection.remove(handle);

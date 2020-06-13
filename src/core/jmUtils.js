@@ -46,7 +46,7 @@ export default class jmUtils {
             for(let k in source) {
                 if(typeof target[k] === 'boolean') {
                     // 如果赋值为对象，则拷贝，否则直接赋值
-                    if(typeof source[k] !== 'object') target[k] = this.clone(source[k], deep);
+                    if(typeof source[k] === 'object') target[k] = this.clone(source[k], deep);
                     else if(typeof source[k] !== 'undefined') {
                         target[k] = source[k];
                     }

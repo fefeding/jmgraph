@@ -271,7 +271,7 @@ export default class jmControl extends jmProperty {
 		 * 根据控件zIndex排序，越大的越高
 		 */
 		this.children.sort = function() {
-			var levelItems = {};
+			const levelItems = {};
 			//提取zindex大于0的元素
 			//为了保证0的层级不改变，只能把大于0的提出来。
 			this.each(function(i, obj) {
@@ -288,7 +288,11 @@ export default class jmControl extends jmProperty {
 			});
 			
 			for(let index in levelItems) {
-				oadd.call(this,levelItems[index]);
+				// 先从数组内去掉， 再加到进后
+				for(let i=0; i< levelItems[index].length; i++) {
+					this.oremove(levelItems[index][i]);
+				}
+				oadd.call(this, levelItems[index]);
 			}
 
 			self.needUpdate = true;

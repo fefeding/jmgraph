@@ -24,9 +24,10 @@ export default class jmUtils {
             deep = target;
             target = {};
         }
-        target = target || {};
 
         if(source && typeof source === 'object') {
+            target = target || {};
+
             //如果为当前泛型，则直接new
             if(this.isType(source, jmList)) {
                 return new jmList(source);
@@ -44,15 +45,10 @@ export default class jmUtils {
             }
             target.constructor = source.constructor;
             for(let k in source) {
-                if(typeof target[k] === 'boolean') {
-                    // 如果赋值为对象，则拷贝，否则直接赋值
-                    if(typeof source[k] === 'object') target[k] = this.clone(source[k], deep);
-                    else if(typeof source[k] !== 'undefined') {
-                        target[k] = source[k];
-                    }
-                    continue;
-                } 
-                target[k] = this.clone(source[k], target[k], deep);
+                // 如果不是对象和空，则采用target的属性
+                if(typeof target[k] === 'object' || typeof target[k] === 'undefined') {                    
+                    target[k] = this.clone(source[k], target[k], deep);
+                }
             }
             return target;
         }

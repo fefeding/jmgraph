@@ -582,6 +582,41 @@ export default class jmUtils {
     }
 
     /**
+     * 16进制颜色转为r g b a 对象 {r, g , b, a}
+     * @param {string}} hex 16进度的颜色
+     */
+    static hexToRGBA(hex) {
+        hex = this.trim(hex).replace(/^#/, '');
+        //当为7位时，表示需要转为带透明度的rgba        
+        if(hex.length >= 7) {
+            a = r.substr(0,2);
+            g = r.substr(4,2);
+            b = r.substr(6,2);
+            r = r.substr(2,2);
+            //透明度
+            a = (this.hexToNumber(a) / 255).toFixed(4);
+
+            r = this.hexToNumber(r||0);
+            g = this.hexToNumber(g||0);
+            b = this.hexToNumber(b||0);
+        }
+        //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
+        else if(hexlength === 4) {
+            a = r.substr(1,1);
+            g = r.substr(3,1);//除#号外的第二位
+            b = r.substr(4,1);
+            r = r.substr(2,1);
+
+            r = this.hexToNumber(r||0);
+            g = this.hexToNumber(g||0);
+            b = this.hexToNumber(b||0);
+            //透明度
+            a = (this.hexToNumber(a) / 255).toFixed(4);
+        }
+               
+    }
+
+    /**
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
      *
      * @method toColor

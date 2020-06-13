@@ -170,7 +170,7 @@ export default class jmLabel extends jmControl {
 		}
 
 		let txt = this.text;
-		if(txt) {
+		if(typeof txt !== 'undefined') {
 			if(this.style.fill && this.context.fillText) {
 				if(this.style.maxWidth) {
 					this.context.fillText(txt,x,y,this.style.maxWidth);

@@ -15,10 +15,17 @@ export default class jmUtils {
      * @method clone
      * @static
      * @param {object} source 被复制的对象
+     * @param {object} target 可选，如果指定就表示复制给这个对象，如果为boolean它就是deep参数
      * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
      * @return {object} 参数source的拷贝对象
      */
-    static clone(source, deep = false) {
+    static clone(source, target, deep = false) {
+        if(typeof target === 'boolean') {
+            deep = target;
+            target = {};
+        }
+        target = target || {};
+
         if(source && typeof source === 'object') {
             //如果为当前泛型，则直接new
             if(this.isType(source, jmList)) {
@@ -35,10 +42,9 @@ export default class jmUtils {
                 }
                 return source.slice(0);
             }
-            let target = {};
             target.constructor = source.constructor;
             for(let k in source) {
-                target[k] = this.clone(source[k], deep);
+                target[k] = this.clone(source[k], target[k], deep);
             }
             return target;
         }

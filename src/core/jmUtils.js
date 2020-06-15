@@ -52,6 +52,10 @@ export default class jmUtils {
             }
             return target;
         }
+        else if(typeof target != 'undefined') {
+            return target;
+        }
+
         return source;
     }
 
@@ -586,34 +590,65 @@ export default class jmUtils {
      * @param {string}} hex 16进度的颜色
      */
     static hexToRGBA(hex) {
-        hex = this.trim(hex).replace(/^#/, '');
-        //当为7位时，表示需要转为带透明度的rgba        
-        if(hex.length >= 7) {
-            a = r.substr(0,2);
-            g = r.substr(4,2);
-            b = r.substr(6,2);
-            r = r.substr(2,2);
-            //透明度
-            a = (this.hexToNumber(a) / 255).toFixed(4);
+        hex = this.trim(hex);        
 
-            r = this.hexToNumber(r||0);
-            g = this.hexToNumber(g||0);
-            b = this.hexToNumber(b||0);
-        }
-        //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
-        else if(hexlength === 4) {
-            a = r.substr(1,1);
-            g = r.substr(3,1);//除#号外的第二位
-            b = r.substr(4,1);
-            r = r.substr(2,1);
+        //当为7位时，表示需要转为带透明度的rgba
+        if(hex[0] == '#') {
+            const color = {
+                a: 1
+            };
+            if(hex.length >= 8) {
+                color.a = hex.substr(1,2);
+                color.g = hex.substr(5,2);
+                color.b = hex.substr(7,2);
+                color.r = hex.substr(3,2);
+                //透明度
+                color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
 
-            r = this.hexToNumber(r||0);
-            g = this.hexToNumber(g||0);
-            b = this.hexToNumber(b||0);
-            //透明度
-            a = (this.hexToNumber(a) / 255).toFixed(4);
-        }
-               
+                color.r = this.hexToNumber(color.r||0);
+                color.g = this.hexToNumber(color.g||0);
+                color.b = this.hexToNumber(color.b||0);
+                return color; 
+            }
+            // #cccccc || #ccc
+            else if(hex.length === 7 || hex.length === 4) {
+                // #ccc这种情况，把每个位复制一份
+                if(hex.length === 4) {
+                    color.g = hex.substr(2, 1);
+                    color.g = color.g + color.g;
+                    color.b = hex.substr(3, 1);
+                    color.b = color.b + color.b;
+                    color.r = hex.substr(1, 1);
+                    color.r = color.r + color.r;
+                }
+                else {
+                    color.g = hex.substr(3, 2);//除#号外的第二位
+                    color.b = hex.substr(5, 2);
+                    color.r = hex.substr(1, 2);
+                }
+
+                color.r = this.hexToNumber(color.r||0);
+                color.g = this.hexToNumber(color.g||0);
+                color.b = this.hexToNumber(color.b||0);
+                
+                return color; 
+            }
+            //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
+            else if(hex.length === 5) {
+                color.a = hex.substr(1,1);
+                color.g = hex.substr(3,1);//除#号外的第二位
+                color.b = hex.substr(4,1);
+                color.r = hex.substr(2,1);
+
+                color.r = this.hexToNumber(color.r||0);
+                color.g = this.hexToNumber(color.g||0);
+                color.b = this.hexToNumber(color.b||0);
+                //透明度
+                color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+                return color; 
+            }
+        }  
+        return hex;     
     }
 
     /**
@@ -625,36 +660,18 @@ export default class jmUtils {
      * @return {string} 颜色字符串
      */
     static toColor(r, g, b, a) {    
-        if(typeof r == 'string' && r) {
-            r = this.trim(r);
-            //当为7位时，表示需要转为带透明度的rgba
-            if(r[0] == '#') {
-                if(r.length >= 8) {
-                    a = r.substr(1,2);
-                    g = r.substr(5,2);
-                    b = r.substr(7,2);
-                    r = r.substr(3,2);
-                    //透明度
-                    a = (this.hexToNumber(a) / 255).toFixed(4);
+        if(typeof r === 'string' && r) {
+            r = this.trim(r); 
+            // 正常的颜色表达，不需要转换
+            if(r[0] === '#' && (r.length === 4 || r.length === 7)) return r;
 
-                    r = this.hexToNumber(r||0);
-                    g = this.hexToNumber(g||0);
-                    b = this.hexToNumber(b||0);
-                }
-                //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
-                else if(r.length === 5) {
-                    a = r.substr(1,1);
-                    g = r.substr(3,1);//除#号外的第二位
-                    b = r.substr(4,1);
-                    r = r.substr(2,1);
-
-                    r = this.hexToNumber(r||0);
-                    g = this.hexToNumber(g||0);
-                    b = this.hexToNumber(b||0);
-                    //透明度
-                    a = (this.hexToNumber(a) / 255).toFixed(4);
-                }
-            }        
+            const color = this.hexToRGBA(r);
+            if(typeof color === 'string') return color;
+            
+            r = color.r || r;
+            g = color.g || g;
+            b = color.b || b;
+            a = color.a || a;
         }
         if(typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
             if(typeof a != 'undefined') {            

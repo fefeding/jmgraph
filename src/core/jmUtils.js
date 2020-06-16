@@ -22,7 +22,7 @@ export default class jmUtils {
     static clone(source, target, deep = false) {
         if(typeof target === 'boolean') {
             deep = target;
-            target = {};
+            target = undefined;
         }
 
         if(source && typeof source === 'object') {

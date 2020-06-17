@@ -101,6 +101,16 @@ export default class jmGraph extends jmControl {
 		//绑定事件
 		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
 
+		//如果指定了自动刷新
+		if(this.option.autoRefresh) {
+			const self = this; 
+			function update() {
+				if(self.needUpdate) self.redraw();
+				requestAnimationFrame(update);
+			}
+			requestAnimationFrame(update);
+		}
+
 		if(callback) callback(this);		
 	}
 

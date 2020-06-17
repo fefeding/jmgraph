@@ -52,6 +52,7 @@ yarn add jmgraph
   var g = new jmGraph(container, {
     width: 800,
     height: 600,
+    autoRefresh: true, // 是否自动刷新变化
     style: {
       fill: '#000'
     }

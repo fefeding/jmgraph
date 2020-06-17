@@ -215,6 +215,9 @@ point格式：{x:0,y:0,m:true}</p>
 </dd>
 <dt><a href="#judge 判断点是否在多边形中">judge 判断点是否在多边形中(dot, coordinates, 是否为实心)</a> ⇒ <code>boolean</code></dt>
 <dd></dd>
+<dt><a href="#hexToRGBA">hexToRGBA(})</a></dt>
+<dd><p>16进制颜色转为r g b a 对象 {r, g , b, a}</p>
+</dd>
 <dt><a href="#is">is(type)</a> ⇒ <code>boolean</code></dt>
 <dd><p>检 查对象是否为指定类型</p>
 </dd>
@@ -1362,6 +1365,17 @@ jmGraph画图类库对canvas画图api进行二次封装，使其更易调用，
 | coordinates | <code>array</code> | {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 |
 | 是否为实心 | <code>number</code> | 1= 是 |
 
+<a name="hexToRGBA"></a>
+
+## hexToRGBA(})
+16进制颜色转为r g b a 对象 {r, g , b, a}
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| } | <code>string</code> | hex 16进度的颜色 |
+
 <a name="is"></a>
 
 ## is(type) ⇒ <code>boolean</code>
@@ -2027,7 +2041,7 @@ img对象
 
 <a name="clone"></a>
 
-## .clone(source, deep) ⇒ <code>object</code>
+## .clone(source, target, deep) ⇒ <code>object</code>
 复制一个对象
 
 **Kind**: static function  
@@ -2036,6 +2050,7 @@ img对象
 | Param | Type | Description |
 | --- | --- | --- |
 | source | <code>object</code> | 被复制的对象 |
+| target | <code>object</code> | 可选，如果指定就表示复制给这个对象，如果为boolean它就是deep参数 |
 | deep | <code>boolean</code> | 是否深度复制，如果为true,数组内的每个对象都会被复制 |
 
 <a name="bindEvent"></a>

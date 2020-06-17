@@ -1115,10 +1115,13 @@ export default class jmControl extends jmProperty {
 		//args = jmUtils.clone(args);//参数副本
 		args.position.x = args.position.offsetX - abounds.left;
 		args.position.y = args.position.offsetY - abounds.top;
+
+		// 是否在当前控件内操作
+		const inpos = this.interactive !== false && this.checkPoint(args.position);
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
 		// 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
-		if(this.interactive !== false && !args.target && this.checkPoint(args.position)) {
+		if(inpos && !args.target) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
 			if(!args.target) {
 				args.target = this;
@@ -1126,16 +1129,19 @@ export default class jmControl extends jmProperty {
 			
 			this.runEventAndPopEvent(name, args);
 
-			if(!this.focused && name == 'mousemove') {
+			if(!this.focused && (name === 'mousemove' || name === 'touchmove')) {
 				this.focused = true;//表明当前焦点在此控件中
-				this.raiseEvent('mouseover',args);
+				this.raiseEvent(name === 'mousemove'? 'mouseover': 'touchover',args);
 			}	
 		}
 		else {
 			//如果焦点不在，且原焦点在，则触发mouseleave事件
-			if(this.interactive !== false && this.type != 'jmGraph' && this.focused && name == 'mousemove') {
+			if(this.interactive !== false && !inpos &&
+				this.focused && 
+				(name === 'mousemove' || name === 'touchmove')) {
+
 				this.focused = false;//表明当前焦点离开
-				this.runEventHandle('mouseleave', args);//执行事件	
+				this.runEventHandle(name === 'mousemove'? 'mouseleave' : 'touchleave', args);//执行事件	
 			}	
 		}
 			

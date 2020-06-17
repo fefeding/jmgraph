@@ -205,6 +205,12 @@ var _jmShadow = require("./jmShadow.js");
 
 var _jmProperty2 = require("./jmProperty.js");
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -377,6 +383,11 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         });
 
         for (var index in levelItems) {
+          // 先从数组内去掉， 再加到进后
+          for (var i = 0; i < levelItems[index].length; i++) {
+            this.oremove(levelItems[index][i]);
+          }
+
           oadd.call(this, levelItems[index]);
         }
 
@@ -498,7 +509,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
               case 'rotation':
                 {
-                  //旋 转先移位偏移量
+                  if (!style.angle) break; //旋 转先移位偏移量
+
                   var tranX = 0;
                   var tranY = 0; //旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
                   //这里只有style中的旋转才能生效，不然会导至子控件多次旋转
@@ -1007,9 +1019,9 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         }
 
         this.context.save();
+        this.emit('beginDraw', this);
         this.setStyle(); //设定样式
 
-        this.emit('beginDraw', this);
         if (needDraw && this.beginDraw) this.beginDraw();
         if (needDraw && this.draw) this.draw();
         if (needDraw && this.endDraw) this.endDraw();
@@ -1052,12 +1064,33 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "bind",
     value: function bind(name, handle) {
+      if (name && name.indexOf(' ') > -1) {
+        name = name.split(' ');
+
+        var _iterator = _createForOfIteratorHelper(name),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var n = _step.value;
+            n && this.bind(n, handle);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        return;
+      }
       /**
        * 添加事件的集合
        *
        * @method _setEvent
        * @private
        */
+
+
       function _setEvent(name, events) {
         if (!this.__events) this.__events = {};
         return this.__events[name] = events;
@@ -1080,6 +1113,26 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "unbind",
     value: function unbind(name, handle) {
+      if (name && name.indexOf(' ') > -1) {
+        name = name.split(' ');
+
+        var _iterator2 = _createForOfIteratorHelper(name),
+            _step2;
+
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var n = _step2.value;
+            n && this.unbind(n, handle);
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+
+        return;
+      }
+
       var eventCollection = this.getEvent(name);
 
       if (eventCollection) {
@@ -2090,7 +2143,7 @@ var jmGradient = /*#__PURE__*/function () {
     key: "addStop",
     value: function addStop(offset, color) {
       this.stops.add({
-        offset: offset,
+        offset: Number(offset),
         color: color
       });
     }
@@ -2198,49 +2251,56 @@ var jmGradient = /*#__PURE__*/function () {
     key: "fromString",
     value: function fromString(s) {
       if (!s) return;
-      var ms = s.match(/(linear|radial)-gradient\s*\(\s*([^,]+[^\)]+)\)/i);
+      var ms = s.match(/(linear|radial)-gradient\s*\(\s*([^,]+)\s*,\s*((.|\s)+)\)/i);
       if (!ms || ms.length < 3) return;
       this.type = ms[1].toLowerCase();
-      var pars = ms[2].split(',');
 
-      if (pars.length) {
-        var ps = _jmUtils.jmUtils.trim(pars[0]).split(/\s+/); //线性渐变
+      var ps = _jmUtils.jmUtils.trim(ms[2]).split(/\s+/); //线性渐变
 
 
-        if (this.type == 'linear') {
-          if (ps.length <= 2) {
+      if (this.type == 'linear') {
+        if (ps.length <= 2) {
+          this.x2 = ps[0];
+          this.y2 = ps[1] || 0;
+        } else {
+          this.x1 = ps[0];
+          this.y1 = ps[1];
+          this.x2 = ps[2];
+          this.y2 = ps[3];
+        }
+      } //径向渐变
+      else {
+          if (ps.length <= 3) {
             this.x2 = ps[0];
             this.y2 = ps[1] || 0;
+            this.r2 = ps[2] || 0;
           } else {
             this.x1 = ps[0];
             this.y1 = ps[1];
-            this.x2 = ps[2];
+            this.r1 = ps[2];
+            this.x2 = ps[3];
             this.y2 = ps[3];
+            this.r2 = ps[3];
           }
-        } //径向渐变
-        else {
-            if (ps.length <= 3) {
-              this.x2 = ps[0];
-              this.y2 = ps[1] || 0;
-              this.r2 = ps[2] || 0;
-            } else {
-              this.x1 = ps[0];
-              this.y1 = ps[1];
-              this.r1 = ps[2];
-              this.x2 = ps[3];
-              this.y2 = ps[3];
-              this.r2 = ps[3];
-            }
-          } //解析颜色偏移
-        //color step
+        } //解析颜色偏移
+      //color step
 
 
-        if (pars.length > 1) {
-          for (var i = 1; i < pars.length; i++) {
-            var cs = _jmUtils.jmUtils.trim(pars[i]).split(/\s+/);
+      var pars = ms[3].match(/((rgb(a)?\s*\([\d,\.\s]+\))|(#[a-zA-Z\d]+))\s+([\d\.]+)/ig);
 
-            if (cs.length) {
-              this.addStop(cs[1] || 0, cs[0]);
+      if (pars && pars.length) {
+        for (var i = 1; i < pars.length; i++) {
+          var par = _jmUtils.jmUtils.trim(pars[i]);
+
+          var spindex = par.lastIndexOf(' ');
+
+          if (spindex > -1) {
+            var offset = Number(par.substr(spindex + 1));
+
+            var color = _jmUtils.jmUtils.trim(par.substr(0, spindex));
+
+            if (!isNaN(offset) && color) {
+              this.addStop(offset, color);
             }
           }
         }
@@ -2435,7 +2495,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
     _this.canvas = canvas;
 
-    _this.init(callback);
+    _this.__init(callback);
 
     return _this;
   }
@@ -2446,8 +2506,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
 
   _createClass(jmGraph, [{
-    key: "init",
-    value: function init(callback) {
+    key: "__init",
+    value: function __init(callback) {
       /**
        * 当前所有图形类型
        * @property shapes
@@ -2474,7 +2534,18 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       if (this.option.width > 0) this.width = this.option.width;
       if (this.option.height > 0) this.height = this.option.height; //绑定事件
 
-      this.eventHandler = new _jmEvents.jmEvents(this, this.canvas.canvas || this.canvas);
+      this.eventHandler = new _jmEvents.jmEvents(this, this.canvas.canvas || this.canvas); //如果指定了自动刷新
+
+      if (this.option.autoRefresh) {
+        var update = function update() {
+          if (self.needUpdate) self.redraw();
+          requestAnimationFrame(update);
+        };
+
+        var self = this;
+        requestAnimationFrame(update);
+      }
+
       if (callback) callback(this);
     }
     /**
@@ -3616,14 +3687,21 @@ var jmUtils = /*#__PURE__*/function () {
      * @method clone
      * @static
      * @param {object} source 被复制的对象
+     * @param {object} target 可选，如果指定就表示复制给这个对象，如果为boolean它就是deep参数
      * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
      * @return {object} 参数source的拷贝对象
      */
-    value: function clone(source) {
-      var deep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    value: function clone(source, target) {
+      var deep = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      if (typeof target === 'boolean') {
+        deep = target;
+        target = undefined;
+      }
 
       if (source && _typeof(source) === 'object') {
-        //如果为当前泛型，则直接new
+        target = target || {}; //如果为当前泛型，则直接new
+
         if (this.isType(source, _jmList.jmList)) {
           return new _jmList.jmList(source);
         } else if (Array.isArray(source)) {
@@ -3641,13 +3719,17 @@ var jmUtils = /*#__PURE__*/function () {
           return source.slice(0);
         }
 
-        var target = {};
         target.constructor = source.constructor;
 
         for (var k in source) {
-          target[k] = this.clone(source[k], deep);
+          // 如果不是对象和空，则采用target的属性
+          if (_typeof(target[k]) === 'object' || typeof target[k] === 'undefined') {
+            target[k] = this.clone(source[k], target[k], deep);
+          }
         }
 
+        return target;
+      } else if (typeof target != 'undefined') {
         return target;
       }
 
@@ -3944,61 +4026,58 @@ var jmUtils = /*#__PURE__*/function () {
      * @returns {boolean} 结果 true=在形状内
      */
 
-  }, {
-    key: "judge",
-    value: function judge(dot, coordinates, noneZeroMode) {
-      // 默认启动none zero mode
-      noneZeroMode = noneZeroMode || 1;
-      var x = dot.x,
-          y = dot.y;
-      var crossNum = 0; // 点在线段的左侧数目
-
-      var leftCount = 0; // 点在线段的右侧数目
-
-      var rightCount = 0;
-
-      for (var i = 0; i < coordinates.length - 1; i++) {
-        var start = coordinates[i];
-        var end = coordinates[i + 1]; // 起点、终点斜率不存在的情况
-
-        if (start.x === end.x) {
-          // 因为射线向右水平，此处说明不相交
-          if (x > start.x) continue; // 从左侧贯穿
-
-          if (end.y > start.y && y >= start.y && y <= end.y) {
-            leftCount++;
-            crossNum++;
-          } // 从右侧贯穿
-
-
-          if (end.y < start.y && y >= end.y && y <= start.y) {
-            rightCount++;
-            crossNum++;
-          }
-
-          continue;
-        } // 斜率存在的情况，计算斜率
-
-
-        var k = (end.y - start.y) / (end.x - start.x); // 交点的x坐标
-
-        var x0 = (y - start.y) / k + start.x; // 因为射线向右水平，此处说明不相交
-
-        if (x > x0) continue;
-
-        if (end.x > start.x && x0 >= start.x && x0 <= end.x) {
-          crossNum++;
-          if (k >= 0) leftCount++;else rightCount++;
+    /*static judge(dot,coordinates,noneZeroMode) {
+        // 默认启动none zero mode
+        noneZeroMode=noneZeroMode||1;
+        var x = dot.x,y=dot.y;
+        var crossNum = 0;
+        // 点在线段的左侧数目
+        var leftCount = 0;
+        // 点在线段的右侧数目
+        var rightCount = 0;
+        for(var i=0;i<coordinates.length-1;i++){
+            var start = coordinates[i];
+            var end = coordinates[i+1];
+                
+            // 起点、终点斜率不存在的情况
+            if(start.x===end.x) {
+                // 因为射线向右水平，此处说明不相交
+                if(x>start.x) continue;
+                
+                // 从左侧贯穿
+                if((end.y>start.y&&y>=start.y && y<=end.y)){
+                    leftCount++;
+                    crossNum++;
+                }
+                // 从右侧贯穿
+                if((end.y<start.y&&y>=end.y && y<=start.y)) {
+                    rightCount++;
+                    crossNum++;
+                }
+                continue;
+            }
+            // 斜率存在的情况，计算斜率
+            var k=(end.y-start.y)/(end.x-start.x);
+            // 交点的x坐标
+            var x0 = (y-start.y)/k+start.x;
+            // 因为射线向右水平，此处说明不相交
+            if(x>x0) continue;
+                
+            if((end.x>start.x&&x0>=start.x && x0<=end.x)){
+                crossNum++;
+                if(k>=0) leftCount++;
+                else rightCount++;
+            }
+            if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
+                crossNum++;
+                if(k>=0) rightCount++;
+                else leftCount++;
+            }
         }
+        
+        return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;
+    }*/
 
-        if (end.x < start.x && x0 >= end.x && x0 <= start.x) {
-          crossNum++;
-          if (k >= 0) rightCount++;else leftCount++;
-        }
-      }
-
-      return noneZeroMode === 1 ? leftCount - rightCount !== 0 : crossNum % 2 === 1;
-    }
     /**
      * 检查边界，子对象是否超出父容器边界
      * 当对象偏移offset后是否出界
@@ -4239,6 +4318,71 @@ var jmUtils = /*#__PURE__*/function () {
       return h;
     }
     /**
+     * 16进制颜色转为r g b a 对象 {r, g , b, a}
+     * @param {string}} hex 16进度的颜色
+     */
+
+  }, {
+    key: "hexToRGBA",
+    value: function hexToRGBA(hex) {
+      hex = this.trim(hex); //当为7位时，表示需要转为带透明度的rgba
+
+      if (hex[0] == '#') {
+        var color = {
+          a: 1
+        };
+
+        if (hex.length >= 8) {
+          color.a = hex.substr(1, 2);
+          color.g = hex.substr(5, 2);
+          color.b = hex.substr(7, 2);
+          color.r = hex.substr(3, 2); //透明度
+
+          color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+          color.r = this.hexToNumber(color.r || 0);
+          color.g = this.hexToNumber(color.g || 0);
+          color.b = this.hexToNumber(color.b || 0);
+          return color;
+        } // #cccccc || #ccc
+        else if (hex.length === 7 || hex.length === 4) {
+            // #ccc这种情况，把每个位复制一份
+            if (hex.length === 4) {
+              color.g = hex.substr(2, 1);
+              color.g = color.g + color.g;
+              color.b = hex.substr(3, 1);
+              color.b = color.b + color.b;
+              color.r = hex.substr(1, 1);
+              color.r = color.r + color.r;
+            } else {
+              color.g = hex.substr(3, 2); //除#号外的第二位
+
+              color.b = hex.substr(5, 2);
+              color.r = hex.substr(1, 2);
+            }
+
+            color.r = this.hexToNumber(color.r || 0);
+            color.g = this.hexToNumber(color.g || 0);
+            color.b = this.hexToNumber(color.b || 0);
+            return color;
+          } //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
+          else if (hex.length === 5) {
+              color.a = hex.substr(1, 1);
+              color.g = hex.substr(3, 1); //除#号外的第二位
+
+              color.b = hex.substr(4, 1);
+              color.r = hex.substr(2, 1);
+              color.r = this.hexToNumber(color.r || 0);
+              color.g = this.hexToNumber(color.g || 0);
+              color.b = this.hexToNumber(color.b || 0); //透明度
+
+              color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+              return color;
+            }
+      }
+
+      return hex;
+    }
+    /**
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
      *
      * @method toColor
@@ -4250,34 +4394,16 @@ var jmUtils = /*#__PURE__*/function () {
   }, {
     key: "toColor",
     value: function toColor(r, g, b, a) {
-      if (typeof r == 'string' && r) {
-        r = this.trim(r); //当为7位时，表示需要转为带透明度的rgba
+      if (typeof r === 'string' && r) {
+        r = this.trim(r); // 正常的颜色表达，不需要转换
 
-        if (r[0] == '#') {
-          if (r.length >= 8) {
-            a = r.substr(1, 2);
-            g = r.substr(5, 2);
-            b = r.substr(7, 2);
-            r = r.substr(3, 2); //透明度
-
-            a = (this.hexToNumber(a) / 255).toFixed(4);
-            r = this.hexToNumber(r || 0);
-            g = this.hexToNumber(g || 0);
-            b = this.hexToNumber(b || 0);
-          } //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
-          else if (r.length === 5) {
-              a = r.substr(1, 1);
-              g = r.substr(3, 1); //除#号外的第二位
-
-              b = r.substr(4, 1);
-              r = r.substr(2, 1);
-              r = this.hexToNumber(r || 0);
-              g = this.hexToNumber(g || 0);
-              b = this.hexToNumber(b || 0); //透明度
-
-              a = (this.hexToNumber(a) / 255).toFixed(4);
-            }
-        }
+        if (r[0] === '#' && (r.length === 4 || r.length === 7)) return r;
+        var color = this.hexToRGBA(r);
+        if (typeof color === 'string') return color;
+        r = color.r || r;
+        g = color.g || g;
+        b = color.b || b;
+        a = color.a || a;
       }
 
       if (typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
@@ -4776,6 +4902,14 @@ var jmArrawLine = /*#__PURE__*/function (_jmLine) {
 
     _classCallCheck(this, jmArrawLine);
 
+    params.start = params.start || {
+      x: 0,
+      y: 0
+    };
+    params.end = params.end || {
+      x: 0,
+      y: 0
+    };
     _this = _super.call(this, params, t || 'jmArrawLine');
     _this.style.lineJoin = _this.style.lineJoin || 'miter';
     _this.arraw = new _jmArraw.jmArraw(params);
@@ -5608,8 +5742,11 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
     value: function testSize() {
       if (this.__size) return this.__size;
       this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
-      this.context.save();
-      this.setStyle(); //计算宽度
+      this.context.save(); // 修改字体，用来计算
+
+      this.setStyle({
+        font: this.style.font
+      }); //计算宽度
 
       this.__size = this.context.measureText ? this.context.measureText(this.text) : {
         width: 15
@@ -5669,7 +5806,7 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
 
       var txt = this.text;
 
-      if (txt) {
+      if (typeof txt !== 'undefined') {
         if (this.style.fill && this.context.fillText) {
           if (this.style.maxWidth) {
             this.context.fillText(txt, x, y, this.style.maxWidth);

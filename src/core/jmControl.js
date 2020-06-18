@@ -1116,6 +1116,17 @@ export default class jmControl extends jmProperty {
 		args.position.x = args.position.offsetX - abounds.left;
 		args.position.y = args.position.offsetY - abounds.top;
 
+		// 相对当前控件的坐标点
+		/*if(this.absoluteBounds) {
+			args.curPosition = {
+				x: args.position.offsetX - this.absoluteBounds.left,
+				y: args.position.offsetY - this.absoluteBounds.top
+			};
+		}
+		else {
+			args.curPosition = args.position;
+		}*/
+
 		// 是否在当前控件内操作
 		const inpos = this.interactive !== false && this.checkPoint(args.position);
 		

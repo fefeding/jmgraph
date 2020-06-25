@@ -1,6 +1,8 @@
 
 import {jmList} from "./jmList.js";
 
+const ANICOUNTER = Symbol('jmchart#animate#counter');
+
 /**
  *  所有jm对象的基础对象
  * 

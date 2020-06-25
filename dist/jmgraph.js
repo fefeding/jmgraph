@@ -1358,10 +1358,23 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       if (!abounds) return false; //args = jmUtils.clone(args);//参数副本
 
       args.position.x = args.position.offsetX - abounds.left;
-      args.position.y = args.position.offsetY - abounds.top; //事件发生在边界内或健盘事件发生在画布中才触发
+      args.position.y = args.position.offsetY - abounds.top; // 相对当前控件的坐标点
+
+      /*if(this.absoluteBounds) {
+      	args.curPosition = {
+      		x: args.position.offsetX - this.absoluteBounds.left,
+      		y: args.position.offsetY - this.absoluteBounds.top
+      	};
+      }
+      else {
+      	args.curPosition = args.position;
+      }*/
+      // 是否在当前控件内操作
+
+      var inpos = this.interactive !== false && this.checkPoint(args.position); //事件发生在边界内或健盘事件发生在画布中才触发
       // 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
 
-      if (this.interactive !== false && !args.target && this.checkPoint(args.position)) {
+      if (inpos && !args.target) {
         //如果没有指定触发对象，则认为当前为第一触发对象
         if (!args.target) {
           args.target = this;
@@ -1369,17 +1382,17 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
         this.runEventAndPopEvent(name, args);
 
-        if (!this.focused && name == 'mousemove') {
+        if (!this.focused && (name === 'mousemove' || name === 'touchmove')) {
           this.focused = true; //表明当前焦点在此控件中
 
-          this.raiseEvent('mouseover', args);
+          this.raiseEvent(name === 'mousemove' ? 'mouseover' : 'touchover', args);
         }
       } else {
         //如果焦点不在，且原焦点在，则触发mouseleave事件
-        if (this.interactive !== false && this.type != 'jmGraph' && this.focused && name == 'mousemove') {
+        if (this.interactive !== false && !inpos && this.focused && (name === 'mousemove' || name === 'touchmove')) {
           this.focused = false; //表明当前焦点离开
 
-          this.runEventHandle('mouseleave', args); //执行事件	
+          this.runEventHandle(name === 'mousemove' ? 'mouseleave' : 'touchleave', args); //执行事件	
         }
       }
 
@@ -3222,12 +3235,14 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var ANICOUNTER = Symbol('jmchart#animate#counter');
 /**
  *  所有jm对象的基础对象
  * 
  * @class jmObject
  * @for jmGraph
  */
+
 var jmObject = /*#__PURE__*/function () {
   //id;
   function jmObject(g) {
@@ -5741,11 +5756,10 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
     key: "testSize",
     value: function testSize() {
       if (this.__size) return this.__size;
-      this.style.font = this.style.fontSize + 'px ' + this.style.fontFamily;
       this.context.save(); // 修改字体，用来计算
 
       this.setStyle({
-        font: this.style.font
+        font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
       }); //计算宽度
 
       this.__size = this.context.measureText ? this.context.measureText(this.text) : {

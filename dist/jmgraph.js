@@ -2005,11 +2005,12 @@ var jmMouseEvent = /*#__PURE__*/function () {
       }); // passive: false 为了让浏览器不告警并且preventDefault有效
       // 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchstart', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'touchstart', function (evt) {
         return instance.touchStart(evt);
       }, {
         passive: false
       });
+
       doc && _jmUtils.jmUtils.bindEvent(doc, 'touchmove', function (evt) {
         return instance.touchMove(evt);
       }, {

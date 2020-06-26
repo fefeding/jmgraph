@@ -98,6 +98,8 @@ export default class jmGraph extends jmControl {
 		if(this.option.width > 0) this.width = this.option.width;
 		if(this.option.height > 0) this.height = this.option.height;	
 
+		this.resize();
+
 		//绑定事件
 		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
 
@@ -114,6 +116,21 @@ export default class jmGraph extends jmControl {
 		if(callback) callback(this);		
 	}
 
+	//  重置canvas大小，并判断高清屏，画图先放大二倍
+	resize(w, h) {
+		w = w || this.width, h = h || this.height;
+
+		const scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
+		if (scale > 1) {
+		  this.canvas.style.width = w + "px";
+		  this.canvas.style.height = h + "px";
+		  this.canvas.height = h * scale;
+		  this.canvas.width = w *scale;
+		  this.context.scale(scale, scale);
+		  this.devicePixelRatio = scale;
+		}
+	}
+
 	/**
 	 * 宽度
 	 * @property width
@@ -125,7 +142,10 @@ export default class jmGraph extends jmControl {
 	}
 	set width(v) {
 		this.needUpdate = true;
-		if(this.canvas) this.canvas.width = v;		
+		if(this.canvas) {
+			this.canvas.width = v;	
+			this.resize();
+		}	
 		return v;
 	}
 
@@ -140,7 +160,10 @@ export default class jmGraph extends jmControl {
 	}
 	set height(v) {
 		this.needUpdate = true;
-		if(this.canvas) this.canvas.height = v;
+		if(this.canvas) {
+			this.canvas.height = v;
+			this.resize();
+		}
 		return v;
 	}
 

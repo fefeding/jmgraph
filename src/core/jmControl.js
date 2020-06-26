@@ -1078,7 +1078,8 @@ export default class jmControl extends jmProperty {
 		if(this.visible === false) return ;//如果不显示则不响应事件	
 		if(!args.position) {		
 			let graph = this.graph;
-			let position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置		
+			
+			let position = jmUtils.getEventPosition(args, graph.scaleSize, graph.devicePixelRatio);//初始化事件位置		
 
 			let srcElement = args.srcElement || args.target;
 			args = {

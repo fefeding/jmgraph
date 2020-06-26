@@ -146,7 +146,7 @@ export default class jmUtils {
      * @param {point} [scale] 当前画布的缩放比例
      * @return {point} 事件触发的位置 
      */
-    static getEventPosition (evt, scale) {
+    static getEventPosition (evt, scale, devicePixelRatio) {
         evt = evt || event;
         
         let isTouch = false;
@@ -173,6 +173,13 @@ export default class jmUtils {
             if(scale.x) ox = ox / scale.x;
             if(scale.y) oy = oy / scale.y;
         }
+        // 如果有指定scale高清处理，需要对坐标处理
+        // 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N
+        if(devicePixelRatio > 0) {
+            ox = ox * devicePixelRatio;
+            oy = oy * devicePixelRatio;
+        }
+
         return {
             pageX: px,
             pageY: py,

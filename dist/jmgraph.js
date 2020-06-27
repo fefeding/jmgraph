@@ -4540,6 +4540,7 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
     _this.startAngle = params.start || params.startAngle || 0;
     _this.endAngle = params.end || params.endAngle || Math.PI * 2;
     _this.anticlockwise = params.anticlockwise || 0;
+    _this.isFan = !!params.isFan;
     return _this;
   }
   /**
@@ -4588,7 +4589,9 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
         end = p2 - end;
       }
 
-      if (start > end) step = -step; //椭圆方程x=a*cos(r) ,y=b*sin(r)	
+      if (start > end) step = -step;
+      if (this.isFan) this.points.push(location.center); // 如果是扇形，则从中心开始画
+      //椭圆方程x=a*cos(r) ,y=b*sin(r)	
 
       for (var r = start;; r += step) {
         if (step > 0 && r > end) r = end;else if (step < 0 && r < end) r = end;

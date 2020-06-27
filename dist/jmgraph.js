@@ -2567,10 +2567,16 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "resize",
     value: function resize(w, h) {
-      w = w || this.width, h = h || this.height;
       var scale = typeof window != 'undefined' && window.devicePixelRatio > 1 ? window.devicePixelRatio : 1;
 
       if (scale > 1) {
+        this.__normalSize = this.__normalSize || {
+          width: 0,
+          height: 0
+        };
+        w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
+        if (w) this.__normalSize.width = w;
+        if (h) this.__normalSize.height = h;
         this.canvas.style.width = w + "px";
         this.canvas.style.height = h + "px";
         this.canvas.height = h * scale;
@@ -2958,7 +2964,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
       if (this.canvas) {
         this.canvas.width = v;
-        this.resize();
+        this.resize(v);
       }
 
       return v;
@@ -2980,7 +2986,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
       if (this.canvas) {
         this.canvas.height = v;
-        this.resize();
+        this.resize(0, v);
       }
 
       return v;

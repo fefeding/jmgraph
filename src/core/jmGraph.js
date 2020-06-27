@@ -118,10 +118,15 @@ export default class jmGraph extends jmControl {
 
 	//  重置canvas大小，并判断高清屏，画图先放大二倍
 	resize(w, h) {
-		w = w || this.width, h = h || this.height;
 
 		const scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
 		if (scale > 1) {
+		  this.__normalSize = this.__normalSize || { width: 0, height: 0};
+		  w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
+
+		  if(w) this.__normalSize.width = w;
+		  if(h) this.__normalSize.height = h;
+
 		  this.canvas.style.width = w + "px";
 		  this.canvas.style.height = h + "px";
 		  this.canvas.height = h * scale;
@@ -144,7 +149,7 @@ export default class jmGraph extends jmControl {
 		this.needUpdate = true;
 		if(this.canvas) {
 			this.canvas.width = v;	
-			this.resize();
+			this.resize(v);
 		}	
 		return v;
 	}
@@ -162,7 +167,7 @@ export default class jmGraph extends jmControl {
 		this.needUpdate = true;
 		if(this.canvas) {
 			this.canvas.height = v;
-			this.resize();
+			this.resize(0, v);
 		}
 		return v;
 	}

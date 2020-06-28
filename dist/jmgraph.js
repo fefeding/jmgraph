@@ -2205,19 +2205,19 @@ var jmGradient = /*#__PURE__*/function () {
 
 
       if (_jmUtils.jmUtils.checkPercent(x1)) {
-        x1 = _jmUtils.jmUtils.percentToNumber(x1) * (location.width || d);
+        x1 = _jmUtils.jmUtils.percentToNumber(x1) * (bounds.width || d);
       }
 
       if (_jmUtils.jmUtils.checkPercent(x2)) {
-        x2 = _jmUtils.jmUtils.percentToNumber(x2) * (location.width || d);
+        x2 = _jmUtils.jmUtils.percentToNumber(x2) * (bounds.width || d);
       }
 
       if (_jmUtils.jmUtils.checkPercent(y1)) {
-        y1 = _jmUtils.jmUtils.percentToNumber(y1) * (location.height || d);
+        y1 = _jmUtils.jmUtils.percentToNumber(y1) * (bounds.height || d);
       }
 
       if (_jmUtils.jmUtils.checkPercent(y2)) {
-        y2 = _jmUtils.jmUtils.percentToNumber(y2) * (location.height || d);
+        y2 = _jmUtils.jmUtils.percentToNumber(y2) * (bounds.height || d);
       }
 
       var sx1 = Number(x1) + bounds.left;
@@ -2226,9 +2226,7 @@ var jmGradient = /*#__PURE__*/function () {
       var sy2 = Number(y2) + bounds.top;
 
       if (this.type === 'linear') {
-        gradient = context.createLinearGradient(sx1, sy1, sx2, sy2); //let x = Math.abs(x2-x1);
-        //let y = Math.abs(y2-y1);
-        //offsetLine = Math.sqrt(x*x + y*y);
+        gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);
       } else if (this.type === 'radial') {
         var r1 = this.r1 || 0;
         var r2 = this.r2;

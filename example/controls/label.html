@@ -20,6 +20,8 @@
 	</body>
 	<script type="module">	
 		import { jmGraph } from "../../index.js";
+		import jmLabel from '../../src/shapes/jmLabel.js';
+
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
@@ -55,7 +57,7 @@
 			//style.opacity = 0.2;		
 
 			//创建一个label
-            var label = g.createShape('label',{
+            var label = g.createShape(jmLabel,{
                 style:style,
 				//position:{x:200,y:150},
 				center: {x: 250, y: 250},
@@ -65,6 +67,10 @@
             });	
             g.children.add(label);	
 			label.canMove(true);
+
+			g.bind('touchleave', (args) => {
+				console.log('touchleave', args);
+			});
             
 
 			function update() {

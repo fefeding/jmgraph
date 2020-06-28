@@ -1199,13 +1199,16 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       //jmGraph 需要判断dom位置
       if (this.type == 'jmGraph') {
         //获取dom位置
-        var position = this.getPosition();
+        var position = this.getPosition(); // 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
 
-        if (p.pageX > position.right || p.pageX < position.left) {
+        var right = position.left + (this.canvas.clientWidth || this.canvas.offsetWidth || this.canvas.width);
+        var bottom = position.top + (this.canvas.clientHeight || this.canvas.offsetHeight || this.canvas.height);
+
+        if (p.pageX > right || p.pageX < position.left) {
           return false;
         }
 
-        if (p.pageY > position.bottom || p.pageY < position.top) {
+        if (p.pageY > bottom || p.pageY < position.top) {
           return false;
         }
 
@@ -1318,11 +1321,18 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
       if (!args.position) {
         var graph = this.graph;
-
-        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize, graph.devicePixelRatio); //初始化事件位置		
-
-
         var srcElement = args.srcElement || args.target;
+
+        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize); //初始化事件位置		
+        // 如果有指定scale高清处理，需要对坐标处理
+        // 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N    && srcElement === graph.canvas      
+
+
+        if (graph.devicePixelRatio > 0) {
+          position.x = position.offsetX = position.x * devicePixelRatio;
+          position.y = position.offsetY = position.y * devicePixelRatio;
+        }
+
         args = {
           position: position,
           button: args.button == 0 || position.isTouch ? 1 : args.button,
@@ -3882,7 +3892,7 @@ var jmUtils = /*#__PURE__*/function () {
 
   }, {
     key: "getEventPosition",
-    value: function getEventPosition(evt, scale, devicePixelRatio) {
+    value: function getEventPosition(evt, scale) {
       evt = evt || event;
       var isTouch = false;
       var touches = evt.changedTouches || evt.targetTouches || evt.touches;
@@ -3911,13 +3921,6 @@ var jmUtils = /*#__PURE__*/function () {
       if (scale) {
         if (scale.x) ox = ox / scale.x;
         if (scale.y) oy = oy / scale.y;
-      } // 如果有指定scale高清处理，需要对坐标处理
-      // 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N
-
-
-      if (devicePixelRatio > 0) {
-        ox = ox * devicePixelRatio;
-        oy = oy * devicePixelRatio;
       }
 
       return {

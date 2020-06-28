@@ -993,10 +993,13 @@ export default class jmControl extends jmProperty {
 		if(this.type == 'jmGraph') {
 			//获取dom位置
 			let position = this.getPosition();
-			if(p.pageX > position.right || p.pageX < position.left) {
+			// 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
+			const right = position.left + (this.canvas.clientWidth || this.canvas.offsetWidth || this.canvas.width);
+			const bottom = position.top + (this.canvas.clientHeight || this.canvas.offsetHeight || this.canvas.height);
+			if(p.pageX > right || p.pageX < position.left) {
 				return false;
 			}
-			if(p.pageY > position.bottom || p.pageY < position.top) {
+			if(p.pageY > bottom || p.pageY < position.top) {
 				return false;
 			}	
 			return true;
@@ -1078,10 +1081,18 @@ export default class jmControl extends jmProperty {
 		if(this.visible === false) return ;//如果不显示则不响应事件	
 		if(!args.position) {		
 			let graph = this.graph;
-			
-			let position = jmUtils.getEventPosition(args, graph.scaleSize, graph.devicePixelRatio);//初始化事件位置		
 
-			let srcElement = args.srcElement || args.target;
+			let srcElement = args.srcElement || args.target;			
+			
+			let position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置		
+
+			// 如果有指定scale高清处理，需要对坐标处理
+			// 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N    && srcElement === graph.canvas      
+			if(graph.devicePixelRatio > 0) {
+				position.x = position.offsetX = position.x * devicePixelRatio;
+				position.y = position.offsetY = position.y * devicePixelRatio;
+			}
+		
 			args = {
 				position: position,
 				button: args.button == 0||position.isTouch?1:args.button,

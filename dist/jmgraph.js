@@ -296,6 +296,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     _this2.initializing();
 
     _this2.on = _this2.bind;
+    _this2.options = params;
     return _this2;
   } //# region 定义属性
 

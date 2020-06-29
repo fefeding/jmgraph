@@ -581,7 +581,7 @@ export default class jmControl extends jmProperty {
 		local.width = this.width;
 		local.height = this.height;
 
-		let margin = this.style.margin || {};
+		let margin = jmUtils.clone(this.style.margin, {});
 		margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
 		margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
 		margin.right = (margin.right || 0) * this.graph.devicePixelRatio;

@@ -136,7 +136,7 @@ gulp.task('build-js-cmd', function () {
     .pipe(gulp.dest('../dist'));
 });
 
-let tasks = ['docs', 'build-js-core', 'build-js-cmd'];
+let tasks = ['build-js-core'];// 'docs', 'build-js-core', 'build-js-cmd'
 
 gulp.task('default', gulp.parallel(tasks, function(done) {
     done();

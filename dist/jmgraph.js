@@ -718,7 +718,9 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
       local.width = this.width;
       local.height = this.height;
-      var margin = this.style.margin || {};
+
+      var margin = _jmUtils.jmUtils.clone(this.style.margin, {});
+
       margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
       margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
       margin.right = (margin.right || 0) * this.graph.devicePixelRatio;
@@ -3005,7 +3007,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         if (callback) callback();
       }
 
-      update();
+      requestAnimationFrame(update);
       return this;
     } // 销毁当前对象
 

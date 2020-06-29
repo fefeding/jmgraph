@@ -489,7 +489,7 @@ export default class jmGraph extends jmControl {
 			requestAnimationFrame(update);
 			if(callback) callback();
 		}
-		update();
+		requestAnimationFrame(update);
 		return this;
 	}
 

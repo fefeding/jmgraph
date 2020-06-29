@@ -33,6 +33,8 @@ export default class jmGraph extends jmControl {
 		super(option, 'jmGraph');
 
 		this.option = option || {};
+		
+		this.devicePixelRatio = 1; // 根据屏幕的缩放倍数
 
 		/**
 		 * 工具类

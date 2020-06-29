@@ -439,7 +439,9 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       var _this3 = this;
 
       style = style || this.style;
-      if (!style) return;
+      if (!style) return; // 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大
+
+      var scale = this.graph.devicePixelRatio;
       /**
        * 样式设定
        * 
@@ -478,6 +480,31 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
             //颜色转换
             if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
               style = _jmUtils.jmUtils.toColor(style);
+            } // 按比例需要放大的样式
+
+
+            if (scale && style) {
+              switch (mpname) {
+                case 'lineWidth':
+                  {
+                    style *= scale;
+                    break;
+                  }
+                // 字体放大
+
+                case 'fontSize':
+                case 'font':
+                  {
+                    var ms = style.toString().match(/[\d\.]+/);
+
+                    if (ms && ms.length) {
+                      var size = Number(ms[0]) * scale;
+                      style = style.toString().replace(ms[0], size);
+                    }
+
+                    break;
+                  }
+              }
             }
 
             _this3.context[mpname] = style;
@@ -544,14 +571,6 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
                     style.offsetY); //垂直位移
 
                   }
-
-                  break;
-                }
-              //位移
-
-              case 'translate':
-                {
-                  _this3.context.translate(style.x, style.y);
 
                   break;
                 }
@@ -700,10 +719,10 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       local.width = this.width;
       local.height = this.height;
       var margin = this.style.margin || {};
-      margin.left = margin.left || 0;
-      margin.top = margin.top || 0;
-      margin.right = margin.right || 0;
-      margin.bottom = margin.bottom || 0; //如果没有指定位置，但指定了margin。则位置取margin偏移量
+      margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
+      margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
+      margin.right = (margin.right || 0) * this.graph.devicePixelRatio;
+      margin.bottom = (margin.bottom || 0) * this.graph.devicePixelRatio; //如果没有指定位置，但指定了margin。则位置取margin偏移量
 
       if (local.position) {
         local.left = local.position.x;
@@ -1960,7 +1979,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
         //}				
       });
 
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'mousemove', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
         evt = evt || window.event;
         var target = evt.target || evt.srcElement;
 
@@ -2022,11 +2041,12 @@ var jmMouseEvent = /*#__PURE__*/function () {
         passive: false
       });
 
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchmove', function (evt) {
+      _jmUtils.jmUtils.bindEvent(this.target, 'touchmove', function (evt) {
         return instance.touchMove(evt);
       }, {
         passive: false
       });
+
       doc && _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
         return instance.touchEnd(evt);
       }, {
@@ -2487,6 +2507,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     option.interactive = true;
     _this = _super.call(this, option, 'jmGraph');
     _this.option = option || {};
+    _this.devicePixelRatio = 1; // 根据屏幕的缩放倍数
+
     /**
      * 工具类
      * @property utils/util

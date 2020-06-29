@@ -86,7 +86,7 @@ class jmMouseEvent {
 			//}				
 		});
 		
-		doc && jmUtils.bindEvent(doc,'mousemove',function(evt) {	
+		jmUtils.bindEvent(this.target,'mousemove',function(evt) {	
 			evt = evt || window.event;		
 			let target = evt.target || evt.srcElement;
 			if(target == canvas) {
@@ -142,7 +142,7 @@ class jmMouseEvent {
 			return instance.touchStart(evt);
 		},{ passive: false });
 
-		doc && jmUtils.bindEvent(doc,'touchmove', function(evt) {
+		jmUtils.bindEvent(this.target,'touchmove', function(evt) {
 			return instance.touchMove(evt);
 		},{ passive: false });
 

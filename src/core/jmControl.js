@@ -340,6 +340,9 @@ export default class jmControl extends jmProperty {
 		style = style || this.style;
 		if(!style) return;
 
+		// 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大
+		let scale = this.graph.devicePixelRatio;
+
 		/**
 		 * 样式设定
 		 * 
@@ -378,6 +381,26 @@ export default class jmControl extends jmProperty {
 					//颜色转换
 					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
 						style = jmUtils.toColor(style);
+					}
+
+					// 按比例需要放大的样式
+					if(scale && style) {
+						switch(mpname) {
+							case 'lineWidth': {
+								style *= scale;
+								break;
+							}
+							// 字体放大
+							case 'fontSize':
+							case 'font': {
+								const ms = style.toString().match(/[\d\.]+/);
+								if(ms && ms.length) {
+									const size = Number(ms[0]) * scale;
+									style = style.toString().replace(ms[0], size);
+								}
+								break;
+							}
+						}
 					}					
 					this.context[mpname] = style;
 				}	
@@ -432,11 +455,6 @@ export default class jmControl extends jmProperty {
 									style.offsetX,//水平位移
 									style.offsetY);//垂直位移
 							}								
-							break;
-						}
-						//位移
-						case 'translate' : {
-							this.context.translate(style.x,style.y);			
 							break;
 						}
 						//鼠标指针
@@ -564,10 +582,10 @@ export default class jmControl extends jmProperty {
 		local.height = this.height;
 
 		let margin = this.style.margin || {};
-		margin.left = margin.left || 0;
-		margin.top = margin.top || 0;
-		margin.right = margin.right || 0;
-		margin.bottom = margin.bottom || 0;
+		margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
+		margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
+		margin.right = (margin.right || 0) * this.graph.devicePixelRatio;
+		margin.bottom = (margin.bottom || 0) * this.graph.devicePixelRatio;
 		
 		//如果没有指定位置，但指定了margin。则位置取margin偏移量
 		if(local.position) {

@@ -2995,7 +2995,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       this.___isAutoRefreshing = true;
 
       function update() {
-        if (this.destoryed) {
+        if (self.destoryed) {
           self.___isAutoRefreshing = false;
           return; // 已销毁
         }

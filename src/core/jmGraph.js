@@ -481,7 +481,7 @@ export default class jmGraph extends jmControl {
 		const self = this;
 		this.___isAutoRefreshing = true;
 		function update() {
-			if(this.destoryed) {
+			if(self.destoryed) {
 				self.___isAutoRefreshing = false;
 				return;// 已销毁
 			}

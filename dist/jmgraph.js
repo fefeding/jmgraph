@@ -1941,6 +1941,13 @@ var jmEvents = /*#__PURE__*/function () {
         return false;
       }
     }
+  }, {
+    key: "destory",
+    // 销毁
+    value: function destory() {
+      this.mouseHandler.destory();
+      this.keyHandler.destory();
+    }
   }]);
 
   return jmEvents;
@@ -1959,6 +1966,8 @@ var jmMouseEvent = /*#__PURE__*/function () {
     this.instance = instance;
     this.container = container;
     this.target = target || container;
+    this.eventEvents = {}; // 所有绑定的事件
+
     this.init(instance, container, target);
   }
 
@@ -1971,15 +1980,14 @@ var jmMouseEvent = /*#__PURE__*/function () {
       //	return false;
       //};
 
-      _jmUtils.jmUtils.bindEvent(this.target, 'mousedown', function (evt) {
+      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousedown', function (evt) {
         evt = evt || window.event;
         var r = container.raiseEvent('mousedown', evt); //if(r === false) {
         //if(evt.preventDefault) evt.preventDefault();
         //return false;
         //}				
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
+      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
         evt = evt || window.event;
         var target = evt.target || evt.srcElement;
 
@@ -1990,23 +1998,19 @@ var jmMouseEvent = /*#__PURE__*/function () {
           return false; //}		
         }
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
+      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseover', evt);
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'mouseleave', function (evt) {
+      this.eventEvents['mouseleave'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseleave', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseleave', evt);
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'mouseout', function (evt) {
+      this.eventEvents['mouseout'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseout', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('mouseout', evt);
       });
-
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'mouseup', function (evt) {
+      doc && (this.eventEvents['mouseup'] = _jmUtils.jmUtils.bindEvent(doc, 'mouseup', function (evt) {
         evt = evt || window.event; //let target = evt.target || evt.srcElement;
         //if(target == canvas) {						
 
@@ -2017,46 +2021,52 @@ var jmMouseEvent = /*#__PURE__*/function () {
           return false;
         } //}
 
-      });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'dblclick', function (evt) {
+      }));
+      this.eventEvents['dblclick'] = _jmUtils.jmUtils.bindEvent(this.target, 'dblclick', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('dblclick', evt);
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'click', function (evt) {
+      this.eventEvents['click'] = _jmUtils.jmUtils.bindEvent(this.target, 'click', function (evt) {
         evt = evt || window.event;
         container.raiseEvent('click', evt);
       });
-
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'resize', function (evt) {
+      doc && (this.eventEvents['resize'] = _jmUtils.jmUtils.bindEvent(doc, 'resize', function (evt) {
         evt = evt || window.event;
         return container.raiseEvent('resize', evt);
-      }); // passive: false 为了让浏览器不告警并且preventDefault有效
+      })); // passive: false 为了让浏览器不告警并且preventDefault有效
       // 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 
-      _jmUtils.jmUtils.bindEvent(this.target, 'touchstart', function (evt) {
+      this.eventEvents['touchstart'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchstart', function (evt) {
         return instance.touchStart(evt);
       }, {
         passive: false
       });
-
-      _jmUtils.jmUtils.bindEvent(this.target, 'touchmove', function (evt) {
+      this.eventEvents['touchmove'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchmove', function (evt) {
         return instance.touchMove(evt);
       }, {
         passive: false
       });
-
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
+      doc && (this.eventEvents['touchend'] = _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
         return instance.touchEnd(evt);
       }, {
         passive: false
-      });
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'touchcancel', function (evt) {
+      }));
+      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'touchcancel', function (evt) {
         return instance.touchCancel(evt);
       }, {
         passive: false
-      });
+      }));
+    } // 销毁所有事件
+
+  }, {
+    key: "destory",
+    value: function destory() {
+      for (var name in this.eventEvents) {
+        var event = this.eventEvents[name];
+        if (!event || !event.fun) continue;
+
+        _jmUtils.jmUtils.removeEvent(event.target, name, event.fun);
+      }
     }
   }]);
 
@@ -2074,6 +2084,8 @@ var jmKeyEvent = /*#__PURE__*/function () {
     this.instance = instance;
     this.container = container;
     this.target = target || container;
+    this.eventEvents = {}; // 所有绑定的事件
+
     this.init(container, target);
   }
   /**
@@ -2101,30 +2113,41 @@ var jmKeyEvent = /*#__PURE__*/function () {
         return true;
       };
 
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
+      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
         var r = container.raiseEvent('keypress', evt);
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
-      });
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
+      }));
+      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
         var r = container.raiseEvent('keydown', evt);
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
-      });
-      doc && _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
+      }));
+      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
         var r = container.raiseEvent('keyup', evt);
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
-      });
+      }));
+    } // 销毁所有事件
+
+  }, {
+    key: "destory",
+    value: function destory() {
+      for (var name in this.eventEvents) {
+        var event = this.eventEvents[name];
+        if (!event || !event.fun) continue;
+
+        _jmUtils.jmUtils.removeEvent(event.target, name, event.fun);
+      }
     }
   }]);
 
@@ -2583,13 +2606,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       this.eventHandler = new _jmEvents.jmEvents(this, this.canvas.canvas || this.canvas); //如果指定了自动刷新
 
       if (this.option.autoRefresh) {
-        var update = function update() {
-          if (self.needUpdate) self.redraw();
-          requestAnimationFrame(update);
-        };
-
-        var self = this;
-        requestAnimationFrame(update);
+        this.autoRefresh();
       }
 
       if (callback) callback(this);
@@ -2973,9 +2990,16 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "autoRefresh",
     value: function autoRefresh(callback) {
+      if (this.___isAutoRefreshing) return;
       var self = this;
+      this.___isAutoRefreshing = true;
 
       function update() {
+        if (this.destoryed) {
+          self.___isAutoRefreshing = false;
+          return; // 已销毁
+        }
+
         if (self.needUpdate) self.redraw();
         requestAnimationFrame(update);
         if (callback) callback();
@@ -2983,6 +3007,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
       update();
       return this;
+    } // 销毁当前对象
+
+  }, {
+    key: "destory",
+    value: function destory() {
+      this.eventHandler.destory();
+      this.destoryed = true; // 标记已销毁
     }
   }, {
     key: "width",
@@ -3823,6 +3854,7 @@ var jmUtils = /*#__PURE__*/function () {
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
+     * @returns {name, fun, target} 返回当前绑定
      */
 
   }, {
@@ -3834,18 +3866,19 @@ var jmUtils = /*#__PURE__*/function () {
         for (var i = 0; i < ns.length; i++) {
           this.bindEvent(target, ns[i], fun, opt);
         }
-
-        return;
       }
 
       if (target.attachEvent) {
-        return target.attachEvent("on" + name, fun, opt);
+        target.attachEvent("on" + name, fun, opt);
       } else if (target.addEventListener) {
         target.addEventListener(name, fun, opt);
-        return true;
-      } else {
-        return false;
       }
+
+      return {
+        name: name,
+        target: target,
+        fun: fun
+      };
     }
     /**
      * 从对象中移除事件到

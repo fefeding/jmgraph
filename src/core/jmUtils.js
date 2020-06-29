@@ -67,6 +67,7 @@ export default class jmUtils {
      * @param {element} html元素对象
      * @param {string} name 事件名称
      * @param {function} fun 事件委托
+     * @returns {name, fun, target} 返回当前绑定
      */
     static bindEvent(target, name, fun, opt) {
         if(name &&  name.indexOf && name.indexOf(' ') != -1) {
@@ -74,18 +75,18 @@ export default class jmUtils {
             for(let i=0;i<ns.length;i++) {
                 this.bindEvent(target, ns[i], fun, opt);
             }
-            return;
         }
         if(target.attachEvent) {
-            return target.attachEvent("on"+name, fun, opt);
+            target.attachEvent("on"+name, fun, opt);
         }    
         else if(target.addEventListener) {
             target.addEventListener(name, fun, opt);
-            return true;
         }
-        else {
-            return false;
-        }
+        return {
+            name,
+            target,
+            fun
+        };
     }
 
     /**

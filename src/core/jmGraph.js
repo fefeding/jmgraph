@@ -107,12 +107,7 @@ export default class jmGraph extends jmControl {
 
 		//如果指定了自动刷新
 		if(this.option.autoRefresh) {
-			const self = this; 
-			function update() {
-				if(self.needUpdate) self.redraw();
-				requestAnimationFrame(update);
-			}
-			requestAnimationFrame(update);
+			this.autoRefresh();
 		}
 
 		if(callback) callback(this);		
@@ -482,14 +477,26 @@ export default class jmGraph extends jmControl {
 	 * @param {function} callback 执行回调
 	 */
 	autoRefresh(callback) {
-		var self = this;
+		if(this.___isAutoRefreshing) return;
+		const self = this;
+		this.___isAutoRefreshing = true;
 		function update() {
+			if(this.destoryed) {
+				self.___isAutoRefreshing = false;
+				return;// 已销毁
+			}
 			if(self.needUpdate) self.redraw();
 			requestAnimationFrame(update);
 			if(callback) callback();
 		}
 		update();
 		return this;
+	}
+
+	// 销毁当前对象
+	destory() {
+		this.eventHandler.destory();
+		this.destoryed = true;// 标记已销毁
 	}
 }
 

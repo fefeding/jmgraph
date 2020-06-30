@@ -55,13 +55,18 @@ export default class jmGraph extends jmControl {
 			else if(canvas.length) {
 				canvas = canvas[0];
 			}
+
 			if(canvas.tagName != 'CANVAS') {
+				this.container = canvas;
 				let cn = document.createElement('canvas');
 				canvas.appendChild(cn);
 				cn.width = canvas.offsetWidth||canvas.clientWidth;
 				cn.height = canvas.offsetHeight||canvas.clientHeight;
 				canvas = cn;
 			}	
+			else {
+				this.container = canvas.parentElement;
+			}
 
 			this.context = canvas.getContext('2d');
 		}

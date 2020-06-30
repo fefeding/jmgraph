@@ -50,7 +50,7 @@ export default class jmEvents {
 		
 		this.container.raiseEvent('touchcancel',evt);
 		let t = evt.target || evt.srcElement;
-		if(t == target) {
+		if(t == this.target) {
 			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}

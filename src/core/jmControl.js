@@ -232,10 +232,10 @@ export default class jmControl extends jmProperty {
 	 */
 	initializing() {
 
-		var self = this;
+		const self = this;
 		//定义子元素集合
 		this.children = this.children || new jmList();
-		var oadd = this.children.add;
+		const oadd = this.children.add;
 		//当把对象添加到当前控件中时，设定其父节点
 		this.children.add = function(obj) {
 			if(typeof obj === 'object') {
@@ -272,8 +272,9 @@ export default class jmControl extends jmProperty {
 		/**
 		 * 根据控件zIndex排序，越大的越高
 		 */
+		const osort = this.children.sort;
 		this.children.sort = function() {
-			const levelItems = {};
+			/*const levelItems = {};
 			//提取zindex大于0的元素
 			//为了保证0的层级不改变，只能把大于0的提出来。
 			this.each(function(i, obj) {
@@ -297,7 +298,12 @@ export default class jmControl extends jmProperty {
 				oadd.call(this, levelItems[index]);
 			}
 
-			self.needUpdate = true;
+			self.needUpdate = true;*/
+			osort.call(this, (c1, c2) => {
+				let zindex1 = c1.zIndex || c1.style.zIndex || 0;
+				let zindex2 = c2.zIndex || c2.style.zIndex || 0;
+				return zindex1 - zindex2;
+			});
 		}
 		this.children.clear = function() {
 			this.each(function(i,obj) {

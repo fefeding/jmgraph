@@ -272,9 +272,9 @@ export default class jmControl extends jmProperty {
 		/**
 		 * 根据控件zIndex排序，越大的越高
 		 */
-		const osort = this.children.sort;
+		//const osort = this.children.sort;
 		this.children.sort = function() {
-			/*const levelItems = {};
+			const levelItems = {};
 			//提取zindex大于0的元素
 			//为了保证0的层级不改变，只能把大于0的提出来。
 			this.each(function(i, obj) {
@@ -289,21 +289,18 @@ export default class jmControl extends jmProperty {
 					items.push(obj);					
 				}
 			});
+
+			this.splice(0, this.length);
 			
 			for(let index in levelItems) {
-				// 先从数组内去掉， 再加到进后
-				for(let i=0; i< levelItems[index].length; i++) {
-					this.oremove(levelItems[index][i]);
-				}
 				oadd.call(this, levelItems[index]);
 			}
-
-			self.needUpdate = true;*/
+			/*
 			osort.call(this, (c1, c2) => {
 				let zindex1 = c1.zIndex || c1.style.zIndex || 0;
 				let zindex2 = c2.zIndex || c2.style.zIndex || 0;
 				return zindex1 - zindex2;
-			});
+			});*/
 		}
 		this.children.clear = function() {
 			this.each(function(i,obj) {

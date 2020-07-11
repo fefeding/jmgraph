@@ -189,7 +189,8 @@ export default class jmUtils {
             screenY: evt.screenY,
             x: ox,
             y: oy,
-            isTouch: isTouch
+            isTouch: isTouch,
+            touches
         };
     }
 

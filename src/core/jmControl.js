@@ -470,10 +470,10 @@ export default class jmControl extends jmProperty {
 
 		//一些特殊属性要先设置，否则会导致顺序不对出现错误的效果
 		if(this.translate) {
-			__setStyle({translate: this.translate}, 'translate');
+			__setStyle(this.translate, 'translate');
 		}
 		if(this.transform) {
-			__setStyle({transform: this.transform}, 'transform');
+			__setStyle(this.transform, 'transform');
 		}
 		//设置样式
 		for(let k in style) {

@@ -145,7 +145,7 @@ export default class jmResize extends jmRect {
 				this.cursor = 'default';
 			});
 		}
-
+		/*
 		// 如果是双指开始滑动
 		let touchPositions;
 		this.on('touchstart', (evt) => {
@@ -178,7 +178,7 @@ export default class jmResize extends jmRect {
 		// 结束滑动
 		this.on('touchend touchcancel', (evt) => {
 			touchPositions = null;
-		});
+		});*/
 	}
 
 	/**

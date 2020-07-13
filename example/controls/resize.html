@@ -18,7 +18,10 @@
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-	<script type="text/javascript">	
+	<script type="module">	
+		import { jmGraph } from "../../index.js";
+		import jmResize from '../../src/shapes/jmResize.js';
+
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
@@ -49,7 +52,7 @@
 			//style.opacity = 0.2;		
 
 			//创建一个resize
-            var resize = g.createShape('resize', {
+            var resize = g.createShape(jmResize, {
                 style: style,
                 position: {x:200, y:150},
                 width: 120,

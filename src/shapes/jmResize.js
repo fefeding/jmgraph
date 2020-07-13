@@ -67,7 +67,7 @@ export default class jmResize extends jmRect {
 		
 		for(let i = 0;i<8;i++) {
 			//生成改变大小方块
-			let r = (this.graph || params.graph).createShape('rect',{
+			let r = (this.graph || params.graph).createShape(jmRect,{
 					position:{x:0,y:0},
 					width: rs,
 					height: rs,
@@ -145,6 +145,40 @@ export default class jmResize extends jmRect {
 				this.cursor = 'default';
 			});
 		}
+
+		// 如果是双指开始滑动
+		let touchPositions;
+		this.on('touchstart', (evt) => {
+			if(evt.touches && evt.touches.legnth === 2) {
+				touchPositions = evt.touches;
+			}
+		});
+
+		// 如果是双指滑动
+		//计算二手指滑动距离，然后再通过在父容器中的占比得到缩放比例
+		this.on('touchmove', (evt) => {
+			if(touchPositions && evt.touches && evt.touches.length == 2) {
+				//上次滑动二指的距离
+				const preOffX = touchPositions[0].x - touchPositions[1].x;
+				const preOffY = touchPositions[0].y - touchPositions[1].y;
+				const preDis = Math.sqrt(preOffX * preOffX + preOffY * preOffY);
+				//当次滑动二指的距离
+				const curOffX = evt.touches[0].x - evt.touches[1].x;
+				const curOffY = evt.touches[0].y - evt.touches[1].y;
+				const curDis = Math.sqrt(curOffX * curOffX + curOffY * curOffY);
+	
+				//const disx = Math.abs(preOffX - curOffX);//x轴滑行的距离
+				//const disy = Math.abs(preOffY - curOffY);//y轴滑行的距离
+				
+				const offset = curDis - preDis;
+
+				this.reset(0, 0, offset, offset);
+			}
+		});	
+		// 结束滑动
+		this.on('touchend touchcancel', (evt) => {
+			touchPositions = null;
+		});
 	}
 
 	/**

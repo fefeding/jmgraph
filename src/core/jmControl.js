@@ -1133,7 +1133,7 @@ export default class jmControl extends jmProperty {
 				//未被阻止才执行			
 				if(args.cancel !== true) {
 					//如果被阻止冒泡，
-					stoped = el.raiseEvent(name,args) === false? true: stoped;
+					stoped = el.raiseEvent(name, args) === false? true: stoped;
 					// 不再响应其它元素
 					if(stoped) return false;
 				}
@@ -1195,16 +1195,16 @@ export default class jmControl extends jmProperty {
 			//如果返回true则阻断冒泡
 			this.runEventHandle(name, args);//执行事件
 
-			// 向父节点冒泡事件		
-			if(args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
-				// 相对位置需要改为父节点的
-				if(args.position) {
-					let bounds = this.parent.getBounds();
-					args.position.x += bounds.left;
-					args.position.y += bounds.top;
-				}
-				this.parent.runEventAndPopEvent(name, args);
-			}		
+			// // 向父节点冒泡事件		
+			// if(args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
+			// 	// 相对位置需要改为父节点的
+			// 	if(args.position) {
+			// 		let bounds = this.parent.getBounds();
+			// 		args.position.x += bounds.left;
+			// 		args.position.y += bounds.top;
+			// 	}
+			// 	this.parent.runEventAndPopEvent(name, args);
+			// }		
 		}
 	}
 

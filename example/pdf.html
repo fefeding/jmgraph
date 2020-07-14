@@ -13,7 +13,7 @@
 		}
 	</style>
 	
-	<script type="text/javascript" src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>	
+	<script type="text/javascript" src="//jtcospublic.ztzq.cn/public/pdfjs/pdf.min.js"></script>	
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
@@ -25,93 +25,163 @@
 
 		var container = document.getElementById('mycanvas_container');
 		
-		var graph = new jmGraph(container, {
-			width: 800,
-			height: 600,
-			style: {
-				fill: '#000'
-			}
-		});
-		init(graph);
+		init();
 			
-		function init(g){
-
-            //创建一个image
-			pdfImage = g.createShape('image',{
-				style: {
-
-                },
-                position: {x:0,y:0},
-				//image: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
-			});	
-			
-            g.children.add(pdfImage);		
-            pdfImage.canMove(true);
+		function init(g){            
             
 			// 初始化pdf组件  这里的worker请下到你站点内，不能跨域
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';//'//qian-img.tenpay.com/static/pdfjs/pdf.worker.min.js';
+            pdfjsLib.GlobalWorkerOptions.workerSrc = '//jtcospublic.ztzq.cn/public/pdfjs/pdf.worker.min.js';//'//qian-img.tenpay.com/static/pdfjs/pdf.worker.min.js';
             loadPdf('//qian-img.tenpay.com/resources/vtools/img/201906/20ff3e6197e118dcb82fac4cf5a5feeb.pdf');
         }
         
         // 加载PDF
-        function loadPdf(url) {
-            const loadingTask = pdfjsLib.getDocument(url);
-            loadingTask.promise.then((pdf) => {
-                pdfDocument = pdf;
-                const pages = [];
-                if (pdf.numPages > 0) {
-                    for (var i = 0; i < pdf.numPages; i++) {
-                        pages.push({
-                            value: i,
-                            label: '第' + (i + 1) + '页'
-                        });
-                    }
-                    renderPage(0);// 默认打开第一页
-                }
-            }).catch((e) => {
-                console.error(e);
-            });
+        async function loadPdf(url) {
+            const pdf = await pdfjsLib.getDocument(url).promise;
+            
+            if (pdf.numPages > 0) {
+                for (var i = 0; i < pdf.numPages; i++) {
+                    await renderPage(pdf, i);// 默认打开第一页
+                }                    
+            }            
         }
         // 打开当前PDF指定页
-        function renderPage(page) {
-            pdfDocument.getPage(page + 1).then((page) => {
-                var scale = 1;
-                var viewport = page.getViewport({scale});// 旧版本中是要用数字  而非一个object的
-                //
-                // Prepare canvas using PDF page dimensions
-                //
-                var canvas = document.createElement('canvas');
-                canvas.height = (viewport.height || viewport.viewBox[3]); /* viewport.height is NaN */
-                canvas.width = (viewport.width || viewport.viewBox[2]);  /* viewport.width is also NaN */
+        async function renderPage(pdf, page) {
+            const canvas = document.createElement('canvas');
+            canvas.style.width = '100%';
+            container.appendChild(canvas);
 
-                //
-                // Render PDF page into canvas context
-                /*{
-                    canvasContext,
-                    viewport,
-                    intent = "display",
-                    enableWebGL = false,
-                    renderInteractiveForms = false,
-                    transform = null,
-                    imageLayer = null,
-                    canvasFactory = null,
-                    background = null,
-                }*/
-                //
-                var renderContext = {
-                    canvasContext: canvas.getContext('2d'),
-                    viewport: viewport
-                };
-                page.render(renderContext).promise.then(() => {
-                    let bg = new Image();
-                    bg.onload = () => {
-                        pdfImage.image = bg;
-                        //pdfImage.needUpdate = true;;
-                        graph.refresh();
-                    }
-                    bg.src = canvas.toDataURL('image/png');
-                });
+            const pageInstance = await pdf.getPage(page + 1);
+
+            const scale = 1;
+            const viewport = pageInstance.getViewport({
+                scale
             });
+            
+            const context = canvas.getContext('2d');
+            
+            canvas.height = viewport.height || viewport.viewBox[3]; /* viewport.height is NaN */
+           
+            canvas.width = viewport.width || viewport.viewBox[2]; /* viewport.width is also NaN */
+
+            //
+            // Render PDF page into canvas context
+            //
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+
+            await pageInstance.render(renderContext).promise;
+
+            initGraph(canvas);
+        }
+
+        // 初始化当前页，并改造支持放大缩小
+        function initGraph(canvas) {
+            const el = new Image();
+
+            el.onload = () => {
+                const width = canvas.clientWidth || canvas.offsetWidth;
+                const height = canvas.clientHeight || canvas.offsetHeight;
+
+                const g = new jmGraph(canvas, {
+                    width,
+                    height,
+                    autoRefresh: true  // 自动刷新
+                });
+                const img = g.createShape('image', {
+                    //sourcePosition: {x: 0, y: 0},
+                    //sourceWidth: width,
+                    //sourceHeight: height,
+                    position: {x: 0, y: 0},
+                    width: '100%',
+                    height: '100%',
+                    image: el
+                });
+
+                //img.canMove(true);
+
+                // 初始化缩放属性
+                img.transform = {
+                        scaleX: 1,
+                        scaleY: 1,
+                        skewX: 0,
+                        skewY: 0,
+                        offsetX: 0,
+                        offsetY: 0
+                    };
+
+                let prePosition;
+                g.on('touchstart', (e) => {
+                    console.log('touchstart', e.position);
+                    // 二个手指滑动
+                    if(e.position?.touches?.length === 2) {
+                        prePosition = e.position;
+                    }
+                });
+
+                g.on('touchmove', (e) => {
+                    //console.log('touchmove', prePosition, e.position);
+                    if(e.position?.touches?.length !== 2) return;
+
+                    e.event?.stopPropagation();
+                    e.event?.preventDefault();
+
+                    // 没有上一个滑动，则这次就当上次
+                    if(!prePosition) {
+                        prePosition = e.position; 
+                        return;
+                    }
+                    
+                    //上次滑动二指的距离
+                    const preOffX = prePosition.touches[0].pageX - prePosition.touches[1].pageX;
+                    const preOffY = prePosition.touches[0].pageY - prePosition.touches[1].pageY;
+                    const preDis = Math.sqrt(preOffX * preOffX + preOffY * preOffY);
+                    //当次滑动二指的距离
+                    const curOffX = e.position.touches[0].pageX - e.position.touches[1].pageX;
+                    const curOffY = e.position.touches[0].pageY - e.position.touches[1].pageY;
+                    const curDis = Math.sqrt(curOffX * curOffX + curOffY * curOffY);
+                    
+                    // 如果二指移动距离小于1，则认为是在移动图片，不缩放
+                    if(Math.abs(preDis - curDis) < 0.05) {
+                        img.offset(e.position.touches[0].pageX - prePosition.touches[0].pageX,
+                            e.position.touches[0].pageY - prePosition.touches[0].pageY);
+                    }
+                    else {
+                        const disx = Math.abs(preOffX - curOffX) / width;//x轴滑行的距离
+                        const disy = Math.abs(preOffY - curOffY) / height;//y轴滑行的距离
+                        
+                        let offScale = Math.max(disx, disy);
+
+                        console.log('offScale1', offScale);
+
+                        offScale = img.transform.scaleX * (curDis > preDis? (1+offScale): (1-offScale));
+
+                        console.log('offScale2', offScale);
+
+                        img.transform.scaleX = img.transform.scaleY = offScale;
+
+                        const imgBounds = img.getBounds();
+
+                        img.transform.offsetX = (g.width - imgBounds.width * offScale) / 2;
+                        img.transform.offsetY = (g.height - imgBounds.height * offScale) / 2;
+
+                        console.log('transform', img.transform);
+                    }
+                    img.needUpdate = true;
+                    prePosition = e.position;
+
+                    return false;
+                });
+
+                g.on('touchend touchcancel touchleave', (e) => {
+                    prePosition = null;
+                });            
+
+                g.children.add(img);
+            };
+            el.src = canvas.toDataURL('image/png');
         }
 	</script>
 </html>

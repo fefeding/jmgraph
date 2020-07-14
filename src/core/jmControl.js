@@ -1127,19 +1127,20 @@ export default class jmControl extends jmProperty {
 		args.path = args.path||[]; //事件冒泡路径
 
 		//先执行子元素事件，如果事件没有被阻断，则向上冒泡
-		//var stoped = false;
+		let stoped = false;
 		if(this.children) {
-			this.children.each(function(j, el) {	
-				// 如果同级已有命中，则不再需要处理兄弟节点
-				if(args.target) return false;
+			this.children.each(function(j, el) {
 				//未被阻止才执行			
 				if(args.cancel !== true) {
 					//如果被阻止冒泡，
-					//stoped = el.raiseEvent(name,args) === false?true:stoped;
-					el.raiseEvent(name, args)
+					stoped = el.raiseEvent(name,args) === false? true: stoped;
+					// 不再响应其它元素
+					if(stoped) return false;
 				}
 			}, true);//按逆序处理
 		}
+		// 如果已被阻止，不再响应上级事件
+		if(stoped) return false;
 		
 		//获取当前对象的父元素绝对位置
 		//生成当前坐标对应的父级元素的相对位置
@@ -1149,23 +1150,11 @@ export default class jmControl extends jmProperty {
 		args.position.x = args.position.offsetX - abounds.left;
 		args.position.y = args.position.offsetY - abounds.top;
 
-		// 相对当前控件的坐标点
-		/*if(this.absoluteBounds) {
-			args.curPosition = {
-				x: args.position.offsetX - this.absoluteBounds.left,
-				y: args.position.offsetY - this.absoluteBounds.top
-			};
-		}
-		else {
-			args.curPosition = args.position;
-		}*/
-
 		// 是否在当前控件内操作
 		const inpos = this.interactive !== false && this.checkPoint(args.position);
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
-		// 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
-		if(inpos && !args.target) {
+		if(inpos) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
 			if(!args.target) {
 				args.target = this;
@@ -1175,7 +1164,7 @@ export default class jmControl extends jmProperty {
 
 			if(!this.focused && (name === 'mousemove' || name === 'touchmove')) {
 				this.focused = true;//表明当前焦点在此控件中
-				this.raiseEvent(name === 'mousemove'? 'mouseover': 'touchover',args);
+				this.raiseEvent(name === 'mousemove'? 'mouseover': 'touchover', args);
 			}	
 		}
 		else {
@@ -1189,7 +1178,7 @@ export default class jmControl extends jmProperty {
 			}	
 		}
 			
-		return args.cancel == false;//如果被阻止则返回false,否则返回true
+		return args.cancel === false;//如果被阻止则返回false,否则返回true
 	}
 
 	/**

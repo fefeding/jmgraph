@@ -37,7 +37,7 @@ export default class jmUtils {
                 if(deep) {
                     let dest = [];
                     for(let i=0; i<source.length; i++) {
-                        dest.push(this.clone(source[i], deep));
+                        dest.push(this.clone(source[i], target[i], deep));
                     }
                     return dest;
                 }

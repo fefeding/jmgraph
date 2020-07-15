@@ -167,7 +167,7 @@ export default class jmGradient {
 		//color step
 		const pars = ms[3].match(/((rgb(a)?\s*\([\d,\.\s]+\))|(#[a-zA-Z\d]+))\s+([\d\.]+)/ig);
 		if(pars && pars.length) {
-			for(let i=1;i<pars.length;i++) {
+			for(let i=0;i<pars.length;i++) {
 				const par = jmUtils.trim(pars[i]);
 				const spindex = par.lastIndexOf(' ');
 				if(spindex > -1) {			

@@ -139,6 +139,20 @@ export default class jmGraph extends jmControl {
 	}
 
 	/**
+	 * 内部坐标转为页面坐标，这里主要是有devicePixelRatio倍数问题
+	 * @param {x, y} point 内部坐标
+	 */
+	pointToPixes(point) {
+		if(this.devicePixelRatio && this.devicePixelRatio !== 1) {
+			point = Object.assign({}, point, {
+				x: point.x / this.devicePixelRatio,
+				y: point.y / this.devicePixelRatio
+			});
+		}
+		return point;
+	}
+
+	/**
 	 * 宽度
 	 * @property width
 	 * @type {number}

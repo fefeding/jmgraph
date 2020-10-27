@@ -11,6 +11,8 @@ jmGraph
 - 示例：[https://jiamao.github.io/jmgraph/example/index.html](https://jiamao.github.io/jmgraph/example/index.html)
 - API: [https://github.com/jiamao/jmgraph/blob/master/api/jmGraph.md](https://github.com/jiamao/jmgraph/blob/master/api/jmGraph.md)
 
+基于它的图表应用：[https://github.com/jiamao/jmchart](https://github.com/jiamao/jmchart)
+
 安装
 ---
 直接从github下载包或npm安装。

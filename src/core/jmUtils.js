@@ -344,7 +344,7 @@ export default class jmUtils {
     /**
      * @method judge 判断点是否在多边形中
      * @param {point} dot {{x,y}} 需要判断的点
-     * @param {array} coordinates {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
+     * @param {array} coordinates {{x,y}} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
      *        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 
      * @param  {number} 是否为实心 1= 是
      * @returns {boolean} 结果 true=在形状内

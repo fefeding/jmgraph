@@ -1,7 +1,7 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "3.1.71",
+  "version": "3.1.72",
   "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": [
@@ -42,6 +42,7 @@
   },
   "scripts": {
     "build": "cd build & npm i & gulp & cd ..",
+    "push": "npm publish --registry=https://registry.npmjs.org",
     "dev": "node dev"
   },
   "license": "MIT",

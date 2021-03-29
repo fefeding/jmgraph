@@ -338,7 +338,7 @@ export default class jmControl extends jmProperty {
 	 * @param {style} style 样式对象，如:{fill:'black',stroke:'red'}
 	 */
 	setStyle(style) {
-		style = style || this.style;
+		style = style || jmUtils.clone(this.style, true);
 		if(!style) return;
 
 		// 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大

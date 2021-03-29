@@ -357,7 +357,9 @@ export default class jmControl extends jmProperty {
 		let __setStyle = (style, name, mpkey) => {
 			//let styleValue = style[mpkey||name]||style;
 			if(style) {				
-				
+				if(typeof style === 'function') {
+					style = style.call(this);
+				}
 				let t = typeof style;	
 				let mpname = this.jmStyleMap[mpkey || name];
 

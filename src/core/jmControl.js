@@ -362,7 +362,7 @@ export default class jmControl extends jmProperty {
 						style = style.call(this);
 					}
 					catch(e) {
-						console.error(e);
+						console.warn(e);
 						return;
 					}
 				}

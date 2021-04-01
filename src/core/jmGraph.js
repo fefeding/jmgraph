@@ -229,17 +229,13 @@ export default class jmGraph extends jmControl {
 	 * 简单直观创建对象
 	 *
 	 * @method createShape 
-	 * @param {string} name 注册控件的名称
+	 * @param {string} shape 注册控件的名称 也可以直接是控件类型
 	 * @param {object} args 实例化控件的参数
 	 * @return {object} 已实例化控件的对象
 	 */
-	createShape(name, args) {
-		let shape;
-		if(typeof name === 'function') {
-			shape = name;
-		}
-		else {
-			shape = this.shapes[name];
+	createShape(shape, args) {
+		if(typeof shape === 'string') {
+			shape = this.shapes[shape];
 		}
 		if(shape) {
 			if(!args) args = {};

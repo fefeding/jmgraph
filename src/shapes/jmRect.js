@@ -1,4 +1,7 @@
 import {jmPath} from "../core/jmPath.js";
+import {jmArc} from './jmArc.js';
+import {jmLine} from './jmLine.js';
+
 /**
  * 画矩形
  *
@@ -99,31 +102,31 @@ export default class jmRect extends jmPath {
 
 		//如果指定为虚线 , 则初始化一个直线组件，来构建虚线点集合
 		if(this.style.lineType === 'dotted' && !this.dottedLine) {
-			this.dottedLine = this.graph.createShape('line', {style: this.style});
+			this.dottedLine = this.graph.createShape(jmLine, {style: this.style});
 		}
 		
 		//如果有边界弧度则借助圆弧对象计算描点
 		if(location.radius && location.radius < location.width/2 && location.radius < location.height/2) {
 			let q = Math.PI / 2;
-			let arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
+			let arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
 			arc.center = {x:location.left + location.radius,y:location.top+location.radius};
 			arc.startAngle = Math.PI;
 			arc.endAngle = Math.PI + q;
 			let ps1 = arc.initPoints();
 			
-			arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
+			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
 			arc.center = {x:p2.x - location.radius,y:p2.y + location.radius};
 			arc.startAngle = Math.PI + q;
 			arc.endAngle = Math.PI * 2;
 			let ps2 = arc.initPoints();
 			
-			arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
+			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
 			arc.center = {x:p3.x - location.radius,y:p3.y - location.radius};
 			arc.startAngle = 0;
 			arc.endAngle = q;
 			let ps3 = arc.initPoints();
 			
-			arc = this.graph.createShape('arc',{radius:location.radius,anticlockwise:false});
+			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
 			arc.center = {x:p4.x + location.radius,y:p4.y - location.radius};
 			arc.startAngle = q;
 			arc.endAngle = Math.PI;

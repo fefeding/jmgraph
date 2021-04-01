@@ -362,6 +362,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       /**
        * 根据控件zIndex排序，越大的越高
        */
+      //const osort = this.children.sort;
 
 
       this.children.sort = function () {
@@ -377,22 +378,21 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
             if (isNaN(zindex)) zindex = obj.style.zIndex || 0;
           }
 
-          if (zindex) {
-            var items = levelItems[zindex] || (levelItems[zindex] = []);
-            items.push(obj);
-          }
+          var items = levelItems[zindex] || (levelItems[zindex] = []);
+          items.push(obj);
         });
+        this.splice(0, this.length);
 
         for (var index in levelItems) {
-          // 先从数组内去掉， 再加到进后
-          for (var i = 0; i < levelItems[index].length; i++) {
-            this.oremove(levelItems[index][i]);
-          }
-
           oadd.call(this, levelItems[index]);
         }
+        /*
+        osort.call(this, (c1, c2) => {
+        	let zindex1 = c1.zIndex || c1.style.zIndex || 0;
+        	let zindex2 = c2.zIndex || c2.style.zIndex || 0;
+        	return zindex1 - zindex2;
+        });*/
 
-        self.needUpdate = true;
       };
 
       this.children.clear = function () {
@@ -438,7 +438,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     value: function setStyle(style) {
       var _this3 = this;
 
-      style = style || this.style;
+      style = style || _jmUtils.jmUtils.clone(this.style, true);
       if (!style) return; // 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大
 
       var scale = this.graph.devicePixelRatio;
@@ -456,6 +456,15 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       var __setStyle = function __setStyle(style, name, mpkey) {
         //let styleValue = style[mpkey||name]||style;
         if (style) {
+          if (typeof style === 'function') {
+            try {
+              style = style.call(_this3);
+            } catch (e) {
+              console.warn(e);
+              return;
+            }
+          }
+
           var t = _typeof(style);
 
           var mpname = _this3.jmStyleMap[mpkey || name]; //如果为渐变对象
@@ -588,15 +597,11 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
 
       if (this.translate) {
-        __setStyle({
-          translate: this.translate
-        }, 'translate');
+        __setStyle(this.translate, 'translate');
       }
 
       if (this.transform) {
-        __setStyle({
-          transform: this.transform
-        }, 'transform');
+        __setStyle(this.transform, 'transform');
       } //设置样式
 
 
@@ -1369,44 +1374,34 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
       args.path = args.path || []; //事件冒泡路径
       //先执行子元素事件，如果事件没有被阻断，则向上冒泡
-      //var stoped = false;
+
+      var stoped = false;
 
       if (this.children) {
         this.children.each(function (j, el) {
-          // 如果同级已有命中，则不再需要处理兄弟节点
-          if (args.target) return false; //未被阻止才执行			
-
+          //未被阻止才执行			
           if (args.cancel !== true) {
             //如果被阻止冒泡，
-            //stoped = el.raiseEvent(name,args) === false?true:stoped;
-            el.raiseEvent(name, args);
+            stoped = el.raiseEvent(name, args) === false ? true : stoped; // 不再响应其它元素
+
+            if (stoped) return false;
           }
         }, true); //按逆序处理
-      } //获取当前对象的父元素绝对位置
-      //生成当前坐标对应的父级元素的相对位置
+      } // 如果已被阻止，不再响应上级事件
 
+
+      if (stoped) return false; //获取当前对象的父元素绝对位置
+      //生成当前坐标对应的父级元素的相对位置
 
       var abounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
       if (!abounds) return false; //args = jmUtils.clone(args);//参数副本
 
       args.position.x = args.position.offsetX - abounds.left;
-      args.position.y = args.position.offsetY - abounds.top; // 相对当前控件的坐标点
-
-      /*if(this.absoluteBounds) {
-      	args.curPosition = {
-      		x: args.position.offsetX - this.absoluteBounds.left,
-      		y: args.position.offsetY - this.absoluteBounds.top
-      	};
-      }
-      else {
-      	args.curPosition = args.position;
-      }*/
-      // 是否在当前控件内操作
+      args.position.y = args.position.offsetY - abounds.top; // 是否在当前控件内操作
 
       var inpos = this.interactive !== false && this.checkPoint(args.position); //事件发生在边界内或健盘事件发生在画布中才触发
-      // 如果有target 表示当前事件已被命中其它节点，则不再需要判断这里
 
-      if (inpos && !args.target) {
+      if (inpos) {
         //如果没有指定触发对象，则认为当前为第一触发对象
         if (!args.target) {
           args.target = this;
@@ -1428,7 +1423,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         }
       }
 
-      return args.cancel == false; //如果被阻止则返回false,否则返回true
+      return args.cancel === false; //如果被阻止则返回false,否则返回true
     }
     /**
      * 执行事件，并进行冒泡
@@ -1444,18 +1439,16 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         args.path.push(this); //如果返回true则阻断冒泡
 
         this.runEventHandle(name, args); //执行事件
-        // 向父节点冒泡事件		
-
-        if (args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
-          // 相对位置需要改为父节点的
-          if (args.position) {
-            var bounds = this.parent.getBounds();
-            args.position.x += bounds.left;
-            args.position.y += bounds.top;
-          }
-
-          this.parent.runEventAndPopEvent(name, args);
-        }
+        // // 向父节点冒泡事件		
+        // if(args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
+        // 	// 相对位置需要改为父节点的
+        // 	if(args.position) {
+        // 		let bounds = this.parent.getBounds();
+        // 		args.position.x += bounds.left;
+        // 		args.position.y += bounds.top;
+        // 	}
+        // 	this.parent.runEventAndPopEvent(name, args);
+        // }		
       }
     }
     /**
@@ -1938,7 +1931,7 @@ var jmEvents = /*#__PURE__*/function () {
       this.container.raiseEvent('touchcancel', evt);
       var t = evt.target || evt.srcElement;
 
-      if (t == target) {
+      if (t == this.target) {
         //if(evt.preventDefault) evt.preventDefault();
         return false;
       }
@@ -2357,7 +2350,7 @@ var jmGradient = /*#__PURE__*/function () {
       var pars = ms[3].match(/((rgb(a)?\s*\([\d,\.\s]+\))|(#[a-zA-Z\d]+))\s+([\d\.]+)/ig);
 
       if (pars && pars.length) {
-        for (var i = 1; i < pars.length; i++) {
+        for (var i = 0; i < pars.length; i++) {
           var par = _jmUtils.jmUtils.trim(pars[i]);
 
           var spindex = par.lastIndexOf(' ');
@@ -2553,11 +2546,14 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       }
 
       if (canvas.tagName != 'CANVAS') {
+        _this.container = canvas;
         var cn = document.createElement('canvas');
         canvas.appendChild(cn);
         cn.width = canvas.offsetWidth || canvas.clientWidth;
         cn.height = canvas.offsetHeight || canvas.clientHeight;
         canvas = cn;
+      } else {
+        _this.container = canvas.parentElement;
       }
 
       _this.context = canvas.getContext('2d');
@@ -2636,6 +2632,23 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       }
     }
     /**
+     * 内部坐标转为页面坐标，这里主要是有devicePixelRatio倍数问题
+     * @param {x, y} point 内部坐标
+     */
+
+  }, {
+    key: "pointToPixes",
+    value: function pointToPixes(point) {
+      if (this.devicePixelRatio && this.devicePixelRatio !== 1) {
+        point = Object.assign({}, point, {
+          x: point.x / this.devicePixelRatio,
+          y: point.y / this.devicePixelRatio
+        });
+      }
+
+      return point;
+    }
+    /**
      * 宽度
      * @property width
      * @type {number}
@@ -2677,20 +2690,16 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
      * 简单直观创建对象
      *
      * @method createShape 
-     * @param {string} name 注册控件的名称
+     * @param {string} shape 注册控件的名称 也可以直接是控件类型
      * @param {object} args 实例化控件的参数
      * @return {object} 已实例化控件的对象
      */
 
   }, {
     key: "createShape",
-    value: function createShape(name, args) {
-      var shape;
-
-      if (typeof name === 'function') {
-        shape = name;
-      } else {
-        shape = this.shapes[name];
+    value: function createShape(shape, args) {
+      if (typeof shape === 'string') {
+        shape = this.shapes[shape];
       }
 
       if (shape) {
@@ -3802,14 +3811,30 @@ var jmUtils = /*#__PURE__*/function () {
      * @param {object} source 被复制的对象
      * @param {object} target 可选，如果指定就表示复制给这个对象，如果为boolean它就是deep参数
      * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
+     * @param {function} copyHandler 复制对象回调，如果返回undefined，就走后面的逻辑，否则到这里中止
      * @return {object} 参数source的拷贝对象
      */
     value: function clone(source, target) {
       var deep = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      var copyHandler = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+      var deepIndex = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+
+      // 如果有指定回调，则用回调处理，否则走后面的复制逻辑
+      if (typeof copyHandler === 'function') {
+        var obj = copyHandler(source, deep, deepIndex);
+        if (obj) return obj;
+      }
+
+      deepIndex++; // 每执行一次，需要判断最大拷贝深度        
 
       if (typeof target === 'boolean') {
         deep = target;
         target = undefined;
+      } // 超过100拷贝深度，直接返回
+
+
+      if (deepIndex > 100) {
+        return target;
       }
 
       if (source && _typeof(source) === 'object') {
@@ -3823,7 +3848,7 @@ var jmUtils = /*#__PURE__*/function () {
             var dest = [];
 
             for (var i = 0; i < source.length; i++) {
-              dest.push(this.clone(source[i], deep));
+              dest.push(this.clone(source[i], target[i], deep, copyHandler, deepIndex));
             }
 
             return dest;
@@ -3835,9 +3860,10 @@ var jmUtils = /*#__PURE__*/function () {
         target.constructor = source.constructor;
 
         for (var k in source) {
-          // 如果不是对象和空，则采用target的属性
+          if (k === 'constructor') continue; // 如果不是对象和空，则采用target的属性
+
           if (_typeof(target[k]) === 'object' || typeof target[k] === 'undefined') {
-            target[k] = this.clone(source[k], target[k], deep);
+            target[k] = this.clone(source[k], target[k], deep, copyHandler, deepIndex);
           }
         }
 
@@ -3993,7 +4019,8 @@ var jmUtils = /*#__PURE__*/function () {
         screenY: evt.screenY,
         x: ox,
         y: oy,
-        isTouch: isTouch
+        isTouch: isTouch,
+        touches: touches
       };
     }
     /**
@@ -4135,7 +4162,7 @@ var jmUtils = /*#__PURE__*/function () {
     /**
      * @method judge 判断点是否在多边形中
      * @param {point} dot {{x,y}} 需要判断的点
-     * @param {array} coordinates {{x,y}[]} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
+     * @param {array} coordinates {{x,y}} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
      *        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 
      * @param  {number} 是否为实心 1= 是
      * @returns {boolean} 结果 true=在形状内
@@ -5442,7 +5469,12 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
       var maxps = []; //椭圆方程x=a*cos(r) ,y=b*sin(r)
 
       for (var r = start;; r += step) {
-        if (step > 0 && r >= end) break;else if (step < 0 && r <= end) break;
+        if (step > 0 && r > end) {
+          r = end;
+        } else if (step < 0 && r < end) {
+          r = end;
+        }
+
         var cos = Math.cos(r);
         var sin = Math.sin(r);
         var p1 = {
@@ -5455,6 +5487,7 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
         };
         minps.push(p1);
         maxps.push(_p);
+        if (r === end) break;
       }
 
       maxps.reverse(); //大圆逆序
@@ -6302,6 +6335,10 @@ exports.jmRect = exports["default"] = void 0;
 
 var _jmPath2 = require("../core/jmPath.js");
 
+var _jmArc = require("./jmArc.js");
+
+var _jmLine = require("./jmLine.js");
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -6429,7 +6466,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
       }; //如果指定为虚线 , 则初始化一个直线组件，来构建虚线点集合
 
       if (this.style.lineType === 'dotted' && !this.dottedLine) {
-        this.dottedLine = this.graph.createShape('line', {
+        this.dottedLine = this.graph.createShape(_jmLine.jmLine, {
           style: this.style
         });
       } //如果有边界弧度则借助圆弧对象计算描点
@@ -6437,7 +6474,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
 
       if (location.radius && location.radius < location.width / 2 && location.radius < location.height / 2) {
         var q = Math.PI / 2;
-        var arc = this.graph.createShape('arc', {
+        var arc = this.graph.createShape(_jmArc.jmArc, {
           radius: location.radius,
           anticlockwise: false
         });
@@ -6448,7 +6485,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
         arc.startAngle = Math.PI;
         arc.endAngle = Math.PI + q;
         var ps1 = arc.initPoints();
-        arc = this.graph.createShape('arc', {
+        arc = this.graph.createShape(_jmArc.jmArc, {
           radius: location.radius,
           anticlockwise: false
         });
@@ -6459,7 +6496,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
         arc.startAngle = Math.PI + q;
         arc.endAngle = Math.PI * 2;
         var ps2 = arc.initPoints();
-        arc = this.graph.createShape('arc', {
+        arc = this.graph.createShape(_jmArc.jmArc, {
           radius: location.radius,
           anticlockwise: false
         });
@@ -6470,7 +6507,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
         arc.startAngle = 0;
         arc.endAngle = q;
         var ps3 = arc.initPoints();
-        arc = this.graph.createShape('arc', {
+        arc = this.graph.createShape(_jmArc.jmArc, {
           radius: location.radius,
           anticlockwise: false
         });
@@ -6550,7 +6587,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
 
 exports.jmRect = exports["default"] = jmRect;
 
-},{"../core/jmPath.js":8}],23:[function(require,module,exports){
+},{"../core/jmPath.js":8,"./jmArc.js":12,"./jmLine.js":20}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6647,7 +6684,7 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
 
       for (var i = 0; i < 8; i++) {
         //生成改变大小方块
-        var r = (this.graph || params.graph).createShape('rect', {
+        var r = (this.graph || params.graph).createShape(_jmRect2.jmRect, {
           position: {
             x: 0,
             y: 0
@@ -6730,6 +6767,39 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
           this.cursor = 'default';
         });
       }
+      /*
+      // 如果是双指开始滑动
+      let touchPositions;
+      this.on('touchstart', (evt) => {
+      	if(evt.touches && evt.touches.legnth === 2) {
+      		touchPositions = evt.touches;
+      	}
+      });
+      		// 如果是双指滑动
+      //计算二手指滑动距离，然后再通过在父容器中的占比得到缩放比例
+      this.on('touchmove', (evt) => {
+      	if(touchPositions && evt.touches && evt.touches.length == 2) {
+      		//上次滑动二指的距离
+      		const preOffX = touchPositions[0].x - touchPositions[1].x;
+      		const preOffY = touchPositions[0].y - touchPositions[1].y;
+      		const preDis = Math.sqrt(preOffX * preOffX + preOffY * preOffY);
+      		//当次滑动二指的距离
+      		const curOffX = evt.touches[0].x - evt.touches[1].x;
+      		const curOffY = evt.touches[0].y - evt.touches[1].y;
+      		const curDis = Math.sqrt(curOffX * curOffX + curOffY * curOffY);
+      
+      		//const disx = Math.abs(preOffX - curOffX);//x轴滑行的距离
+      		//const disy = Math.abs(preOffY - curOffY);//y轴滑行的距离
+      		
+      		const offset = curDis - preDis;
+      				this.reset(0, 0, offset, offset);
+      	}
+      });	
+      // 结束滑动
+      this.on('touchend touchcancel', (evt) => {
+      	touchPositions = null;
+      });*/
+
     }
     /**
      * 按移动偏移量重置当前对象，并触发大小和位置改变事件

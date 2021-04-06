@@ -56,10 +56,9 @@ export default class jmUtils {
                 }
                 return source.slice(0);
             }
-            //if(source.constructor) target = new source.constructor();
-            //target.constructor = source.constructor;
-            target.__proto__ = source.__proto__;
-            //target.prototype = source;
+           
+            if(source.__proto__) target.__proto__ = source.__proto__;
+            
             for(let k in source) {
                 if(k === 'constructor') continue;
                 // 如果不是对象和空，则采用target的属性

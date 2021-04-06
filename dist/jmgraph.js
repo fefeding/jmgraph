@@ -606,6 +606,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
 
       for (var k in style) {
+        if (k === 'constructor') continue;
+
         var t = _typeof(style[k]); //先处理部分样式，以免每次都需要初始化解析
 
 
@@ -3855,9 +3857,11 @@ var jmUtils = /*#__PURE__*/function () {
           }
 
           return source.slice(0);
-        }
+        } //if(source.constructor) target = new source.constructor();
+        //target.constructor = source.constructor;
 
-        target.constructor = source.constructor;
+
+        target.__proto__ = source.__proto__; //target.prototype = source;
 
         for (var k in source) {
           if (k === 'constructor') continue; // 如果不是对象和空，则采用target的属性

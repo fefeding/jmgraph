@@ -13,6 +13,8 @@ jmGraph
 
 基于它的图表应用：[https://github.com/jiamao/jmchart](https://github.com/jiamao/jmchart)
 
+小游戏：[https://jiamao.github.io/jmgraph/example/love/index.html](https://jiamao.github.io/jmgraph/example/love/index.html)
+
 安装
 ---
 直接从github下载包或npm安装。

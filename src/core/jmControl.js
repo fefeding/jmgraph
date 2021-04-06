@@ -485,6 +485,7 @@ export default class jmControl extends jmProperty {
 		}
 		//设置样式
 		for(let k in style) {
+			if(k === 'constructor') continue;
 			let t = typeof style[k];
 			//先处理部分样式，以免每次都需要初始化解析
 			if(t == 'string' && style[k].indexOf('-gradient') > -1) {

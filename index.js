@@ -13,7 +13,15 @@ import {jmImage} from "./src/shapes/jmImage.js";
 import {jmLabel} from "./src/shapes/jmLabel.js";
 import {jmResize} from "./src/shapes/jmResize.js";
 
-import jmGraphCore from "./src/core/jmGraph.js";
+import { jmGraph as jmGraphCore, 
+    jmUtils,
+	jmList,
+	jmProperty,
+	jmShadow,
+	jmGradient,
+	jmEvents,
+	jmControl,
+	jmPath, } from "./src/core/jmGraph.js";
 
 const shapes = {
     "arc": jmArc,
@@ -61,7 +69,13 @@ const createJmGraph = (...args) => {
 	return new jmGraph(...args);
 }
 
-export {    
+export {   
+    jmUtils, 
+    jmList,    
+    jmControl,
+    jmPath,
+    jmShadow,
+    jmGradient,
 	jmArc,
 	jmArraw,
 	jmBezier,

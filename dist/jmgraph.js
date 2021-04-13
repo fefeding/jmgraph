@@ -6,77 +6,113 @@ Object.defineProperty(exports, "__esModule", {
 });
 Object.defineProperty(exports, "jmArc", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmArc.jmArc;
   }
 });
 Object.defineProperty(exports, "jmArraw", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmArraw.jmArraw;
   }
 });
 Object.defineProperty(exports, "jmBezier", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmBezier.jmBezier;
   }
 });
 Object.defineProperty(exports, "jmCircle", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmCircle.jmCircle;
   }
 });
 Object.defineProperty(exports, "jmHArc", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmHArc.jmHArc;
   }
 });
 Object.defineProperty(exports, "jmLine", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmLine.jmLine;
   }
 });
 Object.defineProperty(exports, "jmPrismatic", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmPrismatic.jmPrismatic;
   }
 });
 Object.defineProperty(exports, "jmRect", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmRect.jmRect;
   }
 });
 Object.defineProperty(exports, "jmArrawLine", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmArrawLine.jmArrawLine;
   }
 });
 Object.defineProperty(exports, "jmImage", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmImage.jmImage;
   }
 });
 Object.defineProperty(exports, "jmLabel", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmLabel.jmLabel;
   }
 });
 Object.defineProperty(exports, "jmResize", {
   enumerable: true,
-  get: function get() {
+  get: function () {
     return _jmResize.jmResize;
   }
 });
-exports.create = exports.jmGraph = exports["default"] = void 0;
+Object.defineProperty(exports, "jmUtils", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmUtils;
+  }
+});
+Object.defineProperty(exports, "jmList", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmList;
+  }
+});
+Object.defineProperty(exports, "jmShadow", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmShadow;
+  }
+});
+Object.defineProperty(exports, "jmGradient", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmGradient;
+  }
+});
+Object.defineProperty(exports, "jmControl", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmControl;
+  }
+});
+Object.defineProperty(exports, "jmPath", {
+  enumerable: true,
+  get: function () {
+    return _jmGraph.jmPath;
+  }
+});
+exports.create = exports.jmGraph = exports.default = void 0;
 
 var _jmArc = require("./src/shapes/jmArc.js");
 
@@ -102,9 +138,7 @@ var _jmLabel = require("./src/shapes/jmLabel.js");
 
 var _jmResize = require("./src/shapes/jmResize.js");
 
-var _jmGraph = _interopRequireDefault(require("./src/core/jmGraph.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _jmGraph = require("./src/core/jmGraph.js");
 
 function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
@@ -172,7 +206,7 @@ var jmGraph = /*#__PURE__*/function (_jmGraphCore) {
   }
 
   return jmGraph;
-}(_jmGraph["default"]); //创建实例
+}(_jmGraph.jmGraph); //创建实例
 
 
 exports.jmGraph = exports["default"] = jmGraph;

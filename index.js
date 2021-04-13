@@ -42,8 +42,9 @@ const shapes = {
 export default class jmGraph extends jmGraphCore {
     constructor(canvas, option, callback) {
 
+        const targetType = new.target;
         //不是用new实例化的话，返回一个promise
-		if(new.target !== jmGraph) {
+		if(!targetType || !(targetType.prototype instanceof jmGraphCore)) {
 			return new Promise(function(resolve, reject){				
 				var g = new jmGraph(canvas, option, callback);
 				if(resolve) resolve(g);				

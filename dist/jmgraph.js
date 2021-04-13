@@ -186,8 +186,9 @@ var jmGraph = /*#__PURE__*/function (_jmGraphCore) {
 
     _classCallCheck(this, jmGraph);
 
-    //不是用new实例化的话，返回一个promise
-    if ((this instanceof jmGraph ? this.constructor : void 0) !== jmGraph) {
+    var targetType = this instanceof jmGraph ? this.constructor : void 0; //不是用new实例化的话，返回一个promise
+
+    if (!targetType || !(targetType.prototype instanceof _jmGraph.jmGraph)) {
       return _possibleConstructorReturn(_this, new Promise(function (resolve, reject) {
         var g = new jmGraph(canvas, option, callback);
         if (resolve) resolve(g);

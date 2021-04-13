@@ -5463,8 +5463,8 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
     _classCallCheck(this, jmHArc);
 
     _this = _super.call(this, params, t);
-    _this.minRadius = params.minRadius || style.minRadius || 0;
-    _this.maxRadius = params.maxRadius || style.maxRadius || 0;
+    _this.minRadius = params.minRadius || _this.style.minRadius || 0;
+    _this.maxRadius = params.maxRadius || _this.style.maxRadius || 0;
     return _this;
   }
   /**

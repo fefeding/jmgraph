@@ -12,8 +12,8 @@ export default class jmHArc extends jmArc {
 	constructor(params, t='jmHArc') {
 		super(params, t);
 
-		this.minRadius = params.minRadius || style.minRadius || 0;
-		this.maxRadius = params.maxRadius || style.maxRadius || 0;
+		this.minRadius = params.minRadius || this.style.minRadius || 0;
+		this.maxRadius = params.maxRadius || this.style.maxRadius || 0;
 	}
 
 	/**

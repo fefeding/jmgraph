@@ -25,9 +25,9 @@
 <dd></dd>
 <dt><a href="#jmArc">jmArc</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
-<dt><a href="#jmArraw">jmArraw</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
+<dt><a href="#jmArrow">jmArrow</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
-<dt><a href="#jmArrawLine">jmArrawLine</a> ⇐ <code><a href="#jmLine">jmLine</a></code></dt>
+<dt><a href="#jmArrowLine">jmArrowLine</a> ⇐ <code><a href="#jmLine">jmLine</a></code></dt>
 <dd></dd>
 <dt><a href="#jmBezier">jmBezier</a> ⇐ <code><a href="#jmPath">jmPath</a></code></dt>
 <dd></dd>
@@ -574,14 +574,14 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- | --- | --- |
 | params | <code>object</code> | center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针 |
 
-<a name="jmArraw"></a>
+<a name="jmArrow"></a>
 
-## jmArraw ⇐ <code>[jmPath](#jmPath)</code>
+## jmArrow ⇐ <code>[jmPath](#jmPath)</code>
 **Kind**: global class  
 **Extends:** <code>[jmPath](#jmPath)</code>  
-<a name="new_jmArraw_new"></a>
+<a name="new_jmArrow_new"></a>
 
-### new jmArraw(生成箭头所需的参数)
+### new jmArrow(生成箭头所需的参数)
 画箭头,继承自jmPath
 
 
@@ -589,14 +589,14 @@ radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2
 | --- | --- |
 | 生成箭头所需的参数 | <code>object</code> | 
 
-<a name="jmArrawLine"></a>
+<a name="jmArrowLine"></a>
 
-## jmArrawLine ⇐ <code>[jmLine](#jmLine)</code>
+## jmArrowLine ⇐ <code>[jmLine](#jmLine)</code>
 **Kind**: global class  
 **Extends:** <code>[jmLine](#jmLine)</code>  
-<a name="new_jmArrawLine_new"></a>
+<a name="new_jmArrowLine_new"></a>
 
-### new jmArrawLine(params)
+### new jmArrowLine(params)
 带箭头的直线,继承jmPath
 
 
@@ -992,7 +992,7 @@ false  顺时针，true 逆时针
 控制起始点
 
 **Kind**: global variable  
-**For**: jmArraw  
+**For**: jmArrow  
 **Properties**
 
 | Name |
@@ -1005,7 +1005,7 @@ false  顺时针，true 逆时针
 控制结束点
 
 **Kind**: global variable  
-**For**: jmArraw  
+**For**: jmArrow  
 **Properties**
 
 | Name |
@@ -1018,7 +1018,7 @@ false  顺时针，true 逆时针
 箭头角度
 
 **Kind**: global variable  
-**For**: jmArraw  
+**For**: jmArrow  
 **Properties**
 
 | Name |
@@ -1031,7 +1031,7 @@ false  顺时针，true 逆时针
 箭头X偏移量
 
 **Kind**: global variable  
-**For**: jmArraw  
+**For**: jmArrow  
 **Properties**
 
 | Name |
@@ -1044,7 +1044,7 @@ false  顺时针，true 逆时针
 箭头Y偏移量
 
 **Kind**: global variable  
-**For**: jmArraw  
+**For**: jmArrow  
 **Properties**
 
 | Name |

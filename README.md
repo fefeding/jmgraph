@@ -201,20 +201,20 @@ var arc1 = g.createShape('arc', {
 ```
 
 #### 箭头
-`arraw`为创建一个箭头，
-`arrawline`是一条带箭头的直线。  
+`arrow`为创建一个箭头，
+`Arrowline`是一条带箭头的直线。  
 具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/arrawline.html)
+[在线示例](http://jiamao.github.io/jmgraph/example/controls/Arrowline.html)
 
 ```javascript
 //带箭头的直线
-var shape = g.createShape('arrawline', {
+var shape = g.createShape('Arrowline', {
     style:style,
     start: {x:100,y:100},
     end: {x: 200, y: 350}
 });	
 //一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
-var arraw = g.createShape('arraw', {
+var arrow = g.createShape('arrow', {
     style:style,
     start: {x:150, y:120},
     end: {x: 160, y: 150}

@@ -73,7 +73,7 @@ exports.init = function(g) {
   g.children.add(mbezierpath);
 
   var arrstyle = g.util.clone(style);
-  var arr = g.createShape('arraw', { style: arrstyle });
+  var arr = g.createShape('arrow', { style: arrstyle });
   g.children.add(arr);
 
   var chplines = [];

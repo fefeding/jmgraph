@@ -1,14 +1,14 @@
 
 
 import {jmArc} from "./src/shapes/jmArc.js";
-import {jmArraw} from "./src/shapes/jmArraw.js";
+import {jmArrow} from "./src/shapes/jmArrow.js";
 import {jmBezier} from "./src/shapes/jmBezier.js";
 import {jmCircle} from "./src/shapes/jmCircle.js";
 import {jmHArc} from "./src/shapes/jmHArc.js";
 import {jmLine} from "./src/shapes/jmLine.js";
 import {jmPrismatic} from "./src/shapes/jmPrismatic.js";
 import {jmRect} from "./src/shapes/jmRect.js";
-import {jmArrawLine} from "./src/shapes/jmArrawLine.js";
+import {jmArrowLine} from "./src/shapes/jmArrowLine.js";
 import {jmImage} from "./src/shapes/jmImage.js";
 import {jmLabel} from "./src/shapes/jmLabel.js";
 import {jmResize} from "./src/shapes/jmResize.js";
@@ -25,14 +25,14 @@ import { jmGraph as jmGraphCore,
 
 const shapes = {
     "arc": jmArc,
-    "arraw": jmArraw,
+    "arrow": jmArrow,
     "bezier": jmBezier,
     "circle": jmCircle,
     "harc": jmHArc,
     "line": jmLine,
     "prismatic": jmPrismatic,
     "rect": jmRect,
-    "arrawline": jmArrawLine,
+    "Arrowline": jmArrowLine,
     "image": jmImage,
     "img": jmImage,
     "label": jmLabel,
@@ -78,14 +78,14 @@ export {
     jmShadow,
     jmGradient,
 	jmArc,
-	jmArraw,
+	jmArrow,
 	jmBezier,
 	jmCircle,
 	jmHArc,
 	jmLine,
 	jmPrismatic,
 	jmRect,
-	jmArrawLine,
+	jmArrowLine,
 	jmImage,
 	jmLabel,
     jmResize,

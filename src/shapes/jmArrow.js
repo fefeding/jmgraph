@@ -3,13 +3,13 @@ import {jmUtils} from "../core/jmUtils.js";
 /**
  * 画箭头,继承自jmPath
  *
- * @class jmArraw
+ * @class jmArrow
  * @extends jmPath
  * @param {object} 生成箭头所需的参数
  */
-export default class jmArraw extends jmPath {	
+export default class jmArrow extends jmPath {	
 
-	constructor(params, t='jmArraw') {
+	constructor(params, t='jmArrow') {
 		super(params, t);
 		this.style.lineJoin = 'miter';
 		this.style.lineCap = 'square';
@@ -25,7 +25,7 @@ export default class jmArraw extends jmPath {
 	 * 控制起始点
 	 *
 	 * @property start
-	 * @for jmArraw
+	 * @for jmArrow
 	 * @type {point}
 	 */
 	get start() {
@@ -40,7 +40,7 @@ export default class jmArraw extends jmPath {
 	 * 控制结束点
 	 *
 	 * @property end
-	 * @for jmArraw
+	 * @for jmArrow
 	 * @type {point} 结束点
 	 */
 	get end() {
@@ -55,7 +55,7 @@ export default class jmArraw extends jmPath {
 	 * 箭头角度
 	 *
 	 * @property angle
-	 * @for jmArraw
+	 * @for jmArrow
 	 * @type {number} 箭头角度
 	 */
 	get angle() {
@@ -70,7 +70,7 @@ export default class jmArraw extends jmPath {
 	 * 箭头X偏移量
 	 *
 	 * @property offsetX
-	 * @for jmArraw
+	 * @for jmArrow
 	 * @type {number}
 	 */
 	get offsetX() {
@@ -85,7 +85,7 @@ export default class jmArraw extends jmPath {
 	 * 箭头Y偏移量
 	 *
 	 * @property offsetY
-	 * @for jmArraw
+	 * @for jmArrow
 	 * @type {number}
 	 */
 	get offsetY() {
@@ -102,7 +102,7 @@ export default class jmArraw extends jmPath {
 	 * @method initPoint
 	 * @private
 	 * @param {boolean} solid 是否为实心的箭头
-	 * @for jmArraw
+	 * @for jmArrow
 	 */
 	initPoints(solid) {	
 		let rotate = this.angle;
@@ -157,4 +157,4 @@ export default class jmArraw extends jmPath {
 
 }
 
-export { jmArraw };
+export { jmArrow };

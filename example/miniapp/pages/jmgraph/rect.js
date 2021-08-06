@@ -95,7 +95,7 @@ exports.init = function(g) {
   style.stroke = '#48EA08';
 
   //创建
-  var arrline = g.createShape('arrawline', {
+  var arrline = g.createShape('Arrowline', {
     style: style,
     start: { x: 100, y: 100 },
     end: { x: 200, y: 350 }
@@ -108,7 +108,7 @@ exports.init = function(g) {
   style.fill = '#48EA08'; //实心箭头
   //创建
   //一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
-  var arraw = g.createShape('arraw', {
+  var arrow = g.createShape('arrow', {
     style: style,
     start: { x: 150, y: 120 },
     end: { x: 160, y: 150 },
@@ -116,8 +116,8 @@ exports.init = function(g) {
     //offsetX: 5, //箭头X偏移量
     //offsetY: 8 //箭头Y偏移量
   });
-  arraw.canMove(1);
-  g.children.add(arraw);
+  arrow.canMove(1);
+  g.children.add(arrow);
 
   var style = {
     src: 'https://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'

@@ -495,11 +495,11 @@ function jmGraphTypeInit(option, callback) {
 			{name:'prismatic',typeName:'jmPrismatic',url:'shapes/jmPrismatic.js'},
 			{name:'bezier',typeName:'jmBezier',url:'shapes/jmBezier.js'},
 			{name:'rect',typeName:'jmRect',url:'shapes/jmRect.js'},
-			{name:'arraw',typeName:'jmArraw',url:'shapes/jmArraw.js'},					
+			{name:'arrow',typeName:'jmArrow',url:'shapes/jmArrow.js'},					
 			{name:'label',typeName:'jmLabel',url:'controls/jmLabel.js'},
 			{name:'image',typeName:'jmImage',url:'controls/jmImage.js'},
 			{name:'resize',typeName:'jmResize',url:'controls/jmResize.js'},
-			{name:'arrawline',typeName:'jmArrawLine',url:'controls/jmArrawLine.js'}
+			{name:'Arrowline',typeName:'jmArrowLine',url:'controls/jmArrowLine.js'}
 	], function(ret){
 
 		//继承基础控件
@@ -4019,13 +4019,13 @@ if(typeof jmGraph != 'undefined') {
 /**
  * 画箭头,继承自jmPath
  *
- * @class jmArraw
+ * @class jmArrow
  * @for jmGraph
  * @module jmGraph
  * @param {jmGraph} graph 当前画布
  * @param {object} 生成箭头所需的参数
  */
-function jmArraw(graph,params) {
+function jmArrow(graph,params) {
 	if(!params) params = {};
 	this.points = params.points || [];
 	var style = params.style || {};
@@ -4035,7 +4035,7 @@ function jmArraw(graph,params) {
 	 * @property type
 	 * @type string
 	 */
-	this.type = 'jmArraw';
+	this.type = 'jmArrow';
 	
 	style.lineJoin = 'miter';
 	style.lineCap = 'square';
@@ -4049,52 +4049,52 @@ function jmArraw(graph,params) {
 	this.initializing(graph.context,style);
 }
 
-jmUtils.extend(jmArraw, jmPath);//jmPath
+jmUtils.extend(jmArrow, jmPath);//jmPath
 
 /**
  * 控制起始点
  *
  * @property start
- * @for jmArraw
+ * @for jmArrow
  * @type {point}
  */
-jmUtils.createProperty(jmArraw.prototype, 'start');
+jmUtils.createProperty(jmArrow.prototype, 'start');
 
 /**
  * 控制结束点
  *
  * @property end
- * @for jmArraw
+ * @for jmArrow
  * @type {point} 结束点
  */
-jmUtils.createProperty(jmArraw.prototype, 'end');
+jmUtils.createProperty(jmArrow.prototype, 'end');
 
 /**
  * 箭头角度
  *
  * @property angle
- * @for jmArraw
+ * @for jmArrow
  * @type {number} 箭头角度
  */
-jmUtils.createProperty(jmArraw.prototype, 'angle');
+jmUtils.createProperty(jmArrow.prototype, 'angle');
 
 /**
  * 箭头X偏移量
  *
  * @property offsetX
- * @for jmArraw
+ * @for jmArrow
  * @type {number}
  */
-jmUtils.createProperty(jmArraw.prototype, 'offsetX');
+jmUtils.createProperty(jmArrow.prototype, 'offsetX');
 
 /**
  * 箭头Y偏移量
  *
  * @property offsetY
- * @for jmArraw
+ * @for jmArrow
  * @type {number}
  */
-jmUtils.createProperty(jmArraw.prototype, 'offsetY');
+jmUtils.createProperty(jmArrow.prototype, 'offsetY');
 
 
 /**
@@ -4103,9 +4103,9 @@ jmUtils.createProperty(jmArraw.prototype, 'offsetY');
  * @method initPoint
  * @private
  * @param {boolean} solid 是否为实心的箭头
- * @for jmArraw
+ * @for jmArrow
  */
-jmArraw.prototype.initPoints = function(solid) {	
+jmArrow.prototype.initPoints = function(solid) {	
 	var rotate = this.angle;
 	var start = this.start;
 	var end = this.end;
@@ -4152,7 +4152,7 @@ jmArraw.prototype.initPoints = function(solid) {
 }
 
 if(typeof jmGraph != 'undefined') {
-	jmGraph.prototype.shapes['arraw'] = jmArraw;
+	jmGraph.prototype.shapes['arrow'] = jmArrow;
 }
 /**
  * 贝塞尔曲线,继承jmPath
@@ -4908,43 +4908,43 @@ if(typeof jmGraph != 'undefined') {
 /**
  * 带箭头的直线,继承jmPath
  *
- * @class jmArrawLine
+ * @class jmArrowLine
  * @for jmGraph
  * @module jmGraph
  * @param {jmGraph} graph 当前画布
  * @param {object} params 生成当前直线的参数对象，(style=当前线条样式,start=直线起始点,end=直线终结点)
  */	
-function jmArrawLine(graph,params) {
+function jmArrowLine(graph,params) {
 	if(!params) params = {};
 	this.points = params.points || [];
 	var style = params.style || {};
 	style.lineJoin = style.lineJoin||'miter';
 	
 	this.graph = graph;
-	this.type = 'jmArrawLine';
+	this.type = 'jmArrowLine';
 	this.start = params.start || (params.start={x:0,y:0});
 	this.end = params.end || (params.end={x:0,y:0});
 
 	this.initializing(graph.context,style);
 	
 	this.line = graph.createShape('line', params) ;
-	this.arraw = graph.createShape('arraw', params);
+	this.arrow = graph.createShape('arrow', params);
 }
-jmUtils.extend(jmArrawLine, jmPath);//jmPath
+jmUtils.extend(jmArrowLine, jmPath);//jmPath
 
 /**
  * 结束点
  * @property end
  * @type {point}
  */
-jmUtils.createProperty(jmArrawLine.prototype, 'end');
+jmUtils.createProperty(jmArrowLine.prototype, 'end');
 
 /**
  * 起点
  * @property start
  * @type {point}
  */
-jmUtils.createProperty(jmArrawLine.prototype, 'start');
+jmUtils.createProperty(jmArrowLine.prototype, 'start');
 
 /**
  * 初始化直线和箭头描点
@@ -4952,16 +4952,16 @@ jmUtils.createProperty(jmArrawLine.prototype, 'start');
  * @method initPoints
  * @private
  */
-jmArrawLine.prototype.initPoints = function() {	
+jmArrowLine.prototype.initPoints = function() {	
 	this.points = this.line.initPoints();
-	if(this.arrawVisible !== false) {
-		this.points = this.points.concat(this.arraw.initPoints());
+	if(this.ArrowVisible !== false) {
+		this.points = this.points.concat(this.arrow.initPoints());
 	}
 	return this.points;
 }
 
 if(typeof jmGraph != 'undefined') {
-	jmGraph.prototype.shapes['arrawline'] = jmArrawLine;
+	jmGraph.prototype.shapes['Arrowline'] = jmArrowLine;
 }
 
 

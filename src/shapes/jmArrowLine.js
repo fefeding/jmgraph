@@ -27,7 +27,7 @@ export default class jmArrowLine extends jmLine {
 	 */
 	initPoints() {	
 		this.points = super.initPoints();
-		if(this.ArrowVisible !== false) {
+		if(this.arrowVisible !== false) {
 			this.points = this.points.concat(this.arrow.initPoints());
 		}
 		return this.points;

@@ -4954,7 +4954,7 @@ jmUtils.createProperty(jmArrowLine.prototype, 'start');
  */
 jmArrowLine.prototype.initPoints = function() {	
 	this.points = this.line.initPoints();
-	if(this.ArrowVisible !== false) {
+	if(this.arrowVisible !== false) {
 		this.points = this.points.concat(this.arrow.initPoints());
 	}
 	return this.points;

@@ -380,7 +380,7 @@ export default class jmGraph extends jmControl {
 	* @param {string} value 样式值
 	*/
 	css(name, value) {
-		if(this.canvas) {
+		if(this.canvas && this.canvas.style) {
 			if(typeof value != 'undefined') this.canvas.style[name] = value;
 			return this.canvas.style[name];
 		}

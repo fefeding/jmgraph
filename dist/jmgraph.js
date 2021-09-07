@@ -2949,7 +2949,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "css",
     value: function css(name, value) {
-      if (this.canvas) {
+      if (this.canvas && this.canvas.style) {
         if (typeof value != 'undefined') this.canvas.style[name] = value;
         return this.canvas.style[name];
       }

@@ -496,16 +496,26 @@ export default class jmGraph extends jmControl {
 		if(this.___isAutoRefreshing) return;
 		const self = this;
 		this.___isAutoRefreshing = true;
+		let requestAnimationFrameFun = null;
+		if(typeof requestAnimationFrame === 'undefined') {
+			requestAnimationFrameFun = (fun) => {
+				if(this.__requestAnimationFrameFunHandler) clearTimeout(this.__requestAnimationFrameFunHandler);
+				this.__requestAnimationFrameFunHandler = setTimeout(fun, 20);
+			};
+		}
+		else {
+			requestAnimationFrameFun = requestAnimationFrame;
+		}
 		function update() {
 			if(self.destoryed) {
 				self.___isAutoRefreshing = false;
 				return;// 已销毁
 			}
 			if(self.needUpdate) self.redraw();
-			requestAnimationFrame(update);
+			requestAnimationFrameFun(update);
 			if(callback) callback();
 		}
-		requestAnimationFrame(update);
+		requestAnimationFrameFun(update);
 		return this;
 	}
 

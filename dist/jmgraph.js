@@ -3084,9 +3084,21 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "autoRefresh",
     value: function autoRefresh(callback) {
+      var _this2 = this;
+
       if (this.___isAutoRefreshing) return;
       var self = this;
       this.___isAutoRefreshing = true;
+      var requestAnimationFrameFun = null;
+
+      if (typeof requestAnimationFrame === 'undefined') {
+        requestAnimationFrameFun = function requestAnimationFrameFun(fun) {
+          if (_this2.__requestAnimationFrameFunHandler) clearTimeout(_this2.__requestAnimationFrameFunHandler);
+          _this2.__requestAnimationFrameFunHandler = setTimeout(fun, 20);
+        };
+      } else {
+        requestAnimationFrameFun = requestAnimationFrame;
+      }
 
       function update() {
         if (self.destoryed) {
@@ -3095,11 +3107,11 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         }
 
         if (self.needUpdate) self.redraw();
-        requestAnimationFrame(update);
+        requestAnimationFrameFun(update);
         if (callback) callback();
       }
 
-      requestAnimationFrame(update);
+      requestAnimationFrameFun(update);
       return this;
     } // 销毁当前对象
 

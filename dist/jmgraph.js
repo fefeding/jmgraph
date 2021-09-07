@@ -2575,6 +2575,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     if (typeof wx != 'undefined' && wx.createCanvasContext) {
       _this.context = wx.createCanvasContext(canvas);
       canvas = wx.createSelectorQuery().select('#' + canvas);
+      _this.isWXMiniApp = true; // 微信小程序平台
     } else {
       if (typeof canvas === 'string' && typeof document != 'undefined') {
         canvas = document.getElementById(canvas);

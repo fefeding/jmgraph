@@ -59,7 +59,7 @@ export default class jmControl extends jmProperty {
 		
 		this.on = this.bind;
 		
-		this.options = params;
+		this.option = params;
 	}
 
 	//# region 定义属性

@@ -41,8 +41,13 @@ const shapes = {
 
 export default class jmGraph extends jmGraphCore {
     constructor(canvas, option, callback) {
-
+        
         const targetType = new.target;
+
+        // 合并shapes
+        option = Object.assign({}, option);
+        option.shapes = Object.assign(shapes, option.shapes||{});
+        
         //不是用new实例化的话，返回一个promise
 		if(!targetType || !(targetType.prototype instanceof jmGraphCore)) {
 			return new Promise(function(resolve, reject){				
@@ -54,12 +59,7 @@ export default class jmGraph extends jmGraphCore {
         if(typeof option == 'function') {
 			callback = option;
 			option = {};
-        }        
-        
-
-        // 合并shapes
-        option = Object.assign({}, option);
-        option.shapes = Object.assign(shapes, option.shapes||{});
+        } 
         
         super(canvas, option, callback);
     }

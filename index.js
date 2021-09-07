@@ -32,7 +32,7 @@ const shapes = {
     "line": jmLine,
     "prismatic": jmPrismatic,
     "rect": jmRect,
-    "Arrowline": jmArrowLine,
+    "arrowline": jmArrowLine,
     "image": jmImage,
     "img": jmImage,
     "label": jmLabel,

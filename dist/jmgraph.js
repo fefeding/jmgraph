@@ -169,7 +169,7 @@ var shapes = {
   "line": _jmLine.jmLine,
   "prismatic": _jmPrismatic.jmPrismatic,
   "rect": _jmRect.jmRect,
-  "Arrowline": _jmArrowLine.jmArrowLine,
+  "arrowline": _jmArrowLine.jmArrowLine,
   "image": _jmImage.jmImage,
   "img": _jmImage.jmImage,
   "label": _jmLabel.jmLabel,

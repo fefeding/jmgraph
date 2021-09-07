@@ -1576,8 +1576,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
 
         if (graph.devicePixelRatio > 0) {
-          position.x = position.offsetX = position.x * devicePixelRatio;
-          position.y = position.offsetY = position.y * devicePixelRatio;
+          position.x = position.offsetX = position.x * graph.devicePixelRatio;
+          position.y = position.offsetY = position.y * graph.devicePixelRatio;
         }
 
         args = {

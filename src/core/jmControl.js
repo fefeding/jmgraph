@@ -1110,22 +1110,22 @@ export default class jmControl extends jmProperty {
 	raiseEvent(name, args) {
 		if(this.visible === false) return ;//如果不显示则不响应事件	
 		if(!args.position) {		
-			let graph = this.graph;
+			const graph = this.graph;
 
-			let srcElement = args.srcElement || args.target;			
+			const srcElement = args.srcElement || args.target;			
 			
-			let position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置		
+			const position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置		
 
 			// 如果有指定scale高清处理，需要对坐标处理
 			// 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N    && srcElement === graph.canvas      
 			if(graph.devicePixelRatio > 0) {
-				position.x = position.offsetX = position.x * devicePixelRatio;
-				position.y = position.offsetY = position.y * devicePixelRatio;
+				position.x = position.offsetX = position.x * graph.devicePixelRatio;
+				position.y = position.offsetY = position.y * graph.devicePixelRatio;
 			}
 		
 			args = {
 				position: position,
-				button: args.button == 0||position.isTouch?1:args.button,
+				button: args.button == 0 || position.isTouch? 1: args.button,
 				keyCode: args.keyCode || args.charCode || args.which,
 				ctrlKey: args.ctrlKey,
 				cancel : false,

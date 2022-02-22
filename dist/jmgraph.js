@@ -1929,6 +1929,7 @@ var jmEvents = /*#__PURE__*/function () {
     key: "touchStart",
     value: function touchStart(evt) {
       evt = evt || window.event;
+      evt.eventName = 'touchstart';
       this.container.raiseEvent('touchstart', evt);
       var t = evt.target || evt.srcElement;
 
@@ -1941,6 +1942,7 @@ var jmEvents = /*#__PURE__*/function () {
     key: "touchMove",
     value: function touchMove(evt) {
       evt = evt || window.event;
+      evt.eventName = 'touchmove';
       this.container.raiseEvent('touchmove', evt);
       var t = evt.target || evt.srcElement;
 
@@ -1953,6 +1955,7 @@ var jmEvents = /*#__PURE__*/function () {
     key: "touchEnd",
     value: function touchEnd(evt) {
       evt = evt || window.event;
+      evt.eventName = 'touchend';
       this.container.raiseEvent('touchend', evt);
       var t = evt.target || evt.srcElement;
 
@@ -1965,6 +1968,7 @@ var jmEvents = /*#__PURE__*/function () {
     key: "touchCancel",
     value: function touchCancel(evt) {
       evt = evt || window.event;
+      evt.eventName = 'touchcancel';
       this.container.raiseEvent('touchcancel', evt);
       var t = evt.target || evt.srcElement;
 
@@ -2014,6 +2018,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
 
       this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousedown', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'mousedown';
         var r = container.raiseEvent('mousedown', evt); //if(r === false) {
         //if(evt.preventDefault) evt.preventDefault();
         //return false;
@@ -2021,6 +2026,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
       });
       this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'mousemove';
         var target = evt.target || evt.srcElement;
 
         if (target == canvas) {
@@ -2032,18 +2038,22 @@ var jmMouseEvent = /*#__PURE__*/function () {
       });
       this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'mouseover';
         container.raiseEvent('mouseover', evt);
       });
       this.eventEvents['mouseleave'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseleave', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'mouseleave';
         container.raiseEvent('mouseleave', evt);
       });
       this.eventEvents['mouseout'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseout', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'mouseout';
         container.raiseEvent('mouseout', evt);
       });
       doc && (this.eventEvents['mouseup'] = _jmUtils.jmUtils.bindEvent(doc, 'mouseup', function (evt) {
-        evt = evt || window.event; //let target = evt.target || evt.srcElement;
+        evt = evt || window.event;
+        evt.eventName = 'mouseup'; //let target = evt.target || evt.srcElement;
         //if(target == canvas) {						
 
         var r = container.raiseEvent('mouseup', evt);
@@ -2056,34 +2066,41 @@ var jmMouseEvent = /*#__PURE__*/function () {
       }));
       this.eventEvents['dblclick'] = _jmUtils.jmUtils.bindEvent(this.target, 'dblclick', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'dblclick';
         container.raiseEvent('dblclick', evt);
       });
       this.eventEvents['click'] = _jmUtils.jmUtils.bindEvent(this.target, 'click', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'click';
         container.raiseEvent('click', evt);
       });
       doc && (this.eventEvents['resize'] = _jmUtils.jmUtils.bindEvent(doc, 'resize', function (evt) {
         evt = evt || window.event;
+        evt.eventName = 'resize';
         return container.raiseEvent('resize', evt);
       })); // passive: false 为了让浏览器不告警并且preventDefault有效
       // 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 
       this.eventEvents['touchstart'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchstart', function (evt) {
+        evt.eventName = 'touchstart';
         return instance.touchStart(evt);
       }, {
         passive: false
       });
       this.eventEvents['touchmove'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchmove', function (evt) {
+        evt.eventName = 'touchmove';
         return instance.touchMove(evt);
       }, {
         passive: false
       });
       doc && (this.eventEvents['touchend'] = _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
+        evt.eventName = 'touchend';
         return instance.touchEnd(evt);
       }, {
         passive: false
       }));
       doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'touchcancel', function (evt) {
+        evt.eventName = 'touchcancel';
         return instance.touchCancel(evt);
       }, {
         passive: false
@@ -2145,7 +2162,7 @@ var jmKeyEvent = /*#__PURE__*/function () {
         return true;
       };
 
-      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
+      doc && (this.eventEvents['keypress'] = _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
@@ -2153,7 +2170,7 @@ var jmKeyEvent = /*#__PURE__*/function () {
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
       }));
-      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
+      doc && (this.eventEvents['keydown'] = _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 
@@ -2161,7 +2178,7 @@ var jmKeyEvent = /*#__PURE__*/function () {
         if (r === false && evt.preventDefault) evt.preventDefault();
         return r;
       }));
-      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
+      doc && (this.eventEvents['keyup'] = _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
         evt = evt || window.event;
         if (!checkKeyEvent(evt)) return; //如果事件为其它输入框，则不响应
 

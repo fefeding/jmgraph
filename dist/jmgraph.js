@@ -3101,21 +3101,9 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "autoRefresh",
     value: function autoRefresh(callback) {
-      var _this2 = this;
-
       if (this.___isAutoRefreshing) return;
       var self = this;
       this.___isAutoRefreshing = true;
-      var requestAnimationFrameFun = null;
-
-      if (typeof requestAnimationFrame === 'undefined') {
-        requestAnimationFrameFun = function requestAnimationFrameFun(fun) {
-          if (_this2.__requestAnimationFrameFunHandler) clearTimeout(_this2.__requestAnimationFrameFunHandler);
-          _this2.__requestAnimationFrameFunHandler = setTimeout(fun, 20);
-        };
-      } else {
-        requestAnimationFrameFun = requestAnimationFrame;
-      }
 
       function update() {
         if (self.destoryed) {
@@ -3124,11 +3112,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         }
 
         if (self.needUpdate) self.redraw();
-        requestAnimationFrameFun(update);
+        self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+        self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update);
         if (callback) callback();
       }
 
-      requestAnimationFrameFun(update);
+      self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+      self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update);
       return this;
     } // 销毁当前对象
 
@@ -4352,12 +4342,12 @@ var jmUtils = /*#__PURE__*/function () {
           p[i].y = x1 * sin + y1 * cos + rp.y;
         }
       } else {
-        var _x2 = p.x - rp.x;
+        var _x4 = p.x - rp.x;
 
         var _y = p.y - rp.y;
 
-        p.x = _x2 * cos - _y * sin + rp.x;
-        p.y = _x2 * sin + _y * cos + rp.y;
+        p.x = _x4 * cos - _y * sin + rp.x;
+        p.y = _x4 * sin + _y * cos + rp.y;
       }
 
       return p;
@@ -4624,7 +4614,46 @@ var jmUtils = /*#__PURE__*/function () {
       }
 
       return r;
-    }
+    } // window.requestAnimationFrame() 告诉浏览器——你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
+
+  }, {
+    key: "requestAnimationFrame",
+    value: function (_requestAnimationFrame) {
+      function requestAnimationFrame(_x2) {
+        return _requestAnimationFrame.apply(this, arguments);
+      }
+
+      requestAnimationFrame.toString = function () {
+        return _requestAnimationFrame.toString();
+      };
+
+      return requestAnimationFrame;
+    }(function (callback) {
+      if (typeof requestAnimationFrame === 'undefined') {
+        return setTimeout(callback, 20);
+      } else {
+        return requestAnimationFrame(callback);
+      }
+    })
+  }, {
+    key: "cancelAnimationFrame",
+    value: function (_cancelAnimationFrame) {
+      function cancelAnimationFrame(_x3) {
+        return _cancelAnimationFrame.apply(this, arguments);
+      }
+
+      cancelAnimationFrame.toString = function () {
+        return _cancelAnimationFrame.toString();
+      };
+
+      return cancelAnimationFrame;
+    }(function (handler) {
+      if (typeof requestAnimationFrame === 'undefined') {
+        return clearTimeout(handler);
+      } else {
+        return cancelAnimationFrame(handler);
+      }
+    })
   }]);
 
   return jmUtils;

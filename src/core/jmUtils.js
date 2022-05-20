@@ -169,7 +169,7 @@ export default class jmUtils {
         let isTouch = false;
         let touches = evt.changedTouches || evt.targetTouches || evt.touches;
         let target = evt.target || evt.srcElement;
-        if(touches) {
+        if(touches && touches.length) {
             evt = touches[0];//兼容touch事件
             if(!evt.target) evt.target = target;
             isTouch = true;

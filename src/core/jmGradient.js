@@ -48,7 +48,7 @@ export default class jmGradient {
 	 */
 	toGradient(control) {
 		let gradient;
-		let context = control.context || control;
+		let context = control.context2d || control.context || control;
 		let bounds = control.absoluteBounds?control.absoluteBounds:control.getAbsoluteBounds();
 		let x1 = this.x1||0;
 		let y1 = this.y1||0;

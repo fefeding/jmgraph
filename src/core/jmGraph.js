@@ -1,3 +1,5 @@
+
+import WebGL2D from '../../node_modules/webgl-2d/index.js';
 import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 import {jmProperty} from './jmProperty.js';
@@ -27,7 +29,7 @@ export default class jmGraph extends jmControl {
 		}
 	
 		option = option || {};
-		
+		option.mode = option.mode || '2d'; // webgl | 2d
 		option.interactive = true;
 		
 		super(option, 'jmGraph');
@@ -68,8 +70,13 @@ export default class jmGraph extends jmControl {
 			else {
 				this.container = canvas.parentElement;
 			}
-
-			this.context = canvas.getContext('2d');
+			if(option.mode === 'webgl') {
+				WebGL2D.enable(canvas);
+				this.context = canvas.getContext('webgl-2d');
+			}
+			else {
+				this.context = canvas.getContext('2d');
+			}
 		}
 		this.canvas = canvas;
 		this.__init(callback);

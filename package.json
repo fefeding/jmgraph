@@ -10,7 +10,9 @@
   ],
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
-  "dependencies": {},
+  "dependencies": {
+    "webgl-2d": "^1.0.1"
+  },
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",

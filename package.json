@@ -1,7 +1,7 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "3.1.89",
+  "version": "3.1.90",
   "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": [
@@ -11,7 +11,6 @@
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
   "dependencies": {
-    "webgl-2d": "^1.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",

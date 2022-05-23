@@ -2576,6 +2576,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     }
 
     option = option || {};
+    option.mode = option.mode || '2d'; // webgl | 2d
+
     option.interactive = true;
     _this = _super.call(this, option, 'jmGraph');
     _this.option = option || {};
@@ -4037,7 +4039,7 @@ var jmUtils = /*#__PURE__*/function () {
       var touches = evt.changedTouches || evt.targetTouches || evt.touches;
       var target = evt.target || evt.srcElement;
 
-      if (touches) {
+      if (touches && touches.length) {
         evt = touches[0]; //兼容touch事件
 
         if (!evt.target) evt.target = target;

@@ -1,5 +1,5 @@
 
-import WebGL2D from '../../node_modules/webgl-2d/index.js';
+import WebGL2D from '../../node_modules/webgl-2d-ctx/index.js';
 import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 import {jmProperty} from './jmProperty.js';

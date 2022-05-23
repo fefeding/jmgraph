@@ -11,7 +11,7 @@
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
   "dependencies": {
-    "webgl-2d": "^1.0.1"
+    "webgl-2d-ctx": "^1.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",

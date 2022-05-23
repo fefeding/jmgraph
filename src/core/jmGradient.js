@@ -85,7 +85,7 @@ export default class jmGradient {
 		let sx2 = Number(x2) + bounds.left;
 		let sy2 = Number(y2) + bounds.top;
 		if(this.type === 'linear') {		
-			gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);
+			context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
 		}
 		else if(this.type === 'radial') {
 			let r1 = this.r1||0;
@@ -103,16 +103,23 @@ export default class jmGradient {
 			if(context.createCircularGradient) { 
 				gradient = context.createCircularGradient(sx1, sy1, r2);
 			}
-			else {
+			else if(context.createRadialGradient) {
 				gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);	
-			}	
+			}
 		}
+		
 		//颜色渐变
-		this.stops.each(function(i,s) {	
-			let c = jmUtils.toColor(s.color);
-			//s.offset 0.0 ~ 1.0
-			gradient.addColorStop(s.offset, c);		
-		});
+		if(gradient) {
+			this.stops.each(function(i,s) {	
+				let c = jmUtils.toColor(s.color);
+				//s.offset 0.0 ~ 1.0
+				gradient && gradient.addColorStop(s.offset, c);		
+			});
+		}
+		else {
+			const s = this.stops.get(0);
+			return (s && s.color) || '#000';
+		}
 		
 		return gradient;
 	}

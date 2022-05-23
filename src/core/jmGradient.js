@@ -1,3 +1,5 @@
+
+import { Gradient } from 'spritejs';
 import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 
@@ -85,7 +87,10 @@ export default class jmGradient {
 		let sx2 = Number(x2) + bounds.left;
 		let sy2 = Number(y2) + bounds.top;
 		if(this.type === 'linear') {		
-			gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);
+			gradient = new Gradient({
+				vector: [sx1, sy1, sx2, sy2],
+				colors: this.stops
+			});
 		}
 		else if(this.type === 'radial') {
 			let r1 = this.r1||0;
@@ -98,21 +103,11 @@ export default class jmGradient {
 				r2 = jmUtils.percentToNumber(r2);
 				r2 = d * r2;
 			}	
-			//offsetLine = Math.abs(r2 - r1);//二圆半径差
-			//小程序的接口特殊
-			if(context.createCircularGradient) { 
-				gradient = context.createCircularGradient(sx1, sy1, r2);
-			}
-			else {
-				gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);	
-			}	
+			gradient = new Gradient({
+				vector: [sx1, sy1, r1, sx2, sy2, r2],
+				colors: this.stops,
+			  })
 		}
-		//颜色渐变
-		this.stops.each(function(i,s) {	
-			let c = jmUtils.toColor(s.color);
-			//s.offset 0.0 ~ 1.0
-			gradient.addColorStop(s.offset, c);		
-		});
 		
 		return gradient;
 	}

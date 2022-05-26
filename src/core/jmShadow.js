@@ -59,7 +59,7 @@ export default class jmShadow {
 		let s = this.x + ',' + this.y;
 		if(this.blur) s += ',' + this.blur;
 		if(this.color) s += ',' + this.color;
-		return s;
+		return `drop-shadow(${s})`;
 	}
 }
 

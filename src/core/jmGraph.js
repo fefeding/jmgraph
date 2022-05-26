@@ -115,7 +115,6 @@ export default class jmGraph extends jmControl {
 	set width(v) {
 		this.needUpdate = true;
 		if(this.scene) {
-			this.scene.width = v;	
 			this.resize(v);
 		}	
 		return v;
@@ -133,7 +132,6 @@ export default class jmGraph extends jmControl {
 	set height(v) {
 		this.needUpdate = true;
 		if(this.scene) {
-			this.scene.height = v;
 			this.resize(0, v);
 		}
 		return v;

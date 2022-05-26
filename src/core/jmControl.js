@@ -79,14 +79,13 @@ export default class jmControl extends jmProperty {
 	 * @type {object}
 	 */
 	get context() {
-		let s = this.__pro('context');
+		const s = this.__pro('context');
 		if(s) return s;
-		else if(this.is('jmGraph') && this.canvas) {
-			return this.context = this.canvas.getContext('2d');
+		else if(this.is('jmGraph') && this.scene) {
+			return this.scene;
 		}
-		let g = this.graph;
-		if(g) return g.context;
-		return g.canvas.getContext('2d');
+		const g = this.graph;
+		if(g && g.scene) return g.scene;
 	}
 	set context(v) {
 		return this.__pro('context', v);

@@ -7,6 +7,8 @@ import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
 
+import * as PIXI from 'pixi.js';
+
 /**
  * jmGraph画图类库
  * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
@@ -20,15 +22,13 @@ import {jmPath} from "./jmPath.js";
  */
 export default class jmGraph extends jmControl {
 
-	constructor(canvas, option, callback) {
+	constructor(container, option, callback) {
 		if(typeof option == 'function') {
 			callback = option;
 			option = {};
 		}
 	
 		option = option || {};
-		option.mode = option.mode || '2d'; // webgl | 2d
-		option.interactive = true;
 		
 		super(option, 'jmGraph');
 
@@ -45,32 +45,34 @@ export default class jmGraph extends jmControl {
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.createCanvasContext) {
-			this.context = wx.createCanvasContext(canvas);
-			canvas = wx.createSelectorQuery().select('#' + canvas);
+			this.context = wx.createCanvasContext(container);
+			container = wx.createSelectorQuery().select('#' + container);
 			this.isWXMiniApp = true;// 微信小程序平台
 		}
 		else {
-			if(typeof canvas === 'string' && typeof document != 'undefined') {
-				canvas = document.getElementById(canvas);
+			if(typeof container === 'string' && typeof document != 'undefined') {
+				container = document.getElementById(container);
 			}
-			else if(canvas.length) {
-				canvas = canvas[0];
+			else if(container.length) {
+				container = container[0];
 			}
 
-			if(canvas.tagName != 'CANVAS') {
-				this.container = canvas;
-				let cn = document.createElement('canvas');
-				canvas.appendChild(cn);
-				cn.width = canvas.offsetWidth||canvas.clientWidth;
-				cn.height = canvas.offsetHeight||canvas.clientHeight;
-				canvas = cn;
-			}	
-			else {
-				this.container = canvas.parentElement;
-			}			
-			this.context = canvas.getContext('2d');
+			const opt = {
+				backgroundColor: option.backgroundColor || '#000'
+			};
+			if(this.option.width > 0) opt.width = option.width;
+			if(this.option.height > 0) opt.height = option.height;	
+
+			this.container = container;
+			if(container.tagName === 'CANVAS') {				
+				this.container = container.parentElement;
+				opt.view = container;
+			}
+			this.app = new PIXI.Application(opt); 
+			if(container.tagName !== 'CANVAS') {	
+				container.appendChild(this.app.view);
+			}
 		}
-		this.canvas = canvas;
 		this.__init(callback);
 	}
 
@@ -86,56 +88,22 @@ export default class jmGraph extends jmControl {
 		 */
 		this.shapes = Object.assign({
 			"path": jmPath,
-		}, this.option.shapes);
+		}, this.option.shapes);		
 		
-		/**
-		 * 画控件前初始化
-		 * 为了解决一像素线条问题
-		 */
-		this.on('beginDraw', function() {	
-			this.context.translate(0.5, 0.5);
-		});
-		/**
-		 * 结束控件绘制 为了解决一像素线条问题
-		 */
-		this.on('endDraw', function() {	
-			this.context.translate(-0.5, -0.5);		
-		});
 		
-		if(this.option.width > 0) this.width = this.option.width;
-		if(this.option.height > 0) this.height = this.option.height;	
 
 		this.resize();
 
 		//绑定事件
-		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
+		//this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);
 
-		//如果指定了自动刷新
-		if(this.option.autoRefresh) {
-			this.autoRefresh();
-		}
 
 		if(callback) callback(this);		
 	}
 
-	//  重置canvas大小，并判断高清屏，画图先放大二倍
+	//  重置canvas大小
 	resize(w, h) {
-
-		const scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
-		if (scale > 1) {
-		  this.__normalSize = this.__normalSize || { width: 0, height: 0};
-		  w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
-
-		  if(w) this.__normalSize.width = w;
-		  if(h) this.__normalSize.height = h;
-
-		  this.canvas.style.width = w + "px";
-		  this.canvas.style.height = h + "px";
-		  this.canvas.height = h * scale;
-		  this.canvas.width = w *scale;
-		  this.context.scale(scale, scale);
-		  this.devicePixelRatio = scale;
-		}
+		this.app.resize();
 	}
 
 	/**
@@ -158,13 +126,12 @@ export default class jmGraph extends jmControl {
 	 * @type {number}
 	 */
 	get width() {
-		if(this.canvas) return this.canvas.width;
+		if(this.app) return this.app.stage.width;
 		return 0;
 	}
 	set width(v) {
 		this.needUpdate = true;
-		if(this.canvas) {
-			this.canvas.width = v;	
+		if(this.app) {
 			this.resize(v);
 		}	
 		return v;
@@ -176,13 +143,12 @@ export default class jmGraph extends jmControl {
 	 * @type {number}
 	 */
 	get height() {
-		if(this.canvas) return this.canvas.height;
+		if(this.app) return this.app.stage.height;
 		return 0;
 	}
 	set height(v) {
 		this.needUpdate = true;
-		if(this.canvas) {
-			this.canvas.height = v;
+		if(this.app) {
 			this.resize(0, v);
 		}
 		return v;
@@ -205,9 +171,9 @@ export default class jmGraph extends jmControl {
 	 * @return {postion} 返回定位坐标
 	 */
 	getPosition() {
-		let p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
-		p.width = this.canvas.width;
-		p.height = this.canvas.height;
+		let p = jmUtils.getElementPosition(this.app.view);
+		p.width = this.width;
+		p.height = this.height;
 		p.right = p.left + p.width;
 		p.bottom = p.top + p.height;
 		return p;
@@ -313,11 +279,7 @@ export default class jmGraph extends jmControl {
 	 * @method refresh
 	 */
 	refresh() {	
-		//加入动画，触发redraw，会导致多次refresh只redraw一次
-		/*this.animate(function() {
-			return false;
-		},100,'jmgraph_refresh');*/
-		this.redraw();
+		return false;
 	}
 
 	/**
@@ -341,48 +303,8 @@ export default class jmGraph extends jmControl {
 	 * @param {number} [h] 清除画布的高度
 	 */
 	clear(w, h) {
-		//this.canvas.width = this.canvas.width;
-		if(w && h) {
-			//this.zoomActual();//恢复比例缩放
-			this.canvas.width = w;
-			this.canvas.height = h;
-			//保留原有缩放比例
-			if(this.scaleSize) {
-				if(this.context.scale) this.context.scale(this.scaleSize.x,this.scaleSize.y);
-			}
-		}
-		else {
-			w = this.canvas.width;
-			h = this.canvas.height;
-			if(this.scaleSize) {
-				w = w / this.scaleSize.x;
-				h = h / this.scaleSize.y;
-			}
-		}
-		//如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
-		if(this.style && this.style.fill) {
-			this.points = [
-				{x:0,y:0},
-				{x:w,y:0},
-				{x:w,y:h},
-				{x:0,y:h}
-			];
-		}
-		else if(this.context.clearRect) this.context.clearRect(0,0,w,h);
-	}
-
-	/**
-	* 设置画布样式，此处只是设置其css样式
-	*
-	* @method css
-	* @param {string} name 样式名
-	* @param {string} value 样式值
-	*/
-	css(name, value) {
-		if(this.canvas && this.canvas.style) {
-			if(typeof value != 'undefined') this.canvas.style[name] = value;
-			return this.canvas.style[name];
-		}
+		console.warn('当前函数不再使用');
+		return false;
 	}
 
 	/**
@@ -459,21 +381,7 @@ export default class jmGraph extends jmControl {
 	 * @param {number} dy 缩放Y轴比例
 	 */
 	scale(dx, dy) {
-		if(!this.normalSize) {
-			this.normalSize = {
-				width: this.canvas.width,
-				height: this.canvas.height
-			};		
-		}
-		
-		this.context.scale(dx,dy);
-		if(!this.scaleSize) {
-			this.scaleSize = {x:dx,y:dy};
-		}
-		else {
-			this.scaleSize = {x:dx * this.scaleSize.x, y:dy * this.scaleSize.y};
-		}
-		this.refresh();
+		this.app.stage.setTransform(0, 0, dx, dy);
 	}
 
 	/**
@@ -483,7 +391,7 @@ export default class jmGraph extends jmControl {
 	 * @return {string} 当前画布图的base64字符串
 	 */
 	toDataURL() {
-		let data = this.canvas.toDataURL?this.canvas.toDataURL():'';
+		let data = this.app.view.toDataURL? this.app.view.toDataURL():'';
 		return data;
 	}
 
@@ -491,29 +399,14 @@ export default class jmGraph extends jmControl {
 	 * 自动刷新画版
 	 * @param {function} callback 执行回调
 	 */
-	autoRefresh(callback) {
-		if(this.___isAutoRefreshing) return;
-		const self = this;
-		this.___isAutoRefreshing = true;
-		
-		function update() {
-			if(self.destoryed) {
-				self.___isAutoRefreshing = false;
-				return;// 已销毁
-			}
-			if(self.needUpdate) self.redraw();
-			self.__requestAnimationFrameFunHandler && jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
-			self.__requestAnimationFrameFunHandler = jmUtils.requestAnimationFrame(update);
-			if(callback) callback();
-		}
-		self.__requestAnimationFrameFunHandler && jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
-		self.__requestAnimationFrameFunHandler = jmUtils.requestAnimationFrame(update);
+	autoRefresh(callback) {		
 		return this;
 	}
 
 	// 销毁当前对象
 	destory() {
-		this.eventHandler.destory();
+		this.app && this.app.destroy();
+		this.eventHandler && this.eventHandler.destory();
 		this.destoryed = true;// 标记已销毁
 	}
 }

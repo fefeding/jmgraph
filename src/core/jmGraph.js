@@ -44,8 +44,7 @@ export default class jmGraph extends jmControl {
 		this.util = this.utils = jmUtils;		
 
 		//如果是小程序
-		if(typeof wx != 'undefined' && wx.createCanvasContext) {
-			this.context = wx.createCanvasContext(canvas);
+		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
 			canvas = wx.createSelectorQuery().select('#' + canvas);
 			this.isWXMiniApp = true;// 微信小程序平台
 		}
@@ -67,9 +66,9 @@ export default class jmGraph extends jmControl {
 			}	
 			else {
 				this.container = canvas.parentElement;
-			}			
-			this.context = canvas.getContext('2d');
-		}
+			}
+		}		
+		if(!this.context) this.context = canvas.getContext('2d');
 		this.canvas = canvas;
 		this.__init(callback);
 	}

@@ -2591,8 +2591,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
     _this.util = _this.utils = _jmUtils.jmUtils; //如果是小程序
 
-    if (typeof wx != 'undefined' && wx.createCanvasContext) {
-      _this.context = wx.createCanvasContext(canvas);
+    if (typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {
       canvas = wx.createSelectorQuery().select('#' + canvas);
       _this.isWXMiniApp = true; // 微信小程序平台
     } else {
@@ -2612,10 +2611,9 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       } else {
         _this.container = canvas.parentElement;
       }
-
-      _this.context = canvas.getContext('2d');
     }
 
+    if (!_this.context) _this.context = canvas.getContext('2d');
     _this.canvas = canvas;
 
     _this.__init(callback);

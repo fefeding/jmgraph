@@ -85,43 +85,62 @@ export default class jmImage extends jmControl {
 	 */
 	draw() {	
 		try {
-			let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
-			if(!bounds) bounds = this.parent && this.parent.getAbsoluteBounds?this.parent.getAbsoluteBounds():this.getAbsoluteBounds();
-			let p = this.getLocation();
-			p.left += bounds.left;
-			p.top += bounds.top;
 			
-			let sp = this.sourcePosition;
-			let sw = this.sourceWidth;
-			let sh = this.sourceHeight;
 			let img = this.getImage();
-				
-			if(sp || typeof sw != 'undefined' || typeof sh != 'undefined') {	
-				if(typeof sw == 'undefined') sw= p.width || img.width || 0;
-				if(typeof sh == 'undefined') sh= p.height || img.height || 0;
-				sp = sp || {x:0, y:0};
-
-				if(p.width && p.height) this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
-				else if(p.width) {
-					this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,sh);
-				}		
-				else if(p.height) {
-					this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,p.height);
-				}		
-				else this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,sh);		
-			}
-			else if(p) {
-				if(p.width && p.height) this.context.drawImage(img,p.left,p.top,p.width,p.height);
-				else if(p.width) this.context.drawImage(img,p.left,p.top,p.width,img.height);
-				else if(p.height) this.context.drawImage(img,p.left,p.top,img.width,p.height);
-				else this.context.drawImage(img,p.left,p.top);
+			if(this.graph.isWXMiniApp && this.graph.canvas) {
+				// 图片对象
+				const image = this.graph.canvas.createImage();
+				// 图片加载完成回调
+				image.onload = () => {
+					// 将图片绘制到 canvas 上
+					this.drawImg(image);
+				}
+				// 设置图片src
+				image.src = img;
 			}
 			else {
-				this.context.drawImage(img);
+				this.drawImg(img);
 			}
 		}
 		catch(e) {
 			console.error && console.error(e);
+		}
+	}
+
+	// 绘制
+	drawImg(img) {
+		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+		if(!bounds) bounds = this.parent && this.parent.getAbsoluteBounds?this.parent.getAbsoluteBounds():this.getAbsoluteBounds();
+		let p = this.getLocation();
+		p.left += bounds.left;
+		p.top += bounds.top;
+
+		let sp = this.sourcePosition;
+		let sw = this.sourceWidth;
+		let sh = this.sourceHeight;
+
+		if(sp || typeof sw != 'undefined' || typeof sh != 'undefined') {	
+			if(typeof sw == 'undefined') sw= p.width || img.width || 0;
+			if(typeof sh == 'undefined') sh= p.height || img.height || 0;
+			sp = sp || {x:0, y:0};
+
+			if(p.width && p.height) this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
+			else if(p.width) {
+				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,sh);
+			}		
+			else if(p.height) {
+				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,p.height);
+			}		
+			else this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,sh);		
+		}
+		else if(p) {
+			if(p.width && p.height) this.context.drawImage(img,p.left,p.top,p.width,p.height);
+			else if(p.width) this.context.drawImage(img,p.left,p.top,p.width,img.height);
+			else if(p.height) this.context.drawImage(img,p.left,p.top,img.width,p.height);
+			else this.context.drawImage(img,p.left,p.top);
+		}
+		else {
+			this.context.drawImage(img);
 		}
 	}
 
@@ -160,7 +179,7 @@ export default class jmImage extends jmControl {
 		else if(src && src.src) {
 			this.__img = src;
 		}
-		else if(document && document.createElement) {
+		else if(typeof document !== 'undefined' && document.createElement) {
 			this.__img = document.createElement('img');
 			if(src && typeof src == 'string') this.__img.src = src;
 		}

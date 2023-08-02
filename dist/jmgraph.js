@@ -359,7 +359,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     get: function get() {
       var s = this.__pro('context');
 
-      if (s) return s;else if (this.is('jmGraph') && this.canvas) {
+      if (s) return s;else if (this.is('jmGraph') && this.canvas && this.canvas.getContext) {
         return this.context = this.canvas.getContext('2d');
       }
       var g = this.graph;
@@ -2592,7 +2592,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     _this.util = _this.utils = _jmUtils.jmUtils; //如果是小程序
 
     if (typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {
-      canvas = wx.createSelectorQuery().select('#' + canvas);
+      if (typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
       _this.isWXMiniApp = true; // 微信小程序平台
     } else {
       if (typeof canvas === 'string' && typeof document != 'undefined') {
@@ -2613,8 +2613,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       }
     }
 
-    if (!_this.context) _this.context = canvas.getContext('2d');
     _this.canvas = canvas;
+    if (!_this.context) _this.context = canvas.getContext('2d');
 
     _this.__init(callback);
 
@@ -2670,6 +2670,10 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     value: function resize(w, h) {
       var scale = typeof window != 'undefined' && window.devicePixelRatio > 1 ? window.devicePixelRatio : 1;
 
+      if (this.isWXMiniApp) {
+        scale = wx.getSystemInfoSync().pixelRatio || 1;
+      }
+
       if (scale > 1) {
         this.__normalSize = this.__normalSize || {
           width: 0,
@@ -2678,11 +2682,18 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
         if (w) this.__normalSize.width = w;
         if (h) this.__normalSize.height = h;
-        this.canvas.style.width = w + "px";
-        this.canvas.style.height = h + "px";
-        this.canvas.height = h * scale;
-        this.canvas.width = w * scale;
-        this.context.scale(scale, scale);
+
+        if (this.canvas.style) {
+          this.canvas.style.width = w + "px";
+          this.canvas.style.height = h + "px";
+          this.canvas.height = h * scale;
+          this.canvas.width = w * scale;
+          this.context.scale(scale, scale);
+        } else {
+          this.canvas.height = h;
+          this.canvas.width = w;
+        }
+
         this.devicePixelRatio = scale;
       }
     }
@@ -5762,36 +5773,58 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "draw",
     value: function draw() {
+      var _this2 = this;
+
       try {
-        var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
-        if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
-        var p = this.getLocation();
-        p.left += bounds.left;
-        p.top += bounds.top;
-        var sp = this.sourcePosition;
-        var sw = this.sourceWidth;
-        var sh = this.sourceHeight;
         var img = this.getImage();
 
-        if (sp || typeof sw != 'undefined' || typeof sh != 'undefined') {
-          if (typeof sw == 'undefined') sw = p.width || img.width || 0;
-          if (typeof sh == 'undefined') sh = p.height || img.height || 0;
-          sp = sp || {
-            x: 0,
-            y: 0
-          };
-          if (p.width && p.height) this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, p.height);else if (p.width) {
-            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, sh);
-          } else if (p.height) {
-            this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, p.height);
-          } else this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, sh);
-        } else if (p) {
-          if (p.width && p.height) this.context.drawImage(img, p.left, p.top, p.width, p.height);else if (p.width) this.context.drawImage(img, p.left, p.top, p.width, img.height);else if (p.height) this.context.drawImage(img, p.left, p.top, img.width, p.height);else this.context.drawImage(img, p.left, p.top);
+        if (this.graph.isWXMiniApp && this.graph.canvas) {
+          // 图片对象
+          var image = this.graph.canvas.createImage(); // 图片加载完成回调
+
+          image.onload = function () {
+            // 将图片绘制到 canvas 上
+            _this2.drawImg(image);
+          }; // 设置图片src
+
+
+          image.src = img;
         } else {
-          this.context.drawImage(img);
+          this.drawImg(img);
         }
       } catch (e) {
         console.error && console.error(e);
+      }
+    } // 绘制
+
+  }, {
+    key: "drawImg",
+    value: function drawImg(img) {
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
+      var p = this.getLocation();
+      p.left += bounds.left;
+      p.top += bounds.top;
+      var sp = this.sourcePosition;
+      var sw = this.sourceWidth;
+      var sh = this.sourceHeight;
+
+      if (sp || typeof sw != 'undefined' || typeof sh != 'undefined') {
+        if (typeof sw == 'undefined') sw = p.width || img.width || 0;
+        if (typeof sh == 'undefined') sh = p.height || img.height || 0;
+        sp = sp || {
+          x: 0,
+          y: 0
+        };
+        if (p.width && p.height) this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, p.height);else if (p.width) {
+          this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, sh);
+        } else if (p.height) {
+          this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, p.height);
+        } else this.context.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, sh);
+      } else if (p) {
+        if (p.width && p.height) this.context.drawImage(img, p.left, p.top, p.width, p.height);else if (p.width) this.context.drawImage(img, p.left, p.top, p.width, img.height);else if (p.height) this.context.drawImage(img, p.left, p.top, img.width, p.height);else this.context.drawImage(img, p.left, p.top);
+      } else {
+        this.context.drawImage(img);
       }
     }
     /**
@@ -5833,7 +5866,7 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
         return this.__img;
       } else if (src && src.src) {
         this.__img = src;
-      } else if (document && document.createElement) {
+      } else if (typeof document !== 'undefined' && document.createElement) {
         this.__img = document.createElement('img');
         if (src && typeof src == 'string') this.__img.src = src;
       } else {

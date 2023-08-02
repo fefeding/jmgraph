@@ -45,7 +45,7 @@ export default class jmGraph extends jmControl {
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
-			canvas = wx.createSelectorQuery().select('#' + canvas);
+			if(typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
 			this.isWXMiniApp = true;// 微信小程序平台
 		}
 		else {
@@ -67,9 +67,9 @@ export default class jmGraph extends jmControl {
 			else {
 				this.container = canvas.parentElement;
 			}
-		}		
+		}	
+		this.canvas = canvas;	
 		if(!this.context) this.context = canvas.getContext('2d');
-		this.canvas = canvas;
 		this.__init(callback);
 	}
 
@@ -120,19 +120,28 @@ export default class jmGraph extends jmControl {
 	//  重置canvas大小，并判断高清屏，画图先放大二倍
 	resize(w, h) {
 
-		const scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
+		let scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
+		if(this.isWXMiniApp) {
+			scale = wx.getSystemInfoSync().pixelRatio || 1;
+		}
 		if (scale > 1) {
 		  this.__normalSize = this.__normalSize || { width: 0, height: 0};
 		  w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
 
 		  if(w) this.__normalSize.width = w;
 		  if(h) this.__normalSize.height = h;
-
-		  this.canvas.style.width = w + "px";
-		  this.canvas.style.height = h + "px";
-		  this.canvas.height = h * scale;
-		  this.canvas.width = w *scale;
-		  this.context.scale(scale, scale);
+		
+		  if(this.canvas.style) {
+			this.canvas.style.width = w + "px";
+			this.canvas.style.height = h + "px";
+			this.canvas.height = h * scale;
+			this.canvas.width = w *scale;
+			this.context.scale(scale, scale);
+		  }
+		  else {			
+			this.canvas.height = h;
+			this.canvas.width = w;
+		  }
 		  this.devicePixelRatio = scale;
 		}
 	}

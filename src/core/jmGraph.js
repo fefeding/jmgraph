@@ -499,7 +499,7 @@ export default class jmGraph extends jmControl {
 		this.___isAutoRefreshing = true;
 		
 		function update() {
-			if(self.destoryed) {
+			if(self.destroyed) {
 				self.___isAutoRefreshing = false;
 				return;// 已销毁
 			}
@@ -514,9 +514,9 @@ export default class jmGraph extends jmControl {
 	}
 
 	// 销毁当前对象
-	destory() {
-		this.eventHandler.destory();
-		this.destoryed = true;// 标记已销毁
+	destroy() {
+		this.eventHandler.destroy();
+		this.destroyed = true;// 标记已销毁
 	}
 }
 

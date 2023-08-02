@@ -1978,11 +1978,11 @@ var jmEvents = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "destory",
+    key: "destroy",
     value: // 销毁
-    function destory() {
-      this.mouseHandler.destory();
-      this.keyHandler.destory();
+    function destroy() {
+      this.mouseHandler.destroy();
+      this.keyHandler.destroy();
     }
   }]);
 
@@ -2108,8 +2108,8 @@ var jmMouseEvent = /*#__PURE__*/function () {
     } // 销毁所有事件
 
   }, {
-    key: "destory",
-    value: function destory() {
+    key: "destroy",
+    value: function destroy() {
       for (var name in this.eventEvents) {
         var event = this.eventEvents[name];
         if (!event || !event.fun) continue;
@@ -2189,8 +2189,8 @@ var jmKeyEvent = /*#__PURE__*/function () {
     } // 销毁所有事件
 
   }, {
-    key: "destory",
-    value: function destory() {
+    key: "destroy",
+    value: function destroy() {
       for (var name in this.eventEvents) {
         var event = this.eventEvents[name];
         if (!event || !event.fun) continue;
@@ -3108,7 +3108,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       this.___isAutoRefreshing = true;
 
       function update() {
-        if (self.destoryed) {
+        if (self.destroyed) {
           self.___isAutoRefreshing = false;
           return; // 已销毁
         }
@@ -3125,10 +3125,10 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     } // 销毁当前对象
 
   }, {
-    key: "destory",
-    value: function destory() {
-      this.eventHandler.destory();
-      this.destoryed = true; // 标记已销毁
+    key: "destroy",
+    value: function destroy() {
+      this.eventHandler.destroy();
+      this.destroyed = true; // 标记已销毁
     }
   }], [{
     key: "create",

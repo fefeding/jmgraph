@@ -138,6 +138,6 @@ exports.init = function(g) {
   handler();
 }
 
-exports.destory = function () {
+exports.destroy = function () {
   if (exports.handler) clearTimeout(exports.handler);
 }

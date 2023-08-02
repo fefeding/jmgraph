@@ -171,6 +171,6 @@ function ball(graph, x, y, radius, style) {
   }
 }
 
-exports.destory = function() {
+exports.destroy = function() {
   if (exports.handler) clearTimeout(exports.handler);
 }

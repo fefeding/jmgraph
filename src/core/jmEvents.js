@@ -61,9 +61,9 @@ export default class jmEvents {
 	};
 
 	// 销毁
-	destory() {
-		this.mouseHandler.destory();
-		this.keyHandler.destory();
+	destroy() {
+		this.mouseHandler.destroy();
+		this.keyHandler.destroy();
 	}
 }
 
@@ -181,7 +181,7 @@ class jmMouseEvent {
 	}
 
 	// 销毁所有事件
-	destory() {
+	destroy() {
 		for(let name in this.eventEvents) {
 			const event = this.eventEvents[name];
 			if(!event || !event.fun) continue;
@@ -257,7 +257,7 @@ class jmKeyEvent {
 	}
 
 	// 销毁所有事件
-	destory() {
+	destroy() {
 		for(let name in this.eventEvents) {
 			const event = this.eventEvents[name];
 			if(!event || !event.fun) continue;

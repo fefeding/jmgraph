@@ -83,8 +83,8 @@ Page({
 
   changeShape: function(s) {
     this.graph.children.clear();
-    if (this.graphShape && this.graphShape.destory) {
-      this.graphShape.destory(this.graph);
+    if (this.graphShape && this.graphShape.destroy) {
+      this.graphShape.destroy(this.graph);
     }
     //切换示例
     this.graphShape = require(s);

@@ -7,7 +7,7 @@ exports.init = function(g) {
   });	
 }
 
-exports.destory = function () {
+exports.destroy = function () {
   if (exports.sort.aniTimeoutHandler) clearTimeout(exports.sort.aniTimeoutHandler);
 }
 

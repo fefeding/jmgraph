@@ -69,7 +69,7 @@ export default class jmGraph extends jmControl {
 			}
 		}	
 		this.canvas = canvas;	
-		if(!this.context) this.context = canvas.getContext('2d');
+		this.context = canvas.getContext('2d');
 		this.__init(callback);
 	}
 
@@ -124,24 +124,18 @@ export default class jmGraph extends jmControl {
 		if(this.isWXMiniApp) {
 			scale = wx.getSystemInfoSync().pixelRatio || 1;
 		}
-		if (scale > 1) {
+		else if (scale > 1) {
 		  this.__normalSize = this.__normalSize || { width: 0, height: 0};
 		  w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
 
 		  if(w) this.__normalSize.width = w;
 		  if(h) this.__normalSize.height = h;
 		
-		  if(this.canvas.style) {
-			this.canvas.style.width = w + "px";
-			this.canvas.style.height = h + "px";
-			this.canvas.height = h * scale;
-			this.canvas.width = w *scale;
-			this.context.scale(scale, scale);
-		  }
-		  else {			
-			this.canvas.height = h;
-			this.canvas.width = w;
-		  }
+		  this.canvas.style && (this.canvas.style.width = w + "px");
+		  this.canvas.style && (this.canvas.style.height = h + "px");
+		  this.canvas.height = h * scale;
+		  this.canvas.width = w *scale;
+		  this.context.scale(scale, scale);
 		  this.devicePixelRatio = scale;
 		}
 	}

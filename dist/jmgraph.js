@@ -5769,7 +5769,7 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
       try {
         var img = this.getImage();
 
-        if (this.graph.isWXMiniApp && this.graph.canvas) {
+        if (this.graph.isWXMiniApp && this.graph.canvas && typeof img === 'string') {
           // 图片对象
           var image = this.graph.canvas.createImage(); // 图片加载完成回调
 
@@ -5791,6 +5791,11 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "drawImg",
     value: function drawImg(img) {
+      if (!img) {
+        console.warn('image is empty');
+        return;
+      }
+
       var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
       if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
       var p = this.getLocation();

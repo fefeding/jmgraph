@@ -3064,8 +3064,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         if (self.needUpdate) self.redraw(); // 触发刷新事件
 
         self.emit('update');
-        self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
-        self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
+        self.__requestAnimationFrameFunHandler && self.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+        self.__requestAnimationFrameFunHandler = self.requestAnimationFrame(update);
         if (callback) callback();
       }
 

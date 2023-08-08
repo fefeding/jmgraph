@@ -894,8 +894,6 @@ export default class jmControl extends jmProperty {
 			this.emit('endDraw',this);	
 			this.context.restore();
 			
-			//兼容小程序
-			if(this.is('jmGraph') && this.context.draw) this.context.draw();
 			this.needUpdate = false;
 		}
 	}

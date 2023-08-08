@@ -499,12 +499,12 @@ export default class jmGraph extends jmControl {
 			// 触发刷新事件
 			self.emit('update');
 
-			self.__requestAnimationFrameFunHandler && jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
-			self.__requestAnimationFrameFunHandler = jmUtils.requestAnimationFrame(update, self.canvas);
+			self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+			self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
 			if(callback) callback();
 		}
-		self.__requestAnimationFrameFunHandler && jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
-		self.__requestAnimationFrameFunHandler = jmUtils.requestAnimationFrame(update, self.canvas);
+		self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+		self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
 		return this;
 	}
 

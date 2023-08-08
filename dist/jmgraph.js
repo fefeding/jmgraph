@@ -3064,13 +3064,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         if (self.needUpdate) self.redraw(); // 触发刷新事件
 
         self.emit('update');
-        self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
-        self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update, self.canvas);
+        self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+        self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
         if (callback) callback();
       }
 
-      self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
-      self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update, self.canvas);
+      self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+      self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
       return this;
     } // 销毁当前对象
 

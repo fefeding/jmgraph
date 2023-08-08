@@ -268,6 +268,31 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+//样式名称，也当做白名单使用		
+var jmStyleMap = {
+  'fill': 'fillStyle',
+  'stroke': 'strokeStyle',
+  'shadow.blur': 'shadowBlur',
+  'shadow.x': 'shadowOffsetX',
+  'shadow.y': 'shadowOffsetY',
+  'shadow.color': 'shadowColor',
+  'lineWidth': 'lineWidth',
+  'miterLimit': 'miterLimit',
+  'fillStyle': 'fillStyle',
+  'strokeStyle': 'strokeStyle',
+  'font': 'font',
+  'opacity': 'globalAlpha',
+  'textAlign': 'textAlign',
+  'textBaseline': 'textBaseline',
+  'shadowBlur': 'shadowBlur',
+  'shadowOffsetX': 'shadowOffsetX',
+  'shadowOffsetY': 'shadowOffsetY',
+  'shadowColor': 'shadowColor',
+  'lineJoin': 'lineJoin',
+  //线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
+  'lineCap': 'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+
+};
 /**
  * 控件基础对象
  * 控件的基础属性和方法
@@ -275,6 +300,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
  * @class jmControl
  * @extends jmProperty
  */
+
 var jmControl = /*#__PURE__*/function (_jmProperty) {
   _inherits(jmControl, _jmProperty);
 
@@ -301,32 +327,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0;
-    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive; //样式名称，也当做白名单使用		
-
-    _this2.jmStyleMap = {
-      'fill': 'fillStyle',
-      'stroke': 'strokeStyle',
-      'shadow.blur': 'shadowBlur',
-      'shadow.x': 'shadowOffsetX',
-      'shadow.y': 'shadowOffsetY',
-      'shadow.color': 'shadowColor',
-      'lineWidth': 'lineWidth',
-      'miterLimit': 'miterLimit',
-      'fillStyle': 'fillStyle',
-      'strokeStyle': 'strokeStyle',
-      'font': 'font',
-      'opacity': 'globalAlpha',
-      'textAlign': 'textAlign',
-      'textBaseline': 'textBaseline',
-      'shadowBlur': 'shadowBlur',
-      'shadowOffsetX': 'shadowOffsetX',
-      'shadowOffsetY': 'shadowOffsetY',
-      'shadowColor': 'shadowColor',
-      'lineJoin': 'lineJoin',
-      //线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-      'lineCap': 'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
-
-    };
+    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive;
 
     _this2.initializing();
 
@@ -683,7 +684,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
           var t = _typeof(style);
 
-          var mpname = _this3.jmStyleMap[mpkey || name]; //如果为渐变对象
+          var mpname = jmStyleMap[mpkey || name]; //如果为渐变对象
 
           if (style instanceof _jmGradient.jmGradient || t == 'string' && style.indexOf('-gradient') > -1) {
             //如果是渐变，则需要转换
@@ -1269,9 +1270,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         }
 
         this.emit('endDraw', this);
-        this.context.restore(); //兼容小程序
-
-        if (this.is('jmGraph') && this.context.draw) this.context.draw();
+        this.context.restore();
         this.needUpdate = false;
       }
     }

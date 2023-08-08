@@ -1,3 +1,5 @@
+
+import {jmUtils} from "./jmUtils.js";
 import { jmObject } from "./jmObject.js";
 
 const PROPERTY_KEY = Symbol("properties");
@@ -69,6 +71,22 @@ export default class jmProperty extends jmObject {
 	}
 	set graph(v) {
 		return this.__pro('graph', v);
+	}
+
+	/**
+	 * 在下次进行重绘时执行
+	 * @param {Function} handler 
+	 */
+	requestAnimationFrame(handler) {
+		return jmUtils.requestAnimationFrame(handler, this.graph? this.graph.canvas: null);
+	}
+	/**
+	 * 清除执行回调
+	 * @param {Function} handler 
+	 * @returns 
+	 */
+	cancelAnimationFrame(handler) {
+		return jmUtils.cancelAnimationFrame(handler, this.graph? this.graph.canvas: null);
 	}
 }
 

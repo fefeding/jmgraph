@@ -352,120 +352,93 @@ export default class jmControl extends jmProperty {
 		 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
 		 */
 		let __setStyle = (style, name, mpkey) => {
-			//let styleValue = style[mpkey||name]||style;
-			if(style) {				
-				if(typeof style === 'function') {
+			
+			if(style) {		
+				let styleValue = style;		
+				if(typeof styleValue === 'function') {
 					try {
-						style = style.call(this);
+						styleValue = styleValue.call(this);
 					}
 					catch(e) {
 						console.warn(e);
 						return;
 					}
 				}
-				let t = typeof style;	
+				let t = typeof styleValue;	
 				let mpname = jmStyleMap[mpkey || name];
 
 				//如果为渐变对象
-				if((style instanceof jmGradient) || (t == 'string' && style.indexOf('-gradient') > -1)) {
+				if((styleValue instanceof jmGradient) || (t == 'string' && styleValue.indexOf('-gradient') > -1)) {
 					//如果是渐变，则需要转换
-					if(t == 'string' && style.indexOf('-gradient') > -1) {
-						style = new jmGradient(style);
+					if(t == 'string' && styleValue.indexOf('-gradient') > -1) {
+						styleValue = new jmGradient(styleValue);
 					}
-					__setStyle(style.toGradient(this), mpname||name);	
-				}
-				else if(t == 'function') {					
-					if(mpname) {
-						style = style.call(this, mpname);
-						if(style) {
-							__setStyle(style, mpname);	
-						}
-					}
+					__setStyle(styleValue.toGradient(this), mpname||name);	
 				}
 				else if(mpname) {
 					//只有存在白名单中才处理
 					//颜色转换
 					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-						style = jmUtils.toColor(style);
+						styleValue = jmUtils.toColor(styleValue);
 					}
-
-					// 按比例需要放大的样式
-					/*if(scale && style) {
-						switch(mpname) {
-							case 'lineWidth': {
-								style *= scale;
-								break;
-							}
-							// 字体放大
-							case 'fontSize':
-							case 'font': {
-								const ms = style.toString().match(/[\d\.]+/);
-								if(ms && ms.length) {
-									const size = Number(ms[0]) * scale;
-									style = style.toString().replace(ms[0], size);
-								}
-								break;
-							}
-						}
-					}		*/			
-					this.context[mpname] = style;
+					this.context[mpname] = styleValue;
 				}	
 				else {
 					switch(name) {
 						//阴影样式
 						case 'shadow' : {
 							if(t == 'string') {
-								__setStyle(new jmShadow(style), name);
+								__setStyle(new jmShadow(styleValue), name);
 								break;
 							}
-							for(let k in style) {
-								__setStyle(style[k], k, name + '.' + k);
+							for(let k in styleValue) {
+								__setStyle(styleValue[k], k, name + '.' + k);
 							}
 							break;
 						}
 						//平移
 						case 'translate' : {
-							this.context.translate(style.x,style.y);
+							this.context.translate(styleValue.x, styleValue.y);
 							break;
 						}
 						//旋转
 						case 'rotation' : {	
-							if(!style.angle) break;							
+							if(!styleValue.angle) break;							
 							//旋 转先移位偏移量
 							let tranX = 0;
 							let tranY = 0;
 							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
 							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							if(style.point) {
+							if(styleValue.point) {
 								let bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
-								style = this.getRotation(style);
+								styleValue = this.getRotation(styleValue);
 								
-								tranX = style.rotateX + bounds.left;
-								tranY = style.rotateY + bounds.top;	
+								tranX = styleValue.rotateX + bounds.left;
+								tranY = styleValue.rotateY + bounds.top;	
 							}
 												
 							if(tranX!=0 || tranY != 0) this.context.translate(tranX,tranY);
-							this.context.rotate(style.angle);
+							this.context.rotate(styleValue.angle);
 							if(tranX!=0 || tranY != 0) this.context.translate(-tranX,-tranY);
 							break;
 						}
 						case 'transform' : {
-							if(Array.isArray(style)) {
-								this.context.transform.apply(this.context, style);
+							if(Array.isArray(styleValue)) {
+								this.context.transform.apply(this.context, styleValue);
 							}
-							else if(typeof style == 'object') {
-								this.context.transform(style.scaleX,//水平缩放
-									style.skewX,//水平倾斜
-									style.skewY,//垂直倾斜
-									style.scaleY,//垂直缩放
-									style.offsetX,//水平位移
-									style.offsetY);//垂直位移
+							else if(typeof styleValue == 'object') {
+								this.context.transform(styleValue.scaleX,//水平缩放
+								styleValue.skewX,//水平倾斜
+								styleValue.skewY,//垂直倾斜
+								styleValue.scaleY,//垂直缩放
+								styleValue.offsetX,//水平位移
+								styleValue.offsetY);//垂直位移
 							}								
 							break;
 						}
 						//鼠标指针
 						case 'cursor' : {
-							this.cursor = style;
+							this.cursor = styleValue;
 							break;
 						}
 					}							

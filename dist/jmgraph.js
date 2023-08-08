@@ -671,77 +671,50 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
        */
 
       var __setStyle = function __setStyle(style, name, mpkey) {
-        //let styleValue = style[mpkey||name]||style;
         if (style) {
-          if (typeof style === 'function') {
+          var styleValue = style;
+
+          if (typeof styleValue === 'function') {
             try {
-              style = style.call(_this3);
+              styleValue = styleValue.call(_this3);
             } catch (e) {
               console.warn(e);
               return;
             }
           }
 
-          var t = _typeof(style);
+          var t = _typeof(styleValue);
 
           var mpname = jmStyleMap[mpkey || name]; //如果为渐变对象
 
-          if (style instanceof _jmGradient.jmGradient || t == 'string' && style.indexOf('-gradient') > -1) {
+          if (styleValue instanceof _jmGradient.jmGradient || t == 'string' && styleValue.indexOf('-gradient') > -1) {
             //如果是渐变，则需要转换
-            if (t == 'string' && style.indexOf('-gradient') > -1) {
-              style = new _jmGradient.jmGradient(style);
+            if (t == 'string' && styleValue.indexOf('-gradient') > -1) {
+              styleValue = new _jmGradient.jmGradient(styleValue);
             }
 
-            __setStyle(style.toGradient(_this3), mpname || name);
-          } else if (t == 'function') {
-            if (mpname) {
-              style = style.call(_this3, mpname);
-
-              if (style) {
-                __setStyle(style, mpname);
-              }
-            }
+            __setStyle(styleValue.toGradient(_this3), mpname || name);
           } else if (mpname) {
             //只有存在白名单中才处理
             //颜色转换
             if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-              style = _jmUtils.jmUtils.toColor(style);
-            } // 按比例需要放大的样式
+              styleValue = _jmUtils.jmUtils.toColor(styleValue);
+            }
 
-            /*if(scale && style) {
-            	switch(mpname) {
-            		case 'lineWidth': {
-            			style *= scale;
-            			break;
-            		}
-            		// 字体放大
-            		case 'fontSize':
-            		case 'font': {
-            			const ms = style.toString().match(/[\d\.]+/);
-            			if(ms && ms.length) {
-            				const size = Number(ms[0]) * scale;
-            				style = style.toString().replace(ms[0], size);
-            			}
-            			break;
-            		}
-            	}
-            }		*/
-
-
-            _this3.context[mpname] = style;
+            _this3.context[mpname] = styleValue;
           } else {
             switch (name) {
               //阴影样式
               case 'shadow':
                 {
                   if (t == 'string') {
-                    __setStyle(new _jmShadow.jmShadow(style), name);
+                    __setStyle(new _jmShadow.jmShadow(styleValue), name);
 
                     break;
                   }
 
-                  for (var k in style) {
-                    __setStyle(style[k], k, name + '.' + k);
+                  for (var k in styleValue) {
+                    __setStyle(styleValue[k], k, name + '.' + k);
                   }
 
                   break;
@@ -750,7 +723,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
               case 'translate':
                 {
-                  _this3.context.translate(style.x, style.y);
+                  _this3.context.translate(styleValue.x, styleValue.y);
 
                   break;
                 }
@@ -758,22 +731,22 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
               case 'rotation':
                 {
-                  if (!style.angle) break; //旋 转先移位偏移量
+                  if (!styleValue.angle) break; //旋 转先移位偏移量
 
                   var tranX = 0;
                   var tranY = 0; //旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
                   //这里只有style中的旋转才能生效，不然会导至子控件多次旋转
 
-                  if (style.point) {
+                  if (styleValue.point) {
                     var bounds = _this3.absoluteBounds ? _this3.absoluteBounds : _this3.getAbsoluteBounds();
-                    style = _this3.getRotation(style);
-                    tranX = style.rotateX + bounds.left;
-                    tranY = style.rotateY + bounds.top;
+                    styleValue = _this3.getRotation(styleValue);
+                    tranX = styleValue.rotateX + bounds.left;
+                    tranY = styleValue.rotateY + bounds.top;
                   }
 
                   if (tranX != 0 || tranY != 0) _this3.context.translate(tranX, tranY);
 
-                  _this3.context.rotate(style.angle);
+                  _this3.context.rotate(styleValue.angle);
 
                   if (tranX != 0 || tranY != 0) _this3.context.translate(-tranX, -tranY);
                   break;
@@ -781,15 +754,15 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
               case 'transform':
                 {
-                  if (Array.isArray(style)) {
-                    _this3.context.transform.apply(_this3.context, style);
-                  } else if (_typeof(style) == 'object') {
-                    _this3.context.transform(style.scaleX, //水平缩放
-                    style.skewX, //水平倾斜
-                    style.skewY, //垂直倾斜
-                    style.scaleY, //垂直缩放
-                    style.offsetX, //水平位移
-                    style.offsetY); //垂直位移
+                  if (Array.isArray(styleValue)) {
+                    _this3.context.transform.apply(_this3.context, styleValue);
+                  } else if (_typeof(styleValue) == 'object') {
+                    _this3.context.transform(styleValue.scaleX, //水平缩放
+                    styleValue.skewX, //水平倾斜
+                    styleValue.skewY, //垂直倾斜
+                    styleValue.scaleY, //垂直缩放
+                    styleValue.offsetX, //水平位移
+                    styleValue.offsetY); //垂直位移
 
                   }
 
@@ -799,7 +772,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
               case 'cursor':
                 {
-                  _this3.cursor = style;
+                  _this3.cursor = styleValue;
                   break;
                 }
             }
@@ -3091,13 +3064,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         if (self.needUpdate) self.redraw(); // 触发刷新事件
 
         self.emit('update');
-        self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
-        self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update);
+        self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
+        self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update, self.canvas);
         if (callback) callback();
       }
 
-      self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
-      self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update);
+      self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler, self.canvas);
+      self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update, self.canvas);
       return this;
     } // 销毁当前对象
 
@@ -3591,6 +3564,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.jmProperty = exports["default"] = void 0;
 
+var _jmUtils = require("./jmUtils.js");
+
 var _jmObject2 = require("./jmObject.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3706,6 +3681,27 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
     set: function set(v) {
       return this.__pro('graph', v);
     }
+    /**
+     * 在下次进行重绘时执行
+     * @param {Function} handler 
+     */
+
+  }, {
+    key: "requestAnimationFrame",
+    value: function requestAnimationFrame(handler) {
+      return _jmUtils.jmUtils.requestAnimationFrame(handler, this.graph ? this.graph.canvas : null);
+    }
+    /**
+     * 清除执行回调
+     * @param {Function} handler 
+     * @returns 
+     */
+
+  }, {
+    key: "cancelAnimationFrame",
+    value: function cancelAnimationFrame(handler) {
+      return _jmUtils.jmUtils.cancelAnimationFrame(handler, this.graph ? this.graph.canvas : null);
+    }
   }]);
 
   return jmProperty;
@@ -3713,7 +3709,7 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
 
 exports.jmProperty = exports["default"] = jmProperty;
 
-},{"./jmObject.js":7}],10:[function(require,module,exports){
+},{"./jmObject.js":7,"./jmUtils.js":11}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4321,12 +4317,12 @@ var jmUtils = /*#__PURE__*/function () {
           p[i].y = x1 * sin + y1 * cos + rp.y;
         }
       } else {
-        var _x4 = p.x - rp.x;
+        var _x2 = p.x - rp.x;
 
         var _y = p.y - rp.y;
 
-        p.x = _x4 * cos - _y * sin + rp.x;
-        p.y = _x4 * sin + _y * cos + rp.y;
+        p.x = _x2 * cos - _y * sin + rp.x;
+        p.y = _x2 * sin + _y * cos + rp.y;
       }
 
       return p;
@@ -4597,42 +4593,16 @@ var jmUtils = /*#__PURE__*/function () {
 
   }, {
     key: "requestAnimationFrame",
-    value: function (_requestAnimationFrame) {
-      function requestAnimationFrame(_x2) {
-        return _requestAnimationFrame.apply(this, arguments);
-      }
-
-      requestAnimationFrame.toString = function () {
-        return _requestAnimationFrame.toString();
-      };
-
-      return requestAnimationFrame;
-    }(function (callback) {
-      if (typeof requestAnimationFrame === 'undefined') {
-        return setTimeout(callback, 20);
-      } else {
-        return requestAnimationFrame(callback);
-      }
-    })
+    value: function requestAnimationFrame(callback, win) {
+      var fun = win && win.requestAnimationFrame ? win.requestAnimationFrame : typeof window !== 'undefined' && window.requestAnimationFrame ? window.requestAnimationFrame : setTimeout;
+      return fun(callback, 20);
+    }
   }, {
     key: "cancelAnimationFrame",
-    value: function (_cancelAnimationFrame) {
-      function cancelAnimationFrame(_x3) {
-        return _cancelAnimationFrame.apply(this, arguments);
-      }
-
-      cancelAnimationFrame.toString = function () {
-        return _cancelAnimationFrame.toString();
-      };
-
-      return cancelAnimationFrame;
-    }(function (handler) {
-      if (typeof requestAnimationFrame === 'undefined') {
-        return clearTimeout(handler);
-      } else {
-        return cancelAnimationFrame(handler);
-      }
-    })
+    value: function cancelAnimationFrame(handler, win) {
+      var fun = win && win.cancelAnimationFrame ? win.cancelAnimationFrame : typeof window !== 'undefined' && window.cancelAnimationFrame ? window.cancelAnimationFrame : clearTimeout;
+      return fun(handler);
+    }
   }]);
 
   return jmUtils;

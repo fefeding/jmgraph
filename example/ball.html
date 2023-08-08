@@ -46,7 +46,7 @@
 			//实时更新画布
 			function update() {
 				if(graph && graph.needUpdate) graph.redraw();
-				requestAnimationFrame(update);
+				graph.utils.requestAnimationFrame(update);
 			}
 			update();
 
@@ -185,7 +185,7 @@
 						b1.y(y);						
 					}
 					graph.needUpdate = true;
-					setTimeout(animate,1);				
+					g.utils.requestAnimationFrame(animate);				
 				};
 				animate();		
 			}

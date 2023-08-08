@@ -42,7 +42,7 @@
 	//实时更新画布
 	function update() {
 		if(graph.needUpdate) graph.redraw();
-		requestAnimationFrame(update);
+		graph.requestAnimationFrame(update);
 	}
 	update();
 	

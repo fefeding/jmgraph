@@ -210,8 +210,8 @@ export default class jmGraph extends jmControl {
 	 */
 	getPosition() {
 		let p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
-		p.width = this.canvas.width;
-		p.height = this.canvas.height;
+		p.width = this.width;
+		p.height = this.height;
 		p.right = p.left + p.width;
 		p.bottom = p.top + p.height;
 		return p;

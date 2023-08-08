@@ -514,18 +514,12 @@ export default class jmControl extends jmProperty {
 			if(typeof this.canvas.width === 'function') {
 				rect.right = this.canvas.width(); 
 			}
-			else if(this.canvas.width) {
-				rect.right = this.canvas.width; 
-			}
 			else if(this.width) {
 				rect.right = this.width;
 			}
 			
 			if(typeof this.canvas.height === 'function') {
 				rect.bottom = this.canvas.height(); 
-			}
-			else if(this.canvas.height) {
-				rect.bottom = this.canvas.height; 
 			}
 			else if(this.height) {
 				rect.bottom = this.height;
@@ -1021,8 +1015,8 @@ export default class jmControl extends jmProperty {
 			//获取dom位置
 			let position = this.getPosition();
 			// 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
-			const right = position.left + (this.canvas.clientWidth || this.canvas.offsetWidth || this.canvas.width);
-			const bottom = position.top + (this.canvas.clientHeight || this.canvas.offsetHeight || this.canvas.height);
+			const right = position.left + this.width;
+			const bottom = position.top + this.height;
 			if(p.pageX > right || p.pageX < position.left) {
 				return false;
 			}

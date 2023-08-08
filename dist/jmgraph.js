@@ -852,16 +852,12 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       if (this.type == 'jmGraph' && this.canvas) {
         if (typeof this.canvas.width === 'function') {
           rect.right = this.canvas.width();
-        } else if (this.canvas.width) {
-          rect.right = this.canvas.width;
         } else if (this.width) {
           rect.right = this.width;
         }
 
         if (typeof this.canvas.height === 'function') {
           rect.bottom = this.canvas.height();
-        } else if (this.canvas.height) {
-          rect.bottom = this.canvas.height;
         } else if (this.height) {
           rect.bottom = this.height;
         }
@@ -1441,8 +1437,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         //获取dom位置
         var position = this.getPosition(); // 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
 
-        var right = position.left + (this.canvas.clientWidth || this.canvas.offsetWidth || this.canvas.width);
-        var bottom = position.top + (this.canvas.clientHeight || this.canvas.offsetHeight || this.canvas.height);
+        var right = position.left + this.width;
+        var bottom = position.top + this.height;
 
         if (p.pageX > right || p.pageX < position.left) {
           return false;
@@ -2758,8 +2754,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     function getPosition() {
       var p = _jmUtils.jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
 
-      p.width = this.canvas.width;
-      p.height = this.canvas.height;
+      p.width = this.width;
+      p.height = this.height;
       p.right = p.left + p.width;
       p.bottom = p.top + p.height;
       return p;

@@ -100,11 +100,19 @@ export default class jmGraph extends jmControl {
 		this.on('endDraw', function() {	
 			this.context.translate(-0.5, -0.5);		
 		});
-		
+
+		// devicePixelRatio初始化
+		let dpr = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
+		if(this.isWXMiniApp) {
+			dpr = wx.getSystemInfoSync().pixelRatio || 1;
+		}		
+		this.devicePixelRatio = dpr;
+		// 为了解决锯齿问题，先放大canvas再缩放
+		this.dprScaleSize = this.devicePixelRatio > 1? this.devicePixelRatio : 2;
+
 		if(this.option.width > 0) this.width = this.option.width;
 		if(this.option.height > 0) this.height = this.option.height;	
-
-		this.resize();
+		this.resize();		
 
 		//绑定事件
 		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
@@ -119,25 +127,19 @@ export default class jmGraph extends jmControl {
 
 	//  重置canvas大小，并判断高清屏，画图先放大二倍
 	resize(w, h) {
+		if(!this.canvas) return;
 
-		let scale = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
-		if(this.isWXMiniApp) {
-			scale = wx.getSystemInfoSync().pixelRatio || 1;
-		}
-		else if (scale > 1) {
-		  this.__normalSize = this.__normalSize || { width: 0, height: 0};
-		  w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
+		this.__normalSize = this.__normalSize || { width: 0, height: 0};
+		w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
 
-		  if(w) this.__normalSize.width = w;
-		  if(h) this.__normalSize.height = h;
-		
-		  this.canvas.style && (this.canvas.style.width = w + "px");
-		  this.canvas.style && (this.canvas.style.height = h + "px");
-		  this.canvas.height = h * scale;
-		  this.canvas.width = w *scale;
-		  this.context.scale(scale, scale);
-		  this.devicePixelRatio = scale;
-		}
+		if(w) this.__normalSize.width = w;
+		if(h) this.__normalSize.height = h;
+	
+		this.css('width', w + "px");
+		this.css('height', h + "px");
+		this.canvas.height = h * this.dprScaleSize;
+		this.canvas.width = w * this.dprScaleSize;
+		this.context.scale(this.dprScaleSize, this.dprScaleSize);	
 	}
 
 	/**
@@ -145,10 +147,10 @@ export default class jmGraph extends jmControl {
 	 * @param {x, y} point 内部坐标
 	 */
 	pointToPixes(point) {
-		if(this.devicePixelRatio && this.devicePixelRatio !== 1) {
+		if(this.dprScaleSize && this.dprScaleSize !== 1) {
 			point = Object.assign({}, point, {
-				x: point.x / this.devicePixelRatio,
-				y: point.y / this.devicePixelRatio
+				x: point.x / this.dprScaleSize,
+				y: point.y / this.dprScaleSize
 			});
 		}
 		return point;
@@ -160,13 +162,13 @@ export default class jmGraph extends jmControl {
 	 * @type {number}
 	 */
 	get width() {
+		if(this.__normalSize && this.__normalSize.width) return this.__normalSize.width;
 		if(this.canvas) return this.canvas.width;
 		return 0;
 	}
 	set width(v) {
 		this.needUpdate = true;
 		if(this.canvas) {
-			this.canvas.width = v;	
 			this.resize(v);
 		}	
 		return v;
@@ -178,13 +180,13 @@ export default class jmGraph extends jmControl {
 	 * @type {number}
 	 */
 	get height() {
+		if(this.__normalSize && this.__normalSize.height) return this.__normalSize.height;
 		if(this.canvas) return this.canvas.height;
 		return 0;
 	}
 	set height(v) {
 		this.needUpdate = true;
 		if(this.canvas) {
-			this.canvas.height = v;
 			this.resize(0, v);
 		}
 		return v;
@@ -343,23 +345,13 @@ export default class jmGraph extends jmControl {
 	 * @param {number} [h] 清除画布的高度
 	 */
 	clear(w, h) {
-		//this.canvas.width = this.canvas.width;
-		if(w && h) {
-			//this.zoomActual();//恢复比例缩放
-			this.canvas.width = w;
-			this.canvas.height = h;
-			//保留原有缩放比例
-			if(this.scaleSize) {
-				if(this.context.scale) this.context.scale(this.scaleSize.x,this.scaleSize.y);
-			}
-		}
-		else {
-			w = this.canvas.width;
-			h = this.canvas.height;
-			if(this.scaleSize) {
+		if(!w || !h) {
+			w = this.width;
+			h = this.height;
+			/*if(this.scaleSize) {
 				w = w / this.scaleSize.x;
 				h = h / this.scaleSize.y;
-			}
+			}*/
 		}
 		//如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
 		if(this.style && this.style.fill) {
@@ -504,6 +496,9 @@ export default class jmGraph extends jmControl {
 				return;// 已销毁
 			}
 			if(self.needUpdate) self.redraw();
+			// 触发刷新事件
+			self.emit('update');
+
 			self.__requestAnimationFrameFunHandler && jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
 			self.__requestAnimationFrameFunHandler = jmUtils.requestAnimationFrame(update);
 			if(callback) callback();

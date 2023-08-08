@@ -1,43 +1,46 @@
 
 
 //游戏主体文件
-//要注册交互事件前，一定要把显示对象的interactive和buttonMode属性设为true。
 (function(win, doc){
     var width = win.innerWidth;
     var height = win.innerHeight;
     var gameState = 'init';//游戏状态，init=等待开始，play=进行中,pause=暂停, end=已结束
     var maxScore = 520;//最高得分
     var startButton = null;
-    var tempSprites = [];//临时的精灵，很快就会消失的   
+    var tempSprites = [];//临时的精灵，很快就会消失的  
     var resources = new resourcesLoader(); 
     
-    resources.add('love', "img/love.json", {
-            crossOrigin: true
-        }).load(function(){
-            //初始化jmgraph
-			var g = jmGraph.create('mycanvas', {
-                width: width,
-                height: height,
-                style: {
-                    fill: '#fff'
-                }
-            })			
-            init(g);
-            
-            var lastUpdateTime = Date.now();
-            var stepTime = 1000 / 60;
-            //实时更新画布
-            function update() {
-                var delta = Date.now() - lastUpdateTime - stepTime;
-                lastUpdateTime = Date.now();
-                gameLoop(delta);
-                if(g.needUpdate) g.redraw();
-                requestAnimationFrame(update);
-                
+    load(function(){
+        //初始化jmgraph
+        var g = jmGraph.create('mycanvas', {
+            width: width,
+            height: height,
+            autoRefresh: true,
+            style: {
+                fill: '#fff'
             }
-            update();
-			
-        });
+        })			
+        init(g);
+        
+        var lastUpdateTime = Date.now();
+        var stepTime = 1000 / 60;
+        g.on('update', function(){
+            var delta = Date.now() - lastUpdateTime - stepTime;
+            lastUpdateTime = Date.now();
+            gameLoop(delta);
+        });			
+    });
+    
+    //资源加载
+    function load(callback) {
+        resources.add('map_background1', 'img/bg_1-min.jpg')
+        .add('qq', "img/qq.json?201902132001")
+        .add('love', "img/love.json?201902132001")
+        .add('bling', "img/bling.json?201902132001")
+        .load(callback);
+        //异步调用音乐加载
+        //loadSounds();
+    }
 
     //游戏渲染逻辑
     function gameLoop(delta) {
@@ -66,7 +69,7 @@
     function init(g) {
         var loveRes = resources.cache['love'].textures;
         if(!startButton) {
-            startButton = new sprite(g, loveRes['start.png']);
+            startButton = new sprite(g, loveRes['start_tap.png']);
             
             startButton.position = {x:(width-startButton.width)/2, y: (height-startButton.height)/2};
 
@@ -88,7 +91,7 @@
             vy: 6,
             init: function(g, res){
                 if(!this.sprite) {                    
-                    this.sprite = new sprite(g, res['heart.png']);
+                    this.sprite = new sprite(g, res['qq_head.png']);
                     g.children.add(this.sprite);
                 }
                 this.sprite.position = {x: (width - this.sprite.width)/2, y:height - this.sprite.height};
@@ -431,6 +434,7 @@
         }
         function resourceLoader() {
             this.loadQueue = [];
+            this.isComplete = false;
         }
         //添加加载任务
         resourceLoader.prototype.add = function(name, url) {
@@ -447,7 +451,11 @@
             return this;
         }
         resourceLoader.prototype.load = function(callback){            
-            load(this.loadQueue, 0, callback);
+            load(this.loadQueue, 0, ()=>{
+                this.isComplete = true;
+                callback && callback.call(this);
+            });
+            return this;
         }
 
 

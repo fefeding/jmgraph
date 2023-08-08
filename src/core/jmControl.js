@@ -341,9 +341,6 @@ export default class jmControl extends jmProperty {
 		style = style || jmUtils.clone(this.style, true);
 		if(!style) return;
 
-		// 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大
-		let scale = this.graph.devicePixelRatio;
-
 		/**
 		 * 样式设定
 		 * 
@@ -393,7 +390,7 @@ export default class jmControl extends jmProperty {
 					}
 
 					// 按比例需要放大的样式
-					if(scale && style) {
+					/*if(scale && style) {
 						switch(mpname) {
 							case 'lineWidth': {
 								style *= scale;
@@ -410,7 +407,7 @@ export default class jmControl extends jmProperty {
 								break;
 							}
 						}
-					}					
+					}		*/			
 					this.context[mpname] = style;
 				}	
 				else {
@@ -592,10 +589,10 @@ export default class jmControl extends jmProperty {
 		local.height = this.height;
 
 		let margin = jmUtils.clone(this.style.margin, {});
-		margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
-		margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
-		margin.right = (margin.right || 0) * this.graph.devicePixelRatio;
-		margin.bottom = (margin.bottom || 0) * this.graph.devicePixelRatio;
+		margin.left = (margin.left || 0);
+		margin.top = (margin.top || 0);
+		margin.right = (margin.right || 0);
+		margin.bottom = (margin.bottom || 0);
 		
 		//如果没有指定位置，但指定了margin。则位置取margin偏移量
 		if(local.position) {
@@ -1114,14 +1111,7 @@ export default class jmControl extends jmProperty {
 
 			const srcElement = args.srcElement || args.target;			
 			
-			const position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置		
-
-			// 如果有指定scale高清处理，需要对坐标处理
-			// 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N    && srcElement === graph.canvas      
-			if(graph.devicePixelRatio > 0) {
-				position.x = position.offsetX = position.x * graph.devicePixelRatio;
-				position.y = position.offsetY = position.y * graph.devicePixelRatio;
-			}
+			const position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置
 		
 			args = {
 				position: position,

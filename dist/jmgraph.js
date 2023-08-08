@@ -657,9 +657,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       var _this3 = this;
 
       style = style || _jmUtils.jmUtils.clone(this.style, true);
-      if (!style) return; // 当前根据屏幕放大倍数，如果有倍数，则需要对线宽等同比放大
-
-      var scale = this.graph.devicePixelRatio;
+      if (!style) return;
       /**
        * 样式设定
        * 
@@ -709,30 +707,25 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
               style = _jmUtils.jmUtils.toColor(style);
             } // 按比例需要放大的样式
 
+            /*if(scale && style) {
+            	switch(mpname) {
+            		case 'lineWidth': {
+            			style *= scale;
+            			break;
+            		}
+            		// 字体放大
+            		case 'fontSize':
+            		case 'font': {
+            			const ms = style.toString().match(/[\d\.]+/);
+            			if(ms && ms.length) {
+            				const size = Number(ms[0]) * scale;
+            				style = style.toString().replace(ms[0], size);
+            			}
+            			break;
+            		}
+            	}
+            }		*/
 
-            if (scale && style) {
-              switch (mpname) {
-                case 'lineWidth':
-                  {
-                    style *= scale;
-                    break;
-                  }
-                // 字体放大
-
-                case 'fontSize':
-                case 'font':
-                  {
-                    var ms = style.toString().match(/[\d\.]+/);
-
-                    if (ms && ms.length) {
-                      var size = Number(ms[0]) * scale;
-                      style = style.toString().replace(ms[0], size);
-                    }
-
-                    break;
-                  }
-              }
-            }
 
             _this3.context[mpname] = style;
           } else {
@@ -946,10 +939,10 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
       var margin = _jmUtils.jmUtils.clone(this.style.margin, {});
 
-      margin.left = (margin.left || 0) * this.graph.devicePixelRatio;
-      margin.top = (margin.top || 0) * this.graph.devicePixelRatio;
-      margin.right = (margin.right || 0) * this.graph.devicePixelRatio;
-      margin.bottom = (margin.bottom || 0) * this.graph.devicePixelRatio; //如果没有指定位置，但指定了margin。则位置取margin偏移量
+      margin.left = margin.left || 0;
+      margin.top = margin.top || 0;
+      margin.right = margin.right || 0;
+      margin.bottom = margin.bottom || 0; //如果没有指定位置，但指定了margin。则位置取margin偏移量
 
       if (local.position) {
         local.left = local.position.x;
@@ -1570,15 +1563,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         var graph = this.graph;
         var srcElement = args.srcElement || args.target;
 
-        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize); //初始化事件位置		
-        // 如果有指定scale高清处理，需要对坐标处理
-        // 因为是对canvas放大N倍，再把style指定为当前大小，所以坐标需要放大N    && srcElement === graph.canvas      
+        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize); //初始化事件位置
 
-
-        if (graph.devicePixelRatio > 0) {
-          position.x = position.offsetX = position.x * graph.devicePixelRatio;
-          position.y = position.offsetY = position.y * graph.devicePixelRatio;
-        }
 
         args = {
           position: position,
@@ -2651,7 +2637,17 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
 
       this.on('endDraw', function () {
         this.context.translate(-0.5, -0.5);
-      });
+      }); // devicePixelRatio初始化
+
+      var dpr = typeof window != 'undefined' && window.devicePixelRatio > 1 ? window.devicePixelRatio : 1;
+
+      if (this.isWXMiniApp) {
+        dpr = wx.getSystemInfoSync().pixelRatio || 1;
+      }
+
+      this.devicePixelRatio = dpr; // 为了解决锯齿问题，先放大canvas再缩放
+
+      this.dprScaleSize = this.devicePixelRatio > 1 ? this.devicePixelRatio : 2;
       if (this.option.width > 0) this.width = this.option.width;
       if (this.option.height > 0) this.height = this.option.height;
       this.resize(); //绑定事件
@@ -2668,25 +2664,19 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "resize",
     value: function resize(w, h) {
-      var scale = typeof window != 'undefined' && window.devicePixelRatio > 1 ? window.devicePixelRatio : 1;
-
-      if (this.isWXMiniApp) {
-        scale = wx.getSystemInfoSync().pixelRatio || 1;
-      } else if (scale > 1) {
-        this.__normalSize = this.__normalSize || {
-          width: 0,
-          height: 0
-        };
-        w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
-        if (w) this.__normalSize.width = w;
-        if (h) this.__normalSize.height = h;
-        this.canvas.style && (this.canvas.style.width = w + "px");
-        this.canvas.style && (this.canvas.style.height = h + "px");
-        this.canvas.height = h * scale;
-        this.canvas.width = w * scale;
-        this.context.scale(scale, scale);
-        this.devicePixelRatio = scale;
-      }
+      if (!this.canvas) return;
+      this.__normalSize = this.__normalSize || {
+        width: 0,
+        height: 0
+      };
+      w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
+      if (w) this.__normalSize.width = w;
+      if (h) this.__normalSize.height = h;
+      this.css('width', w + "px");
+      this.css('height', h + "px");
+      this.canvas.height = h * this.dprScaleSize;
+      this.canvas.width = w * this.dprScaleSize;
+      this.context.scale(this.dprScaleSize, this.dprScaleSize);
     }
     /**
      * 内部坐标转为页面坐标，这里主要是有devicePixelRatio倍数问题
@@ -2696,10 +2686,10 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "pointToPixes",
     value: function pointToPixes(point) {
-      if (this.devicePixelRatio && this.devicePixelRatio !== 1) {
+      if (this.dprScaleSize && this.dprScaleSize !== 1) {
         point = Object.assign({}, point, {
-          x: point.x / this.devicePixelRatio,
-          y: point.y / this.devicePixelRatio
+          x: point.x / this.dprScaleSize,
+          y: point.y / this.dprScaleSize
         });
       }
 
@@ -2714,6 +2704,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "width",
     get: function get() {
+      if (this.__normalSize && this.__normalSize.width) return this.__normalSize.width;
       if (this.canvas) return this.canvas.width;
       return 0;
     },
@@ -2721,7 +2712,6 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       this.needUpdate = true;
 
       if (this.canvas) {
-        this.canvas.width = v;
         this.resize(v);
       }
 
@@ -2736,6 +2726,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "height",
     get: function get() {
+      if (this.__normalSize && this.__normalSize.height) return this.__normalSize.height;
       if (this.canvas) return this.canvas.height;
       return 0;
     },
@@ -2743,7 +2734,6 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       this.needUpdate = true;
 
       if (this.canvas) {
-        this.canvas.height = v;
         this.resize(0, v);
       }
 
@@ -2921,23 +2911,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "clear",
     value: function clear(w, h) {
-      //this.canvas.width = this.canvas.width;
-      if (w && h) {
-        //this.zoomActual();//恢复比例缩放
-        this.canvas.width = w;
-        this.canvas.height = h; //保留原有缩放比例
-
-        if (this.scaleSize) {
-          if (this.context.scale) this.context.scale(this.scaleSize.x, this.scaleSize.y);
-        }
-      } else {
-        w = this.canvas.width;
-        h = this.canvas.height;
-
-        if (this.scaleSize) {
-          w = w / this.scaleSize.x;
-          h = h / this.scaleSize.y;
-        }
+      if (!w || !h) {
+        w = this.width;
+        h = this.height;
+        /*if(this.scaleSize) {
+        	w = w / this.scaleSize.x;
+        	h = h / this.scaleSize.y;
+        }*/
       } //如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
 
 
@@ -3113,7 +3093,9 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
           return; // 已销毁
         }
 
-        if (self.needUpdate) self.redraw();
+        if (self.needUpdate) self.redraw(); // 触发刷新事件
+
+        self.emit('update');
         self.__requestAnimationFrameFunHandler && _jmUtils.jmUtils.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
         self.__requestAnimationFrameFunHandler = _jmUtils.jmUtils.requestAnimationFrame(update);
         if (callback) callback();

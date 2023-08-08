@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+		<!--<script type="text/javascript" src="../index.js"></script>
+		<script type="text/javascript" src="../dist/jmGraph.min.js"></script>	-->
+		<style>
+		html,body {
+			margin:0;
+			padding:0;
+			width:100%;
+			height:100%;
+			overflow: hidden;
+		}
+		#mycanvas {
+			background-color:#000;
+			position: absolute;	
+		}
+		</style>
+
+	</head>
+	<body>
+		<canvas id="mycanvas" width="300" height="200">
+			</canvas>	
+		<script>
+            var mycanvas = document.getElementById('mycanvas');
+            var w = mycanvas.width;
+            var h = mycanvas.height;
+            
+
+            var ctx = mycanvas.getContext('2d');
+            function resize(w, h) {
+                var size = 3;
+                mycanvas.width = w * size;
+                mycanvas.height = h * size;
+
+                mycanvas.style.width = w + 'px';
+                mycanvas.style.height = h + 'px';
+                ctx.scale(size, size);
+            }
+
+            resize(w, h); resize(w, h); resize(w, h); resize(w, h); resize(w, h);
+
+
+            ctx.fillStyle = "rgb(200,0,0)";
+            //绘制矩形
+            ctx.fillRect (100, 50, 55, 50);
+        
+            ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+            ctx.fillRect (150, 80, 55, 50);
+        </script>
+	</body>
+</html>

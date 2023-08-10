@@ -2548,6 +2548,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     if (typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {
       if (typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
       _this.isWXMiniApp = true; // 微信小程序平台
+
+      _this.container = canvas;
     } else {
       if (typeof canvas === 'string' && typeof document != 'undefined') {
         canvas = document.getElementById(canvas);

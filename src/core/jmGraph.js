@@ -47,6 +47,7 @@ export default class jmGraph extends jmControl {
 		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
 			if(typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
 			this.isWXMiniApp = true;// 微信小程序平台
+			this.container = canvas;
 		}
 		else {
 			if(typeof canvas === 'string' && typeof document != 'undefined') {

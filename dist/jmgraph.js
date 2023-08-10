@@ -3892,10 +3892,13 @@ var jmUtils = /*#__PURE__*/function () {
         if (source.__proto__) target.__proto__ = source.__proto__;
 
         for (var k in source) {
-          if (k === 'constructor') continue; // 如果不是对象和空，则采用target的属性
+          if (k === 'constructor') continue;
+          var v = source[k]; // 不复制页面元素和class对象
+
+          if (v && (v.tagName || v.getContext)) continue; // 如果不是对象和空，则采用target的属性
 
           if (_typeof(target[k]) === 'object' || typeof target[k] === 'undefined') {
-            target[k] = this.clone(source[k], target[k], deep, copyHandler, deepIndex);
+            target[k] = this.clone(v, target[k], deep, copyHandler, deepIndex);
           }
         }
 

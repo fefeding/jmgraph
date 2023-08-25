@@ -31,7 +31,9 @@
 
 <script type="module">
 		import jmGraph from "../index.js";
-			var graph = new jmGraph('mycanvas');
+			var graph = new jmGraph('mycanvas', {
+				mode: 'webgl'
+			});
 			//初始化jmgraph
 			/*jmGraph('mycanvas').then((g)=>{
 				graph = g;

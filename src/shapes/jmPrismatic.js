@@ -26,11 +26,11 @@ export default class jmPrismatic extends jmPath {
 	 * @type {point}
 	 */
 	get center() {
-		return this.__pro('center');
+		return this.property('center');
 	}
 	set center(v) {
 		this.needUpdate = true;
-		return this.__pro('center', v);
+		return this.property('center', v);
 	}
 	
 	/**

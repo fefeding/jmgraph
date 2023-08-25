@@ -27,11 +27,11 @@ export default class jmBezier extends jmPath {
 	 * @type {array}
 	 */
 	get cpoints() {
-		return this.__pro('cpoints');
+		return this.property('cpoints');
 	}
 	set cpoints(v) {
 		this.needUpdate = true;
-		return this.__pro('cpoints', v);
+		return this.property('cpoints', v);
 	}
 	
 	/**

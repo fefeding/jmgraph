@@ -32,11 +32,11 @@ export default class jmLabel extends jmControl {
 	 * @type {string}
 	 */
 	get text() {
-		return this.__pro('text');
+		return this.property('text');
 	}
 	set text(v) {
 		this.needUpdate = true;
-		return this.__pro('text', v);
+		return this.property('text', v);
 	}
 
 	/**
@@ -46,11 +46,11 @@ export default class jmLabel extends jmControl {
 	 * @type {point}
 	 */
 	get center() {
-		return this.__pro('center');
+		return this.property('center');
 	}
 	set center(v) {
 		this.needUpdate = true;
-		return this.__pro('center', v);
+		return this.property('center', v);
 	}	
 
 	/**
@@ -59,11 +59,11 @@ export default class jmLabel extends jmControl {
 	 * @type {point}
 	 */
 	get position() {
-		return this.__pro('position');
+		return this.property('position');
 	}
 	set position(v) {
 		this.needUpdate = true;
-		return this.__pro('position', v);
+		return this.property('position', v);
 	}
 
 	/**

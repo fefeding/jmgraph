@@ -25,11 +25,11 @@ export default class jmLine extends jmPath {
 	 * @type {point}
 	 */
 	get start() {
-		return this.__pro('start');
+		return this.property('start');
 	}
 	set start(v) {
 		this.needUpdate = true;
-		return this.__pro('start', v);
+		return this.property('start', v);
 	}
 
 	/**
@@ -40,11 +40,11 @@ export default class jmLine extends jmPath {
 	 * @type {point}
 	 */
 	get end() {
-		return this.__pro('end');
+		return this.property('end');
 	}
 	set end(v) {
 		this.needUpdate = true;
-		return this.__pro('end', v);
+		return this.property('end', v);
 	}
 
 	/**

@@ -26,10 +26,10 @@ export default class jmResize extends jmRect {
 	 * @type {number}
 	 */
 	get rectSize() {
-		return this.__pro('rectSize');
+		return this.property('rectSize');
 	}
 	set rectSize(v) {
-		return this.__pro('rectSize', v);
+		return this.property('rectSize', v);
 	}
 
 	/**
@@ -38,10 +38,10 @@ export default class jmResize extends jmRect {
 	 * @type {boolean}
 	 */
 	get resizable() {
-		return this.__pro('resizable');
+		return this.property('resizable');
 	}
 	set resizable(v) {
-		return this.__pro('resizable', v);
+		return this.property('resizable', v);
 	}
 
 	/**

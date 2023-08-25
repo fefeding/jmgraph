@@ -24,11 +24,11 @@ export default class jmHArc extends jmArc {
 	 * @type {number} 
 	 */
 	get minRadius() {
-		return this.__pro('minRadius');
+		return this.property('minRadius');
 	}
 	set minRadius(v) {
 		this.needUpdate = true;
-		return this.__pro('minRadius', v);
+		return this.property('minRadius', v);
 	}
 
 	/**
@@ -39,11 +39,11 @@ export default class jmHArc extends jmArc {
 	 * @type {number} 
 	 */
 	get maxRadius() {
-		return this.__pro('maxRadius');
+		return this.property('maxRadius');
 	}
 	set maxRadius(v) {
 		this.needUpdate = true;
-		return this.__pro('maxRadius', v);
+		return this.property('maxRadius', v);
 	}
 
 	/**

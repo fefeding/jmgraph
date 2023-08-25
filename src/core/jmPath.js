@@ -23,12 +23,12 @@ export default class jmPath extends jmControl {
 	 * @type {array}
 	 */
 	get points() {
-		let s = this.__pro('points');
+		let s = this.property('points');
 		return s;
 	}
 	set points(v) {
 		this.needUpdate = true;
-		return this.__pro('points', v);
+		return this.property('points', v);
 	}
 }
 

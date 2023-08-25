@@ -29,10 +29,10 @@ export default class jmImage extends jmControl {
 	 * @type {point}
 	 */
 	get sourcePosition() {
-		return this.__pro('sourcePosition');
+		return this.property('sourcePosition');
 	}
 	set sourcePosition(v) {
-		return this.__pro('sourcePosition', v);
+		return this.property('sourcePosition', v);
 	}
 
 	/**
@@ -42,11 +42,11 @@ export default class jmImage extends jmControl {
 	 * @type {number}
 	 */
 	get sourceWidth() {
-		return this.__pro('sourceWidth');
+		return this.property('sourceWidth');
 	}
 	set sourceWidth(v) {
 		this.needUpdate = true;
-		return this.__pro('sourceWidth', v);
+		return this.property('sourceWidth', v);
 	}
 
 	/**
@@ -56,11 +56,11 @@ export default class jmImage extends jmControl {
 	 * @type {number}
 	 */
 	get sourceHeight() {
-		return this.__pro('sourceHeight');
+		return this.property('sourceHeight');
 	}
 	set sourceHeight(v) {
 		this.needUpdate = true;
-		return this.__pro('sourceHeight', v);
+		return this.property('sourceHeight', v);
 	}
 
 	/**
@@ -70,11 +70,11 @@ export default class jmImage extends jmControl {
 	 * @type {img}
 	 */
 	get image() {
-		return this.__pro('image');
+		return this.property('image');
 	}
 	set image(v) {
 		this.needUpdate = true;
-		return this.__pro('image', v);
+		return this.property('image', v);
 	}
 
 	/**

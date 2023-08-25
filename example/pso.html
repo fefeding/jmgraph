@@ -10,6 +10,7 @@
 			padding:0;
 			width:100%;
 			height:100%;
+            background-color: #000;
 			overflow: hidden;
 		}
 		#pso {
@@ -28,7 +29,8 @@
 
     const graph = new jmGraph('pso', {
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
+        autoRefresh: true
     });    
 
     function createItems(count) {
@@ -58,7 +60,7 @@
                     x: Math.random() * graph.width,
                     y: Math.random() * graph.height
                 };
-            let shape = graph.createShape('arc',{style: styletmp, center: pos, radius: radius, anticlockwise:true});
+            let shape = graph.createShape('circle',{style: styletmp, center: pos, radius: radius, anticlockwise:true});
             graph.children.add(shape);
             items.push({
                 velocity:{
@@ -107,12 +109,13 @@
     };
     
     function startPso(items) {  
-        items = items || createItems(200);      
+        items = items || createItems(500);      
         const gBest = pso.gBest(items, curPos);
         for(let i = 0;i < items.length;i++){
             items[i].velocity = pso.velocity(items[i].present, gBest, items[i].present, items[i].velocity);
             items[i].present = pso.present(items[i].velocity, items[i].present);
         }
+        graph.needUpdate = true;
     }
     
     const items = createItems(1000); 
@@ -120,21 +123,25 @@
     //实时更新画布
     function update() {
         startPso(items);
-        graph.redraw();
         setTimeout(()=>{
-            requestAnimationFrame(update);
+            graph.requestAnimationFrame(update);
         }, 50);
     }
-    update();
+    graph.requestAnimationFrame(update);
 
-    graph.on('mousemove', (e) => {
+    graph.on('mousedown mousemove', (e) => {
         curPos.x = e.position.x;
         curPos.y = e.position.y;
     });
-    graph.on('touchmove', (e) => {
+    graph.on('touchstart touchmove', (e) => {
         curPos.x = e.position.x;
         curPos.y = e.position.y;
     });
+
+    setInterval(()=>{
+        curPos.x = Math.random() * graph.width;
+        curPos.y = Math.random() * graph.height;
+    }, 1000);
 </script>
 </body>
 </html>

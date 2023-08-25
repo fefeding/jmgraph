@@ -24,11 +24,11 @@ export default class jmRect extends jmPath {
 	 * @type {number}
 	 */
 	get radius() {
-		return this.__pro('radius');
+		return this.property('radius');
 	}
 	set radius(v) {
 		this.needUpdate = true;
-		return this.__pro('radius', v);
+		return this.property('radius', v);
 	}	
 
 	/**
@@ -37,11 +37,11 @@ export default class jmRect extends jmPath {
 	 * @type {point}
 	 */
 	get position() {
-		return this.__pro('position');
+		return this.property('position');
 	}
 	set position(v) {
 		this.needUpdate = true;
-		return this.__pro('position', v);
+		return this.property('position', v);
 	}
 
 	/**

@@ -41,7 +41,7 @@ export default class jmControl extends jmProperty {
 	constructor(params, t) {
 		params = params||{};
 		super();
-		this.__pro('type', t || new.target.name);
+		this.property('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
@@ -70,7 +70,7 @@ export default class jmControl extends jmProperty {
 	 * @type string
 	 */
 	get type() {
-		return this.__pro('type');
+		return this.property('type');
 	}
 
 	/**
@@ -79,7 +79,7 @@ export default class jmControl extends jmProperty {
 	 * @type {object}
 	 */
 	get context() {
-		let s = this.__pro('context');
+		let s = this.property('context');
 		if(s) return s;
 		else if(this.is('jmGraph') && this.canvas && this.canvas.getContext) {
 			return this.context = this.canvas.getContext('2d');
@@ -89,7 +89,7 @@ export default class jmControl extends jmProperty {
 		return g.canvas.getContext('2d');
 	}
 	set context(v) {
-		return this.__pro('context', v);
+		return this.property('context', v);
 	}
 
 	/**
@@ -98,13 +98,13 @@ export default class jmControl extends jmProperty {
 	 * @type {object}
 	 */
 	get style() {
-		let s = this.__pro('style');
-		if(!s) s = this.__pro('style', {});
+		let s = this.property('style');
+		if(!s) s = this.property('style', {});
 		return s;
 	}
 	set style(v) {
 		this.needUpdate = true;
-		return this.__pro('style', v);
+		return this.property('style', v);
 	}
 
 	/**
@@ -114,13 +114,13 @@ export default class jmControl extends jmProperty {
 	 * @type {boolean}
 	 */
 	get visible() {
-		let s = this.__pro('visible');
-		if(typeof s == 'undefined') s = this.__pro('visible', true);
+		let s = this.property('visible');
+		if(typeof s == 'undefined') s = this.property('visible', true);
 		return s;
 	}
 	set visible(v) {
 		this.needUpdate = true;
-		return this.__pro('visible', v);
+		return this.property('visible', v);
 	}	
 
 	/**
@@ -131,11 +131,11 @@ export default class jmControl extends jmProperty {
 	 * @type {boolean}
 	 */
 	get interactive() {
-		let s = this.__pro('interactive');
+		let s = this.property('interactive');
 		return s;
 	}
 	set interactive(v) {
-		return this.__pro('interactive', v);
+		return this.property('interactive', v);
 	}
 		
 	/**
@@ -144,13 +144,13 @@ export default class jmControl extends jmProperty {
 	 * @type {list}
 	 */
 	get children() {
-		let s = this.__pro('children');
-		if(!s) s = this.__pro('children', new jmList());
+		let s = this.property('children');
+		if(!s) s = this.property('children', new jmList());
 		return s;
 	}
 	set children(v) {
 		this.needUpdate = true;
-		return this.__pro('children', v);
+		return this.property('children', v);
 	}
 
 	/**
@@ -159,13 +159,13 @@ export default class jmControl extends jmProperty {
 	 * @type {number}
 	 */
 	get width() {
-		let s = this.__pro('width');
-		if(typeof s == 'undefined') s = this.__pro('width', 0);
+		let s = this.property('width');
+		if(typeof s == 'undefined') s = this.property('width', 0);
 		return s;
 	}
 	set width(v) {
 		this.needUpdate = true;
-		return this.__pro('width', v);
+		return this.property('width', v);
 	}
 
 	/**
@@ -174,13 +174,13 @@ export default class jmControl extends jmProperty {
 	 * @type {number}
 	 */
 	get height() {
-		let s = this.__pro('height');
-		if(typeof s == 'undefined') s = this.__pro('height', 0);
+		let s = this.property('height');
+		if(typeof s == 'undefined') s = this.property('height', 0);
 		return s;
 	}
 	set height(v) {
 		this.needUpdate = true;
-		return this.__pro('height', v);
+		return this.property('height', v);
 	}
 
 	/**
@@ -189,13 +189,13 @@ export default class jmControl extends jmProperty {
 	 * @type {number}
 	 */
 	get zIndex() {
-		let s = this.__pro('zIndex');
-		if(!s) s = this.__pro('zIndex', 0);
+		let s = this.property('zIndex');
+		if(!s) s = this.property('zIndex', 0);
 		return s;
 	}
 	set zIndex(v) {
 		this.needUpdate = true;
-		this.__pro('zIndex', v);
+		this.property('zIndex', v);
 		this.children.sort();//层级发生改变，需要重新排序
 		this.needUpdate = true;
 		return v;

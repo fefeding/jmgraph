@@ -29,11 +29,11 @@ export default class jmArrow extends jmPath {
 	 * @type {point}
 	 */
 	get start() {
-		return this.__pro('start');
+		return this.property('start');
 	}
 	set start(v) {
 		this.needUpdate = true;
-		return this.__pro('start', v);
+		return this.property('start', v);
 	}
 
 	/**
@@ -44,11 +44,11 @@ export default class jmArrow extends jmPath {
 	 * @type {point} 结束点
 	 */
 	get end() {
-		return this.__pro('end');
+		return this.property('end');
 	}
 	set end(v) {
 		this.needUpdate = true;
-		return this.__pro('end', v);
+		return this.property('end', v);
 	}
 
 	/**
@@ -59,11 +59,11 @@ export default class jmArrow extends jmPath {
 	 * @type {number} 箭头角度
 	 */
 	get angle() {
-		return this.__pro('angle');
+		return this.property('angle');
 	}
 	set angle(v) {
 		this.needUpdate = true;
-		return this.__pro('angle', v);
+		return this.property('angle', v);
 	}
 
 	/**
@@ -74,11 +74,11 @@ export default class jmArrow extends jmPath {
 	 * @type {number}
 	 */
 	get offsetX() {
-		return this.__pro('offsetX');
+		return this.property('offsetX');
 	}
 	set offsetX(v) {
 		this.needUpdate = true;
-		return this.__pro('offsetX', v);
+		return this.property('offsetX', v);
 	}
 
 	/**
@@ -89,11 +89,11 @@ export default class jmArrow extends jmPath {
 	 * @type {number}
 	 */
 	get offsetY() {
-		return this.__pro('offsetY');
+		return this.property('offsetY');
 	}
 	set offsetY(v) {
 		this.needUpdate = true;
-		return this.__pro('offsetY', v);
+		return this.property('offsetY', v);
 	}
 
 	/**

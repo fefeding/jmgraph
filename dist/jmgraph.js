@@ -314,7 +314,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     params = params || {};
     _this2 = _super.call(this);
 
-    _this2.__pro('type', t || (this instanceof jmControl ? this.constructor : void 0).name);
+    _this2.property('type', t || (this instanceof jmControl ? this.constructor : void 0).name);
 
     _this2.style = params && params.style ? params.style : {}; //this.position = params.position || {x:0,y:0};
 
@@ -347,7 +347,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   _createClass(jmControl, [{
     key: "type",
     get: function get() {
-      return this.__pro('type');
+      return this.property('type');
     }
     /**
      * 当前canvas的context
@@ -358,8 +358,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "context",
     get: function get() {
-      var s = this.__pro('context');
-
+      var s = this.property('context');
       if (s) return s;else if (this.is('jmGraph') && this.canvas && this.canvas.getContext) {
         return this.context = this.canvas.getContext('2d');
       }
@@ -368,7 +367,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       return g.canvas.getContext('2d');
     },
     set: function set(v) {
-      return this.__pro('context', v);
+      return this.property('context', v);
     }
     /**
      * 样式
@@ -379,14 +378,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "style",
     get: function get() {
-      var s = this.__pro('style');
-
-      if (!s) s = this.__pro('style', {});
+      var s = this.property('style');
+      if (!s) s = this.property('style', {});
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('style', v);
+      return this.property('style', v);
     }
     /**
      * 当前控件是否可见
@@ -398,14 +396,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "visible",
     get: function get() {
-      var s = this.__pro('visible');
-
-      if (typeof s == 'undefined') s = this.__pro('visible', true);
+      var s = this.property('visible');
+      if (typeof s == 'undefined') s = this.property('visible', true);
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('visible', v);
+      return this.property('visible', v);
     }
     /**
      * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
@@ -418,12 +415,11 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "interactive",
     get: function get() {
-      var s = this.__pro('interactive');
-
+      var s = this.property('interactive');
       return s;
     },
     set: function set(v) {
-      return this.__pro('interactive', v);
+      return this.property('interactive', v);
     }
     /**
      * 当前控件的子控件集合
@@ -434,14 +430,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "children",
     get: function get() {
-      var s = this.__pro('children');
-
-      if (!s) s = this.__pro('children', new _jmList.jmList());
+      var s = this.property('children');
+      if (!s) s = this.property('children', new _jmList.jmList());
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('children', v);
+      return this.property('children', v);
     }
     /**
      * 宽度
@@ -452,14 +447,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "width",
     get: function get() {
-      var s = this.__pro('width');
-
-      if (typeof s == 'undefined') s = this.__pro('width', 0);
+      var s = this.property('width');
+      if (typeof s == 'undefined') s = this.property('width', 0);
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('width', v);
+      return this.property('width', v);
     }
     /**
      * 高度
@@ -470,14 +464,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "height",
     get: function get() {
-      var s = this.__pro('height');
-
-      if (typeof s == 'undefined') s = this.__pro('height', 0);
+      var s = this.property('height');
+      if (typeof s == 'undefined') s = this.property('height', 0);
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('height', v);
+      return this.property('height', v);
     }
     /**
      * 控件层级关系，发生改变时，需要重新调整排序
@@ -488,16 +481,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
   }, {
     key: "zIndex",
     get: function get() {
-      var s = this.__pro('zIndex');
-
-      if (!s) s = this.__pro('zIndex', 0);
+      var s = this.property('zIndex');
+      if (!s) s = this.property('zIndex', 0);
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-
-      this.__pro('zIndex', v);
-
+      this.property('zIndex', v);
       this.children.sort(); //层级发生改变，需要重新排序
 
       this.needUpdate = true;
@@ -3353,14 +3343,12 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var ANICOUNTER = Symbol('jmchart#animate#counter');
 /**
  *  所有jm对象的基础对象
  * 
  * @class jmObject
  * @for jmGraph
  */
-
 var jmObject = /*#__PURE__*/function () {
   //id;
   function jmObject(g) {
@@ -3541,13 +3529,12 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
   _createClass(jmPath, [{
     key: "points",
     get: function get() {
-      var s = this.__pro('points');
-
+      var s = this.property('points');
       return s;
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('points', v);
+      return this.property('points', v);
     }
   }]);
 
@@ -3615,7 +3602,7 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
   }
   /**
    * 基础属性读写接口
-   * @method __pro
+   * @method property
    * @param {string} name 属性名
    * @param {any} value 属性的值
    * @returns {any} 属性的值
@@ -3623,8 +3610,8 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
 
 
   _createClass(jmProperty, [{
-    key: "__pro",
-    value: function __pro() {
+    key: "property",
+    value: function property() {
       for (var _len = arguments.length, pars = new Array(_len), _key = 0; _key < _len; _key++) {
         pars[_key] = arguments[_key];
       }
@@ -3642,7 +3629,7 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
           pros[name] = pars[1];
           if (this.emit) this.emit('propertyChange', name, args);
           return pars[1];
-        } else if (pars.length == 1) {
+        } else if (name) {
           return pros[name];
         }
       }
@@ -3656,11 +3643,10 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
   }, {
     key: "needUpdate",
     get: function get() {
-      return this.__pro('needUpdate');
+      return this.property('needUpdate');
     },
     set: function set(v) {
-      this.__pro('needUpdate', v); //子控件属性改变，需要更新整个画板
-
+      this.property('needUpdate', v); //子控件属性改变，需要更新整个画板
 
       if (v && !this.is('jmGraph') && this.graph) {
         this.graph.needUpdate = true;
@@ -3675,13 +3661,12 @@ var jmProperty = /*#__PURE__*/function (_jmObject) {
   }, {
     key: "graph",
     get: function get() {
-      var g = this.__pro('graph');
-
-      g = g || this.__pro('graph', this.findParent('jmGraph'));
+      var g = this.property('graph');
+      g = g || this.property('graph', this.findParent('jmGraph'));
       return g;
     },
     set: function set(v) {
-      return this.__pro('graph', v);
+      return this.property('graph', v);
     }
     /**
      * 在下次进行重绘时执行
@@ -4690,11 +4675,11 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
   _createClass(jmArc, [{
     key: "center",
     get: function get() {
-      return this.__pro('center');
+      return this.property('center');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('center', v);
+      return this.property('center', v);
     }
     /**
      * 半径
@@ -4705,11 +4690,11 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "radius",
     get: function get() {
-      return this.__pro('radius');
+      return this.property('radius');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('radius', v);
+      return this.property('radius', v);
     }
     /**
      * 扇形起始角度
@@ -4720,11 +4705,11 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "startAngle",
     get: function get() {
-      return this.__pro('startAngle');
+      return this.property('startAngle');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('startAngle', v);
+      return this.property('startAngle', v);
     }
     /**
      * 扇形结束角度
@@ -4735,11 +4720,11 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "endAngle",
     get: function get() {
-      return this.__pro('endAngle');
+      return this.property('endAngle');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('endAngle', v);
+      return this.property('endAngle', v);
     }
     /**
      * 可选。规定应该逆时针还是顺时针绘图
@@ -4751,11 +4736,11 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "anticlockwise",
     get: function get() {
-      return this.__pro('anticlockwise');
+      return this.property('anticlockwise');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('anticlockwise', v);
+      return this.property('anticlockwise', v);
     }
     /**
      * 初始化图形点
@@ -4899,11 +4884,11 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
   _createClass(jmArrow, [{
     key: "start",
     get: function get() {
-      return this.__pro('start');
+      return this.property('start');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('start', v);
+      return this.property('start', v);
     }
     /**
      * 控制结束点
@@ -4916,11 +4901,11 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "end",
     get: function get() {
-      return this.__pro('end');
+      return this.property('end');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('end', v);
+      return this.property('end', v);
     }
     /**
      * 箭头角度
@@ -4933,11 +4918,11 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "angle",
     get: function get() {
-      return this.__pro('angle');
+      return this.property('angle');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('angle', v);
+      return this.property('angle', v);
     }
     /**
      * 箭头X偏移量
@@ -4950,11 +4935,11 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "offsetX",
     get: function get() {
-      return this.__pro('offsetX');
+      return this.property('offsetX');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('offsetX', v);
+      return this.property('offsetX', v);
     }
     /**
      * 箭头Y偏移量
@@ -4967,11 +4952,11 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "offsetY",
     get: function get() {
-      return this.__pro('offsetY');
+      return this.property('offsetY');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('offsetY', v);
+      return this.property('offsetY', v);
     }
     /**
      * 初始化图形点
@@ -5209,11 +5194,11 @@ var jmBezier = /*#__PURE__*/function (_jmPath) {
   _createClass(jmBezier, [{
     key: "cpoints",
     get: function get() {
-      return this.__pro('cpoints');
+      return this.property('cpoints');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('cpoints', v);
+      return this.property('cpoints', v);
     }
     /**
      * 初始化图形点
@@ -5492,11 +5477,11 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
   _createClass(jmHArc, [{
     key: "minRadius",
     get: function get() {
-      return this.__pro('minRadius');
+      return this.property('minRadius');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('minRadius', v);
+      return this.property('minRadius', v);
     }
     /**
      * 设定或获取外空心圆半径
@@ -5509,11 +5494,11 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
   }, {
     key: "maxRadius",
     get: function get() {
-      return this.__pro('maxRadius');
+      return this.property('maxRadius');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('maxRadius', v);
+      return this.property('maxRadius', v);
     }
     /**
      * 初始化图形点
@@ -5653,10 +5638,10 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   _createClass(jmImage, [{
     key: "sourcePosition",
     get: function get() {
-      return this.__pro('sourcePosition');
+      return this.property('sourcePosition');
     },
     set: function set(v) {
-      return this.__pro('sourcePosition', v);
+      return this.property('sourcePosition', v);
     }
     /**
      * 被剪切宽度
@@ -5668,11 +5653,11 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "sourceWidth",
     get: function get() {
-      return this.__pro('sourceWidth');
+      return this.property('sourceWidth');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('sourceWidth', v);
+      return this.property('sourceWidth', v);
     }
     /**
      * 被剪切高度
@@ -5684,11 +5669,11 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "sourceHeight",
     get: function get() {
-      return this.__pro('sourceHeight');
+      return this.property('sourceHeight');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('sourceHeight', v);
+      return this.property('sourceHeight', v);
     }
     /**
      * 设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
@@ -5700,11 +5685,11 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "image",
     get: function get() {
-      return this.__pro('image');
+      return this.property('image');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('image', v);
+      return this.property('image', v);
     }
     /**
      * 重写控件绘制
@@ -5907,11 +5892,11 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
   _createClass(jmLabel, [{
     key: "text",
     get: function get() {
-      return this.__pro('text');
+      return this.property('text');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('text', v);
+      return this.property('text', v);
     }
     /**
      * 中心点
@@ -5923,11 +5908,11 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "center",
     get: function get() {
-      return this.__pro('center');
+      return this.property('center');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('center', v);
+      return this.property('center', v);
     }
     /**
      * 当前位置左上角
@@ -5938,11 +5923,11 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "position",
     get: function get() {
-      return this.__pro('position');
+      return this.property('position');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('position', v);
+      return this.property('position', v);
     }
     /**
      * 在基础的getLocation上，再加上一个特殊的center处理
@@ -6207,11 +6192,11 @@ var jmLine = /*#__PURE__*/function (_jmPath) {
   _createClass(jmLine, [{
     key: "start",
     get: function get() {
-      return this.__pro('start');
+      return this.property('start');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('start', v);
+      return this.property('start', v);
     }
     /**
      * 控制结束点
@@ -6224,11 +6209,11 @@ var jmLine = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "end",
     get: function get() {
-      return this.__pro('end');
+      return this.property('end');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('end', v);
+      return this.property('end', v);
     }
     /**
      * 初始化图形点,如呆为虚线则根据跳跃间隔描点
@@ -6357,11 +6342,11 @@ var jmPrismatic = /*#__PURE__*/function (_jmPath) {
   _createClass(jmPrismatic, [{
     key: "center",
     get: function get() {
-      return this.__pro('center');
+      return this.property('center');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('center', v);
+      return this.property('center', v);
     }
     /**
      * 初始化图形点
@@ -6473,11 +6458,11 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
   _createClass(jmRect, [{
     key: "radius",
     get: function get() {
-      return this.__pro('radius');
+      return this.property('radius');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('radius', v);
+      return this.property('radius', v);
     }
     /**
      * 当前位置左上角
@@ -6488,11 +6473,11 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
   }, {
     key: "position",
     get: function get() {
-      return this.__pro('position');
+      return this.property('position');
     },
     set: function set(v) {
       this.needUpdate = true;
-      return this.__pro('position', v);
+      return this.property('position', v);
     }
     /**
      * 获取当前控件的边界
@@ -6738,10 +6723,10 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
   _createClass(jmResize, [{
     key: "rectSize",
     get: function get() {
-      return this.__pro('rectSize');
+      return this.property('rectSize');
     },
     set: function set(v) {
-      return this.__pro('rectSize', v);
+      return this.property('rectSize', v);
     }
     /**
      * 是否可以拉大缩小
@@ -6752,10 +6737,10 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
   }, {
     key: "resizable",
     get: function get() {
-      return this.__pro('resizable');
+      return this.property('resizable');
     },
     set: function set(v) {
-      return this.__pro('resizable', v);
+      return this.property('resizable', v);
     }
     /**
      * 初始化控件的8个拉伸方框

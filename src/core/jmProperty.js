@@ -21,23 +21,23 @@ export default class jmProperty extends jmObject {
 
 	/**
 	 * 基础属性读写接口
-	 * @method __pro
+	 * @method property
 	 * @param {string} name 属性名
 	 * @param {any} value 属性的值
 	 * @returns {any} 属性的值
 	 */
-	__pro(...pars) {
+	 property(...pars) {
 		if(pars) {
-			let pros = this[PROPERTY_KEY];
-			let name = pars[0];
+			const pros = this[PROPERTY_KEY];
+			const name = pars[0];
 			if(pars.length > 1) {
-				let value = pars[1];
-				let args = {oldValue: pros[name], newValue: value};
+				const value = pars[1];
+				const args = {oldValue: pros[name], newValue: value};
 				pros[name] = pars[1];
 				if(this.emit) this.emit('propertyChange', name, args);
 				return pars[1];
 			}
-			else if(pars.length == 1) {
+			else if(name) {
 				return pros[name];
 			}
 		}
@@ -49,10 +49,10 @@ export default class jmProperty extends jmObject {
 	 * @type {boolean}
 	 */
 	get needUpdate() {
-		return this.__pro('needUpdate');
+		return this.property('needUpdate');
 	}
 	set needUpdate(v) {
-		this.__pro('needUpdate', v);
+		this.property('needUpdate', v);
 		//子控件属性改变，需要更新整个画板
 		if(v && !this.is('jmGraph') && this.graph) {
 			this.graph.needUpdate = true;
@@ -65,12 +65,12 @@ export default class jmProperty extends jmObject {
 	 * @type {jmGraph}
 	 */
 	get graph() {
-		let g = this.__pro('graph');
-		g = g || (this.__pro('graph', this.findParent('jmGraph')));
+		let g = this.property('graph');
+		g = g || (this.property('graph', this.findParent('jmGraph')));
 		return g;
 	}
 	set graph(v) {
-		return this.__pro('graph', v);
+		return this.property('graph', v);
 	}
 
 	/**

@@ -30,11 +30,11 @@ export default class jmArc extends jmPath {
 	 * @type {point}
 	 */
 	get center() {
-		return this.__pro('center');
+		return this.property('center');
 	}
 	set center(v) {
 		this.needUpdate = true;
-		return this.__pro('center', v);
+		return this.property('center', v);
 	}
 
 	/**
@@ -43,11 +43,11 @@ export default class jmArc extends jmPath {
 	 * @type {number}
 	 */
 	get radius() {
-		return this.__pro('radius');
+		return this.property('radius');
 	}
 	set radius(v) {
 		this.needUpdate = true;
-		return this.__pro('radius', v);
+		return this.property('radius', v);
 	}
 
 	/**
@@ -56,11 +56,11 @@ export default class jmArc extends jmPath {
 	 * @type {number}
 	 */
 	get startAngle() {
-		return this.__pro('startAngle');
+		return this.property('startAngle');
 	}
 	set startAngle(v) {
 		this.needUpdate = true;
-		return this.__pro('startAngle', v);
+		return this.property('startAngle', v);
 	}
 
 	/**
@@ -69,11 +69,11 @@ export default class jmArc extends jmPath {
 	 * @type {number}
 	 */
 	get endAngle() {
-		return this.__pro('endAngle');
+		return this.property('endAngle');
 	}
 	set endAngle(v) {
 		this.needUpdate = true;
-		return this.__pro('endAngle', v);
+		return this.property('endAngle', v);
 	}
 
 	/**
@@ -83,11 +83,11 @@ export default class jmArc extends jmPath {
 	 * @type {boolean}
 	 */
 	get anticlockwise() {
-		return this.__pro('anticlockwise');
+		return this.property('anticlockwise');
 	}
 	set anticlockwise(v) {
 		this.needUpdate = true;
-		return this.__pro('anticlockwise', v);
+		return this.property('anticlockwise', v);
 	}
 
 

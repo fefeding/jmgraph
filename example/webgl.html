@@ -102,7 +102,7 @@
         gl.clearColor(0, 1, 1, 1) // 设置清空颜色缓冲时的颜色值
         gl.clear(gl.COLOR_BUFFER_BIT) // 清空颜色缓冲区，也就是清空画布
 
-        gl.drawArrays( // 从数组中绘制图元
+        /*gl.drawArrays( // 从数组中绘制图元
             gl.TRIANGLES, // 渲染三角形
             0,  // 从数组中哪个点开始渲染
             3   // 需要用到多少个点，三角形的三个顶点
@@ -111,6 +111,10 @@
             gl.TRIANGLES, // 渲染三角形
             3,  // 从数组中哪个点开始渲染
             3   // 需要用到多少个点，三角形的三个顶点
-        );
+        );*/
+        gl.drawArrays(gl.LINE_LOOP, 0, 3);
+        gl.drawArrays(gl.LINE_STRIP, 3, 3);
+        gl.drawArrays(gl.TRIANGLE_FAN, 2, 3);
+        
     </script>
   </body>

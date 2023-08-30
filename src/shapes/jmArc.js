@@ -1,4 +1,5 @@
 import {jmPath} from "../core/jmPath.js";
+
 /**
  * 圆弧图型 继承自jmPath
  *
@@ -137,7 +138,7 @@ export default class jmArc extends jmPath {
 			if(step > 0 && r > end) r = end;
 			else if(step < 0 && r < end) r = end;
 
-			let p = {
+			const p = {
 				x : Math.cos(r) * mw + cx,
 				y : Math.sin(r) * mh + cy
 			};

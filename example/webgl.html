@@ -5,9 +5,17 @@
     <script type="module">
         import {
             createProgram,
-            extractAttributes,
-            extractUniforms
+            writeVertexAttrib
         } from '../src/lib/webgl/program.js';
+
+        import {
+            createFloat32Buffer,
+            deleteBuffer,
+        } from '../src/lib/webgl/buffer.js';
+
+        import {
+            create2DTexture
+        } from '../src/lib/webgl/texture.js';
 
       //获取画布元素
       var cvs = document.getElementById('cvs');
@@ -42,13 +50,8 @@
         }
         `);
        //texture2D(uSample, vTextCoord)
-        const attrs = extractAttributes(gl, program);
-        const uniforms = extractUniforms(gl, program);
 
-        if(uniforms.u_color) {
-        //const colorLocation = gl.getUniformLocation(program, 'u_color') // 获取 u_color 变量位置
-            gl.uniform4f(uniforms.u_color.location, 0.93, 0.2, 0.56, 0.4) // 设置它的值
-        }
+        
 
         const colors = [Math.random(),Math.random(),Math.random(),1];
        const points = [];
@@ -87,74 +90,27 @@
         points.push(points[lastLen], points[lastLen+1]);
         colors.push(...colorStop);*/
 
+        if(program.uniforms.u_color) {
+        //const colorLocation = gl.getUniformLocation(program.program, 'u_color') // 获取 u_color 变量位置
+            gl.uniform4f(program.uniforms.u_color.location, 0.93, 0.2, 0.56, 0.4) // 设置它的值
+        }
         
-        // 将这个顶点缓冲对象绑定到 gl.ARRAY_BUFFER
-        // 后续对 gl.ARRAY_BUFFER 的操作都会映射到这个缓存
-        const vertices = new Float32Array(points);
-        
-        // 将顶点数据加入的刚刚创建的缓存对象
-
         //先创建一个缓存对象
-      var vertexBuffer = gl.createBuffer()
-      //说明缓存对象保存的类型
-      gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-      //写入坐标数据
-      gl.bufferData(gl.ARRAY_BUFFER, vertices,  // 三角形的三个顶点
-            // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-            gl.STATIC_DRAW // 表示缓冲区的内容不会经常更改
-        )
-
-        //获取到数组中单个元素的字节数
-      var FSIZE = vertices.BYTES_PER_ELEMENT
-
-      
-
-
-       // const positionLocation = gl.getAttribLocation(program, 'a_position') 
-        // 开启 attribute 变量，使顶点着色器能够访问缓冲区数据
-        gl.vertexAttribPointer( // 告诉 OpenGL 如何从 Buffer 中获取数据
-            attrs.a_position.location, // 顶点属性的索引
-            2, // 组成数量，必须是1，2，3或4。我们只提供了 x 和 y
-            gl.FLOAT, // 每个元素的数据类型
-            false, // 是否归一化到特定的范围，对 FLOAT 类型数据设置无效
-            2*FSIZE, // stride 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
-            0 // offset 字节偏移量，必须是类型的字节长度的倍数。
-        )
-        gl.enableVertexAttribArray(attrs.a_position.location);
+      var vertexBuffer = createFloat32Buffer(gl, points); 
+      writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 2, 0);
+      //deleteBuffer(gl, vertexBuffer);
 
          //先创建一个缓存对象
-        var colorBuffer = gl.createBuffer()
-        //说明缓存对象保存的类型
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-        var colorArr = new Float32Array(colors);
-            //写入坐标数据
-        gl.bufferData(gl.ARRAY_BUFFER, colorArr,  // 三角形的三个顶点
-                // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-                gl.STATIC_DRAW // 表示缓冲区的内容不会经常更改
-            )
-
-        //const vColorLocation = gl.getAttribLocation(program, 'aColor') 
-        //gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.93, 0.2, 0.56, 1]), gl.STATIC_DRAW)
-        //gl.vertexAttribPointer(vColorLocation, 4, gl.FLOAT, false, 0, 0)
-        gl.vertexAttribPointer(attrs.aColor.location, 4, gl.FLOAT, false, 4*colorArr.BYTES_PER_ELEMENT, 0)
-        gl.enableVertexAttribArray(attrs.aColor.location)
-
-        
+        var colorBuffer = createFloat32Buffer(gl, colors); 
+        writeVertexAttrib(gl, colorBuffer, program.attrs.aColor, 4, 4, 0);
+        //deleteBuffer(gl, colorBuffer);
         //const aTextCoord = gl.getAttribLocation(program, 'aTextCoord');
         //const uSample = gl.getUniformLocation(program, 'uSample');
 
         //先创建一个缓存对象
-        var textCoordBuffer = gl.createBuffer()
-        //说明缓存对象保存的类型
-        gl.bindBuffer(gl.ARRAY_BUFFER, textCoordBuffer);
-        var uvArr = new Float32Array(uvpoints);
-            //写入坐标数据
-        gl.bufferData(gl.ARRAY_BUFFER, uvArr, 
-                // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-                gl.STATIC_DRAW // 表示缓冲区的内容不会经常更改
-            )
-        gl.vertexAttribPointer(attrs.aTextCoord.location, 2, gl.FLOAT, false, 2*uvArr.BYTES_PER_ELEMENT, 0)
-        gl.enableVertexAttribArray(attrs.aTextCoord.location)
+        var textCoordBuffer = createFloat32Buffer(gl, uvpoints); 
+        writeVertexAttrib(gl, textCoordBuffer, program.attrs.aTextCoord, 2, 2, 0);
+        
 
         // 纹理
       var img = new Image();
@@ -166,40 +122,10 @@
       
     
       function draw() {
-        var texture = gl.createTexture();
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1) // 图像反转Y轴
-        gl.activeTexture(gl.TEXTURE0) // 激活纹理单元
-        gl.bindTexture(gl.TEXTURE_2D, texture) // 绑定纹理对象
-/*
-        const level = 0;
-  const internalFormat = gl.RGBA;
-  const width = 1;
-  const height = 1;
-  const border = 0;
-  const srcFormat = gl.RGBA;
-  const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 0, 255, 255]); // opaque blue
-  gl.texImage2D(
-    gl.TEXTURE_2D,
-    level,
-    internalFormat,
-    width,
-    height,
-    border,
-    srcFormat,
-    srcType,
-    pixel
-  );*/
-
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR) // 放大处理方式
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR) // 缩小处理方式
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE) // 水平平铺方式
-        gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE) // 竖直平铺方式
-
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img) // 配置纹理图像
-
-        if(uniforms.uSample) {
-            gl.uniform1i(uniforms.uSample.location, 0) // 纹理单元传递给着色器
+        var texture = create2DTexture(gl, img);
+        
+        if(program.uniforms.uSample) {
+            gl.uniform1i(program.uniforms.uSample.location, 0) // 纹理单元传递给着色器
         }
 
         gl.clearColor(0, 1, 1, 0) // 设置清空颜色缓冲时的颜色值
@@ -218,6 +144,10 @@
         gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length);
         //gl.drawArrays(gl.LINE_STRIP, 3, 3);
         //gl.drawArrays(gl.LINE_LOOP, 2, 3);
+
+        deleteBuffer(gl, vertexBuffer);
+        deleteBuffer(gl, colorBuffer);
+        deleteBuffer(gl, textCoordBuffer);
       }
     </script>
   </body>

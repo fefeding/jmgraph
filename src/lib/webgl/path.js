@@ -61,7 +61,7 @@ class WebglPath extends WebglBase {
     }
 
     // 开始绘制
-    draw(points = this.points) {
+    draw(points = this.points, bounds = this.absoluteBounds) {
         // 写入当前canvas大小
         if(this.program.uniforms.a_center_point) {
             this.graph.context.uniform2f(this.program.uniforms.a_center_point.location, graph.width / 2, graph.height / 2);
@@ -69,7 +69,14 @@ class WebglPath extends WebglBase {
         // 设置路径
         if(this.program.attrs.a_position) {
             if(points) this.points = points;
-            const vertexBuffer = createFloat32Buffer(this.context, points); 
+            const absolutePoints = [];
+            for(const p of points) {
+                absolutePoints.push(
+                    p.x + bounds.left,
+                    p.y + bounds.top
+                );
+            }
+            const vertexBuffer = createFloat32Buffer(this.context, absolutePoints); 
             writeVertexAttrib(this.context, vertexBuffer, program.attrs.a_position, 2, 0, 0);
         }
     }

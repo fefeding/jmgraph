@@ -57,8 +57,8 @@ export default class jmControl extends jmProperty {
 		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
 
 		// webgl模式
-		if(this.graph.option.mode === 'webgl') {
-			this.webglControl = new WebglPath(this.context, {
+		if(this.graph.mode === 'webgl') {
+			this.webglControl = new WebglPath(this.graph, {
 				style: this.style
 			});
 		}
@@ -390,9 +390,7 @@ export default class jmControl extends jmProperty {
 						styleValue = jmUtils.toColor(styleValue);
 					}
 					if(this.webglControl) {
-						this.webglControl.setStyle({
-							mpname: styleValue
-						});
+						this.webglControl.setStyle(mpname, styleValue);
 					}
 					else {
 						this.context[mpname] = styleValue;
@@ -413,7 +411,7 @@ export default class jmControl extends jmProperty {
 						}
 						//平移
 						case 'translate' : {
-							this.context.translate(styleValue.x, styleValue.y);
+							this.context.translate && this.context.translate(styleValue.x, styleValue.y);
 							break;
 						}
 						//旋转
@@ -432,9 +430,9 @@ export default class jmControl extends jmProperty {
 								tranY = styleValue.rotateY + bounds.top;	
 							}
 												
-							if(tranX!=0 || tranY != 0) this.context.translate(tranX,tranY);
+							if(tranX!=0 || tranY != 0) this.context.translate && this.context.translate(tranX,tranY);
 							this.context.rotate(styleValue.angle);
-							if(tranX!=0 || tranY != 0) this.context.translate(-tranX,-tranY);
+							if(tranX!=0 || tranY != 0) this.context.translate && this.context.translate(-tranX,-tranY);
 							break;
 						}
 						case 'transform' : {
@@ -830,9 +828,9 @@ export default class jmControl extends jmProperty {
 			//获取当前控件的绝对位置
 			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 			if(this.webglControl) {
-				this.webglControl.draw(bounds);
+				this.webglControl.draw(this.points, bounds);
 			}
-			else {
+			else if(this.context && this.context.moveTo) {
 				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 				let len = this.points.length;			
 				for(let i=1; i < len;i++) {
@@ -869,7 +867,7 @@ export default class jmControl extends jmProperty {
 				else if(this.absoluteBounds.bottom <= 0) needDraw = false;
 			}
 			
-			this.context.save();
+			this.context.save && this.context.save();
 
 			this.emit('beginDraw', this);
 			
@@ -886,7 +884,7 @@ export default class jmControl extends jmProperty {
 			}
 
 			this.emit('endDraw',this);	
-			this.context.restore();
+			this.context.restore && this.context.restore();
 			
 			this.needUpdate = false;
 		}

@@ -41,7 +41,9 @@ export default class jmGraph extends jmControl {
 		 * @property utils/util
 		 * @type {jmUtils}
 		 */
-		this.util = this.utils = jmUtils;		
+		this.util = this.utils = jmUtils;	
+		// 模式 webgl | 2d
+		this.mode = option.mode;
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
@@ -70,7 +72,7 @@ export default class jmGraph extends jmControl {
 			}
 		}	
 		this.canvas = canvas;	
-		this.context = canvas.getContext('2d');
+		this.context = canvas.getContext(this.mode);
 		this.__init(callback);
 	}
 
@@ -93,13 +95,13 @@ export default class jmGraph extends jmControl {
 		 * 为了解决一像素线条问题
 		 */
 		this.on('beginDraw', function() {	
-			this.context.translate(0.5, 0.5);
+			this.context.translate && this.context.translate(0.5, 0.5);
 		});
 		/**
 		 * 结束控件绘制 为了解决一像素线条问题
 		 */
 		this.on('endDraw', function() {	
-			this.context.translate(-0.5, -0.5);		
+			this.context.translate && this.context.translate(-0.5, -0.5);		
 		});
 
 		// devicePixelRatio初始化
@@ -110,6 +112,10 @@ export default class jmGraph extends jmControl {
 		this.devicePixelRatio = dpr;
 		// 为了解决锯齿问题，先放大canvas再缩放
 		this.dprScaleSize = this.devicePixelRatio > 1? this.devicePixelRatio : 2;
+		// 如果是webl不进行处理
+		if(this.mode === 'webgl') {
+			this.devicePixelRatio = this.dprScaleSize = 1;
+		}
 
 		if(this.option.width > 0) this.width = this.option.width;
 		if(this.option.height > 0) this.height = this.option.height;	
@@ -140,7 +146,7 @@ export default class jmGraph extends jmControl {
 		this.css('height', h + "px");
 		this.canvas.height = h * this.dprScaleSize;
 		this.canvas.width = w * this.dprScaleSize;
-		this.context.scale(this.dprScaleSize, this.dprScaleSize);	
+		if(this.dprScaleSize !== 1) this.context.scale(this.dprScaleSize, this.dprScaleSize);	
 	}
 
 	/**

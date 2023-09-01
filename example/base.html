@@ -26,6 +26,7 @@
 		var g = new jmGraph(container, {
 			width: 800,
 			height: 600,
+			mode: 'webgl',
 			style: {
 				fill: '#000'
 			}
@@ -44,6 +45,7 @@
 			//style.lineCap = 'round';
 
 			//创建一个方块
+			/*
 			var rect = g.createShape('rect',{
 				style:style,
 				position: {x:300,y:100},
@@ -61,7 +63,7 @@
 
 			g.children.add(rect);
 			rect.canMove(true);
-
+*/
 			// 画二个五角星
 			var coordinates = [
 				{x:50,y:100},
@@ -78,7 +80,7 @@
 			});
 			g.children.add(star1);
 			star1.canMove(true);
-
+/*
 			var coordinates2 = [
 				{x:50,y:300},
 				{x:250,y:300},
@@ -95,13 +97,13 @@
 			});
 			g.children.add(star2);
 			star2.canMove(true);
-
+*/
 			function update() {
 				if(g.needUpdate) {
 					console.log(coordinates);
 					g.redraw();
 				}
-				requestAnimationFrame(update);
+				//requestAnimationFrame(update);
 			}
 
 			update();

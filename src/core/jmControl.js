@@ -793,7 +793,7 @@ export default class jmControl extends jmProperty {
 	 */
 	beginDraw() {	
 		this.getLocation(true);//重置位置信息
-		this.context.beginPath();			
+		this.context.beginPath && this.context.beginPath();			
 	}
 
 	/**
@@ -804,14 +804,16 @@ export default class jmControl extends jmProperty {
 	endDraw() {
 		//如果当前为封闭路径
 		if(this.style.close) {
-			this.context.closePath();
+			this.context.closePath && this.context.closePath();
 		}
 		
 		if(this.style['fill']) {
-			this.context.fill();
+			if(this.webglControl) this.webglControl.fill();
+			else this.context.fill && this.context.fill();
 		}
 		if(this.style['stroke'] || !this.style['fill']) {
-			this.context.stroke();
+			if(this.webglControl) this.webglControl.stroke();
+			else this.context.stroke && this.context.stroke();
 		}
 
 		this.needUpdate = false;
@@ -826,20 +828,24 @@ export default class jmControl extends jmProperty {
 	draw() {	
 		if(this.points && this.points.length > 0) {
 			//获取当前控件的绝对位置
-			let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
-			
-			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			let len = this.points.length;			
-			for(let i=1; i < len;i++) {
-				let p = this.points[i];
-				//移至当前坐标
-				if(p.m) {
-					this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
-				}
-				else {
-					this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
-				}			
-			}		
+			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
+			if(this.webglControl) {
+				this.webglControl.draw(bounds);
+			}
+			else {
+				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+				let len = this.points.length;			
+				for(let i=1; i < len;i++) {
+					let p = this.points[i];
+					//移至当前坐标
+					if(p.m) {
+						this.context.moveTo(p.x + bounds.left,p.y + bounds.top);
+					}
+					else {
+						this.context.lineTo(p.x+ bounds.left,p.y + bounds.top);
+					}			
+				}	
+			}	
 		}	
 	}
 

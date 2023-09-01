@@ -39,8 +39,10 @@ function createProgram(gl, vertexSrc, fragmentSrc) {
     // clean up some shaders
     gl.deleteShader(vertexShader);
     gl.deleteShader(fragmentShader);
+
     const attrs = extractAttributes(gl, program);
     const uniforms = extractUniforms(gl, program);
+    
     return {
         program,
         attrs,

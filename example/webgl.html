@@ -2,6 +2,9 @@
     <canvas id="cvs" width="600" height="600" style="border: dashed 1px red">
       你的浏览器不支持画布元素
     </canvas>
+    <canvas id="cvs2d" width="600" height="600" style="border: dashed 1px red">
+        你的浏览器不支持画布元素
+      </canvas>
     <script type="module">
         import {
             createProgram,
@@ -28,16 +31,39 @@
         // 设置 webgl 视口，将 -1 到 1 映射为 canvas 上的坐标
         const program = createProgram(gl, `
         attribute vec4 a_position;
+        attribute vec2 aPointIndex;
         attribute vec4 aColor;
         attribute vec2 aTextCoord;
+        uniform vec2 aCenterPoint;
+        uniform vec2 aLineStart;
+        uniform vec2 aLineEnd;
+        uniform float aTotalPointCount;
         varying vec4 vColor;
         varying  vec2 vTextCoord;
 
+        vec4 translatePosition(in vec4 point, float x, float y) {
+            point.x = (point.x-x)/x;
+            point.y = (y-point.y)/y;
+            return point;
+        }
+        
+        vec4 pointToPos(vec2 start, vec2 end, float index) {            
+            float len = sqrt(pow(end.x - start.x, 2.0) + pow(end.y - start.y, 2.0));
+           
+            float x = start.x + (end.x - start.x)/10.0 * index;
+            float y = start.y + (end.y - start.y)/10.0 * index;
+            return vec4(x, y, 0.0, 0.0);
+        }
+
         void main() {
-            gl_Position = a_position; // 设置顶点位置
+            gl_PointSize = 10.0;
+            //vec4 pos = pointToPos(aLineStart, aLineEnd, aPointIndex.x);
+            vec4 pos = a_position;//translatePosition(a_position, aCenterPoint.x, aCenterPoint.y);
+            gl_Position = pos;
             vColor = aColor;
             vTextCoord = aTextCoord;
         }
+
         `,`
         precision mediump float;
         uniform vec4 u_color;
@@ -46,28 +72,40 @@
         varying  vec2 vTextCoord;
 
         void main() {
-            gl_FragColor = texture2D(uSample, vTextCoord);
+            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            //根据距离设置片元
+            if(r <= 0.5){
+                // 方形区域片元距离几何中心半径小于0.5，像素颜色设置红色
+                gl_FragColor = u_color;
+            }else {
+                // 方形区域距离几何中心半径不小于0.5的片元剪裁舍弃掉：
+               discard;
+            }
+            //gl_FragColor = u_color;
         }
+        
         `);
        //texture2D(uSample, vTextCoord)
 
         
 
-        const colors = [Math.random(),Math.random(),Math.random(),1];
-       const points = [];
+       const colors = [Math.random(),Math.random(),Math.random(),1];
+       const points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, 0.665, -0.2774, 0.6062, -0.5341, 0.399, -0.66, 0.0941, -0.6243, -0.2339, -0.4358, -0.5045, -0.1405, -0.6517, 0.1891, -0.6393, 0.4724, -0.4704, 0.6401, -0.1863];
        const uvpoints = [];
 
         const center = {
             x: width / 2,
             y: height / 2
         };
+
+        
         let colorStop = [Math.random(),Math.random(),Math.random(),1];
-       for(let r=0; r<=Math.PI*2;r += 0.1) {	
+       for(let r=0; r<=Math.PI*2;r += 0.5) {	
             const cos = Math.cos(r);
             const sin = Math.sin(r);
-            const x = (cos * 200) / center.x;
-            const y = (sin * 200) / center.y;
-			points.push(x, y);
+            const x = (cos * 200) + center.x;
+            const y = (sin * 200) + center.y;
+			//points.push(Number(((cos * 200)/center.x).toFixed(4)), Number(((sin * 200) / center.y).toFixed(4)));
             let ux = (cos + 1)/2;
             //if(ux < 0.5) ux = ux/2;
             
@@ -77,9 +115,10 @@
             uvpoints.push(ux, uy);
             colors.push(...colorStop);
 		}
-        points.push(points[0], points[1]);
-        uvpoints.push(uvpoints[0], uvpoints[1]);
-        colors.push(...colorStop);
+        //points.push(points[0], points[1]);
+        //uvpoints.push(uvpoints[0], uvpoints[1]);
+        //colors.push(...colorStop);
+
 /*
         colorStop = [Math.random(),Math.random(),Math.random(),1];
         const lastLen = points.length;
@@ -89,17 +128,39 @@
 		}
         points.push(points[lastLen], points[lastLen+1]);
         colors.push(...colorStop);*/
-
+        
         if(program.uniforms.u_color) {
         //const colorLocation = gl.getUniformLocation(program.program, 'u_color') // 获取 u_color 变量位置
-            gl.uniform4f(program.uniforms.u_color.location, 0.93, 0.2, 0.56, 0.4) // 设置它的值
+            gl.uniform4f(program.uniforms.u_color.location, 0.0, 1.0, 0.0, 1) // 设置它的值
         }
-        
+        if(program.uniforms.aLineEnd) {
+            gl.uniform2f(program.uniforms.aLineEnd.location, 100.0, 50.0) // 设置它的值
+        }
+        if(program.uniforms.aLineStart) {
+            gl.uniform2f(program.uniforms.aLineStart.location, 305.0, 500.0) // 设置它的值
+        }
+        if(program.uniforms.aTotalPointCount) {
+            gl.uniform1f(program.uniforms.aTotalPointCount.location, 100); // 设置它的值
+        }
+        if(program.uniforms.aCenterPoint) {
+            gl.uniform2f(program.uniforms.aCenterPoint.location, center.x, center.y); // 设置它的值
+        }
+          
         //先创建一个缓存对象
-      var vertexBuffer = createFloat32Buffer(gl, points); 
-      writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 2, 0);
-      //deleteBuffer(gl, vertexBuffer);
+        if(program.attrs.a_position) {
+            var vertexBuffer = createFloat32Buffer(gl, points); 
+            writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
+            //deleteBuffer(gl, vertexBuffer);
+        }
 
+      if(program.attrs.aPointIndex) {
+            const pointIndexs = [];
+            for(let i=0;i<100;i++) {
+                pointIndexs.push(i);
+            }
+            var pointIndexBuffer = createFloat32Buffer(gl, pointIndexs); 
+            writeVertexAttrib(gl, pointIndexBuffer, program.attrs.aPointIndex, 1, 0, 0);
+        }
          //先创建一个缓存对象
         var colorBuffer = createFloat32Buffer(gl, colors); 
         writeVertexAttrib(gl, colorBuffer, program.attrs.aColor, 4, 4, 0);
@@ -108,27 +169,32 @@
         //const uSample = gl.getUniformLocation(program, 'uSample');
 
         //先创建一个缓存对象
-        var textCoordBuffer = createFloat32Buffer(gl, uvpoints); 
-        writeVertexAttrib(gl, textCoordBuffer, program.attrs.aTextCoord, 2, 2, 0);
+        //var textCoordBuffer = createFloat32Buffer(gl, uvpoints); 
+        //writeVertexAttrib(gl, textCoordBuffer, program.attrs.aTextCoord, 2, 2, 0);
         
 
         // 纹理
-      var img = new Image();
+      /*var img = new Image();
       
       img.onload = function(){
         draw();
       };
-      img.src = 'qrcode.jpg';
+      img.src = 'qrcode.jpg';*/
       
-    
+      draw();
+
       function draw() {
-        var texture = create2DTexture(gl, img);
+        /*var texture = create2DTexture(gl, img);
         
         if(program.uniforms.uSample) {
             gl.uniform1i(program.uniforms.uSample.location, 0) // 纹理单元传递给着色器
+        }*/
+
+        if(program.uniforms.u_color) {
+            gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
         }
 
-        gl.clearColor(0, 1, 1, 0) // 设置清空颜色缓冲时的颜色值
+        gl.clearColor(1, 1, 1, 1) // 设置清空颜色缓冲时的颜色值
         gl.clear(gl.COLOR_BUFFER_BIT) // 清空颜色缓冲区，也就是清空画布
 
         /*gl.drawArrays( // 从数组中绘制图元
@@ -141,13 +207,49 @@
             3,  // 从数组中哪个点开始渲染
             3   // 需要用到多少个点，三角形的三个顶点
         );*/
-        gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length);
-        //gl.drawArrays(gl.LINE_STRIP, 3, 3);
-        //gl.drawArrays(gl.LINE_LOOP, 2, 3);
+        gl.drawArrays(gl.TRIANGLE, 0, points.length/2);
+        //gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length/2);
+        //gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
+        //gl.drawArrays(gl.LINE_STRIP, 0, points.length/2);
+        //gl.drawArrays(gl.LINE_LOOP, 0, points.length/2);
+        //gl.drawArrays(gl.POINTS, 0, points.length/2);
+        //gl.drawArrays(gl.LINES, 0, points.length/2);
 
-        deleteBuffer(gl, vertexBuffer);
-        deleteBuffer(gl, colorBuffer);
-        deleteBuffer(gl, textCoordBuffer);
+        //deleteBuffer(gl, vertexBuffer);
+        //deleteBuffer(gl, colorBuffer);
+        //deleteBuffer(gl, textCoordBuffer);
+        console.log(points);
+
+
+        if(program.uniforms.u_color) {
+            gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
+        }
+        vertexBuffer = createFloat32Buffer(gl, [
+            -0.8, 0.5, 0, 0.5,0.6,0,0,-0.6, -0.5
+        ]); 
+        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+
+        draw2d(points);
+
+        //setTimeout(draw, 1000)
+      }
+
+      function draw2d(points) {
+        var cvs = document.getElementById("cvs2d");
+        var ctx = cvs.getContext("2d");
+
+        ctx.strokeStyle = "rgba(0, 255, 0, 1)";
+        
+        ctx.beginPath();
+        ctx.moveTo(points[0] * center.x + center.x, center.y - points[1] * center.y);
+        for(let i=2;i<points.length;i+=2) {
+            ctx.lineTo(points[i] * center.x + center.x, center.y - points[i+1] * center.y);
+        }
+        ctx.lineTo(points[0] * center.x + center.x, center.y - points[1] * center.y);
+        ctx.stroke();
+        ctx.closePath();
       }
     </script>
   </body>

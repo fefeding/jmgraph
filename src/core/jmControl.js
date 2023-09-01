@@ -4,6 +4,7 @@ import {jmList} from "./jmList.js";
 import {jmGradient} from "./jmGradient.js";
 import {jmShadow} from "./jmShadow.js";
 import {jmProperty} from "./jmProperty.js";
+import WebglPath from "../lib/webgl/path.js";
 
 //样式名称，也当做白名单使用		
 const jmStyleMap = {
@@ -55,6 +56,13 @@ export default class jmControl extends jmProperty {
 		this.zIndex = params.zIndex || 0;
 		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
 
+		// webgl模式
+		if(this.graph.option.mode === 'webgl') {
+			this.webglControl = new WebglPath(this.context, {
+				style: this.style
+			});
+		}
+
 		this.initializing();	
 		
 		this.on = this.bind;
@@ -82,11 +90,11 @@ export default class jmControl extends jmProperty {
 		let s = this.property('context');
 		if(s) return s;
 		else if(this.is('jmGraph') && this.canvas && this.canvas.getContext) {
-			return this.context = this.canvas.getContext('2d');
+			return this.context = this.canvas.getContext(this.option.mode || '2d');
 		}
 		let g = this.graph;
 		if(g) return g.context;
-		return g.canvas.getContext('2d');
+		return g.canvas.getContext(this.option.mode || '2d');
 	}
 	set context(v) {
 		return this.property('context', v);
@@ -381,7 +389,14 @@ export default class jmControl extends jmProperty {
 					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
 						styleValue = jmUtils.toColor(styleValue);
 					}
-					this.context[mpname] = styleValue;
+					if(this.webglControl) {
+						this.webglControl.setStyle({
+							mpname: styleValue
+						});
+					}
+					else {
+						this.context[mpname] = styleValue;
+					}
 				}	
 				else {
 					switch(name) {

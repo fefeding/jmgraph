@@ -112,11 +112,7 @@ export default class jmGraph extends jmControl {
 		this.devicePixelRatio = dpr;
 		// 为了解决锯齿问题，先放大canvas再缩放
 		this.dprScaleSize = this.devicePixelRatio > 1? this.devicePixelRatio : 2;
-		// 如果是webl不进行处理
-		if(this.mode === 'webgl') {
-			this.devicePixelRatio = this.dprScaleSize = 1;
-		}
-
+		
 		if(this.option.width > 0) this.width = this.option.width;
 		if(this.option.height > 0) this.height = this.option.height;	
 		this.resize();		
@@ -144,9 +140,17 @@ export default class jmGraph extends jmControl {
 	
 		this.css('width', w + "px");
 		this.css('height', h + "px");
-		this.canvas.height = h * this.dprScaleSize;
-		this.canvas.width = w * this.dprScaleSize;
-		if(this.dprScaleSize !== 1) this.context.scale(this.dprScaleSize, this.dprScaleSize);	
+		if(this.mode === '2d') {
+			this.canvas.height = h * this.dprScaleSize;
+			this.canvas.width = w * this.dprScaleSize;
+			if(this.dprScaleSize !== 1) this.context.scale && this.context.scale(this.dprScaleSize, this.dprScaleSize);	
+		}
+		else {
+			this.canvas.width = w;
+			this.canvas.height = h;
+		}
+
+		this.context.viewport && this.context.viewport(0, 0, w, h);
 	}
 
 	/**
@@ -216,7 +220,7 @@ export default class jmGraph extends jmControl {
 	 * @return {postion} 返回定位坐标
 	 */
 	getPosition() {
-		let p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+		const p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
 		p.width = this.width;
 		p.height = this.height;
 		p.right = p.left + p.width;
@@ -267,7 +271,7 @@ export default class jmGraph extends jmControl {
 	 * @return {jmShadow} 阴影对象
 	 */
 	createShadow(x, y, blur, color) {
-		let sh = new jmShadow(x, y, blur, color);
+		const sh = new jmShadow(x, y, blur, color);
 		return sh;
 	}
 
@@ -282,7 +286,7 @@ export default class jmGraph extends jmControl {
 	 * @return {jmGradient} 线性渐变对象
 	 */
 	createLinearGradient(x1, y1, x2, y2) {
-		let gradient = new jmGradient({
+		const gradient = new jmGradient({
 			type:'linear',
 			x1: x1,
 			y1: y1,
@@ -305,7 +309,7 @@ export default class jmGraph extends jmControl {
 	 * @return {jmGradient} 放射渐变对象
 	 */
 	createRadialGradient(x1, y1, r1, x2, y2, r2) {	
-		let gradient = new jmGradient({
+		const gradient = new jmGradient({
 			type:'radial',
 			x1: x1,
 			y1: y1,
@@ -360,8 +364,21 @@ export default class jmGraph extends jmControl {
 				h = h / this.scaleSize.y;
 			}*/
 		}
+		if(this.mode === 'webgl') {
+			let bg = {
+				r: 0,
+				g: 0,
+				b: 0,
+				a: 0
+			};
+			if(this.style && this.style.fill) {
+				bg = this.utils.hexToRGBA(this.style.fill);
+			}
+			this.context.clearColor(bg.r, bg.g, bg.b, bg.a); // 设置清空颜色缓冲时的颜色值
+        	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
+		}
 		//如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
-		if(this.style && this.style.fill) {
+		else if(this.style && this.style.fill) {
 			this.points = [
 				{x:0,y:0},
 				{x:w,y:0},
@@ -395,7 +412,7 @@ export default class jmGraph extends jmControl {
 	 * @return {jmPath} 路径对象jmPath
 	 */
 	createPath(points, style) {
-		let path = this.createShape('path',{
+		const path = this.createShape('path',{
 			points: points,
 			style: style
 		});
@@ -412,7 +429,7 @@ export default class jmGraph extends jmControl {
 	 * @return {jmLine} 直线对象
 	 */
 	createLine(start, end, style) {
-		let line = this.createShape('line', {
+		const line = this.createShape('line', {
 			start: start,
 			end: end,
 			style: style

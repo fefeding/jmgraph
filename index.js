@@ -63,6 +63,10 @@ export default class jmGraph extends jmGraphCore {
         
         super(canvas, option, callback);
     }
+
+    static create(...args) {
+        return createJmGraph(...args);
+    }
 }
 
 //创建实例

@@ -384,15 +384,23 @@ export default class jmControl extends jmProperty {
 					__setStyle(styleValue.toGradient(this), mpname||name);	
 				}
 				else if(mpname) {
-					//只有存在白名单中才处理
-					//颜色转换
-					if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-						styleValue = jmUtils.toColor(styleValue);
-					}
+					
 					if(this.webglControl) {
+						//只有存在白名单中才处理
+						//颜色转换
+						if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+							styleValue = jmUtils.hexToRGBA(styleValue);
+						}
+
 						this.webglControl.setStyle(mpname, styleValue);
 					}
 					else {
+						//只有存在白名单中才处理
+						//颜色转换
+						if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+							styleValue = jmUtils.toColor(styleValue);
+						}
+
 						this.context[mpname] = styleValue;
 					}
 				}	
@@ -802,7 +810,8 @@ export default class jmControl extends jmProperty {
 	endDraw() {
 		//如果当前为封闭路径
 		if(this.style.close) {
-			this.context.closePath && this.context.closePath();
+			if(this.webglControl) this.webglControl.closePath();
+			else this.context.closePath && this.context.closePath();
 		}
 		
 		if(this.style['fill']) {
@@ -828,7 +837,9 @@ export default class jmControl extends jmProperty {
 			//获取当前控件的绝对位置
 			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 			if(this.webglControl) {
-				this.webglControl.draw(this.points, bounds);
+				this.webglControl.draw([
+					...this.points
+				], bounds);
 			}
 			else if(this.context && this.context.moveTo) {
 				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);

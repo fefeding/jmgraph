@@ -10,9 +10,7 @@
   ],
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
-  "dependencies": {
-    "pixi-gl-core": "^1.1.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",

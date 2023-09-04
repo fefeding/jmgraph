@@ -33,7 +33,9 @@
 	import jmGraph from "../index.js";
 
 	//初始化jmgraph
-	var graph = new jmGraph('mycanvas');
+	var graph = new jmGraph('mycanvas', {
+        mode: 'webgl'
+    });
 	
     var arcStyle = {				
         lineWidth:1,

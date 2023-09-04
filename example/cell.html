@@ -35,7 +35,7 @@
 	var balls = [];
 	//初始化jmgraph
 	var graph = new jmGraph('mycanvas', {
-		mode: '2d'
+		mode: 'webgl'
 	});
 	graph.util.bindEvent(window,'resize',resize);	
 
@@ -95,7 +95,7 @@
 		style.fill.addStop(0,'rgb(112,154,22)');
 		style.fill.addStop(1,'rgb(49,95,118)');	
 
-		var count = 1000;
+		var count = 100;
 			
 		for(var i=0; i<count; i++) {
 			var radius = Math.random() * 10 + 4;			

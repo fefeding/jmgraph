@@ -114,7 +114,7 @@ export default class jmLabel extends jmControl {
 	testSize() {
 		if(this.__size) return this.__size;
 		
-		this.context.save();
+		this.context.save && this.context.save();
 		// 修改字体，用来计算
 		this.setStyle({
 			font: this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily)
@@ -123,7 +123,7 @@ export default class jmLabel extends jmControl {
 		this.__size = this.context.measureText?
 							this.context.measureText(this.text):
 							{width:15};
-		this.context.restore();
+		this.context.restore && this.context.restore();
 		this.__size.height = this.style.fontSize?this.style.fontSize:15;
 		if(!this.width) this.width = this.__size.width;
 		if(!this.height) this.height = this.__size.height;

@@ -18,7 +18,10 @@ export default class jmCircle extends jmArc {
 	 * @private
 	 * @for jmCircle
 	 */
-	initPoints() {			
+	initPoints() {		
+		if(this.graph.mode === 'webgl') {
+			return super.initPoints();
+		}	
 		let location = this.getLocation();
 		
 		if(!location.radius) {
@@ -37,6 +40,9 @@ export default class jmCircle extends jmArc {
 	 * @method draw
 	 */
 	draw() {
+		if(this.graph.mode === 'webgl') {
+			return super.draw();
+		}
 		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;	
 		let location = this.getLocation();
 		

@@ -5,8 +5,6 @@
 		<title>排序算法演示</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="//mat1.gtimg.com/www/mobi/js/zepto.min.js"></script>
-		<!--<script type="text/javascript" src="../src/jmgraph.js"></script>	-->
-		<script type="text/javascript" src="../dist/jmgraph.min.js"></script>
 	</head>
 	<button id="btn_quick" href="#">快速排序</button>
 	<button id="btn_straightinsertion" href="#">直接插入排序</button>
@@ -19,7 +17,9 @@
 		<div id="mycanvas" style="border:1px solid #ddd;width:100%;"></div>
 		<div id="console" style="border:1px solid #ccc;background-color:#000;color:green; width: 100%;height: 300px;overflow-y:auto;padding:4px;"></div>	
 	</body>
-	<script type="text/javascript">
+	<script type="module">
+		import jmGraph from "../index.js";
+
 			Array.prototype.toRect = function(){
 				var rects = [];
 				for(var i=0;i<this.length;i++) {
@@ -53,7 +53,7 @@
 
 				this.selectRectStyle = {
 					stroke:'rgb(120,20,80)',
-					lineWidth:1,
+					lineWidth: 2,
 					zIndex: 100,
 					close:true,
 					fill: 'rgba(255,180,5,0.7)'
@@ -134,7 +134,7 @@
 						cb && cb();
 					}
 					else {
-						self.aniTimeoutHandler = setTimeout(move, 50);
+						self.aniTimeoutHandler = setTimeout(move, 100);
 					}					
 				}
 				move();				
@@ -246,12 +246,9 @@
 						pos.y = offy - arr[i].height;
 						arr[i].rect = this.graph.createShape('rect',{position:pos,width: 10, height: arr[i].height, style: this.rectStyle});
 						//arr[i].item = arr[i];
-						var label = this.graph.createShape('label',{style:this.labelStyle,position:{x:0,y:arr[i].height},value:arr[i].value,width:10,height:20});
-						
+						var label = this.graph.createShape('label',{style:this.labelStyle,position:{x:0,y:arr[i].height},value:arr[i].value,width:10,height:20});						
 						arr[i].rect.children.add(label);
-						if(typeof arr[i].rect != 'object') {
-							debugger;
-						}
+						
 						this.graph.children.add(arr[i].rect);
 					}
 					//this.graph.children.add(arr[i].rect);
@@ -742,9 +739,10 @@
 				container.style.height = h + 'px';
 
 				//初始化jmgraph
-				var g = new jmGraph.create('mycanvas', {
+				var g = jmGraph.create('mycanvas', {
 					width: w,
-					height: h
+					height: h,
+					mode: 'webgl'
 				});
 				
 					

@@ -780,7 +780,7 @@ export default class jmUtils {
                 color.b = res.substr(7,2);
                 color.r = res.substr(3,2);
                 //透明度
-                color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+                color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
 
                 color.r = this.hexToNumber(color.r||0);
                 color.g = this.hexToNumber(color.g||0);
@@ -821,7 +821,7 @@ export default class jmUtils {
                 color.g = this.hexToNumber(color.g||0);
                 color.b = this.hexToNumber(color.b||0);
                 //透明度
-                color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+                color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
                 res = color; 
             }
         }  

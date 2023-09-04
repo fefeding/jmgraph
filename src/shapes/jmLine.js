@@ -15,6 +15,7 @@ export default class jmLine extends jmPath {
 		this.end = params.end || {x:0,y:0};
 		this.style.lineType = this.style.lineType || 'solid';
 		this.style.dashLength = this.style.dashLength || 4;
+		this.style.close = false;
 	}	
 
 	/**
@@ -53,30 +54,34 @@ export default class jmLine extends jmPath {
 	 * @private
 	 */
 	initPoints() {	
-		let start = this.start;
-		let end = this.end;
+		const start = this.start;
+		const end = this.end;
 		this.points = [];	
 		this.points.push(start);
 
 		if(this.style.lineType === 'dotted') {			
 			let dx = end.x - start.x;
 			let dy = end.y - start.y;
-			let lineLen = Math.sqrt(dx * dx + dy * dy);
+			const lineLen = Math.sqrt(dx * dx + dy * dy);
 			dx = dx / lineLen;
 			dy = dy / lineLen;
 			let dottedstart = false;
 
-			let dashLen = this.style.dashLength || 5;
-			let dottedsp = dashLen / 2;
+			const dashLen = this.style.dashLength || 5;
+			const dottedsp = dashLen / 2;
 			for(let l=dashLen; l<=lineLen;) {
-				if(dottedstart == false) {
-					this.points.push({x: start.x + dx * l, y: start.y + dy * l});
+				const p = {
+					x: start.x + dx * l, 
+					y: start.y + dy * l
+				};
+				if(dottedstart === false) {					
 					l += dottedsp;
 				}
 				else {				
-					this.points.push({x: start.x + dx * l, y: start.y+ dy * l, m: true});
+					p.m = true;// 移动到当时坐标
 					l += dashLen;
 				}
+				this.points.push(p);
 				dottedstart = !dottedstart;				
 			}
 		}

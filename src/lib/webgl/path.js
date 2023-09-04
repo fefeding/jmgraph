@@ -2,7 +2,7 @@ import WebglBase from './base.js';
 
 // 把canvas坐标转为webgl坐标系
 const convertPointSource = `
-    vec4 translatePosition(in vec4 point, float x, float y) {
+    vec4 translatePosition(vec4 point, float x, float y) {
         point.x = (point.x-x)/x;
         point.y = (y-point.y)/y;
         return point;
@@ -70,6 +70,7 @@ class WebglPath extends WebglBase {
             color.g /= 255;
             color.b /= 255;
             this.style.strokeStyle = color;
+            delete style.strokeStyle;
         }
         else if(style.fillStyle) {
             let color = style.fillStyle;
@@ -79,10 +80,16 @@ class WebglPath extends WebglBase {
             color.g /= 255;
             color.b /= 255;
             this.style.fillStyle = color;
+            delete style.fillStyle;
         }
         // 线宽
         if(style.lineWidth && this.program.uniforms.a_point_size) {
-            this.context.uniform1f(this.program.uniforms.a_point_size.location, style.lineWidth * this.graph.devicePixelRatio);
+            this.context.uniform1f(this.program.uniforms.a_point_size.location, style.lineWidth);// * this.graph.devicePixelRatio
+        }
+
+        this.style = {
+            ...this.style,
+            ...style
         }
     }
 
@@ -129,7 +136,8 @@ class WebglPath extends WebglBase {
             const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             const cos = dx / len;
             const sin = dy / len;
-            for(let l=1; l<len; l++) {
+            const step = 0.1;
+            for(let l=step; l<len; l+=step) {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;
                 points.push({
@@ -144,7 +152,8 @@ class WebglPath extends WebglBase {
     // 画线条
     stroke() {
         if(this.program.uniforms.v_color && this.style.strokeStyle) {
-            this.context.uniform4f(this.program.uniforms.v_color.location, this.style.strokeStyle.r, this.style.strokeStyle.g, this.style.strokeStyle.b, this.style.strokeStyle.a);
+            const color = this.style.strokeStyle;
+            this.context.uniform4f(this.program.uniforms.v_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
         }
         // 标注为stroke
         if(this.program.uniforms.v_type) {
@@ -159,7 +168,7 @@ class WebglPath extends WebglBase {
                     const linePoints = this.genLinePoints(start, p);
                     points.push(...linePoints);
                 }
-                else if(start) {
+                else if(start && !points.includes(start)) {
                     points.push(start);
                 }
                 start = p;
@@ -174,7 +183,8 @@ class WebglPath extends WebglBase {
     // 填充图形
     fill() {
         if(this.program.uniforms.v_color && this.style.fillStyle) {
-            this.context.uniform4f(this.program.uniforms.v_color.location, this.style.fillStyle.r, this.style.fillStyle.g, this.style.fillStyle.b, this.style.fillStyle.a);
+            const color = this.style.fillStyle;
+            this.context.uniform4f(this.program.uniforms.v_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
         }
         // 标注为fill
         if(this.program.uniforms.v_type) {

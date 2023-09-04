@@ -17,7 +17,9 @@ class WeblBase {
         this.graph = graph;
         this.context = graph.context;
         this.option = option || {};
-        this.style = {};
+        this.style = {
+            globalAlpha: 1
+        };
     }
 
     // 创建程序

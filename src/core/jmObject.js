@@ -1,6 +1,7 @@
 
 import {jmList} from "./jmList.js";
 
+var control_id_counter = 0;
 /**
  *  所有jm对象的基础对象
  * 
@@ -13,7 +14,7 @@ export default class jmObject {
 		if(g && g.type == 'jmGraph') {
 			this.graph = g;
 		}
-		//this.id = Symbol("id"); //生成一个唯一id
+		this.id = ++control_id_counter; //生成一个唯一id
 	}
 	
 	/**

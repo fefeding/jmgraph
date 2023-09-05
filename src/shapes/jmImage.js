@@ -83,23 +83,14 @@ export default class jmImage extends jmControl {
 	 *
 	 * @method draw
 	 */
-	draw() {	
-		try {
-			
-			let img = this.getImage();
-			if(this.graph.isWXMiniApp && this.graph.canvas && typeof img === 'string') {
-				// 图片对象
-				const image = this.graph.canvas.createImage();
-				// 图片加载完成回调
-				image.onload = () => {
-					// 将图片绘制到 canvas 上
-					this.drawImg(image);
-				}
-				// 设置图片src
-				image.src = img;
-			}
+	async draw() {	
+		try {			
+			const img = this.getImage();	
+			if(img.complete) this.drawImg(img);
 			else {
-				this.drawImg(img);
+				img.onload = ()=>{
+					this.drawImg(img);
+				}	
 			}
 		}
 		catch(e) {
@@ -115,36 +106,46 @@ export default class jmImage extends jmControl {
 		}
 		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 		if(!bounds) bounds = this.parent && this.parent.getAbsoluteBounds?this.parent.getAbsoluteBounds():this.getAbsoluteBounds();
-		let p = this.getLocation();
-		p.left += bounds.left;
-		p.top += bounds.top;
+
+		let p = this.getLocation();		
 
 		let sp = this.sourcePosition;
 		let sw = this.sourceWidth;
 		let sh = this.sourceHeight;
+
+		const ctx = this.webglControl || this.context;
+		if(this.webglControl) {
+			ctx.setBounds && ctx.setBounds(bounds);
+			ctx.drawImage(img, p.left, p.top, p.width, p.height);
+			return;
+		}
+
+		// 计算绝对定位
+		p.left += bounds.left;
+		p.top += bounds.top;
 
 		if(sp || typeof sw != 'undefined' || typeof sh != 'undefined') {	
 			if(typeof sw == 'undefined') sw= p.width || img.width || 0;
 			if(typeof sh == 'undefined') sh= p.height || img.height || 0;
 			sp = sp || {x:0, y:0};
 
-			if(p.width && p.height) this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
+			if(p.width && p.height) ctx.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
 			else if(p.width) {
-				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,sh);
+				ctx.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,sh);
 			}		
 			else if(p.height) {
-				this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,p.height);
+				ctx.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,p.height);
 			}		
-			else this.context.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,sh);		
+			else ctx.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,sw,sh);		
 		}
 		else if(p) {
-			if(p.width && p.height) this.context.drawImage(img,p.left,p.top,p.width,p.height);
-			else if(p.width) this.context.drawImage(img,p.left,p.top,p.width,img.height);
-			else if(p.height) this.context.drawImage(img,p.left,p.top,img.width,p.height);
-			else this.context.drawImage(img,p.left,p.top);
+			if(p.width && p.height) ctx.drawImage(img,p.left,p.top,p.width,p.height);
+			else if(p.width) ctx.drawImage(img,p.left,p.top,p.width,img.height);
+			else if(p.height) ctx.drawImage(img,p.left,p.top,img.width,p.height);
+			else ctx.drawImage(img,p.left,p.top);
 		}
 		else {
-			this.context.drawImage(img);
+			ctx.drawImage(img);
 		}
 	}
 
@@ -185,11 +186,24 @@ export default class jmImage extends jmControl {
 		}
 		else if(typeof document !== 'undefined' && document.createElement) {
 			this.__img = document.createElement('img');
+			//this.__img.onload = ()=>{
+			//	this.needUpdate = true;
+			//};
 			if(src && typeof src == 'string') this.__img.src = src;
+		}
+		else if(this.graph.isWXMiniApp && this.graph.canvas && typeof src === 'string') {
+			// 图片对象
+			this.__img = this.graph.canvas.createImage();
+			//this.__img.onload = ()=>{
+			//	this.needUpdate = true;
+			//};
+			// 设置图片src
+			this.__img.src = src;
 		}
 		else {
 			this.__img = src;
 		}
+		this.image = this.__img.src;
 		return this.__img;
 	}
 }

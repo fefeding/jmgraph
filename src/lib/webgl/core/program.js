@@ -34,7 +34,7 @@ function createProgram(gl, vertexSrc, fragmentSrc) {
         gl.deleteProgram(program);
     }
 
-    gl.useProgram(program) // 告诉 webgl 用这个 program 进行渲染
+    useProgram(gl, program);
 
     // clean up some shaders
     gl.deleteShader(vertexShader);
@@ -48,6 +48,11 @@ function createProgram(gl, vertexSrc, fragmentSrc) {
         attrs,
         uniforms
     };
+}
+
+// 采用program
+function useProgram(gl, program) {
+    return gl.useProgram(program); // 告诉 webgl 用这个 program 进行渲染
 }
 
 function extractAttributes(gl, program) {
@@ -110,8 +115,19 @@ function writeVertexAttrib(gl, buffer, attr, size=2,strip=0,offset=0,dataType=gl
     return buffer;
 }
 
+function getAttribLocation(gl, program, name) {
+    return gl.getAttribLocation(program, name);
+}
+
+function getUniformLocation(gl, program, name) {
+    return gl.getUniformLocation(program, name);
+}
+
 export {
     createProgram,
+    useProgram,
+    getAttribLocation,
+    getUniformLocation,
     extractAttributes,
     extractUniforms,
     writeVertexAttrib

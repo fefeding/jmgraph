@@ -799,7 +799,8 @@ export default class jmControl extends jmProperty {
 	 */
 	beginDraw() {	
 		this.getLocation(true);//重置位置信息
-		this.context.beginPath && this.context.beginPath();			
+		this.context.beginPath && this.context.beginPath();		
+		if(this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
 	}
 
 	/**
@@ -864,7 +865,7 @@ export default class jmControl extends jmProperty {
 	 *
 	 * @method paint
 	 */
-	paint(v) {
+	async paint(v) {
 		if(v !== false && this.visible !== false) {		
 			if(this.initPoints) this.initPoints();
 			//计算当前边界
@@ -884,13 +885,13 @@ export default class jmControl extends jmProperty {
 			
 			this.setStyle();//设定样式
 
-			if(needDraw && this.beginDraw) this.beginDraw();
-			if(needDraw && this.draw) this.draw();	
-			if(needDraw && this.endDraw) this.endDraw();
+			if(needDraw && this.beginDraw) await this.beginDraw();
+			if(needDraw && this.draw) await this.draw();	
+			if(needDraw && this.endDraw) await this.endDraw();
 
 			if(this.children) {
-				this.children.each(function(i,item) {
-					if(item && item.paint) item.paint();
+				this.children.each(async function(i,item) {
+					if(item && item.paint) await item.paint();
 				});
 			}
 

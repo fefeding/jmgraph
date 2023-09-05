@@ -6,6 +6,7 @@ import {jmGradient} from "./jmGradient.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
+import WebglPath from "../lib/webgl/path.js";
 
 /**
  * jmGraph画图类库
@@ -73,6 +74,16 @@ export default class jmGraph extends jmControl {
 		}	
 		this.canvas = canvas;	
 		this.context = canvas.getContext(this.mode);
+		// webgl模式
+		if(this.mode === 'webgl') {
+
+			//this.context.enable(this.context.BLEND);// 开启混合功能：（注意，它不可和gl.DEPTH_TEST一起使用）
+			//this.context.blendFunc(this.context.SRC_ALPHA, this.context.ONE_MINUS_SRC_ALPHA); // 指定混合函数：
+
+			this.webglControl = new WebglPath(this, {
+				style: this.style
+			});
+		}
 		this.__init(callback);
 	}
 
@@ -364,21 +375,7 @@ export default class jmGraph extends jmControl {
 				h = h / this.scaleSize.y;
 			}*/
 		}
-		if(this.mode === 'webgl') {
-			let bg = {
-				r: 0,
-				g: 0,
-				b: 0,
-				a: 0
-			};
-			if(this.style && this.style.fill) {
-				bg = this.utils.hexToRGBA(this.style.fill);
-			}
-			this.context.clearColor(bg.r, bg.g, bg.b, bg.a); // 设置清空颜色缓冲时的颜色值
-        	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
-		}
-		//如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
-		else if(this.style && this.style.fill) {
+		if(this.style && this.style.fill) {
 			this.points = [
 				{x:0,y:0},
 				{x:w,y:0},
@@ -386,7 +383,11 @@ export default class jmGraph extends jmControl {
 				{x:0,y:h}
 			];
 		}
-		else if(this.context.clearRect) this.context.clearRect(0,0,w,h);
+		if(this.context.clearRect) this.context.clearRect(0, 0, w, h);
+		else if(this.mode === 'webgl' && this.context.clear) {
+			this.context.clearColor(0, 0,0, 0); // 设置清空颜色缓冲时的颜色值
+        	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
+		}
 	}
 
 	/**

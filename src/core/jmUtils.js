@@ -142,7 +142,8 @@ const colorKeywords = {
     white:                "#ffffff",
     whitesmoke:           "#f5f5f5",
     yellow:               "#ffff00",
-    yellowgreen:          "#9acd32"
+    yellowgreen:          "#9acd32",
+    transparent:          "rgba(0,0,0,0)"
   };
 
 /**
@@ -838,6 +839,22 @@ export default class jmUtils {
             }
         }
         return this.__hexToRGBA_Cache[hex] = res;     
+    }
+
+    /**
+     * 把255的rgb值转为0-1的值
+     * @param {rgba} color 颜色
+     */
+    static rgbToDecimal(color) {
+        color.r = this.byteToDecimal(color.r);
+        color.g = this.byteToDecimal(color.g);
+        color.b = this.byteToDecimal(color.b);
+        return color;
+    }
+
+    //255值转为0-1的小数
+    static byteToDecimal(b) {
+        return b / 255;
     }
 
     /**

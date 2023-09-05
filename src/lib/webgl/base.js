@@ -1,5 +1,6 @@
 import {
     createProgram,
+    useProgram,
     writeVertexAttrib
 } from './core/program.js';
 
@@ -25,6 +26,23 @@ class WeblBase {
     // 创建程序
     createProgram(vertexSrc, fragmentSrc) {
         return createProgram(this.context, vertexSrc, fragmentSrc);
+    }
+
+    // 指定使用某个程序
+    useProgram(program=this.program) {
+        program = program.program || program;
+        if(this.context.__curent_program === program) return program;
+        useProgram(this.context, program.program || program);
+        this.context.__curent_program = program;
+        return program;
+    }
+
+    getAttribLocation(name) {
+        return this.context.getAttribLocation(this.program.program, name);
+    }
+    
+    getUniformLocation(name) {
+        return this.context.getUniformLocation(this.program.program, name);
     }
 
     // 把缓冲区的值写入变量

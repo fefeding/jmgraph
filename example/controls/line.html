@@ -73,7 +73,7 @@
 			
 			style.lineType = "dotted";
 			style.dashLength = 10;
-			style.lineWidth = 2;
+			style.lineWidth = 1;
 			var line = graph.createLine({x:50,y:50},{x:200,y:400}, style);
 			style.zIndex = 20;
 			graph.children.add(line);
@@ -110,17 +110,15 @@
 			//delete style.fill;
 			//style.close = true;
 			var path = graph.createPath(null,style);
-			path.points.push({x:10,y:60});
-			path.points.push({x:90,y:60});
+			path.points.push({x:200,y:60});
+			path.points.push({x:400,y:60});
 
-			path.points.push({x:80,y:20});	
-			path.points.push({x:50,y:60});
-			path.points.push({x:10,y:10});
+			path.points.push({x:320,y:120});
 
+			path.points.push({x:260,y:20});	
+			path.points.push({x:250,y:60});
+			path.points.push({x:200,y:10});
 
-			path.points.push({x:100,y:60});
-			path.points.push({x:100,y:120});
-			path.points.push({x:90,y:60});
 			
 			
 

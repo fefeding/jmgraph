@@ -134,6 +134,11 @@ class WebglPath extends WebglBase {
         this.points = points;
     }
 
+    endDraw() {
+        if(this.points) delete this.points;
+        if(this.pathPoints) delete this.pathPoints;
+    }
+
     // 图形封闭
     closePath() {
         if(this.points && this.points.length > 2 && this.points[0] !== this.points[this.points.length-1]) {
@@ -147,18 +152,15 @@ class WebglPath extends WebglBase {
     writePoints(points, attr = this.program.attrs.a_position) {
        
         const fixedPoints = [];
-        // 设置路径
-        if(attr) {
-            for(const p of points) {
-                fixedPoints.push(
-                    p.x + this.absoluteBounds.left,
-                    p.y + this.absoluteBounds.top
-                );
-            }
-            const vertexBuffer = this.createFloat32Buffer(fixedPoints); 
-            this.writeVertexAttrib(vertexBuffer, attr, 2, 0, 0);
+        for(const p of points) {
+            fixedPoints.push(
+                p.x + this.absoluteBounds.left,
+                p.y + this.absoluteBounds.top
+            );
         }
-        return fixedPoints;
+        const vertexBuffer = this.createFloat32Buffer(fixedPoints); 
+        this.writeVertexAttrib(vertexBuffer, attr, 2, 0, 0);
+        return vertexBuffer;
     }
 
     // 连接二个点
@@ -183,6 +185,78 @@ class WebglPath extends WebglBase {
         return points;
     }
 
+    // 把path坐标集合分解成一个个点，并且处理moveTo线段能力
+    pathToPoints(points=this.points) {
+        let start = null;
+        const res = [];
+        for(let i=0; i<points.length; i++) {
+            const p = points[i];
+            if(start && !p.m) {
+                const linePoints = this.genLinePoints(start, p);
+                res.push(...linePoints);
+            }
+            else if(start && !res.includes(start)) {
+                res.push(start);
+            }
+            start = p;
+        }
+        if(!res.includes(start)) res.push(start);
+        return res;
+    }
+
+    // 把path坐标集合转为线段集
+    pathToLines(points) {
+        let start = null;
+        const res = [];
+        for(let i=0; i<points.length; i++) {
+            const p = points[i];
+            // 不重合的二个点，组成线段
+            if(start && !p.m && !(start.x == p.x && start.y == p.y)) {
+                const line = {
+                    start,
+                    end: p
+                };
+                res.push(line);
+            }
+            start = p;
+        }
+        if(!res.includes(start)) res.push(start);
+        return res;
+    }
+
+    // 计算二个线段的交点
+    getIntersection(line1, line2) {
+        // 三角形abc 面积的2倍
+        const area_abc = (line1.start.x - line2.start.x) * (line1.end.y - line2.start.y) - (line1.start.y - line2.start.y) * (line1.end.x - line2.start.x);
+        
+        // 三角形abd 面积的2倍
+        const area_abd = (line1.start.x - line2.end.x) * (line1.end.y - line2.end.y) - (line1.start.y - line2.end.y) * (line1.end.x - line2.end.x);
+        
+        // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
+        if (area_abc*area_abd >= 0) {
+            return null;
+        }
+        
+        // 三角形cda 面积的2倍
+        const area_cda = (line2.start.x - line1.start.x) * (line2.end.y - line1.start.y) - (line2.start.y - line1.start.y) * (line2.end.x - line1.start.x);
+        // 三角形cdb 面积的2倍
+        // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+        const area_cdb = area_cda + area_abc - area_abd ;
+        if(area_cda * area_cdb >= 0) {
+            return null ;
+        }
+        
+        //计算交点坐标
+        const t = area_cda / (area_abd - area_abc);
+        const dx= t * (line1.end.x - line1.start.x);
+        const dy= t * (line1.end.y - line1.start.y);
+
+        return { 
+            x: line1.start.x + dx , 
+            y: line1.start.y + dy 
+        };
+    }
+
     // 画线条
     stroke() {
        // this.useProgram();
@@ -196,28 +270,16 @@ class WebglPath extends WebglBase {
             this.context.uniform1i(this.program.uniforms.v_type.location, 1);
         }
         if(this.points && this.points.length) {
-            let start = null;
-            const points = [];
-            for(let i=0; i<this.points.length; i++) {
-                const p = this.points[i];
-                if(start && !p.m) {
-                    const linePoints = this.genLinePoints(start, p);
-                    points.push(...linePoints);
-                }
-                else if(start && !points.includes(start)) {
-                    points.push(start);
-                }
-                start = p;
-            }
-            if(!points.includes(start)) points.push(start);
-            this.writePoints(points);
+            const points =this.pathToPoints(this.points);
+            const buffer = this.writePoints(points);
             this.context.drawArrays(this.context.POINTS, 0, points.length);
+            this.deleteBuffer(buffer);
         }
         
     }
 
     // 填充图形
-    fill(polygonIndices=[], type = 1) {
+    fill(type = 1) {
         //this.useProgram();
 
         if(this.style.fillStyle) {
@@ -228,17 +290,35 @@ class WebglPath extends WebglBase {
         this.context.uniform1i(this.program.uniforms.v_type.location, type);
         
         if(this.points && this.points.length) {
-            // 需要分割三角形，不然填充会有问题
-            const triangles = this.earCutPointsToTriangles(this.points, polygonIndices);// 切割得到三角形顶点二维数组
-            //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-            //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
+            let buffer = null;
+            if(this.points.length > 3) {
+                const lines = this.pathToLines(this.points); // 分解得到线段
+                if(lines && lines.length > 2) {
+                    
+                }
+                // 需要分割三角形，不然填充会有问题
+                const triangles = this.earCutPoints(this.points);// 切割得到三角形顶点二维数组
 
+                if(triangles && triangles.length) {
+                    buffer = this.writePoints(this.points);
+                    const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
+                    this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
+                    this.deleteBuffer(indexBuffer);
+                }
+            }            
+            else {
+                buffer = this.writePoints(this.points);
+                this.context.drawArrays(this.context.TRIANGLE_FAN, 0, this.points.length);
+            }
+            if(buffer) this.deleteBuffer(buffer);
+/*
             for(const points of triangles) {
                 this.writePoints(points);
 
                 const indexBuffer = this.createUint16Buffer([0,1,2], this.context.ELEMENT_ARRAY_BUFFER);
                 this.context.drawElements(this.context.TRIANGLES, 3, this.context.UNSIGNED_SHORT, 0);
-            }     
+                this.deleteBuffer(indexBuffer);
+            }   */  
         }
     }
 
@@ -283,17 +363,18 @@ class WebglPath extends WebglBase {
         ];
 
         // 纹理坐标
-        if(this.program.attrs.a_text_coord) {
-            this.writePoints(this.points, this.program.attrs.a_text_coord);
-        }
+        const coordBuffer = this.writePoints(this.points, this.program.attrs.a_text_coord);
 
         // 标注为纹理对象
        // 标注为fill
         this.context.uniform1i(this.program.uniforms.v_type.location, 2);
         if(this.points && this.points.length) {
-            this.writePoints(this.points);
+            const buffer = this.writePoints(this.points);
             this.context.drawArrays(this.context.TRIANGLE_FAN, 0, this.points.length);
+            this.deleteBuffer(buffer);
         }
+        this.deleteBuffer(coordBuffer);
+        this.deleteTexture(texture);
     }
 }
 

@@ -95,7 +95,7 @@ export default class jmImage extends jmControl {
 
 	// 绘制
 	drawImg(img) {
-		if(!img) {
+		if(!img || !img.complete) {
 			console.warn('image is empty');
 			return;
 		}

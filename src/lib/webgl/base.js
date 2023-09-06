@@ -13,7 +13,8 @@ import {
 } from './core/buffer.js';
 
 import {
-    create2DTexture
+    create2DTexture,
+    deleteTexture
 } from './core/texture.js';
 
 class WeblBase {
@@ -61,12 +62,18 @@ class WeblBase {
     // 创建float32的buffer
     createFloat32Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
         const buffer = createFloat32Buffer(this.context, data, type, drawType);
-        return buffer;
+        return {
+            data,
+            ...buffer
+        };
     }
 
     createUint16Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
         const buffer = createUint16Buffer(this.context, data, type, drawType);
-        return buffer;
+        return {
+            data,
+            ...buffer
+        };
     }
 
     // 释放
@@ -77,6 +84,11 @@ class WeblBase {
     // 生成纹理
     create2DTexture(img) { 
         return create2DTexture(this.context, img);
+    }
+
+    // 删除纹理
+    deleteTexture(texture) {
+        return deleteTexture(this.context, texture.texture || texture);
     }
 
     // 多边切割, 得到三角形顶点索引数组

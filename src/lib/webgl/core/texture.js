@@ -5,8 +5,8 @@ function create2DTexture(gl, img) {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1) // 图像反转Y轴
     gl.activeTexture(gl.TEXTURE0) // 激活纹理单元
     gl.bindTexture(gl.TEXTURE_2D, texture) // 绑定纹理对象
-    /*
-        const level = 0;
+    
+    const level = 0;
     const internalFormat = gl.RGBA;
     const width = 1;
     const height = 1;
@@ -15,16 +15,16 @@ function create2DTexture(gl, img) {
     const srcType = gl.UNSIGNED_BYTE;
     const pixel = new Uint8Array([0, 0, 255, 255]); // opaque blue
     gl.texImage2D(
-    gl.TEXTURE_2D,
-    level,
-    internalFormat,
-    width,
-    height,
-    border,
-    srcFormat,
-    srcType,
-    pixel
-    );*/
+        gl.TEXTURE_2D,
+        level,
+        internalFormat,
+        width,
+        height,
+        border,
+        srcFormat,
+        srcType,
+        pixel
+    );
     /*
     gl.texImage2D(
         gl.TEXTURE_2D, // 纹理目标，这里是二维纹理
@@ -49,6 +49,12 @@ function create2DTexture(gl, img) {
     };
 }
 
+// 删除纹理
+function deleteTexture(gl, texture) {
+    return gl.deleteTexture(texture);
+}
+
 export {
-    create2DTexture
+    create2DTexture,
+    deleteTexture
 }

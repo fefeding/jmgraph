@@ -817,13 +817,15 @@ export default class jmControl extends jmProperty {
 		
 		if(this.style['fill']) {
 			// polygonIndices 顶点数组索引
-			if(this.webglControl) this.webglControl.fill(this.polygonIndices||[]);
+			if(this.webglControl) this.webglControl.fill();
 			else this.context.fill && this.context.fill();
 		}
-		if(this.style['stroke'] || !this.style['fill']) {
+		if(this.style['stroke'] || (!this.style['fill'] && !this.is('graph'))) {
 			if(this.webglControl) this.webglControl.stroke();
 			else this.context.stroke && this.context.stroke();
 		}
+
+		if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
 
 		this.needUpdate = false;
 	}

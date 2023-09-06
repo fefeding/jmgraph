@@ -220,7 +220,6 @@ class WebglPath extends WebglBase {
             }
             start = p;
         }
-        if(!res.includes(start)) res.push(start);
         return res;
     }
 
@@ -257,6 +256,45 @@ class WebglPath extends WebglBase {
         };
     }
 
+    // 根据路径点坐标，切割出封闭的多边形
+    getPolygon(points) {
+        const polygons = [];
+        const lines = this.pathToLines(points); // 分解得到线段
+        if(lines && lines.length > 2) {
+            for(let i=0; i<lines.length-1; i++) {
+                const line1 = lines[i];
+                let polygon = [];// 当前图形
+                let lastLine = line1; // 下一个还在连接状态的线
+                for(let j=i+1; j<lines.length; j++) {
+                    const line2 = lines[j];
+                    // 如果跟下一条线相接，则表示还在形成图形中
+                    if(lastLine.end.x === line2.start.x && lastLine.end.y === line2.start.y) {
+                        lastLine = line2;
+                        polygon.push(line2.start);
+                    }
+                    else {
+                        polygon = [];
+                        // 表示连线断开，如果还只是下一条线，后面逻辑没必要进行，2条线断开后就没有形成图形的可能
+                        if(j === i+1) continue;
+                    }
+                    
+                    const intersection = this.getIntersection(line1, line2);// 计算交点
+                    if(intersection) {
+                        polygon.push(intersection);// 交叉点为图形顶点
+                        lastLine = line2;
+                        // 如果上一个连接线不是当前交叉线，则表示重新开始闭合
+                        // 如果上一个连接线是当前交叉线，形成了封闭的图形
+                        if(lastLine === line2) {
+                            polygons.push(polygon);
+                            polygon = [ intersection ];// 重新开始新一轮找图形
+                        }
+                    }
+                }
+            }
+        }
+        return polygons;
+    }
+
     // 画线条
     stroke() {
        // this.useProgram();
@@ -290,27 +328,31 @@ class WebglPath extends WebglBase {
         this.context.uniform1i(this.program.uniforms.v_type.location, type);
         
         if(this.points && this.points.length) {
-            let buffer = null;
+           
             if(this.points.length > 3) {
-                const lines = this.pathToLines(this.points); // 分解得到线段
-                if(lines && lines.length > 2) {
-                    
-                }
-                // 需要分割三角形，不然填充会有问题
-                const triangles = this.earCutPoints(this.points);// 切割得到三角形顶点二维数组
+                
+                const polygons = this.getPolygon(this.points);
+                if(polygons.length) {
+                    for(const polygon of polygons) {
+                        // 需要分割三角形，不然填充会有问题
+                        const triangles = this.earCutPoints(polygon);// 切割得到三角形顶点二维数组
 
-                if(triangles && triangles.length) {
-                    buffer = this.writePoints(this.points);
-                    const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-                    this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
-                    this.deleteBuffer(indexBuffer);
+                        if(triangles && triangles.length) {
+                            const buffer = this.writePoints(polygon);
+                            const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
+                            this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
+                            this.deleteBuffer(indexBuffer);
+                            this.deleteBuffer(buffer);
+                        }
+                    }
                 }
             }            
             else {
-                buffer = this.writePoints(this.points);
+                const buffer = this.writePoints(this.points);
                 this.context.drawArrays(this.context.TRIANGLE_FAN, 0, this.points.length);
+                if(buffer) this.deleteBuffer(buffer);
             }
-            if(buffer) this.deleteBuffer(buffer);
+            
 /*
             for(const points of triangles) {
                 this.writePoints(points);

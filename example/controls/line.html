@@ -110,16 +110,29 @@
 			//delete style.fill;
 			//style.close = true;
 			var path = graph.createPath(null,style);
-			path.points.push({x:10,y:10});
 			path.points.push({x:10,y:60});
-			path.points.push({x:80,y:20});
-			path.points.push({x:90,y:80});				
-			//path.points.push({x:80,y:20});
-			path.points.push({x:80,y:80});
-			
-			rect.children.add(path);
+			path.points.push({x:90,y:60});
 
-			//rect.children.add(line);
+			path.points.push({x:80,y:20});	
+			path.points.push({x:50,y:60});
+			path.points.push({x:10,y:10});
+
+
+			path.points.push({x:100,y:60});
+			path.points.push({x:100,y:120});
+			path.points.push({x:90,y:60});
+			
+			
+
+			/*path.polygonIndices = [
+				1,2,3,
+				3,4,5,
+				5,6,7
+			];*/
+			
+			//rect.children.add(path);
+
+			graph.children.add(path);
 
 			path.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';

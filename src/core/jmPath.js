@@ -13,7 +13,7 @@ export default class jmPath extends jmControl {
 	constructor(params, t='jmPath') {
 		super(params, t);		
 		this.points = params && params.points ? params.points : [];	
-		
+		this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];	
 	}
 	
 	/**
@@ -30,6 +30,22 @@ export default class jmPath extends jmControl {
 		this.needUpdate = true;
 		return this.property('points', v);
 	}
+
+	/**
+	 * 顶点数组索引，对应points中的顶点
+	 * @property polygonIndices
+	 * @type {array} 
+	 */
+	get polygonIndices() {
+		let s = this.property('polygonIndices');
+		return s;
+	}
+	set polygonIndices(v) {
+		this.needUpdate = true;
+		return this.property('polygonIndices', v);
+	}
+	
+	
 }
 
 export { jmPath };

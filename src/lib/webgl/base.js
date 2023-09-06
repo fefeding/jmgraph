@@ -1,3 +1,5 @@
+
+import earcut from '../earcut.js';
 import {
     createProgram,
     useProgram,
@@ -6,6 +8,7 @@ import {
 
 import {
     createFloat32Buffer,
+    createUint16Buffer,
     deleteBuffer,
 } from './core/buffer.js';
 
@@ -61,6 +64,11 @@ class WeblBase {
         return buffer;
     }
 
+    createUint16Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
+        const buffer = createUint16Buffer(this.context, data, type, drawType);
+        return buffer;
+    }
+
     // 释放
     deleteBuffer(buffer) {
         if(buffer) return deleteBuffer(this.context, buffer.buffer || buffer);
@@ -69,6 +77,46 @@ class WeblBase {
     // 生成纹理
     create2DTexture(img) { 
         return create2DTexture(this.context, img);
+    }
+
+    // 多边切割, 得到三角形顶点索引数组
+    // polygonIndices 顶点索引，
+    earCutPoints(points, polygonIndices=[]) {
+        const arr = this.pointsToArray(points);
+        const ps = earcut(arr, polygonIndices);// 切割得到3角色顶点索引，
+        return ps;
+    }
+
+    // 多边切割, 得到三角形顶点
+    // polygonIndices 顶点索引，
+    earCutPointsToTriangles(points, polygonIndices=[]) {
+        const ps = this.earCutPoints(points, polygonIndices);// 切割得到3角色顶点索引，
+        const triangles = [];
+        // 用顶点索引再组合成坐标数组
+        for(let i=0;i<ps.length; i+=3) {
+            const p1 = points[ps[i]];
+            const p2 = points[ps[i+1]];
+            const p3 = points[ps[i+2]];
+
+            triangles.push([p1, p2, p3]);// 每三个顶点构成一个三角
+        }
+        return triangles;
+    }
+
+    // 点坐标数组转为一维数组
+    pointsToArray(points) {
+        return [].concat(...points.map(p=>[p.x,p.y]));// 把x,y转为数组元素
+    }
+    // 每2位表示坐标x,y转为坐标点对象
+    arrayToPoints(arr) {
+        const points = [];
+        for(let i=0;i<arr.length; i+=2) {
+            points.push({
+                x: arr[i],
+                y: arr[i+1]
+            });
+        }
+        return points;
     }
 }
 

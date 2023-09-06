@@ -83,15 +83,10 @@ export default class jmImage extends jmControl {
 	 *
 	 * @method draw
 	 */
-	async draw() {	
+	draw() {	
 		try {			
 			const img = this.getImage();	
-			if(img.complete) this.drawImg(img);
-			else {
-				img.onload = ()=>{
-					this.drawImg(img);
-				}	
-			}
+			this.drawImg(img);
 		}
 		catch(e) {
 			console.error && console.error(e);
@@ -186,17 +181,17 @@ export default class jmImage extends jmControl {
 		}
 		else if(typeof document !== 'undefined' && document.createElement) {
 			this.__img = document.createElement('img');
-			//this.__img.onload = ()=>{
-			//	this.needUpdate = true;
-			//};
+			this.__img.onload = ()=>{
+				this.needUpdate = true;
+			};
 			if(src && typeof src == 'string') this.__img.src = src;
 		}
 		else if(this.graph.isWXMiniApp && this.graph.canvas && typeof src === 'string') {
 			// 图片对象
 			this.__img = this.graph.canvas.createImage();
-			//this.__img.onload = ()=>{
-			//	this.needUpdate = true;
-			//};
+			this.__img.onload = ()=>{
+				this.needUpdate = true;
+			};
 			// 设置图片src
 			this.__img.src = src;
 		}

@@ -816,7 +816,8 @@ export default class jmControl extends jmProperty {
 		}
 		
 		if(this.style['fill']) {
-			if(this.webglControl) this.webglControl.fill();
+			// polygonIndices 顶点数组索引
+			if(this.webglControl) this.webglControl.fill(this.polygonIndices||[]);
 			else this.context.fill && this.context.fill();
 		}
 		if(this.style['stroke'] || !this.style['fill']) {
@@ -865,7 +866,7 @@ export default class jmControl extends jmProperty {
 	 *
 	 * @method paint
 	 */
-	async paint(v) {
+	paint(v) {
 		if(v !== false && this.visible !== false) {		
 			if(this.initPoints) this.initPoints();
 			//计算当前边界
@@ -885,13 +886,13 @@ export default class jmControl extends jmProperty {
 			
 			this.setStyle();//设定样式
 
-			if(needDraw && this.beginDraw) await this.beginDraw();
-			if(needDraw && this.draw) await this.draw();	
-			if(needDraw && this.endDraw) await this.endDraw();
+			if(needDraw && this.beginDraw) this.beginDraw();
+			if(needDraw && this.draw) this.draw();	
+			if(needDraw && this.endDraw) this.endDraw();
 
 			if(this.children) {
-				this.children.each(async function(i,item) {
-					if(item && item.paint) await item.paint();
+				this.children.each(function(i,item) {
+					if(item && item.paint) item.paint();
 				});
 			}
 

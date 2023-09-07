@@ -1,5 +1,6 @@
 
 import earcut from '../earcut.js';
+import webglGradient from './gradient.js';
 import {
     createProgram,
     useProgram,
@@ -66,6 +67,7 @@ class WeblBase {
     // 禁用attri
     disableVertexAttribArray(attr) {
         try{
+            if(!attr) return attr;
             return disableVertexAttribArray(this.context, attr);
         }
         catch(e) {
@@ -94,6 +96,7 @@ class WeblBase {
     // 释放
     deleteBuffer(buffer) {
         try {
+            if(!buffer) return;
             const bufferHandler = buffer.buffer || buffer;
             if(bufferHandler) return deleteBuffer(this.context, bufferHandler);
         }
@@ -158,6 +161,24 @@ class WeblBase {
             });
         }
         return points;
+    }
+
+    // 创建线性渐变
+    createLinearGradient(x1, y1, x2, y2) {
+        return new webglGradient('linear', {
+            x1, y1, x2, y2
+        });
+    }
+    // 创建放射性渐变
+    createRadialGradient(x1, y1, r1, x2, y2, r2) {
+        return new webglGradient('radial', {
+            x1, y1, r1,
+            x2, y2, r2
+        });
+    }
+    // 判断是否是一个渐变对象
+    isGradient(obj) {
+        return obj && obj instanceof webglGradient;
     }
 }
 

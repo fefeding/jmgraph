@@ -84,8 +84,13 @@ export default class jmGradient {
 		let sy1 = Number(y1) + bounds.top;
 		let sx2 = Number(x2) + bounds.left;
 		let sy2 = Number(y2) + bounds.top;
-		if(this.type === 'linear') {		
-			context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
+		if(this.type === 'linear') {
+			if(control.mode === 'webgl' && control.webglControl) {
+				gradient = control.webglControl.createLinearGradient(sx1, sy1, sx2, sy2);
+			}	
+			else {		
+				context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
+			}
 		}
 		else if(this.type === 'radial') {
 			let r1 = this.r1||0;
@@ -97,9 +102,12 @@ export default class jmGradient {
 			if(jmUtils.checkPercent(r2)) {
 				r2 = jmUtils.percentToNumber(r2);
 				r2 = d * r2;
+			}
+			if(control.mode === 'webgl' && control.webglControl) {
+				gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
 			}	
 			//offsetLine = Math.abs(r2 - r1);//二圆半径差
-			if(context.createRadialGradient) {
+			else if(context.createRadialGradient) {
 				gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);	
 			}
 			//小程序的接口特殊

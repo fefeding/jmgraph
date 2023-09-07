@@ -57,6 +57,10 @@ const pathFragmentSource = `
         if(v_type == 1.0) {
             gl_FragColor = v_single_color;
         }
+        // 渐变色
+        else if(v_type == 3.0) {
+            gl_FragColor = v_color;
+        }
         else if(v_type == 2.0) {
             vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);
             gl_FragColor = texture2D(u_sample, pos);
@@ -424,9 +428,17 @@ class WebglPath extends WebglBase {
         // 标注为fill
         this.context.uniform1i(this.program.uniforms.a_type.location, type);
 
-        const colorBuffer = this.setFragColor(color);
-
         const buffer = this.writePoints(points);
+
+        let colorBuffer = null;
+        // 如果是渐变色，则需要计算偏移量的颜色
+        if(this.isGradient(color)) {
+
+        }
+        else {
+            colorBuffer = this.setFragColor(color);
+        }
+
         this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
         if(buffer) {
             this.deleteBuffer(buffer);

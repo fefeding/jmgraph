@@ -21,6 +21,12 @@ class WeblGradient {
             color
         });
     }
+
+    // 根据绘制图形的坐标计算出对应点的颜色
+    toPointColors(points) {
+        const stops = this.stops.sort((p1, p2)=>p1.offset-p2.offset); // 渐变色排序从小于大
+
+    }
 }
 
 export default WeblGradient;

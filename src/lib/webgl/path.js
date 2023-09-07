@@ -28,7 +28,7 @@ const pathVertexSource = `
     ${convertPointSource}
 
     void main() {
-        gl_PointSize = a_point_size;
+        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;
         v_type = float(a_type);
         vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);
         gl_Position = pos;
@@ -75,6 +75,8 @@ const pathFragmentSource = `
 class WebglPath extends WebglBase {
     constructor(graph, option) {
         super(graph, option);
+        // 是否是规则的，不规则的处理方式更为复杂和耗性能
+        this.isRegular = option.isRegular || false;
     }
 
     // i当前程序
@@ -180,12 +182,12 @@ class WebglPath extends WebglBase {
             const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             const cos = dx / len;
             const sin = dy / len;
-            const step = 0.1;
+            const step = 1;
             for(let l=step; l<len; l+=step) {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;
                 points.push({
-                    x, y
+                    x: Number(x.toFixed(2)), y: Number(y.toFixed(2))
                 });
             }
         }
@@ -331,9 +333,11 @@ class WebglPath extends WebglBase {
             this.context.uniform1i(this.program.uniforms.a_type.location, 1);
         }
         if(this.points && this.points.length) {
-            const points =this.pathToPoints(this.points);
+            const regular = this.isRegular && (this.style.lineWidth == 1);
+            const points = regular? this.points : this.pathToPoints(this.points);
+            //this.context.lineWidth(10);
             const buffer = this.writePoints(points);
-            this.context.drawArrays(this.context.POINTS, 0, points.length);
+            this.context.drawArrays(regular? this.context.LINES: this.context.POINTS, 0, points.length);
             this.deleteBuffer(buffer);
         }
         
@@ -353,7 +357,8 @@ class WebglPath extends WebglBase {
                 this.context.uniform4f(this.program.uniforms.v_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
             
                 let filled = false;// 是否成功填充
-                if(this.points.length > 3) {                
+                // 3个以上的点，且非规则图形才需要切割
+                if(this.points.length > 3 && !this.isRegular) {                
                     const polygons = this.getPolygon(this.points);
                     if(polygons.length) {
                         for(const polygon of polygons) {
@@ -428,7 +433,8 @@ class WebglPath extends WebglBase {
         this.context.uniform1i(this.program.uniforms.a_type.location, 2);
 
         let filled = false;// 是否成功填充
-        if(points.length > 3) {                
+        // 3个以上的点，且非规则图形才需要切割
+        if(points.length > 3 && !this.isRegular) {                
             const polygons = this.getPolygon(points);
             if(polygons.length) {
                 for(const polygon of polygons) {

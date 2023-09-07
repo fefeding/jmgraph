@@ -9,6 +9,7 @@ import {jmArc} from "./jmArc.js";
 export default class jmCircle extends jmArc {		
 	
 	constructor(params, t='jmCircle') {
+		params.isRegular = true;// 规则的
 		super(params, t);		
 	}
 	/**

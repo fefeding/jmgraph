@@ -65,7 +65,13 @@ class WeblBase {
 
     // 禁用attri
     disableVertexAttribArray(attr) {
-        return disableVertexAttribArray(this.context, attr);
+        try{
+            return disableVertexAttribArray(this.context, attr);
+        }
+        catch(e) {
+            console.error(e);
+        }
+        return attr;
     }
 
     // 创建float32的buffer
@@ -87,7 +93,15 @@ class WeblBase {
 
     // 释放
     deleteBuffer(buffer) {
-        if(buffer) return deleteBuffer(this.context, buffer.buffer || buffer);
+        try {
+            const bufferHandler = buffer.buffer || buffer;
+            if(bufferHandler) return deleteBuffer(this.context, bufferHandler);
+        }
+        catch(e) {
+            console.log(buffer);
+            console.error(e);
+        }
+        return buffer;
     }
 
     // 生成纹理
@@ -97,7 +111,13 @@ class WeblBase {
 
     // 删除纹理
     deleteTexture(texture) {
-        return deleteTexture(this.context, texture.texture || texture);
+        try {
+            return deleteTexture(this.context, texture.texture || texture);
+        }
+        catch(e) {
+            console.error(e);
+        }
+        return texture;
     }
 
     // 多边切割, 得到三角形顶点索引数组

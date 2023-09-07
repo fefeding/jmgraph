@@ -10,6 +10,7 @@ import {jmArc} from "./jmArc.js";
 export default class jmHArc extends jmArc {
 		
 	constructor(params, t='jmHArc') {
+		params.isRegular = true;// 规则的
 		super(params, t);
 
 		this.minRadius = params.minRadius || this.style.minRadius || 0;

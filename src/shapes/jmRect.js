@@ -13,6 +13,7 @@ export default class jmRect extends jmPath {
 
 	constructor(params, t='jmRect') {
 		params = params||{};
+		params.isRegular = true;// 规则的
 		super(params, t);
 
 		this.style.close = true;

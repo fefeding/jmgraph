@@ -11,6 +11,8 @@ export default class jmArc extends jmPath {
 
 	constructor(params, t='jmArc') {
 		if(!params) params = {};
+		params.isRegular = true;// 规则的
+
 		super(params, t);
 
 		this.center = params.center || {x:0,y:0};

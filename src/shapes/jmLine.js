@@ -9,6 +9,9 @@ import {jmPath} from "../core/jmPath.js";
 export default class jmLine extends jmPath {	
 	
 	constructor(params, t='jmLine') {
+		
+		params.isRegular = true;// 规则的
+
 		super(params, t);
 
 		this.start = params.start || {x:0,y:0};

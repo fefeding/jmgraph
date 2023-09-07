@@ -12,6 +12,7 @@ export default class jmImage extends jmControl {
 
 	constructor(params, t) {
 		params = params || {};
+		params.isRegular = true;// 规则的
 		super(params, t||'jmImage');
 
 		this.style.fill = this.fill || 'transparent';//默认指定一个fill，为了可以鼠标选中

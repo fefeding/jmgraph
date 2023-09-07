@@ -60,7 +60,8 @@ export default class jmControl extends jmProperty {
 		// webgl模式
 		if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
-				style: this.style
+				style: this.style,
+				isRegular: params.isRegular
 			});
 		}
 

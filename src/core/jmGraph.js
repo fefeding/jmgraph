@@ -30,7 +30,8 @@ export default class jmGraph extends jmControl {
 		option = option || {};
 		option.mode = option.mode || '2d'; // webgl | 2d
 		option.interactive = true;
-		
+		option.isRegular = true;// 规则的
+
 		super(option, 'jmGraph');
 
 		this.option = option || {};
@@ -79,7 +80,8 @@ export default class jmGraph extends jmControl {
 
 			this.context.enable(this.context.BLEND);// 开启混合功能：（注意，它不可和gl.DEPTH_TEST一起使用）
 			this.context.blendFunc(this.context.SRC_ALPHA, this.context.ONE_MINUS_SRC_ALPHA); // 指定混合函数：
-		}
+			// webglcontextlost webglcontextrestored
+		} 
 		this.__init(callback);
 	}
 
@@ -409,10 +411,11 @@ export default class jmGraph extends jmControl {
 	 * @param {style} style 当前路径的样式
 	 * @return {jmPath} 路径对象jmPath
 	 */
-	createPath(points, style) {
+	createPath(points, style, option={}) {
 		const path = this.createShape('path',{
 			points: points,
-			style: style
+			style: style,
+			...option
 		});
 		return path;
 	}

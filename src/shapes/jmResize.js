@@ -11,6 +11,8 @@ export default class jmResize extends jmRect {
 
 	constructor(params, t='jmResize') {
 		params = params || {};
+		params.isRegular = true;// 规则的
+		
 		super(params, t);
 		//是否可拉伸
 		this.resizable = params.resizable === false?false:true;	

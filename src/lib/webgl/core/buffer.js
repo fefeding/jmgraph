@@ -3,6 +3,9 @@
 function createBuffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
     //先创建一个缓存对象
     const buffer = gl.createBuffer();
+    if(!buffer) {
+        throw Error('创建缓冲区对象失败');
+    }
     //说明缓存对象保存的类型
     gl.bindBuffer(type, buffer);
     //写入坐标数据

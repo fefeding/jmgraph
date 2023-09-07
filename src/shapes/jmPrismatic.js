@@ -9,6 +9,8 @@ import {jmPath} from "../core/jmPath.js";
 export default class jmPrismatic extends jmPath {	
 	
 	constructor(params, t='jmPrismatic') {
+		params.isRegular = true;// 规则的
+		
 		super(params, t);
 		this.style.close = typeof this.style.close == 'undefined'? true : this.style.close;
 

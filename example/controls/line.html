@@ -33,7 +33,7 @@
 			graph.style.fill = '#fff';
 			var style = {
 				stroke:'#D07814FF',
-				lineWidth: 1,
+				lineWidth: 3,
 				close:true
 			};
 			style.shadow = '0,0,5,#fff';
@@ -73,7 +73,7 @@
 			
 			style.lineType = "dotted";
 			style.dashLength = 10;
-			style.lineWidth = 1;
+			style.lineWidth = 2;
 			var line = graph.createLine({x:50,y:50},{x:200,y:400}, style);
 			style.zIndex = 20;
 			graph.children.add(line);
@@ -98,7 +98,9 @@
 			bg.addStop(1,'rgb(150,200,180)');
 			style.fill = 'linear-gradient(0 0 0 100,#000 0,#73998A 1)';
 			style.close = true;
-			var rect = 	graph.createPath(null,style);
+			var rect = 	graph.createPath(null,style, {
+				isRegular: true
+			});
 			rect.points.push({x:20,y:20});
 			rect.points.push({x:20,y:100});
 			rect.points.push({x:100,y:100});

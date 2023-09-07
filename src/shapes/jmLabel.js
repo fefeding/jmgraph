@@ -10,6 +10,7 @@ export default class jmLabel extends jmControl {
 
 	constructor(params, t) {
 		params = params || {};
+		params.isRegular = true;// 规则的
 		super(params, t||'jmLabel');
 
 		this.style.font = this.style.font || "15px Arial";

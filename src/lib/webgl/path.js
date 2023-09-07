@@ -231,8 +231,8 @@ class WebglPath extends WebglBase {
         // 三角形abd 面积的2倍
         const area_abd = (line1.start.x - line2.end.x) * (line1.end.y - line2.end.y) - (line1.start.y - line2.end.y) * (line1.end.x - line2.end.x);
         
-        // 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);
-        if (area_abc*area_abd >= 0) {
+        // 面积符号相同则两点在线段同侧,不相交 (=0表示在线段顶点上);
+        if (area_abc*area_abd > 0) {
             return null;
         }
         
@@ -241,7 +241,7 @@ class WebglPath extends WebglBase {
         // 三角形cdb 面积的2倍
         // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
         const area_cdb = area_cda + area_abc - area_abd ;
-        if(area_cda * area_cdb >= 0) {
+        if(area_cda * area_cdb > 0) {
             return null ;
         }
         
@@ -251,7 +251,7 @@ class WebglPath extends WebglBase {
         const dy= t * (line1.end.y - line1.start.y);
 
         return { 
-            x: line1.start.x + dx , 
+            x: line1.start.x + dx, 
             y: line1.start.y + dy 
         };
     }
@@ -269,24 +269,39 @@ class WebglPath extends WebglBase {
                     const line2 = lines[j];
                     // 如果跟下一条线相接，则表示还在形成图形中
                     if(lastLine.end.x === line2.start.x && lastLine.end.y === line2.start.y) {
+                        polygon.push(lastLine.end);
                         lastLine = line2;
-                        polygon.push(line2.start);
                     }
                     else {
                         polygon = [];
-                        // 表示连线断开，如果还只是下一条线，后面逻辑没必要进行，2条线断开后就没有形成图形的可能
-                        if(j === i+1) continue;
-                    }
+                    }                    
+                    // 表示连线断开，如果还只是下一条线，后面逻辑没必要进行，2条线断开后就没有形成图形的可能
+                    if(j === i+1) continue;
                     
                     const intersection = this.getIntersection(line1, line2);// 计算交点
                     if(intersection) {
                         polygon.push(intersection);// 交叉点为图形顶点
-                        lastLine = line2;
                         // 如果上一个连接线不是当前交叉线，则表示重新开始闭合
                         // 如果上一个连接线是当前交叉线，形成了封闭的图形
-                        if(lastLine === line2) {
+                        if(lastLine === line2 && polygon.length > 1) {
                             polygons.push(polygon);
-                            polygon = [ intersection ];// 重新开始新一轮找图形
+                            
+                            // 封闭后，下一个起始线条就是从交点开始计算起
+                            lastLine = {
+                                start: intersection,
+                                end: line2.end
+                            };
+
+                            // 如果交点是上一条线的终点，则新图形为空
+                            if(line2.end.x === intersection.x && line2.end.y === intersection.y) {
+                                polygon = [];// 重新开始新一轮找图形
+                            }
+                            else {
+                                polygon = [ intersection ];// 重新开始新一轮找图形
+                            }
+                        }
+                        else {
+                            lastLine = line2;
                         }
                     }
                 }
@@ -352,15 +367,6 @@ class WebglPath extends WebglBase {
                 this.context.drawArrays(this.context.TRIANGLE_FAN, 0, this.points.length);
                 if(buffer) this.deleteBuffer(buffer);
             }
-            
-/*
-            for(const points of triangles) {
-                this.writePoints(points);
-
-                const indexBuffer = this.createUint16Buffer([0,1,2], this.context.ELEMENT_ARRAY_BUFFER);
-                this.context.drawElements(this.context.TRIANGLES, 3, this.context.UNSIGNED_SHORT, 0);
-                this.deleteBuffer(indexBuffer);
-            }   */  
         }
     }
 

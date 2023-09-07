@@ -382,10 +382,11 @@ export default class jmGraph extends jmControl {
 				{x:w,y:h},
 				{x:0,y:h}
 			];
+			this.style.close = true;// 封闭填充
 		}
 		if(this.context.clearRect) this.context.clearRect(0, 0, w, h);
 		else if(this.mode === 'webgl' && this.context.clear) {
-			this.context.clearColor(0, 0,0, 0); // 设置清空颜色缓冲时的颜色值
+			this.context.clearColor(0, 0, 0, 0); // 设置清空颜色缓冲时的颜色值
         	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
 		}
 	}

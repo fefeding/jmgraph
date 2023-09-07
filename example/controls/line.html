@@ -30,7 +30,7 @@
 		
 			
 		function init(graph){
-			graph.style.fill = '#00000000';
+			graph.style.fill = '#000000';
 			var style = {
 				stroke:'#D07814FF',
 				lineWidth: 1,
@@ -92,7 +92,7 @@
 
 
 			style = graph.utils.clone(style);	
-			style.opacity = .8;
+			style.opacity = .3;
 			var bg = graph.createLinearGradient(0,0,0,100);
 			bg.addStop(0,'rgb(0,0,0)');
 			bg.addStop(1,'rgb(150,200,180)');
@@ -113,12 +113,13 @@
 			path.points.push({x:200,y:60});
 			path.points.push({x:400,y:60});
 
+			path.points.push({x:360,y:130});
 			path.points.push({x:320,y:120});
 
-			path.points.push({x:300,y:60});
+			//path.points.push({x:300,y:60});
 
 			path.points.push({x:260,y:20});	
-			path.points.push({x:250,y:60});
+			path.points.push({x:250,y:80});
 			path.points.push({x:200,y:10});
 
 			

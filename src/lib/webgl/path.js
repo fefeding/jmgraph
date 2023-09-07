@@ -343,9 +343,8 @@ class WebglPath extends WebglBase {
         this.context.uniform1i(this.program.uniforms.v_type.location, type);
         
         if(this.points && this.points.length) {
-           
-            if(this.points.length > 3) {
-                
+            let filled = false;// 是否成功填充
+            if(this.points.length > 3) {                
                 const polygons = this.getPolygon(this.points);
                 if(polygons.length) {
                     for(const polygon of polygons) {
@@ -358,11 +357,13 @@ class WebglPath extends WebglBase {
                             this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
                             this.deleteBuffer(indexBuffer);
                             this.deleteBuffer(buffer);
+                            filled = true;// 表示已填充过了
                         }
                     }
                 }
-            }            
-            else {
+            }   
+            // 如果前面的条件没有填充成功，则直接按正常填充         
+            if(!filled) {
                 const buffer = this.writePoints(this.points);
                 this.context.drawArrays(this.context.TRIANGLE_FAN, 0, this.points.length);
                 if(buffer) this.deleteBuffer(buffer);

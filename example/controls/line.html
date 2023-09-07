@@ -64,7 +64,7 @@
 				console.log('touchend',evt);
 			});
 			
-			//graph.children.add(line);
+			graph.children.add(line);
 			line.canMove(true);
 			
 
@@ -76,7 +76,7 @@
 			style.lineWidth = 1;
 			var line = graph.createLine({x:50,y:50},{x:200,y:400}, style);
 			style.zIndex = 20;
-			//graph.children.add(line);
+			graph.children.add(line);
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,1)';
 				//graph.canvas.style.cursor = 'pointer';
@@ -103,7 +103,7 @@
 			rect.points.push({x:20,y:100});
 			rect.points.push({x:100,y:100});
 			rect.points.push({x:100,y:20});
-			//graph.children.add(rect);
+			graph.children.add(rect);
 
 			style = graph.utils.clone(style);
 			//style.fill = 'rgba(220,100,80,1)';
@@ -121,19 +121,11 @@
 			path.points.push({x:260,y:20});	
 			path.points.push({x:250,y:80});
 			path.points.push({x:200,y:10});
-
 			
 			
+			rect.children.add(path);
 
-			/*path.polygonIndices = [
-				1,2,3,
-				3,4,5,
-				5,6,7
-			];*/
-			
-			//rect.children.add(path);
-
-			graph.children.add(path);
+			//graph.children.add(path);
 
 			path.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';

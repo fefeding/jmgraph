@@ -41,7 +41,7 @@ export default class jmControl extends jmProperty {
 
 	constructor(params, t) {
 		params = params||{};
-		super();
+		super(params);
 		this.property('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
 		//this.position = params.position || {x:0,y:0};
@@ -57,7 +57,7 @@ export default class jmControl extends jmProperty {
 		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
 
 		// webgl模式
-		if(this.graph.mode === 'webgl') {
+		if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
 				style: this.style
 			});
@@ -90,11 +90,11 @@ export default class jmControl extends jmProperty {
 		let s = this.property('context');
 		if(s) return s;
 		else if(this.is('jmGraph') && this.canvas && this.canvas.getContext) {
-			return this.context = this.canvas.getContext(this.option.mode || '2d');
+			return this.context = this.canvas.getContext(this.mode || '2d');
 		}
-		let g = this.graph;
+		const g = this.graph;
 		if(g) return g.context;
-		return g.canvas.getContext(this.option.mode || '2d');
+		return g.canvas.getContext(this.mode || '2d');
 	}
 	set context(v) {
 		return this.property('context', v);
@@ -820,7 +820,7 @@ export default class jmControl extends jmProperty {
 			if(this.webglControl) this.webglControl.fill();
 			else this.context.fill && this.context.fill();
 		}
-		if(this.style['stroke'] || (!this.style['fill'] && !this.is('graph'))) {
+		if(this.style['stroke'] || (!this.style['fill'] && !this.is('jmGraph'))) {
 			if(this.webglControl) this.webglControl.stroke();
 			else this.context.stroke && this.context.stroke();
 		}

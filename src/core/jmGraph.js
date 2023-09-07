@@ -79,10 +79,6 @@ export default class jmGraph extends jmControl {
 
 			this.context.enable(this.context.BLEND);// 开启混合功能：（注意，它不可和gl.DEPTH_TEST一起使用）
 			this.context.blendFunc(this.context.SRC_ALPHA, this.context.ONE_MINUS_SRC_ALPHA); // 指定混合函数：
-
-			this.webglControl = new WebglPath(this, {
-				style: this.style
-			});
 		}
 		this.__init(callback);
 	}

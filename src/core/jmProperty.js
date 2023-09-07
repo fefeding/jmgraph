@@ -13,10 +13,10 @@ const PROPERTY_KEY = Symbol("properties");
  */
 export default class jmProperty extends jmObject {		
 	
-	constructor() {
+	constructor(params) {
 		super();
-		
 		this[PROPERTY_KEY] = {};
+		if(params && params.mode) this.mode = params.mode;
 	}
 
 	/**
@@ -71,6 +71,21 @@ export default class jmProperty extends jmObject {
 	}
 	set graph(v) {
 		return this.property('graph', v);
+	}
+
+	/**
+	 * 绘制模式 2d/webgl
+	 * @property mode
+	 * @type {string}
+	 */
+	get mode() {
+		let m = this.property('mode');
+		if(m) return m;
+		else if(this.is('jmGraph')) return this.property('mode');		
+		return this.graph.mode;
+	}
+	set mode(v) {
+		return this.property('mode', v);
 	}
 
 	/**

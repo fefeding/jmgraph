@@ -30,7 +30,7 @@
 		
 			
 		function init(graph){
-			graph.style.fill = '#000000';
+			graph.style.fill = '#fff';
 			var style = {
 				stroke:'#D07814FF',
 				lineWidth: 1,
@@ -92,7 +92,7 @@
 
 
 			style = graph.utils.clone(style);	
-			style.opacity = .3;
+			style.opacity = .8;
 			var bg = graph.createLinearGradient(0,0,0,100);
 			bg.addStop(0,'rgb(0,0,0)');
 			bg.addStop(1,'rgb(150,200,180)');
@@ -106,7 +106,7 @@
 			graph.children.add(rect);
 
 			style = graph.utils.clone(style);
-			//style.fill = 'rgba(220,100,80,1)';
+			style.fill = 'rgba(220,100,80, 0.8)';
 			//delete style.fill;
 			//style.close = true;
 			var path = graph.createPath(null,style);

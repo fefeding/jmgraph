@@ -20,11 +20,14 @@ import {
 class WeblBase {
     constructor(graph, option) {
         this.graph = graph;
-        this.context = graph.context;
         this.option = option || {};
         this.style = {
             globalAlpha: 1
         };
+    }
+
+    get context() {
+        if(this.graph) return this.graph.context;
     }
 
     // 创建程序

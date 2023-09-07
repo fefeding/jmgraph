@@ -69,9 +69,13 @@ const pathFragmentSource = `
 // path 绘制类
 class WebglPath extends WebglBase {
     constructor(graph, option) {
-        super(graph, option);   
+        super(graph, option);
+    }
+
+    // i当前程序
+    get program() {
         // 默认所有path用同一个编译好的program
-        this.program = graph.context.pathProgram || (graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
+        return this.graph.context.pathProgram || (this.graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
     }
 
     // 设置样式

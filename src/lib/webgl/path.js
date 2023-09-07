@@ -344,41 +344,42 @@ class WebglPath extends WebglBase {
         //this.useProgram();
         
         if(this.points && this.points.length) {
+            
             // 如果是颜色rgba
             if(this.style.fillStyle && this.style.fillStyle.hasOwnProperty && 
                 this.style.fillStyle.hasOwnProperty('r') && this.style.fillStyle.hasOwnProperty('g') && this.style.fillStyle.hasOwnProperty('b')) {
 
                 const color = this.style.fillStyle;
                 this.context.uniform4f(this.program.uniforms.v_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
-            }
-            // 如果指定的是img，则采用填充图片的方式
-            if(this.style.fillImage) {
-                return this.fillImage(this.style.fillImage, this.points, bounds);
-            }
             
+                let filled = false;// 是否成功填充
+                if(this.points.length > 3) {                
+                    const polygons = this.getPolygon(this.points);
+                    if(polygons.length) {
+                        for(const polygon of polygons) {
+                            // 需要分割三角形，不然填充会有问题
+                            const triangles = this.earCutPoints(polygon);// 切割得到三角形顶点二维数组
 
-            let filled = false;// 是否成功填充
-            if(this.points.length > 3) {                
-                const polygons = this.getPolygon(this.points);
-                if(polygons.length) {
-                    for(const polygon of polygons) {
-                        // 需要分割三角形，不然填充会有问题
-                        const triangles = this.earCutPoints(polygon);// 切割得到三角形顶点二维数组
-
-                        if(triangles && triangles.length) {
-                            const buffer = this.writePoints(polygon);
-                            const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-                            this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
-                            this.deleteBuffer(indexBuffer);
-                            this.deleteBuffer(buffer);
-                            filled = true;// 表示已填充过了
+                            if(triangles && triangles.length) {
+                                const buffer = this.writePoints(polygon);
+                                const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
+                                this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGNED_SHORT, 0);
+                                this.deleteBuffer(indexBuffer);
+                                this.deleteBuffer(buffer);
+                                filled = true;// 表示已填充过了
+                            }
                         }
                     }
+                }   
+                // 如果前面的条件没有填充成功，则直接按正常填充         
+                if(!filled) {
+                    this.fillColor(this.points, type);
                 }
-            }   
-            // 如果前面的条件没有填充成功，则直接按正常填充         
-            if(!filled) {
-                this.fillColor(this.points, type);
+            }
+
+            // 如果指定的是img，则采用填充图片的方式
+            if(this.style.fillImage) {
+                this.fillImage(this.style.fillImage, this.points, bounds);
             }
         }
     }

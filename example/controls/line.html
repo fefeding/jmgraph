@@ -106,6 +106,12 @@
 			graph.children.add(rect);
 
 			style = graph.utils.clone(style);
+			var img = new Image();
+			img.onload = ()=>{
+				graph.needUpdate = true;
+			}
+			img.src = '../x.png';
+			style.fillImage = img;
 			style.fill = 'rgba(220,100,80, 0.8)';
 			//delete style.fill;
 			//style.close = true;

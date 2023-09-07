@@ -3,7 +3,8 @@ import earcut from '../earcut.js';
 import {
     createProgram,
     useProgram,
-    writeVertexAttrib
+    writeVertexAttrib,
+    disableVertexAttribArray
 } from './core/program.js';
 
 import {
@@ -62,6 +63,11 @@ class WeblBase {
         return writeVertexAttrib(this.context, buffer, attr, size, strip, offset, dataType);
     }
 
+    // 禁用attri
+    disableVertexAttribArray(attr) {
+        return disableVertexAttribArray(this.context, attr);
+    }
+
     // 创建float32的buffer
     createFloat32Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
         const buffer = createFloat32Buffer(this.context, data, type, drawType);
@@ -96,16 +102,16 @@ class WeblBase {
 
     // 多边切割, 得到三角形顶点索引数组
     // polygonIndices 顶点索引，
-    earCutPoints(points, polygonIndices=[]) {
+    earCutPoints(points) {
         const arr = this.pointsToArray(points);
-        const ps = earcut(arr, polygonIndices);// 切割得到3角色顶点索引，
+        const ps = earcut(arr);// 切割得到3角色顶点索引，
         return ps;
     }
 
     // 多边切割, 得到三角形顶点
     // polygonIndices 顶点索引，
-    earCutPointsToTriangles(points, polygonIndices=[]) {
-        const ps = this.earCutPoints(points, polygonIndices);// 切割得到3角色顶点索引，
+    earCutPointsToTriangles(points) {
+        const ps = this.earCutPoints(points);// 切割得到3角色顶点索引，
         const triangles = [];
         // 用顶点索引再组合成坐标数组
         for(let i=0;i<ps.length; i+=3) {

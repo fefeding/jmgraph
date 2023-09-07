@@ -9,6 +9,7 @@ import WebglPath from "../lib/webgl/path.js";
 //样式名称，也当做白名单使用		
 const jmStyleMap = {
 	'fill':'fillStyle',
+	'fillImage':'fillImage',
 	'stroke':'strokeStyle',
 	'shadow.blur':'shadowBlur',
 	'shadow.x':'shadowOffsetX',
@@ -816,8 +817,10 @@ export default class jmControl extends jmProperty {
 		}
 		
 		if(this.style['fill']) {
-			// polygonIndices 顶点数组索引
-			if(this.webglControl) this.webglControl.fill();
+			if(this.webglControl) {
+				const bounds = this.getBounds();
+				this.webglControl.fill(bounds);
+			}
 			else this.context.fill && this.context.fill();
 		}
 		if(this.style['stroke'] || (!this.style['fill'] && !this.is('jmGraph'))) {
@@ -841,9 +844,10 @@ export default class jmControl extends jmProperty {
 			//获取当前控件的绝对位置
 			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 			if(this.webglControl) {
+				this.webglControl.setParentBounds(bounds);
 				this.webglControl.draw([
 					...this.points
-				], bounds);
+				]);
 			}
 			else if(this.context && this.context.moveTo) {
 				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);

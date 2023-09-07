@@ -110,8 +110,28 @@ export default class jmImage extends jmControl {
 
 		const ctx = this.webglControl || this.context;
 		if(this.webglControl) {
-			ctx.setBounds && ctx.setBounds(bounds);
-			ctx.drawImage(img, p.left, p.top, p.width, p.height);
+			ctx.setParentBounds && ctx.setParentBounds(bounds);
+			const localBounds = this.getBounds();
+			// 给图片给定顶点
+			ctx.draw([
+				{
+					x: localBounds.left,
+					y: localBounds.top
+				},
+				{
+					x: localBounds.left + localBounds.width,
+					y: localBounds.top
+				},
+				{
+					x: localBounds.left + localBounds.width,
+					y: localBounds.top + localBounds.height
+				},
+				 {
+					x: localBounds.left, 
+					y: localBounds.top + localBounds.height
+				 }
+			], bounds);
+			ctx.drawImage(img, localBounds.left, localBounds.top, localBounds.width, localBounds.height);
 			return;
 		}
 

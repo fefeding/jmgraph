@@ -208,7 +208,10 @@ export default class jmUtils {
                 if(k === 'constructor') continue;
                 const v = source[k];
                 // 不复制页面元素和class对象
-                if(v && (v.tagName || v.getContext)) continue;
+                if(v && (v.tagName || v.getContext)) {
+                    target[k] = v;
+                    continue;
+                }
 
                 // 如果不是对象和空，则采用target的属性
                 if(typeof target[k] === 'object' || typeof target[k] === 'undefined') {                    

@@ -115,6 +115,10 @@ function writeVertexAttrib(gl, buffer, attr, size=2,strip=0,offset=0,dataType=gl
     return buffer;
 }
 
+function disableVertexAttribArray(gl, attr) {
+    return gl.disableVertexAttribArray(attr.location);
+}
+
 function getAttribLocation(gl, program, name) {
     return gl.getAttribLocation(program, name);
 }
@@ -130,5 +134,6 @@ export {
     getUniformLocation,
     extractAttributes,
     extractUniforms,
-    writeVertexAttrib
+    writeVertexAttrib,
+    disableVertexAttribArray
 }

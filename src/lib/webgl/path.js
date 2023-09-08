@@ -122,11 +122,7 @@ class WebglPath extends WebglBase {
                 this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
             }
             delete style.fillStyle;
-        }
-        // 线宽
-        if(style.lineWidth) {
-            this.context.uniform1f(this.program.uniforms.a_point_size.location, style.lineWidth);// * this.graph.devicePixelRatio
-        }
+        }        
 
         this.style = {
             ...this.style,
@@ -249,7 +245,10 @@ class WebglPath extends WebglBase {
         if(!res.includes(start)) res.push(start);
         return res;
     }
-
+    // 二点是否重合
+    equalPoint(p1, p2) {
+        return p1.x === p2.x && p1.y === p2.y;
+    }
     // 把path坐标集合转为线段集
     pathToLines(points) {
         let start = null;
@@ -260,7 +259,7 @@ class WebglPath extends WebglBase {
             if(start && !p.m && !(start.x == p.x && start.y == p.y)) {
                 const line = {
                     start,
-                    end: p
+                    end: p,
                 };
                 res.push(line);
             }
@@ -269,8 +268,74 @@ class WebglPath extends WebglBase {
         return res;
     }
 
+    // 裁剪线段，如果二段线段有交点，则分割成四段， 端头相交的线段不用分割
+    cutLines(lines, index1=0, index2=0) {
+        if(lines && lines.length < 3) return lines;
+        
+        index2 = Math.max(index1 + 1, index2); //如果指定了比下一个更大的索引，则用更大的，说明前面的已经处理过了，不需要重复
+
+        // 找出线段相交的点，并切割线段
+        while(index1 < lines.length) {
+            const line1 = lines[index1];
+
+            while(index2 < lines.length) {
+                const line2 = lines[index2];
+                // 如果二条线顶点有重合，则不用处理
+                if(this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.end, line2.end) || 
+                this.equalPoint(line1.start, line2.end) || this.equalPoint(line1.end, line2.start)) {
+                    index2++;
+                    continue;
+                }
+                let cuted = false;
+                const intersection = this.getIntersection(line1, line2);// 计算交点
+                if(intersection) {
+                    // 如果交点不是线段的端点，则分割成二条线段
+                    if(!this.equalPoint(line1.start, intersection) && !this.equalPoint(line1.end, intersection)) {
+                        const sub1 = {
+                            start: line1.start,
+                            end: intersection
+                        };
+                        const sub2 = {
+                            start: intersection,
+                            end: line1.end
+                        };
+                        // 从原数组中删除当前线段，替换成新的线段
+                        lines.splice(index1, 1, sub1, sub2);
+                        // 当前线段被重新替换，需要重新从它开始处理
+                        cuted = true;
+                        index2 ++;// 因为多加入了一个线段，则对比线索引需要加1
+                    }
+                    // 如果交点不是线段的端点，则分割成二条线段
+                    if(!this.equalPoint(line2.start, intersection) && !this.equalPoint(line2.end, intersection)) {
+                        const sub1 = {
+                            start: line2.start,
+                            end: intersection
+                        };
+                        const sub2 = {
+                            start: intersection,
+                            end: line2.end
+                        };
+                        // 从原数组中删除当前线段，替换成新的线段
+                        lines.splice(index2, 1, sub1, sub2);
+                        index2 ++; // 线段2也切成了二段，对比索引要继续加1
+                    }
+                }
+                index2++;
+                // 如果已经分割了起始线段，则第一个子线段开始，重新对比后面还未对比完的。直接所有对比完成返回
+                if(cuted) return this.cutLines(lines, index1, index2);
+            }
+            index1++;
+            index2 = index1 + 1;
+        }
+        return lines;
+    }
+
     // 计算二个线段的交点
     getIntersection(line1, line2) {
+        // 如果首尾相接，也认为是有交点
+        if(this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.start, line2.end)) return line1.start;
+        if(this.equalPoint(line1.end, line2.start) || this.equalPoint(line1.end, line2.end)) return line1.end;
+
         // 三角形abc 面积的2倍
         const area_abc = (line1.start.x - line2.start.x) * (line1.end.y - line2.start.y) - (line1.start.y - line2.start.y) * (line1.end.x - line2.start.x);
         
@@ -278,7 +343,7 @@ class WebglPath extends WebglBase {
         const area_abd = (line1.start.x - line2.end.x) * (line1.end.y - line2.end.y) - (line1.start.y - line2.end.y) * (line1.end.x - line2.end.x);
         
         // 面积符号相同则两点在线段同侧,不相交 (=0表示在线段顶点上);
-        if (area_abc*area_abd > 0) {
+        if (area_abc * area_abd > 0) {
             return null;
         }
         
@@ -290,7 +355,8 @@ class WebglPath extends WebglBase {
         if(area_cda * area_cdb > 0) {
             return null ;
         }
-        
+        if(area_abd === area_abc) return null;
+
         //计算交点坐标
         const t = area_cda / (area_abd - area_abc);
         const dx= t * (line1.end.x - line1.start.x);
@@ -302,29 +368,63 @@ class WebglPath extends WebglBase {
         };
     }
 
+    // 找出跟当前线段尾部相交的所有线段
+    getIntersectionLines(line, lines, index, point=line.end, points=[], root=null) {
+        const res = {
+            line,
+            polygons: []
+        };
+        
+        points.push(point);
+        
+        if(root && this.equalPoint(root.line.start, point)) {
+            points.unshift(root.line.start); // 把起始地址加入进去
+            root.polygons.push(points);
+            return res;
+        }
+
+        for(;index<lines.length; index++) {
+            const l = lines[index];
+            if(this.equalPoint(point, l.start)) {      
+                if(points.includes(l.end)) continue;          
+                this.getIntersectionLines(l, lines, index+1, l.end, [...points], root||res);
+            }
+            else if(this.equalPoint(point, l.end)) {
+                if(points.includes(l.start)) continue;     
+                this.getIntersectionLines(l, lines, index+1, l.start, [...points], root||res);
+            }
+        }
+        return res;
+    }
+
     // 根据路径点坐标，切割出封闭的多边形
     getPolygon(points) {
         let polygons = [];
-        const lines = this.pathToLines(points); // 分解得到线段
+        let lines = this.pathToLines(points); // 分解得到线段
         if(lines && lines.length > 2) {
+            lines = this.cutLines(lines); // 把所有相交点切割线段找出来
             for(let i=0; i<lines.length-1; i++) {
                 const line1 = lines[i];
                 let polygon = [];// 当前图形
+
+                const treeLine = this.getIntersectionLines(line1, lines, i+1);
+                
+                if(treeLine.polygons.length) polygons.push(...treeLine.polygons);
+                continue;
                 let lastLine = line1; // 下一个还在连接状态的线
                 for(let j=i+1; j<lines.length; j++) {
                     const line2 = lines[j];
                     // 如果跟下一条线相接，则表示还在形成图形中
-                    if(lastLine.end.x === line2.start.x && lastLine.end.y === line2.start.y) {
+                    if(this.equalPoint(lastLine.end, line2.start)) {
                         polygon.push(lastLine.end);
                         lastLine = line2;
+                        if(i === j+1) continue; //下一条相连 则不需要处理相交情况
                     }
                     else {
                         polygon = [];
-                    }                    
-                    // 表示连线断开，如果还只是下一条线，后面逻辑没必要进行，2条线断开后就没有形成图形的可能
-                    if(j === i+1) continue;
-                    
-                    const intersection = this.getIntersection(line1, line2);// 计算交点
+                    }  
+                    // 因为前面进行了分割线段，则里只有处理端点相连的情况
+                    const intersection = this.equalPoint(line1.start, line2.end)? line1.start: null;//this.getIntersection(line1, line2);// 计算交点
                     if(intersection) {
                         polygon.push(intersection);// 交叉点为图形顶点
                         // 如果上一个连接线不是当前交叉线，则表示重新开始闭合
@@ -333,13 +433,15 @@ class WebglPath extends WebglBase {
                             polygons.push(polygon);
                             
                             // 封闭后，下一个起始线条就是从交点开始计算起
-                            lastLine = {
+                            /*lastLine = {
                                 start: intersection,
                                 end: line2.end
-                            };
+                            };*/
+                            polygon = [];// 重新开始新一轮找图形
 
+                            /*
                             // 如果交点是上一条线的终点，则新图形为空
-                            if(line2.end.x === intersection.x && line2.end.y === intersection.y) {
+                            if(this.equalPoint(line2.end, intersection)) {
                                 polygon = [];// 重新开始新一轮找图形
                             }
                             else {
@@ -347,7 +449,7 @@ class WebglPath extends WebglBase {
                                 polygon.unshift(intersection);
 
                                 polygon = [ intersection ];// 重新开始新一轮找图形
-                            }
+                            }*/
                         }
                         else {
                             lastLine = line2;
@@ -358,40 +460,46 @@ class WebglPath extends WebglBase {
         }
         
         // 当有多个封闭图形时，再弟归一下，里面是不是有封闭图形内还有子封闭图形
-        if(polygons.length > 1) {
+        /*if(polygons.length > 1) {
             const newPolygons = [];
             for(const polygon of polygons) {
                 // 只有大于4才有可能有子封闭图形
                 if(polygon.length > 4) {
                     const childPolygons = this.getPolygon(polygon);
-                    // 当有多个子图形时，表示它不是最终封闭图形，跳过，只加它的子图形
+                    // 当有多个子图形时，表示它不是最终封闭图形，跳过，
+                    // 因为它的子图形之前有加入的，不需要重复加入
                     if(childPolygons.length > 1) {
-                        newPolygons.push(...childPolygons);
+                        //newPolygons.push(...childPolygons);
                         continue;
                     }
                 }
                 newPolygons.push(polygon);
             }
             polygons = newPolygons;
-        }
+        }*/
+        console.log(polygons);
         return polygons;
     }
 
     // 画线条
-    stroke() {
+    stroke(points = this.points, color = this.style.strokeStyle, lineWidth = this.style.lineWidth) {
        // this.useProgram();
         let colorBuffer = null;
-        if(this.style.strokeStyle) {
-            const color = this.style.strokeStyle;
+        if(color) {
             colorBuffer = this.setFragColor(color);
+        }
+        // 线宽
+        if(lineWidth) {
+            this.context.uniform1f(this.program.uniforms.a_point_size.location, lineWidth);// * this.graph.devicePixelRatio
         }
         // 标注为stroke
         if(this.program.uniforms.a_type) {
-            this.context.uniform1i(this.program.uniforms.a_type.location, this.points.length === 1? 4 :1);
+            // 4表示单画一个圆点，1表示方块形成的线条
+            this.context.uniform1i(this.program.uniforms.a_type.location, points.length === 1? 4 :1);
         }
-        if(this.points && this.points.length) {
-            const regular = this.isRegular && (this.style.lineWidth == 1);
-            const points = regular? this.points : this.pathToPoints(this.points);
+        if(points && points.length) {
+            const regular = this.isRegular && (lineWidth == 1);
+            points = regular? points : this.pathToPoints(points);
             //this.context.lineWidth(10);
             const buffer = this.writePoints(points);
             this.context.drawArrays(regular? this.context.LINES: this.context.POINTS, 0, points.length);
@@ -468,6 +576,11 @@ class WebglPath extends WebglBase {
         }
         colorBuffer && this.deleteBuffer(colorBuffer);
         colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
+
+        // 为线段顶点绘制
+        /*for(const p of points) {
+            this.stroke([p], 'red', 10);
+        }*/
     }
 
     // 区域填充图片

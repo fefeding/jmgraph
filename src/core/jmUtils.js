@@ -849,6 +849,7 @@ export default class jmUtils {
      * @param {rgba} color 颜色
      */
     static rgbToDecimal(color) {
+        color = this.clone(color);
         color.r = this.byteToDecimal(color.r);
         color.g = this.byteToDecimal(color.g);
         color.b = this.byteToDecimal(color.b);

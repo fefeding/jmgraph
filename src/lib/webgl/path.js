@@ -107,7 +107,6 @@ class WebglPath extends WebglBase {
         if(style.strokeStyle) {
             let color = style.strokeStyle;
             if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-            color = this.graph.utils.clone(color);
             this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
             delete style.strokeStyle;
         }
@@ -118,7 +117,6 @@ class WebglPath extends WebglBase {
             }
             else {
                 if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-                color = this.graph.utils.clone(color);
                 this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
             }
             delete style.fillStyle;

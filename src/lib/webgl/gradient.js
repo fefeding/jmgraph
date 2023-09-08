@@ -22,6 +22,7 @@ class WeblGradient {
         this.control = params.control;
 
         this.stops = [];
+        this.init();
     }
 
     init() {
@@ -105,7 +106,10 @@ class WeblGradient {
     getStops() {
         const stops = this.stops.sort((p1, p2) => p1.offset - p2.offset); // 渐变色排序从小于大
         for(const s of stops) {
-            s.color = this.control.graph.utils.hexToRGBA(s.color);
+            
+            const color = typeof s.color === 'string'? this.control.graph.utils.hexToRGBA(s.color) : s.color;
+            console.log(s, color);
+            s.color = this.control.graph.utils.rgbToDecimal(color);
             s.length = s.offset * this.length;
         }
         return stops;

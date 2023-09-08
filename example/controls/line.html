@@ -64,7 +64,7 @@
 				console.log('touchend',evt);
 			});
 			
-			graph.children.add(line);
+			//graph.children.add(line);
 			line.canMove(true);
 			
 
@@ -76,7 +76,7 @@
 			style.lineWidth = 2;
 			var line = graph.createLine({x:50,y:50},{x:200,y:400}, style);
 			style.zIndex = 20;
-			graph.children.add(line);
+			//graph.children.add(line);
 			line.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,1)';
 				//graph.canvas.style.cursor = 'pointer';
@@ -143,7 +143,7 @@
 			
 			//rect.children.add(path);
 
-			graph.children.add(path);
+			//graph.children.add(path);
 
 			path.bind('mouseover',function(evt) {
 				this.style.stroke = 'rgba(39,72,188,0.5)';

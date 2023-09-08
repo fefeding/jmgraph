@@ -516,8 +516,7 @@ class WebglPath extends WebglBase {
         if(this.points && this.points.length) {
             
             // 如果是颜色rgba
-            if(this.style.fillStyle && this.style.fillStyle.hasOwnProperty && 
-                this.style.fillStyle.hasOwnProperty('r') && this.style.fillStyle.hasOwnProperty('g') && this.style.fillStyle.hasOwnProperty('b')) {
+            if(this.style.fillStyle) {
             
                 let filled = false;// 是否成功填充
                 // 3个以上的点，且非规则图形才需要切割
@@ -555,17 +554,20 @@ class WebglPath extends WebglBase {
     }
 
     fillColor(points, color, type=1) {
-        // 标注为fill
-        this.context.uniform1i(this.program.uniforms.a_type.location, type);
+        
 
         const buffer = this.writePoints(points);
 
         let colorBuffer = null;
         // 如果是渐变色，则需要计算偏移量的颜色
         if(this.isGradient(color)) {
-
+            this.context.uniform1i(this.program.uniforms.a_type.location, 3);
+            const colors = color.toPointColors(buffer.data);
+            colorBuffer = this.setFragColor(colors);
         }
         else {
+            // 标注为fill
+            this.context.uniform1i(this.program.uniforms.a_type.location, type);
             colorBuffer = this.setFragColor(color);
         }
 

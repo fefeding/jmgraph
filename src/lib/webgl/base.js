@@ -61,6 +61,7 @@ class WeblBase {
     // offset: 字节偏移量，必须是类型的字节长度的倍数。
     // dataType: 每个元素的数据类型
     writeVertexAttrib(buffer, attr, size=2, strip=0, offset=0, dataType=this.context.FLOAT) {
+        buffer.attr = attr;
         return writeVertexAttrib(this.context, buffer, attr, size, strip, offset, dataType);
     }
 
@@ -164,16 +165,19 @@ class WeblBase {
     }
 
     // 创建线性渐变
-    createLinearGradient(x1, y1, x2, y2) {
+    createLinearGradient(x1, y1, x2, y2, bounds) {
         return new webglGradient('linear', {
-            x1, y1, x2, y2
+            x1, y1, x2, y2, bounds,
+            control: this
         });
     }
     // 创建放射性渐变
-    createRadialGradient(x1, y1, r1, x2, y2, r2) {
+    createRadialGradient(x1, y1, r1, x2, y2, r2, bounds) {
         return new webglGradient('radial', {
             x1, y1, r1,
-            x2, y2, r2
+            x2, y2, r2,
+            bounds,
+            control: this
         });
     }
     // 判断是否是一个渐变对象

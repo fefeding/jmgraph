@@ -86,7 +86,7 @@ export default class jmGradient {
 		let sy2 = Number(y2) + bounds.top;
 		if(this.type === 'linear') {
 			if(control.mode === 'webgl' && control.webglControl) {
-				gradient = control.webglControl.createLinearGradient(sx1, sy1, sx2, sy2);
+				gradient = control.webglControl.createLinearGradient(sx1, sy1, sx2, sy2, bounds);
 			}	
 			else {		
 				context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
@@ -104,7 +104,7 @@ export default class jmGradient {
 				r2 = d * r2;
 			}
 			if(control.mode === 'webgl' && control.webglControl) {
-				gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
+				gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2, bounds);
 			}	
 			//offsetLine = Math.abs(r2 - r1);//二圆半径差
 			else if(context.createRadialGradient) {

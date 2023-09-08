@@ -222,7 +222,8 @@ class WebglPath extends WebglBase {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;
                 points.push({
-                    x: Number(x.toFixed(2)), y: Number(y.toFixed(2))
+                    x: Number(x.toFixed(2)), 
+                    y: Number(y.toFixed(2))
                 });
             }
         }
@@ -296,14 +297,14 @@ class WebglPath extends WebglBase {
         const dy= t * (line1.end.y - line1.start.y);
 
         return { 
-            x: line1.start.x + dx, 
-            y: line1.start.y + dy 
+            x: Number((line1.start.x + dx).toFixed(2)), 
+            y: Number((line1.start.y + dy).toFixed(2))
         };
     }
 
     // 根据路径点坐标，切割出封闭的多边形
     getPolygon(points) {
-        const polygons = [];
+        let polygons = [];
         const lines = this.pathToLines(points); // 分解得到线段
         if(lines && lines.length > 2) {
             for(let i=0; i<lines.length-1; i++) {
@@ -342,6 +343,9 @@ class WebglPath extends WebglBase {
                                 polygon = [];// 重新开始新一轮找图形
                             }
                             else {
+                                // 同时交点也要加到上一个图形中第一个点，形成封闭
+                                polygon.unshift(intersection);
+
                                 polygon = [ intersection ];// 重新开始新一轮找图形
                             }
                         }
@@ -351,6 +355,24 @@ class WebglPath extends WebglBase {
                     }
                 }
             }
+        }
+        
+        // 当有多个封闭图形时，再弟归一下，里面是不是有封闭图形内还有子封闭图形
+        if(polygons.length > 1) {
+            const newPolygons = [];
+            for(const polygon of polygons) {
+                // 只有大于4才有可能有子封闭图形
+                if(polygon.length > 4) {
+                    const childPolygons = this.getPolygon(polygon);
+                    // 当有多个子图形时，表示它不是最终封闭图形，跳过，只加它的子图形
+                    if(childPolygons.length > 1) {
+                        newPolygons.push(...childPolygons);
+                        continue;
+                    }
+                }
+                newPolygons.push(polygon);
+            }
+            polygons = newPolygons;
         }
         return polygons;
     }

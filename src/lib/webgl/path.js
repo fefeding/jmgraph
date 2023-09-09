@@ -85,6 +85,7 @@ class WebglPath extends WebglBase {
         super(graph, option);
         // 是否是规则的，不规则的处理方式更为复杂和耗性能
         this.isRegular = option.isRegular || false;
+        this.points = [];
     }
 
     // i当前程序
@@ -480,7 +481,9 @@ class WebglPath extends WebglBase {
 
     // 画线条
     stroke(points = this.points, color = this.style.strokeStyle, lineWidth = this.style.lineWidth) {
+        if(!points || !points.length) return;
        // this.useProgram();
+
         let colorBuffer = null;
         if(color) {
             colorBuffer = this.setFragColor(color);

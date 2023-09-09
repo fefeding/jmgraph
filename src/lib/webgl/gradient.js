@@ -92,7 +92,7 @@ class WeblGradient {
 
         const src = canvas.toDataURL();
         const img = new Image();
-        img.onload = ()=>{
+        img.onload = () => {
             control.graph.needUpdate = true;
         }
         img.src = src;

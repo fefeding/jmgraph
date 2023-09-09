@@ -74,6 +74,9 @@ export default class jmGraph extends jmControl {
 		}	
 		this.canvas = canvas;	
 		this.context = canvas.getContext(this.mode);
+
+		this.textureCanvas = option.textureCanvas || null;
+		
 		// webgl模式
 		if(this.mode === 'webgl') {
 

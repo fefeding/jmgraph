@@ -1,4 +1,4 @@
-
+const WebglGradientTextureCache = {};
 // 渐变
 class WeblGradient {
     // type:[linear= 线性渐变,radial=放射性渐变] 
@@ -49,6 +49,57 @@ class WeblGradient {
             offset,
             color
         });
+    }
+
+    // 转为渐变为纹理
+    toTexture(control, bounds) {
+        const key = this.toString() + `-${bounds.width}x${bounds.height}`;
+        if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
+
+        let canvas = control.graph.textureCanvas;
+        if(!canvas) {
+            canvas = control.graph.textureCanvas = document.createElement('canvas');
+        }
+        canvas.width = bounds.width;
+        canvas.height = bounds.height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let gradient = null;
+        if(this.type === 'linear') {
+            gradient = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+        }
+        else {
+            gradient = ctx.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
+        }
+        this.stops.forEach(function(s, i) {	
+            const c = control.graph.utils.toColor(s.color);
+            gradient && gradient.addColorStop(s.offset, c);		
+        });
+        ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, 0);
+        ctx.lineTo(bounds.width, 0);
+        ctx.lineTo(bounds.width, bounds.height);
+        ctx.lineTo(0, bounds.height);
+        ctx.lineTo(0, 0);
+
+        ctx.closePath();
+        ctx.fill();
+
+        const src = canvas.toDataURL();
+        const img = new Image();
+        img.onload = ()=>{
+            control.graph.needUpdate = true;
+        }
+        img.src = src;
+
+        WebglGradientTextureCache[key] = img;
+
+        return img;
     }
 
     // 根据绘制图形的坐标计算出对应点的颜色
@@ -114,6 +165,28 @@ class WeblGradient {
         }
         return stops;
     }
+
+    /**
+	 * 转换为渐变的字符串表达
+	 *
+	 * @method toString
+	 * @for jmGradient
+	 * @return {string} linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
+	 */
+	toString() {
+		let str = this.type + '-gradient(';
+		if(this.type == 'linear') {
+			str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
+		}
+		else {
+			str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
+		}
+		//颜色渐变
+		this.stops.forEach(function(s) {	
+			str += ',' + s.color + ' ' + s.offset;
+		});
+		return str + ')';
+	}
 }
 
 export default WeblGradient;

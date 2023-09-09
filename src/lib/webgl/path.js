@@ -475,7 +475,6 @@ class WebglPath extends WebglBase {
             }
             polygons = newPolygons;
         }*/
-        console.log(polygons);
         return polygons;
     }
 
@@ -527,7 +526,7 @@ class WebglPath extends WebglBase {
 
                             if(triangles && triangles.length) {
                                 for(const triangle of triangles) {
-                                    this.fillColor(triangle, this.style.fillStyle, type); // 单独为每个分割的图形填充
+                                    this.fillColor(triangle, this.style.fillStyle, bounds, type); // 单独为每个分割的图形填充
 
                                     // 如果指定的是img，则采用填充图片的方式
                                     if(this.style.fillImage) {
@@ -541,7 +540,7 @@ class WebglPath extends WebglBase {
                 }   
                 // 如果前面的条件没有填充成功，则直接按正常填充         
                 if(!filled) {
-                    this.fillColor(this.points, this.style.fillStyle, type);// 如果指定的是img，则采用填充图片的方式
+                    this.fillColor(this.points, this.style.fillStyle, bounds, type);// 如果指定的是img，则采用填充图片的方式
                     if(this.style.fillImage) {
                         this.fillImage(this.style.fillImage, this.points, bounds);
                     }
@@ -551,24 +550,19 @@ class WebglPath extends WebglBase {
         }
     }
 
-    fillColor(points, color, type=1) {
+    fillColor(points, color, bounds, type=1) {
         
-
-        const buffer = this.writePoints(points);
-
-        let colorBuffer = null;
         // 如果是渐变色，则需要计算偏移量的颜色
         if(this.isGradient(color)) {
-            this.context.uniform1i(this.program.uniforms.a_type.location, 3);
-            const colors = color.toPointColors(buffer.data);
-            colorBuffer = this.setFragColor(colors);
+            const img = color.toTexture(this, bounds);
+            return this.fillImage(img, points, bounds);
         }
-        else {
-            // 标注为fill
-            this.context.uniform1i(this.program.uniforms.a_type.location, type);
-            colorBuffer = this.setFragColor(color);
-        }
-
+        
+        // 标注为fill
+        this.context.uniform1i(this.program.uniforms.a_type.location, type);
+        const colorBuffer = this.setFragColor(color);
+        
+        const buffer = this.writePoints(points);
         this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
         if(buffer) {
             this.deleteBuffer(buffer);

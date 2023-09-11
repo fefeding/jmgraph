@@ -11,6 +11,7 @@ export default class jmHArc extends jmArc {
 		
 	constructor(params, t='jmHArc') {
 		params.isRegular = true;// 规则的
+		params.needCut = true;
 		super(params, t);
 
 		this.minRadius = params.minRadius || this.style.minRadius || 0;
@@ -54,18 +55,18 @@ export default class jmHArc extends jmArc {
 	 * @private
 	 */
 	initPoints() {	
-		let location = this.getLocation();	
+		const location = this.getLocation();	
 		//如果设定了半径。则以半径为主
-		let minr = this.minRadius;
-		let maxr = this.maxRadius;
+		const minr = this.minRadius;
+		const maxr = this.maxRadius;
 		
 		let start = this.startAngle;
 		let end = this.endAngle;
-		let anticlockwise = this.anticlockwise;
+		const anticlockwise = this.anticlockwise;
 
 		//如果是逆时针绘制，则角度为负数，并且结束角为2Math.PI-end
 		if(anticlockwise) {
-			let p2 =  Math.PI*2;
+			const p2 =  Math.PI*2;
 			start = p2 - start;
 			end = p2 - end;
 		}
@@ -73,8 +74,8 @@ export default class jmHArc extends jmArc {
 		let step = 0.1;
 		if(start > end) step = -step;
 
-		let minps = [];
-		let maxps = [];
+		const minps = [];
+		const maxps = [];
 		//椭圆方程x=a*cos(r) ,y=b*sin(r)
 		for(let r=start;;r += step) {
 			if(step > 0 && r > end) {
@@ -84,13 +85,13 @@ export default class jmHArc extends jmArc {
 				r = end;
 			}
 
-			let cos = Math.cos(r);
-			let sin = Math.sin(r);
-			let p1 = {
+			const cos = Math.cos(r);
+			const sin = Math.sin(r);
+			const p1 = {
 				x : cos * minr + location.center.x,
 				y : sin * minr + location.center.y
 			};
-			let p2 = {
+			const p2 = {
 				x : cos * maxr + location.center.x,
 				y : sin * maxr + location.center.y
 			};

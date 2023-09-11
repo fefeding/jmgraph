@@ -878,10 +878,10 @@ export default class jmUtils {
             const color = this.hexToRGBA(r);
             if(typeof color === 'string') return color;
             
-            r = color.r || r;
-            g = color.g || g;
-            b = color.b || b;
-            a = color.a || a;
+            r = typeof color.r !== 'undefined'? color.r: r;
+            g = typeof color.g !== 'undefined'? color.g: g;
+            b = typeof color.b !== 'undefined'? color.b: b;
+            a = typeof color.a !== 'undefined'? color.a: a;
         }
         if(typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
             if(typeof a != 'undefined') {            

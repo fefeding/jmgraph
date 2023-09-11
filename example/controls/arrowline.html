@@ -12,12 +12,12 @@
 			overflow: hidden;		
 		}
 	</style>
-	<script type="text/javascript" src="../../dist/jmgraph.min.js"></script>
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-	<script type="text/javascript">	
+	<script type="module">	
+		import jmGraph from "../../index.js";
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件

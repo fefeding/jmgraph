@@ -5,7 +5,6 @@
 	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>贝塞尔曲线</title>
-	<script type="text/javascript" src="../../dist/jmgraph.js"></script>
 </head>
 
 <body style="width:100%;margin:10px auto;border:1px solid blue;">
@@ -17,7 +16,8 @@
 
 </html>
 
-<script type="text/javascript">
+<script type="module">
+	import jmGraph from "../../index.js";
 
 	var psize = 6;
 	var style = {
@@ -29,7 +29,9 @@
 	
 
 	//初始化jmgraph
-	var g1 = jmGraph.create('mycanvas');
+	var g1 = jmGraph.create('mycanvas', {
+		mode: 'webgl'
+	});
 
 	init1(g1);
 	
@@ -77,7 +79,9 @@
 
 
 	//初始化jmgraph
-	var g2 = jmGraph.create('mycanvas2');
+	var g2 = jmGraph.create('mycanvas2', {
+		mode: 'webgl'
+	});
 
 	
 

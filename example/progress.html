@@ -74,10 +74,10 @@
 
 		style = g.util.clone(style);
 		style.close = true;
-		style.lineWidth = 1;
+		style.lineWidth = 1.1;
 		style.fill = 'red';
 		style.zIndex = 4;
-		var harc = graph.createShape('harc',{style:style,center:{x:600,y:380},start:0,end: 0 ,minRadius:100,maxRadius:150,anticlockwise:false});
+		var harc = graph.createShape('harc',{style:style, center:{x:600,y:380}, startAngle:0, endAngle: Math.PI * 2, minRadius:100, maxRadius:150, anticlockwise:false});
 		graph.children.add(harc);
 
 		function arcAni() {		
@@ -105,7 +105,7 @@
 			graph.needUpdate = true;		
 		}				
 		arc.children.add(childarc);				
-		childarc.animate(arcAni,10);
+		childarc.animate(arcAni, 10);
 		
 		
 		harc.canMove(true);

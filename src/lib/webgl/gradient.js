@@ -52,7 +52,7 @@ class WeblGradient {
     }
 
     // 转为渐变为纹理
-    toTexture(control, bounds) {
+    toImageData(control, bounds) {
         const key = this.toString() + `-${bounds.width}x${bounds.height}`;
         if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
 
@@ -62,7 +62,14 @@ class WeblGradient {
         }
         canvas.width = bounds.width;
         canvas.height = bounds.height;
-        const ctx = canvas.getContext('2d');
+
+        if(!canvas.width || !canvas.height) {
+            return null;
+        }
+
+        const ctx = canvas.getContext('2d', {
+            willReadFrequently: true
+        });
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -90,16 +97,11 @@ class WeblGradient {
         ctx.closePath();
         ctx.fill();
 
-        const src = canvas.toDataURL();
-        const img = new Image();
-        img.onload = () => {
-            control.graph.needUpdate = true;
-        }
-        img.src = src;
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        WebglGradientTextureCache[key] = img;
+        //WebglGradientTextureCache[key] = data;
 
-        return img;
+        return data;
     }
 
     // 根据绘制图形的坐标计算出对应点的颜色

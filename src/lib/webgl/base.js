@@ -16,6 +16,8 @@ import {
 
 import {
     create2DTexture,
+    createImgTexture,
+    createDataTexture,
     deleteTexture
 } from './core/texture.js';
 
@@ -109,8 +111,18 @@ class WeblBase {
     }
 
     // 生成纹理
-    create2DTexture(img) { 
-        return create2DTexture(this.context, img);
+    create2DTexture() { 
+        return create2DTexture(this.context);
+    }
+
+    // 创建图片纹理
+    createImgTexture(img) {
+        return createImgTexture(this.context, img);
+    }
+
+    // 根根像素值生成纹理
+    createDataTexture(data) {
+        return createDataTexture(this.context, data);
     }
 
     // 删除纹理

@@ -557,8 +557,8 @@ class WebglPath extends WebglBase {
         
         // 如果是渐变色，则需要计算偏移量的颜色
         if(this.isGradient(color)) {
-            const img = color.toTexture(this, bounds);
-            return this.fillImage(img, points, bounds);
+            const imgData = color.toImageData(this, bounds);
+            return this.fillImage(imgData, points, bounds);
         }
         
         // 标注为fill
@@ -584,8 +584,10 @@ class WebglPath extends WebglBase {
     // points绘制的图形顶点
     // 图片整体绘制区域
     fillImage(img, points, bounds) {
+        if(!img) return;
+        
         // 设置纹理
-        const texture = this.create2DTexture(img);
+        const texture = img instanceof ImageData? this.createDataTexture(img) : this.createImgTexture(img);
         this.context.uniform1i(this.program.uniforms.u_sample.location, 0); // 纹理单元传递给着色器
 
         // 指定纹理区域尺寸

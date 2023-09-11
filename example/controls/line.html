@@ -114,57 +114,55 @@
 			style = graph.utils.clone(style);
 			var img = new Image();
 			img.onload = ()=>{
-				graph.needUpdate = true;
-			}
-			img.src = '../x.png';
-			style.fillImage = img;
-			style.fill = 'rgba(220,100,80, 0.8)';
-			//delete style.fill;
-			//style.close = true;
-			var path = graph.createPath(null,style);
-			path.points.push({x:200,y:60});
-			path.points.push({x:400,y:60});
+				style.fillImage = img;
+				style.fill = 'rgba(220,100,80, 0.8)';
+				//delete style.fill;
+				//style.close = true;
+				var path = graph.createPath(null,style);
+				path.points.push({x:200,y:60});
+				path.points.push({x:400,y:60});
 
-			path.points.push({x:220,y:120});
-			path.points.push({x:260,y:300});		
+				path.points.push({x:220,y:120});
+				path.points.push({x:260,y:300});		
 
-			path.points.push({x:420,y:100});
+				path.points.push({x:420,y:100});
 
-			path.points.push({x:260,y:20});	
-			path.points.push({x:250,y:80});
-			path.points.push({x:200,y:10});
+				path.points.push({x:260,y:20});	
+				path.points.push({x:250,y:80});
+				path.points.push({x:200,y:10});
 
-			/*path.points.push({x:300,y:60});
-			path.points.push({x:400,y:60});
+				/*path.points.push({x:300,y:60});
+				path.points.push({x:400,y:60});
 
-			path.points.push({x:360,y:130});
-			//path.points.push({x:320,y:120});
+				path.points.push({x:360,y:130});
+				//path.points.push({x:320,y:120});
 
-			path.points.push({x:420,y:100});
+				path.points.push({x:420,y:100});
 
-			path.points.push({x:260,y:60});*/
-			
-			
-			//rect.children.add(path);
-
-			graph.children.add(path);
-
-			path.bind('mouseover',function(evt) {
-				this.style.stroke = 'rgba(39,72,188,0.5)';
-				this.needUpdate = true;
-				//graph.canvas.style.cursor = 'pointer';
+				path.points.push({x:260,y:60});*/
 				
-			});
-			path.bind('mouseleave',function(evt) {					
-				this.style.stroke = 'rgb(120,20,80)';
-				this.needUpdate = true;
-				//graph.canvas.style.cursor = 'default';
-			});
-			
-			rect.canMove(true);
-			//line.canMove(true);
-			path.canMove(true);	
-			
+				
+				//rect.children.add(path);
+
+				graph.children.add(path);
+
+				path.bind('mouseover',function(evt) {
+					this.style.stroke = 'rgba(39,72,188,0.5)';
+					this.needUpdate = true;
+					//graph.canvas.style.cursor = 'pointer';
+					
+				});
+				path.bind('mouseleave',function(evt) {					
+					this.style.stroke = 'rgb(120,20,80)';
+					this.needUpdate = true;
+					//graph.canvas.style.cursor = 'default';
+				});
+				
+				rect.canMove(true);
+				//line.canMove(true);
+				path.canMove(true);	
+			}
+			img.src = '../x.png';			
 		}
 			
 		

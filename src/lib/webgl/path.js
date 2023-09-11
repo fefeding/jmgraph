@@ -86,7 +86,7 @@ class WebglPath extends WebglBase {
         // 是否是规则的，不规则的处理方式更为复杂和耗性能
         this.isRegular = option.isRegular || false;
         this.needCut = option.needCut || false;
-        
+
         this.points = [];
     }
 
@@ -214,7 +214,7 @@ class WebglPath extends WebglBase {
             const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
             const cos = dx / len;
             const sin = dy / len;
-            const step = 1;
+            const step = 0.5;
             for(let l=step; l<len; l+=step) {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;

@@ -12,19 +12,20 @@
 			overflow: hidden;		
 		}
 	</style>
-	
-	<script type="text/javascript" src="../../dist/jmgraph.min.js"></script>
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-	<script type="text/javascript">	
+	<script type="module">	
+		import { jmGraph } from "../../index.js";
+
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
 		var g = jmGraph.create('mycanvas_container', {
 			width: 800,
 			height: 600,
+			mode: 'webgl',
 			style: {
 				fill: '#000'
 			}
@@ -37,7 +38,7 @@
 			var style = {
                 stroke: 'red',
                 fill: 'yellow',
-                lineWidth: 2 //边线宽
+                lineWidth: 1.1 //边线宽
 			};
 			//style.opacity = 0.2;		
 

@@ -193,7 +193,7 @@ export default class jmLabel extends jmControl {
 		if(this.style.border) {
 			//如果指定了边框样式
 			if(this.style.border.style) {
-				this.context.save();
+				this.context.save && this.context.save();
 				this.setStyle(this.style.border.style);
 			}
 			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
@@ -217,7 +217,7 @@ export default class jmLabel extends jmControl {
 			}
 			//如果指定了边框颜色
 			if(this.style.border.style) {
-				this.context.restore();
+				this.context.restore && this.context.restore();
 			}	
 		}		
 	}

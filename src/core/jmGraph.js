@@ -383,18 +383,28 @@ export default class jmGraph extends jmControl {
 				h = h / this.scaleSize.y;
 			}*/
 		}
-		if(this.style && this.style.fill) {
-			this.points = [
-				{x:0,y:0},
-				{x:w,y:0},
-				{x:w,y:h},
-				{x:0,y:h}
-			];
-			this.style.close = true;// 封闭填充
+		
+		if(this.context.clearRect) {
+			if(this.style && this.style.fill) {
+				this.points = [
+					{x:0, y:0},
+					{x:w, y:0},
+					{x:w, y:h},
+					{x:0, y:h}
+				];
+				this.style.close = true;// 封闭填充
+			}
+
+			this.context.clearRect(0, 0, w, h);
 		}
-		if(this.context.clearRect) this.context.clearRect(0, 0, w, h);
 		else if(this.mode === 'webgl' && this.context.clear) {
-			this.context.clearColor(0, 0, 0, 0); // 设置清空颜色缓冲时的颜色值
+			const color = this.style && this.style.fill? this.utils.hexToRGBA(this.style.fill): {
+				r: 0,
+				g: 0,
+				b: 0,
+				a: 0
+			};
+			this.context.clearColor(color.r, color.g, color.b, color.a); // 设置清空颜色缓冲时的颜色值
         	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
 		}
 	}

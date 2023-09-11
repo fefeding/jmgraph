@@ -373,10 +373,10 @@ class jmTest extends jmPath {
      * @type {point}
      */
     get center() {
-        return this.__pro('center');
+        return this.property('center');
     }
     set center(v) {
-        return this.__pro('center', v);
+        return this.property('center', v);
     }
     /**
     * 半径
@@ -384,10 +384,10 @@ class jmTest extends jmPath {
     * @type {number}
     */
     get radius() {
-        return this.__pro('radius');
+        return this.property('radius');
     }
     set radius(v) {
-        return this.__pro('radius', v);
+        return this.property('radius', v);
     }
 
     /**

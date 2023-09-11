@@ -53,7 +53,7 @@ class WeblGradient {
 
     // 转为渐变为纹理
     toImageData(control, bounds) {
-        const key = this.toString() + `-${bounds.width}x${bounds.height}`;
+        const key = this.toString() + `-${bounds.width.toFixed(4)}x${bounds.height.toFixed(4)}`;
         if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
 
         let canvas = control.graph.textureCanvas;

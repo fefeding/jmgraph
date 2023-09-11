@@ -40,10 +40,10 @@
          * @type {point}
          */
         get center() {
-            return this.__pro('center');
+            return this.property('center');
         }
         set center(v) {
-            return this.__pro('center', v);
+            return this.property('center', v);
         }
         /**
         * 中心点
@@ -52,10 +52,10 @@
         * @type {point}
         */
         get radius() {
-            return this.__pro('radius');
+            return this.property('radius');
         }
         set radius(v) {
-            return this.__pro('radius', v);
+            return this.property('radius', v);
         }
 
         /**
@@ -115,10 +115,10 @@
         //style.opacity = 0.2;		
 
         //创建一个自定义的控件
-        var t = new jmTest({
+        var t = g.createShape(jmTest, {
             style: style,
             center: {x:100,y:100},
-            radius: 20
+            radius: 20,
         });
         
         g.children.add(t);            

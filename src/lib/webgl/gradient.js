@@ -105,6 +105,7 @@ class WeblGradient {
     }
 
     // 根据绘制图形的坐标计算出对应点的颜色
+    /*
     toPointColors(points) {
         const stops = this.getStops();
         const colors = [];
@@ -140,8 +141,9 @@ class WeblGradient {
         }
         return colors;
     }
-
+*/
     // 根据起点距离获取边界stop
+    /*
     getStopRange(len, stops) {
         const res = {};
         for(const s of stops) {
@@ -167,7 +169,7 @@ class WeblGradient {
         }
         return stops;
     }
-
+*/
     /**
 	 * 转换为渐变的字符串表达
 	 *

@@ -99,7 +99,7 @@ class WeblGradient {
 
         const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        //WebglGradientTextureCache[key] = data;
+        WebglGradientTextureCache[key] = data;
 
         return data;
     }

@@ -35,7 +35,8 @@ class WeblBase {
     }
 
     // 创建程序
-    createProgram(vertexSrc, fragmentSrc) {
+    createProgram(vertexSrc, fragmentSrc) {        
+        this.context.lineWidth(1);
         return createProgram(this.context, vertexSrc, fragmentSrc);
     }
 

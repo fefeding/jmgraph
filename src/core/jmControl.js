@@ -61,6 +61,7 @@ export default class jmControl extends jmProperty {
 		if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
 				style: this.style,
+				control: this,
 				isRegular: params.isRegular,
 				needCut: params.needCut
 			});

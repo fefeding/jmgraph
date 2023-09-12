@@ -87,6 +87,7 @@ export default class jmGradient {
 		if(this.type === 'linear') {
 			if(control.mode === 'webgl' && control.webglControl) {
 				gradient = control.webglControl.createLinearGradient(x1, y1, x2, y2, bounds);
+				gradient.key = this.toString();
 			}	
 			else {		
 				context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
@@ -105,6 +106,7 @@ export default class jmGradient {
 			}
 			if(control.mode === 'webgl' && control.webglControl) {
 				gradient = control.webglControl.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
+				gradient.key = this.toString();
 			}	
 			//offsetLine = Math.abs(r2 - r1);//二圆半径差
 			else if(context.createRadialGradient) {
@@ -206,14 +208,14 @@ export default class jmGradient {
 	toString() {
 		let str = this.type + '-gradient(';
 		if(this.type == 'linear') {
-			str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2);
+			str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
 		}
 		else {
-			str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.r1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2) + ' ' + this.r2.toFixed(2);
+			str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
 		}
 		//颜色渐变
 		this.stops.each(function(i,s) {	
-			str += ',' + s.color + ' ' + s.offset.toFixed(2);
+			str += ',' + s.color + ' ' + s.offset;
 		});
 		return str + ')';
 	}

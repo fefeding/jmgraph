@@ -29,22 +29,7 @@ export default class jmPath extends jmControl {
 	set points(v) {
 		this.needUpdate = true;
 		return this.property('points', v);
-	}
-
-	/**
-	 * 顶点数组索引，对应points中的顶点
-	 * @property polygonIndices
-	 * @type {array} 
-	 */
-	get polygonIndices() {
-		let s = this.property('polygonIndices');
-		return s;
-	}
-	set polygonIndices(v) {
-		this.needUpdate = true;
-		return this.property('polygonIndices', v);
-	}
-	
+	}	
 	
 }
 

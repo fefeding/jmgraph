@@ -502,7 +502,6 @@ class WebglPath extends WebglBase {
         if(points && points.length) {
             const regular = this.isRegular && (lineWidth == 1);
             points = regular? points : this.pathToPoints(points);
-            this.context.lineWidth(1);
             const buffer = this.writePoints(points);
             this.context.drawArrays(regular? this.context.LINES: this.context.POINTS, 0, points.length);
             this.deleteBuffer(buffer);
@@ -536,12 +535,20 @@ class WebglPath extends WebglBase {
         this.context.uniform1i(this.program.uniforms.a_type.location, type);
         const colorBuffer = this.setFragColor(color);
 
-        // 需要分割三角形，不然填充会有问题
-        const polygons = this.earCutPointsToTriangles(points);
-        if(polygons.length) {
-            for(const polygon of polygons) {
-                this.fillPolygons(polygon);
-            }   
+        let rendered = false;
+        const regular = (this.isRegular || points.length < 4);
+        if(!regular) {
+            // 需要分割三角形，不然填充会有问题
+            const polygons = this.earCutPointsToTriangles(points);
+            if(polygons.length) {
+                for(const polygon of polygons) {
+                    this.fillPolygons(polygon);
+                } 
+                rendered = true;  
+            }
+        }
+        if(!rendered) {
+            this.fillPolygons(points);
         }
 
         colorBuffer && this.deleteBuffer(colorBuffer);
@@ -575,19 +582,28 @@ class WebglPath extends WebglBase {
     fillTexture(points) {        
         if(points && points.length) {  // 标注为纹理对象
             this.context.uniform1i(this.program.uniforms.a_type.location, 2);
-            // 需要分割三角形，不然填充会有问题
-            const polygons = this.earCutPointsToTriangles(points);
-            if(polygons.length) {
-                for(const polygon of polygons) {
-                    // 纹理坐标
-                    const coordBuffer = this.writePoints(polygon, this.program.attrs.a_text_coord);
+            const regular = (this.isRegular || points.length < 4);
+            if(!regular) {
+                // 需要分割三角形，不然填充会有问题
+                const polygons = this.earCutPointsToTriangles(points);
+                if(polygons.length) {
+                    for(const polygon of polygons) {
+                        // 纹理坐标
+                        const coordBuffer = this.writePoints(polygon, this.program.attrs.a_text_coord);
 
-                    this.fillPolygons(polygon);
-                    
-                    this.deleteBuffer(coordBuffer);    
-                }   
-                this.disableVertexAttribArray(this.program.attrs.a_text_coord);
+                        this.fillPolygons(polygon);
+                        
+                        this.deleteBuffer(coordBuffer);    
+                    }   
+                    this.disableVertexAttribArray(this.program.attrs.a_text_coord);
+                    return;
+                }
             }
+            // 纹理坐标
+            const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
+            this.fillPolygons(points);
+            this.deleteBuffer(coordBuffer);  
+            this.disableVertexAttribArray(this.program.attrs.a_text_coord);   
         } 
     }
 

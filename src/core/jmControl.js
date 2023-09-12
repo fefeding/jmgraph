@@ -206,7 +206,6 @@ export default class jmControl extends jmProperty {
 		return s;
 	}
 	set zIndex(v) {
-		this.needUpdate = true;
 		this.property('zIndex', v);
 		this.children.sort();//层级发生改变，需要重新排序
 		this.needUpdate = true;

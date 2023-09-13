@@ -63,7 +63,7 @@ const pathVertexSource = `
 `;
 // path 片段着色器源码
 const pathFragmentSource = `
-    precision highp float;
+    precision mediump float;
     uniform sampler2D u_sample;
     uniform vec4 v_texture_bounds; // 纹理的左上坐标和大小 x,y,z,w
     uniform vec4 v_single_color;

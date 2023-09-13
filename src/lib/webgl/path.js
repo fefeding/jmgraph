@@ -99,8 +99,8 @@ class WebglPath extends WebglBase {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;
                 points.push({
-                    x: Number(x.toFixed(2)), 
-                    y: Number(y.toFixed(2))
+                    x, 
+                    y
                 });
             }
         }
@@ -244,8 +244,8 @@ class WebglPath extends WebglBase {
         const dy= t * (line1.end.y - line1.start.y);
 
         return { 
-            x: Number((line1.start.x + dx).toFixed(2)), 
-            y: Number((line1.start.y + dy).toFixed(2))
+            x: line1.start.x + dx, 
+            y: line1.start.y + dy
         };
     }
 

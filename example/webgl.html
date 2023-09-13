@@ -24,7 +24,7 @@
       var cvs = document.getElementById('cvs');
       //获取到元素的上下文环境对象
       var gl = cvs.getContext('webgl');
-      
+      gl.lineWidth(1);
         const width = gl.canvas.width;
         const height = gl.canvas.height;
         gl.viewport(0, 0, width, height)
@@ -58,7 +58,7 @@
         void main() {
             gl_PointSize = 10.0;
             //vec4 pos = pointToPos(aLineStart, aLineEnd, aPointIndex.x);
-            vec4 pos = a_position;//translatePosition(a_position, aCenterPoint.x, aCenterPoint.y);
+            vec4 pos = a_position * 100000000000000.0 / 100000000000000.0;//translatePosition(a_position, aCenterPoint.x, aCenterPoint.y);
             gl_Position = pos;
             vColor = aColor;
             vTextCoord = aTextCoord;
@@ -90,7 +90,7 @@
         
 
        const colors = [Math.random(),Math.random(),Math.random(),1];
-       const points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, 0.665, -0.2774, 0.6062, -0.5341, 0.399, -0.66, 0.0941, -0.6243, -0.2339, -0.4358, -0.5045, -0.1405, -0.6517, 0.1891, -0.6393, 0.4724, -0.4704, 0.6401, -0.1863];
+       let points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, ];
        const uvpoints = [];
 
         const center = {
@@ -181,6 +181,8 @@
       };
       img.src = 'qrcode.jpg';*/
       
+      //points =  [-0.8, 0.5, 0, 0.5,0.6,0,0,-0.6, -0.5];
+      
       draw();
 
       function draw() {
@@ -189,6 +191,9 @@
         if(program.uniforms.uSample) {
             gl.uniform1i(program.uniforms.uSample.location, 0) // 纹理单元传递给着色器
         }*/
+
+        vertexBuffer = createFloat32Buffer(gl, points); 
+        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
 
         if(program.uniforms.u_color) {
             gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
@@ -207,8 +212,8 @@
             3,  // 从数组中哪个点开始渲染
             3   // 需要用到多少个点，三角形的三个顶点
         );*/
-        gl.drawArrays(gl.TRIANGLE, 0, points.length/2);
-        //gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length/2);
+        //gl.drawArrays(gl.TRIANGLE, 0, points.length/2);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.LINE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.LINE_LOOP, 0, points.length/2);
@@ -218,22 +223,23 @@
         //deleteBuffer(gl, vertexBuffer);
         //deleteBuffer(gl, colorBuffer);
         //deleteBuffer(gl, textCoordBuffer);
-        console.log(points);
+        
 
-
+        console.log(1,vertexBuffer);
         if(program.uniforms.u_color) {
             gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
         }
-        vertexBuffer = createFloat32Buffer(gl, [
-            -0.8, 0.5, 0, 0.5,0.6,0,0,-0.6, -0.5
-        ]); 
-        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
+        vertexBuffer = createFloat32Buffer(gl, points); 
+        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
+        
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
+
+        console.log(2,vertexBuffer);
 
         draw2d(points);
 
-        setTimeout(draw, 1000)
+        //setTimeout(draw, 1000)
       }
 
       function draw2d(points) {

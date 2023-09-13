@@ -1,84 +1,5 @@
 import WebglBase from './base.js';
 
-// 把canvas坐标转为webgl坐标系
-const convertPointSource = `
-    vec4 translatePosition(vec4 point, float x, float y) {
-        point.x = (point.x-x)/x;
-        point.y = (y-point.y)/y;
-        return point;
-    }`;
-// 把纹理的canvas坐标转为纹理的坐标系
-const convertTexturePosition = `
-    vec2 translateTexturePosition(in vec2 point, vec4 bounds) {
-        point.x = (point.x-bounds.x)/bounds.z; // 离左上角位置的X长比上纹理宽 0-1
-        point.y = 1.0-(point.y-bounds.y)/bounds.w; // 离左上角位置的Y长比上高，因为纹理坐标是左下角起，所以要用1-
-        return point;
-    }`;
-
-// path顶点着色器源码
-const pathVertexSource = `
-    attribute vec4 a_position;
-    attribute vec4 a_color;
-    attribute vec2 a_text_coord;
-    uniform vec2 a_center_point; // 当前canvas的中心位置
-    uniform float a_point_size; // 点的大小
-    uniform int a_type;
-    varying vec4 v_color;
-    varying vec2 v_text_coord;
-    varying float v_type;
-
-    ${convertPointSource}
-
-    void main() {
-        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;
-        v_type = float(a_type);
-        vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);
-        gl_Position = pos;
-        v_color = a_color;
-        if(a_type == 2) {
-            v_text_coord = a_text_coord;
-        }
-    }
-`;
-// path 片段着色器源码
-const pathFragmentSource = `
-    precision highp float;
-    uniform sampler2D u_sample;
-    uniform vec4 v_texture_bounds; // 纹理的左上坐标和大小 x,y,z,w
-    uniform vec4 v_single_color;
-    varying float v_type;
-    varying vec4 v_color;
-    varying vec2 v_text_coord;
-
-    ${convertTexturePosition}
-
-    void main() {
-        // 如果是fill，则直接填充颜色
-        if(v_type == 1.0) {
-            gl_FragColor = v_single_color;
-        }
-        // 渐变色
-        else if(v_type == 3.0) {
-            gl_FragColor = v_color;
-        }
-        else if(v_type == 2.0) {
-            vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);
-            gl_FragColor = texture2D(u_sample, pos);
-        }
-        else {
-            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
-            //根据距离设置片元
-            if(r <= 0.5){
-                // 方形区域片元距离几何中心半径小于0.5，像素颜色设置红色
-                gl_FragColor = v_single_color;
-            }else {
-                // 方形区域距离几何中心半径不小于0.5的片元剪裁舍弃掉：
-                discard;
-            }
-        }
-    }
-`;
-
 // path 绘制类
 class WebglPath extends WebglBase {
     constructor(graph, option) {
@@ -88,47 +9,6 @@ class WebglPath extends WebglBase {
         this.needCut = option.needCut || false;
         this.control = option.control;
         this.points = [];
-    }
-
-    // i当前程序
-    get program() {
-        // 默认所有path用同一个编译好的program
-        return this.graph.context.pathProgram || (this.graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
-    }
-
-    // 设置样式
-    setStyle(style = this.style, value = '') {
-        this.useProgram();
-
-        if(typeof style === 'string') {
-            const obj = {};
-            obj[style] = value;
-            style = obj;
-        }
-       
-        // 设置线条颜色或填充色
-        if(style.strokeStyle) {
-            let color = style.strokeStyle;
-            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-            this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
-            delete style.strokeStyle;
-        }
-        else if(style.fillStyle) {
-            let color = style.fillStyle;
-            if(this.isGradient(color)) {
-                this.style.fillStyle = color;
-            }
-            else {
-                if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-                this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
-            }
-            delete style.fillStyle;
-        }        
-
-        this.style = {
-            ...this.style,
-            ...style
-        }
     }
 
     setParentBounds(parentBounds = this.parentAbsoluteBounds) {
@@ -143,7 +23,7 @@ class WebglPath extends WebglBase {
     setFragColor(color) {
         
         if(!Array.isArray(color)) {
-            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
+            color = this.convertColor(color);
             if(typeof color.a === 'undefined') color.a = 1;
             this.context.uniform4f(this.program.uniforms.v_single_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
             return null;
@@ -151,7 +31,7 @@ class WebglPath extends WebglBase {
 
         const colorData = [];
         for(let c of color) {
-            if(typeof c === 'string') c = this.graph.utils.hexToRGBA(c);
+            c = this.convertColor(c);
             if(typeof c.a === 'undefined') c.a = 1;
             colorData.push(c.r, c.g, c.b, c.a * this.style.globalAlpha);
         }
@@ -606,7 +486,7 @@ class WebglPath extends WebglBase {
         //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
         //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
         //this.deleteBuffer(indexBuffer);
-        if(!regular) {
+        if(points.length > 3 && (!regular || this.needCut)) {
             const triangles = this.getTriangles(points);                
             if(triangles.length) {   
                 for(const triangle of triangles) {
@@ -636,6 +516,50 @@ class WebglPath extends WebglBase {
             width, 
             height
         });
+    }
+
+    drawText(text, x, y, bounds) {
+        let canvas = this.textureCanvas;
+        if(!canvas) {
+            return null;
+        }
+        canvas.width = bounds.width;
+        canvas.height = bounds.height;
+
+        if(!canvas.width || !canvas.height) {
+            return null;
+        }
+
+        this.textureContext.clearRect(0, 0, canvas.width, canvas.height);
+        // 修改字体
+		this.textureContext.font = this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily);
+
+        x -= bounds.left;
+        y -= bounds.top;
+
+        this.setTextureStyle(this.style);
+
+        if(this.style.fillStyle && this.textureContext.fillText) {
+
+            if(this.style.maxWidth) {
+                this.textureContext.fillText(text, x, y, this.style.maxWidth);
+            }
+            else {
+                this.textureContext.fillText(text, x, y);
+            }
+        }
+        if(this.textureContext.strokeText) {
+
+            if(this.style.maxWidth) {
+                this.textureContext.strokeText(text, x, y, this.style.maxWidth);
+            }
+            else {
+                this.textureContext.strokeText(text, x, y);
+            }
+        }
+        // 用纹理图片代替文字
+        const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
+        this.fillImage(data, this.points, bounds);
     }
 }
 

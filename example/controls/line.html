@@ -116,11 +116,11 @@
 			var img = new Image();
 			img.onload = ()=>{
 				style.fillImage = img;
-				style.fill = 'rgba(220,100,80, 0.8)';
+				style.fill = 'rgba(220,100,80, 0.5)';
 				//delete style.fill;
 				//style.close = true;
 
-				for(let i=0; i< 100; i++) {
+				for(let i=0; i< 10; i++) {
 					var path = graph.createPath(null,style);
 					const startx = Math.random() * window.innerWidth;
 					const starty = Math.random() * window.innerHeight

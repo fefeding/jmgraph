@@ -21,6 +21,85 @@ import {
     deleteTexture
 } from './core/texture.js';
 
+// 把canvas坐标转为webgl坐标系
+const convertPointSource = `
+    vec4 translatePosition(vec4 point, float x, float y) {
+        point.x = (point.x-x)/x;
+        point.y = (y-point.y)/y;
+        return point;
+    }`;
+// 把纹理的canvas坐标转为纹理的坐标系
+const convertTexturePosition = `
+    vec2 translateTexturePosition(in vec2 point, vec4 bounds) {
+        point.x = (point.x-bounds.x)/bounds.z; // 离左上角位置的X长比上纹理宽 0-1
+        point.y = 1.0-(point.y-bounds.y)/bounds.w; // 离左上角位置的Y长比上高，因为纹理坐标是左下角起，所以要用1-
+        return point;
+    }`;
+
+// path顶点着色器源码
+const pathVertexSource = `
+    attribute vec4 a_position;
+    attribute vec4 a_color;
+    attribute vec2 a_text_coord;
+    uniform vec2 a_center_point; // 当前canvas的中心位置
+    uniform float a_point_size; // 点的大小
+    uniform int a_type;
+    varying vec4 v_color;
+    varying vec2 v_text_coord;
+    varying float v_type;
+
+    ${convertPointSource}
+
+    void main() {
+        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;
+        v_type = float(a_type);
+        vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);
+        gl_Position = pos;
+        v_color = a_color;
+        if(a_type == 2) {
+            v_text_coord = a_text_coord;
+        }
+    }
+`;
+// path 片段着色器源码
+const pathFragmentSource = `
+    precision highp float;
+    uniform sampler2D u_sample;
+    uniform vec4 v_texture_bounds; // 纹理的左上坐标和大小 x,y,z,w
+    uniform vec4 v_single_color;
+    varying float v_type;
+    varying vec4 v_color;
+    varying vec2 v_text_coord;
+
+    ${convertTexturePosition}
+
+    void main() {
+        // 如果是fill，则直接填充颜色
+        if(v_type == 1.0) {
+            gl_FragColor = v_single_color;
+        }
+        // 渐变色
+        else if(v_type == 3.0) {
+            gl_FragColor = v_color;
+        }
+        else if(v_type == 2.0) {
+            vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);
+            gl_FragColor = texture2D(u_sample, pos);
+        }
+        else {
+            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            //根据距离设置片元
+            if(r <= 0.5){
+                // 方形区域片元距离几何中心半径小于0.5，像素颜色设置红色
+                gl_FragColor = v_single_color;
+            }else {
+                // 方形区域距离几何中心半径不小于0.5的片元剪裁舍弃掉：
+                discard;
+            }
+        }
+    }
+`;
+
 class WeblBase {
     constructor(graph, option) {
         this.graph = graph;
@@ -32,6 +111,86 @@ class WeblBase {
 
     get context() {
         if(this.graph) return this.graph.context;
+    }
+
+    // 纹理绘制canvas
+    get textureCanvas() {
+        let canvas = this.graph.textureCanvas;
+        if(!canvas) {
+            if(typeof document === 'undefined') return null;
+            canvas = this.graph.textureCanvas = document.createElement('canvas');
+        }
+        return canvas;
+    }
+    // 纹理绘制canvas ctx
+    get textureContext() {
+        const ctx = this.textureCanvas.ctx || (this.textureCanvas.ctx = this.textureCanvas.getContext('2d', {
+            willReadFrequently: true
+        }));
+        return ctx;
+    }
+
+    // i当前程序
+    get program() {
+        // 默认所有path用同一个编译好的program
+        return this.graph.context.pathProgram || (this.graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
+    }
+
+    // 设置样式
+    setStyle(style = this.style, value = '') {
+
+        if(typeof style === 'string') {
+            const obj = {};
+            obj[style] = value;
+            style = obj;
+        }
+       /*
+        // 设置线条颜色或填充色
+        if(style.strokeStyle) {
+            let color = style.strokeStyle;
+            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
+            this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
+            delete style.strokeStyle;
+        }
+        else if(style.fillStyle) {
+            let color = style.fillStyle;
+            if(this.isGradient(color)) {
+                this.style.fillStyle = color;
+            }
+            else {
+                if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
+                this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
+            }
+            delete style.fillStyle;
+        } */       
+
+        this.style = {
+            ...this.style,
+            ...style
+        }
+    }
+
+    // 把传统颜色转为webgl识别的
+    convertColor(color) {
+        if(this.isGradient(color)) return color;
+        if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
+        return this.graph.utils.rgbToDecimal(color);
+    }
+
+    setTextureStyle(style, value='') {
+        
+        if(typeof style === 'string') {
+            if(['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(style) > -1) {
+                value = this.graph.utils.toColor(value);
+            }
+            this.textureContext[style] = value;
+        }
+        else {
+            for(const name in style) {
+                if(name === 'constructor') continue;
+                this.setTextureStyle(name, style[name]);
+            }
+        }
     }
 
     // 创建程序
@@ -197,6 +356,27 @@ class WeblBase {
     isGradient(obj) {
         return obj && obj instanceof webglGradient;
     }
+
+    /**
+	 * 测试获取文本所占大小
+	 *
+	 * @method testSize
+	 * @return {object} 含文本大小的对象
+	 */
+	testSize(text, style=this.style) {
+		
+		this.textureContext.save && this.textureContext.save();
+		// 修改字体，用来计算
+		if(style.font || style.fontSize) this.textureContext.font = style.font || (style.fontSize + 'px ' + style.fontFamily);
+		
+		//计算宽度
+		const size = this.textureContext.measureText?
+                        this.textureContext.measureText(text):
+							{width:15};
+        this.textureContext.restore &&this.textureContext.restore();
+		size.height = this.style.fontSize? this.style.fontSize: 15;
+		return size;
+	}
 }
 
 export default WeblBase;

@@ -1,6 +1,6 @@
 const WebglGradientTextureCache = {};
 // 渐变
-class WeblGradient {
+class WebglGradient {
     // type:[linear= 线性渐变,radial=放射性渐变] 
     constructor(type='linear', params={}) {
         this.type = type || 'linear';
@@ -56,9 +56,9 @@ class WeblGradient {
         const key = this.key || this.toString();
         if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
 
-        let canvas = control.graph.textureCanvas;
+        let canvas = control.textureCanvas;
         if(!canvas) {
-            canvas = control.graph.textureCanvas = document.createElement('canvas');
+            return null;
         }
         canvas.width = bounds.width;
         canvas.height = bounds.height;
@@ -67,37 +67,33 @@ class WeblGradient {
             return null;
         }
 
-        const ctx = canvas.getContext('2d', {
-            willReadFrequently: true
-        });
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        control.textureContext.clearRect(0, 0, canvas.width, canvas.height);
 
         let gradient = null;
         if(this.type === 'linear') {
-            gradient = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+            gradient = control.textureContext.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
         }
         else {
-            gradient = ctx.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
+            gradient = control.textureContext.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
         }
         this.stops.forEach(function(s, i) {	
             const c = control.graph.utils.toColor(s.color);
             gradient && gradient.addColorStop(s.offset, c);		
         });
-        ctx.fillStyle = gradient;
+        control.textureContext.fillStyle = gradient;
 
-        ctx.beginPath();
+        control.textureContext.beginPath();
 
-        ctx.moveTo(0, 0);
-        ctx.lineTo(bounds.width, 0);
-        ctx.lineTo(bounds.width, bounds.height);
-        ctx.lineTo(0, bounds.height);
-        ctx.lineTo(0, 0);
+        control.textureContext.moveTo(0, 0);
+        control.textureContext.lineTo(bounds.width, 0);
+        control.textureContext.lineTo(bounds.width, bounds.height);
+        control.textureContext.lineTo(0, bounds.height);
+        control.textureContext.lineTo(0, 0);
 
-        ctx.closePath();
-        ctx.fill();
+        control.textureContext.closePath();
+        control.textureContext.fill();
 
-        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = control.textureContext.getImageData(0, 0, canvas.width, canvas.height);
 
         WebglGradientTextureCache[key] = data;
 
@@ -193,4 +189,4 @@ class WeblGradient {
 	}
 }
 
-export default WeblGradient;
+export default WebglGradient;

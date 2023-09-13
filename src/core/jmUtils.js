@@ -883,6 +883,12 @@ export default class jmUtils {
             b = typeof color.b !== 'undefined'? color.b: b;
             a = typeof color.a !== 'undefined'? color.a: a;
         }
+        if(typeof r === 'object') {
+            g = r.g;
+            b = r.b;
+            a = r.a || 1;
+            r = r.r;
+        }
         if(typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
             if(typeof a != 'undefined') {            
                 return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';

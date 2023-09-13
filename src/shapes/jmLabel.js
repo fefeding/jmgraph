@@ -114,20 +114,25 @@ export default class jmLabel extends jmControl {
 	 */
 	testSize() {
 		if(this.__size) return this.__size;
-		
-		this.context.save && this.context.save();
-		// 修改字体，用来计算
-		this.setStyle({
-			font: this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily)
-		});
-		//计算宽度
-		this.__size = this.context.measureText?
-							this.context.measureText(this.text):
-							{width:15};
-		this.context.restore && this.context.restore();
-		this.__size.height = this.style.fontSize?this.style.fontSize:15;
+
+		if(this.webglControl) this.__size = this.webglControl.testSize(this.text, this.style);
+		else {
+			this.context.save && this.context.save();
+			// 修改字体，用来计算
+			this.setStyle({
+				font: this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily)
+			});
+			//计算宽度
+			this.__size = this.context.measureText?
+								this.context.measureText(this.text):
+								{width:15};
+			this.context.restore && this.context.restore();
+			this.__size.height = this.style.fontSize?this.style.fontSize:15;
+		}
+
 		if(!this.width) this.width = this.__size.width;
 		if(!this.height) this.height = this.__size.height;
+		
 		return this.__size;
 	}
 
@@ -140,7 +145,7 @@ export default class jmLabel extends jmControl {
 		
 		//获取当前控件的绝对位置
 		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;		
-		let size = this.testSize();
+		const size = this.testSize();
 		let location = this.location;
 		let x = location.left + bounds.left;
 		let y = location.top + bounds.top;
@@ -172,9 +177,14 @@ export default class jmLabel extends jmControl {
 
 		let txt = this.text;
 		if(typeof txt !== 'undefined') {
-			if(this.style.fill && this.context.fillText) {
+			// webgl方式
+			if(this.webglControl) {
+				this.webglControl.draw(this.points, bounds);
+				this.webglControl.drawText(txt, x, y, location);
+			}
+			else if(this.style.fill && this.context.fillText) {
 				if(this.style.maxWidth) {
-					this.context.fillText(txt,x,y,this.style.maxWidth);
+					this.context.fillText(txt,x,y, this.style.maxWidth);
 				}
 				else {
 					this.context.fillText(txt,x,y);
@@ -182,7 +192,7 @@ export default class jmLabel extends jmControl {
 			}
 			else if(this.context.strokeText) {
 				if(this.style.maxWidth) {
-					this.context.strokeText(txt,x,y,this.style.maxWidth);
+					this.context.strokeText(txt,x,y, this.style.maxWidth);
 				}
 				else {
 					this.context.strokeText(txt,x,y);
@@ -196,30 +206,66 @@ export default class jmLabel extends jmControl {
 				this.context.save && this.context.save();
 				this.setStyle(this.style.border.style);
 			}
-			this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			if(this.style.border.top) {
-				this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+			if(this.mode === '2d') {
+				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+				if(this.style.border.top) {
+					this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+				}
+				
+				if(this.style.border.right) {
+					this.context.moveTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
+					this.context.lineTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+				}
+				
+				if(this.style.border.bottom) {
+					this.context.moveTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+					this.context.lineTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
+				}
+				
+				if(this.style.border.left) {
+					this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
+					this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
+				}
 			}
-			
-			if(this.style.border.right) {
-				this.context.moveTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
-				this.context.lineTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
+			else {
+				const points = [];
+				if(this.style.border.top) {
+					points.push(this.points[0]);
+					points.push(this.points[1]);
+				}
+				
+				if(this.style.border.right) {
+					points.push({
+						...this.points[1],
+						m: true
+					});
+					points.push(this.points[2]);
+				}
+				
+				if(this.style.border.bottom) {
+					points.push({
+						...this.points[2],
+						m: true
+					});
+					points.push(this.points[3]);
+				}
+				
+				if(this.style.border.left) {
+					points.push({
+						...this.points[3],
+						m: true
+					});
+					points.push(this.points[0]);
+				}
+				points.length && this.webglControl && this.webglControl.stroke(points);
 			}
-			
-			if(this.style.border.bottom) {
-				this.context.moveTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
-				this.context.lineTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
-			}
-			
-			if(this.style.border.left) {
-				this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
-				this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-			}
-			//如果指定了边框颜色
-			if(this.style.border.style) {
-				this.context.restore && this.context.restore();
-			}	
-		}		
+		}	
+	}
+
+	endDraw() {
+		if(this.mode === '2d') {
+			super.endDraw();
+		}
 	}
 }
 

@@ -391,9 +391,9 @@ export default class jmControl extends jmProperty {
 					if(this.webglControl) {
 						//只有存在白名单中才处理
 						//颜色转换
-						if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+						/*if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
 							styleValue = jmUtils.hexToRGBA(styleValue);
-						}
+						}*/
 
 						this.webglControl.setStyle(mpname, styleValue);
 					}

@@ -82,10 +82,10 @@
 					return {x:x,y:y};
 				}
 
-				for(var i=0;i<10;i++) {
+				for(var i=0;i<100;i++) {
 					var radius = Math.random() * 10 + 8;
 					var styletmp = graph.util.clone(style);
-					styletmp.fill = graph.createRadialGradient(radius,radius,0,radius,radius,radius);
+					styletmp.fill = graph.createRadialGradient('50%','50%',0,'50%','50%',radius);
 					var rr1 = Math.floor(Math.random() * 255);
 					var gg1 = Math.floor(Math.random() * 255);
 					var bb1 = Math.floor(Math.random() * 255);

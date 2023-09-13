@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		
 	</head>
-	<body style="width:800px;margin:10px;border:1px solid blue; background-color: #fff;">
-		<div id="mycanvas" style="border:1px solid red;margin:10px;width:100%;height:600px;"></div>
+	<body style="margin:10px;border:1px solid blue; background-color: #fff;">
+		<div id="mycanvas" style="border:1px solid red;margin:10px;"></div>
 		<canvas id="textureCanvas"></canvas>
 		<div id="eventposition"></div>
 
@@ -17,8 +17,8 @@
 
 		const textureCanvas = document.getElementById('textureCanvas');
 		var g = jmGraph.create('mycanvas', {
-			width: 800,
-			height: 600,
+			width: window.innerWidth * 0.8,
+			height: window.innerHeight * 0.8,
 			mode: 'webgl',
 			textureCanvas
 		});
@@ -96,9 +96,10 @@
 
 
 			style = graph.utils.clone(style);	
-			style.opacity = .8;
-			var bg = graph.createLinearGradient(0,0,80,80);
-			bg.addStop(0,'rgba(0,0,0,0.3)');
+			//style.opacity = .8;
+			var bg = graph.createRadialGradient('50%','50%', 0,'50%','50%', 40);
+			bg.addStop(0,'rgba(0,0,0, 0.1)');
+			bg.addStop(0.5,'rgba(0,255,0,5)');
 			bg.addStop(1,'rgba(150,200,180,0.8)');
 			style.fill = bg;//'linear-gradient(0 0 0 100,#000 0,#73998A 1)';
 			style.close = true;
@@ -118,51 +119,46 @@
 				style.fill = 'rgba(220,100,80, 0.8)';
 				//delete style.fill;
 				//style.close = true;
-				var path = graph.createPath(null,style);
-				path.points.push({x:200,y:60});
-				path.points.push({x:400,y:60});
 
-				path.points.push({x:220,y:120});
-				path.points.push({x:260,y:300});		
+				for(let i=0; i< 100; i++) {
+					var path = graph.createPath(null,style);
+					const startx = Math.random() * window.innerWidth;
+					const starty = Math.random() * window.innerHeight
+					;
+					path.points.push({x:startx+200,y:60+starty});
+					path.points.push({x:startx+400,y:60+starty});
 
-				path.points.push({x:420,y:100});
+					path.points.push({x:startx+220,y:120+starty});
+					path.points.push({x:startx+260,y:300+starty});		
 
-				path.points.push({x:260,y:20});	
-				path.points.push({x:250,y:80});
-				path.points.push({x:200,y:10});
+					path.points.push({x:startx+420,y:100+starty});
 
-				/*path.points.push({x:300,y:60});
-				path.points.push({x:400,y:60});
+					path.points.push({x:startx+260,y:20+starty});	
+					path.points.push({x:startx+250,y:80+starty});
+					path.points.push({x:startx+200,y:10+starty});
 
-				path.points.push({x:360,y:130});
-				//path.points.push({x:320,y:120});
+					/*path.points.push({x:300,y:60});
+					path.points.push({x:400,y:60});
 
-				path.points.push({x:420,y:100});
+					path.points.push({x:360,y:130});
+					//path.points.push({x:320,y:120});
 
-				path.points.push({x:260,y:60});*/
-				
-				
-				//rect.children.add(path);
+					path.points.push({x:420,y:100});
 
-				graph.children.add(path);
-
-				path.bind('mouseover',function(evt) {
-					this.style.stroke = 'rgba(39,72,188,0.5)';
-					this.needUpdate = true;
-					//graph.canvas.style.cursor = 'pointer';
+					path.points.push({x:260,y:60});*/
 					
-				});
-				path.bind('mouseleave',function(evt) {					
-					this.style.stroke = 'rgb(120,20,80)';
-					this.needUpdate = true;
-					//graph.canvas.style.cursor = 'default';
-				});
-				
-				rect.canMove(true);
-				//line.canMove(true);
-				path.canMove(true);	
+					
+					//rect.children.add(path);
+
+					graph.children.add(path);
+					
+					//line.canMove(true);
+					path.canMove(true);	
+				}
 			}
-			img.src = '../x.png';			
+			img.src = '../x.png';	
+			
+			rect.canMove(true);
 		}
 			
 		

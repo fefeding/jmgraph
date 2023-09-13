@@ -9,16 +9,16 @@
         import {
             createProgram,
             writeVertexAttrib
-        } from '../src/lib/webgl/program.js';
+        } from '../src/lib/webgl/core/program.js';
 
         import {
             createFloat32Buffer,
             deleteBuffer,
-        } from '../src/lib/webgl/buffer.js';
+        } from '../src/lib/webgl/core/buffer.js';
 
         import {
             create2DTexture
-        } from '../src/lib/webgl/texture.js';
+        } from '../src/lib/webgl/core/texture.js';
 
       //获取画布元素
       var cvs = document.getElementById('cvs');
@@ -65,7 +65,7 @@
         }
 
         `,`
-        precision mediump float;
+        precision highp float;
         uniform vec4 u_color;
         uniform sampler2D uSample;
         varying vec4 vColor;
@@ -233,7 +233,7 @@
 
         draw2d(points);
 
-        //setTimeout(draw, 1000)
+        setTimeout(draw, 1000)
       }
 
       function draw2d(points) {

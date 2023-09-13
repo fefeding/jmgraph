@@ -55,10 +55,14 @@
             return vec4(x, y, 0.0, 0.0);
         }
 
+        vec4 ceilPosition(vec4 pos) {
+            return vec4(floor(pos.xy*10000.0)/10000.0, pos.zw);
+        }
+
         void main() {
             gl_PointSize = 10.0;
             //vec4 pos = pointToPos(aLineStart, aLineEnd, aPointIndex.x);
-            vec4 pos = a_position * 100000000000000.0 / 100000000000000.0;//translatePosition(a_position, aCenterPoint.x, aCenterPoint.y);
+            vec4 pos = ceilPosition(a_position);//translatePosition(a_position, aCenterPoint.x, aCenterPoint.y);
             gl_Position = pos;
             vColor = aColor;
             vTextCoord = aTextCoord;
@@ -72,15 +76,15 @@
         varying  vec2 vTextCoord;
 
         void main() {
-            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            //float r = distance(gl_PointCoord, vec2(0.5, 0.5));
             //根据距离设置片元
-            if(r <= 0.5){
+            //if(r <= 0.5){
                 // 方形区域片元距离几何中心半径小于0.5，像素颜色设置红色
                 gl_FragColor = u_color;
-            }else {
+            //}else {
                 // 方形区域距离几何中心半径不小于0.5的片元剪裁舍弃掉：
-               discard;
-            }
+             //  discard;
+            //}
             //gl_FragColor = u_color;
         }
         
@@ -90,7 +94,7 @@
         
 
        const colors = [Math.random(),Math.random(),Math.random(),1];
-       let points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, ];
+       let points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, 0.5555, 0.680];
        const uvpoints = [];
 
         const center = {
@@ -192,15 +196,19 @@
             gl.uniform1i(program.uniforms.uSample.location, 0) // 纹理单元传递给着色器
         }*/
 
-        vertexBuffer = createFloat32Buffer(gl, points); 
-        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
+        
+
+        
+
+        gl.clearColor(1, 1, 1, 1) // 设置清空颜色缓冲时的颜色值
+        gl.clear(gl.COLOR_BUFFER_BIT) // 清空颜色缓冲区，也就是清空画布
 
         if(program.uniforms.u_color) {
             gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
         }
 
-        gl.clearColor(1, 1, 1, 1) // 设置清空颜色缓冲时的颜色值
-        gl.clear(gl.COLOR_BUFFER_BIT) // 清空颜色缓冲区，也就是清空画布
+        vertexBuffer = createFloat32Buffer(gl, points); 
+        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
 
         /*gl.drawArrays( // 从数组中绘制图元
             gl.TRIANGLES, // 渲染三角形
@@ -213,7 +221,7 @@
             3   // 需要用到多少个点，三角形的三个顶点
         );*/
         //gl.drawArrays(gl.TRIANGLE, 0, points.length/2);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
+        gl.drawArrays(gl.LINE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.LINE_STRIP, 0, points.length/2);
         //gl.drawArrays(gl.LINE_LOOP, 0, points.length/2);

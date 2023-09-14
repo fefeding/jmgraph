@@ -101,7 +101,7 @@ function extractUniforms(gl, program) {
 // strip: 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
 // offset: 字节偏移量，必须是类型的字节长度的倍数。
 // dataType: 每个元素的数据类型
-function writeVertexAttrib(gl, buffer, attr, size=2,strip=0,offset=0,dataType=gl.FLOAT) {
+function writeVertexAttrib(gl, buffer, attr, size=2, strip=0, offset=0, dataType=gl.FLOAT) {
     gl.bindBuffer(buffer.type, buffer.buffer);
     gl.vertexAttribPointer( // 告诉 OpenGL 如何从 Buffer 中获取数据
             attr.location, // 顶点属性的索引
@@ -110,7 +110,7 @@ function writeVertexAttrib(gl, buffer, attr, size=2,strip=0,offset=0,dataType=gl
             false, // 是否归一化到特定的范围，对 FLOAT 类型数据设置无效
             strip * buffer.unitSize,
             offset
-        )
+        );
     gl.enableVertexAttribArray(attr.location);
     return buffer;
 }

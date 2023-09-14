@@ -13,6 +13,7 @@
 
         import {
             createFloat32Buffer,
+            createUint16Buffer,
             deleteBuffer,
         } from '../src/lib/webgl/core/buffer.js';
 
@@ -56,7 +57,7 @@
         }
 
         vec4 ceilPosition(vec4 pos) {
-            return vec4(floor(pos.xy*10000.0)/10000.0, pos.zw);
+            return vec4(pos.xy/10000.0, pos.zw);
         }
 
         void main() {
@@ -94,7 +95,7 @@
         
 
        const colors = [Math.random(),Math.random(),Math.random(),1];
-       let points = [0.6667, 0, 0.5851, 0.3196, 0.3602, 0.561, 0.0472, 0.5555, 0.680];
+       let points = [6667, 0, 5851, 3196, 3602, 5610, 472, 5555, 680];
        const uvpoints = [];
 
         const center = {
@@ -232,18 +233,26 @@
         //deleteBuffer(gl, colorBuffer);
         //deleteBuffer(gl, textCoordBuffer);
         
+        
 
-        console.log(1,vertexBuffer);
+        //console.log(1,vertexBuffer);
+
+
+
         if(program.uniforms.u_color) {
             gl.uniform4f(program.uniforms.u_color.location, Math.random(), Math.random(), Math.random(), 1) // 设置它的值
         }
 
-        vertexBuffer = createFloat32Buffer(gl, points); 
-        writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
-        
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length/2);
+        //setTimeout(() => {
+            
+            vertexBuffer = createFloat32Buffer(gl, points); 
+            console.log(0, vertexBuffer);
+            writeVertexAttrib(gl, vertexBuffer, program.attrs.a_position, 2, 0, 0);
+            console.log(5, vertexBuffer.buffer);
+            gl.drawArrays(gl.LINE_STRIP, 0, points.length/2);
 
-        console.log(2,vertexBuffer);
+            deleteBuffer(gl, vertexBuffer);
+        //}, 2000);
 
         draw2d(points);
 
@@ -257,11 +266,11 @@
         ctx.strokeStyle = "rgba(0, 255, 0, 1)";
         
         ctx.beginPath();
-        ctx.moveTo(points[0] * center.x + center.x, center.y - points[1] * center.y);
+        ctx.moveTo(points[0]/10000 * center.x + center.x, center.y - points[1]/10000 * center.y);
         for(let i=2;i<points.length;i+=2) {
-            ctx.lineTo(points[i] * center.x + center.x, center.y - points[i+1] * center.y);
+            ctx.lineTo(points[i]/10000 * center.x + center.x, center.y - points[i+1]/10000 * center.y);
         }
-        ctx.lineTo(points[0] * center.x + center.x, center.y - points[1] * center.y);
+        ctx.lineTo(points[0]/10000 * center.x + center.x, center.y - points[1]/10000 * center.y);
         ctx.stroke();
         ctx.closePath();
       }

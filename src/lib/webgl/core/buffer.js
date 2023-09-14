@@ -16,7 +16,6 @@ function createBuffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
         type,
         drawType,
         buffer,
-        data,
         // 获取到数组中单个元素的字节数
         unitSize: data.BYTES_PER_ELEMENT
     };

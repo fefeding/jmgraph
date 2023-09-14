@@ -883,7 +883,7 @@ export default class jmUtils {
             b = typeof color.b !== 'undefined'? color.b: b;
             a = typeof color.a !== 'undefined'? color.a: a;
         }
-        if(typeof r === 'object') {
+        if(r && typeof r === 'object') {
             g = r.g;
             b = r.b;
             a = r.a || 1;

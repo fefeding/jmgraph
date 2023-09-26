@@ -6189,9 +6189,9 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
         this.__img.src = src;
       } else {
         this.__img = src;
-      } //this.image = this.__img.src;
+      }
 
-
+      if (this.__img) this.image = this.__img.src;
       return this.__img;
     }
   }]);

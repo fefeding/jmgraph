@@ -219,7 +219,7 @@ export default class jmImage extends jmControl {
 		else {
 			this.__img = src;
 		}
-		//this.image = this.__img.src;
+		if(this.__img) this.image = this.__img.src;
 		return this.__img;
 	}
 }

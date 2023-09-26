@@ -52,23 +52,12 @@ class WebglGradient {
     }
 
     // 转为渐变为纹理
-    toImageData(control, bounds) {
-        const key = this.key || this.toString();
-        if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
-
-        let canvas = control.textureCanvas;
-        if(!canvas) {
+    toImageData(control, bounds, points=null) {
+        //const key = this.key || this.toString();
+        //if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
+        if(!control.textureContext) {
             return null;
         }
-        canvas.width = bounds.width;
-        canvas.height = bounds.height;
-
-        if(!canvas.width || !canvas.height) {
-            return null;
-        }
-
-        control.textureContext.clearRect(0, 0, canvas.width, canvas.height);
-
         let gradient = null;
         if(this.type === 'linear') {
             gradient = control.textureContext.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
@@ -80,22 +69,10 @@ class WebglGradient {
             const c = control.graph.utils.toColor(s.color);
             gradient && gradient.addColorStop(s.offset, c);		
         });
-        control.textureContext.fillStyle = gradient;
+        
+        const data = control.toFillTexture(gradient, bounds, points);
 
-        control.textureContext.beginPath();
-
-        control.textureContext.moveTo(0, 0);
-        control.textureContext.lineTo(bounds.width, 0);
-        control.textureContext.lineTo(bounds.width, bounds.height);
-        control.textureContext.lineTo(0, bounds.height);
-        control.textureContext.lineTo(0, 0);
-
-        control.textureContext.closePath();
-        control.textureContext.fill();
-
-        const data = control.textureContext.getImageData(0, 0, canvas.width, canvas.height);
-
-        WebglGradientTextureCache[key] = data;
+        //WebglGradientTextureCache[key] = data;
 
         return data;
     }

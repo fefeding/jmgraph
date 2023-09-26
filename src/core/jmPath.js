@@ -13,7 +13,6 @@ export default class jmPath extends jmControl {
 	constructor(params, t='jmPath') {
 		super(params, t);		
 		this.points = params && params.points ? params.points : [];	
-		this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];	
 	}
 	
 	/**

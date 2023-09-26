@@ -400,10 +400,10 @@ class WebglPath extends WebglBase {
             this.context.uniform1i(this.program.uniforms.a_type.location, points.length === 1? 4 :1);
         }
         if(points && points.length) {
-            const regular = this.isRegular && (lineWidth == 1);
+            const regular = lineWidth <= 1.2;
             points = regular? points : this.pathToPoints(points);
             const buffer = this.writePoints(points);
-            this.context.drawArrays(regular? this.context.LINES: this.context.POINTS, 0, points.length);
+            this.context.drawArrays(regular? this.context.LINE_LOOP: this.context.POINTS, 0, points.length);
             this.deleteBuffer(buffer);
         }
         colorBuffer && this.deleteBuffer(colorBuffer);
@@ -413,15 +413,12 @@ class WebglPath extends WebglBase {
     // 填充图形
     fill(bounds = {left: 0, top: 0, width: 0, height: 0}, type = 1) {
        
-        if(this.points && this.points.length) {
-            
+        if(this.points && this.points.length) {            
             // 如果是颜色rgba
-            if(this.style.fillStyle) {
-            
+            if(this.style.fillStyle) {            
                 this.fillColor(this.style.fillStyle, this.points, bounds, type);
             }
-            if(this.style.fillImage) {
-            
+            if(this.style.fillImage) {            
                 this.fillImage(this.style.fillImage, this.points, bounds, type); 
             }
         }
@@ -431,8 +428,8 @@ class WebglPath extends WebglBase {
         
         // 如果是渐变色，则需要计算偏移量的颜色
         if(this.isGradient(color)) {
-            const imgData = color.toImageData(this, bounds);
-            return this.fillImage(imgData, points, bounds);
+            const imgData = color.toImageData(this, bounds, points);
+            return this.fillImage(imgData.data, imgData.points, bounds);
         }
         
         // 标注为fill
@@ -471,30 +468,29 @@ class WebglPath extends WebglBase {
 
     fillTexture(points) {        
         if(points && points.length) {  // 标注为纹理对象
-            this.context.uniform1i(this.program.uniforms.a_type.location, 2);   
-            const regular=this.isRegular || points.length < 4         
+            this.context.uniform1i(this.program.uniforms.a_type.location, 2);  
             // 纹理坐标
             //const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
-            this.fillPolygons(points, regular, true);
+            this.fillPolygons(points, true);
             //this.deleteBuffer(coordBuffer);  
             this.disableVertexAttribArray(this.program.attrs.a_text_coord);   
         } 
     }
 
     // 进行多边形填充
-    fillPolygons(points, regular=this.isRegular || points.length < 4, isTexture = false) {   
+    fillPolygons(points, isTexture = false) {   
         //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
         //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
         //this.deleteBuffer(indexBuffer);
-        if(points.length > 3 && (!regular || this.needCut)) {
-            const triangles = this.getTriangles(points);                
+        /*if(points.length > 3 && (!regular || this.needCut)) {
+            const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
             if(triangles.length) {   
                 for(const triangle of triangles) {
-                    this.fillPolygons(triangle, true, isTexture);// 这里就变成了规则的图形了
+                    this.fillPolygons(triangle, isTexture);// 这里就变成了规则的图形了
                 }
             }
         }
-        else {
+        else {*/
             const buffer = this.writePoints(points);
             // 纹理坐标
             const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
@@ -502,7 +498,7 @@ class WebglPath extends WebglBase {
             this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
             this.deleteBuffer(buffer);
             coordBuffer && this.deleteBuffer(coordBuffer);    
-        }
+        //}
     }
 
     // 填充图形

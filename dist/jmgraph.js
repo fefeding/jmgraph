@@ -3640,7 +3640,6 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
 
     _this = _super.call(this, params, t);
     _this.points = params && params.points ? params.points : [];
-    _this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];
     return _this;
   }
   /**
@@ -7108,10 +7107,10 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
       }
 
       if (points && points.length) {
-        var regular = this.isRegular && lineWidth == 1;
+        var regular = lineWidth <= 1.2;
         points = regular ? points : this.pathToPoints(points);
         var buffer = this.writePoints(points);
-        this.context.drawArrays(regular ? this.context.LINES : this.context.POINTS, 0, points.length);
+        this.context.drawArrays(regular ? this.context.LINE_LOOP : this.context.POINTS, 0, points.length);
         this.deleteBuffer(buffer);
       }
 
@@ -7196,36 +7195,25 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
     value: function fillPolygons(points) {
       var regular = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.isRegular || points.length < 4;
       var isTexture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
       //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
       //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
       //this.deleteBuffer(indexBuffer);
-      if (points.length > 3 && (!regular || this.needCut)) {
-        var triangles = this.getTriangles(points);
 
-        if (triangles.length) {
-          var _iterator4 = _createForOfIteratorHelper(triangles),
-              _step4;
-
-          try {
-            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-              var triangle = _step4.value;
-              this.fillPolygons(triangle, true, isTexture); // 这里就变成了规则的图形了
-            }
-          } catch (err) {
-            _iterator4.e(err);
-          } finally {
-            _iterator4.f();
+      /*if(points.length > 3 && (!regular || this.needCut)) {
+          const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
+          if(triangles.length) {   
+              for(const triangle of triangles) {
+                  this.fillPolygons(triangle, true, isTexture);// 这里就变成了规则的图形了
+              }
           }
-        }
-      } else {
-        var buffer = this.writePoints(points); // 纹理坐标
-
-        var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
-        this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-        this.deleteBuffer(buffer);
-        coordBuffer && this.deleteBuffer(coordBuffer);
       }
+      else {*/
+      var buffer = this.writePoints(points); // 纹理坐标
+
+      var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
+      this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+      this.deleteBuffer(buffer);
+      coordBuffer && this.deleteBuffer(coordBuffer); //}
     } // 填充图形
 
   }, {

@@ -115,28 +115,35 @@
 			style = graph.utils.clone(style);
 			var img = new Image();
 			img.onload = ()=>{
-				style.fillImage = img;
-				style.fill = 'rgba(220,100,80, 0.5)';
+				//style.fillImage = img;
+				//style.fill = 'rgba(220,100,80, 0.5)';
+				style.lineWidth = 1.2;
 				//delete style.fill;
 				//style.close = true;
 
-				for(let i=0; i< 10; i++) {
-					var path = graph.createPath(null,style);
+				for(let i=0; i< 1000; i++) {
+					var path = graph.createPath(null,style, {
+						isRegular: true,
+						needCut: false
+					});
 					const startx = Math.random() * window.innerWidth;
-					const starty = Math.random() * window.innerHeight
-					;
-					path.points.push({x:startx+200,y:60+starty});
-					path.points.push({x:startx+400,y:60+starty});
+					const starty = Math.random() * window.innerHeight;
+					if(i === 0) {
+						path.points = [{x:600, y:370}, {x:700,  y:600}, {x:780,  y:420}, {x:730,  y:570}, {x:590,  y:520}];
+					}
+					else {
+						path.points.push({x:startx+200,y:60+starty});
+						path.points.push({x:startx+400,y:60+starty});
 
-					path.points.push({x:startx+220,y:120+starty});
-					path.points.push({x:startx+260,y:300+starty});		
+						path.points.push({x:startx+220,y:120+starty});
+						path.points.push({x:startx+260,y:300+starty});		
 
-					path.points.push({x:startx+420,y:100+starty});
+						path.points.push({x:startx+420,y:100+starty});
 
-					path.points.push({x:startx+260,y:20+starty});	
-					path.points.push({x:startx+250,y:80+starty});
-					path.points.push({x:startx+200,y:10+starty});
-
+						path.points.push({x:startx+260,y:20+starty});	
+						path.points.push({x:startx+250,y:80+starty});
+						path.points.push({x:startx+200,y:10+starty});
+					}
 					/*path.points.push({x:300,y:60});
 					path.points.push({x:400,y:60});
 

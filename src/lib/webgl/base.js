@@ -377,6 +377,77 @@ class WeblBase {
 		size.height = this.style.fontSize? this.style.fontSize: 15;
 		return size;
 	}
+
+    // 使用纹理canvas生成图，
+    // 填充可以是颜色或渐变对象
+    // 如果指定了points，则表明要绘制不规则的图形
+    toFillTexture(fillStyle, bounds, points=null) {
+        const canvas = this.textureCanvas;
+        if(!canvas) {
+            return fillStyle;
+        }
+        canvas.width = bounds.width;
+        canvas.height = bounds.height;
+
+        if(!canvas.width || !canvas.height) {
+            return fillStyle;
+        }
+
+        this.textureContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.textureContext.fillStyle = fillStyle;
+
+        this.textureContext.beginPath();
+        if(!points || !points.length) {
+            points = [];
+            points.push({
+                x: bounds.left,
+                y: bounds.top
+            });
+            points.push({
+                x: bounds.left + bounds.width,
+                y: bounds.top
+            });
+            points.push({
+                x: bounds.left + bounds.width,
+                y: bounds.top + bounds.height
+            });
+            points.push({
+                x: bounds.left,
+                y: bounds.top + bounds.height
+            });
+            points.push({
+                x: bounds.left,
+                y: bounds.top
+            });
+        }
+        if(points && points.length) {
+            for(const p of points) {
+                //移至当前坐标
+                if(p.m) {
+                    this.textureContext.moveTo(p.x - bounds.left, p.y - bounds.top);
+                }
+                else {
+                    this.textureContext.lineTo(p.x - bounds.left, p.y - bounds.top);
+                }			
+            }	
+        }
+        else {
+            this.textureContext.moveTo(0, 0);
+            this.textureContext.lineTo(bounds.width, 0);
+            this.textureContext.lineTo(bounds.width, bounds.height);
+            this.textureContext.lineTo(0, bounds.height);
+            this.textureContext.lineTo(0, 0);
+        }
+        this.textureContext.closePath();
+        this.textureContext.fill();
+
+        const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
+        return {
+            data,
+            points
+        };
+    }
 }
 
 export default WeblBase;

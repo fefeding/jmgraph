@@ -60,7 +60,7 @@ export default class jmGraph extends jmControl {
 				canvas = canvas[0];
 			}
 
-			if(canvas.tagName != 'CANVAS') {
+			if(!canvas.getContext && typeof document != 'undefined') {
 				this.container = canvas;
 				let cn = document.createElement('canvas');
 				canvas.appendChild(cn);

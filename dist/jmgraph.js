@@ -1891,8 +1891,6 @@ exports.jmEvents = exports["default"] = void 0;
 
 var _jmUtils = require("./jmUtils.js");
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -2001,7 +1999,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
     key: "init",
     value: function init(instance, container, target) {
       var canvas = this.target;
-      var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null; //禁用鼠标右健系统菜单
+      var doc = typeof document != 'undefined' ? document : null; //禁用鼠标右健系统菜单
       //canvas.oncontextmenu = function() {
       //	return false;
       //};
@@ -2135,7 +2133,7 @@ var jmKeyEvent = /*#__PURE__*/function () {
   _createClass(jmKeyEvent, [{
     key: "init",
     value: function init(container, target) {
-      var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null;
+      var doc = typeof document != 'undefined' ? document : null;
       /**
        * 检查是否触发健盘事件至画布
        * 如果触发对象为输入框等对象则不响应事件
@@ -2615,7 +2613,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         canvas = canvas[0];
       }
 
-      if (canvas.tagName != 'CANVAS') {
+      if (!canvas.getContext && typeof document != 'undefined') {
         _this.container = canvas;
         var cn = document.createElement('canvas');
         canvas.appendChild(cn);
@@ -6191,9 +6189,9 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
         this.__img.src = src;
       } else {
         this.__img = src;
-      }
+      } //this.image = this.__img.src;
 
-      this.image = this.__img.src;
+
       return this.__img;
     }
   }]);
@@ -6387,14 +6385,14 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
       this.context.save && this.context.save(); // 修改字体，用来计算
 
       this.setStyle({
-        font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
+        font: this.style.font || "".concat(this.style.fontSize, "px \"").concat(this.style.fontFamily, "\"")
       }); //计算宽度
 
       this.__size = this.context.measureText ? this.context.measureText(this.text) : {
         width: 15
       };
       this.context.restore && this.context.restore();
-      this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+      if (!this.__size.height) this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
       if (!this.width) this.width = this.__size.width;
       if (!this.height) this.height = this.__size.height;
       return this.__size;

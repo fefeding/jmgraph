@@ -83,7 +83,7 @@ class jmMouseEvent {
 	
 	init(instance, container, target) {
 		let canvas = this.target;	
-		let doc = typeof typeof document != 'undefined'?document:null;
+		let doc = typeof document != 'undefined'? document: null;
 		//禁用鼠标右健系统菜单
 		//canvas.oncontextmenu = function() {
 		//	return false;
@@ -208,7 +208,7 @@ class jmKeyEvent {
 	 * 初始化健盘事件
 	 */
 	init(container, target) {
-		let doc = typeof typeof document != 'undefined'?document:null;
+		let doc = typeof document != 'undefined'? document: null;
 		/**
 		 * 检查是否触发健盘事件至画布
 		 * 如果触发对象为输入框等对象则不响应事件

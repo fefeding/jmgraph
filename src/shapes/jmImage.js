@@ -193,7 +193,7 @@ export default class jmImage extends jmControl {
 	 * @return {img} 图片对象
 	 */
 	getImage() {
-		let src = this.image || this.style.src || this.style.image;
+		const src = this.image || this.style.src || this.style.image;
 		if(this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
 			return this.__img;
 		}
@@ -219,7 +219,7 @@ export default class jmImage extends jmControl {
 		else {
 			this.__img = src;
 		}
-		this.image = this.__img.src;
+		//this.image = this.__img.src;
 		return this.__img;
 	}
 }

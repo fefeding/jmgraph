@@ -27,7 +27,7 @@ export default class jmGraph extends jmControl {
 		}
 	
 		option = option || {};
-		option.mode = option.mode || '2d'; // webgl | 2d
+		option.mode = '2d'; // webgl | 2d 暂不支持webgl
 		option.interactive = true;
 		option.isRegular = true;// 规则的
 
@@ -60,7 +60,7 @@ export default class jmGraph extends jmControl {
 				canvas = canvas[0];
 			}
 
-			if(canvas.tagName != 'CANVAS') {
+			if(!canvas.getContext && typeof document != 'undefined') {
 				this.container = canvas;
 				let cn = document.createElement('canvas');
 				canvas.appendChild(cn);
@@ -304,13 +304,14 @@ export default class jmGraph extends jmControl {
 	 * @param {number} y2 线性渐变结束点Y坐标
 	 * @return {jmGradient} 线性渐变对象
 	 */
-	createLinearGradient(x1, y1, x2, y2) {
+	createLinearGradient(x1, y1, x2, y2, stops=[]) {
 		const gradient = new jmGradient({
 			type:'linear',
 			x1: x1,
 			y1: y1,
 			x2: x2,
-			y2: y2
+			y2: y2,
+			stops
 		});
 		return gradient;
 	}
@@ -327,7 +328,7 @@ export default class jmGraph extends jmControl {
 	 * @param {number} r2 放射渐变大圆半径
 	 * @return {jmGradient} 放射渐变对象
 	 */
-	createRadialGradient(x1, y1, r1, x2, y2, r2) {	
+	createRadialGradient(x1, y1, r1, x2, y2, r2, stops=[]) {	
 		const gradient = new jmGradient({
 			type:'radial',
 			x1: x1,
@@ -335,7 +336,8 @@ export default class jmGraph extends jmControl {
 			r1: r1,
 			x2: x2,
 			y2: y2,
-			r2: r2
+			r2: r2,
+			stops
 		});
 		return gradient;
 	}

@@ -1,12 +1,13 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "3.2.2",
+  "version": "3.2.7",
   "description": "一个简单的canvas画图库",
   "homepage": "http://graph.jm47.com/",
   "keywords": [
     "canvas",
-    "html5"
+    "html5",
+    "webgl"
   ],
   "author": "jiamao<haofefe@163.com>",
   "engines": {},
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",
+    "canvas": "^2.11.2",
     "cz-conventional-changelog": "^2.1.0",
     "express": "^4.17.1"
   },

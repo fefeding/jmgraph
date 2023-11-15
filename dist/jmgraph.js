@@ -291,6 +291,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+//import WebglPath from "../lib/webgl/path.js";
 //样式名称，也当做白名单使用		
 var jmStyleMap = {
   'fill': 'fillStyle',
@@ -351,16 +352,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0;
-    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive; // webgl模式
-
-    if (_this2.mode === 'webgl') {
-      _this2.webglControl = new _path["default"](_this2.graph, {
-        style: _this2.style,
-        control: _assertThisInitialized(_this2),
-        isRegular: params.isRegular,
-        needCut: params.needCut
-      });
-    }
+    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive;
 
     _this2.initializing();
 
@@ -717,23 +709,13 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
             __setStyle(styleValue.toGradient(_this3), mpname || name);
           } else if (mpname) {
-            if (_this3.webglControl) {
-              //只有存在白名单中才处理
-              //颜色转换
-
-              /*if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-              	styleValue = jmUtils.hexToRGBA(styleValue);
-              }*/
-              _this3.webglControl.setStyle(mpname, styleValue);
-            } else {
-              //只有存在白名单中才处理
-              //颜色转换
-              if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-                styleValue = _jmUtils.jmUtils.toColor(styleValue);
-              }
-
-              _this3.context[mpname] = styleValue;
+            //只有存在白名单中才处理
+            //颜色转换
+            if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+              styleValue = _jmUtils.jmUtils.toColor(styleValue);
             }
+
+            _this3.context[mpname] = styleValue;
           } else {
             switch (name) {
               //阴影样式
@@ -1185,8 +1167,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     value: function beginDraw() {
       this.getLocation(true); //重置位置信息
 
-      this.context.beginPath && this.context.beginPath();
-      if (this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
+      this.context.beginPath();
     }
     /**
      * 结束控件绘制
@@ -1199,7 +1180,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     value: function endDraw() {
       //如果当前为封闭路径
       if (this.style.close) {
-        if (this.webglControl) this.webglControl.closePath();else this.context.closePath && this.context.closePath();
+        this.context.closePath();
       }
 
       if (this.style['fill']) {
@@ -1213,7 +1194,6 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         if (this.webglControl) this.webglControl.stroke();else this.context.stroke && this.context.stroke();
       }
 
-      if (this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
       this.needUpdate = false;
     }
     /**
@@ -1229,13 +1209,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       if (this.points && this.points.length > 0) {
         //获取当前控件的绝对位置
         var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
-
-        if (this.webglControl) {
-          this.webglControl.setParentBounds(bounds);
-          this.webglControl.draw(_toConsumableArray(this.points));
-        } else if (this.context && this.context.moveTo) {
-          this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-          var len = this.points.length;
+        this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+        var len = this.points.length;
 
           for (var i = 1; i < len; i++) {
             var p = this.points[i]; //移至当前坐标
@@ -1897,8 +1872,6 @@ exports.jmEvents = exports["default"] = void 0;
 
 var _jmUtils = require("./jmUtils.js");
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -2007,7 +1980,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
     key: "init",
     value: function init(instance, container, target) {
       var canvas = this.target;
-      var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null; //禁用鼠标右健系统菜单
+      var doc = typeof document != 'undefined' ? document : null; //禁用鼠标右健系统菜单
       //canvas.oncontextmenu = function() {
       //	return false;
       //};
@@ -2141,7 +2114,7 @@ var jmKeyEvent = /*#__PURE__*/function () {
   _createClass(jmKeyEvent, [{
     key: "init",
     value: function init(container, target) {
-      var doc = typeof (typeof document === "undefined" ? "undefined" : _typeof(document)) != 'undefined' ? document : null;
+      var doc = typeof document != 'undefined' ? document : null;
       /**
        * 检查是否触发健盘事件至画布
        * 如果触发对象为输入框等对象则不响应事件
@@ -2211,6 +2184,18 @@ var _jmUtils = require("./jmUtils.js");
 
 var _jmList = require("./jmList.js");
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2233,7 +2218,14 @@ var jmGradient = /*#__PURE__*/function () {
 
     if (opt && _typeof(opt) == 'object') {
       for (var k in opt) {
+        if (k === 'stops') continue;
         this[k] = opt[k];
+      }
+
+      if (opt.stops && Array.isArray(opt.stops)) {
+        var _this$stops;
+
+        (_this$stops = this.stops).push.apply(_this$stops, _toConsumableArray(opt.stops));
       }
     } //解析字符串格式
     //linear-gradient(direction, color-stop1, color-stop2, ...);
@@ -2314,12 +2306,7 @@ var jmGradient = /*#__PURE__*/function () {
       var sy2 = Number(y2) + bounds.top;
 
       if (this.type === 'linear') {
-        if (control.mode === 'webgl' && control.webglControl) {
-          gradient = control.webglControl.createLinearGradient(x1, y1, x2, y2, bounds);
-          gradient.key = this.toString();
-        } else {
-          context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
-        }
+        gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);
       } else if (this.type === 'radial') {
         var r1 = this.r1 || 0;
         var r2 = this.r2;
@@ -2332,11 +2319,6 @@ var jmGradient = /*#__PURE__*/function () {
         if (_jmUtils.jmUtils.checkPercent(r2)) {
           r2 = _jmUtils.jmUtils.percentToNumber(r2);
           r2 = d * r2;
-        }
-
-        if (control.mode === 'webgl' && control.webglControl) {
-          gradient = control.webglControl.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
-          gradient.key = this.toString();
         } //offsetLine = Math.abs(r2 - r1);//二圆半径差
         else if (context.createRadialGradient) {
           gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
@@ -2445,14 +2427,14 @@ var jmGradient = /*#__PURE__*/function () {
       var str = this.type + '-gradient(';
 
       if (this.type == 'linear') {
-        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
+        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2);
       } else {
-        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
+        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.r1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2) + ' ' + this.r2.toFixed(2);
       } //颜色渐变
 
 
       this.stops.each(function (i, s) {
-        str += ',' + s.color + ' ' + s.offset;
+        str += ',' + s.color + ' ' + s.offset.toFixed(2);
       });
       return str + ')';
     }
@@ -2592,7 +2574,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
     }
 
     option = option || {};
-    option.mode = option.mode || '2d'; // webgl | 2d
+    option.mode = '2d'; // webgl | 2d 暂不支持webgl
 
     option.interactive = true;
     option.isRegular = true; // 规则的
@@ -2623,7 +2605,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         canvas = canvas[0];
       }
 
-      if (canvas.tagName != 'CANVAS') {
+      if (!canvas.getContext && typeof document != 'undefined') {
         _this.container = canvas;
         var cn = document.createElement('canvas');
         canvas.appendChild(cn);
@@ -2898,12 +2880,14 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "createLinearGradient",
     value: function createLinearGradient(x1, y1, x2, y2) {
+      var stops = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
       var gradient = new _jmGradient.jmGradient({
         type: 'linear',
         x1: x1,
         y1: y1,
         x2: x2,
-        y2: y2
+        y2: y2,
+        stops: stops
       });
       return gradient;
     }
@@ -2923,6 +2907,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "createRadialGradient",
     value: function createRadialGradient(x1, y1, r1, x2, y2, r2) {
+      var stops = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : [];
       var gradient = new _jmGradient.jmGradient({
         type: 'radial',
         x1: x1,
@@ -2930,7 +2915,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         r1: r1,
         x2: x2,
         y2: y2,
-        r2: r2
+        r2: r2,
+        stops: stops
       });
       return gradient;
     }
@@ -2984,38 +2970,24 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         	w = w / this.scaleSize.x;
         	h = h / this.scaleSize.y;
         }*/
-      }
+      } //如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
 
-      if (this.context.clearRect) {
-        if (this.style && this.style.fill) {
-          this.points = [{
-            x: 0,
-            y: 0
-          }, {
-            x: w,
-            y: 0
-          }, {
-            x: w,
-            y: h
-          }, {
-            x: 0,
-            y: h
-          }];
-          this.style.close = true; // 封闭填充
-        }
 
-        this.context.clearRect(0, 0, w, h);
-      } else if (this.mode === 'webgl' && this.context.clear) {
-        var color = this.style && this.style.fill ? this.utils.hexToRGBA(this.style.fill) : {
-          r: 0,
-          g: 0,
-          b: 0,
-          a: 0
-        };
-        this.context.clearColor(color.r, color.g, color.b, color.a); // 设置清空颜色缓冲时的颜色值
-
-        this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
-      }
+      if (this.style && this.style.fill) {
+        this.points = [{
+          x: 0,
+          y: 0
+        }, {
+          x: w,
+          y: 0
+        }, {
+          x: w,
+          y: h
+        }, {
+          x: 0,
+          y: h
+        }];
+      } else if (this.context.clearRect) this.context.clearRect(0, 0, w, h);
     }
     /**
     * 设置画布样式，此处只是设置其css样式
@@ -3640,6 +3612,7 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
 
     _this = _super.call(this, params, t);
     _this.points = params && params.points ? params.points : [];
+    _this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];
     return _this;
   }
   /**
@@ -3659,6 +3632,22 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
     set: function set(v) {
       this.needUpdate = true;
       return this.property('points', v);
+    }
+    /**
+     * 顶点数组索引，对应points中的顶点
+     * @property polygonIndices
+     * @type {array} 
+     */
+
+  }, {
+    key: "polygonIndices",
+    get: function get() {
+      var s = this.property('polygonIndices');
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('polygonIndices', v);
     }
   }]);
 
@@ -4779,15 +4768,9 @@ var jmUtils = /*#__PURE__*/function () {
   }, {
     key: "hexToRGBA",
     value: function hexToRGBA(hex) {
-      if (typeof hex === 'string') hex = this.trim(hex);else return hex; // 如果缓存存在，则直接返回
+      hex = this.trim(hex); //当为7位时，表示需要转为带透明度的rgba
 
-      this.__hexToRGBA_Cache = this.__hexToRGBA_Cache || {};
-      if (this.__hexToRGBA_Cache[hex]) return this.__hexToRGBA_Cache[hex];
-      var res = hex; // 系统颜色
-
-      if (colorKeywords[res]) res = colorKeywords[res]; //当为7位时，表示需要转为带透明度的rgba
-
-      if (res[0] == '#') {
+      if (hex[0] == '#') {
         var color = {
           a: 1
         };
@@ -4835,46 +4818,12 @@ var jmUtils = /*#__PURE__*/function () {
           color.g = this.hexToNumber(color.g || 0);
           color.b = this.hexToNumber(color.b || 0); //透明度
 
-          color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
-          res = color;
+          color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
+          return color;
         }
       }
 
-      if (typeof res === 'string') {
-        var m = res.match(/rgb(a)?\s*\(\s*([\d\.]+)\s*,\s*([\d\.]+)\s*,\s*([\d\.]+)\s*(,\s*[\d\.]+)?\s*\)/i);
-
-        if (m && m.length === 6) {
-          var _color = {
-            r: Number(m[2]),
-            g: Number(m[3]),
-            b: Number(m[4]),
-            a: Number(this.trimStart(m[5] || '1', ','))
-          };
-          res = _color;
-        }
-      }
-
-      return this.__hexToRGBA_Cache[hex] = res;
-    }
-    /**
-     * 把255的rgb值转为0-1的值
-     * @param {rgba} color 颜色
-     */
-
-  }, {
-    key: "rgbToDecimal",
-    value: function rgbToDecimal(color) {
-      color = this.clone(color);
-      color.r = this.byteToDecimal(color.r);
-      color.g = this.byteToDecimal(color.g);
-      color.b = this.byteToDecimal(color.b);
-      return color;
-    } //255值转为0-1的小数
-
-  }, {
-    key: "byteToDecimal",
-    value: function byteToDecimal(b) {
-      return b / 255;
+      return hex;
     }
     /**
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
@@ -4894,17 +4843,10 @@ var jmUtils = /*#__PURE__*/function () {
         if (r[0] === '#' && (r.length === 4 || r.length === 7)) return r;
         var color = this.hexToRGBA(r);
         if (typeof color === 'string') return color;
-        r = typeof color.r !== 'undefined' ? color.r : r;
-        g = typeof color.g !== 'undefined' ? color.g : g;
-        b = typeof color.b !== 'undefined' ? color.b : b;
-        a = typeof color.a !== 'undefined' ? color.a : a;
-      }
-
-      if (r && _typeof(r) === 'object') {
-        g = r.g;
-        b = r.b;
-        a = r.a || 1;
-        r = r.r;
+        r = color.r || r;
+        g = color.g || g;
+        b = color.b || b;
+        a = color.a || a;
       }
 
       if (typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
@@ -4938,2352 +4880,6 @@ var jmUtils = /*#__PURE__*/function () {
 exports.jmUtils = exports["default"] = jmUtils;
 
 },{"./jmList.js":6}],12:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _default = earcut;
-exports["default"] = _default;
-
-function earcut(data, holeIndices, dim) {
-  dim = dim || 2;
-  var hasHoles = holeIndices && holeIndices.length,
-      outerLen = hasHoles ? holeIndices[0] * dim : data.length,
-      outerNode = linkedList(data, 0, outerLen, dim, true),
-      triangles = [];
-  if (!outerNode || outerNode.next === outerNode.prev) return triangles;
-  var minX, minY, maxX, maxY, x, y, invSize;
-  if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim); // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
-
-  if (data.length > 80 * dim) {
-    minX = maxX = data[0];
-    minY = maxY = data[1];
-
-    for (var i = dim; i < outerLen; i += dim) {
-      x = data[i];
-      y = data[i + 1];
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
-    } // minX, minY and invSize are later used to transform coords into integers for z-order calculation
-
-
-    invSize = Math.max(maxX - minX, maxY - minY);
-    invSize = invSize !== 0 ? 32767 / invSize : 0;
-  }
-
-  earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
-  return triangles;
-} // create a circular doubly linked list from polygon points in the specified winding order
-
-
-function linkedList(data, start, end, dim, clockwise) {
-  var i, last;
-
-  if (clockwise === signedArea(data, start, end, dim) > 0) {
-    for (i = start; i < end; i += dim) {
-      last = insertNode(i, data[i], data[i + 1], last);
-    }
-  } else {
-    for (i = end - dim; i >= start; i -= dim) {
-      last = insertNode(i, data[i], data[i + 1], last);
-    }
-  }
-
-  if (last && equals(last, last.next)) {
-    removeNode(last);
-    last = last.next;
-  }
-
-  return last;
-} // eliminate colinear or duplicate points
-
-
-function filterPoints(start, end) {
-  if (!start) return start;
-  if (!end) end = start;
-  var p = start,
-      again;
-
-  do {
-    again = false;
-
-    if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
-      removeNode(p);
-      p = end = p.prev;
-      if (p === p.next) break;
-      again = true;
-    } else {
-      p = p.next;
-    }
-  } while (again || p !== end);
-
-  return end;
-} // main ear slicing loop which triangulates a polygon (given as a linked list)
-
-
-function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
-  if (!ear) return; // interlink polygon nodes in z-order
-
-  if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
-  var stop = ear,
-      prev,
-      next; // iterate through ears, slicing them one by one
-
-  while (ear.prev !== ear.next) {
-    prev = ear.prev;
-    next = ear.next;
-
-    if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
-      // cut off the triangle
-      triangles.push(prev.i / dim | 0);
-      triangles.push(ear.i / dim | 0);
-      triangles.push(next.i / dim | 0);
-      removeNode(ear); // skipping the next vertex leads to less sliver triangles
-
-      ear = next.next;
-      stop = next.next;
-      continue;
-    }
-
-    ear = next; // if we looped through the whole remaining polygon and can't find any more ears
-
-    if (ear === stop) {
-      // try filtering points and slicing again
-      if (!pass) {
-        earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1); // if this didn't work, try curing all small self-intersections locally
-      } else if (pass === 1) {
-        ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
-        earcutLinked(ear, triangles, dim, minX, minY, invSize, 2); // as a last resort, try splitting the remaining polygon into two
-      } else if (pass === 2) {
-        splitEarcut(ear, triangles, dim, minX, minY, invSize);
-      }
-
-      break;
-    }
-  }
-} // check whether a polygon node forms a valid ear with adjacent nodes
-
-
-function isEar(ear) {
-  var a = ear.prev,
-      b = ear,
-      c = ear.next;
-  if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
-  // now make sure we don't have other points inside the potential ear
-
-  var ax = a.x,
-      bx = b.x,
-      cx = c.x,
-      ay = a.y,
-      by = b.y,
-      cy = c.y; // triangle bbox; min & max are calculated like this for speed
-
-  var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx,
-      y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy,
-      x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx,
-      y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
-  var p = c.next;
-
-  while (p !== a) {
-    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-    p = p.next;
-  }
-
-  return true;
-}
-
-function isEarHashed(ear, minX, minY, invSize) {
-  var a = ear.prev,
-      b = ear,
-      c = ear.next;
-  if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
-
-  var ax = a.x,
-      bx = b.x,
-      cx = c.x,
-      ay = a.y,
-      by = b.y,
-      cy = c.y; // triangle bbox; min & max are calculated like this for speed
-
-  var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx,
-      y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy,
-      x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx,
-      y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy; // z-order range for the current triangle bbox;
-
-  var minZ = zOrder(x0, y0, minX, minY, invSize),
-      maxZ = zOrder(x1, y1, minX, minY, invSize);
-  var p = ear.prevZ,
-      n = ear.nextZ; // look for points inside the triangle in both directions
-
-  while (p && p.z >= minZ && n && n.z <= maxZ) {
-    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-    p = p.prevZ;
-    if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
-    n = n.nextZ;
-  } // look for remaining points in decreasing z-order
-
-
-  while (p && p.z >= minZ) {
-    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
-    p = p.prevZ;
-  } // look for remaining points in increasing z-order
-
-
-  while (n && n.z <= maxZ) {
-    if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
-    n = n.nextZ;
-  }
-
-  return true;
-} // go through all polygon nodes and cure small local self-intersections
-
-
-function cureLocalIntersections(start, triangles, dim) {
-  var p = start;
-
-  do {
-    var a = p.prev,
-        b = p.next.next;
-
-    if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
-      triangles.push(a.i / dim | 0);
-      triangles.push(p.i / dim | 0);
-      triangles.push(b.i / dim | 0); // remove two nodes involved
-
-      removeNode(p);
-      removeNode(p.next);
-      p = start = b;
-    }
-
-    p = p.next;
-  } while (p !== start);
-
-  return filterPoints(p);
-} // try splitting polygon into two and triangulate them independently
-
-
-function splitEarcut(start, triangles, dim, minX, minY, invSize) {
-  // look for a valid diagonal that divides the polygon into two
-  var a = start;
-
-  do {
-    var b = a.next.next;
-
-    while (b !== a.prev) {
-      if (a.i !== b.i && isValidDiagonal(a, b)) {
-        // split the polygon in two by the diagonal
-        var c = splitPolygon(a, b); // filter colinear points around the cuts
-
-        a = filterPoints(a, a.next);
-        c = filterPoints(c, c.next); // run earcut on each half
-
-        earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
-        earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
-        return;
-      }
-
-      b = b.next;
-    }
-
-    a = a.next;
-  } while (a !== start);
-} // link every hole into the outer loop, producing a single-ring polygon without holes
-
-
-function eliminateHoles(data, holeIndices, outerNode, dim) {
-  var queue = [],
-      i,
-      len,
-      start,
-      end,
-      list;
-
-  for (i = 0, len = holeIndices.length; i < len; i++) {
-    start = holeIndices[i] * dim;
-    end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
-    list = linkedList(data, start, end, dim, false);
-    if (list === list.next) list.steiner = true;
-    queue.push(getLeftmost(list));
-  }
-
-  queue.sort(compareX); // process holes from left to right
-
-  for (i = 0; i < queue.length; i++) {
-    outerNode = eliminateHole(queue[i], outerNode);
-  }
-
-  return outerNode;
-}
-
-function compareX(a, b) {
-  return a.x - b.x;
-} // find a bridge between vertices that connects hole with an outer ring and and link it
-
-
-function eliminateHole(hole, outerNode) {
-  var bridge = findHoleBridge(hole, outerNode);
-
-  if (!bridge) {
-    return outerNode;
-  }
-
-  var bridgeReverse = splitPolygon(bridge, hole); // filter collinear points around the cuts
-
-  filterPoints(bridgeReverse, bridgeReverse.next);
-  return filterPoints(bridge, bridge.next);
-} // David Eberly's algorithm for finding a bridge between hole and outer polygon
-
-
-function findHoleBridge(hole, outerNode) {
-  var p = outerNode,
-      hx = hole.x,
-      hy = hole.y,
-      qx = -Infinity,
-      m; // find a segment intersected by a ray from the hole's leftmost point to the left;
-  // segment's endpoint with lesser x will be potential connection point
-
-  do {
-    if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
-      var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
-
-      if (x <= hx && x > qx) {
-        qx = x;
-        m = p.x < p.next.x ? p : p.next;
-        if (x === hx) return m; // hole touches outer segment; pick leftmost endpoint
-      }
-    }
-
-    p = p.next;
-  } while (p !== outerNode);
-
-  if (!m) return null; // look for points inside the triangle of hole point, segment intersection and endpoint;
-  // if there are no points found, we have a valid connection;
-  // otherwise choose the point of the minimum angle with the ray as connection point
-
-  var stop = m,
-      mx = m.x,
-      my = m.y,
-      tanMin = Infinity,
-      tan;
-  p = m;
-
-  do {
-    if (hx >= p.x && p.x >= mx && hx !== p.x && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
-      tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
-
-      if (locallyInside(p, hole) && (tan < tanMin || tan === tanMin && (p.x > m.x || p.x === m.x && sectorContainsSector(m, p)))) {
-        m = p;
-        tanMin = tan;
-      }
-    }
-
-    p = p.next;
-  } while (p !== stop);
-
-  return m;
-} // whether sector in vertex m contains sector in vertex p in the same coordinates
-
-
-function sectorContainsSector(m, p) {
-  return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
-} // interlink polygon nodes in z-order
-
-
-function indexCurve(start, minX, minY, invSize) {
-  var p = start;
-
-  do {
-    if (p.z === 0) p.z = zOrder(p.x, p.y, minX, minY, invSize);
-    p.prevZ = p.prev;
-    p.nextZ = p.next;
-    p = p.next;
-  } while (p !== start);
-
-  p.prevZ.nextZ = null;
-  p.prevZ = null;
-  sortLinked(p);
-} // Simon Tatham's linked list merge sort algorithm
-// http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
-
-
-function sortLinked(list) {
-  var i,
-      p,
-      q,
-      e,
-      tail,
-      numMerges,
-      pSize,
-      qSize,
-      inSize = 1;
-
-  do {
-    p = list;
-    list = null;
-    tail = null;
-    numMerges = 0;
-
-    while (p) {
-      numMerges++;
-      q = p;
-      pSize = 0;
-
-      for (i = 0; i < inSize; i++) {
-        pSize++;
-        q = q.nextZ;
-        if (!q) break;
-      }
-
-      qSize = inSize;
-
-      while (pSize > 0 || qSize > 0 && q) {
-        if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
-          e = p;
-          p = p.nextZ;
-          pSize--;
-        } else {
-          e = q;
-          q = q.nextZ;
-          qSize--;
-        }
-
-        if (tail) tail.nextZ = e;else list = e;
-        e.prevZ = tail;
-        tail = e;
-      }
-
-      p = q;
-    }
-
-    tail.nextZ = null;
-    inSize *= 2;
-  } while (numMerges > 1);
-
-  return list;
-} // z-order of a point given coords and inverse of the longer side of data bbox
-
-
-function zOrder(x, y, minX, minY, invSize) {
-  // coords are transformed into non-negative 15-bit integer range
-  x = (x - minX) * invSize | 0;
-  y = (y - minY) * invSize | 0;
-  x = (x | x << 8) & 0x00FF00FF;
-  x = (x | x << 4) & 0x0F0F0F0F;
-  x = (x | x << 2) & 0x33333333;
-  x = (x | x << 1) & 0x55555555;
-  y = (y | y << 8) & 0x00FF00FF;
-  y = (y | y << 4) & 0x0F0F0F0F;
-  y = (y | y << 2) & 0x33333333;
-  y = (y | y << 1) & 0x55555555;
-  return x | y << 1;
-} // find the leftmost node of a polygon ring
-
-
-function getLeftmost(start) {
-  var p = start,
-      leftmost = start;
-
-  do {
-    if (p.x < leftmost.x || p.x === leftmost.x && p.y < leftmost.y) leftmost = p;
-    p = p.next;
-  } while (p !== start);
-
-  return leftmost;
-} // check if a point lies within a convex triangle
-
-
-function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
-  return (cx - px) * (ay - py) >= (ax - px) * (cy - py) && (ax - px) * (by - py) >= (bx - px) * (ay - py) && (bx - px) * (cy - py) >= (cx - px) * (by - py);
-} // check if a diagonal between two polygon nodes is valid (lies in polygon interior)
-
-
-function isValidDiagonal(a, b) {
-  return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
-  equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
-} // signed area of a triangle
-
-
-function area(p, q, r) {
-  return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-} // check if two points are equal
-
-
-function equals(p1, p2) {
-  return p1.x === p2.x && p1.y === p2.y;
-} // check if two segments intersect
-
-
-function intersects(p1, q1, p2, q2) {
-  var o1 = sign(area(p1, q1, p2));
-  var o2 = sign(area(p1, q1, q2));
-  var o3 = sign(area(p2, q2, p1));
-  var o4 = sign(area(p2, q2, q1));
-  if (o1 !== o2 && o3 !== o4) return true; // general case
-
-  if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
-
-  if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
-
-  if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
-
-  if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
-
-  return false;
-} // for collinear points p, q, r, check if point q lies on segment pr
-
-
-function onSegment(p, q, r) {
-  return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
-}
-
-function sign(num) {
-  return num > 0 ? 1 : num < 0 ? -1 : 0;
-} // check if a polygon diagonal intersects any polygon segments
-
-
-function intersectsPolygon(a, b) {
-  var p = a;
-
-  do {
-    if (p.i !== a.i && p.next.i !== a.i && p.i !== b.i && p.next.i !== b.i && intersects(p, p.next, a, b)) return true;
-    p = p.next;
-  } while (p !== a);
-
-  return false;
-} // check if a polygon diagonal is locally inside the polygon
-
-
-function locallyInside(a, b) {
-  return area(a.prev, a, a.next) < 0 ? area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 : area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
-} // check if the middle point of a polygon diagonal is inside the polygon
-
-
-function middleInside(a, b) {
-  var p = a,
-      inside = false,
-      px = (a.x + b.x) / 2,
-      py = (a.y + b.y) / 2;
-
-  do {
-    if (p.y > py !== p.next.y > py && p.next.y !== p.y && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
-    p = p.next;
-  } while (p !== a);
-
-  return inside;
-} // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
-// if one belongs to the outer ring and another to a hole, it merges it into a single ring
-
-
-function splitPolygon(a, b) {
-  var a2 = new Node(a.i, a.x, a.y),
-      b2 = new Node(b.i, b.x, b.y),
-      an = a.next,
-      bp = b.prev;
-  a.next = b;
-  b.prev = a;
-  a2.next = an;
-  an.prev = a2;
-  b2.next = a2;
-  a2.prev = b2;
-  bp.next = b2;
-  b2.prev = bp;
-  return b2;
-} // create a node and optionally link it with previous one (in a circular doubly linked list)
-
-
-function insertNode(i, x, y, last) {
-  var p = new Node(i, x, y);
-
-  if (!last) {
-    p.prev = p;
-    p.next = p;
-  } else {
-    p.next = last.next;
-    p.prev = last;
-    last.next.prev = p;
-    last.next = p;
-  }
-
-  return p;
-}
-
-function removeNode(p) {
-  p.next.prev = p.prev;
-  p.prev.next = p.next;
-  if (p.prevZ) p.prevZ.nextZ = p.nextZ;
-  if (p.nextZ) p.nextZ.prevZ = p.prevZ;
-}
-
-function Node(i, x, y) {
-  // vertex index in coordinates array
-  this.i = i; // vertex coordinates
-
-  this.x = x;
-  this.y = y; // previous and next vertex nodes in a polygon ring
-
-  this.prev = null;
-  this.next = null; // z-order curve value
-
-  this.z = 0; // previous and next nodes in z-order
-
-  this.prevZ = null;
-  this.nextZ = null; // indicates whether this is a steiner point
-
-  this.steiner = false;
-} // return a percentage difference between the polygon area and its triangulation area;
-// used to verify correctness of triangulation
-
-
-earcut.deviation = function (data, holeIndices, dim, triangles) {
-  var hasHoles = holeIndices && holeIndices.length;
-  var outerLen = hasHoles ? holeIndices[0] * dim : data.length;
-  var polygonArea = Math.abs(signedArea(data, 0, outerLen, dim));
-
-  if (hasHoles) {
-    for (var i = 0, len = holeIndices.length; i < len; i++) {
-      var start = holeIndices[i] * dim;
-      var end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
-      polygonArea -= Math.abs(signedArea(data, start, end, dim));
-    }
-  }
-
-  var trianglesArea = 0;
-
-  for (i = 0; i < triangles.length; i += 3) {
-    var a = triangles[i] * dim;
-    var b = triangles[i + 1] * dim;
-    var c = triangles[i + 2] * dim;
-    trianglesArea += Math.abs((data[a] - data[c]) * (data[b + 1] - data[a + 1]) - (data[a] - data[b]) * (data[c + 1] - data[a + 1]));
-  }
-
-  return polygonArea === 0 && trianglesArea === 0 ? 0 : Math.abs((trianglesArea - polygonArea) / polygonArea);
-};
-
-function signedArea(data, start, end, dim) {
-  var sum = 0;
-
-  for (var i = start, j = end - dim; i < end; i += dim) {
-    sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
-    j = i;
-  }
-
-  return sum;
-} // turn a polygon in a multi-dimensional array form (e.g. as in GeoJSON) into a form Earcut accepts
-
-
-earcut.flatten = function (data) {
-  var dim = data[0][0].length,
-      result = {
-    vertices: [],
-    holes: [],
-    dimensions: dim
-  },
-      holeIndex = 0;
-
-  for (var i = 0; i < data.length; i++) {
-    for (var j = 0; j < data[i].length; j++) {
-      for (var d = 0; d < dim; d++) {
-        result.vertices.push(data[i][j][d]);
-      }
-    }
-
-    if (i > 0) {
-      holeIndex += data[i - 1].length;
-      result.holes.push(holeIndex);
-    }
-  }
-
-  return result;
-};
-
-},{}],13:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _earcut = _interopRequireDefault(require("../earcut.js"));
-
-var _gradient = _interopRequireDefault(require("./gradient.js"));
-
-var _program = require("./core/program.js");
-
-var _buffer = require("./core/buffer.js");
-
-var _texture = require("./core/texture.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// 把canvas坐标转为webgl坐标系
-var convertPointSource = "\n    vec4 translatePosition(vec4 point, float x, float y) {\n        point.x = (point.x-x)/x;\n        point.y = (y-point.y)/y;\n        return point;\n    }"; // 把纹理的canvas坐标转为纹理的坐标系
-
-var convertTexturePosition = "\n    vec2 translateTexturePosition(in vec2 point, vec4 bounds) {\n        point.x = (point.x-bounds.x)/bounds.z; // \u79BB\u5DE6\u4E0A\u89D2\u4F4D\u7F6E\u7684X\u957F\u6BD4\u4E0A\u7EB9\u7406\u5BBD 0-1\n        point.y = 1.0-(point.y-bounds.y)/bounds.w; // \u79BB\u5DE6\u4E0A\u89D2\u4F4D\u7F6E\u7684Y\u957F\u6BD4\u4E0A\u9AD8\uFF0C\u56E0\u4E3A\u7EB9\u7406\u5750\u6807\u662F\u5DE6\u4E0B\u89D2\u8D77\uFF0C\u6240\u4EE5\u8981\u75281-\n        return point;\n    }"; // path顶点着色器源码
-
-var pathVertexSource = "\n    attribute vec4 a_position;\n    attribute vec4 a_color;\n    attribute vec2 a_text_coord;\n    uniform vec2 a_center_point; // \u5F53\u524Dcanvas\u7684\u4E2D\u5FC3\u4F4D\u7F6E\n    uniform float a_point_size; // \u70B9\u7684\u5927\u5C0F\n    uniform int a_type;\n    varying vec4 v_color;\n    varying vec2 v_text_coord;\n    varying float v_type;\n\n    ".concat(convertPointSource, "\n\n    void main() {\n        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;\n        v_type = float(a_type);\n        vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);\n        gl_Position = pos;\n        v_color = a_color;\n        if(a_type == 2) {\n            v_text_coord = a_text_coord;\n        }\n    }\n"); // path 片段着色器源码
-
-var pathFragmentSource = "\n    precision mediump float;\n    uniform sampler2D u_sample;\n    uniform vec4 v_texture_bounds; // \u7EB9\u7406\u7684\u5DE6\u4E0A\u5750\u6807\u548C\u5927\u5C0F x,y,z,w\n    uniform vec4 v_single_color;\n    varying float v_type;\n    varying vec4 v_color;\n    varying vec2 v_text_coord;\n\n    ".concat(convertTexturePosition, "\n\n    void main() {\n        // \u5982\u679C\u662Ffill\uFF0C\u5219\u76F4\u63A5\u586B\u5145\u989C\u8272\n        if(v_type == 1.0) {\n            gl_FragColor = v_single_color;\n        }\n        // \u6E10\u53D8\u8272\n        else if(v_type == 3.0) {\n            gl_FragColor = v_color;\n        }\n        else if(v_type == 2.0) {\n            vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);\n            gl_FragColor = texture2D(u_sample, pos);\n        }\n        else {\n            float r = distance(gl_PointCoord, vec2(0.5, 0.5));\n            //\u6839\u636E\u8DDD\u79BB\u8BBE\u7F6E\u7247\u5143\n            if(r <= 0.5){\n                // \u65B9\u5F62\u533A\u57DF\u7247\u5143\u8DDD\u79BB\u51E0\u4F55\u4E2D\u5FC3\u534A\u5F84\u5C0F\u4E8E0.5\uFF0C\u50CF\u7D20\u989C\u8272\u8BBE\u7F6E\u7EA2\u8272\n                gl_FragColor = v_single_color;\n            }else {\n                // \u65B9\u5F62\u533A\u57DF\u8DDD\u79BB\u51E0\u4F55\u4E2D\u5FC3\u534A\u5F84\u4E0D\u5C0F\u4E8E0.5\u7684\u7247\u5143\u526A\u88C1\u820D\u5F03\u6389\uFF1A\n                discard;\n            }\n        }\n    }\n");
-
-var WeblBase = /*#__PURE__*/function () {
-  function WeblBase(graph, option) {
-    _classCallCheck(this, WeblBase);
-
-    this.graph = graph;
-    this.option = option || {};
-    this.style = {
-      globalAlpha: 1
-    };
-  }
-
-  _createClass(WeblBase, [{
-    key: "context",
-    get: function get() {
-      if (this.graph) return this.graph.context;
-    } // 纹理绘制canvas
-
-  }, {
-    key: "textureCanvas",
-    get: function get() {
-      var canvas = this.graph.textureCanvas;
-
-      if (!canvas) {
-        if (typeof document === 'undefined') return null;
-        canvas = this.graph.textureCanvas = document.createElement('canvas');
-      }
-
-      return canvas;
-    } // 纹理绘制canvas ctx
-
-  }, {
-    key: "textureContext",
-    get: function get() {
-      var ctx = this.textureCanvas.ctx || (this.textureCanvas.ctx = this.textureCanvas.getContext('2d', {
-        willReadFrequently: true
-      }));
-      return ctx;
-    } // i当前程序
-
-  }, {
-    key: "program",
-    get: function get() {
-      // 默认所有path用同一个编译好的program
-      return this.graph.context.pathProgram || (this.graph.context.pathProgram = this.createProgram(pathVertexSource, pathFragmentSource));
-    } // 设置样式
-
-  }, {
-    key: "setStyle",
-    value: function setStyle() {
-      var style = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.style;
-      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-      if (typeof style === 'string') {
-        var obj = {};
-        obj[style] = value;
-        style = obj;
-      }
-      /*
-       // 设置线条颜色或填充色
-       if(style.strokeStyle) {
-           let color = style.strokeStyle;
-           if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-           this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
-           delete style.strokeStyle;
-       }
-       else if(style.fillStyle) {
-           let color = style.fillStyle;
-           if(this.isGradient(color)) {
-               this.style.fillStyle = color;
-           }
-           else {
-               if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-               this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
-           }
-           delete style.fillStyle;
-       } */
-
-
-      this.style = _objectSpread(_objectSpread({}, this.style), style);
-    } // 把传统颜色转为webgl识别的
-
-  }, {
-    key: "convertColor",
-    value: function convertColor(color) {
-      if (this.isGradient(color)) return color;
-      if (typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-      return this.graph.utils.rgbToDecimal(color);
-    }
-  }, {
-    key: "setTextureStyle",
-    value: function setTextureStyle(style) {
-      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-      if (typeof style === 'string') {
-        if (['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(style) > -1) {
-          value = this.graph.utils.toColor(value);
-        }
-
-        this.textureContext[style] = value;
-      } else {
-        for (var name in style) {
-          if (name === 'constructor') continue;
-          this.setTextureStyle(name, style[name]);
-        }
-      }
-    } // 创建程序
-
-  }, {
-    key: "createProgram",
-    value: function createProgram(vertexSrc, fragmentSrc) {
-      this.context.lineWidth(1);
-      return (0, _program.createProgram)(this.context, vertexSrc, fragmentSrc);
-    } // 指定使用某个程序
-
-  }, {
-    key: "useProgram",
-    value: function useProgram() {
-      var program = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.program;
-      program = program.program || program;
-      if (this.context.__curent_program === program) return program;
-      (0, _program.useProgram)(this.context, program.program || program);
-      this.context.__curent_program = program;
-      return program;
-    }
-  }, {
-    key: "getAttribLocation",
-    value: function getAttribLocation(name) {
-      return this.context.getAttribLocation(this.program.program, name);
-    }
-  }, {
-    key: "getUniformLocation",
-    value: function getUniformLocation(name) {
-      return this.context.getUniformLocation(this.program.program, name);
-    } // 把缓冲区的值写入变量
-    // buffer: 缓冲区
-    // size: 组成数量，必须是1，2，3或4.  每个单元由多少个数组成
-    // strip: 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
-    // offset: 字节偏移量，必须是类型的字节长度的倍数。
-    // dataType: 每个元素的数据类型
-
-  }, {
-    key: "writeVertexAttrib",
-    value: function writeVertexAttrib(buffer, attr) {
-      var size = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
-      var strip = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-      var offset = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
-      var dataType = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : this.context.FLOAT;
-      buffer.attr = attr;
-      return (0, _program.writeVertexAttrib)(this.context, buffer, attr, size, strip, offset, dataType);
-    } // 禁用attri
-
-  }, {
-    key: "disableVertexAttribArray",
-    value: function disableVertexAttribArray(attr) {
-      try {
-        if (!attr) return attr;
-        return (0, _program.disableVertexAttribArray)(this.context, attr);
-      } catch (e) {
-        console.error(e);
-      }
-
-      return attr;
-    } // 创建float32的buffer
-
-  }, {
-    key: "createFloat32Buffer",
-    value: function createFloat32Buffer(data) {
-      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.context.ARRAY_BUFFER;
-      var drawType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.context.STATIC_DRAW;
-      var buffer = (0, _buffer.createFloat32Buffer)(this.context, data, type, drawType);
-      return _objectSpread({
-        data: data
-      }, buffer);
-    }
-  }, {
-    key: "createUint16Buffer",
-    value: function createUint16Buffer(data) {
-      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.context.ARRAY_BUFFER;
-      var drawType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.context.STATIC_DRAW;
-      var buffer = (0, _buffer.createUint16Buffer)(this.context, data, type, drawType);
-      return _objectSpread({
-        data: data
-      }, buffer);
-    } // 释放
-
-  }, {
-    key: "deleteBuffer",
-    value: function deleteBuffer(buffer) {
-      try {
-        if (!buffer) return;
-        var bufferHandler = buffer.buffer || buffer;
-        if (bufferHandler) return (0, _buffer.deleteBuffer)(this.context, bufferHandler);
-      } catch (e) {
-        console.log(buffer);
-        console.error(e);
-      }
-
-      return buffer;
-    } // 生成纹理
-
-  }, {
-    key: "create2DTexture",
-    value: function create2DTexture() {
-      return (0, _texture.create2DTexture)(this.context);
-    } // 创建图片纹理
-
-  }, {
-    key: "createImgTexture",
-    value: function createImgTexture(img) {
-      return (0, _texture.createImgTexture)(this.context, img);
-    } // 根根像素值生成纹理
-
-  }, {
-    key: "createDataTexture",
-    value: function createDataTexture(data) {
-      return (0, _texture.createDataTexture)(this.context, data);
-    } // 删除纹理
-
-  }, {
-    key: "deleteTexture",
-    value: function deleteTexture(texture) {
-      try {
-        return (0, _texture.deleteTexture)(this.context, texture.texture || texture);
-      } catch (e) {
-        console.error(e);
-      }
-
-      return texture;
-    } // 多边切割, 得到三角形顶点索引数组
-    // polygonIndices 顶点索引，
-
-  }, {
-    key: "earCutPoints",
-    value: function earCutPoints(points) {
-      var arr = this.pointsToArray(points);
-      var ps = (0, _earcut["default"])(arr); // 切割得到3角色顶点索引，
-
-      return ps;
-    } // 多边切割, 得到三角形顶点
-    // polygonIndices 顶点索引，
-
-  }, {
-    key: "earCutPointsToTriangles",
-    value: function earCutPointsToTriangles(points) {
-      var ps = this.earCutPoints(points); // 切割得到3角色顶点索引，
-
-      var triangles = []; // 用顶点索引再组合成坐标数组
-
-      for (var i = 0; i < ps.length; i += 3) {
-        var p1 = points[ps[i]];
-        var p2 = points[ps[i + 1]];
-        var p3 = points[ps[i + 2]];
-        triangles.push([p1, p2, p3]); // 每三个顶点构成一个三角
-      }
-
-      return triangles;
-    } // 点坐标数组转为一维数组
-
-  }, {
-    key: "pointsToArray",
-    value: function pointsToArray(points) {
-      var _ref;
-
-      return (_ref = []).concat.apply(_ref, _toConsumableArray(points.map(function (p) {
-        return [p.x, p.y];
-      }))); // 把x,y转为数组元素
-    } // 每2位表示坐标x,y转为坐标点对象
-
-  }, {
-    key: "arrayToPoints",
-    value: function arrayToPoints(arr) {
-      var points = [];
-
-      for (var i = 0; i < arr.length; i += 2) {
-        points.push({
-          x: arr[i],
-          y: arr[i + 1]
-        });
-      }
-
-      return points;
-    } // 创建线性渐变
-
-  }, {
-    key: "createLinearGradient",
-    value: function createLinearGradient(x1, y1, x2, y2, bounds) {
-      return new _gradient["default"]('linear', {
-        x1: x1,
-        y1: y1,
-        x2: x2,
-        y2: y2,
-        bounds: bounds,
-        control: this
-      });
-    } // 创建放射性渐变
-
-  }, {
-    key: "createRadialGradient",
-    value: function createRadialGradient(x1, y1, r1, x2, y2, r2, bounds) {
-      return new _gradient["default"]('radial', {
-        x1: x1,
-        y1: y1,
-        r1: r1,
-        x2: x2,
-        y2: y2,
-        r2: r2,
-        bounds: bounds,
-        control: this
-      });
-    } // 判断是否是一个渐变对象
-
-  }, {
-    key: "isGradient",
-    value: function isGradient(obj) {
-      return obj && obj instanceof _gradient["default"];
-    }
-    /**
-    * 测试获取文本所占大小
-    *
-    * @method testSize
-    * @return {object} 含文本大小的对象
-    */
-
-  }, {
-    key: "testSize",
-    value: function testSize(text) {
-      var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.style;
-      this.textureContext.save && this.textureContext.save(); // 修改字体，用来计算
-
-      if (style.font || style.fontSize) this.textureContext.font = style.font || style.fontSize + 'px ' + style.fontFamily; //计算宽度
-
-      var size = this.textureContext.measureText ? this.textureContext.measureText(text) : {
-        width: 15
-      };
-      this.textureContext.restore && this.textureContext.restore();
-      size.height = this.style.fontSize ? this.style.fontSize : 15;
-      return size;
-    }
-  }]);
-
-  return WeblBase;
-}();
-
-var _default = WeblBase;
-exports["default"] = _default;
-
-},{"../earcut.js":12,"./core/buffer.js":14,"./core/program.js":17,"./core/texture.js":19,"./gradient.js":20}],14:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createBuffer = createBuffer;
-exports.createUint16Buffer = createUint16Buffer;
-exports.createFloat32Buffer = createFloat32Buffer;
-exports.deleteBuffer = deleteBuffer;
-
-// 创建缓冲区
-function createBuffer(gl, data) {
-  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
-  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
-  //先创建一个缓存对象
-  var buffer = gl.createBuffer();
-
-  if (!buffer) {
-    throw Error('创建缓冲区对象失败');
-  } //说明缓存对象保存的类型
-
-
-  gl.bindBuffer(type, buffer); //写入坐标数据
-  // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-  // data.buffer这里要使用data.buffer，否则在edge下可能导至数据发生较大的改变
-
-  gl.bufferData(type, data.buffer || data, drawType); // 表示缓冲区的内容不会经常更改
-
-  return {
-    type: type,
-    drawType: drawType,
-    buffer: buffer,
-    // 获取到数组中单个元素的字节数
-    unitSize: data.BYTES_PER_ELEMENT
-  };
-} // 创建float32的buffer
-
-
-function createFloat32Buffer(gl, data) {
-  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
-  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
-  var vertices = new Float32Array(data);
-  var buffer = createBuffer(gl, vertices, type, drawType);
-  return buffer;
-} // 创建uint16的bugger
-
-
-function createUint16Buffer(gl, data) {
-  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
-  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
-  var vertices = new Uint16Array(data);
-  var buffer = createBuffer(gl, vertices, type, drawType);
-  return buffer;
-} // 释放
-
-
-function deleteBuffer(gl, buffer) {
-  gl.deleteBuffer(buffer.buffer || buffer);
-}
-
-},{}],15:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.mapSize = void 0;
-var GLSL_TO_SIZE = {
-  'float': 1,
-  'vec2': 2,
-  'vec3': 3,
-  'vec4': 4,
-  'int': 1,
-  'ivec2': 2,
-  'ivec3': 3,
-  'ivec4': 4,
-  'bool': 1,
-  'bvec2': 2,
-  'bvec3': 3,
-  'bvec4': 4,
-  'mat2': 4,
-  'mat3': 9,
-  'mat4': 16,
-  'sampler2D': 1
-};
-/**
- * @class
- * @memberof PIXI.glCore.shader
- * @param type {String}
- * @return {Number}
- */
-
-var mapSize = function mapSize(type) {
-  return GLSL_TO_SIZE[type];
-};
-
-exports.mapSize = mapSize;
-
-},{}],16:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.mapType = void 0;
-var GL_TABLE = null;
-var GL_TO_GLSL_TYPES = {
-  'FLOAT': 'float',
-  'FLOAT_VEC2': 'vec2',
-  'FLOAT_VEC3': 'vec3',
-  'FLOAT_VEC4': 'vec4',
-  'INT': 'int',
-  'INT_VEC2': 'ivec2',
-  'INT_VEC3': 'ivec3',
-  'INT_VEC4': 'ivec4',
-  'BOOL': 'bool',
-  'BOOL_VEC2': 'bvec2',
-  'BOOL_VEC3': 'bvec3',
-  'BOOL_VEC4': 'bvec4',
-  'FLOAT_MAT2': 'mat2',
-  'FLOAT_MAT3': 'mat3',
-  'FLOAT_MAT4': 'mat4',
-  'SAMPLER_2D': 'sampler2D'
-};
-
-var mapType = function mapType(gl, type) {
-  if (!GL_TABLE) {
-    var typeNames = Object.keys(GL_TO_GLSL_TYPES);
-    GL_TABLE = {};
-
-    for (var i = 0; i < typeNames.length; ++i) {
-      var tn = typeNames[i];
-      GL_TABLE[gl[tn]] = GL_TO_GLSL_TYPES[tn];
-    }
-  }
-
-  return GL_TABLE[type];
-};
-
-exports.mapType = mapType;
-
-},{}],17:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createProgram = createProgram;
-exports.useProgram = useProgram;
-exports.getAttribLocation = getAttribLocation;
-exports.getUniformLocation = getUniformLocation;
-exports.extractAttributes = extractAttributes;
-exports.extractUniforms = extractUniforms;
-exports.writeVertexAttrib = writeVertexAttrib;
-exports.disableVertexAttribArray = disableVertexAttribArray;
-
-var _shader = require("./shader.js");
-
-var _mapSize = require("./mapSize.js");
-
-var _mapType = require("./mapType.js");
-
-// 创建程序
-function createProgram(gl, vertexSrc, fragmentSrc) {
-  // 创建顶点着色器
-  var vertexShader = (0, _shader.createShader)(gl, gl.VERTEX_SHADER, vertexSrc); // 创建片段着色器
-
-  var fragmentShader = (0, _shader.createShader)(gl, gl.FRAGMENT_SHADER, fragmentSrc);
-  var program = gl.createProgram(); // 创建一个程序
-
-  gl.attachShader(program, vertexShader); // 添加顶点着色器
-
-  gl.attachShader(program, fragmentShader); // 添加片元着色器
-
-  gl.linkProgram(program); // 连接 program 中的着色器
-  // 检查程序链接状态
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('PError: Could not initialize shader.');
-    console.error('gl.VALIDATE_STATUS', gl.getProgramParameter(program, gl.VALIDATE_STATUS));
-    console.error('gl.getError()', gl.getError()); // if there is a program info log, log it
-
-    if (gl.getProgramInfoLog(program) !== '') {
-      console.warn('Warning: gl.getProgramInfoLog()', gl.getProgramInfoLog(program));
-    }
-
-    gl.deleteProgram(program);
-  }
-
-  useProgram(gl, program); // clean up some shaders
-
-  gl.deleteShader(vertexShader);
-  gl.deleteShader(fragmentShader);
-  var attrs = extractAttributes(gl, program);
-  var uniforms = extractUniforms(gl, program);
-  return {
-    program: program,
-    attrs: attrs,
-    uniforms: uniforms
-  };
-} // 采用program
-
-
-function useProgram(gl, program) {
-  return gl.useProgram(program); // 告诉 webgl 用这个 program 进行渲染
-}
-
-function extractAttributes(gl, program) {
-  var attributes = {};
-  var count = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-
-  for (var i = 0; i < count; i++) {
-    var attribData = gl.getActiveAttrib(program, i);
-    var type = (0, _mapType.mapType)(gl, attribData.type);
-    attributes[attribData.name] = {
-      attribData: attribData,
-      size: (0, _mapSize.mapSize)(type),
-      type: type,
-      location: gl.getAttribLocation(program, attribData.name)
-    };
-  }
-
-  return attributes;
-}
-
-function extractUniforms(gl, program) {
-  var uniforms = {};
-  var count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-
-  for (var i = 0; i < count; i++) {
-    var uniformData = gl.getActiveUniform(program, i);
-    var name = uniformData.name.replace(/\[.*?\]/, "");
-    var type = (0, _mapType.mapType)(gl, uniformData.type);
-    uniforms[name] = {
-      uniformData: uniformData,
-      type: type,
-      size: uniformData.size,
-      location: gl.getUniformLocation(program, name)
-    };
-  }
-
-  return uniforms;
-}
-
-; // 把缓冲区的值写入变量
-// size: 组成数量，必须是1，2，3或4.  每个单元由多少个数组成
-// strip: 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
-// offset: 字节偏移量，必须是类型的字节长度的倍数。
-// dataType: 每个元素的数据类型
-
-function writeVertexAttrib(gl, buffer, attr) {
-  var size = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 2;
-  var strip = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
-  var offset = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-  var dataType = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : gl.FLOAT;
-  gl.bindBuffer(buffer.type, buffer.buffer);
-  gl.vertexAttribPointer( // 告诉 OpenGL 如何从 Buffer 中获取数据
-  attr.location, // 顶点属性的索引
-  size, // 组成数量，必须是1，2，3或4。我们只提供了 x 和 y
-  dataType, false, // 是否归一化到特定的范围，对 FLOAT 类型数据设置无效
-  strip * buffer.unitSize, offset);
-  gl.enableVertexAttribArray(attr.location);
-  return buffer;
-}
-
-function disableVertexAttribArray(gl, attr) {
-  return gl.disableVertexAttribArray(attr.location);
-}
-
-function getAttribLocation(gl, program, name) {
-  return gl.getAttribLocation(program, name);
-}
-
-function getUniformLocation(gl, program, name) {
-  return gl.getUniformLocation(program, name);
-}
-
-},{"./mapSize.js":15,"./mapType.js":16,"./shader.js":18}],18:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createShader = createShader;
-
-// 生成着色器
-// type: gl.VERTEX_SHADER 顶点着色器  , gl.FRAGMENT_SHADER  片段着色器
-// src: 着色器代码
-function createShader(gl, type, src) {
-  var shader = gl.createShader(type); // 创建一个顶点着色器
-
-  gl.shaderSource(shader, src); // 编写顶点着色器代码
-
-  gl.compileShader(shader); // 编译着色器
-
-  return shader;
-}
-
-},{}],19:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.create2DTexture = create2DTexture;
-exports.createImgTexture = createImgTexture;
-exports.createDataTexture = createDataTexture;
-exports.deleteTexture = deleteTexture;
-
-// 生成纹理
-function create2DTexture(gl) {
-  var texture = gl.createTexture();
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // 图像反转Y轴
-
-  gl.activeTexture(gl.TEXTURE0); // 激活纹理单元
-
-  gl.bindTexture(gl.TEXTURE_2D, texture); // 绑定纹理对象
-  //gl.generateMipmap(gl.TEXTURE_2D);
-
-  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST); // 放大处理方式  // LINEAR  / NEAREST
-
-  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); // 缩小处理方式
-
-  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // 水平平铺方式
-
-  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); // 竖直平铺方式
-
-  return texture;
-} // 创建图片纹理
-
-
-function createImgTexture(gl, img) {
-  var texture = create2DTexture(gl);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); // 配置纹理图像
-
-  return {
-    texture: texture
-  };
-} // 用像素值来绘制纹理
-
-
-function createDataTexture(gl, pixels) {
-  var data = new Uint8Array(pixels.data || pixels);
-  var texture = create2DTexture(gl);
-  gl.texImage2D(gl.TEXTURE_2D, // 纹理目标
-  0, // 细节级别,指定详细级别。0 级是基本图像等级，n 级是第 n 个金字塔简化级。
-  gl.RGBA, // 纹理内部格式
-  pixels.width || 1, // 指定纹理的宽度
-  pixels.height || 1, // 指定纹理的高度
-  0, // 指定纹理的边框宽度。必须为 0。
-  gl.RGBA, // 源图像数据格式
-  gl.UNSIGNED_BYTE, // 纹理数据类型
-  data // 数据
-  );
-  return {
-    texture: texture
-  };
-} // 删除纹理
-
-
-function deleteTexture(gl, texture) {
-  return gl.deleteTexture(texture);
-}
-
-},{}],20:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var WebglGradientTextureCache = {}; // 渐变
-
-var WebglGradient = /*#__PURE__*/function () {
-  // type:[linear= 线性渐变,radial=放射性渐变] 
-  function WebglGradient() {
-    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'linear';
-    var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    _classCallCheck(this, WebglGradient);
-
-    this.type = type || 'linear';
-    this.x1 = params.x1 || 0;
-    this.y1 = params.y1 || 0;
-    this.r1 = params.r1 || 0;
-    this.x2 = params.x2 || 0;
-    this.y2 = params.y2 || 0;
-    this.r2 = params.r2 || 0;
-    this.bounds = params.bounds || {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0
-    };
-    this.control = params.control;
-    this.stops = [];
-    this.init();
-  }
-
-  _createClass(WebglGradient, [{
-    key: "init",
-    value: function init() {
-      var dx = this.x2 - this.x1;
-      var dy = this.y2 - this.y1;
-
-      if (this.type === 'radial') {
-        this.length = this.r2 - this.r1;
-      } else if (dx === 0 && dy === 0) {
-        this.length = 0;
-      } else {
-        // 渐变中心的距离
-        this.length = Math.sqrt(Math.pow(dx, 2), Math.pow(dy, 2));
-        this.sin = dy / this.length;
-        this.cos = dx / this.length;
-      }
-    } // 渐变颜色
-
-  }, {
-    key: "addColorStop",
-    value: function addColorStop(offset, color) {
-      this.stops.push({
-        offset: offset,
-        color: color
-      });
-    } // 转为渐变为纹理
-
-  }, {
-    key: "toImageData",
-    value: function toImageData(control, bounds) {
-      var key = this.key || this.toString();
-      if (WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
-      var canvas = control.textureCanvas;
-
-      if (!canvas) {
-        return null;
-      }
-
-      canvas.width = bounds.width;
-      canvas.height = bounds.height;
-
-      if (!canvas.width || !canvas.height) {
-        return null;
-      }
-
-      control.textureContext.clearRect(0, 0, canvas.width, canvas.height);
-      var gradient = null;
-
-      if (this.type === 'linear') {
-        gradient = control.textureContext.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
-      } else {
-        gradient = control.textureContext.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
-      }
-
-      this.stops.forEach(function (s, i) {
-        var c = control.graph.utils.toColor(s.color);
-        gradient && gradient.addColorStop(s.offset, c);
-      });
-      control.textureContext.fillStyle = gradient;
-      control.textureContext.beginPath();
-      control.textureContext.moveTo(0, 0);
-      control.textureContext.lineTo(bounds.width, 0);
-      control.textureContext.lineTo(bounds.width, bounds.height);
-      control.textureContext.lineTo(0, bounds.height);
-      control.textureContext.lineTo(0, 0);
-      control.textureContext.closePath();
-      control.textureContext.fill();
-      var data = control.textureContext.getImageData(0, 0, canvas.width, canvas.height);
-      WebglGradientTextureCache[key] = data;
-      return data;
-    } // 根据绘制图形的坐标计算出对应点的颜色
-
-    /*
-    toPointColors(points) {
-        const stops = this.getStops();
-        const colors = [];
-        for(let i=0; i<points.length; i+=2) {
-            const p = {
-                x: points[i],
-                y: points[i+1]
-            }
-            if(this.type === 'radial') {
-                const dx = p.x - this.x1;
-                const dy = p.y - this.y1;
-                const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-                const rang = this.getStopRange(len, stops);
-                if(!rang.start && rang.end) {
-                    colors.push(rang.end.color);
-                }
-                else if(!rang.end && rang.start) {
-                    colors.push(rang.start.color);
-                }
-                else {
-                    const rangLength = rang.end.length - rang.start.length;
-                    const offlen = len - rang.start.length;
-                    const per = offlen / rangLength;
-                    const color = {
-                        r: rang.start.color.r + (rang.end.color.r - rang.start.color.r) * per,
-                        g: rang.start.color.g + (rang.end.color.g - rang.start.color.g) * per,
-                        b: rang.start.color.b + (rang.end.color.b - rang.start.color.b) * per,
-                        a: rang.start.color.a + (rang.end.color.a - rang.start.color.a) * per,
-                    };
-                    colors.push(color);
-                }
-            }
-        }
-        return colors;
-    }
-    */
-    // 根据起点距离获取边界stop
-
-    /*
-    getStopRange(len, stops) {
-        const res = {};
-        for(const s of stops) {
-            if(s.length <= len) {
-                res.start = s;
-            }
-            else {
-                res.end = s;
-            }
-        }
-        return res;
-    }
-      // 根据stop计算offset长度
-    getStops() {
-        const stops = this.stops.sort((p1, p2) => p1.offset - p2.offset); // 渐变色排序从小于大
-        for(const s of stops) {
-            
-            const color = typeof s.color === 'string'? this.control.graph.utils.hexToRGBA(s.color) : s.color;
-            console.log(s, color);
-            s.color = this.control.graph.utils.rgbToDecimal(color);
-            s.length = s.offset * this.length;
-        }
-        return stops;
-    }
-    */
-
-    /**
-    * 转换为渐变的字符串表达
-    *
-    * @method toString
-    * @for jmGradient
-    * @return {string} linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
-    */
-
-  }, {
-    key: "toString",
-    value: function toString() {
-      var str = this.type + '-gradient(';
-
-      if (this.type == 'linear') {
-        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
-      } else {
-        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
-      } //颜色渐变
-
-
-      this.stops.forEach(function (s) {
-        str += ',' + s.color + ' ' + s.offset;
-      });
-      return str + ')';
-    }
-  }]);
-
-  return WebglGradient;
-}();
-
-var _default = WebglGradient;
-exports["default"] = _default;
-
-},{}],21:[function(require,module,exports){
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _base = _interopRequireDefault(require("./base.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-// path 绘制类
-var WebglPath = /*#__PURE__*/function (_WebglBase) {
-  _inherits(WebglPath, _WebglBase);
-
-  var _super = _createSuper(WebglPath);
-
-  function WebglPath(graph, option) {
-    var _this;
-
-    _classCallCheck(this, WebglPath);
-
-    _this = _super.call(this, graph, option); // 是否是规则的，不规则的处理方式更为复杂和耗性能
-
-    _this.isRegular = option.isRegular || false;
-    _this.needCut = option.needCut || false;
-    _this.control = option.control;
-    _this.points = [];
-    return _this;
-  }
-
-  _createClass(WebglPath, [{
-    key: "setParentBounds",
-    value: function setParentBounds() {
-      var parentBounds = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.parentAbsoluteBounds;
-      //this.useProgram();
-      if (parentBounds) this.parentAbsoluteBounds = parentBounds; // 写入当前canvas大小
-
-      this.context.uniform2f(this.program.uniforms.a_center_point.location, this.graph.width / 2, this.graph.height / 2);
-    }
-  }, {
-    key: "setFragColor",
-    value: function setFragColor(color) {
-      if (!Array.isArray(color)) {
-        color = this.convertColor(color);
-        if (typeof color.a === 'undefined') color.a = 1;
-        this.context.uniform4f(this.program.uniforms.v_single_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
-        return null;
-      }
-
-      var colorData = [];
-
-      var _iterator = _createForOfIteratorHelper(color),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var c = _step.value;
-          c = this.convertColor(c);
-          if (typeof c.a === 'undefined') c.a = 1;
-          colorData.push(c.r, c.g, c.b, c.a * this.style.globalAlpha);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      var colorBuffer = this.createFloat32Buffer(colorData);
-      this.writeVertexAttrib(colorBuffer, this.program.attrs.a_color, 4, 0, 0);
-      colorBuffer.attr = this.program.attrs.a_color;
-      return colorBuffer;
-    }
-  }, {
-    key: "beginDraw",
-    value: function beginDraw() {
-      this.useProgram();
-    } // 开始绘制
-
-  }, {
-    key: "draw",
-    value: function draw(points) {
-      var parentBounds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.parentAbsoluteBounds;
-      //this.useProgram();
-      this.setParentBounds(parentBounds);
-      this.points = points;
-    }
-  }, {
-    key: "endDraw",
-    value: function endDraw() {
-      if (this.points) delete this.points;
-      if (this.pathPoints) delete this.pathPoints;
-    } // 图形封闭
-
-  }, {
-    key: "closePath",
-    value: function closePath() {
-      if (this.points && this.points.length > 2 && this.points[0] !== this.points[this.points.length - 1]) {
-        var start = this.points[0];
-        var end = this.points[this.points.length - 1];
-        if (start != end && !(start.x === end.x && start.y === end.y)) this.points.push(start);
-      }
-    } // 绘制点数组
-
-  }, {
-    key: "writePoints",
-    value: function writePoints(points) {
-      var attr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.program.attrs.a_position;
-      var fixedPoints = [];
-
-      var _iterator2 = _createForOfIteratorHelper(points),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var p = _step2.value;
-          fixedPoints.push(p.x + this.parentAbsoluteBounds.left, p.y + this.parentAbsoluteBounds.top);
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-
-      var vertexBuffer = this.createFloat32Buffer(fixedPoints);
-      this.writeVertexAttrib(vertexBuffer, attr, 2, 0, 0);
-      vertexBuffer.attr = attr;
-      return vertexBuffer;
-    } // 连接二个点
-
-  }, {
-    key: "genLinePoints",
-    value: function genLinePoints(start, end) {
-      var points = [start];
-      var dx = end.x - start.x;
-      var dy = end.y - start.y;
-
-      if (dx !== 0 || dy !== 0) {
-        var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        var cos = dx / len;
-        var sin = dy / len;
-        var step = 0.5;
-
-        for (var l = step; l < len; l += step) {
-          var x = start.x + cos * l;
-          var y = start.y + sin * l;
-          points.push({
-            x: x,
-            y: y
-          });
-        }
-      }
-
-      points.push(end);
-      return points;
-    } // 把path坐标集合分解成一个个点，并且处理moveTo线段能力
-
-  }, {
-    key: "pathToPoints",
-    value: function pathToPoints() {
-      var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.points;
-      var start = null;
-      var res = [];
-
-      for (var i = 0; i < points.length; i++) {
-        var p = points[i];
-
-        if (start && !p.m) {
-          var linePoints = this.genLinePoints(start, p);
-          res.push.apply(res, _toConsumableArray(linePoints));
-        } else if (start && !res.includes(start)) {
-          res.push(start);
-        }
-
-        start = p;
-      }
-
-      if (!res.includes(start)) res.push(start);
-      return res;
-    } // 二点是否重合
-
-  }, {
-    key: "equalPoint",
-    value: function equalPoint(p1, p2) {
-      return p1.x === p2.x && p1.y === p2.y;
-    } // 把path坐标集合转为线段集
-
-  }, {
-    key: "pathToLines",
-    value: function pathToLines(points) {
-      var start = null;
-      var res = [];
-
-      for (var i = 0; i < points.length; i++) {
-        var p = points[i]; // 不重合的二个点，组成线段
-
-        if (start && !p.m && !(start.x == p.x && start.y == p.y)) {
-          var line = {
-            start: start,
-            end: p
-          };
-          res.push(line);
-        }
-
-        start = p;
-      }
-
-      return res;
-    } // 裁剪线段，如果二段线段有交点，则分割成四段， 端头相交的线段不用分割
-
-  }, {
-    key: "cutLines",
-    value: function cutLines(lines) {
-      var index1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var index2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-      if (lines && lines.length < 3) return lines;
-      index2 = Math.max(index1 + 1, index2); //如果指定了比下一个更大的索引，则用更大的，说明前面的已经处理过了，不需要重复
-      // 找出线段相交的点，并切割线段
-
-      while (index1 < lines.length) {
-        var line1 = lines[index1];
-
-        while (index2 < lines.length) {
-          var line2 = lines[index2]; // 如果二条线顶点有重合，则不用处理
-
-          if (this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.end, line2.end) || this.equalPoint(line1.start, line2.end) || this.equalPoint(line1.end, line2.start)) {
-            index2++;
-            continue;
-          }
-
-          var cuted = false;
-          var intersection = this.getIntersection(line1, line2); // 计算交点
-
-          if (intersection) {
-            // 如果交点不是线段的端点，则分割成二条线段
-            if (!this.equalPoint(line1.start, intersection) && !this.equalPoint(line1.end, intersection)) {
-              var sub1 = {
-                start: line1.start,
-                end: intersection
-              };
-              var sub2 = {
-                start: intersection,
-                end: line1.end
-              }; // 从原数组中删除当前线段，替换成新的线段
-
-              lines.splice(index1, 1, sub1, sub2); // 当前线段被重新替换，需要重新从它开始处理
-
-              cuted = true;
-              index2++; // 因为多加入了一个线段，则对比线索引需要加1
-            } // 如果交点不是线段的端点，则分割成二条线段
-
-
-            if (!this.equalPoint(line2.start, intersection) && !this.equalPoint(line2.end, intersection)) {
-              var _sub = {
-                start: line2.start,
-                end: intersection
-              };
-              var _sub2 = {
-                start: intersection,
-                end: line2.end
-              }; // 从原数组中删除当前线段，替换成新的线段
-
-              lines.splice(index2, 1, _sub, _sub2);
-              index2++; // 线段2也切成了二段，对比索引要继续加1
-            }
-          }
-
-          index2++; // 如果已经分割了起始线段，则第一个子线段开始，重新对比后面还未对比完的。直接所有对比完成返回
-
-          if (cuted) return this.cutLines(lines, index1, index2);
-        }
-
-        index1++;
-        index2 = index1 + 1;
-      }
-
-      return lines;
-    } // 计算二个线段的交点
-
-  }, {
-    key: "getIntersection",
-    value: function getIntersection(line1, line2) {
-      // 如果首尾相接，也认为是有交点
-      if (this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.start, line2.end)) return line1.start;
-      if (this.equalPoint(line1.end, line2.start) || this.equalPoint(line1.end, line2.end)) return line1.end; // 三角形abc 面积的2倍
-
-      var area_abc = (line1.start.x - line2.start.x) * (line1.end.y - line2.start.y) - (line1.start.y - line2.start.y) * (line1.end.x - line2.start.x); // 三角形abd 面积的2倍
-
-      var area_abd = (line1.start.x - line2.end.x) * (line1.end.y - line2.end.y) - (line1.start.y - line2.end.y) * (line1.end.x - line2.end.x); // 面积符号相同则两点在线段同侧,不相交 (=0表示在线段顶点上);
-
-      if (area_abc * area_abd > 0) {
-        return null;
-      } // 三角形cda 面积的2倍
-
-
-      var area_cda = (line2.start.x - line1.start.x) * (line2.end.y - line1.start.y) - (line2.start.y - line1.start.y) * (line2.end.x - line1.start.x); // 三角形cdb 面积的2倍
-      // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
-
-      var area_cdb = area_cda + area_abc - area_abd;
-
-      if (area_cda * area_cdb > 0) {
-        return null;
-      }
-
-      if (area_abd === area_abc) return null; //计算交点坐标
-
-      var t = area_cda / (area_abd - area_abc);
-      var dx = t * (line1.end.x - line1.start.x);
-      var dy = t * (line1.end.y - line1.start.y);
-      return {
-        x: line1.start.x + dx,
-        y: line1.start.y + dy
-      };
-    } // 找出跟当前线段尾部相交的所有线段
-
-  }, {
-    key: "getIntersectionLines",
-    value: function getIntersectionLines(line, lines, index) {
-      var point = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : line.end;
-      var points = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-      var root = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
-      var res = {
-        line: line,
-        polygons: []
-      };
-      points.push(point);
-
-      if (root && this.equalPoint(root.line.start, point)) {
-        points.unshift(root.line.start); // 把起始地址加入进去
-
-        root.polygons.push(points);
-        return res;
-      }
-
-      for (; index < lines.length; index++) {
-        var l = lines[index];
-
-        if (this.equalPoint(point, l.start)) {
-          if (points.includes(l.end)) continue;
-          this.getIntersectionLines(l, lines, index + 1, l.end, _toConsumableArray(points), root || res);
-        } else if (this.equalPoint(point, l.end)) {
-          if (points.includes(l.start)) continue;
-          this.getIntersectionLines(l, lines, index + 1, l.start, _toConsumableArray(points), root || res);
-        }
-      }
-
-      return res;
-    } // 根据路径点坐标，切割出封闭的多边形
-
-  }, {
-    key: "getPolygon",
-    value: function getPolygon(points) {
-      var polygons = [];
-      var lines = this.pathToLines(points); // 分解得到线段
-
-      if (lines && lines.length > 2) {
-        lines = this.cutLines(lines); // 把所有相交点切割线段找出来
-
-        for (var i = 0; i < lines.length - 1; i++) {
-          var line1 = lines[i];
-          var polygon = []; // 当前图形
-
-          var treeLine = this.getIntersectionLines(line1, lines, i + 1);
-          if (treeLine.polygons.length) polygons.push.apply(polygons, _toConsumableArray(treeLine.polygons));
-          continue;
-          var lastLine = line1; // 下一个还在连接状态的线
-
-          for (var j = i + 1; j < lines.length; j++) {
-            var line2 = lines[j]; // 如果跟下一条线相接，则表示还在形成图形中
-
-            if (this.equalPoint(lastLine.end, line2.start)) {
-              polygon.push(lastLine.end);
-              lastLine = line2;
-              if (i === j + 1) continue; //下一条相连 则不需要处理相交情况
-            } else {
-              polygon = [];
-            } // 因为前面进行了分割线段，则里只有处理端点相连的情况
-
-
-            var intersection = this.equalPoint(line1.start, line2.end) ? line1.start : null; //this.getIntersection(line1, line2);// 计算交点
-
-            if (intersection) {
-              polygon.push(intersection); // 交叉点为图形顶点
-              // 如果上一个连接线不是当前交叉线，则表示重新开始闭合
-              // 如果上一个连接线是当前交叉线，形成了封闭的图形
-
-              if (lastLine === line2 && polygon.length > 1) {
-                polygons.push(polygon); // 封闭后，下一个起始线条就是从交点开始计算起
-
-                /*lastLine = {
-                    start: intersection,
-                    end: line2.end
-                };*/
-
-                polygon = []; // 重新开始新一轮找图形
-
-                /*
-                // 如果交点是上一条线的终点，则新图形为空
-                if(this.equalPoint(line2.end, intersection)) {
-                    polygon = [];// 重新开始新一轮找图形
-                }
-                else {
-                    // 同时交点也要加到上一个图形中第一个点，形成封闭
-                    polygon.unshift(intersection);
-                      polygon = [ intersection ];// 重新开始新一轮找图形
-                }*/
-              } else {
-                lastLine = line2;
-              }
-            }
-          }
-        }
-      } // 当有多个封闭图形时，再弟归一下，里面是不是有封闭图形内还有子封闭图形
-
-      /*if(polygons.length > 1) {
-          const newPolygons = [];
-          for(const polygon of polygons) {
-              // 只有大于4才有可能有子封闭图形
-              if(polygon.length > 4) {
-                  const childPolygons = this.getPolygon(polygon);
-                  // 当有多个子图形时，表示它不是最终封闭图形，跳过，
-                  // 因为它的子图形之前有加入的，不需要重复加入
-                  if(childPolygons.length > 1) {
-                      //newPolygons.push(...childPolygons);
-                      continue;
-                  }
-              }
-              newPolygons.push(polygon);
-          }
-          polygons = newPolygons;
-      }*/
-
-
-      return polygons;
-    } // 分割成一个个规则的三角形，不规则的多边形不全割的话纹理就会没法正确覆盖
-
-  }, {
-    key: "getTriangles",
-    value: function getTriangles(points) {
-      //this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
-      //const key = JSON.stringify(points);
-      //if(this.trianglesCache[key]) return this.trianglesCache[key];
-      var res = [];
-      var polygons = this.getPolygon(points);
-
-      if (polygons.length) {
-        var _iterator3 = _createForOfIteratorHelper(polygons),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var polygon = _step3.value;
-            // 需要分割三角形，不然填充会有问题
-            var triangles = this.earCutPointsToTriangles(polygon);
-            res.push.apply(res, _toConsumableArray(triangles));
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-      } //this.trianglesCache[key] = res;
-
-
-      return res;
-    } // 画线条
-
-  }, {
-    key: "stroke",
-    value: function stroke() {
-      var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.points;
-      var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.style.strokeStyle;
-      var lineWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.style.lineWidth;
-      if (!points || !points.length) return; // this.useProgram();
-
-      var colorBuffer = null;
-
-      if (color) {
-        colorBuffer = this.setFragColor(color);
-      } // 线宽
-
-
-      if (lineWidth) {
-        this.context.uniform1f(this.program.uniforms.a_point_size.location, lineWidth); // * this.graph.devicePixelRatio
-      } // 标注为stroke
-
-
-      if (this.program.uniforms.a_type) {
-        // 4表示单画一个圆点，1表示方块形成的线条
-        this.context.uniform1i(this.program.uniforms.a_type.location, points.length === 1 ? 4 : 1);
-      }
-
-      if (points && points.length) {
-        var regular = lineWidth <= 1.2;
-        points = regular ? points : this.pathToPoints(points);
-        var buffer = this.writePoints(points);
-        this.context.drawArrays(regular ? this.context.LINE_LOOP : this.context.POINTS, 0, points.length);
-        this.deleteBuffer(buffer);
-      }
-
-      colorBuffer && this.deleteBuffer(colorBuffer);
-      colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
-    } // 填充图形
-
-  }, {
-    key: "fill",
-    value: function fill() {
-      var bounds = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0
-      };
-      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-
-      if (this.points && this.points.length) {
-        // 如果是颜色rgba
-        if (this.style.fillStyle) {
-          this.fillColor(this.style.fillStyle, this.points, bounds, type);
-        }
-
-        if (this.style.fillImage) {
-          this.fillImage(this.style.fillImage, this.points, bounds, type);
-        }
-      }
-    }
-  }, {
-    key: "fillColor",
-    value: function fillColor(color, points, bounds) {
-      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
-
-      // 如果是渐变色，则需要计算偏移量的颜色
-      if (this.isGradient(color)) {
-        var imgData = color.toImageData(this, bounds);
-        return this.fillImage(imgData, points, bounds);
-      } // 标注为fill
-
-
-      this.context.uniform1i(this.program.uniforms.a_type.location, type);
-      var colorBuffer = this.setFragColor(color);
-      this.fillPolygons(points);
-      colorBuffer && this.deleteBuffer(colorBuffer);
-      colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
-    } // 区域填充图片
-    // points绘制的图形顶点
-    // 图片整体绘制区域
-
-  }, {
-    key: "fillImage",
-    value: function fillImage(img, points, bounds) {
-      if (!img) return; // 设置纹理
-
-      var texture = img instanceof ImageData ? this.createDataTexture(img) : this.createImgTexture(img);
-      this.context.uniform1i(this.program.uniforms.u_sample.location, 0); // 纹理单元传递给着色器
-      // 指定纹理区域尺寸
-
-      this.context.uniform4f(this.program.uniforms.v_texture_bounds.location, bounds.left + this.parentAbsoluteBounds.left, bounds.top + this.parentAbsoluteBounds.top, bounds.width, bounds.height); // 纹理单元传递给着色器
-
-      this.fillTexture(points);
-      this.deleteTexture(texture);
-    }
-  }, {
-    key: "fillTexture",
-    value: function fillTexture(points) {
-      if (points && points.length) {
-        // 标注为纹理对象
-        this.context.uniform1i(this.program.uniforms.a_type.location, 2);
-        var regular = this.isRegular || points.length < 4; // 纹理坐标
-        //const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
-
-        this.fillPolygons(points, regular, true); //this.deleteBuffer(coordBuffer);  
-
-        this.disableVertexAttribArray(this.program.attrs.a_text_coord);
-      }
-    } // 进行多边形填充
-
-  }, {
-    key: "fillPolygons",
-    value: function fillPolygons(points) {
-      var regular = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.isRegular || points.length < 4;
-      var isTexture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-      //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-      //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
-      //this.deleteBuffer(indexBuffer);
-
-      /*if(points.length > 3 && (!regular || this.needCut)) {
-          const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
-          if(triangles.length) {   
-              for(const triangle of triangles) {
-                  this.fillPolygons(triangle, true, isTexture);// 这里就变成了规则的图形了
-              }
-          }
-      }
-      else {*/
-      var buffer = this.writePoints(points); // 纹理坐标
-
-      var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
-      this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-      this.deleteBuffer(buffer);
-      coordBuffer && this.deleteBuffer(coordBuffer); //}
-    } // 填充图形
-
-  }, {
-    key: "drawImage",
-    value: function drawImage(img) {
-      var left = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var top = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-      var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : img.width;
-      var height = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : img.height;
-      width = width || img.width;
-      height = height || img.height;
-      this.fillImage(img, this.points, {
-        left: left,
-        top: top,
-        width: width,
-        height: height
-      });
-    }
-  }, {
-    key: "drawText",
-    value: function drawText(text, x, y, bounds) {
-      var canvas = this.textureCanvas;
-
-      if (!canvas) {
-        return null;
-      }
-
-      canvas.width = bounds.width;
-      canvas.height = bounds.height;
-
-      if (!canvas.width || !canvas.height) {
-        return null;
-      }
-
-      this.textureContext.clearRect(0, 0, canvas.width, canvas.height); // 修改字体
-
-      this.textureContext.font = this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily;
-      x -= bounds.left;
-      y -= bounds.top;
-      this.setTextureStyle(this.style);
-
-      if (this.style.fillStyle && this.textureContext.fillText) {
-        if (this.style.maxWidth) {
-          this.textureContext.fillText(text, x, y, this.style.maxWidth);
-        } else {
-          this.textureContext.fillText(text, x, y);
-        }
-      }
-
-      if (this.textureContext.strokeText) {
-        if (this.style.maxWidth) {
-          this.textureContext.strokeText(text, x, y, this.style.maxWidth);
-        } else {
-          this.textureContext.strokeText(text, x, y);
-        }
-      } // 用纹理图片代替文字
-
-
-      var data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
-      this.fillImage(data, this.points, bounds);
-    }
-  }]);
-
-  return WebglPath;
-}(_base["default"]);
-
-var _default = WebglPath;
-exports["default"] = _default;
-
-},{"./base.js":13}],22:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -8539,7 +6135,6 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
         this.__img = src;
       }
 
-      this.image = this.__img.src;
       return this.__img;
     }
   }]);
@@ -8736,19 +6331,17 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
     key: "testSize",
     value: function testSize() {
       if (this.__size) return this.__size;
-      if (this.webglControl) this.__size = this.webglControl.testSize(this.text, this.style);else {
-        this.context.save && this.context.save(); // 修改字体，用来计算
+      this.context.save(); // 修改字体，用来计算
 
         this.setStyle({
           font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
         }); //计算宽度
 
-        this.__size = this.context.measureText ? this.context.measureText(this.text) : {
-          width: 15
-        };
-        this.context.restore && this.context.restore();
-        this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
-      }
+      this.__size = this.context.measureText ? this.context.measureText(this.text) : {
+        width: 15
+      };
+      this.context.restore();
+      this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
       if (!this.width) this.width = this.__size.width;
       if (!this.height) this.height = this.__size.height;
       return this.__size;
@@ -8847,31 +6440,10 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
             this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
           }
 
-          if (this.style.border.left) {
-            this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-            this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-          }
-        } else {
-          var points = [];
-
-          if (this.style.border.top) {
-            points.push(this.points[0]);
-            points.push(this.points[1]);
-          }
-
-          if (this.style.border.right) {
-            points.push(_objectSpread(_objectSpread({}, this.points[1]), {}, {
-              m: true
-            }));
-            points.push(this.points[2]);
-          }
-
-          if (this.style.border.bottom) {
-            points.push(_objectSpread(_objectSpread({}, this.points[2]), {}, {
-              m: true
-            }));
-            points.push(this.points[3]);
-          }
+        if (this.style.border.left) {
+          this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+          this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+        } //如果指定了边框颜色
 
           if (this.style.border.left) {
             points.push(_objectSpread(_objectSpread({}, this.points[3]), {}, {
@@ -8880,7 +6452,8 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
             points.push(this.points[0]);
           }
 
-          points.length && this.webglControl && this.webglControl.stroke(points);
+        if (this.style.border.style) {
+          this.context.restore();
         }
       }
     }

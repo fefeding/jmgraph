@@ -4,7 +4,7 @@ import {jmList} from "./jmList.js";
 import {jmGradient} from "./jmGradient.js";
 import {jmShadow} from "./jmShadow.js";
 import {jmProperty} from "./jmProperty.js";
-import WebglPath from "../lib/webgl/path.js";
+//import WebglPath from "../lib/webgl/path.js";
 
 //样式名称，也当做白名单使用		
 const jmStyleMap = {
@@ -58,14 +58,14 @@ export default class jmControl extends jmProperty {
 		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
 
 		// webgl模式
-		if(this.mode === 'webgl') {
+		/*if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
 				style: this.style,
 				control: this,
 				isRegular: params.isRegular,
 				needCut: params.needCut
 			});
-		}
+		}*/
 
 		this.initializing();	
 		
@@ -803,7 +803,7 @@ export default class jmControl extends jmProperty {
 	beginDraw() {	
 		this.getLocation(true);//重置位置信息
 		this.context.beginPath && this.context.beginPath();		
-		if(this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
+		//if(this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
 	}
 
 	/**
@@ -814,23 +814,24 @@ export default class jmControl extends jmProperty {
 	endDraw() {
 		//如果当前为封闭路径
 		if(this.style.close) {
-			if(this.webglControl) this.webglControl.closePath();
-			else this.context.closePath && this.context.closePath();
+			//if(this.webglControl) this.webglControl.closePath();
+			this.context.closePath && this.context.closePath();
 		}
 		
-		if(this.style['fill']) {
-			if(this.webglControl) {
+		const fill = this.style['fill'] || this.style['fillStyle'];
+		if(fill) {
+			/*if(this.webglControl) {
 				const bounds = this.getBounds();
 				this.webglControl.fill(bounds);
-			}
-			else this.context.fill && this.context.fill();
+			}*/
+			this.context.fill && this.context.fill();
 		}
-		if(this.style['stroke'] || (!this.style['fill'] && !this.is('jmGraph'))) {
-			if(this.webglControl) this.webglControl.stroke();
-			else this.context.stroke && this.context.stroke();
+		if(this.style['stroke'] || (!fill && !this.is('jmGraph'))) {
+			//if(this.webglControl) this.webglControl.stroke();
+			this.context.stroke && this.context.stroke();
 		}
 
-		if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
+		//if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
 
 		this.needUpdate = false;
 	}
@@ -845,13 +846,13 @@ export default class jmControl extends jmProperty {
 		if(this.points && this.points.length > 0) {
 			//获取当前控件的绝对位置
 			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
-			if(this.webglControl) {
+			/*if(this.webglControl) {
 				this.webglControl.setParentBounds(bounds);
 				this.webglControl.draw([
 					...this.points
 				]);
-			}
-			else if(this.context && this.context.moveTo) {
+			}*/
+			if(this.context && this.context.moveTo) {
 				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 				let len = this.points.length;			
 				for(let i=1; i < len;i++) {

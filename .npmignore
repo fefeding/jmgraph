@@ -1,6 +1,6 @@
-api
-build
-docs
-example
+*.ttf
+*.png
+*.jpg
 ._config.yml
 .travis.yml
+node_modules

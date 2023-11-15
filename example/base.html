@@ -13,20 +13,20 @@
 		}
 	</style>
 	
-	<!--<script type="text/javascript" src="../dist/jmGraph.min.js"></script>-->	
+	<script type="text/javascript" src="../dist/jmGraph.min.js"></script>
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-	<script type="module">	
-		import jmGraph from "../index.js";
+	<script type="text/javascript">	
+		//import jmGraph from "../index.js";
 
 		var container = document.getElementById('mycanvas_container');
 		
-		var g = new jmGraph(container, {
+		var g = jmGraph.create(container, {
 			width: 800,
 			height: 600,
-			mode: 'webgl',
+			mode: '2d',
 			style: {
 				fill: '#000'
 			}
@@ -90,7 +90,7 @@
 				{x:50,y:300},
 			];
 			style = g.utils.clone(style);
-			//delete style.fill;
+			delete style.fill;
 			var star2 = g.createShape('path',{
 				style:style,
 				points: coordinates2

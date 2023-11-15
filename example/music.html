@@ -52,7 +52,15 @@
 
 		//解码
 		function decodeAudio(data) {
-            if(!audioContext) audioContext = new window.AudioContext();
+            if(!audioContext) {
+                audioContext = new window.AudioContext();
+                audioContext.onstatechange = function(e) {
+                    console.log(e);
+                }
+            }
+
+            currentAudioData = data.slice(0);
+
 				log('解码中...');
 			audioContext.decodeAudioData(data, function(buffer){
 				log('解码成功');
@@ -68,8 +76,14 @@
 			if(audioBufferSouceNode) {
 				audioBufferSouceNode.stop();
 			}
+            //AudioBufferSourceNode 
 			audioBufferSouceNode = audioContext.createBufferSource();	
 			audioBufferSouceNode.buffer = buffer;
+            //audioBufferSouceNode.loop = true; // 循环
+
+            audioBufferSouceNode.onended = function(e) {
+                log('播放结束', e);
+            }
 			////连接到扬声器
 			//audioBufferSouceNode.connect(audioContext.destination);
 			//处理频谱
@@ -199,6 +213,7 @@
 
 	function log(msg) {
 		document.getElementById('txtstatus').innerHTML = msg;
+        console.log(...arguments);
 	}
 </script>
 </body>

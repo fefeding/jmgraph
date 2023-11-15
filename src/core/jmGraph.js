@@ -27,7 +27,7 @@ export default class jmGraph extends jmControl {
 		}
 	
 		option = option || {};
-		option.mode = '2d'; // webgl | 2d 暂不支持webgl
+		//option.mode = '2d'; // webgl | 2d 暂不支持webgl
 		option.interactive = true;
 		option.isRegular = true;// 规则的
 

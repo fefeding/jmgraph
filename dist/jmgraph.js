@@ -233,7 +233,7 @@ var createJmGraph = function createJmGraph() {
 
 exports.create = createJmGraph;
 
-},{"./src/core/jmGraph.js":5,"./src/shapes/jmArc.js":22,"./src/shapes/jmArrow.js":23,"./src/shapes/jmArrowLine.js":24,"./src/shapes/jmBezier.js":25,"./src/shapes/jmCircle.js":26,"./src/shapes/jmHArc.js":27,"./src/shapes/jmImage.js":28,"./src/shapes/jmLabel.js":29,"./src/shapes/jmLine.js":30,"./src/shapes/jmPrismatic.js":31,"./src/shapes/jmRect.js":32,"./src/shapes/jmResize.js":33}],2:[function(require,module,exports){
+},{"./src/core/jmGraph.js":5,"./src/shapes/jmArc.js":12,"./src/shapes/jmArrow.js":13,"./src/shapes/jmArrowLine.js":14,"./src/shapes/jmBezier.js":15,"./src/shapes/jmCircle.js":16,"./src/shapes/jmHArc.js":17,"./src/shapes/jmImage.js":18,"./src/shapes/jmLabel.js":19,"./src/shapes/jmLine.js":20,"./src/shapes/jmPrismatic.js":21,"./src/shapes/jmRect.js":22,"./src/shapes/jmResize.js":23}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -251,21 +251,9 @@ var _jmShadow = require("./jmShadow.js");
 
 var _jmProperty2 = require("./jmProperty.js");
 
-var _path = _interopRequireDefault(require("../lib/webgl/path.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
@@ -352,7 +340,16 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0;
-    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive;
+    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive; // webgl模式
+
+    /*if(this.mode === 'webgl') {
+    	this.webglControl = new WebglPath(this.graph, {
+    		style: this.style,
+    		control: this,
+    		isRegular: params.isRegular,
+    		needCut: params.needCut
+    	});
+    }*/
 
     _this2.initializing();
 
@@ -709,13 +706,23 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
             __setStyle(styleValue.toGradient(_this3), mpname || name);
           } else if (mpname) {
-            //只有存在白名单中才处理
-            //颜色转换
-            if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-              styleValue = _jmUtils.jmUtils.toColor(styleValue);
-            }
+            if (_this3.webglControl) {
+              //只有存在白名单中才处理
+              //颜色转换
 
-            _this3.context[mpname] = styleValue;
+              /*if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+              	styleValue = jmUtils.hexToRGBA(styleValue);
+              }*/
+              _this3.webglControl.setStyle(mpname, styleValue);
+            } else {
+              //只有存在白名单中才处理
+              //颜色转换
+              if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+                styleValue = _jmUtils.jmUtils.toColor(styleValue);
+              }
+
+              _this3.context[mpname] = styleValue;
+            }
           } else {
             switch (name) {
               //阴影样式
@@ -1167,7 +1174,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     value: function beginDraw() {
       this.getLocation(true); //重置位置信息
 
-      this.context.beginPath();
+      this.context.beginPath && this.context.beginPath(); //if(this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
     }
     /**
      * 结束控件绘制
@@ -1180,19 +1187,25 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     value: function endDraw() {
       //如果当前为封闭路径
       if (this.style.close) {
-        this.context.closePath();
+        //if(this.webglControl) this.webglControl.closePath();
+        this.context.closePath && this.context.closePath();
       }
 
-      if (this.style['fill']) {
-        if (this.webglControl) {
-          var bounds = this.getBounds();
-          this.webglControl.fill(bounds);
-        } else this.context.fill && this.context.fill();
+      var fill = this.style['fill'] || this.style['fillStyle'];
+
+      if (fill) {
+        /*if(this.webglControl) {
+        	const bounds = this.getBounds();
+        	this.webglControl.fill(bounds);
+        }*/
+        this.context.fill && this.context.fill();
       }
 
-      if (this.style['stroke'] || !this.style['fill'] && !this.is('jmGraph')) {
-        if (this.webglControl) this.webglControl.stroke();else this.context.stroke && this.context.stroke();
-      }
+      if (this.style['stroke'] || !fill && !this.is('jmGraph')) {
+        //if(this.webglControl) this.webglControl.stroke();
+        this.context.stroke && this.context.stroke();
+      } //if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
+
 
       this.needUpdate = false;
     }
@@ -1209,8 +1222,16 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       if (this.points && this.points.length > 0) {
         //获取当前控件的绝对位置
         var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
-        this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-        var len = this.points.length;
+        /*if(this.webglControl) {
+        	this.webglControl.setParentBounds(bounds);
+        	this.webglControl.draw([
+        		...this.points
+        	]);
+        }*/
+
+        if (this.context && this.context.moveTo) {
+          this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+          var len = this.points.length;
 
           for (var i = 1; i < len; i++) {
             var p = this.points[i]; //移至当前坐标
@@ -1862,7 +1883,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 exports.jmControl = exports["default"] = jmControl;
 ;
 
-},{"../lib/webgl/path.js":21,"./jmGradient.js":4,"./jmList.js":6,"./jmProperty.js":9,"./jmShadow.js":10,"./jmUtils.js":11}],3:[function(require,module,exports){
+},{"./jmGradient.js":4,"./jmList.js":6,"./jmProperty.js":9,"./jmShadow.js":10,"./jmUtils.js":11}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2306,7 +2327,12 @@ var jmGradient = /*#__PURE__*/function () {
       var sy2 = Number(y2) + bounds.top;
 
       if (this.type === 'linear') {
-        gradient = context.createLinearGradient(sx1, sy1, sx2, sy2);
+        if (control.mode === 'webgl' && control.webglControl) {
+          gradient = control.webglControl.createLinearGradient(x1, y1, x2, y2, bounds);
+          gradient.key = this.toString();
+        } else {
+          context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
+        }
       } else if (this.type === 'radial') {
         var r1 = this.r1 || 0;
         var r2 = this.r2;
@@ -2319,6 +2345,11 @@ var jmGradient = /*#__PURE__*/function () {
         if (_jmUtils.jmUtils.checkPercent(r2)) {
           r2 = _jmUtils.jmUtils.percentToNumber(r2);
           r2 = d * r2;
+        }
+
+        if (control.mode === 'webgl' && control.webglControl) {
+          gradient = control.webglControl.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
+          gradient.key = this.toString();
         } //offsetLine = Math.abs(r2 - r1);//二圆半径差
         else if (context.createRadialGradient) {
           gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
@@ -2427,14 +2458,14 @@ var jmGradient = /*#__PURE__*/function () {
       var str = this.type + '-gradient(';
 
       if (this.type == 'linear') {
-        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2);
+        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
       } else {
-        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.r1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2) + ' ' + this.r2.toFixed(2);
+        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
       } //颜色渐变
 
 
       this.stops.each(function (i, s) {
-        str += ',' + s.color + ' ' + s.offset.toFixed(2);
+        str += ',' + s.color + ' ' + s.offset;
       });
       return str + ')';
     }
@@ -2970,24 +3001,38 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         	w = w / this.scaleSize.x;
         	h = h / this.scaleSize.y;
         }*/
-      } //如果有指定背景，则等到draw再全屏绘制一次，也同样达到清除画布的功能
+      }
 
+      if (this.context.clearRect) {
+        if (this.style && this.style.fill) {
+          this.points = [{
+            x: 0,
+            y: 0
+          }, {
+            x: w,
+            y: 0
+          }, {
+            x: w,
+            y: h
+          }, {
+            x: 0,
+            y: h
+          }];
+          this.style.close = true; // 封闭填充
+        }
 
-      if (this.style && this.style.fill) {
-        this.points = [{
-          x: 0,
-          y: 0
-        }, {
-          x: w,
-          y: 0
-        }, {
-          x: w,
-          y: h
-        }, {
-          x: 0,
-          y: h
-        }];
-      } else if (this.context.clearRect) this.context.clearRect(0, 0, w, h);
+        this.context.clearRect(0, 0, w, h);
+      } else if (this.mode === 'webgl' && this.context.clear) {
+        var color = this.style && this.style.fill ? this.utils.hexToRGBA(this.style.fill) : {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0
+        };
+        this.context.clearColor(color.r, color.g, color.b, color.a); // 设置清空颜色缓冲时的颜色值
+
+        this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
+      }
     }
     /**
     * 设置画布样式，此处只是设置其css样式
@@ -3612,7 +3657,6 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
 
     _this = _super.call(this, params, t);
     _this.points = params && params.points ? params.points : [];
-    _this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];
     return _this;
   }
   /**
@@ -3632,22 +3676,6 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
     set: function set(v) {
       this.needUpdate = true;
       return this.property('points', v);
-    }
-    /**
-     * 顶点数组索引，对应points中的顶点
-     * @property polygonIndices
-     * @type {array} 
-     */
-
-  }, {
-    key: "polygonIndices",
-    get: function get() {
-      var s = this.property('polygonIndices');
-      return s;
-    },
-    set: function set(v) {
-      this.needUpdate = true;
-      return this.property('polygonIndices', v);
     }
   }]);
 
@@ -4768,9 +4796,15 @@ var jmUtils = /*#__PURE__*/function () {
   }, {
     key: "hexToRGBA",
     value: function hexToRGBA(hex) {
-      hex = this.trim(hex); //当为7位时，表示需要转为带透明度的rgba
+      if (typeof hex === 'string') hex = this.trim(hex);else return hex; // 如果缓存存在，则直接返回
 
-      if (hex[0] == '#') {
+      this.__hexToRGBA_Cache = this.__hexToRGBA_Cache || {};
+      if (this.__hexToRGBA_Cache[hex]) return this.__hexToRGBA_Cache[hex];
+      var res = hex; // 系统颜色
+
+      if (colorKeywords[res]) res = colorKeywords[res]; //当为7位时，表示需要转为带透明度的rgba
+
+      if (res[0] == '#') {
         var color = {
           a: 1
         };
@@ -4818,12 +4852,46 @@ var jmUtils = /*#__PURE__*/function () {
           color.g = this.hexToNumber(color.g || 0);
           color.b = this.hexToNumber(color.b || 0); //透明度
 
-          color.a = (this.hexToNumber(color.a) / 255).toFixed(4);
-          return color;
+          color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
+          res = color;
         }
       }
 
-      return hex;
+      if (typeof res === 'string') {
+        var m = res.match(/rgb(a)?\s*\(\s*([\d\.]+)\s*,\s*([\d\.]+)\s*,\s*([\d\.]+)\s*(,\s*[\d\.]+)?\s*\)/i);
+
+        if (m && m.length === 6) {
+          var _color = {
+            r: Number(m[2]),
+            g: Number(m[3]),
+            b: Number(m[4]),
+            a: Number(this.trimStart(m[5] || '1', ','))
+          };
+          res = _color;
+        }
+      }
+
+      return this.__hexToRGBA_Cache[hex] = res;
+    }
+    /**
+     * 把255的rgb值转为0-1的值
+     * @param {rgba} color 颜色
+     */
+
+  }, {
+    key: "rgbToDecimal",
+    value: function rgbToDecimal(color) {
+      color = this.clone(color);
+      color.r = this.byteToDecimal(color.r);
+      color.g = this.byteToDecimal(color.g);
+      color.b = this.byteToDecimal(color.b);
+      return color;
+    } //255值转为0-1的小数
+
+  }, {
+    key: "byteToDecimal",
+    value: function byteToDecimal(b) {
+      return b / 255;
     }
     /**
      * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
@@ -4843,10 +4911,17 @@ var jmUtils = /*#__PURE__*/function () {
         if (r[0] === '#' && (r.length === 4 || r.length === 7)) return r;
         var color = this.hexToRGBA(r);
         if (typeof color === 'string') return color;
-        r = color.r || r;
-        g = color.g || g;
-        b = color.b || b;
-        a = color.a || a;
+        r = typeof color.r !== 'undefined' ? color.r : r;
+        g = typeof color.g !== 'undefined' ? color.g : g;
+        b = typeof color.b !== 'undefined' ? color.b : b;
+        a = typeof color.a !== 'undefined' ? color.a : a;
+      }
+
+      if (r && _typeof(r) === 'object') {
+        g = r.g;
+        b = r.b;
+        a = r.a || 1;
+        r = r.r;
       }
 
       if (typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
@@ -5086,7 +5161,7 @@ var jmArc = /*#__PURE__*/function (_jmPath) {
 
 exports.jmArc = exports["default"] = jmArc;
 
-},{"../core/jmPath.js":8}],23:[function(require,module,exports){
+},{"../core/jmPath.js":8}],13:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -5310,7 +5385,7 @@ var jmArrow = /*#__PURE__*/function (_jmPath) {
 
 exports.jmArrow = exports["default"] = jmArrow;
 
-},{"../core/jmPath.js":8,"../core/jmUtils.js":11}],24:[function(require,module,exports){
+},{"../core/jmPath.js":8,"../core/jmUtils.js":11}],14:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -5404,7 +5479,7 @@ var jmArrowLine = /*#__PURE__*/function (_jmLine) {
 
 exports.jmArrowLine = exports["default"] = jmArrowLine;
 
-},{"./jmArrow.js":23,"./jmLine.js":30}],25:[function(require,module,exports){
+},{"./jmArrow.js":13,"./jmLine.js":20}],15:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -5576,7 +5651,7 @@ var jmBezier = /*#__PURE__*/function (_jmPath) {
 
 exports.jmBezier = exports["default"] = jmBezier;
 
-},{"../core/jmPath.js":8}],26:[function(require,module,exports){
+},{"../core/jmPath.js":8}],16:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -5706,7 +5781,7 @@ var jmCircle = /*#__PURE__*/function (_jmArc) {
 
 exports.jmCircle = exports["default"] = jmCircle;
 
-},{"./jmArc.js":22}],27:[function(require,module,exports){
+},{"./jmArc.js":12}],17:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -5866,7 +5941,7 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
 
 exports.jmHArc = exports["default"] = jmHArc;
 
-},{"./jmArc.js":22}],28:[function(require,module,exports){
+},{"./jmArc.js":12}],18:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -6135,6 +6210,7 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
         this.__img = src;
       }
 
+      if (this.__img) this.image = this.__img.src;
       return this.__img;
     }
   }]);
@@ -6144,7 +6220,7 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
 
 exports.jmImage = exports["default"] = jmImage;
 
-},{"../core/jmControl.js":2}],29:[function(require,module,exports){
+},{"../core/jmControl.js":2}],19:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -6331,17 +6407,19 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
     key: "testSize",
     value: function testSize() {
       if (this.__size) return this.__size;
-      this.context.save(); // 修改字体，用来计算
+      if (this.webglControl) this.__size = this.webglControl.testSize(this.text, this.style);else {
+        this.context.save && this.context.save(); // 修改字体，用来计算
 
         this.setStyle({
           font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
         }); //计算宽度
 
-      this.__size = this.context.measureText ? this.context.measureText(this.text) : {
-        width: 15
-      };
-      this.context.restore();
-      this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+        this.__size = this.context.measureText ? this.context.measureText(this.text) : {
+          width: 15
+        };
+        this.context.restore && this.context.restore();
+        this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+      }
       if (!this.width) this.width = this.__size.width;
       if (!this.height) this.height = this.__size.height;
       return this.__size;
@@ -6440,10 +6518,31 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
             this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
           }
 
-        if (this.style.border.left) {
-          this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-          this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-        } //如果指定了边框颜色
+          if (this.style.border.left) {
+            this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+            this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+          }
+        } else {
+          var points = [];
+
+          if (this.style.border.top) {
+            points.push(this.points[0]);
+            points.push(this.points[1]);
+          }
+
+          if (this.style.border.right) {
+            points.push(_objectSpread(_objectSpread({}, this.points[1]), {}, {
+              m: true
+            }));
+            points.push(this.points[2]);
+          }
+
+          if (this.style.border.bottom) {
+            points.push(_objectSpread(_objectSpread({}, this.points[2]), {}, {
+              m: true
+            }));
+            points.push(this.points[3]);
+          }
 
           if (this.style.border.left) {
             points.push(_objectSpread(_objectSpread({}, this.points[3]), {}, {
@@ -6452,8 +6551,7 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
             points.push(this.points[0]);
           }
 
-        if (this.style.border.style) {
-          this.context.restore();
+          points.length && this.webglControl && this.webglControl.stroke(points);
         }
       }
     }
@@ -6471,7 +6569,7 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
 
 exports.jmLabel = exports["default"] = jmLabel;
 
-},{"../core/jmControl.js":2}],30:[function(require,module,exports){
+},{"../core/jmControl.js":2}],20:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -6626,7 +6724,7 @@ var jmLine = /*#__PURE__*/function (_jmPath) {
 
 exports.jmLine = exports["default"] = jmLine;
 
-},{"../core/jmPath.js":8}],31:[function(require,module,exports){
+},{"../core/jmPath.js":8}],21:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -6746,7 +6844,7 @@ var jmPrismatic = /*#__PURE__*/function (_jmPath) {
 
 exports.jmPrismatic = exports["default"] = jmPrismatic;
 
-},{"../core/jmPath.js":8}],32:[function(require,module,exports){
+},{"../core/jmPath.js":8}],22:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -7012,7 +7110,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
 
 exports.jmRect = exports["default"] = jmRect;
 
-},{"../core/jmPath.js":8,"./jmArc.js":22,"./jmLine.js":30}],33:[function(require,module,exports){
+},{"../core/jmPath.js":8,"./jmArc.js":12,"./jmLine.js":20}],23:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -7367,5 +7465,5 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
 
 exports.jmResize = exports["default"] = jmResize;
 
-},{"./jmRect.js":32}]},{},[1]);
+},{"./jmRect.js":22}]},{},[1]);
 var _r=_m(1);_g.jmGraph=_r;return _r;})})(typeof window!=='undefined'?window:(typeof global!=='undefined'?global:(typeof self!=='undefined'?self:this)));

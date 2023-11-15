@@ -20,13 +20,13 @@
     <button id="btn_play">播放</button> <br />
     <span id="txtstatus"></span><br />
 </div>
-<canvas id="sound_canvas" width="600" height="400"></canvas>
+<canvas id="sound_canvas"></canvas>
 <script type="module">
 	import jmGraph from "../index.js";
 	(function(){
 		//初始化jmgraph
         var graph = new jmGraph('sound_canvas', {
-            mode: '2d',
+            mode: 'webgl',
             width: window.innerWidth,
 		    height: window.innerHeight * 0.95,
         });

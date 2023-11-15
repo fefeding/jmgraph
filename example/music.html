@@ -14,6 +14,7 @@
 <body>
 <span>请选择音频文件</span> <br />
 <input type="file" id="my_sound" /> <br />
+<button id="btn_play">播放</button>
 <span id="txtstatus"></span><br />
 <canvas id='sound_canvas' width="600" height="400"></canvas>
 <script type="module">
@@ -34,22 +35,24 @@
 			alert('不支持');
 			return;
 		}
-		var audioContext=new window.AudioContext();
+		var audioContext = null;
 		//音频容器
-		var audioBufferSouceNode,analyser;	
+		var audioBufferSouceNode, analyser, currentAudioData = null;	
 
 		//读取音频文件
 		window.readSound = function(file) {
 			var fr = new FileReader();
 			fr.onload = function(e) {
 				//解码文件
-				decodeAudio(e.target.result);
+				//decodeAudio(e.target.result);
+                currentAudioData = e.target.result;
 			}
 			fr.readAsArrayBuffer(file);
 		}
 
 		//解码
 		function decodeAudio(data) {
+            if(!audioContext) audioContext = new window.AudioContext();
 				log('解码中...');
 			audioContext.decodeAudioData(data, function(buffer){
 				log('解码成功');
@@ -73,6 +76,7 @@
 			createAnalyser(audioBufferSouceNode);
 			//开始播放
 			audioBufferSouceNode.start(0);
+            log('播放中');
 		}
 
 		//生成频谱分析
@@ -157,20 +161,29 @@
 		bindEvent();
 
 		log('加载中mp3...');
-		loadSoundFile('https://raw.githubusercontent.com/jiamao/my_doc/master/demo/%E4%B8%AA%E6%80%A7%E6%95%88%E6%9E%9C/%E9%98%BF%E8%A1%A3%E8%8E%AB-%E9%98%BF%E5%90%89%E5%A4%AA%E7%BB%84%E5%90%88.mp3', function(buffer) {
-			decodeAudio(buffer);
+		loadSoundFile('data/ringing_short.mp3', function(buffer) {
+			//decodeAudio(buffer);
+            currentAudioData = buffer;
+            log('加载完成');
 		});
+
+        function bindEvent() {
+            //选择文件
+            document.getElementById('my_sound').onchange = function(e) {
+                if(this.files.length) {
+                    var file = this.files[0];
+                    window.readSound(file);
+                }
+            }
+            document.getElementById('btn_play').onclick = function(e) {
+                if(currentAudioData) {
+                    decodeAudio(currentAudioData);
+                }
+            }
+        }
 	})();
 
-	function bindEvent() {
-		//选择文件
-		document.getElementById('my_sound').onchange = function(e) {
-			if(this.files.length) {
-				var file = this.files[0];
-				window.readSound(file);
-			}
-		}
-	}
+
 	//获取远程音频文件
 	function loadSoundFile(url,callback) {
 	    var request = new XMLHttpRequest(); 

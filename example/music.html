@@ -20,13 +20,12 @@
     <button id="btn_play">播放</button> <br />
     <span id="txtstatus"></span><br />
 </div>
-<canvas id="sound_canvas" width="600" height="400"></canvas>
+<canvas id="sound_canvas"></canvas>
 <script type="module">
 	import jmGraph from "../index.js";
 	(function(){
 		//初始化jmgraph
         var graph = new jmGraph('sound_canvas', {
-            mode: '2d',
             width: window.innerWidth,
 		    height: window.innerHeight * 0.95,
         });
@@ -125,7 +124,7 @@
             // gradient.addColorStop(0.5, '#B2F70D');
                 //gradient.addColorStop(0, '#D6FA03');
                 //graph.context.fillStyle = gradient;
-                var gradient = graph.createLinearGradient(0, 0, 0, '100%', [
+                /*var gradient = graph.createLinearGradient(0, 0, 0, '100%', [
                     {
                         offset: 1,
                         color: '#0D8E21'
@@ -138,7 +137,7 @@
                         offset: 0,
                         color: '#D6FA03'
                     }
-                ]);
+                ]);*/
                 var perh = graph.height / 300;
                 for(var i=0;i<array.length;i++) {
                     var h = perh * array[i];
@@ -155,7 +154,8 @@
                             height: h,
                             style: {
                                 //stroke: 'red',
-                                fill: gradient
+                                // linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...)
+                                fill: 'linear-gradient(0 0 0 100%, #0D8E21 1, #B2F70D 0.5, #D6FA03 0)'
                             }
                         });
                         graph.children.add(bar);

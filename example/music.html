@@ -48,8 +48,8 @@
 			var fr = new FileReader();
 			fr.onload = function(e) {
 				//解码文件
-				//decodeAudio(e.target.result);
-                currentAudioData = e.target.result;
+				decodeAudio(e.target.result);
+                //currentAudioData = e.target.result;
 			}
 			fr.readAsArrayBuffer(file);
 		}

@@ -818,14 +818,15 @@ export default class jmControl extends jmProperty {
 			this.context.closePath && this.context.closePath();
 		}
 		
-		if(this.style['fill']) {
+		const fill = this.style['fill'] || this.style['fillStyle'];
+		if(fill) {
 			/*if(this.webglControl) {
 				const bounds = this.getBounds();
 				this.webglControl.fill(bounds);
 			}*/
 			this.context.fill && this.context.fill();
 		}
-		if(this.style['stroke'] || (!this.style['fill'] && !this.is('jmGraph'))) {
+		if(this.style['stroke'] || (!fill && !this.is('jmGraph'))) {
 			//if(this.webglControl) this.webglControl.stroke();
 			this.context.stroke && this.context.stroke();
 		}

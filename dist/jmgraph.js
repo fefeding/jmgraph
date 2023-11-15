@@ -1191,7 +1191,9 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         this.context.closePath && this.context.closePath();
       }
 
-      if (this.style['fill']) {
+      var fill = this.style['fill'] || this.style['fillStyle'];
+
+      if (fill) {
         /*if(this.webglControl) {
         	const bounds = this.getBounds();
         	this.webglControl.fill(bounds);
@@ -1199,7 +1201,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         this.context.fill && this.context.fill();
       }
 
-      if (this.style['stroke'] || !this.style['fill'] && !this.is('jmGraph')) {
+      if (this.style['stroke'] || !fill && !this.is('jmGraph')) {
         //if(this.webglControl) this.webglControl.stroke();
         this.context.stroke && this.context.stroke();
       } //if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
@@ -2203,6 +2205,18 @@ var _jmUtils = require("./jmUtils.js");
 
 var _jmList = require("./jmList.js");
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2225,7 +2239,14 @@ var jmGradient = /*#__PURE__*/function () {
 
     if (opt && _typeof(opt) == 'object') {
       for (var k in opt) {
+        if (k === 'stops') continue;
         this[k] = opt[k];
+      }
+
+      if (opt.stops && Array.isArray(opt.stops)) {
+        var _this$stops;
+
+        (_this$stops = this.stops).push.apply(_this$stops, _toConsumableArray(opt.stops));
       }
     } //解析字符串格式
     //linear-gradient(direction, color-stop1, color-stop2, ...);
@@ -2888,12 +2909,14 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "createLinearGradient",
     value: function createLinearGradient(x1, y1, x2, y2) {
+      var stops = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
       var gradient = new _jmGradient.jmGradient({
         type: 'linear',
         x1: x1,
         y1: y1,
         x2: x2,
-        y2: y2
+        y2: y2,
+        stops: stops
       });
       return gradient;
     }
@@ -2913,6 +2936,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
   }, {
     key: "createRadialGradient",
     value: function createRadialGradient(x1, y1, r1, x2, y2, r2) {
+      var stops = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : [];
       var gradient = new _jmGradient.jmGradient({
         type: 'radial',
         x1: x1,
@@ -2920,7 +2944,8 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         r1: r1,
         x2: x2,
         y2: y2,
-        r2: r2
+        r2: r2,
+        stops: stops
       });
       return gradient;
     }

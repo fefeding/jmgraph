@@ -13,7 +13,11 @@ export default class jmGradient {
 
 		if(opt && typeof opt == 'object') {
 			for(let k in opt) {
+				if(k === 'stops') continue;
 				this[k] = opt[k];
+			}
+			if(opt.stops && Array.isArray(opt.stops)) {
+				this.stops.push(...opt.stops);
 			}
 		}
 		//解析字符串格式

@@ -3,3 +3,4 @@
 *.jpg
 ._config.yml
 .travis.yml
+node_modules

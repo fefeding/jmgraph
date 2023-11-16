@@ -26,6 +26,7 @@
 	(function(){
 		//初始化jmgraph
         var graph = new jmGraph('sound_canvas', {
+            mode: '2d',
             width: window.innerWidth,
 		    height: window.innerHeight * 0.95,
         });
@@ -115,37 +116,26 @@
                 //获取频率能量值
                 var array = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(array);
+                var arrper = 10;
+                var count = Math.floor(array.length / arrper);
                 //每个柱子的宽度
-                var w = graph.width / array.length;
+                var w = graph.width / count;
 
-                //定义一个渐变样式用于画图
-                //var gradient = graph.context.createLinearGradient(0, 0, 0, graph.height);
-                //gradient.addColorStop(1, '#0D8E21');
-            // gradient.addColorStop(0.5, '#B2F70D');
-                //gradient.addColorStop(0, '#D6FA03');
-                //graph.context.fillStyle = gradient;
-                /*var gradient = graph.createLinearGradient(0, 0, 0, '100%', [
-                    {
-                        offset: 1,
-                        color: '#0D8E21'
-                    },
-                    {
-                        offset: 0.5,
-                        color: '#B2F70D'
-                    },
-                    {
-                        offset: 0,
-                        color: '#D6FA03'
-                    }
-                ]);*/
                 var perh = graph.height / 300;
-                for(var i=0;i<array.length;i++) {
-                    var h = perh * array[i];
+
+                for(var i=0;i<count; i++) {
+                    var start = i*arrper;
+                    var end = start + arrper;
+                    var arr = array.slice(start, end);
+                    var sum = 0;
+                    arr.forEach(p=>sum+=p);
+
+                    var h = perh * sum/arr.length;
                     var bar = graph.children.get(i);
                     var y = graph.height - h;
 
                     if(!bar)  {
-                        var x = i * w;
+                        var x = i * (w + 4);
                         bar = graph.createShape('rect', {
                             position: {
                                 x, y
@@ -153,7 +143,7 @@
                             width: w,
                             height: h,
                             style: {
-                                //stroke: 'red',
+                                //stroke: '#cccccc',
                                 // linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...)
                                 fill: 'linear-gradient(0 0 0 100%, #0D8E21 1, #B2F70D 0.5, #D6FA03 0)'
                             }

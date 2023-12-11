@@ -417,38 +417,32 @@ export default class jmControl extends jmProperty {
 						}
 						//平移
 						case 'translate' : {
-							this.context.translate && this.context.translate(styleValue.x, styleValue.y);
 							break;
 						}
 						//旋转
 						case 'rotation' : {	
-							if(!styleValue.angle) break;							
+							if(typeof styleValue.angle === 'undefined') break;	
+							styleValue = this.getRotation(styleValue);
 							//旋 转先移位偏移量
 							let tranX = 0;
 							let tranY = 0;
 							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
 							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							if(styleValue.point) {
-								let bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
-								styleValue = this.getRotation(styleValue);
+							if(styleValue.x || styleValue.y) {
+								const bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
 								
-								tranX = styleValue.rotateX + bounds.left;
-								tranY = styleValue.rotateY + bounds.top;	
+								tranX = styleValue.x + bounds.left;
+								tranY = styleValue.y + bounds.top;	
 							}
 												
 							if(tranX!=0 || tranY != 0) {
-								//this.context.translate && this.context.translate(tranX,tranY);
-								__setStyle({
-									x: tranX,
-									y: tranY
-								}, 'translate');
+								this.context.translate && this.context.translate(tranX, tranY);
 							}
+							
 							this.context.rotate(styleValue.angle);
+
 							if(tranX!=0 || tranY != 0) {
-								__setStyle({
-									x: -tranX,
-									y: -tranY
-								}, 'translate');
+								this.context.translate && this.context.translate(-tranX, -tranY);
 							};
 							break;
 						}
@@ -529,8 +523,7 @@ export default class jmControl extends jmProperty {
 			}
 		}
 		else if(this.points && this.points.length > 0) {		
-			for(let i in this.points) {
-				let p = this.points[i];
+			for(const p of this.points) {
 				if(typeof rect.left === 'undefined' || rect.left > p.x) {
 					rect.left = p.x;
 				}
@@ -561,6 +554,7 @@ export default class jmControl extends jmProperty {
 		if(!rect.bottom) rect.bottom = 0; 
 		rect.width = rect.right - rect.left;
 		rect.height = rect.bottom - rect.top;
+		
 		return this.bounds=rect;
 	}
 
@@ -585,7 +579,7 @@ export default class jmControl extends jmProperty {
 		local.width = this.width;
 		local.height = this.height;
 
-		let margin = jmUtils.clone(this.style.margin, {});
+		const margin = jmUtils.clone(this.style.margin, {});
 		margin.left = (margin.left || 0);
 		margin.top = (margin.top || 0);
 		margin.right = (margin.right || 0);
@@ -601,40 +595,47 @@ export default class jmControl extends jmProperty {
 			local.top = margin.top;
 		}
 
-		if(!this.parent) return local;//没有父节点则直接返回
-		let parentBounds = this.parent.getBounds();	
+		if(this.parent) {
+			const parentBounds = this.parent.getBounds();	
 
-		//处理百分比参数
-		if(jmUtils.checkPercent(local.left)) {
-			local.left = jmUtils.percentToNumber(local.left) * parentBounds.width;
-		}
-		if(jmUtils.checkPercent(local.top)) {
-			local.top = jmUtils.percentToNumber(local.top) * parentBounds.height;
-		}
-		
-		//如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
-		if(jmUtils.checkPercent(local.width)) {
-			local.width = jmUtils.percentToNumber(local.width) * parentBounds.width;
-		}
-		if(jmUtils.checkPercent(local.height)) {
-			local.height = jmUtils.percentToNumber(local.height) * parentBounds.height;
-		}
-		//处理中心点
-		if(local.center) {
 			//处理百分比参数
-			if(jmUtils.checkPercent(local.center.x)) {
-				local.center.x = jmUtils.percentToNumber(local.center.x) * parentBounds.width;
+			if(jmUtils.checkPercent(local.left)) {
+				local.left = jmUtils.percentToNumber(local.left) * parentBounds.width;
 			}
-			if(jmUtils.checkPercent(local.center.y)) {
-				local.center.y = jmUtils.percentToNumber(local.center.y) * parentBounds.height;
+			if(jmUtils.checkPercent(local.top)) {
+				local.top = jmUtils.percentToNumber(local.top) * parentBounds.height;
+			}
+			
+			//如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
+			if(jmUtils.checkPercent(local.width)) {
+				local.width = jmUtils.percentToNumber(local.width) * parentBounds.width;
+			}
+			if(jmUtils.checkPercent(local.height)) {
+				local.height = jmUtils.percentToNumber(local.height) * parentBounds.height;
+			}
+			//处理中心点
+			if(local.center) {
+				//处理百分比参数
+				if(jmUtils.checkPercent(local.center.x)) {
+					local.center.x = jmUtils.percentToNumber(local.center.x) * parentBounds.width;
+				}
+				if(jmUtils.checkPercent(local.center.y)) {
+					local.center.y = jmUtils.percentToNumber(local.center.y) * parentBounds.height;
+				}
+			}
+			if(local.radius) {
+				//处理百分比参数
+				if(jmUtils.checkPercent(local.radius)) {
+					local.radius = jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
+				}
 			}
 		}
-		if(local.radius) {
-			//处理百分比参数
-			if(jmUtils.checkPercent(local.radius)) {
-				local.radius = jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
-			}
-		}
+		// 如果有偏移，则加上
+		/*const translate = this.getTranslate();
+		if(translate) {
+			local.left += translate.x;
+			local.top += translate.y;
+		}*/
 		return local;
 	}
 
@@ -642,32 +643,51 @@ export default class jmControl extends jmProperty {
 	 * 获取当前控制的旋转信息
 	 * @returns {object} 旋转中心和角度
 	 */
-	getRotation(rotation) {
+	getRotation(rotation, bounds = null) {
 		rotation = rotation || this.style.rotation;
 		if(!rotation) {
 			//如果本身没有，则可以继承父级的
 			rotation = this.parent && this.parent.getRotation?this.parent.getRotation():null;
 			//如果父级有旋转，则把坐标转换为当前控件区域
 			if(rotation) {
-				let bounds = this.getBounds();
-				rotation.rotateX -= bounds.left;
-				rotation.rotateY -= bounds.top;
+				bounds = bounds || this.getBounds();
+				rotation.x -= bounds.left;
+				rotation.y -= bounds.top;
 			}
 		}
 		else {
-			let bounds = this.getBounds();
-			rotation.rotateX = rotation.point.x;
-			if(jmUtils.checkPercent(rotation.rotateX)) {
-				rotation.rotateX  = jmUtils.percentToNumber(rotation.rotateX) * bounds.width;
+			bounds = bounds || this.getBounds();
+			if(typeof rotation.x === 'undefined') rotation.x = '50%';
+			if(typeof rotation.y === 'undefined') rotation.y = '50%';
+			if(jmUtils.checkPercent(rotation.x)) {
+				rotation.x  = jmUtils.percentToNumber(rotation.x) * bounds.width;
 			}
-
-			rotation.rotateY = rotation.point.y;
-			if(jmUtils.checkPercent(rotation.rotateY)) {
-				rotation.rotateY  = jmUtils.percentToNumber(rotation.rotateY) * bounds.height;
+			if(jmUtils.checkPercent(rotation.y)) {
+				rotation.y  = jmUtils.percentToNumber(rotation.y) * bounds.height;
 			}
 		}
 		return rotation;
 
+	}
+
+	// 计算位移偏移量
+	getTranslate(translate, bounds = null) {
+		translate = translate || this.style.translate;
+		if(!translate) return {x: 0, y: 0};
+		const result = {
+			x: translate.x || 0,
+			y: translate.y || 0
+		}
+		
+		if(jmUtils.checkPercent(result.x)) {
+			if(!bounds && this.parent) bounds = this.parent.getBounds();
+			result.x  = jmUtils.percentToNumber(result.x) * bounds.width;
+		}
+		if(jmUtils.checkPercent(result.y)) {
+			if(!bounds && this.parent) bounds = this.parent.getBounds();
+			result.y  = jmUtils.percentToNumber(result.y) * bounds.height;
+		}
+		return result;
 	}
 
 	/**
@@ -1044,8 +1064,8 @@ export default class jmControl extends jmProperty {
 			return true;
 		}
 		
-		let bounds = this.getBounds();	
-		let rotation = this.getRotation();//获取当前旋转参数
+		const bounds = this.getBounds();	
+		const rotation = this.getRotation(null, bounds);//获取当前旋转参数
 		let ps = this.points;
 		//如果不是路径组成，则采用边界做为顶点
 		if(!ps || !ps.length) {
@@ -1065,27 +1085,27 @@ export default class jmControl extends jmProperty {
 				ps = jmUtils.clone(ps, true);//拷贝一份数据
 				//rotateX ,rotateY 是相对当前控件的位置
 				ps = jmUtils.rotatePoints(ps, {
-					x: rotation.rotateX + bounds.left,
-					y: rotation.rotateY + bounds.top
+					x: rotation.x + bounds.left,
+					y: rotation.y + bounds.top
 				}, rotation.angle);
 			}
 			//如果当前路径不是实心的
 			//就只用判断点是否在边上即可	
 			if(ps.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
 				let i = 0;
-				let count = ps.length;
+				const count = ps.length;
 				for(let j = i+1; j <= count; j = (++i + 1)) {
 					//如果j超出最后一个
 					//则当为封闭图形时跟第一点连线处理.否则直接返回false
 					if(j == count) {
 						if(this.style.close) {
-							let r = jmUtils.pointInPolygon(p,[ps[i],ps[0]], pad);
+							const r = jmUtils.pointInPolygon(p,[ps[i],ps[0]], pad);
 							if(r) return true;
 						}
 					} 
 					else {
 						//判断是否在点i,j连成的线上
-						let s = jmUtils.pointInPolygon(p,[ps[i],ps[j]], pad);
+						const s = jmUtils.pointInPolygon(p,[ps[i],ps[j]], pad);
 						if(s) return true;
 					}			
 				}
@@ -1093,7 +1113,7 @@ export default class jmControl extends jmProperty {
 				if(!this.style['fill']) return false;
 			}
 
-			let r = jmUtils.pointInPolygon(p,ps, pad);		
+			const r = jmUtils.pointInPolygon(p,ps, pad);		
 			return r;
 		}
 

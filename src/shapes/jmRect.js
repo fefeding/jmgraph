@@ -65,6 +65,7 @@ export default class jmRect extends jmPath {
 		
 		rect.width = rect.right - rect.left;
 		rect.height = rect.bottom - rect.top;
+
 		return this.bounds=rect;
 	}
 	

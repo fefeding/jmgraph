@@ -24,8 +24,8 @@
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
 		var g = jmGraph.create('mycanvas_container', {
-			width: 1800,
-			height: 1600,
+			width: 800,
+			height: 600,
 			style: {
 				//fill: '#000'
 			},
@@ -40,6 +40,9 @@
 			var style = {
 				//src: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
 				//stroke: 'red',
+				rotation: {
+					angle: Math.PI / 2
+				},
 			};
 			style.shadow = '0,0,20,#fff';
 			//style.opacity = 0.2;		
@@ -69,7 +72,7 @@
                 sourceWidth: 192,          //截取宽度，如果不填则用原图宽
                 sourceHeight: 192            //截取高度，如果不填则用原图高
 			});			
-			g.children.add(img2);	
+			//g.children.add(img2);	
 			img2.canMove(true);
 
 			/*var style = {

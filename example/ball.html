@@ -32,7 +32,8 @@
 <script type="module">
 		import jmGraph from "../index.js";
 			var graph = new jmGraph('mycanvas', {
-				mode: '2d'
+				mode: 'webgl',
+				autoRefresh: true
 			});
 			//初始化jmgraph
 			/*jmGraph('mycanvas').then((g)=>{
@@ -45,12 +46,6 @@
 
 			refreshBall(graph);
 
-			//实时更新画布
-			function update() {
-				if(graph && graph.needUpdate) graph.redraw();
-				graph.utils.requestAnimationFrame(update);
-			}
-			update();
 
 			
 			function refreshBall(g) {
@@ -186,10 +181,9 @@
 						y = Math.min(maxY,y);
 						b1.y(y);						
 					}
-					graph.needUpdate = true;
-					g.utils.requestAnimationFrame(animate);				
+					graph.needUpdate = true;			
 				};
-				animate();		
+				g.on('update', animate);
 			}
 			function resize() {
 				if(graph) {

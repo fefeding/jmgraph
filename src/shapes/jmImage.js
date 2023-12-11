@@ -140,10 +140,18 @@ export default class jmImage extends jmControl {
 		p.left += bounds.left;
 		p.top += bounds.top;
 
+		// 如果指定了宽度，但没有指定高宽，则等比缩放
+		if(p.width && !p.height) {
+			p.height = p.width / img.width * img.height;
+		}
+		else if(p.height && !p.width) {
+			p.width = p.height / img.height * img.width;
+		}
+
 		if(sp || typeof sw != 'undefined' || typeof sh != 'undefined') {	
 			if(typeof sw == 'undefined') sw= p.width || img.width || 0;
 			if(typeof sh == 'undefined') sh= p.height || img.height || 0;
-			sp = sp || {x:0, y:0};
+			sp = sp || {x:0, y:0};			
 
 			if(p.width && p.height) ctx.drawImage(img,sp.x,sp.y,sw,sh,p.left,p.top,p.width,p.height);
 			else if(p.width) {

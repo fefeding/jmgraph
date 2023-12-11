@@ -441,9 +441,20 @@ export default class jmControl extends jmProperty {
 								tranY = styleValue.rotateY + bounds.top;	
 							}
 												
-							if(tranX!=0 || tranY != 0) this.context.translate && this.context.translate(tranX,tranY);
+							if(tranX!=0 || tranY != 0) {
+								//this.context.translate && this.context.translate(tranX,tranY);
+								__setStyle({
+									x: tranX,
+									y: tranY
+								}, 'translate');
+							}
 							this.context.rotate(styleValue.angle);
-							if(tranX!=0 || tranY != 0) this.context.translate && this.context.translate(-tranX,-tranY);
+							if(tranX!=0 || tranY != 0) {
+								__setStyle({
+									x: -tranX,
+									y: -tranY
+								}, 'translate');
+							};
 							break;
 						}
 						case 'transform' : {

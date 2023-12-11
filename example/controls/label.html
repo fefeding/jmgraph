@@ -17,18 +17,20 @@
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
+		<canvas id="textureCanvas"></canvas>
 	</body>
 	<script type="module">	
 		import { jmGraph } from "../../index.js";
 		import jmLabel from '../../src/shapes/jmLabel.js';
 
         var container = document.getElementById('mycanvas_container');
-        
+        const textureCanvas = document.getElementById('textureCanvas');
+
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
 		var g = jmGraph.create('mycanvas_container', {
 			width: 800,
 			height: 600,
-			mode: '2d',
+			mode: 'webgl',
 			style: {
 				fill: '#000'
 			}
@@ -38,8 +40,8 @@
 		function init(g){
 			//g.style.fill = '#000'; //画布背景
 			var style = {
-                stroke: '#effaaa',
-                fill: '#fff',
+                stroke: 'green',
+                fill: 'yellow',
 				textAlign: 'right',
                 textBaseline: 'middle',
                 fontFamily: "Arial",

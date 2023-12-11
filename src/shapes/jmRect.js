@@ -51,7 +51,9 @@ export default class jmRect extends jmPath {
 	 * @method getBounds
 	 * @return {bound} 当前控件边界
 	 */
-	getBounds() {
+	getBounds(isReset) {
+		//如果当次计算过，则不重复计算
+		if(this.bounds && !isReset) return this.bounds;
 		let rect = {};
 		this.initPoints();
 		let p = this.getLocation();
@@ -63,7 +65,7 @@ export default class jmRect extends jmPath {
 		
 		rect.width = rect.right - rect.left;
 		rect.height = rect.bottom - rect.top;
-		return rect;
+		return this.bounds=rect;
 	}
 	
 	/**

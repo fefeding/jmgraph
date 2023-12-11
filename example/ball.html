@@ -77,10 +77,10 @@
 					return {x:x,y:y};
 				}
 
-				for(var i=0;i<10;i++) {
+				for(var i=0;i<100;i++) {
 					var radius = Math.random() * 10 + 8;
 					var styletmp = graph.util.clone(style);
-					styletmp.fill = graph.createRadialGradient(radius,radius,0,radius,radius,radius);
+					styletmp.fill = graph.createRadialGradient('50%','50%',0,'50%','50%',radius);
 					var rr1 = Math.floor(Math.random() * 255);
 					var gg1 = Math.floor(Math.random() * 255);
 					var bb1 = Math.floor(Math.random() * 255);
@@ -106,8 +106,8 @@
 				styletmp.fill.addStop(1, graph.util.toColor(255,149,255));	
 				var p = createPosition(radius,0);
 				var b = new ball(graph,p.x,p.y,radius,styletmp);
-				b.vx = 6;
-				b.vy = 4;
+				b.vx = 106;
+				b.vy = 104;
 				balls.push(b);
 
 				function animate() {

@@ -1,84 +1,5 @@
 import WebglBase from './base.js';
 
-// 把canvas坐标转为webgl坐标系
-const convertPointSource = `
-    vec4 translatePosition(vec4 point, float x, float y) {
-        point.x = (point.x-x)/x;
-        point.y = (y-point.y)/y;
-        return point;
-    }`;
-// 把纹理的canvas坐标转为纹理的坐标系
-const convertTexturePosition = `
-    vec2 translateTexturePosition(in vec2 point, vec4 bounds) {
-        point.x = (point.x-bounds.x)/bounds.z; // 离左上角位置的X长比上纹理宽 0-1
-        point.y = 1.0-(point.y-bounds.y)/bounds.w; // 离左上角位置的Y长比上高，因为纹理坐标是左下角起，所以要用1-
-        return point;
-    }`;
-
-// path顶点着色器源码
-const pathVertexSource = `
-    attribute vec4 a_position;
-    attribute vec4 a_color;
-    attribute vec2 a_text_coord;
-    uniform vec2 a_center_point; // 当前canvas的中心位置
-    uniform float a_point_size; // 点的大小
-    uniform int a_type;
-    varying vec4 v_color;
-    varying vec2 v_text_coord;
-    varying float v_type;
-
-    ${convertPointSource}
-
-    void main() {
-        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;
-        v_type = float(a_type);
-        vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);
-        gl_Position = pos;
-        v_color = a_color;
-        if(a_type == 2) {
-            v_text_coord = a_text_coord;
-        }
-    }
-`;
-// path 片段着色器源码
-const pathFragmentSource = `
-    precision highp float;
-    uniform sampler2D u_sample;
-    uniform vec4 v_texture_bounds; // 纹理的左上坐标和大小 x,y,z,w
-    uniform vec4 v_single_color;
-    varying float v_type;
-    varying vec4 v_color;
-    varying vec2 v_text_coord;
-
-    ${convertTexturePosition}
-
-    void main() {
-        // 如果是fill，则直接填充颜色
-        if(v_type == 1.0) {
-            gl_FragColor = v_single_color;
-        }
-        // 渐变色
-        else if(v_type == 3.0) {
-            gl_FragColor = v_color;
-        }
-        else if(v_type == 2.0) {
-            vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);
-            gl_FragColor = texture2D(u_sample, pos);
-        }
-        else {
-            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
-            //根据距离设置片元
-            if(r <= 0.5){
-                // 方形区域片元距离几何中心半径小于0.5，像素颜色设置红色
-                gl_FragColor = v_single_color;
-            }else {
-                // 方形区域距离几何中心半径不小于0.5的片元剪裁舍弃掉：
-                discard;
-            }
-        }
-    }
-`;
-
 // path 绘制类
 class WebglPath extends WebglBase {
     constructor(graph, option) {
@@ -86,49 +7,8 @@ class WebglPath extends WebglBase {
         // 是否是规则的，不规则的处理方式更为复杂和耗性能
         this.isRegular = option.isRegular || false;
         this.needCut = option.needCut || false;
-
+        this.control = option.control;
         this.points = [];
-    }
-
-    // i当前程序
-    get program() {
-        // 默认所有path用同一个编译好的program
-        return this.graph.context.pathProgram || (this.graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
-    }
-
-    // 设置样式
-    setStyle(style = this.style, value = '') {
-        this.useProgram();
-
-        if(typeof style === 'string') {
-            const obj = {};
-            obj[style] = value;
-            style = obj;
-        }
-       
-        // 设置线条颜色或填充色
-        if(style.strokeStyle) {
-            let color = style.strokeStyle;
-            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-            this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
-            delete style.strokeStyle;
-        }
-        else if(style.fillStyle) {
-            let color = style.fillStyle;
-            if(this.isGradient(color)) {
-                this.style.fillStyle = color;
-            }
-            else {
-                if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-                this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
-            }
-            delete style.fillStyle;
-        }        
-
-        this.style = {
-            ...this.style,
-            ...style
-        }
     }
 
     setParentBounds(parentBounds = this.parentAbsoluteBounds) {
@@ -143,7 +23,7 @@ class WebglPath extends WebglBase {
     setFragColor(color) {
         
         if(!Array.isArray(color)) {
-            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
+            color = this.convertColor(color);
             if(typeof color.a === 'undefined') color.a = 1;
             this.context.uniform4f(this.program.uniforms.v_single_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
             return null;
@@ -151,7 +31,7 @@ class WebglPath extends WebglBase {
 
         const colorData = [];
         for(let c of color) {
-            if(typeof c === 'string') c = this.graph.utils.hexToRGBA(c);
+            c = this.convertColor(c);
             if(typeof c.a === 'undefined') c.a = 1;
             colorData.push(c.r, c.g, c.b, c.a * this.style.globalAlpha);
         }
@@ -219,8 +99,8 @@ class WebglPath extends WebglBase {
                 const x = start.x + cos * l;
                 const y = start.y + sin * l;
                 points.push({
-                    x: Number(x.toFixed(2)), 
-                    y: Number(y.toFixed(2))
+                    x, 
+                    y
                 });
             }
         }
@@ -364,8 +244,8 @@ class WebglPath extends WebglBase {
         const dy= t * (line1.end.y - line1.start.y);
 
         return { 
-            x: Number((line1.start.x + dx).toFixed(2)), 
-            y: Number((line1.start.y + dy).toFixed(2))
+            x: line1.start.x + dx, 
+            y: line1.start.y + dy
         };
     }
 
@@ -481,6 +361,26 @@ class WebglPath extends WebglBase {
         return polygons;
     }
 
+    // 分割成一个个规则的三角形，不规则的多边形不全割的话纹理就会没法正确覆盖
+    getTriangles(points) {
+        
+        //this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
+        //const key = JSON.stringify(points);
+        //if(this.trianglesCache[key]) return this.trianglesCache[key];
+
+        const res = [];
+        const polygons = this.getPolygon(points);                
+        if(polygons.length) {            
+            for(const polygon of polygons) {
+                // 需要分割三角形，不然填充会有问题
+                const triangles = this.earCutPointsToTriangles(polygon);
+                res.push(...triangles);
+            }   
+        }
+        //this.trianglesCache[key] = res;
+        return res;
+    }
+
     // 画线条
     stroke(points = this.points, color = this.style.strokeStyle, lineWidth = this.style.lineWidth) {
         if(!points || !points.length) return;
@@ -500,11 +400,10 @@ class WebglPath extends WebglBase {
             this.context.uniform1i(this.program.uniforms.a_type.location, points.length === 1? 4 :1);
         }
         if(points && points.length) {
-            const regular = this.isRegular && (lineWidth == 1);
+            const regular = lineWidth <= 1.2;
             points = regular? points : this.pathToPoints(points);
-            //this.context.lineWidth(10);
             const buffer = this.writePoints(points);
-            this.context.drawArrays(regular? this.context.LINES: this.context.POINTS, 0, points.length);
+            this.context.drawArrays(regular? this.context.LINE_LOOP: this.context.POINTS, 0, points.length);
             this.deleteBuffer(buffer);
         }
         colorBuffer && this.deleteBuffer(colorBuffer);
@@ -513,91 +412,35 @@ class WebglPath extends WebglBase {
 
     // 填充图形
     fill(bounds = {left: 0, top: 0, width: 0, height: 0}, type = 1) {
-        //this.useProgram();
-        
-        if(this.points && this.points.length) {
-            
+       
+        if(this.points && this.points.length) {            
             // 如果是颜色rgba
-            if(this.style.fillStyle) {
-            
-                let filled = false;// 是否成功填充
-                // 3个以上的点，且非规则图形才需要切割
-                if(this.points.length > 3) {               
-                    if(this.isRegular && this.needCut) {
-                        // 需要分割三角形，不然填充会有问题
-                        const triangles = this.earCutPointsToTriangles(this.points);// 切割得到三角形顶点二维数组
-
-                        if(triangles && triangles.length) {
-                            for(const triangle of triangles) {
-                                this.fillColor(triangle, this.style.fillStyle, bounds, type); // 单独为每个分割的图形填充
-
-                                // 如果指定的是img，则采用填充图片的方式
-                                if(this.style.fillImage) {
-                                    this.fillImage(this.style.fillImage, triangle, bounds);
-                                }
-                            }
-                            filled = true;// 表示已填充过了
-                        }
-                    } 
-                    else if(!this.isRegular) {
-                        const polygons = this.getPolygon(this.points);
-                        if(polygons.length) {
-                            for(const polygon of polygons) {
-                                // 需要分割三角形，不然填充会有问题
-                                const triangles = this.earCutPointsToTriangles(polygon);// 切割得到三角形顶点二维数组
-
-                                if(triangles && triangles.length) {
-                                    for(const triangle of triangles) {
-                                        this.fillColor(triangle, this.style.fillStyle, bounds, type); // 单独为每个分割的图形填充
-
-                                        // 如果指定的是img，则采用填充图片的方式
-                                        if(this.style.fillImage) {
-                                            this.fillImage(this.style.fillImage, triangle, bounds);
-                                        }
-                                    }
-                                    filled = true;// 表示已填充过了
-                                }
-                            }
-                        }
-                    }
-                }   
-                // 如果前面的条件没有填充成功，则直接按正常填充         
-                if(!filled) {
-                    this.fillColor(this.points, this.style.fillStyle, bounds, type);// 如果指定的是img，则采用填充图片的方式
-                    if(this.style.fillImage) {
-                        this.fillImage(this.style.fillImage, this.points, bounds);
-                    }
-                }
-                
+            if(this.style.fillStyle) {            
+                this.fillColor(this.style.fillStyle, this.points, bounds, type);
+            }
+            if(this.style.fillImage) {            
+                this.fillImage(this.style.fillImage, this.points, bounds, type); 
             }
         }
     }
 
-    fillColor(points, color, bounds, type=1) {
+    fillColor(color, points, bounds, type=1) {
         
         // 如果是渐变色，则需要计算偏移量的颜色
         if(this.isGradient(color)) {
-            const imgData = color.toImageData(this, bounds);
-            return this.fillImage(imgData, points, bounds);
+            const imgData = color.toImageData(this, bounds, points);
+            return this.fillImage(imgData.data, imgData.points, bounds);
         }
         
         // 标注为fill
         this.context.uniform1i(this.program.uniforms.a_type.location, type);
         const colorBuffer = this.setFragColor(color);
-        
-        const buffer = this.writePoints(points);
-        this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-        if(buffer) {
-            this.deleteBuffer(buffer);
-            this.disableVertexAttribArray(buffer.attr);
-        }
+
+        this.fillPolygons(points);                
+
         colorBuffer && this.deleteBuffer(colorBuffer);
         colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
 
-        // 为线段顶点绘制
-        /*for(const p of points) {
-            this.stroke([p], 'red', 10);
-        }*/
     }
 
     // 区域填充图片
@@ -618,40 +461,50 @@ class WebglPath extends WebglBase {
             bounds.height,
         ); // 纹理单元传递给着色器
 
-        // 标注为纹理对象
-        this.context.uniform1i(this.program.uniforms.a_type.location, 2);
+        this.fillTexture(points);
+        
+        this.deleteTexture(texture);
+    }
 
-        let filled = false;// 是否成功填充
-        // 3个以上的点，且非规则图形才需要切割
-        if(points.length > 3 && !this.isRegular) {                
-            const polygons = this.getPolygon(points);
-            if(polygons.length) {
-                for(const polygon of polygons) {
-                    // 需要分割三角形，不然填充会有问题
-                    const triangles = this.earCutPointsToTriangles(polygon);// 切割得到三角形顶点二维数组
+    fillTexture(points) {        
+        if(points && points.length) {  // 标注为纹理对象
+            this.context.uniform1i(this.program.uniforms.a_type.location, 2);  
+            // 纹理坐标
+            //const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
+            this.fillPolygons(points, true);
+            //this.deleteBuffer(coordBuffer);  
+            this.disableVertexAttribArray(this.program.attrs.a_text_coord);   
+        } 
+    }
 
-                    if(triangles && triangles.length) {
-                        for(const triangle of triangles) {
-                            this.fillTexture(triangle); // 单独为每个分割的图形填充
-                        }
-                        filled = true;// 表示已填充过了
-                    }
+    // 进行多边形填充
+    fillPolygons(points, isTexture = false) {   
+        //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
+        //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
+        //this.deleteBuffer(indexBuffer);
+        /*if(points.length > 3 && (!regular || this.needCut)) {
+            const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
+            if(triangles.length) {   
+                for(const triangle of triangles) {
+                    this.fillPolygons(triangle, isTexture);// 这里就变成了规则的图形了
                 }
             }
-        }   
-        // 如果前面的条件没有填充成功，则直接按正常填充         
-        if(!filled) {
-            this.fillTexture(points);
         }
-        this.deleteTexture(texture);
+        else {*/
+            const buffer = this.writePoints(points);
+            // 纹理坐标
+            const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
+
+            this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+            this.deleteBuffer(buffer);
+            coordBuffer && this.deleteBuffer(coordBuffer);    
+        //}
     }
 
     // 填充图形
     drawImage(img, left=0, top=0, width=img.width, height=img.height) {
         width = width || img.width;
         height = height || img.height;
-
-        //this.useProgram();
 
         this.fillImage(img, this.points, {
             left,
@@ -661,18 +514,48 @@ class WebglPath extends WebglBase {
         });
     }
 
-    fillTexture(points) {
-        // 纹理坐标
-        const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
-        
-        if(points && points.length) {
-            const buffer = this.writePoints(points);
-            this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-            this.deleteBuffer(buffer);
-            this.disableVertexAttribArray(buffer.attr);
+    drawText(text, x, y, bounds) {
+        let canvas = this.textureCanvas;
+        if(!canvas) {
+            return null;
         }
-        this.disableVertexAttribArray(coordBuffer.attr);
-        this.deleteBuffer(coordBuffer);        
+        canvas.width = bounds.width;
+        canvas.height = bounds.height;
+
+        if(!canvas.width || !canvas.height) {
+            return null;
+        }
+
+        this.textureContext.clearRect(0, 0, canvas.width, canvas.height);
+        // 修改字体
+		this.textureContext.font = this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily);
+
+        x -= bounds.left;
+        y -= bounds.top;
+
+        this.setTextureStyle(this.style);
+
+        if(this.style.fillStyle && this.textureContext.fillText) {
+
+            if(this.style.maxWidth) {
+                this.textureContext.fillText(text, x, y, this.style.maxWidth);
+            }
+            else {
+                this.textureContext.fillText(text, x, y);
+            }
+        }
+        if(this.textureContext.strokeText) {
+
+            if(this.style.maxWidth) {
+                this.textureContext.strokeText(text, x, y, this.style.maxWidth);
+            }
+            else {
+                this.textureContext.strokeText(text, x, y);
+            }
+        }
+        // 用纹理图片代替文字
+        const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
+        this.fillImage(data, this.points, bounds);
     }
 }
 

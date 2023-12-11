@@ -179,7 +179,9 @@ export default class jmImage extends jmControl {
 	 * @method getBounds
 	 * @return {object} 边界对象(left,top,right,bottom,width,height)
 	 */
-	getBounds() {
+	getBounds(isReset) {
+		//如果当次计算过，则不重复计算
+		if(this.bounds && !isReset) return this.bounds;
 		let rect = {};
 		let img = this.getImage();
 		let p = this.getLocation();
@@ -191,7 +193,7 @@ export default class jmImage extends jmControl {
 		rect.bottom = p.top + h; 
 		rect.width = w;
 		rect.height = h;
-		return rect;
+		return this.bounds=rect;
 	}
 
 	/**

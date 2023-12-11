@@ -1,6 +1,6 @@
 const WebglGradientTextureCache = {};
 // 渐变
-class WeblGradient {
+class WebglGradient {
     // type:[linear= 线性渐变,radial=放射性渐变] 
     constructor(type='linear', params={}) {
         this.type = type || 'linear';
@@ -52,54 +52,27 @@ class WeblGradient {
     }
 
     // 转为渐变为纹理
-    toImageData(control, bounds) {
-        const key = this.toString() + `-${bounds.width.toFixed(4)}x${bounds.height.toFixed(4)}`;
-        if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
-
-        let canvas = control.graph.textureCanvas;
-        if(!canvas) {
-            canvas = control.graph.textureCanvas = document.createElement('canvas');
-        }
-        canvas.width = bounds.width;
-        canvas.height = bounds.height;
-
-        if(!canvas.width || !canvas.height) {
+    toImageData(control, bounds, points=null) {
+        //const key = this.key || this.toString();
+        //if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
+        if(!control.textureContext) {
             return null;
         }
-
-        const ctx = canvas.getContext('2d', {
-            willReadFrequently: true
-        });
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         let gradient = null;
         if(this.type === 'linear') {
-            gradient = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+            gradient = control.textureContext.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
         }
         else {
-            gradient = ctx.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
+            gradient = control.textureContext.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
         }
         this.stops.forEach(function(s, i) {	
             const c = control.graph.utils.toColor(s.color);
             gradient && gradient.addColorStop(s.offset, c);		
         });
-        ctx.fillStyle = gradient;
+        
+        const data = control.toFillTexture(gradient, bounds, points);
 
-        ctx.beginPath();
-
-        ctx.moveTo(0, 0);
-        ctx.lineTo(bounds.width, 0);
-        ctx.lineTo(bounds.width, bounds.height);
-        ctx.lineTo(0, bounds.height);
-        ctx.lineTo(0, 0);
-
-        ctx.closePath();
-        ctx.fill();
-
-        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-        WebglGradientTextureCache[key] = data;
+        //WebglGradientTextureCache[key] = data;
 
         return data;
     }
@@ -193,4 +166,4 @@ class WeblGradient {
 	}
 }
 
-export default WeblGradient;
+export default WebglGradient;

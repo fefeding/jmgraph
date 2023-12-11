@@ -10,7 +10,8 @@ function createBuffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
     gl.bindBuffer(type, buffer);
     //写入坐标数据
     // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-    gl.bufferData(type, data, drawType); // 表示缓冲区的内容不会经常更改
+    // data.buffer这里要使用data.buffer，否则在edge下可能导至数据发生较大的改变
+    gl.bufferData(type, data.buffer || data, drawType); // 表示缓冲区的内容不会经常更改
     return {
         type,
         drawType,

@@ -345,6 +345,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
     /*if(this.mode === 'webgl') {
     	this.webglControl = new WebglPath(this.graph, {
     		style: this.style,
+    		control: this,
     		isRegular: params.isRegular,
     		needCut: params.needCut
     	});
@@ -507,7 +508,6 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       return s;
     },
     set: function set(v) {
-      this.needUpdate = true;
       this.property('zIndex', v);
       this.children.sort(); //层级发生改变，需要重新排序
 
@@ -709,10 +709,10 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
             if (_this3.webglControl) {
               //只有存在白名单中才处理
               //颜色转换
-              if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
-                styleValue = _jmUtils.jmUtils.hexToRGBA(styleValue);
-              }
 
+              /*if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+              	styleValue = jmUtils.hexToRGBA(styleValue);
+              }*/
               _this3.webglControl.setStyle(mpname, styleValue);
             } else {
               //只有存在白名单中才处理
@@ -2329,6 +2329,7 @@ var jmGradient = /*#__PURE__*/function () {
       if (this.type === 'linear') {
         if (control.mode === 'webgl' && control.webglControl) {
           gradient = control.webglControl.createLinearGradient(x1, y1, x2, y2, bounds);
+          gradient.key = this.toString();
         } else {
           context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
         }
@@ -2348,6 +2349,7 @@ var jmGradient = /*#__PURE__*/function () {
 
         if (control.mode === 'webgl' && control.webglControl) {
           gradient = control.webglControl.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
+          gradient.key = this.toString();
         } //offsetLine = Math.abs(r2 - r1);//二圆半径差
         else if (context.createRadialGradient) {
           gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
@@ -2456,14 +2458,14 @@ var jmGradient = /*#__PURE__*/function () {
       var str = this.type + '-gradient(';
 
       if (this.type == 'linear') {
-        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2);
+        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
       } else {
-        str += this.x1.toFixed(2) + ' ' + this.y1.toFixed(2) + ' ' + this.r1.toFixed(2) + ' ' + this.x2.toFixed(2) + ' ' + this.y2.toFixed(2) + ' ' + this.r2.toFixed(2);
+        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
       } //颜色渐变
 
 
       this.stops.each(function (i, s) {
-        str += ',' + s.color + ' ' + s.offset.toFixed(2);
+        str += ',' + s.color + ' ' + s.offset;
       });
       return str + ')';
     }
@@ -3655,7 +3657,6 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
 
     _this = _super.call(this, params, t);
     _this.points = params && params.points ? params.points : [];
-    _this.polygonIndices = params && params.polygonIndices ? params.polygonIndices : [];
     return _this;
   }
   /**
@@ -3675,22 +3676,6 @@ var jmPath = /*#__PURE__*/function (_jmControl) {
     set: function set(v) {
       this.needUpdate = true;
       return this.property('points', v);
-    }
-    /**
-     * 顶点数组索引，对应points中的顶点
-     * @property polygonIndices
-     * @type {array} 
-     */
-
-  }, {
-    key: "polygonIndices",
-    get: function get() {
-      var s = this.property('polygonIndices');
-      return s;
-    },
-    set: function set(v) {
-      this.needUpdate = true;
-      return this.property('polygonIndices', v);
     }
   }]);
 
@@ -4932,6 +4917,13 @@ var jmUtils = /*#__PURE__*/function () {
         a = typeof color.a !== 'undefined' ? color.a : a;
       }
 
+      if (r && _typeof(r) === 'object') {
+        g = r.g;
+        b = r.b;
+        a = r.a || 1;
+        r = r.r;
+      }
+
       if (typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
         if (typeof a != 'undefined') {
           return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
@@ -6162,7 +6154,9 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
 
   }, {
     key: "getBounds",
-    value: function getBounds() {
+    value: function getBounds(isReset) {
+      //如果当次计算过，则不重复计算
+      if (this.bounds && !isReset) return this.bounds;
       var rect = {};
       var img = this.getImage();
       var p = this.getLocation();
@@ -6174,7 +6168,7 @@ var jmImage = /*#__PURE__*/function (_jmControl) {
       rect.bottom = p.top + h;
       rect.width = w;
       rect.height = h;
-      return rect;
+      return this.bounds = rect;
     }
     /**
      * img对象
@@ -6237,6 +6231,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.jmLabel = exports["default"] = void 0;
 
 var _jmControl2 = require("../core/jmControl.js");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6407,17 +6407,19 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
     key: "testSize",
     value: function testSize() {
       if (this.__size) return this.__size;
-      this.context.save && this.context.save(); // 修改字体，用来计算
+      if (this.webglControl) this.__size = this.webglControl.testSize(this.text, this.style);else {
+        this.context.save && this.context.save(); // 修改字体，用来计算
 
-      this.setStyle({
-        font: this.style.font || "".concat(this.style.fontSize, "px \"").concat(this.style.fontFamily, "\"")
-      }); //计算宽度
+        this.setStyle({
+          font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
+        }); //计算宽度
 
-      this.__size = this.context.measureText ? this.context.measureText(this.text) : {
-        width: 15
-      };
-      this.context.restore && this.context.restore();
-      if (!this.__size.height) this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+        this.__size = this.context.measureText ? this.context.measureText(this.text) : {
+          width: 15
+        };
+        this.context.restore && this.context.restore();
+        this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+      }
       if (!this.width) this.width = this.__size.width;
       if (!this.height) this.height = this.__size.height;
       return this.__size;
@@ -6472,7 +6474,11 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
       var txt = this.text;
 
       if (typeof txt !== 'undefined') {
-        if (this.style.fill && this.context.fillText) {
+        // webgl方式
+        if (this.webglControl) {
+          this.webglControl.draw(this.points, bounds);
+          this.webglControl.drawText(txt, x, y, location);
+        } else if (this.style.fill && this.context.fillText) {
           if (this.style.maxWidth) {
             this.context.fillText(txt, x, y, this.style.maxWidth);
           } else {
@@ -6495,31 +6501,65 @@ var jmLabel = /*#__PURE__*/function (_jmControl) {
           this.setStyle(this.style.border.style);
         }
 
-        this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+        if (this.mode === '2d') {
+          this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
 
-        if (this.style.border.top) {
-          this.context.lineTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
+          if (this.style.border.top) {
+            this.context.lineTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
+          }
+
+          if (this.style.border.right) {
+            this.context.moveTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
+            this.context.lineTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
+          }
+
+          if (this.style.border.bottom) {
+            this.context.moveTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
+            this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+          }
+
+          if (this.style.border.left) {
+            this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
+            this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+          }
+        } else {
+          var points = [];
+
+          if (this.style.border.top) {
+            points.push(this.points[0]);
+            points.push(this.points[1]);
+          }
+
+          if (this.style.border.right) {
+            points.push(_objectSpread(_objectSpread({}, this.points[1]), {}, {
+              m: true
+            }));
+            points.push(this.points[2]);
+          }
+
+          if (this.style.border.bottom) {
+            points.push(_objectSpread(_objectSpread({}, this.points[2]), {}, {
+              m: true
+            }));
+            points.push(this.points[3]);
+          }
+
+          if (this.style.border.left) {
+            points.push(_objectSpread(_objectSpread({}, this.points[3]), {}, {
+              m: true
+            }));
+            points.push(this.points[0]);
+          }
+
+          points.length && this.webglControl && this.webglControl.stroke(points);
         }
-
-        if (this.style.border.right) {
-          this.context.moveTo(this.points[1].x + bounds.left, this.points[1].y + bounds.top);
-          this.context.lineTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
-        }
-
-        if (this.style.border.bottom) {
-          this.context.moveTo(this.points[2].x + bounds.left, this.points[2].y + bounds.top);
-          this.context.lineTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-        }
-
-        if (this.style.border.left) {
-          this.context.moveTo(this.points[3].x + bounds.left, this.points[3].y + bounds.top);
-          this.context.lineTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
-        } //如果指定了边框颜色
-
-
-        if (this.style.border.style) {
-          this.context.restore && this.context.restore();
-        }
+      }
+    }
+  }, {
+    key: "endDraw",
+    value: function endDraw() {
+      if (this.mode === '2d') {
+        _get(_getPrototypeOf(jmLabel.prototype), "endDraw", this).call(this);
       }
     }
   }]);
@@ -6907,7 +6947,9 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
 
   }, {
     key: "getBounds",
-    value: function getBounds() {
+    value: function getBounds(isReset) {
+      //如果当次计算过，则不重复计算
+      if (this.bounds && !isReset) return this.bounds;
       var rect = {};
       this.initPoints();
       var p = this.getLocation();
@@ -6917,7 +6959,7 @@ var jmRect = /*#__PURE__*/function (_jmPath) {
       rect.bottom = p.top + p.height;
       rect.width = rect.right - rect.left;
       rect.height = rect.bottom - rect.top;
-      return rect;
+      return this.bounds = rect;
     }
     /**
      * 重写检查坐标是否在区域内

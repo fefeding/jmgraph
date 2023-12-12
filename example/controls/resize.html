@@ -27,8 +27,9 @@
 			width: 800,
 			height: 600,
 			mode: '2d',
+			autoRefresh: true,
 			style: {
-				fill: '#000'
+				fill: '#000',
 			}
 		});
 		init(g);
@@ -40,6 +41,9 @@
                 stroke: 'red',
                 fill: 'yellow',
                 lineWidth: 2, //边线宽
+				rotation: {
+					angle: 0
+				},
                 //小方块样式
                 rectStyle: {
                     stroke: 'green', //小方块边颜色
@@ -64,12 +68,10 @@
 			resize.canMove(true);
             g.children.add(resize);           
             
-			function update() {
-				g.redraw();
-				requestAnimationFrame(update);
-			}
-
-			update();
+			g.on('update', (time) => {
+				style.rotation.angle += 0.001;
+				g.needUpdate = true;
+			});
 		}
 	</script>
 </html>

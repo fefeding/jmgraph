@@ -29,7 +29,8 @@
 			style: {
 				//fill: '#000'
 			},
-			mode: '2d'
+			mode: '2d',
+			autoRefresh: true
 		});
 			
 		init(g);
@@ -41,7 +42,7 @@
 				//src: '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
 				//stroke: 'red',
 				rotation: {
-					angle: Math.PI / 2
+					angle: 0
 				},
 			};
 			style.shadow = '0,0,20,#fff';
@@ -58,11 +59,22 @@
 			//img.image = '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png';
             g.children.add(img);		
 			img.canMove(true);
+
+			//创建一个image
+			var img3 = g.createShape('image',{
+				style: g.utils.clone(style),
+				//伸展或缩小图像
+                width: 200,
+				position: {x:100,y:100},
+				image: '../qrcode.jpg'
+			});	
+			//img.image = '//mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png';
+            g.children.add(img3);		
             
             //截取logo
             var img2 = g.createShape('image',{
-				style:style,
-                position: {x:200,y:300},
+				style: style,
+                position: {x:100,y:100},
 
                 //伸展或缩小图像
                 width: 100,
@@ -72,24 +84,14 @@
                 sourceWidth: 192,          //截取宽度，如果不填则用原图宽
                 sourceHeight: 192            //截取高度，如果不填则用原图高
 			});			
-			//g.children.add(img2);	
+			g.children.add(img2);	
 			img2.canMove(true);
-
-			/*var style = {
-                stroke: 'red',
-                fill: 'yellow',
-                lineWidth: 2 //边线宽
-			};*/
-			//style.opacity = 0.2;		
-
 			
 
-			function update() {
-				g.needUpdate && g.redraw();
-				requestAnimationFrame(update);
-			}
-
-			update();
+			g.on('update', (time) => {
+				style.rotation.angle += 0.01;
+				g.needUpdate = true;
+			});
 		}
 	</script>
 </html>

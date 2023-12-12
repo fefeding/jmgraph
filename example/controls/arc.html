@@ -28,6 +28,7 @@
 			width: 800,
 			height: 600,
 			mode: '2d',
+			autoRefresh: true,
 			style: {
 				fill: '#000'
 			}
@@ -42,6 +43,9 @@
                 stroke: '#ccc',
                 fill: 'yellow',
                 lineWidth: 4, //边线宽
+				rotation: {
+					angle: 0
+				}
 			};
 			//style.opacity = 0.2;		
 
@@ -113,14 +117,13 @@
 				end: Math.PI / 4,
 				anticlockwise: true //false  顺时针，true 逆时针
             });	
-            g.children.add(harc);   
+            g.children.add(harc);  
+			harc.canMove(true); 
             
-			function update() {
-				g.needUpdate && g.redraw();
-				requestAnimationFrame(update);
-			}
-
-			update();
+			g.on('update', (time) => {
+				style.rotation.angle += 0.01;
+				g.needUpdate = true;
+			});
 		}
 	</script>
 </html>

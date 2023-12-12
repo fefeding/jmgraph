@@ -421,29 +421,16 @@ export default class jmControl extends jmProperty {
 						}
 						//旋转
 						case 'rotation' : {	
-							if(typeof styleValue.angle === 'undefined') break;	
+							if(typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;	
 							styleValue = this.getRotation(styleValue);
-							//旋 转先移位偏移量
-							let tranX = 0;
-							let tranY = 0;
+							
 							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
 							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							if(styleValue.x || styleValue.y) {
-								const bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
-								
-								tranX = styleValue.x + bounds.left;
-								tranY = styleValue.y + bounds.top;	
-							}
-												
-							if(tranX!=0 || tranY != 0) {
-								this.context.translate && this.context.translate(tranX, tranY);
-							}
-							
+							styleValue = this.toAbsolutePoint(styleValue);
+									
+							this.context.translate && this.context.translate(styleValue.x, styleValue.y);							
 							this.context.rotate(styleValue.angle);
-
-							if(tranX!=0 || tranY != 0) {
-								this.context.translate && this.context.translate(-tranX, -tranY);
-							};
+							this.context.translate && this.context.translate(-styleValue.x, -styleValue.y);							
 							break;
 						}
 						case 'transform' : {
@@ -630,12 +617,6 @@ export default class jmControl extends jmProperty {
 				}
 			}
 		}
-		// 如果有偏移，则加上
-		/*const translate = this.getTranslate();
-		if(translate) {
-			local.left += translate.x;
-			local.top += translate.y;
-		}*/
 		return local;
 	}
 
@@ -644,7 +625,8 @@ export default class jmControl extends jmProperty {
 	 * @returns {object} 旋转中心和角度
 	 */
 	getRotation(rotation, bounds = null) {
-		rotation = rotation || this.style.rotation;
+		rotation = rotation || jmUtils.clone(this.style.rotation);
+
 		if(!rotation) {
 			//如果本身没有，则可以继承父级的
 			rotation = this.parent && this.parent.getRotation?this.parent.getRotation():null;
@@ -818,6 +800,22 @@ export default class jmControl extends jmProperty {
 			};
 		}
 		return rec;
+	}
+
+	/**
+	 * 把当前控制内部坐标转为canvas绝对定位坐标
+	 * 
+	 * @method toAbsolutePoint
+	 * @param {x: number, y: number} 内部坐标
+	 */
+	toAbsolutePoint(point) {
+		if(point.x || point.y) {
+			const bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
+			
+			point.x = (point.x||0) + bounds.left;
+			point.y = (point.y||0) + bounds.top;	
+		}
+		return point;
 	}
 
 	/**

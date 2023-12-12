@@ -523,14 +523,17 @@ export default class jmGraph extends jmControl {
 		const self = this;
 		this.___isAutoRefreshing = true;
 		
+		const refreshStartTime = Date.now();
 		function update() {
 			if(self.destroyed) {
 				self.___isAutoRefreshing = false;
 				return;// 已销毁
 			}
 			if(self.needUpdate) self.redraw();
+
+			const time = Date.now() - refreshStartTime;
 			// 触发刷新事件
-			self.emit('update');
+			self.emit('update', time);
 
 			self.__requestAnimationFrameFunHandler && self.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
 			self.__requestAnimationFrameFunHandler = self.requestAnimationFrame(update);

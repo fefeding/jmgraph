@@ -170,6 +170,7 @@ export default class jmGraph extends jmControl {
 		}
 
 		this.context.viewport && this.context.viewport(0, 0, w, h);
+		this.needUpdate = true;
 	}
 
 	/**
@@ -493,7 +494,7 @@ export default class jmGraph extends jmControl {
 			};		
 		}
 		
-		this.context.scale(dx,dy);
+		this.context.scale && this.context.scale(dx,dy);
 		if(!this.scaleSize) {
 			this.scaleSize = {x:dx,y:dy};
 		}

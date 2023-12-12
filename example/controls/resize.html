@@ -15,6 +15,9 @@
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
+		<button onclick="zoomIn()">放大</button>
+		<button onclick="zoomOut()">缩小</button>
+		<button onclick="zoomActual()">复原</button>
 	</body>
 	<script type="module">	
 		import { jmGraph } from "../../index.js";
@@ -23,7 +26,7 @@
         var container = document.getElementById('mycanvas_container');
         
         //开发模式下，引用jmGraph.js，请使用这种方式，内部会初始化组件
-		var g = jmGraph.create('mycanvas_container', {
+		var g = window.graph = jmGraph.create('mycanvas_container', {
 			width: 800,
 			height: 600,
 			mode: '2d',
@@ -69,9 +72,29 @@
             g.children.add(resize);           
             
 			g.on('update', (time) => {
-				style.rotation.angle += 0.001;
-				g.needUpdate = true;
+				//style.rotation.angle += 0.001;
+				//g.needUpdate = true;
 			});
+		}
+
+		
+	</script>
+	<script>
+		function zoomIn() {
+			window.graph && window.graph.resize(window.graph.width * 1.1, window.graph.height * 1.1);
+			window.graph && window.graph.scale(1.1, 1.1);
+		}
+
+		function zoomOut() {
+			window.graph && window.graph.resize(window.graph.width * 0.9, window.graph.height * 0.9);
+			window.graph && window.graph.scale(0.9, 0.9);
+
+		}
+
+		function zoomActual() {
+			window.graph && window.graph.resize(800, 600);
+			window.graph && window.graph.zoomActual();
+
 		}
 	</script>
 </html>

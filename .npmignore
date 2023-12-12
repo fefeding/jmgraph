@@ -1,6 +1,8 @@
 *.ttf
 *.png
 *.jpg
+*.mp3
 ._config.yml
 .travis.yml
+docs
 node_modules

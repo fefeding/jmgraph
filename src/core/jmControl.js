@@ -429,21 +429,24 @@ export default class jmControl extends jmProperty {
 							styleValue = this.toAbsolutePoint(styleValue);
 									
 							this.context.translate && this.context.translate(styleValue.x, styleValue.y);							
-							this.context.rotate(styleValue.angle);
+							this.context.rotate && this.context.rotate(styleValue.angle);
 							this.context.translate && this.context.translate(-styleValue.x, -styleValue.y);							
 							break;
 						}
 						case 'transform' : {
+							if(!this.context.transform) break;
 							if(Array.isArray(styleValue)) {
 								this.context.transform.apply(this.context, styleValue);
 							}
 							else if(typeof styleValue == 'object') {
-								this.context.transform(styleValue.scaleX,//水平缩放
-								styleValue.skewX,//水平倾斜
-								styleValue.skewY,//垂直倾斜
-								styleValue.scaleY,//垂直缩放
-								styleValue.offsetX,//水平位移
-								styleValue.offsetY);//垂直位移
+								this.context.transform(
+									styleValue.scaleX || 1,//水平缩放
+									styleValue.skewX || 0,//水平倾斜
+									styleValue.skewY || 0,//垂直倾斜
+									styleValue.scaleY || 1,//垂直缩放
+									styleValue.offsetX || 0,//水平位移
+									styleValue.offsetY || 0//垂直位移
+								);
 							}								
 							break;
 						}

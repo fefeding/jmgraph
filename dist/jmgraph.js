@@ -351,7 +351,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
 
     _this2.graph = params.graph || null;
     _this2.zIndex = params.zIndex || 0;
-    _this2.interactive = typeof params.interactive == 'undefined' ? true : params.interactive; // webgl模式
+    _this2.interactive = typeof params.interactive == 'undefined' ? false : params.interactive; // webgl模式
 
     if (_this2.mode === 'webgl') {
       _this2.webglControl = new _path["default"](_this2.graph, {
@@ -1617,7 +1617,7 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         var graph = this.graph;
         var srcElement = args.srcElement || args.target;
 
-        var position = _jmUtils.jmUtils.getEventPosition(args, graph.scaleSize); //初始化事件位置
+        var position = _jmUtils.jmUtils.getEventPosition(args); //初始化事件位置
 
 
         args = {
@@ -1921,6 +1921,8 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
         this.unbind('touchstart', this.__mvMonitor.md);
       }
 
+      this.interactive = true; // 如果可以移动，则响应事件
+
       return this;
     }
   }]);
@@ -2062,7 +2064,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
         //return false;
         //}				
       });
-      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
+      this.eventEvents['mousemove'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
         evt = evt || window.event;
         evt.eventName = 'mousemove';
         var target = evt.target || evt.srcElement;
@@ -2074,7 +2076,7 @@ var jmMouseEvent = /*#__PURE__*/function () {
           return false; //}		
         }
       });
-      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
+      this.eventEvents['mouseover'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
         evt = evt || window.event;
         evt.eventName = 'mouseover';
         container.raiseEvent('mouseover', evt);
@@ -3173,14 +3175,13 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
           width: this.canvas.width,
           height: this.canvas.height
         };
-      }
+      } //this.context.scale && this.context.scale(dx,dy);
 
-      this.context.scale && this.context.scale(dx, dy);
 
       if (!this.scaleSize) {
         this.scaleSize = {
-          x: dx,
-          y: dy
+          x: 1,
+          y: 1
         };
       } else {
         this.scaleSize = {
@@ -3189,7 +3190,7 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
         };
       }
 
-      this.refresh();
+      this.canvas.style && (this.canvas.style.transform = "scale(".concat(this.scaleSize.x, ", ").concat(this.scaleSize.y, ")"));
     }
     /**
      * 保存为base64图形数据

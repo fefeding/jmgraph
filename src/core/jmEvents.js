@@ -99,7 +99,7 @@ class jmMouseEvent {
 			//}				
 		});
 		
-		this.eventEvents['mousedown'] = jmUtils.bindEvent(this.target,'mousemove',function(evt) {	
+		this.eventEvents['mousemove'] = jmUtils.bindEvent(this.target,'mousemove',function(evt) {	
 			evt = evt || window.event;		
 			evt.eventName = 'mousemove';
 			let target = evt.target || evt.srcElement;
@@ -112,7 +112,7 @@ class jmMouseEvent {
 			}				
 		});
 		
-		this.eventEvents['mousedown'] = jmUtils.bindEvent(this.target,'mouseover',function(evt) {
+		this.eventEvents['mouseover'] = jmUtils.bindEvent(this.target,'mouseover',function(evt) {
 			evt = evt || window.event;	
 			evt.eventName = 'mouseover';
 			container.raiseEvent('mouseover',evt);

@@ -55,7 +55,7 @@ export default class jmControl extends jmProperty {
 
 		this.graph = params.graph || null;
 		this.zIndex = params.zIndex || 0;
-		this.interactive = typeof params.interactive == 'undefined'? true : params.interactive;
+		this.interactive = typeof params.interactive == 'undefined'? false : params.interactive;
 
 		// webgl模式
 		if(this.mode === 'webgl') {
@@ -143,7 +143,7 @@ export default class jmControl extends jmProperty {
 	 * @type {boolean}
 	 */
 	get interactive() {
-		let s = this.property('interactive');
+		const s = this.property('interactive');
 		return s;
 	}
 	set interactive(v) {
@@ -1144,7 +1144,7 @@ export default class jmControl extends jmProperty {
 
 			const srcElement = args.srcElement || args.target;			
 			
-			const position = jmUtils.getEventPosition(args, graph.scaleSize);//初始化事件位置
+			const position = jmUtils.getEventPosition(args);//初始化事件位置
 		
 			args = {
 				position: position,
@@ -1415,6 +1415,8 @@ export default class jmControl extends jmProperty {
 			graph.unbind('touchend',this.__mvMonitor.mu);
 			this.unbind('touchstart',this.__mvMonitor.md);	
 		}
+
+		this.interactive = true;// 如果可以移动，则响应事件
 		return this;
 	}
 };

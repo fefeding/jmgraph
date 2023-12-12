@@ -494,14 +494,14 @@ export default class jmGraph extends jmControl {
 			};		
 		}
 		
-		this.context.scale && this.context.scale(dx,dy);
+		//this.context.scale && this.context.scale(dx,dy);
 		if(!this.scaleSize) {
-			this.scaleSize = {x:dx,y:dy};
+			this.scaleSize = {x: 1,y: 1};
 		}
 		else {
-			this.scaleSize = {x:dx * this.scaleSize.x, y:dy * this.scaleSize.y};
+			this.scaleSize = {x: dx * this.scaleSize.x, y: dy * this.scaleSize.y};
 		}
-		this.refresh();
+		this.canvas.style && (this.canvas.style.transform = `scale(${this.scaleSize.x}, ${this.scaleSize.y})`);
 	}
 
 	/**

@@ -67,9 +67,9 @@ export default class jmResize extends jmRect {
 		rectStyle.close = true;
 		rectStyle.fill = rectStyle.fill || 'transparent';
 		
-		for(let i = 0;i<8;i++) {
+		for(let i = 0; i<8; i++) {
 			//生成改变大小方块
-			let r = (this.graph || params.graph).createShape(jmRect,{
+			const r = (this.graph || params.graph).createShape(jmRect,{
 					position:{x:0,y:0},
 					width: rs,
 					height: rs,
@@ -95,9 +95,9 @@ export default class jmResize extends jmRect {
 	 */
 	bindRectEvents() {		
 		for(let i =0; i<this.resizeRects.length; i++) {
-			let r = this.resizeRects[i];		
+			const r = this.resizeRects[i];		
 			//小方块移动监听
-			r.on('move',function(arg) {				
+			r.on('move',function(arg) {					
 				let px=0, py=0, dx=0, dy=0;
 				if(this.index == 0) {				
 					dx = - arg.offsetX;
@@ -135,15 +135,20 @@ export default class jmResize extends jmRect {
 					dy = arg.offsetY;				
 				}
 				//重新定位
-				this.parent.reset(px,py,dx,dy);
+				this.parent.reset(px, py, dx, dy);
 				this.needUpdate = true;
 			});
 			//鼠标指针
-			r.bind('mousemove',function() {	
+			r.bind('mousemove', function() {	
+				// 如果有旋转方位，则重新定义小块的作用
+				const rotation = this.parent.getRotation();	
+				// 旋转一定角度后的位置
+				const position = rotation && rotation.angle? this.graph.utils.rotatePoints(this.graph.utils.clone(this.position), rotation, rotation.angle): this.position;
+
 				let rectCursors = ['w-resize','nw-resize','n-resize','ne-resize','e-resize','se-resize','s-resize','sw-resize'];		
 				this.cursor = rectCursors[this.index];
 			});
-			r.bind('mouseleave',function() {
+			r.bind('mouseleave', function() {
 				this.cursor = 'default';
 			});
 		}
@@ -192,13 +197,13 @@ export default class jmResize extends jmRect {
 	 * @param {number} dy 大小y轴偏移
 	 */
 	reset(px, py, dx, dy) {
-		let minWidth = typeof this.style.minWidth=='undefined'?5:this.style.minWidth;
-		let minHeight = typeof this.style.minHeight=='undefined'?5:this.style.minHeight;
+		const minWidth = typeof this.style.minWidth=='undefined'?5:this.style.minWidth;
+		const minHeight = typeof this.style.minHeight=='undefined'?5:this.style.minHeight;
 
-		let location = this.getLocation();
+		const location = this.getLocation();
 		if(dx != 0 || dy != 0) {
-			let w = location.width + dx;
-			let h = location.height + dy;
+			const w = location.width + dx;
+			const h = location.height + dy;
 			if(w >= minWidth || h >= minHeight) {
 				if(w >= minWidth) {
 					this.width = w;
@@ -216,7 +221,7 @@ export default class jmResize extends jmRect {
 				}
 				//如果当前控件能移动才能改变其位置
 				if(this.movable !== false && (px||py)) {
-					let p = this.position;
+					const p = this.position;
 					p.x = location.left + px;
 					p.y = location.top + py;
 					this.position = p;
@@ -227,7 +232,7 @@ export default class jmResize extends jmRect {
 		}
 
 		for(let i in this.resizeRects) {
-			let r = this.resizeRects[i];
+			const r = this.resizeRects[i];
 			switch(r.index) {
 				case 0: {
 					r.position.x = -r.width / 2;

@@ -20,6 +20,9 @@ export default class jmResize extends jmRect {
 		this.rectSize = params.rectSize || 8;
 		this.style.close = this.style.close || true;
 
+		// 方块鼠标指针方向
+		this.rectCursors = ['w-resize','nw-resize','n-resize','ne-resize','e-resize','se-resize','s-resize','sw-resize'];
+
 		this.init(params);
 	}
 	/**
@@ -142,11 +145,57 @@ export default class jmResize extends jmRect {
 			r.bind('mousemove', function() {	
 				// 如果有旋转方位，则重新定义小块的作用
 				const rotation = this.parent.getRotation();	
+				let cursor = this.parent.rectCursors[this.index];
+
 				// 旋转一定角度后的位置
 				const position = rotation && rotation.angle? this.graph.utils.rotatePoints(this.graph.utils.clone(this.position), rotation, rotation.angle): this.position;
+				const center = {
+					x: this.parent.width / 2,
+					y: this.parent.height / 2
+				};
 
-				let rectCursors = ['w-resize','nw-resize','n-resize','ne-resize','e-resize','se-resize','s-resize','sw-resize'];		
-				this.cursor = rectCursors[this.index];
+				this.rotationAngleByCenter = Math.atan((position.y - center.y) / (position.x - center.x));// 与中心连线和x轴的夹角
+				// 把90度分割成三个区域，不同的指针
+				const angleSplit1 = Math.atan(center.y / center.x) / 2;
+				const angleSplit2 = angleSplit1 * 2 + Math.PI / 4;
+
+				// 如果在左边，
+				if(position.x < center.x) {
+					if(this.rotationAngleByCenter >= -angleSplit1 && this.rotationAngleByCenter <= angleSplit1) {
+						cursor = this.parent.rectCursors[0];
+					}
+					else if(this.rotationAngleByCenter > angleSplit1 && this.rotationAngleByCenter < angleSplit2) {
+						cursor = this.parent.rectCursors[1];
+					}
+					else if(this.rotationAngleByCenter >= angleSplit2) {
+						cursor = this.parent.rectCursors[2];
+					}
+					else if(this.rotationAngleByCenter <= -angleSplit1 && this.rotationAngleByCenter > -angleSplit2) {
+						cursor = this.parent.rectCursors[7];
+					}
+					else if(this.rotationAngleByCenter <= -angleSplit2) {
+						cursor = this.parent.rectCursors[6];
+					}
+				}
+				else {
+					if(this.rotationAngleByCenter >= -angleSplit1 && this.rotationAngleByCenter <= angleSplit1) {
+						cursor = this.parent.rectCursors[4];
+					}
+					else if(this.rotationAngleByCenter > angleSplit1 && this.rotationAngleByCenter < angleSplit2) {
+						cursor = this.parent.rectCursors[5];
+					}
+					else if(this.rotationAngleByCenter >= angleSplit2) {
+						cursor = this.parent.rectCursors[6];
+					}
+					else if(this.rotationAngleByCenter <= -angleSplit1 && this.rotationAngleByCenter > -angleSplit2) {
+						cursor = this.parent.rectCursors[3];
+					}
+					else if(this.rotationAngleByCenter <= -angleSplit2) {
+						cursor = this.parent.rectCursors[2];
+					}
+				}
+						
+				this.cursor = cursor;
 			});
 			r.bind('mouseleave', function() {
 				this.cursor = 'default';

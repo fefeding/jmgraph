@@ -600,7 +600,7 @@ export default class jmUtils {
         if(!r || !p) return p;
         let cos = Math.cos(r);
         let sin = Math.sin(r);
-        if(p.length) {
+        if(Array.isArray(p)) {
             for(let i=0;i<p.length;i++) {
                 if(!p[i]) continue;
                 let x1 = p[i].x - rp.x;

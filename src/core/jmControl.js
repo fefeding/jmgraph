@@ -362,7 +362,7 @@ export default class jmControl extends jmProperty {
 		 * @param {string} name 样式名称
 		 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
 		 */
-		let __setStyle = (style, name, mpkey) => {
+		const __setStyle = (style, name, mpkey) => {
 			
 			if(style) {		
 				let styleValue = style;		
@@ -424,13 +424,15 @@ export default class jmControl extends jmProperty {
 							if(typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;	
 							styleValue = this.getRotation(styleValue);
 							
+							this.__translateAbsolutePosition = this.toAbsolutePoint({
+								x: styleValue.x,
+								y: styleValue.y
+							});
 							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
 							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							styleValue = this.toAbsolutePoint(styleValue);
-									
-							this.context.translate && this.context.translate(styleValue.x, styleValue.y);							
+							this.context.translate && this.context.translate(this.__translateAbsolutePosition.x, this.__translateAbsolutePosition.y);							
 							this.context.rotate && this.context.rotate(styleValue.angle);
-							this.context.translate && this.context.translate(-styleValue.x, -styleValue.y);							
+							this.context.translate && this.context.translate(-this.__translateAbsolutePosition.x, -this.__translateAbsolutePosition.y);							
 							break;
 						}
 						case 'transform' : {
@@ -495,7 +497,7 @@ export default class jmControl extends jmProperty {
 		//如果当次计算过，则不重复计算
 		if(this.bounds && !isReset) return this.bounds;
 
-		let rect = {}; // left top
+		const rect = {}; // left top
 		//jmGraph，特殊处理
 		if(this.type == 'jmGraph' && this.canvas) {
 			if(typeof this.canvas.width === 'function') {
@@ -546,6 +548,73 @@ export default class jmControl extends jmProperty {
 		rect.height = rect.bottom - rect.top;
 		
 		return this.bounds=rect;
+	}
+
+	/**
+	 * 获取被旋转后的边界
+	 */
+	getRotationBounds(rotation=null) {
+		rotation = rotation || this.getRotation();
+		const bounds = this.getBounds();
+		if(!rotation || !rotation.angle) return bounds;
+
+		const rect = {
+			width: 0,
+			height: 0,
+			oldBounds: bounds
+		}; // left top
+		let points = [];
+		if(this.points && this.points.length > 0) {	
+			points = jmUtils.clone(this.points, true); // 深度拷贝			
+		}
+		else if(this.getLocation) {
+			const local = this.getLocation();
+			if(local) {
+				points.push({
+					x: local.left,
+					y: local.top
+				},{
+					x: local.left + local.width,
+					y: local.top
+				},{
+					x: local.left + local.width,
+					y: local.top + local.height
+				},{
+					x: local.left,
+					y: local.top + local.height
+				});
+			}		
+		}
+		points = jmUtils.rotatePoints(points, {
+			x: rotation.x + bounds.left,
+			y: rotation.y + bounds.top
+		}, rotation.angle);// 对现在点进行旋转
+
+		for(const p of points) {
+			if(typeof rect.left === 'undefined' || rect.left > p.x) {
+				rect.left = p.x;
+			}
+			if(typeof rect.top === 'undefined'  || rect.top > p.y) {
+				rect.top = p.y;
+			}
+
+			if(typeof rect.right === 'undefined'  || rect.right < p.x) {
+				rect.right = p.x;
+			}
+			if(typeof rect.bottom === 'undefined' || rect.bottom < p.y) {
+				rect.bottom = p.y;
+			}
+		}
+
+		if(!rect.left) rect.left = 0; 
+		if(!rect.top) rect.top = 0; 
+		if(!rect.right) rect.right = 0; 
+		if(!rect.bottom) rect.bottom = 0; 
+
+		rect.width = rect.right - rect.left;
+		rect.height = rect.bottom - rect.top;
+
+		return rect;
 	}
 
 	/**
@@ -651,7 +720,10 @@ export default class jmControl extends jmProperty {
 				rotation.y  = jmUtils.percentToNumber(rotation.y) * bounds.height;
 			}
 		}
-		return rotation;
+		return {
+			...rotation,
+			bounds
+		};
 
 	}
 
@@ -763,23 +835,6 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 把图形旋转一个角度
-	 * @param {number} angle 旋转角度
-	 * @param {object} point 旋转坐标，可以是百分比,例如：{x: '50%',y: '50%'}
-	 */
-	rotate(angle, point) {	
-		/*this.children.each(function(i,c){
-			c.rotate(angle);
-		});*/
-		this.style.rotation = {
-			angle: angle,
-			point: point
-		};
-
-		this.needUpdate = true;
-	}
-
-	/**
 	 * 获取控件相对于画布的绝对边界，
 	 * 与getBounds不同的是：getBounds获取的是相对于父容器的边界.
 	 *
@@ -819,6 +874,20 @@ export default class jmControl extends jmProperty {
 			point.y = (point.y||0) + bounds.top;	
 		}
 		return point;
+	}
+
+	/**
+	 * 把绝对定位坐标转为当前控件坐标系内
+	 * @param {*} point 
+	 */
+	toLocalPosition(point) {
+		
+		const bounds = this.absoluteBounds?this.absoluteBounds:this.getAbsoluteBounds();
+		if(!bounds) return false;	
+		return { 
+			x: point.x - bounds.left,
+			y: point.y - bounds.top
+		};
 	}
 
 	/**
@@ -1066,7 +1135,7 @@ export default class jmControl extends jmProperty {
 		}
 		
 		const bounds = this.getBounds();	
-		const rotation = this.getRotation(null, bounds);//获取当前旋转参数
+		
 		let ps = this.points;
 		//如果不是路径组成，则采用边界做为顶点
 		if(!ps || !ps.length) {
@@ -1080,7 +1149,7 @@ export default class jmControl extends jmProperty {
 		//如果有指定padding 表示接受区域加宽，命中更易
 		pad = Number(pad || this.style['touchPadding'] || this.style['lineWidth'] || 1);
 		if(ps && ps.length) {
-			
+			const rotation = this.getRotation(null, bounds);//获取当前旋转参数
 			//如果有旋转参数，则需要转换坐标再处理
 			if(rotation && rotation.angle != 0) {
 				ps = jmUtils.clone(ps, true);//拷贝一份数据

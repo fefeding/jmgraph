@@ -52,7 +52,7 @@
                 //小方块样式
                 rectStyle: {
                     stroke: 'green', //小方块边颜色
-                    fill: 'transparent',//小方块填充色
+                    fill: '#ccc',//小方块填充色
                     lineWidth: 1.1, //小方块线宽
                     close: true
                 }
@@ -68,7 +68,7 @@
 			});	
 			//大小改变事件
 			resize.on('resize', function() {
-				console.log(arguments);
+				console.log( Date.now(), arguments);
 			});	
 			resize.canMove(true);
             g.children.add(resize);           

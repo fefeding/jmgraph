@@ -44,7 +44,7 @@ export default class jmGraph extends jmControl {
 		 */
 		this.util = this.utils = jmUtils;	
 		// 模式 webgl | 2d
-		this.mode = option.mode;
+		this.mode = option.mode || '2d';
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
@@ -126,7 +126,7 @@ export default class jmGraph extends jmControl {
 		// devicePixelRatio初始化
 		let dpr = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
 		if(this.isWXMiniApp) {
-			dpr = wx.getSystemInfoSync().pixelRatio || 1;
+			dpr = wx.getWindowInfo().pixelRatio || 1;
 		}		
 		this.devicePixelRatio = dpr;
 		// 为了解决锯齿问题，先放大canvas再缩放

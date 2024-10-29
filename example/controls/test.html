@@ -19,6 +19,7 @@
 	</body>
     <script type="module">	
         import {jmGraph} from "../../index.js";
+        import {jmRect} from "../../src/shapes/jmRect.js";
         import {jmPath} from "../../src/core/jmPath.js";
     /**
      * 测试
@@ -91,7 +92,211 @@
         }
     } 
 
+    // 图片裁剪框
+    class ImageEditCover extends jmPath {
+    constructor(params = {}) {      
+        super(params);      
+        this.style.close = this.style.close || true;
+        this.init(params);
+    }
+    // 初始化控件元素
+    init(params) {
+        this.width = this.width || '100%';
+        this.height = this.height || '100%';
+        // 生成层
+        const rectStyle = {
+            stroke: 'transparent',
+            fill: 'rgba(100,100,100,0.4)',
+            lineWidth: 0.1,
+            zIndex: 1,
+        };
+        const graph = (this.graph || params.graph);
+        const leftRect = graph.createShape(jmRect, {
+            position:{x:0, y:0 },
+            width: 0,
+            height: '100%',
+            style: rectStyle,
+            interactive: false
+        });
+        const topRect = graph.createShape(jmRect, {
+            position:{x:0, y:0 },
+            width: '100%',
+            height: 0,
+            style: rectStyle,
+            interactive: false
+        });
+        const rightRect = graph.createShape(jmRect, {
+            position:{x:0, y:0 },
+            width: 0,
+            height: '100%',
+            style: rectStyle,
+            interactive: false
+        });
+        const bottomRect = graph.createShape(jmRect, {
+            position:{x:0, y:0 },
+            width: '100%',
+            height: 0,
+            style: rectStyle,
+            interactive: false
+        });
+        this.rects.push(leftRect, topRect, rightRect, bottomRect);
+        this.children.add(leftRect);
+        this.children.add(topRect);
+        this.children.add(rightRect);
+        this.children.add(bottomRect);
 
+        const controlStyle = {
+            lineWidth: 3,        
+            stroke: '#fff',
+            zIndex: 100,
+        }
+        const c1 = graph.createShape(jmPath, {
+            style: controlStyle,
+            interactive: true
+        });
+        const c2 = graph.createShape(jmPath, {
+            style: controlStyle,
+            interactive: true
+        });
+        const c3 = graph.createShape(jmPath, {
+            style: controlStyle,
+            interactive: true
+        });
+        const c4 = graph.createShape(jmPath, {
+            style: controlStyle,
+            interactive: true
+        });
+        this.controls.push(c1, c2, c3, c4);
+        
+        this.children.add(c1);
+        this.children.add(c2);
+        this.children.add(c3);
+        this.children.add(c4);
+
+        c1.canMove(true);
+        c2.canMove(true);
+        c3.canMove(true);
+        c4.canMove(true);
+        
+    }
+
+    // 裁剪的目录区域
+    // 最终改变结果也是这个参数
+    targetBounds = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+    }
+
+    rects = [];
+    // 操作折角
+    controls = [];
+
+    /**
+     * 初始化图形点
+     * 控件都是由点形成
+     * 
+     * @method initPoint
+     * @private
+     * @for jmArc
+     */
+    initPoints() {    
+        //可以获取当前控件的左上坐标，可以用来画相对位置
+        const location = this.getLocation();//获取位置参数      
+
+        const targetLeft = location.width / 2 - this.targetBounds.width / 2;
+        const targetRight = location.width / 2 + this.targetBounds.width / 2;
+        const targetBottom = this.targetBounds.y + this.targetBounds.height;
+
+        this.rects[0].width = targetLeft + 0.1;
+
+        this.rects[1].height = this.targetBounds.y;
+        this.rects[1].width = this.targetBounds.width + 0.1;
+        this.rects[1].position.x = targetLeft;
+
+        this.rects[2].width = location.width - targetRight;
+        this.rects[2].position.x = targetRight;
+
+        this.rects[3].height = location.height - targetBottom;
+        this.rects[3].width = this.targetBounds.width + 0.1;
+        this.rects[3].position.x = targetLeft;
+        this.rects[3].position.y = targetBottom;
+        
+        return this.points;
+    }
+    resetControlsPosition() {
+        //可以获取当前控件的左上坐标，可以用来画相对位置
+        const location = this.getLocation();//获取位置参数      
+
+        const targetLeft = location.width / 2 - this.targetBounds.width / 2;
+        const targetRight = location.width / 2 + this.targetBounds.width / 2;
+        const targetBottom = this.targetBounds.y + this.targetBounds.height;
+
+        // 操作折角位置
+        const controlWidth = 10;
+        const controlLineWidth = this.controls[0].style.lineWidth || 2;
+        this.controls[0].points = [
+            {
+            x: targetLeft - controlLineWidth/2,
+            y: this.targetBounds.y + controlWidth
+            },
+            {
+            x: targetLeft - controlLineWidth/2,
+            y: this.targetBounds.y - controlLineWidth/2
+            },
+            {
+            x: targetLeft + controlWidth,
+            y: this.targetBounds.y - controlLineWidth/2
+            }
+        ];
+
+        this.controls[1].points = [
+            {
+            x: targetRight - controlWidth,
+            y: this.targetBounds.y - controlLineWidth/2
+            },
+            {
+            x: targetRight + controlLineWidth/2,
+            y: this.targetBounds.y - controlLineWidth/2
+            },
+            {
+            x: targetRight + controlLineWidth/2,
+            y: this.targetBounds.y + controlWidth
+            }
+        ];
+
+        this.controls[2].points = [
+            {
+            x: targetRight - controlWidth,
+            y: targetBottom  + controlLineWidth/2
+            },
+            {
+            x: targetRight + controlLineWidth/2,
+            y: targetBottom + controlLineWidth/2
+            },
+            {
+            x: targetRight + controlLineWidth/2,
+            y: targetBottom - controlWidth
+            }
+        ];
+
+        this.controls[3].points = [
+            {
+            x: targetLeft - controlLineWidth/2,
+            y: targetBottom - controlWidth
+            },
+            {
+            x: targetLeft - controlLineWidth/2,
+            y: targetBottom + controlLineWidth/2
+            },
+            {
+            x: targetLeft + controlWidth,
+            y: targetBottom + controlLineWidth/2
+            }
+        ];
+    }
+    } 
     var container = document.getElementById('mycanvas_container');
 
     var g = jmGraph.create(container, {
@@ -124,6 +329,25 @@
         
         g.children.add(t);            
         t.canMove(true);
+
+        const editorCover = g.createShape(ImageEditCover, {
+          style: {
+            fill: 'transparent',
+            stroke: 'transparent',
+          },
+          interactive: true
+        });
+
+        editorCover.targetBounds = {
+            x: 100,
+            y: 100,
+            width: 200,
+            height: 300,
+        };
+        //editorCover.visible = false;
+        g.children.add(editorCover); 
+
+        editorCover.resetControlsPosition();
 
         function update() {
             if(g.needUpdate) g.redraw();

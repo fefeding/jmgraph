@@ -1151,13 +1151,13 @@ export default class jmControl extends jmProperty {
 		if(ps && ps.length) {
 			const rotation = this.getRotation(null, bounds);//获取当前旋转参数
 			//如果有旋转参数，则需要转换坐标再处理
-			if(rotation && rotation.angle != 0) {
+			if(rotation && rotation.angle) {
 				ps = jmUtils.clone(ps, true);//拷贝一份数据
 				//rotateX ,rotateY 是相对当前控件的位置
 				ps = jmUtils.rotatePoints(ps, {
 					x: rotation.x + bounds.left,
 					y: rotation.y + bounds.top
-				}, rotation.angle);
+				}, rotation.angle || 0);
 			}
 			//如果当前路径不是实心的
 			//就只用判断点是否在边上即可	
@@ -1210,6 +1210,7 @@ export default class jmControl extends jmProperty {
 		if(this.visible === false) return ;//如果不显示则不响应事件	
 		if(!args.position) {		
 			const graph = this.graph;
+			args.isWXMiniApp = graph.isWXMiniApp;
 
 			const srcElement = args.srcElement || args.target;			
 			
@@ -1222,7 +1223,8 @@ export default class jmControl extends jmProperty {
 				ctrlKey: args.ctrlKey,
 				cancel : false,
 				event: args, // 原生事件
-				srcElement : srcElement
+				srcElement : srcElement,
+				isWXMiniApp: graph.isWXMiniApp,
 			};		
 		}
 		args.path = args.path||[]; //事件冒泡路径

@@ -1445,13 +1445,13 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
       if (ps && ps.length) {
         var rotation = this.getRotation(null, bounds); //获取当前旋转参数
         //如果有旋转参数，则需要转换坐标再处理
-        if (rotation && rotation.angle != 0) {
+        if (rotation && rotation.angle) {
           ps = _jmUtils.jmUtils.clone(ps, true); //拷贝一份数据
           //rotateX ,rotateY 是相对当前控件的位置
           ps = _jmUtils.jmUtils.rotatePoints(ps, {
             x: rotation.x + bounds.left,
             y: rotation.y + bounds.top
-          }, rotation.angle);
+          }, rotation.angle || 0);
         }
         //如果当前路径不是实心的
         //就只用判断点是否在边上即可	
@@ -1501,6 +1501,7 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
       if (this.visible === false) return; //如果不显示则不响应事件	
       if (!args.position) {
         var graph = this.graph;
+        args.isWXMiniApp = graph.isWXMiniApp;
         var srcElement = args.srcElement || args.target;
         var position = _jmUtils.jmUtils.getEventPosition(args); //初始化事件位置
 
@@ -1512,7 +1513,8 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
           cancel: false,
           event: args,
           // 原生事件
-          srcElement: srcElement
+          srcElement: srcElement,
+          isWXMiniApp: graph.isWXMiniApp
         };
       }
       args.path = args.path || []; //事件冒泡路径
@@ -3941,9 +3943,15 @@ var jmUtils = exports.jmUtils = exports["default"] = /*#__PURE__*/function () {
       var ox = evt.offsetX;
       var oy = evt.offsetY;
       if (typeof ox === 'undefined' && typeof oy === 'undefined') {
-        var p = this.getElementPosition(target);
-        ox = px - p.left;
-        oy = py - p.top;
+        // 小程序下取x,y就是它的相对坐标
+        if (evt.isWXMiniApp) {
+          ox = evt.x;
+          oy = evt.y;
+        } else {
+          var p = this.getElementPosition(target);
+          ox = px - p.left;
+          oy = py - p.top;
+        }
       }
       if (scale) {
         if (scale.x) ox = ox / scale.x;
@@ -7792,7 +7800,10 @@ var jmImage = exports.jmImage = exports["default"] = /*#__PURE__*/function (_jmC
       //如果当次计算过，则不重复计算
       if (this.bounds && !isReset) return this.bounds;
       var rect = {};
-      var img = this.getImage();
+      var img = this.getImage() || {
+        width: 0,
+        height: 0
+      };
       var p = this.getLocation();
       var w = p.width || img.width;
       var h = p.height || img.height;

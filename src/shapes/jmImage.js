@@ -175,7 +175,10 @@ export default class jmImage extends jmControl {
 		//如果当次计算过，则不重复计算
 		if(this.bounds && !isReset) return this.bounds;
 		let rect = {};
-		let img = this.getImage();
+		let img = this.getImage() || {
+			width: 0,
+			height: 0
+		};
 		let p = this.getLocation();
 		let w = p.width || img.width;
 		let h = p.height || img.height;

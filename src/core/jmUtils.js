@@ -334,9 +334,16 @@ export default class jmUtils {
         let ox = evt.offsetX;
         let oy = evt.offsetY;
         if(typeof ox === 'undefined' && typeof oy === 'undefined') {
-            let p = this.getElementPosition(target);
-            ox= px - p.left;
-            oy = py - p.top;
+            // 小程序下取x,y就是它的相对坐标
+            if(evt.isWXMiniApp) {
+                ox = evt.x;
+                oy = evt.y;
+            }
+            else {
+                let p = this.getElementPosition(target);
+                ox= px - p.left;
+                oy = py - p.top;
+            }
         }
         if(scale) {
             if(scale.x) ox = ox / scale.x;

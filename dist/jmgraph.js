@@ -208,7 +208,6 @@ var _jmShadow = require("./jmShadow.js");
 var _jmProperty2 = require("./jmProperty.js");
 var _path = _interopRequireDefault(require("../lib/webgl/path.js"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-function _readOnlyError(r) { throw new TypeError('"' + r + '" is read-only'); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -276,6 +275,7 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
     //this.position = params.position || {x:0,y:0};
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
+    _this2.hitArea = params.hitArea || null;
     //this.lockSide = params.lockSide || null;
 
     if (params.position) {
@@ -384,6 +384,23 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
     },
     set: function set(v) {
       return this.property('interactive', v);
+    }
+
+    /**
+     * 事件命中区域，如果不给定就会自动计算
+     *  这个区域是相对于当前控件本身的，也就是说从左上角开始 {x:0,y:0}
+     * @property hitArea
+     * @default bounds
+     * @type { x: number, y: number, width: number, height: number}
+     */
+  }, {
+    key: "hitArea",
+    get: function get() {
+      var s = this.property('hitArea');
+      return s;
+    },
+    set: function set(v) {
+      return this.property('hitArea', v);
     }
 
     /**
@@ -1418,6 +1435,22 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
         return true;
       }
       var bounds = this.getBounds();
+      // 如果指定了合中区域，则以命中区域为准
+      if (this.hitArea) {
+        var hitArea = {
+          left: this.hitArea.x + bounds.left,
+          top: this.hitArea.y + bounds.top,
+          right: this.hitArea.width + bounds.left,
+          bottom: this.hitArea.height + bounds.top
+        };
+        if (p.x > hitArea.right || p.x < hitArea.left) {
+          return false;
+        }
+        if (p.y > hitArea.bottom || p.y < hitArea.top) {
+          return false;
+        }
+        return true;
+      }
       var ps = this.points;
       //如果不是路径组成，则采用边界做为顶点
       if (!ps || !ps.length) {
@@ -1689,17 +1722,17 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
               });
               if (outside.left < 0) {
                 //offsetx -= outside.left;
-                0, _readOnlyError("offsetx");
+                offsetx = 0;
               } else if (outside.right > 0) {
                 //offsetx -= outside.right;
-                0, _readOnlyError("offsetx");
+                offsetx = 0;
               }
               if (outside.top < 0) {
                 //offsety -= outside.top;
-                0, _readOnlyError("offsety");
+                offsety = 0;
               } else if (outside.bottom > 0) {
                 //offsety -= outside.bottom;
-                0, _readOnlyError("offsety");
+                offsety = 0;
               }
             }
             if (offsetx || offsety) {

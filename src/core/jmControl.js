@@ -48,6 +48,7 @@ export default class jmControl extends jmProperty {
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+		this.hitArea = params.hitArea || null;
 		//this.lockSide = params.lockSide || null;
 
 		if(params.position) {
@@ -149,6 +150,21 @@ export default class jmControl extends jmProperty {
 	}
 	set interactive(v) {
 		return this.property('interactive', v);
+	}
+
+	/**
+	 * 事件命中区域，如果不给定就会自动计算
+	 *  这个区域是相对于当前控件本身的，也就是说从左上角开始 {x:0,y:0}
+	 * @property hitArea
+	 * @default bounds
+	 * @type { x: number, y: number, width: number, height: number}
+	 */
+	get hitArea() {
+		const s = this.property('hitArea');
+		return s;
+	}
+	set hitArea(v) {
+		return this.property('hitArea', v);
 	}
 		
 	/**
@@ -1136,6 +1152,22 @@ export default class jmControl extends jmProperty {
 		}
 		
 		const bounds = this.getBounds();	
+		// 如果指定了合中区域，则以命中区域为准
+		if(this.hitArea) {
+			const hitArea = {
+				left: this.hitArea.x + bounds.left,
+				top: this.hitArea.y + bounds.top,
+				right: this.hitArea.width + bounds.left,
+				bottom: this.hitArea.height + bounds.top,
+			};
+			if(p.x > hitArea.right || p.x < hitArea.left) {
+				return false;
+			}
+			if(p.y > hitArea.bottom || p.y < hitArea.top) {
+				return false;
+			}
+			return true;
+		}
 		
 		let ps = this.points;
 		//如果不是路径组成，则采用边界做为顶点

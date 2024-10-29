@@ -48,6 +48,7 @@ export default class jmControl extends jmProperty {
 		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+		//this.lockSide = params.lockSide || null;
 
 		if(params.position) {
 			this.position = params.position;
@@ -1125,10 +1126,10 @@ export default class jmControl extends jmProperty {
 			// 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
 			const right = position.left + this.width;
 			const bottom = position.top + this.height;
-			if(p.pageX > right || p.pageX < position.left) {
+			if(p.x > right || p.x < position.left) {
 				return false;
 			}
-			if(p.pageY > bottom || p.pageY < position.top) {
+			if(p.y > bottom || p.y < position.top) {
 				return false;
 			}	
 			return true;
@@ -1381,33 +1382,37 @@ export default class jmControl extends jmProperty {
 
 				if(_this.__mvMonitor.mouseDown) {
 					_this.parent.bounds = null;
-					let parentbounds = _this.parent.getAbsoluteBounds();		
-					let offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
-					let offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				
+					//let parentbounds = _this.parent.getAbsoluteBounds();		
+					const offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
+					const offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				
 					//console.log(offsetx + ',' + offsety);
 					//如果锁定边界
-					if(_this.lockSide) {
+					if(_this.option.lockSide) {
 						let thisbounds = _this.bounds || _this.getAbsoluteBounds();					
 						//检查边界出界
-						let outside = jmUtils.checkOutSide(parentbounds,thisbounds,{x:offsetx,y:offsety});
+						let outside = jmUtils.checkOutSide(_this.option.lockSide, thisbounds, { x: offsetx, y: offsety });
 						if(outside.left < 0) {
-							if(_this.lockSide.left) offsetx -= outside.left;
+							//offsetx -= outside.left;
+							offsetx = 0;
 						}
 						else if(outside.right > 0) {
-							if(_this.lockSide.right) offsetx -= outside.right;
+							//offsetx -= outside.right;
+							offsetx = 0;
 						}
 						if(outside.top < 0) {
-							if(_this.lockSide.top) offsety -= outside.top;
+							//offsety -= outside.top;
+							offsety = 0;
 						}
 						else if(outside.bottom > 0) {
-							if(_this.lockSide.bottom) offsety -= outside.bottom;
+							//offsety -= outside.bottom;
+							offsety = 0;
 						}
 					}
 					
 					if(offsetx || offsety) {
 						_this.offset(offsetx, offsety, true, evt);
-						_this.__mvMonitor.curposition.x = evt.position.offsetX;
-						_this.__mvMonitor.curposition.y = evt.position.offsetY;	
+						if(offsetx) _this.__mvMonitor.curposition.x = evt.position.offsetX;
+						if(offsety) _this.__mvMonitor.curposition.y = evt.position.offsetY;	
 						//console.log(offsetx + '.' + offsety);
 					}
 					return false;

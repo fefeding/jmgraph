@@ -208,6 +208,7 @@ var _jmShadow = require("./jmShadow.js");
 var _jmProperty2 = require("./jmProperty.js");
 var _path = _interopRequireDefault(require("../lib/webgl/path.js"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+function _readOnlyError(r) { throw new TypeError('"' + r + '" is read-only'); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -275,6 +276,8 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
     //this.position = params.position || {x:0,y:0};
     _this2.width = params.width || 0;
     _this2.height = params.height || 0;
+    //this.lockSide = params.lockSide || null;
+
     if (params.position) {
       _this2.position = params.position;
     }
@@ -1406,10 +1409,10 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
         // 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
         var right = position.left + this.width;
         var bottom = position.top + this.height;
-        if (p.pageX > right || p.pageX < position.left) {
+        if (p.x > right || p.x < position.left) {
           return false;
         }
-        if (p.pageY > bottom || p.pageY < position.top) {
+        if (p.y > bottom || p.y < position.top) {
           return false;
         }
         return true;
@@ -1672,33 +1675,37 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
 
           if (_this.__mvMonitor.mouseDown) {
             _this.parent.bounds = null;
-            var parentbounds = _this.parent.getAbsoluteBounds();
+            //let parentbounds = _this.parent.getAbsoluteBounds();		
             var offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
             var offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;
             //console.log(offsetx + ',' + offsety);
             //如果锁定边界
-            if (_this.lockSide) {
+            if (_this.option.lockSide) {
               var thisbounds = _this.bounds || _this.getAbsoluteBounds();
               //检查边界出界
-              var outside = _jmUtils.jmUtils.checkOutSide(parentbounds, thisbounds, {
+              var outside = _jmUtils.jmUtils.checkOutSide(_this.option.lockSide, thisbounds, {
                 x: offsetx,
                 y: offsety
               });
               if (outside.left < 0) {
-                if (_this.lockSide.left) offsetx -= outside.left;
+                //offsetx -= outside.left;
+                0, _readOnlyError("offsetx");
               } else if (outside.right > 0) {
-                if (_this.lockSide.right) offsetx -= outside.right;
+                //offsetx -= outside.right;
+                0, _readOnlyError("offsetx");
               }
               if (outside.top < 0) {
-                if (_this.lockSide.top) offsety -= outside.top;
+                //offsety -= outside.top;
+                0, _readOnlyError("offsety");
               } else if (outside.bottom > 0) {
-                if (_this.lockSide.bottom) offsety -= outside.bottom;
+                //offsety -= outside.bottom;
+                0, _readOnlyError("offsety");
               }
             }
             if (offsetx || offsety) {
               _this.offset(offsetx, offsety, true, evt);
-              _this.__mvMonitor.curposition.x = evt.position.offsetX;
-              _this.__mvMonitor.curposition.y = evt.position.offsetY;
+              if (offsetx) _this.__mvMonitor.curposition.x = evt.position.offsetX;
+              if (offsety) _this.__mvMonitor.curposition.y = evt.position.offsetY;
               //console.log(offsetx + '.' + offsety);
             }
             return false;
@@ -2610,7 +2617,10 @@ var jmGraph = exports.jmGraph = exports["default"] = /*#__PURE__*/function (_jmC
      * @return {postion} 返回定位坐标
      */
     function getPosition() {
-      var p = _jmUtils.jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+      var p = this.isWXMiniApp ? {
+        left: 0,
+        top: 0
+      } : _jmUtils.jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
       p.width = this.width;
       p.height = this.height;
       p.right = p.left + p.width;

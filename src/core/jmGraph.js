@@ -226,7 +226,11 @@ export default class jmGraph extends jmControl {
 	 * @return {postion} 返回定位坐标
 	 */
 	getPosition() {
-		const p = jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+		const p = this.isWXMiniApp? {
+			left: 0,
+			top: 0
+		} :jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+		
 		p.width = this.width;
 		p.height = this.height;
 		p.right = p.left + p.width;

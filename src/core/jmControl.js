@@ -1383,8 +1383,8 @@ export default class jmControl extends jmProperty {
 				if(_this.__mvMonitor.mouseDown) {
 					_this.parent.bounds = null;
 					//let parentbounds = _this.parent.getAbsoluteBounds();		
-					const offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
-					const offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				
+					let offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
+					let offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				
 					//console.log(offsetx + ',' + offsety);
 					//如果锁定边界
 					if(_this.option.lockSide) {

@@ -3928,11 +3928,12 @@ var jmUtils = exports.jmUtils = exports["default"] = /*#__PURE__*/function () {
     key: "getEventPosition",
     value: function getEventPosition(evt, scale) {
       evt = evt || event;
+      var isWXMiniApp = evt.isWXMiniApp;
       var isTouch = false;
       var touches = evt.changedTouches || evt.targetTouches || evt.touches;
       var target = evt.target || evt.srcElement;
       if (touches && touches.length) {
-        evt = touches[0]; //兼容touch事件
+        evt = touches[0]; //兼容touch事件            
         if (!evt.target) evt.target = target;
         isTouch = true;
       }
@@ -3944,7 +3945,7 @@ var jmUtils = exports.jmUtils = exports["default"] = /*#__PURE__*/function () {
       var oy = evt.offsetY;
       if (typeof ox === 'undefined' && typeof oy === 'undefined') {
         // 小程序下取x,y就是它的相对坐标
-        if (evt.isWXMiniApp) {
+        if (isWXMiniApp) {
           ox = evt.x;
           oy = evt.y;
         } else {
@@ -3972,7 +3973,8 @@ var jmUtils = exports.jmUtils = exports["default"] = /*#__PURE__*/function () {
         x: ox,
         y: oy,
         isTouch: isTouch,
-        touches: touches
+        touches: touches,
+        isWXMiniApp: isWXMiniApp
       };
     }
 

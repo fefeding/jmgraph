@@ -317,12 +317,12 @@ export default class jmUtils {
      */
     static getEventPosition (evt, scale) {
         evt = evt || event;
-        
+        const isWXMiniApp = evt.isWXMiniApp;
         let isTouch = false;
         let touches = evt.changedTouches || evt.targetTouches || evt.touches;
         let target = evt.target || evt.srcElement;
         if(touches && touches.length) {
-            evt = touches[0];//兼容touch事件
+            evt = touches[0];//兼容touch事件            
             if(!evt.target) evt.target = target;
             isTouch = true;
         }
@@ -335,7 +335,7 @@ export default class jmUtils {
         let oy = evt.offsetY;
         if(typeof ox === 'undefined' && typeof oy === 'undefined') {
             // 小程序下取x,y就是它的相对坐标
-            if(evt.isWXMiniApp) {
+            if(isWXMiniApp) {
                 ox = evt.x;
                 oy = evt.y;
             }
@@ -365,7 +365,8 @@ export default class jmUtils {
             x: ox,
             y: oy,
             isTouch: isTouch,
-            touches
+            touches,
+            isWXMiniApp
         };
     }
 

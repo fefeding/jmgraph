@@ -1720,17 +1720,17 @@ var jmControl = exports.jmControl = exports["default"] = /*#__PURE__*/function (
                 x: offsetx,
                 y: offsety
               });
-              if (outside.left < 0) {
+              if (outside.left < 0 && offsetx < 0) {
                 //offsetx -= outside.left;
                 offsetx = 0;
-              } else if (outside.right > 0) {
+              } else if (outside.right > 0 && offsetx > 0) {
                 //offsetx -= outside.right;
                 offsetx = 0;
               }
-              if (outside.top < 0) {
+              if (outside.top < 0 && offsety < 0) {
                 //offsety -= outside.top;
                 offsety = 0;
-              } else if (outside.bottom > 0) {
+              } else if (outside.bottom > 0 && offsety > 0) {
                 //offsety -= outside.bottom;
                 offsety = 0;
               }

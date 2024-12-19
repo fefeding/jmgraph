@@ -74,7 +74,9 @@
 		p3arc.canMove(true);
 		var p4arc = graph1.createShape('arc', { style: pstyle, center: p4, radius: psize, start: 0, end: Math.PI * 2, width: psize, height: psize });
 		graph1.children.add(p4arc);
-		p4arc.canMove(true);		
+		p4arc.canMove(true);	
+		
+		drawManualArc(graph1);
 	}
 
 
@@ -212,6 +214,80 @@
 	}
 
 	init2(g2);
+
+	// 手绘式圆
+	function drawManualArc(g) {
+		const baseRadius = 60; // 基础半径
+        const points = 12; // 分割成多少点，减少点数以避免毛刺
+        const variance = 20; // 半径的随机偏移量
+		const center = {
+			x: 600, y: 100
+		};
+
+        // 生成半径偏移的函数，使用简单的正弦函数模拟平滑变化
+        function getRadius(angleIndex, totalPoints) {
+            const angle = (angleIndex / totalPoints) * Math.PI * 2;
+            // 使用正弦函数创建周期性变化
+            const noise = Math.sin(angle * 1) * (variance / 2); // 3决定波动次数，可调节
+            // 添加随机偏移
+            const randomOffset = (Math.random() - 0.5) * (variance / 2);
+            return baseRadius + noise + randomOffset;
+        }
+
+		var p = g.createShape('path', { style: {
+			stroke: 'rgb(120,20,80)',
+			lineWidth: 3,
+			close: true,
+		}, points: [] });
+
+		//一个固定的bezier曲线
+		var bezier = g.createShape('bezier', { style: style, points: [] });
+		let start = {
+			x: 0,
+			y: 0
+		};
+		for (let i = 0; i <= points; i++) {
+            const angleIndex = i % points;
+            const angle = (angleIndex / points) * Math.PI * 2;
+            const r = getRadius(angleIndex, points);
+            const x = center.x + r * Math.cos(angle);
+            const y = center.y + r * Math.sin(angle);
+            
+            if (i === 0) {
+                start = {
+					x, y
+				};
+            } else {
+                // 使用二次贝塞尔曲线连接点
+                const prevIndex = (i - 1) % points;
+                const prevAngle = (prevIndex / points) * Math.PI * 2;
+                const prevR = getRadius(prevIndex, points);
+                const prevX = center.x + prevR * Math.cos(prevAngle);
+                const prevY = center.y + prevR * Math.sin(prevAngle);
+                
+                // 控制点为当前点和前一个点的中点，加上偏移量
+                const cpX = (prevX + x) / 2;
+                const cpY = (prevY + y) / 2;
+				bezier.cpoints = [
+					start,{
+					x: prevX,
+					y: prevY
+				}, {
+					x: cpX,
+					y: cpY
+				}]
+                //ctx.quadraticCurveTo(prevX, prevY, cpX, cpY);
+				p.points.push(...bezier.initPoints());
+				start = {
+					x: cpX,
+					y: cpY
+				}
+            }
+        }
+		//p.points.push(start);
+		console.log(p.points)
+		g.children.add(p);
+	}
 
 	//实时更新画布
 	function update() {

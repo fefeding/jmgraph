@@ -1904,6 +1904,18 @@ var jmEvents = exports.jmEvents = exports["default"] = /*#__PURE__*/function () 
       }
     }
   }, {
+    key: "tap",
+    value: function tap(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'tap';
+      this.container.raiseEvent('tap', evt);
+      var t = evt.target || evt.srcElement;
+      if (t == this.target) {
+        //if(evt.preventDefault) evt.preventDefault();
+        return false;
+      }
+    }
+  }, {
     key: "destroy",
     value:
     // 销毁

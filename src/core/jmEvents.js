@@ -60,6 +60,18 @@ export default class jmEvents {
 		}
 	};
 
+	tap(evt) {
+		evt = evt || window.event;
+		evt.eventName = 'tap';
+		
+		this.container.raiseEvent('tap',evt);
+		let t = evt.target || evt.srcElement;
+		if(t == this.target) {
+			//if(evt.preventDefault) evt.preventDefault();
+			return false;
+		}
+	};
+
 	// 销毁
 	destroy() {
 		this.mouseHandler.destroy();

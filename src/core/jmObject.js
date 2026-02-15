@@ -1,30 +1,16 @@
 
 import {jmList} from "./jmList.js";
 
-var control_id_counter = 0;
-/**
- *  所有jm对象的基础对象
- * 
- * @class jmObject
- * @for jmGraph
- */
+let control_id_counter = 0;
+
 export default class jmObject {
-	//id;
 	constructor(g) {
 		if(g && g.type == 'jmGraph') {
 			this.graph = g;
 		}
-		this.id = ++control_id_counter; //生成一个唯一id
+		this.id = ++control_id_counter;
 	}
 	
-	/**
-	 * 检 查对象是否为指定类型
-	 * 
-	 * @method is
-	 * @param {class} type 判断的类型
-	 * @for jmObject
-	 * @return {boolean} true=表示当前对象为指定的类型type,false=表示不是
-	 */
 	is(type) {
 		if(typeof type == 'string') {
 			return this.type == type;
@@ -32,68 +18,55 @@ export default class jmObject {
 		return this instanceof type;
 	}
 
-	/**
-	 * 给控件添加动画处理,如果成功执行会导致画布刷新。
-	 *
-	 * @method animate
-	 * @for jmObject
-	 * @param {function} handle 动画委托
-	 * @param {integer} millisec 此委托执行间隔 （毫秒）
-	 */
 	animate(...args) {	
 		if(this.is('jmGraph')) {
 			if(args.length > 1) {			
 				if(!this.animateHandles) this.animateHandles = new jmList();
 				
-				var params = [];
+				const params = [];
 				if(args.length > 2) {
-					for(var i=2;i<args.length;i++) {
+					for(let i = 2; i < args.length; i++) {
 						params.push(args[i]);
 					}
 				}		
 				this.animateHandles.add({
 					millisec: args[1] || 20, 
 					handle: args[0], 
-					params:params
+					params
 				});
 			}
-			if(this.animateHandles) {
-				if(this.animateHandles.count() > 0) {
-					var self = this;
-					//延时处理动画事件
-					this.dispatcher = setTimeout(function(_this) {
-						_this = _this || self;
-						//var needredraw = false;
-						var overduehandles = [];
-						var curTimes = new Date().getTime();
-						_this.animateHandles.each(function(i,ani) {						
-							try {
-								if(ani && ani.handle && (!ani.times || curTimes - ani.times >= ani.millisec)) {
-									var r = ani.handle.apply(_this, ani.params);
-									if(r === false) {
-										overduehandles.push(ani);//表示已完成的动画效果
-									}								
-									ani.times = curTimes;
-									//needredraw = true;								
-								}
+			if(this.animateHandles && this.animateHandles.count() > 0) {
+				const self = this;
+				this.dispatcher = setTimeout(function(_this) {
+					_this = _this || self;
+					const overduehandles = [];
+					const curTimes = Date.now();
+					_this.animateHandles.each(function(i, ani) {						
+						try {
+							if(ani && ani.handle && (!ani.times || curTimes - ani.times >= ani.millisec)) {
+								const r = ani.handle.apply(_this, ani.params);
+								if(r === false) {
+									overduehandles.push(ani);
+								}								
+								ani.times = curTimes;
 							}
-							catch(e) {
-								if(window.console && window.console.info) {
-									window.console.info(e.toString());
-								}
-								if(ani) overduehandles.push(ani);//异常的事件，不再执行
-							}						
-						});
-						for(var i in overduehandles) {
-							_this.animateHandles.remove(overduehandles[i]);//移除完成的效果
 						}
-						_this.animate();
-					},10,this);//刷新				
-				}
+						catch(e) {
+							if(window.console && window.console.info) {
+								window.console.info(e.toString());
+							}
+							if(ani) overduehandles.push(ani);
+						}						
+					});
+					for(let i = 0; i < overduehandles.length; i++) {
+						_this.animateHandles.remove(overduehandles[i]);
+					}
+					_this.animate();
+				}, 10, this);
 			}
 		}	
 		else {
-			var graph = this.graph;
+			const graph = this.graph;
 			if(graph) {
 				graph.animate(...args);
 			}

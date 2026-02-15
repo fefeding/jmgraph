@@ -1,59 +1,57 @@
-jmGraph
-=========
+# jmGraph
 
-[![Latest NPM release][npm-badge]][npm-badge-url]
+[![npm version](https://img.shields.io/npm/v/jmgraph.svg)](https://www.npmjs.com/package/jmgraph)
+[![npm downloads](https://img.shields.io/npm/dm/jmgraph.svg)](https://www.npmjs.com/package/jmgraph)
+[![License: MIT](https://img.shields.io/npm/l/jmgraph.svg)](https://github.com/jiamao/jmgraph/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jiamao/jmgraph.svg?branch=master)](https://travis-ci.org/jiamao/jmgraph)
 
-基于CANVAS的简单画图组件  
-`让你用类似于dom的方式，在canvas上画图，感觉会不会很爽。`
+基于 Canvas 的简单画图组件，让你用类似于 DOM 的方式，在 Canvas 上画图。
 
-- 主页：[https://jiamao.github.io/jmgraph/](https://jiamao.github.io/jmgraph/)  
-- 示例：[https://jiamao.github.io/jmgraph/example/index.html](https://jiamao.github.io/jmgraph/example/index.html)
+## ✨ 特性
 
-基于它的图表应用：[https://github.com/jiamao/jmchart](https://github.com/jiamao/jmchart)
+- 🎨 **简单易用** - 类似 DOM 的 API 设计，学习成本低
+- 🚀 **高性能** - 基于 Canvas 原生渲染，支持大量图形
+- 📱 **跨平台** - 支持浏览器、Node.js 和微信小程序
+- 🎯 **丰富图形** - 内置矩形、圆形、线条、箭头、贝塞尔曲线等常用图形
+- 🎭 **事件系统** - 完整的鼠标和触摸事件支持
+- 🔧 **可扩展** - 支持自定义图形控件
+- 🌈 **样式丰富** - 支持渐变、阴影、透明度等样式
 
-安装
----
-直接从github下载包或npm安装。
-如需要构建，直接在项目录下执行`npm run build`即可。
-```shell
+## 📦 安装
+
+### npm
+
+```bash
 npm install jmgraph
 ```
-```shell
+
+### yarn
+
+```bash
 yarn add jmgraph
 ```
 
-入门
---------
+### CDN
 
-### es5引用办法
+直接下载 `dist/jmgraph.min.js` 并在 HTML 中引用：
 
-下载`dist/jmgraph.min.js`代码，并引用到你的html中。
 ```html
-<script type="text/javascript" src="../dist/jmgraph.min.js"></script>	
+<script type="text/javascript" src="../dist/jmgraph.min.js"></script>
 ```
-也可以用`commonjs`、`requirejs`等模块化库。
-##### requirejs
-```html
-<script type="text/javascript" src="js/require.js"></script>
-<script>
-    require(['../dist/jmgraph.js'], function(m) {
-        var g = new m.jmGraph();
-    });
-</script>
-```
-##### es6模块引用
-也可以直接用es6中的import来引用
+
+## 🚀 快速开始
+
+### ES6 模块方式
+
 ```html
 <script type="module">
-  // import jmGraph from "../dist/jmgraph.es6.js";
-  // import jmGraph from "./node_modules/jmgraph/index.js";
   import jmGraph from "jmgraph";
-  var container = document.getElementById('mycanvas_container');		
-  var g = new jmGraph(container, {
+  
+  const container = document.getElementById('mycanvas_container');
+  const g = new jmGraph(container, {
     width: 800,
     height: 600,
-    autoRefresh: true, // 是否自动刷新变化
+    autoRefresh: true,
     style: {
       fill: '#000'
     }
@@ -61,457 +59,285 @@ yarn add jmgraph
 </script>
 ```
 
+### CommonJS 方式
 
-在dom中添加一个`div或canvas`，然后初始化jmGraph。
-```html
-<div id="mycanvas_container"></div>
-<script type="text/javascript">	
-    //也可以是一个dom对象或一个jquery对象 
-    //例如：$('#mycanvas_container') || document.getElementById('mycanvas_container')
-    var container = 'mycanvas_container';
-    
-    var g = jmGraph.create(container, {
-        width: 800,
-        height: 600,
-        //样式，规则请参照样式说明
-        style: {
-            fill: '#000' //指定背景色
-        }
-    });
-</script>
-```
-在画布上画一个方块
 ```javascript
+const jmGraph = require('jmgraph');
 
-function init(g){
-    var style = {
-        stroke:'#46BF86',
-        lineWidth: 2
-    };
-    style.shadow = '0,0,10,#fff';//阴影
-    //style.opacity = 0.2;			
-    //style.lineCap = 'round';
-
-    //创建一个方块
-    var rect = g.createShape('rect',{
-        style:style,
-        position: {x:100,y:100}, //左上角坐标
-        width:100,
-        height:100
-    });
-    g.children.add(rect);
-
-    //绘制，可以用requestAnimationFrame动态刷新
-    function update() {
-        g.redraw();
-        //requestAnimationFrame(update);
-    }
-    update();
-}
-```
-
-样式
----
-
-样式可以直接用`canvas`支持的名称，也可以用本组件简化后的。
-
-#### 样式一览
-| 简化名称 | 原生名称 | 说明
-| :- | :- | :- | 
-| fill | fillStyle | 用于填充绘画的颜色、渐变或模式
-| stroke | strokeStyle | 用于笔触的颜色、渐变或模式
-| shadow | 没有对应的 | 最终会解析成以下几个属性，格式：'0,0,10,#fff'或g.createShadow(0,0,20,'#000');
-| shadow.blur | shadowBlur | 用于阴影的模糊级别
-| shadow.x | shadowOffsetX | 阴影距形状的水平距离
-| shadow.y | shadowOffsetY | 阴影距形状的垂直距离
-| shadow.color | shadowColor | 阴影颜色，格式：'#000'、'#46BF86'、'rgb(255,255,255)'或'rgba(39,72,188,0.5)'
-| lineWidth | lineWidth | 当前的线条宽度
-| miterLimit | miterLimit | 最大斜接长度
-| font | font | 请使用下面的 fontSize 和 fontFamily
-| fontSize | font | 字体大小
-| fontFamily | font | 字体
-| opacity | globalAlpha | 绘图的当前 alpha 或透明值
-| textAlign | textAlign | 文本内容的当前对齐方式
-| textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
-| lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
-| lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
-
-
-事件
----
-
-事件的绑定函数：`bind/unbind`  
-示例：
-```javascript
-//创建一条线
-var line = graph.createLine({x:10,y:200},{x:80,y:120},style);
-//鼠标移到上面显示不同的样式			
-line.bind('mouseover',function(evt) {
-    this.style.stroke = 'rgba(39,72,188,0.5)';
-    this.cursor('pointer');
-    this.neadUpdate = true; //需要刷新
+const g = jmGraph.create('mycanvas_container', {
+  width: 800,
+  height: 600,
+  style: {
+    fill: '#000'
+  }
 });
 ```
 
-> 如果要某个控件不响用操作事件，设置其`interactive`为`false`即可。
-
-#### 事件一览
-| 名称 | 说明 | 回调参数
-| :- | :- | :- | 
-| mousedown | 鼠标按下时触发 | -
-| mousemove | 鼠标在对象上移动时触发 |{target:当前元素,position: 当前位置}
-| mouseover | 鼠标从某元素移开 | {target:当前元素}
-| mouseleave | 某个鼠标按键被松开 | -
-| mouseup | 某个鼠标按键被松开 | -
-| dblclick | 鼠标双击某个对象 | -
-| click | 鼠标点击某个对象 | -
-| touchstart | 触控开始 | position: 当前位置
-| touchmove | 触控移动手指 | position: 当前位置
-| touchend | 触控结束 | position: 当前位置
-
-控件
----
-
-#### Path
-`path`是多数图形的基类，可以指定一个points数组来绘制一个路径。  
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/line.html)
+### 绘制一个矩形
 
 ```javascript
-var path = graph.createPath(null, style);
-path.points.push({x:10,y:10});
-path.points.push({x:10,y:60});
-path.points.push({x:80,y:20});
-path.points.push({x:90,y:80});
-path.points.push({x:80,y:80});
-```
-#### 圆
-`arc`可以创建椭圆、圆弧和圆，circle调用的是原生的arc函数绘制，harc可以绘制一个圆环。
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/arc.html)
-
-```javascript
-//创建一个椭圆，指定不同的宽高就为椭圆。如果相同或指定半径则为圆。
-var arc1 = g.createShape('arc', {
-    style: style,
-    center: {x:100, y:150},
-    width: 120,
-    height: 80
-});		
-```
-
-#### 箭头
-`arrow`为创建一个箭头，
-`Arrowline`是一条带箭头的直线。  
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/Arrowline.html)
-
-```javascript
-//带箭头的直线
-var shape = g.createShape('Arrowline', {
-    style:style,
-    start: {x:100,y:100},
-    end: {x: 200, y: 350}
-});	
-//一起结束点和一个角度angle可以决定一个箭头，如果不填angle，则会用start和end来计算角度
-var arrow = g.createShape('arrow', {
-    style:style,
-    start: {x:150, y:120},
-    end: {x: 160, y: 150}
-    //angle: Math.PI/2, //箭头角度  可以不填
-    //offsetX: 5, //箭头X偏移量
-    //offsetY: 8 //箭头Y偏移量
-});	
-```
-
-#### 贝塞尔曲线
-`bezier`可以指定无数个控制点，绘制复杂的曲线。
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/bezier.html)
-
-```javascript
-//一个固定的bezier曲线
-var bezier = g.createShape('bezier', { style: style, points: [p0, p1, p2, p3, p4] });
-```
-
-#### 图片
-`img`是用来承载一张图片的控件，可以用style.src来指定图片url。
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/img.html)
-
-```javascript
-var style = {
-    src: 'http://mat1.gtimg.com/www/qq2018/imgs/qq_logo_2018x2.png'
+const style = {
+  stroke: '#46BF86',
+  lineWidth: 2,
+  shadow: '0,0,10,#fff'
 };
-style.shadow = '0,0,10,#fff';
-//style.opacity = 0.2;		
 
-//创建一个image
-var img = g.createShape('image',{
-    style:style,
-    position: {x:100,y:100}
-});	
-//设置图片可以用鼠标移动		
+const rect = g.createShape('rect', {
+  style: style,
+  position: {x: 100, y: 100},
+  width: 100,
+  height: 100
+});
+
+g.children.add(rect);
+g.redraw();
+```
+
+## 📚 文档
+
+- [在线示例](https://jiamao.github.io/jmgraph/)
+- [API 文档](https://jiamao.github.io/jmgraph/example/index.html)
+- [基于 jmGraph 的图表库](https://github.com/jiamao/jmchart)
+
+## 🎨 样式说明
+
+jmGraph 支持简化的样式名称和原生 Canvas 样式：
+
+| 简化名称 | 原生名称 | 说明 |
+| :- | :- | :- |
+| fill | fillStyle | 填充颜色、渐变或模式 |
+| stroke | strokeStyle | 描边颜色、渐变或模式 |
+| shadow | - | 阴影，格式：'0,0,10,#fff' |
+| shadow.blur | shadowBlur | 阴影模糊级别 |
+| shadow.x | shadowOffsetX | 阴影水平偏移 |
+| shadow.y | shadowOffsetY | 阴影垂直偏移 |
+| shadow.color | shadowColor | 阴影颜色 |
+| lineWidth | lineWidth | 线条宽度 |
+| miterLimit | miterLimit | 最大斜接长度 |
+| font | font | 字体 |
+| fontSize | font | 字体大小 |
+| fontFamily | font | 字体名称 |
+| opacity | globalAlpha | 透明度 |
+| textAlign | textAlign | 文本水平对齐 |
+| textBaseline | textBaseline | 文本垂直对齐 |
+| lineJoin | lineJoin | 线条连接样式 |
+| lineCap | lineCap | 线条端点样式 |
+
+## 🎯 内置图形
+
+### 矩形 (Rect)
+
+```javascript
+const rect = g.createShape('rect', {
+  style: style,
+  position: {x: 100, y: 100},
+  width: 100,
+  height: 100
+});
+```
+
+### 圆形/椭圆 (Arc)
+
+```javascript
+const arc = g.createShape('arc', {
+  style: style,
+  center: {x: 100, y: 150},
+  width: 120,
+  height: 80
+});
+```
+
+### 线条 (Line)
+
+```javascript
+const line = g.createLine(
+  {x: 10, y: 200},
+  {x: 80, y: 120},
+  style
+);
+```
+
+### 箭头 (Arrow)
+
+```javascript
+const arrow = g.createShape('arrow', {
+  style: style,
+  start: {x: 150, y: 120},
+  end: {x: 160, y: 150}
+});
+```
+
+### 贝塞尔曲线 (Bezier)
+
+```javascript
+const bezier = g.createShape('bezier', {
+  style: style,
+  points: [p0, p1, p2, p3, p4]
+});
+```
+
+### 图片 (Image)
+
+```javascript
+const img = g.createShape('image', {
+  style: {src: 'image.png'},
+  position: {x: 100, y: 100}
+});
 img.canMove(true);
 ```
 
-#### 文字
-`label`可以用来绘制文字，通过style指定样式。
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/label.html)
+### 文字 (Label)
 
 ```javascript
-var style = {
+const label = g.createShape('label', {
+  style: {
     stroke: '#effaaa',
     fill: '#fff',
-    textAlign: 'center', //水平居中
-    textBaseline: 'middle', //垂直居中
+    textAlign: 'center',
+    textBaseline: 'middle',
     fontSize: 24,
-    fontFamily: 'Arial',
-    border: {
-        left:1,
-        top:1,
-        right:1,
-        bottom:1,
-        //边框样式
-        style: {
-            stroke: 'red' //颜色
-        }
-    }, //边框
-    shadow: '0,0,10,#fff'
-};
-//style.opacity = 0.2;		
-
-//创建一个label
-var label = g.createShape('label',{
-    style:style,
-    position:{x:200,y:150},
-    text:'test label',
-    width:120,
-    height:80
-});		
+    fontFamily: 'Arial'
+  },
+  position: {x: 200, y: 150},
+  text: 'Hello World',
+  width: 120,
+  height: 80
+});
 ```
 
-#### 棱形
-`prismatic`  
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/prismatic.html)
+## 🎮 事件系统
+
+### 事件绑定
 
 ```javascript
-var prismatic = g.createShape('prismatic',{
-    style:style,
-    center:{x:200,y:150},
-    width:120,
-    height:80
-});		
+const shape = g.createShape('rect', {...});
+
+shape.bind('mouseover', function(evt) {
+  this.style.stroke = 'rgba(39,72,188,0.5)';
+  this.cursor('pointer');
+  this.needUpdate = true;
+});
 ```
 
-#### 可缩放控件
-`resize` 可以自由放大缩小的控件。 
-具体请参考示例。
-[在线示例](http://jiamao.github.io/jmgraph/example/controls/resize.html)
+### 支持的事件
+
+| 事件名称 | 说明 | 回调参数 |
+| :- | :- | :- |
+| mousedown | 鼠标按下 | - |
+| mousemove | 鼠标移动 | {target, position} |
+| mouseover | 鼠标移入 | {target} |
+| mouseleave | 鼠标移出 | {target} |
+| mouseup | 鼠标松开 | - |
+| click | 鼠标点击 | - |
+| dblclick | 鼠标双击 | - |
+| touchstart | 触摸开始 | {position} |
+| touchmove | 触摸移动 | {position} |
+| touchend | 触摸结束 | {position} |
+
+## 🔧 自定义控件
+
+大多数控件继承 `jmPath` 即可，通过实现 `initPoints` 方法来绘制自定义图形：
 
 ```javascript
-var style = {
-    stroke: 'red',
-    fill: 'yellow',
-    lineWidth: 2, //边线宽
-    //小方块样式
-    rectStyle: {
-        stroke: 'green', //小方块边颜色
-        fill: 'transparent',//小方块填充色
-        lineWidth: 1, //小方块线宽
-        close: true
-    }
-};
-//style.opacity = 0.2;		
+import {jmPath} from "jmgraph";
 
-//创建一个resize
-var resize = g.createShape('resize', {
-    style: style,
-    position: {x:200, y:150},
-    width: 120,
-    height: 80
-});	
-//大小改变事件
-resize.on('resize', function() {
-    console.log(arguments);
-});	
-```
-
-#### 自定义控件
-
-大多数控件直接继承`jmPath`即可，然后通过实现`initPoints`来绘制当前控件。  
-`当需要从某点重新开始画时，给点指定m属性为true，表示移到当前点。`  。
-
-继承这里需要用到`es6`的模块，所以当你用的是`script标签`时，记得给`type="module"`。
-或写一个class的js文件，构建成es5的。
-
-
-##### 示例
-来画一个X  
-在线示例：[http://jiamao.github.io/jmgraph/example/controls/test.html](http://jiamao.github.io/jmgraph/example/controls/test.html)
-```javascript
-import {jmGraph} from "../../src/jmGraph.js";
-import {jmPath} from "../../src/shapes/jmPath.js";
-/**
- * 测试
- */
-class jmTest extends jmPath {
-    constructor(params) {
-        if(!params) params = {};
-        super(params);
-        this.center = params.center || {x:0, y:0};
-        this.radius = params.radius || 0;
-    }   
-
-    //定义属性 
-    /**
-     * 中心点
-     * point格式：{x:0,y:0,m:true}
-     * @property center
-     * @type {point}
-     */
-    get center() {
-        return this.property('center');
-    }
-    set center(v) {
-        return this.property('center', v);
-    }
-    /**
-    * 半径
-    * @property radius
-    * @type {number}
-    */
-    get radius() {
-        return this.property('radius');
-    }
-    set radius(v) {
-        return this.property('radius', v);
-    }
-
-    /**
-    * 初始化图形点
-    * 控件都是由点形成
-    * 
-    * @method initPoint
-    * @private
-    * @for jmArc
-    */
-    initPoints() {
-        //可以获取当前控件的左上坐标，可以用来画相对位置
-        var location = this.getLocation();//获取位置参数
-        
-        var cx = location.center.x ;
-        var cy = location.center.y ;
-    
-        this.points = [];
-
-        //简单的画一个X
-
-        //根据半径计算x,y偏移量
-        //由于是圆，偏移量相同
-        var offw = Math.sqrt(location.radius * location.radius / 2);
-        //左上角到右下角对角线
-        this.points.push({x:cx - offw, y:cy-offw}, {x:cx + offw, y:cy+offw});
-
-        //左下角到右上角对角线
-        //画完上面的线后，需要重新移到这条线的起点，指定m:true即可
-        this.points.push({x:cx - offw, y:cy+offw, m:true}, {x:cx + offw, y:cy-offw});
-
-        return this.points;
-    }
-} 
-```
-
-
-#### 微信小程序支持
-线上体验小程序：
-![截图](https://raw.githubusercontent.com/jiamao/jmgraph/master/example/qrcode.jpg) 
-
-源码：[https://github.com/jiamao/mini-jmchart](https://github.com/jiamao/mini-jmchart)
-
-微信小程序稍有差别，因为无需压缩，请直接把`dist`中的`jmgraph.js`合并后的文件引用到你的小程序中。
-
-##### 示例
-`wxml`
-```html
-<canvas style="width: 400px; height: 600px;background:#000;" 
-    canvas-id="mycanvas" 
-    bindtouchstart="canvastouchstart" 
-    bindtouchmove="canvastouchmove" 
-    bindtouchend="canvastouchend" 
-    bindtouchcancel="canvastouchcancel">
-</canvas>
-```
-`javascript`
-```javascript
-/**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    
-    //这里引用jmgraph
-    let jmGraph = require('../../utils/jmgraph');
-
-    var self = this;
-
-    var g = jmGraph.create('mycanvas', {
-        style: {
-          fill: '#000'
-        },
-        width: 400,
-        height: 600
-      });
-    init(g);
-
-    function init(g) {
-      //g.style.fill = '#000'; //画布背景
-      var style = {
-        stroke: '#46BF86',
-        fill: '#556662',
-        lineWidth: 2
-      };
-      style.shadow = '0,0,10,#fff';
-      //style.opacity = 0.2;			
-      //style.lineCap = 'round';
-
-      //创建一个方块
-      var rect = g.createShape('rect', {
-        style: style,
-        position: { x: 100, y: 100 },
-        width: 100,
-        height: 100
-      });
-      rect.canMove(true);
-      g.children.add(rect);
-
-      function update() {
-        if (g.needUpdate) g.redraw();
-        setTimeout(update, 20);
-      }
-
-      update();
-
-      //初始化jmGraph事件
-      //把小程序中的canvas事件交给jmGraph处理
-      this.canvastouchstart = function (...arg) {
-        return g.eventHandler.touchStart(...arg);
-      }
-      this.canvastouchmove = function (...arg) {
-        return g.eventHandler.touchMove(...arg);
-      }
-      this.canvastouchend = function (...arg) {
-        return g.eventHandler.touchEnd(...arg);
-      }
-      this.canvastouchcancel = function (...arg) {
-        return g.eventHandler.touchCancel(...arg);
-      }
-    }
+class CustomShape extends jmPath {
+  constructor(params) {
+    super(params);
+    this.center = params.center || {x: 0, y: 0};
+    this.radius = params.radius || 0;
   }
+
+  initPoints() {
+    const location = this.getLocation();
+    const cx = location.center.x;
+    const cy = location.center.y;
+    
+    this.points = [];
+    // 添加你的图形点
+    this.points.push({x: cx - this.radius, y: cy - this.radius});
+    this.points.push({x: cx + this.radius, y: cy + this.radius});
+    
+    return this.points;
+  }
+}
 ```
 
-  
-[npm-badge]: https://img.shields.io/npm/v/jmgraph.svg
-[npm-badge-url]: https://www.npmjs.com/package/jmgraph
-[license-badge]: https://img.shields.io/npm/l/jmgraph.svg
-[license-badge-url]: ./LICENSE
+## 📱 微信小程序支持
+
+jmGraph 支持微信小程序，详情请参考 [mini-jmchart](https://github.com/jiamao/mini-jmchart)。
+
+### 使用方法
+
+```javascript
+const jmGraph = require('../../utils/jmgraph');
+
+const g = jmGraph.create('mycanvas', {
+  style: {fill: '#000'},
+  width: 400,
+  height: 600
+});
+
+// 初始化事件
+this.canvastouchstart = function (...arg) {
+  return g.eventHandler.touchStart(...arg);
+}
+this.canvastouchmove = function (...arg) {
+  return g.eventHandler.touchMove(...arg);
+}
+this.canvastouchend = function (...arg) {
+  return g.eventHandler.touchEnd(...arg);
+}
+```
+
+## 🛠️ 开发
+
+### 构建
+
+```bash
+npm run build
+```
+
+### 运行示例
+
+```bash
+npm run dev
+```
+
+## 🤝 贡献
+
+欢迎贡献代码！请遵循以下步骤：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+## 📄 许可证
+
+本项目采用 [MIT](LICENSE) 许可证。
+
+## 💬 讨论
+
+- [GitHub Issues](https://github.com/jiamao/jmgraph/issues) - 报告 Bug 和功能请求
+- [GitHub Discussions](https://github.com/jiamao/jmgraph/discussions) - 问题和讨论
+
+## 🙏 致谢
+
+感谢所有为本项目做出贡献的开发者！
+
+## 🔗 相关项目
+
+- [jmChart](https://github.com/jiamao/jmchart) - 基于 jmGraph 的图表库
+- [mini-jmchart](https://github.com/jiamao/mini-jmchart) - 微信小程序图表库
+
+## 📮 联系方式
+
+- 作者: jiamao
+- 邮箱: haofefe@163.com
+- 主页: https://jiamao.github.io/jmgraph/
+
+---
+
+如果这个项目对你有帮助，请给个 ⭐️ Star！

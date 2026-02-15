@@ -101,6 +101,7 @@ export default class jmResize extends jmRect {
 			const r = this.resizeRects[i];		
 			//小方块移动监听
 			r.on('move',function(arg) {					
+				arg.cancel = true;
 				let px=0, py=0, dx=0, dy=0;
 				if(this.index == 0) {				
 					dx = - arg.offsetX;
@@ -139,7 +140,6 @@ export default class jmResize extends jmRect {
 				}
 				//重新定位
 				this.parent.reset(px, py, dx, dy);
-				this.needUpdate = true;
 			});
 			//鼠标指针
 			r.bind('mousemove', function() {	
@@ -280,12 +280,13 @@ export default class jmResize extends jmRect {
 			}	
 		}
 
+		const newLocation = this.getLocation();
 		for(let i in this.resizeRects) {
 			const r = this.resizeRects[i];
 			switch(r.index) {
 				case 0: {
 					r.position.x = -r.width / 2;
-					r.position.y = (location.height - r.height) / 2;
+					r.position.y = (newLocation.height - r.height) / 2;
 					break;
 				}	
 				case 1: {
@@ -294,36 +295,37 @@ export default class jmResize extends jmRect {
 					break;
 				}		
 				case 2: {
-					r.position.x = (location.width - r.width) / 2;
+					r.position.x = (newLocation.width - r.width) / 2;
 					r.position.y = -r.height / 2;
 					break;
 				}
 				case 3: {
-					r.position.x = location.width - r.width / 2;
+					r.position.x = newLocation.width - r.width / 2;
 					r.position.y = -r.height / 2;
 					break;
 				}
 				case 4: {
-					r.position.x = location.width - r.width / 2;
-					r.position.y = (location.height - r.height) / 2;
+					r.position.x = newLocation.width - r.width / 2;
+					r.position.y = (newLocation.height - r.height) / 2;
 					break;
 				}
 				case 5: {
-					r.position.x = location.width - r.width / 2;
-					r.position.y = location.height - r.height /2;
+					r.position.x = newLocation.width - r.width / 2;
+					r.position.y = newLocation.height - r.height /2;
 					break;
 				}
 				case 6: {
-					r.position.x = (location.width - r.height) / 2;
-					r.position.y = location.height - r.height / 2;
+					r.position.x = (newLocation.width - r.height) / 2;
+					r.position.y = newLocation.height - r.height / 2;
 					break;
 				}
 				case 7: {
 					r.position.x = -r.width / 2;
-					r.position.y = location.height - r.height / 2;
+					r.position.y = newLocation.height - r.height / 2;
 					break;
 				}
 			}
+			r.needUpdate = true;
 		}
 	}
 }

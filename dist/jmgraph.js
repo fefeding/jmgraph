@@ -9520,6 +9520,7 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
         var r = this.resizeRects[i]; //小方块移动监听
 
         r.on('move', function (arg) {
+          arg.cancel = true;
           var px = 0,
               py = 0,
               dx = 0,
@@ -9556,7 +9557,6 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
 
 
           this.parent.reset(px, py, dx, dy);
-          this.needUpdate = true;
         }); //鼠标指针
 
         r.bind('mousemove', function () {
@@ -9688,6 +9688,8 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
         }
       }
 
+      var newLocation = this.getLocation();
+
       for (var i in this.resizeRects) {
         var r = this.resizeRects[i];
 
@@ -9695,7 +9697,7 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
           case 0:
             {
               r.position.x = -r.width / 2;
-              r.position.y = (location.height - r.height) / 2;
+              r.position.y = (newLocation.height - r.height) / 2;
               break;
             }
 
@@ -9708,46 +9710,48 @@ var jmResize = /*#__PURE__*/function (_jmRect) {
 
           case 2:
             {
-              r.position.x = (location.width - r.width) / 2;
+              r.position.x = (newLocation.width - r.width) / 2;
               r.position.y = -r.height / 2;
               break;
             }
 
           case 3:
             {
-              r.position.x = location.width - r.width / 2;
+              r.position.x = newLocation.width - r.width / 2;
               r.position.y = -r.height / 2;
               break;
             }
 
           case 4:
             {
-              r.position.x = location.width - r.width / 2;
-              r.position.y = (location.height - r.height) / 2;
+              r.position.x = newLocation.width - r.width / 2;
+              r.position.y = (newLocation.height - r.height) / 2;
               break;
             }
 
           case 5:
             {
-              r.position.x = location.width - r.width / 2;
-              r.position.y = location.height - r.height / 2;
+              r.position.x = newLocation.width - r.width / 2;
+              r.position.y = newLocation.height - r.height / 2;
               break;
             }
 
           case 6:
             {
-              r.position.x = (location.width - r.height) / 2;
-              r.position.y = location.height - r.height / 2;
+              r.position.x = (newLocation.width - r.height) / 2;
+              r.position.y = newLocation.height - r.height / 2;
               break;
             }
 
           case 7:
             {
               r.position.x = -r.width / 2;
-              r.position.y = location.height - r.height / 2;
+              r.position.y = newLocation.height - r.height / 2;
               break;
             }
         }
+
+        r.needUpdate = true;
       }
     }
   }]);

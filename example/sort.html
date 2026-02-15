@@ -4,15 +4,14 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 		<title>排序算法演示</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://lib.sinaapp.com/js/jquery/1.6/jquery.min.js"></script>
 	</head>
-	<button id="btn_quick" href="#">快速排序</button>
-	<button id="btn_straightinsertion" href="#">直接插入排序</button>
-	<button id="btn_shell" href="#">希尔排序</button>
-	<button id="btn_simpleselection" href="#">简单选择排序</button>
-	<button id="btn_simpleselection2" href="#">二元选择排序</button>
-	<button id="btn_bubble" href="#">冒泡排序</button>
-		<button id="btn_heap" href="#">堆排序</button>
+	<button id="btn_quick">快速排序</button>
+	<button id="btn_straightinsertion">直接插入排序</button>
+	<button id="btn_shell">希尔排序</button>
+	<button id="btn_simpleselection">简单选择排序</button>
+	<button id="btn_simpleselection2">二元选择排序</button>
+	<button id="btn_bubble">冒泡排序</button>
+		<button id="btn_heap">堆排序</button>
 	<body style="width:100%;">
 		<div id="mycanvas" style="border:1px solid #ddd;width:100%;"></div>
 		<div id="console" style="border:1px solid #ccc;background-color:#000;color:green; width: 100%;height: 300px;overflow-y:auto;padding:4px;"></div>	
@@ -728,89 +727,79 @@
 				return result;
 			}
 
-			//$(function(){
-				//开始
-				var sort = null;
+			//开始
+			var sort = null;
 
-				var container = document.getElementById('mycanvas');
-				var w = Math.min(600, document.getElementById('mycanvas').offsetWidth - 10);
-				container.style.width = w + 'px';
-				var h = Math.min(450, window.innerHeight - 10);
-				container.style.height = h + 'px';
+			var container = document.getElementById('mycanvas');
+			var w = Math.min(600, document.getElementById('mycanvas').offsetWidth - 10);
+			container.style.width = w + 'px';
+			var h = Math.min(450, window.innerHeight - 10);
+			container.style.height = h + 'px';
 
-				//初始化jmgraph
-				var g = jmGraph.create('mycanvas', {
-					width: w,
-					height: h,
-					mode: '2d'
-				});
+			//初始化jmgraph
+			var g = jmGraph.create('mycanvas', {
+				width: w,
+				height: h,
+				mode: '2d'
+			});
 				
-					
-				sort = new jmSort(g);
+			sort = new jmSort(g);
+			
+			sort.init();
+			sort.heapSort(function(ret){
+				console.log(ret);
+			});	
+
+			//实时更新画布
+			function update() {
+				if(g.needUpdate) g.redraw();
+				requestAnimationFrame(update);
+			}
+			update();
 				
-				sort.init();
-				sort.heapSort(function(ret){
+			document.getElementById('btn_quick').addEventListener('click', function(){
+				sort.reset();
+				sort.quickSort(null,null,null,function(ret) {
+					this.datumLine.visible = false;
+					this.selectRect(ret);
 					console.log(ret);
 				});	
-
-				//实时更新画布
-				function update() {
-					if(g.needUpdate) g.redraw();
-					requestAnimationFrame(update);
-				}
-				update();
-				
-					
-
-				$('#btn_quick').click(function(){
-					sort.reset();
-					sort.quickSort(null,null,null,function(ret) {
-						this.datumLine.visible = false;
-						this.selectRect(ret);
-						console.log(ret);
-					});	
-					return false;
+			});
+			document.getElementById('btn_straightinsertion').addEventListener('click', function(){
+				sort.reset();
+				sort.straightInsertionSort(function(result){
+					sort.play();
+					console.log(result);
 				});
-				$('#btn_straightinsertion').click(function(){
-					sort.reset();
-					sort.straightInsertionSort(function(result){
-						sort.play();
-						console.log(result);
-					});
-					return false;	
-				});
-				$('#btn_shell').click(function(){
-					sort.reset();
-					sort.shellSort();
-					return false;	
-				});
-				$('#btn_simpleselection').click(function(){
-					sort.reset();
-					sort.simpleSelectionSort();	
-					return false;
-				});
-				$('#btn_simpleselection2').click(function(){
-					sort.reset();
-					sort.selection2Sort();
-					return false;				
-				});
-				$('#btn_bubble').click(function(){
-					sort.reset();
-					sort.bubbleSort();
-					return false;
-				});
-				$('#btn_heap').click(function(){
-					sort.reset();
-					sort.heapSort();
-					return false;
-				});
-			//});
+			});
+			document.getElementById('btn_shell').addEventListener('click', function(){
+				sort.reset();
+				sort.shellSort();
+			});
+			document.getElementById('btn_simpleselection').addEventListener('click', function(){
+				sort.reset();
+				sort.simpleSelectionSort();	
+			});
+			document.getElementById('btn_simpleselection2').addEventListener('click', function(){
+				sort.reset();
+				sort.selection2Sort();
+			});
+			document.getElementById('btn_bubble').addEventListener('click', function(){
+				sort.reset();
+				sort.bubbleSort();
+			});
+			document.getElementById('btn_heap').addEventListener('click', function(){
+				sort.reset();
+				sort.heapSort();
+			});
 			
 			function log(msg) {
-				$('#console').append(msg + '<br />')[0].scrollTop = $('#console')[0].scrollHeight;
+				var consoleDiv = document.getElementById('console');
+				consoleDiv.innerHTML += msg + '<br />';
+				consoleDiv.scrollTop = consoleDiv.scrollHeight;
 			}
 			function clear() {
-				$('#console').html('');
+				document.getElementById('console').innerHTML = '';
 			}
 	</script>
 </html>

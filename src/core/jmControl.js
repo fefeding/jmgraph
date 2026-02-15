@@ -6,7 +6,6 @@ import {jmShadow} from "./jmShadow.js";
 import {jmProperty} from "./jmProperty.js";
 import WebglPath from "../lib/webgl/path.js";
 
-//样式名称，也当做白名单使用		
 const jmStyleMap = {
 	'fill':'fillStyle',
 	'fillImage':'fillImage',
@@ -27,29 +26,20 @@ const jmStyleMap = {
 	'shadowOffsetX' : 'shadowOffsetX',
 	'shadowOffsetY' : 'shadowOffsetY',
 	'shadowColor' : 'shadowColor',
-	'lineJoin': 'lineJoin',//线交汇处的形状,miter(默认，尖角),bevel(斜角),round（圆角）
-	'lineCap':'lineCap' //线条终端点,butt(默认，平),round(圆),square（方）
+	'lineJoin': 'lineJoin',
+	'lineCap':'lineCap'
 };
 
-/**
- * 控件基础对象
- * 控件的基础属性和方法
- *
- * @class jmControl
- * @extends jmProperty
- */	
-export default class jmControl extends jmProperty {	
+export default class jmControl extends jmProperty {
 
 	constructor(params, t) {
 		params = params||{};
 		super(params);
 		this.property('type', t || new.target.name);
 		this.style = params && params.style ? params.style : {};
-		//this.position = params.position || {x:0,y:0};
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
 		this.hitArea = params.hitArea || null;
-		//this.lockSide = params.lockSide || null;
 
 		if(params.position) {
 			this.position = params.position;
@@ -59,7 +49,6 @@ export default class jmControl extends jmProperty {
 		this.zIndex = params.zIndex || 0;
 		this.interactive = typeof params.interactive == 'undefined'? false : params.interactive;
 
-		// webgl模式
 		if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
 				style: this.style,
@@ -69,29 +58,17 @@ export default class jmControl extends jmProperty {
 			});
 		}
 
-		this.initializing();	
+		this.initializing();
 		
 		this.on = this.bind;
 		
 		this.option = params;
 	}
 
-	//# region 定义属性
-	/**
-	 * 当前对象类型名jmRect
-	 *
-	 * @property type
-	 * @type string
-	 */
 	get type() {
 		return this.property('type');
 	}
 
-	/**
-	 * 当前canvas的context
-	 * @property context
-	 * @type {object}
-	 */
 	get context() {
 		let s = this.property('context');
 		if(s) return s;
@@ -106,11 +83,6 @@ export default class jmControl extends jmProperty {
 		return this.property('context', v);
 	}
 
-	/**
-	 * 样式
-	 * @property style
-	 * @type {object}
-	 */
 	get style() {
 		let s = this.property('style');
 		if(!s) s = this.property('style', {});
@@ -121,12 +93,6 @@ export default class jmControl extends jmProperty {
 		return this.property('style', v);
 	}
 
-	/**
-	 * 当前控件是否可见
-	 * @property visible
-	 * @default true
-	 * @type {boolean}
-	 */
 	get visible() {
 		let s = this.property('visible');
 		if(typeof s == 'undefined') s = this.property('visible', true);
@@ -135,15 +101,8 @@ export default class jmControl extends jmProperty {
 	set visible(v) {
 		this.needUpdate = true;
 		return this.property('visible', v);
-	}	
+	}
 
-	/**
-	 * 当前控件是否是交互式的，如果是则会响应鼠标或touch事件。
-	 * 如果false则不会主动响应，但冒泡的事件依然会得到回调
-	 * @property interactive
-	 * @default false
-	 * @type {boolean}
-	 */
 	get interactive() {
 		const s = this.property('interactive');
 		return s;
@@ -152,13 +111,6 @@ export default class jmControl extends jmProperty {
 		return this.property('interactive', v);
 	}
 
-	/**
-	 * 事件命中区域，如果不给定就会自动计算
-	 *  这个区域是相对于当前控件本身的，也就是说从左上角开始 {x:0,y:0}
-	 * @property hitArea
-	 * @default bounds
-	 * @type { x: number, y: number, width: number, height: number}
-	 */
 	get hitArea() {
 		const s = this.property('hitArea');
 		return s;
@@ -167,11 +119,6 @@ export default class jmControl extends jmProperty {
 		return this.property('hitArea', v);
 	}
 		
-	/**
-	 * 当前控件的子控件集合
-	 * @property children
-	 * @type {list}
-	 */
 	get children() {
 		let s = this.property('children');
 		if(!s) s = this.property('children', new jmList());
@@ -182,11 +129,6 @@ export default class jmControl extends jmProperty {
 		return this.property('children', v);
 	}
 
-	/**
-	 * 宽度
-	 * @property width
-	 * @type {number}
-	 */
 	get width() {
 		let s = this.property('width');
 		if(typeof s == 'undefined') s = this.property('width', 0);
@@ -197,11 +139,6 @@ export default class jmControl extends jmProperty {
 		return this.property('width', v);
 	}
 
-	/**
-	 * 高度
-	 * @property height
-	 * @type {number}
-	 */
 	get height() {
 		let s = this.property('height');
 		if(typeof s == 'undefined') s = this.property('height', 0);
@@ -212,11 +149,6 @@ export default class jmControl extends jmProperty {
 		return this.property('height', v);
 	}
 
-	/**
-	 * 控件层级关系，发生改变时，需要重新调整排序
-	 * @property zIndex
-	 * @type {number}
-	 */
 	get zIndex() {
 		let s = this.property('zIndex');
 		if(!s) s = this.property('zIndex', 0);
@@ -224,54 +156,36 @@ export default class jmControl extends jmProperty {
 	}
 	set zIndex(v) {
 		this.property('zIndex', v);
-		this.children.sort();//层级发生改变，需要重新排序
+		this.children.sort();
 		this.needUpdate = true;
 		return v;
 	}
 
-	/**
-	 * 设置鼠标指针
-	 * css鼠标指针标识,例如:pointer,move等
-	 * 
-	 * @property cursor
-	 * @type {string}
-	 */
-	set cursor(cur) {	
-		var graph = this.graph ;
-		if(graph) {		
-			graph.css('cursor',cur);		
+	set cursor(cur) {
+		const graph = this.graph;
+		if(graph) {
+			graph.css('cursor',cur);
 		}
 	}
 	get cursor() {
-		var graph = this.graph ;
-		if(graph) {		
-			return graph.css('cursor');		
+		const graph = this.graph;
+		if(graph) {
+			return graph.css('cursor');
 		}
 	}
 
-	//# end region
-
-	/**
-	 * 初始化对象，设定样式，初始化子控件对象
-	 * 此方法为所有控件需调用的方法
-	 *
-	 * @method initializing
-	 * @for jmControl
-	 */
 	initializing() {
 
 		const self = this;
-		//定义子元素集合
 		this.children = this.children || new jmList();
 		const oadd = this.children.add;
-		//当把对象添加到当前控件中时，设定其父节点
+		
 		this.children.add = function(obj) {
 			if(typeof obj === 'object') {
 				if(obj.parent && obj.parent != self && obj.parent.children) {
-					obj.parent.children.remove(obj);//如果有父节点则从其父节点中移除
+					obj.parent.children.remove(obj);
 				}
 				obj.parent = self;
-				//如果存在先移除
 				if(this.contain(obj)) {
 					this.oremove(obj);
 				}
@@ -280,31 +194,24 @@ export default class jmControl extends jmProperty {
 
 				self.needUpdate = true;
 				if(self.graph) obj.graph = self.graph;
-				this.sort();//先排序
-				//self.emit('addChild', obj);
+				this.sort();
 				return obj;
 			}
 		};
 		this.children.oremove= this.children.remove;
-		//当把对象从此控件中移除时，把其父节点置为空
+		
 		this.children.remove = function(obj) {
-			if(typeof obj === 'object') {				
+			if(typeof obj === 'object') {
 				obj.parent = null;
 				obj.graph = null;
 				obj.remove(true);
 				this.oremove(obj);
 				self.needUpdate = true;
-				//self.emit('removeChild', obj, index);
 			}
 		};
-		/**
-		 * 根据控件zIndex排序，越大的越高
-		 */
-		//const osort = this.children.sort;
+		
 		this.children.sort = function() {
 			const levelItems = {};
-			//提取zindex大于0的元素
-			//为了保证0的层级不改变，只能把大于0的提出来。
 			this.each(function(i, obj) {
 				if(!obj) return;
 				let zindex = obj.zIndex;
@@ -321,12 +228,6 @@ export default class jmControl extends jmProperty {
 			for(let index in levelItems) {
 				oadd.call(this, levelItems[index]);
 			}
-			/*
-			osort.call(this, (c1, c2) => {
-				let zindex1 = c1.zIndex || c1.style.zIndex || 0;
-				let zindex2 = c2.zIndex || c2.style.zIndex || 0;
-				return zindex1 - zindex2;
-			});*/
 		}
 		this.children.clear = function() {
 			this.each(function(i,obj) {
@@ -336,53 +237,13 @@ export default class jmControl extends jmProperty {
 		this.needUpdate = true;
 	} 
 
-	/**
-	 * 设定样式到context
-	 * 处理样式映射，转换渐变和阴影对象为标准canvas属性
-	 * 样式一览
-		| 简化名称 | 原生名称 | 说明
-		| :- | :- | :- | 
-		| fill | fillStyle | 用于填充绘画的颜色、渐变或模式
-		| stroke | strokeStyle | 用于笔触的颜色、渐变或模式
-		| shadow | 没有对应的 | 最终会解析成以下几个属性，格式：'0,0,10,#fff'或g.createShadow(0,0,20,'#000');
-		| shadow.blur | shadowBlur | 用于阴影的模糊级别
-		| shadow.x | shadowOffsetX | 阴影距形状的水平距离
-		| shadow.y | shadowOffsetY | 阴影距形状的垂直距离
-		| shadow.color | shadowColor | 阴影颜色，格式：'#000'、'#46BF86'、'rgb(255,255,255)'或'rgba(39,72,188,0.5)'
-		| lineWidth | lineWidth | 当前的线条宽度
-		| miterLimit | miterLimit | 最大斜接长度
-		| font | font | 请使用下面的 fontSize 和 fontFamily
-		| fontSize | font | 字体大小
-		| fontFamily | font | 字体
-		| opacity | globalAlpha | 绘图的当前 alpha 或透明值
-		| textAlign | textAlign | 文本内容的当前对齐方式
-		| textBaseline | textBaseline | 在绘制文本时使用的当前文本基线
-		| lineJoin | lineJoin | 两条线相交时，所创建的拐角类型：miter(默认，尖角),bevel(斜角),round（圆角）
-		| lineCap | lineCap | 线条的结束端点样式：butt(默认，平),round(圆),square（方）
-	 * 
-	 * @method setStyle
-	 * @for jmControl
-	 * @private
-	 * @param {style} style 样式对象，如:{fill:'black',stroke:'red'}
-	 */
 	setStyle(style) {
 		style = style || jmUtils.clone(this.style, true);
 		if(!style) return;
 
-		/**
-		 * 样式设定
-		 * 
-		 * @method __setStyle
-		 * @private
-		 * @param {jmControl} control 当前样式对应的控件对象
-		 * @param {style} style 样式
-		 * @param {string} name 样式名称
-		 * @param {string} mpkey 样式名称在映射中的key(例如：shadow.blur为模糊值)
-		 */
 		const __setStyle = (style, name, mpkey) => {
-			
-			if(style) {		
-				let styleValue = style;		
+			if(style) {
+				let styleValue = style;
 				if(typeof styleValue === 'function') {
 					try {
 						styleValue = styleValue.call(this);
@@ -392,36 +253,28 @@ export default class jmControl extends jmProperty {
 						return;
 					}
 				}
-				let t = typeof styleValue;	
+				let t = typeof styleValue;
 				let mpname = jmStyleMap[mpkey || name];
 
-				//如果为渐变对象
 				if((styleValue instanceof jmGradient) || (t == 'string' && styleValue.indexOf('-gradient') > -1)) {
-					//如果是渐变，则需要转换
 					if(t == 'string' && styleValue.indexOf('-gradient') > -1) {
 						styleValue = new jmGradient(styleValue);
 					}
-					__setStyle(styleValue.toGradient(this), mpname||name);	
+					__setStyle(styleValue.toGradient(this), mpname||name);
 				}
 				else if(mpname) {
-					
 					if(this.webglControl) {
-
 						this.webglControl.setStyle(mpname, styleValue);
 					}
 					else {
-						//只有存在白名单中才处理
-						//颜色转换
 						if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
 							styleValue = jmUtils.toColor(styleValue);
 						}
-
 						this.context[mpname] = styleValue;
 					}
-				}	
+				}
 				else {
 					switch(name) {
-						//阴影样式
 						case 'shadow' : {
 							if(t == 'string') {
 								__setStyle(new jmShadow(styleValue), name);
@@ -432,24 +285,20 @@ export default class jmControl extends jmProperty {
 							}
 							break;
 						}
-						//平移
 						case 'translate' : {
 							break;
 						}
-						//旋转
-						case 'rotation' : {	
-							if(typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;	
+						case 'rotation' : {
+							if(typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;
 							styleValue = this.getRotation(styleValue);
 							
 							this.__translateAbsolutePosition = this.toAbsolutePoint({
 								x: styleValue.x,
 								y: styleValue.y
 							});
-							//旋转，则移位，如果有中心位则按中心旋转，否则按左上角旋转
-							//这里只有style中的旋转才能生效，不然会导至子控件多次旋转
-							this.context.translate && this.context.translate(this.__translateAbsolutePosition.x, this.__translateAbsolutePosition.y);							
+							this.context.translate && this.context.translate(this.__translateAbsolutePosition.x, this.__translateAbsolutePosition.y);
 							this.context.rotate && this.context.rotate(styleValue.angle);
-							this.context.translate && this.context.translate(-this.__translateAbsolutePosition.x, -this.__translateAbsolutePosition.y);							
+							this.context.translate && this.context.translate(-this.__translateAbsolutePosition.x, -this.__translateAbsolutePosition.y);
 							break;
 						}
 						case 'transform' : {
@@ -459,38 +308,34 @@ export default class jmControl extends jmProperty {
 							}
 							else if(typeof styleValue == 'object') {
 								this.context.transform(
-									styleValue.scaleX || 1,//水平缩放
-									styleValue.skewX || 0,//水平倾斜
-									styleValue.skewY || 0,//垂直倾斜
-									styleValue.scaleY || 1,//垂直缩放
-									styleValue.offsetX || 0,//水平位移
-									styleValue.offsetY || 0//垂直位移
+									styleValue.scaleX || 1,
+									styleValue.skewX || 0,
+									styleValue.skewY || 0,
+									styleValue.scaleY || 1,
+									styleValue.offsetX || 0,
+									styleValue.offsetY || 0
 								);
-							}								
+							}
 							break;
 						}
-						//鼠标指针
 						case 'cursor' : {
 							this.cursor = styleValue;
 							break;
 						}
-					}							
+					}
 				}
 			}
-		}	
+		}
 
-		//一些特殊属性要先设置，否则会导致顺序不对出现错误的效果
 		if(this.translate) {
 			__setStyle(this.translate, 'translate');
 		}
 		if(this.transform) {
 			__setStyle(this.transform, 'transform');
 		}
-		//设置样式
 		for(let k in style) {
 			if(k === 'constructor') continue;
 			let t = typeof style[k];
-			//先处理部分样式，以免每次都需要初始化解析
 			if(t == 'string' && style[k].indexOf('-gradient') > -1) {
 				style[k] = new jmGradient(style[k]);
 			}

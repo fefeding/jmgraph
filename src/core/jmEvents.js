@@ -1,10 +1,5 @@
 import {jmUtils} from "./jmUtils.js";
-/**
- * 事件模型
- *
- * @class jmEvents
- * @for jmGraph
- */
+
 export default class jmEvents {
 
 	constructor(container, target) {
@@ -18,9 +13,8 @@ export default class jmEvents {
 		evt = evt || window.event;
 		evt.eventName = 'touchstart';
 		this.container.raiseEvent('touchstart',evt);
-		let t = evt.target || evt.srcElement;
+		const t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -29,9 +23,8 @@ export default class jmEvents {
 		evt = evt || window.event;
 		evt.eventName = 'touchmove';
 		this.container.raiseEvent('touchmove',evt);
-		let t = evt.target || evt.srcElement;
+		const t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -41,9 +34,8 @@ export default class jmEvents {
 		evt.eventName = 'touchend';
 		
 		this.container.raiseEvent('touchend',evt);
-		let t = evt.target || evt.srcElement;
+		const t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -53,9 +45,8 @@ export default class jmEvents {
 		evt.eventName = 'touchcancel';
 		
 		this.container.raiseEvent('touchcancel',evt);
-		let t = evt.target || evt.srcElement;
+		const t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
@@ -65,91 +56,73 @@ export default class jmEvents {
 		evt.eventName = 'tap';
 		
 		this.container.raiseEvent('tap',evt);
-		let t = evt.target || evt.srcElement;
+		const t = evt.target || evt.srcElement;
 		if(t == this.target) {
-			//if(evt.preventDefault) evt.preventDefault();
 			return false;
 		}
 	};
 
-	// 销毁
 	destroy() {
 		this.mouseHandler.destroy();
 		this.keyHandler.destroy();
 	}
 }
 
-/**
- * 鼠标事件处理对象，container 为事件主体，target为响应事件对象
- */
 class jmMouseEvent {
 	constructor(instance, container, target) {
 		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 
-		this.eventEvents = {};// 所有绑定的事件
+		this.eventEvents = {};
 
 		this.init(instance, container, target);
 	}
 	
 	init(instance, container, target) {
-		let canvas = this.target;	
-		let doc = typeof document != 'undefined'? document: null;
-		//禁用鼠标右健系统菜单
-		//canvas.oncontextmenu = function() {
-		//	return false;
-		//};
+		const canvas = this.target;
+		const doc = typeof document != 'undefined'? document: null;
 
 		this.eventEvents['mousedown'] = jmUtils.bindEvent(this.target,'mousedown',function(evt) {
 			evt = evt || window.event;
 			evt.eventName = 'mousedown';
-			let r = container.raiseEvent('mousedown',evt);
-			//if(r === false) {
-				//if(evt.preventDefault) evt.preventDefault();
-				//return false;
-			//}				
+			container.raiseEvent('mousedown',evt);
 		});
 		
-		this.eventEvents['mousemove'] = jmUtils.bindEvent(this.target,'mousemove',function(evt) {	
-			evt = evt || window.event;		
+		this.eventEvents['mousemove'] = jmUtils.bindEvent(this.target,'mousemove',function(evt) {
+			evt = evt || window.event;
 			evt.eventName = 'mousemove';
-			let target = evt.target || evt.srcElement;
+			const target = evt.target || evt.srcElement;
 			if(target == canvas) {
-				let r = container.raiseEvent('mousemove',evt);
-				//if(r === false) {
-					if(evt.preventDefault) evt.preventDefault();
-					return false;
-				//}		
-			}				
+				container.raiseEvent('mousemove',evt);
+				if(evt.preventDefault) evt.preventDefault();
+				return false;
+			}
 		});
 		
 		this.eventEvents['mouseover'] = jmUtils.bindEvent(this.target,'mouseover',function(evt) {
-			evt = evt || window.event;	
+			evt = evt || window.event;
 			evt.eventName = 'mouseover';
 			container.raiseEvent('mouseover',evt);
 		});
 		this.eventEvents['mouseleave'] = jmUtils.bindEvent(this.target,'mouseleave',function(evt) {
-			evt = evt || window.event;	
+			evt = evt || window.event;
 			evt.eventName = 'mouseleave';
 			container.raiseEvent('mouseleave',evt);
-		});			
+		});
 		this.eventEvents['mouseout'] = jmUtils.bindEvent(this.target,'mouseout',function(evt) {
-			evt = evt || window.event;	
+			evt = evt || window.event;
 			evt.eventName = 'mouseout';
 			container.raiseEvent('mouseout',evt);
 		});
 		doc && (this.eventEvents['mouseup'] = jmUtils.bindEvent(doc,'mouseup',function(evt) {
-			evt = evt || window.event;	
+			evt = evt || window.event;
 			evt.eventName = 'mouseup';
-			//let target = evt.target || evt.srcElement;
-			//if(target == canvas) {						
-				let r = container.raiseEvent('mouseup',evt);
-				if(r === false) {
-					if(evt.preventDefault) evt.preventDefault();
-					return false;
-				}					
-			//}
+			const r = container.raiseEvent('mouseup',evt);
+			if(r === false) {
+				if(evt.preventDefault) evt.preventDefault();
+				return false;
+			}
 		}));
 		
 		this.eventEvents['dblclick'] = jmUtils.bindEvent(this.target,'dblclick',function(evt) {
@@ -169,8 +142,6 @@ class jmMouseEvent {
 			return container.raiseEvent('resize',evt);
 		}));
 
-		// passive: false 为了让浏览器不告警并且preventDefault有效
-		// 另一种处理：touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。
 		this.eventEvents['touchstart'] = jmUtils.bindEvent(this.target,'touchstart', function(evt) {
 			evt.eventName = 'touchstart';
 			return instance.touchStart(evt);
@@ -192,9 +163,8 @@ class jmMouseEvent {
 		},{ passive: false }));
 	}
 
-	// 销毁所有事件
 	destroy() {
-		for(let name in this.eventEvents) {
+		for(const name in this.eventEvents) {
 			const event = this.eventEvents[name];
 			if(!event || !event.fun) continue;
 			jmUtils.removeEvent(event.target, name, event.fun);
@@ -202,32 +172,22 @@ class jmMouseEvent {
 	}
 }
 
-/**
- * 健盘事件处理对象，container 为事件主体，target为响应事件对象
- */
 class jmKeyEvent {
 	constructor(instance, container,target) {
 		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 
-		this.eventEvents = {};// 所有绑定的事件
+		this.eventEvents = {};
 
 		this.init(container, target);
 	}
 
-	/**
-	 * 初始化健盘事件
-	 */
 	init(container, target) {
-		let doc = typeof document != 'undefined'? document: null;
-		/**
-		 * 检查是否触发健盘事件至画布
-		 * 如果触发对象为输入框等对象则不响应事件
-		 *  
-		 */
-		let checkKeyEvent = (evt) => {
-			let target = evt.srcElement || evt.target;
+		const doc = typeof document != 'undefined'? document: null;
+
+		const checkKeyEvent = (evt) => {
+			const target = evt.srcElement || evt.target;
 			if(target && (target.tagName == 'INPUT' 
 				|| target.tagName == 'TEXTAREA'
 				|| target.tagName == 'ANCHOR' 
@@ -244,33 +204,32 @@ class jmKeyEvent {
 
 		doc && (this.eventEvents['keypress'] = jmUtils.bindEvent(doc,'keypress',function(evt) {
 			evt = evt || window.event;
-			if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
-			let r = container.raiseEvent('keypress',evt);
+			if(!checkKeyEvent(evt)) return;
+			const r = container.raiseEvent('keypress',evt);
 			if(r === false && evt.preventDefault) 
 				evt.preventDefault();
 			return r;
 		}));
 		doc && (this.eventEvents['keydown'] = jmUtils.bindEvent(doc,'keydown',function(evt) {
 			evt = evt || window.event;
-			if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
-			let r = container.raiseEvent('keydown',evt);
+			if(!checkKeyEvent(evt)) return;
+			const r = container.raiseEvent('keydown',evt);
 			if(r === false && evt.preventDefault) 
 				evt.preventDefault();
 			return r;
 		}));
 		doc && (this.eventEvents['keyup'] = jmUtils.bindEvent(doc,'keyup',function(evt) {
 			evt = evt || window.event;
-			if(!checkKeyEvent(evt)) return;//如果事件为其它输入框，则不响应
-			let r = container.raiseEvent('keyup',evt);
+			if(!checkKeyEvent(evt)) return;
+			const r = container.raiseEvent('keyup',evt);
 			if(r === false && evt.preventDefault) 
 				evt.preventDefault();
 			return r;
-		}));			
+		}));
 	}
 
-	// 销毁所有事件
 	destroy() {
-		for(let name in this.eventEvents) {
+		for(const name in this.eventEvents) {
 			const event = this.eventEvents[name];
 			if(!event || !event.fun) continue;
 			jmUtils.removeEvent(event.target, name, event.fun);

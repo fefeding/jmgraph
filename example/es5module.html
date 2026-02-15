@@ -12,24 +12,23 @@
 			overflow: hidden;		
 		}
 	</style>
-    <script type="text/javascript" src="js/require.js"></script>
 	</head>
 	<body>
 		<div id="mycanvas_container"></div>
 	</body>
-    <script>
-        require(['../dist/jmgraph.js'], function(m) {
-            var g = new m.jmGraph(container, {
-                width: 800,
-                height: 600,
-                style: {
-                    fill: '#000'
-                }
-            });
-            init(g);
-        });
+    <script type="module">
+        import jmGraph from '../index.js';
         
-		var container = document.getElementById('mycanvas_container');	
+        var container = document.getElementById('mycanvas_container');	
+		
+        var g = new jmGraph(container, {
+            width: 800,
+            height: 600,
+            style: {
+                fill: '#000'
+            }
+        });
+        init(g);
 		
 			
 		function init(g){

@@ -405,102 +405,89 @@ export default class jmUtils {
     static pointInPolygon(pt, polygon, offset) {
         offset = offset || 1;
         offset = offset / 2;
-        let i, j, n = polygon.length;
-        let inside = false, redo = true;
-
+        const n = polygon.length;
+        
         if(!polygon || n == 0) return 0;
+        
         if(n == 1) {
-            return Math.abs(polygon[0].x - pt.x) <= offset && Math.abs(polygon[0].y - pt.y) <= offset;
+            return Math.abs(polygon[0].x - pt.x) <= offset && Math.abs(polygon[0].y - pt.y) <= offset ? 1 : 0;
         }
         
-        //一条直线
-        else if(n == 2) {
-            //在最左边之外或在最右边之外
-            if(Math.min(polygon[0].x,polygon[1].x) - pt.x > offset || 
-                pt.x - Math.max(polygon[0].x,polygon[1].x) > offset ) {
-                return 0;
-            }
-            //在最顶部之外或在最底部之外
-            if(Math.min(polygon[0].y,polygon[1].y) - pt.y > offset || 
-                pt.y - Math.max(polygon[0].y,polygon[1].y) > offset) {
-                return 0;
-            }
+        if(n == 2) {
+            return this.pointOnLine(pt, polygon[0], polygon[1], offset);
+        }
 
-            //如果线为平行为纵坐标。
-            if(polygon[0].x == polygon[1].x){
-                return (Math.abs(polygon[0].x - pt.x) <= offset && (pt.y - polygon[0].y) * (pt.y - polygon[1].y) <= 0)? 1:0;
-            }
-            //如果线为平行为横坐标。
-            if(polygon[0].y == polygon[1].y){
-                return (Math.abs(polygon[0].y - pt.y) <= offset && (pt.x - polygon[0].x) * (pt.x - polygon[1].x) <= 0)? 1:0;
-            }
-
-            if(Math.abs(polygon[0].x - pt.x) < offset && Math.abs(polygon[0].y - pt.y) < offset) {
+        for (let i = 0; i < n; i++) {
+            if (Math.abs(polygon[i].x - pt.x) <= offset && 
+                Math.abs(polygon[i].y - pt.y) <= offset) {
                 return 1;
             }
-            if(Math.abs(polygon[1].x - pt.x) < offset && Math.abs(polygon[1].y - pt.y) < offset) {
-                return 1;
-            }
+        }
 
-            //点到直线的距离小于宽度的一半，表示在线上
-            if(pt.y != polygon[0].y && pt.y != polygon[1].y) {
+        return this.rayCasting(pt, polygon, offset);
+    }
 
-                let f = (polygon[1].x - polygon[0].x) / (polygon[1].y - polygon[0].y) * (pt.y - polygon[0].y);
-                let ff = (pt.y - polygon[0].y) / Math.sqrt(f * f + (pt.y - polygon[0].y) * (pt.y - polygon[0].y));
-                let l = ff * (pt.x - polygon[0].x - f );
-                
-                return Math.abs(l) <= offset ?1:0;
-            }
+    static pointOnLine(pt, p1, p2, offset) {
+        const minX = Math.min(p1.x, p2.x);
+        const maxX = Math.max(p1.x, p2.x);
+        const minY = Math.min(p1.y, p2.y);
+        const maxY = Math.max(p1.y, p2.y);
+
+        if (minX - pt.x > offset || pt.x - maxX > offset) {
+            return 0;
+        }
+        if (minY - pt.y > offset || pt.y - maxY > offset) {
             return 0;
         }
 
-        for (i = 0;i < n;++i) {
-            if (polygon[i].x == pt.x &&    // 是否在顶点上
-                polygon[i].y == pt.y ) {
-                return 1;
+        if (p1.x == p2.x) {
+            return Math.abs(p1.x - pt.x) <= offset && 
+                   (pt.y - p1.y) * (pt.y - p2.y) <= 0 ? 1 : 0;
+        }
+
+        if (p1.y == p2.y) {
+            return Math.abs(p1.y - pt.y) <= offset && 
+                   (pt.x - p1.x) * (pt.x - p2.x) <= 0 ? 1 : 0;
+        }
+
+        if (Math.abs(p1.x - pt.x) < offset && Math.abs(p1.y - pt.y) < offset) {
+            return 1;
+        }
+        if (Math.abs(p2.x - pt.x) < offset && Math.abs(p2.y - pt.y) < offset) {
+            return 1;
+        }
+
+        if (pt.y != p1.y && pt.y != p2.y) {
+            const f = (p2.x - p1.x) / (p2.y - p1.y) * (pt.y - p1.y);
+            const ff = (pt.y - p1.y) / Math.sqrt(f * f + (pt.y - p1.y) * (pt.y - p1.y));
+            const l = ff * (pt.x - p1.x - f);
+            
+            return Math.abs(l) <= offset ? 1 : 0;
+        }
+        return 0;
+    }
+
+    static rayCasting(pt, polygon, offset) {
+        const n = polygon.length;
+        let inside = false;
+        const testY = pt.y;
+        const testX = pt.x;
+
+        for (let i = 0, j = n - 1; i < n; j = i++) {
+            const yi = polygon[i].y;
+            const yj = polygon[j].y;
+            const xi = polygon[i].x;
+            const xj = polygon[j].x;
+
+            const intersect = ((yi > testY) !== (yj > testY)) &&
+                (testX < (xj - xi) * (testY - yi) / (yj - yi) + xi);
+
+            if (intersect) {
+                inside = !inside;
             }
         }
 
-        //pt = this.clone(pt);
-        while (redo) {
-            redo = false;
-            inside = false;
-            for (i = 0,j = n - 1;i < n;j = i++) {
-                if ( (polygon[i].y < pt.y && pt.y < polygon[j].y) || 
-                    (polygon[j].y < pt.y && pt.y < polygon[i].y) ) {
-                    if (pt.x <= polygon[i].x || pt.x <= polygon[j].x) {
-                        var _x = (pt.y-polygon[i].y)*(polygon[j].x-polygon[i].x)/(polygon[j].y-polygon[i].y)+polygon[i].x;
-                        if (pt.x < _x)          // 在线的左侧
-                            inside = !inside;
-                        else if (pt.x == _x)    // 在线上
-                        {
-                            return 1;
-                        }
-                    }
-                }
-                else if ( pt.y == polygon[i].y) {
-                    if (pt.x < polygon[i].x) {    // 交点在顶点上                    
-                        if(polygon[i].y > polygon[j].y) {
-                            --pt.y
-                        }
-                        else {
-                            ++pt.y;
-                        }
-                        redo = true;
-                        break;
-                    }
-                }
-                else if ( polygon[i].y ==  polygon[j].y && // 在水平的边界线上
-                    pt.y == polygon[i].y &&
-                    ( (polygon[i].x < pt.x && pt.x < polygon[j].x) || 
-                    (polygon[j].x < pt.x && pt.x < polygon[i].x) ) ) {
-                    inside = true;
-                    break;
-                }
-            }
-        }
-
-        return inside ? 2:0;
+        return inside ? 2 : 0;
     }
 
     /**

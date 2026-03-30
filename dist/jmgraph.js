@@ -5452,7 +5452,21 @@ var _texture = require("./core/texture.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -5465,12 +5479,6 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5496,12 +5504,109 @@ var WeblBase = /*#__PURE__*/function () {
     this.style = {
       globalAlpha: 1
     };
+    this.stateStack = [];
+    this.transformMatrix = [1, 0, 0, 1, 0, 0]; // 2D 变换矩阵
   }
 
   _createClass(WeblBase, [{
     key: "context",
     get: function get() {
       if (this.graph) return this.graph.context;
+    } // 保存当前状态
+
+  }, {
+    key: "save",
+    value: function save() {
+      this.stateStack.push({
+        transformMatrix: _toConsumableArray(this.transformMatrix),
+        style: _objectSpread({}, this.style)
+      });
+    } // 恢复上一个状态
+
+  }, {
+    key: "restore",
+    value: function restore() {
+      if (this.stateStack.length > 0) {
+        var state = this.stateStack.pop();
+        this.transformMatrix = state.transformMatrix;
+        this.style = state.style;
+      }
+    } // 平移变换
+
+  }, {
+    key: "translate",
+    value: function translate(x, y) {
+      // 更新变换矩阵
+      this.transformMatrix[4] += x * this.transformMatrix[0] + y * this.transformMatrix[2];
+      this.transformMatrix[5] += x * this.transformMatrix[1] + y * this.transformMatrix[3];
+    } // 缩放变换
+
+  }, {
+    key: "scale",
+    value: function scale(sx, sy) {
+      // 更新变换矩阵
+      this.transformMatrix[0] *= sx;
+      this.transformMatrix[1] *= sx;
+      this.transformMatrix[2] *= sy;
+      this.transformMatrix[3] *= sy;
+    } // 旋转变换
+
+  }, {
+    key: "rotate",
+    value: function rotate(angle) {
+      var cos = Math.cos(angle);
+      var sin = Math.sin(angle);
+
+      var _this$transformMatrix = _slicedToArray(this.transformMatrix, 6),
+          a = _this$transformMatrix[0],
+          b = _this$transformMatrix[1],
+          c = _this$transformMatrix[2],
+          d = _this$transformMatrix[3],
+          tx = _this$transformMatrix[4],
+          ty = _this$transformMatrix[5]; // 更新变换矩阵
+
+
+      this.transformMatrix[0] = a * cos - b * sin;
+      this.transformMatrix[1] = a * sin + b * cos;
+      this.transformMatrix[2] = c * cos - d * sin;
+      this.transformMatrix[3] = c * sin + d * cos;
+    } // 矩阵变换
+
+  }, {
+    key: "transform",
+    value: function transform(a, b, c, d, e, f) {
+      var _this$transformMatrix2 = _slicedToArray(this.transformMatrix, 6),
+          currentA = _this$transformMatrix2[0],
+          currentB = _this$transformMatrix2[1],
+          currentC = _this$transformMatrix2[2],
+          currentD = _this$transformMatrix2[3],
+          currentE = _this$transformMatrix2[4],
+          currentF = _this$transformMatrix2[5]; // 矩阵乘法
+
+
+      this.transformMatrix[0] = a * currentA + b * currentC;
+      this.transformMatrix[1] = a * currentB + b * currentD;
+      this.transformMatrix[2] = c * currentA + d * currentC;
+      this.transformMatrix[3] = c * currentB + d * currentD;
+      this.transformMatrix[4] = e * currentA + f * currentC + currentE;
+      this.transformMatrix[5] = e * currentB + f * currentD + currentF;
+    } // 应用变换到点
+
+  }, {
+    key: "applyTransform",
+    value: function applyTransform(point) {
+      var _this$transformMatrix3 = _slicedToArray(this.transformMatrix, 6),
+          a = _this$transformMatrix3[0],
+          b = _this$transformMatrix3[1],
+          c = _this$transformMatrix3[2],
+          d = _this$transformMatrix3[3],
+          tx = _this$transformMatrix3[4],
+          ty = _this$transformMatrix3[5];
+
+      return {
+        x: a * point.x + c * point.y + tx,
+        y: b * point.x + d * point.y + ty
+      };
     } // 纹理绘制canvas
 
   }, {
@@ -6512,6 +6617,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
@@ -6544,9 +6653,15 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
     _this.control = option.control;
     _this.points = [];
     return _this;
-  }
+  } // 应用变换到点
+
 
   _createClass(WebglPath, [{
+    key: "applyTransform",
+    value: function applyTransform(point) {
+      return _get(_getPrototypeOf(WebglPath.prototype), "applyTransform", this).call(this, point);
+    }
+  }, {
     key: "setParentBounds",
     value: function setParentBounds() {
       var parentBounds = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.parentAbsoluteBounds;
@@ -6631,7 +6746,9 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
       try {
         for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
           var p = _step2.value;
-          fixedPoints.push(p.x + this.parentAbsoluteBounds.left, p.y + this.parentAbsoluteBounds.top);
+          // 应用变换矩阵
+          var transformedPoint = this.applyTransform(p);
+          fixedPoints.push(transformedPoint.x + this.parentAbsoluteBounds.left, transformedPoint.y + this.parentAbsoluteBounds.top);
         }
       } catch (err) {
         _iterator2.e(err);

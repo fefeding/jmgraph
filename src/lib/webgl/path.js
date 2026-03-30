@@ -11,6 +11,11 @@ class WebglPath extends WebglBase {
         this.points = [];
     }
 
+    // 应用变换到点
+    applyTransform(point) {
+        return super.applyTransform(point);
+    }
+
     setParentBounds(parentBounds = this.parentAbsoluteBounds) {
 
         //this.useProgram();
@@ -74,9 +79,11 @@ class WebglPath extends WebglBase {
        
         const fixedPoints = [];
         for(const p of points) {
+            // 应用变换矩阵
+            const transformedPoint = this.applyTransform(p);
             fixedPoints.push(
-                p.x + this.parentAbsoluteBounds.left,
-                p.y + this.parentAbsoluteBounds.top
+                transformedPoint.x + this.parentAbsoluteBounds.left,
+                transformedPoint.y + this.parentAbsoluteBounds.top
             );
         }
         const vertexBuffer = this.createFloat32Buffer(fixedPoints); 

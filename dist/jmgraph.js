@@ -2623,8 +2623,16 @@ var jmGraph = /*#__PURE__*/function (_jmControl) {
       }
     }
 
-    _this.canvas = canvas;
-    _this.context = canvas.getContext(_this.mode);
+    _this.canvas = canvas; // Create context with preserveDrawingBuffer for webgl to prevent flickering
+
+    if (_this.mode === 'webgl') {
+      _this.context = canvas.getContext(_this.mode, {
+        preserveDrawingBuffer: true
+      });
+    } else {
+      _this.context = canvas.getContext(_this.mode);
+    }
+
     _this.textureCanvas = option.textureCanvas || null; // webgl模式
 
     if (_this.mode === 'webgl') {
@@ -5836,6 +5844,9 @@ var WeblBase = /*#__PURE__*/function () {
   }, {
     key: "earCutPointsToTriangles",
     value: function earCutPointsToTriangles(points) {
+      this.earCutCache = this.earCutCache || (this.earCutCache = {});
+      var key = JSON.stringify(points);
+      if (this.earCutCache[key]) return this.earCutCache[key];
       var ps = this.earCutPoints(points); // 切割得到3角色顶点索引，
 
       var triangles = []; // 用顶点索引再组合成坐标数组
@@ -5847,6 +5858,7 @@ var WeblBase = /*#__PURE__*/function () {
         triangles.push([p1, p2, p3]); // 每三个顶点构成一个三角
       }
 
+      this.earCutCache[key] = triangles;
       return triangles;
     } // 点坐标数组转为一维数组
 
@@ -7071,9 +7083,9 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
   }, {
     key: "getTriangles",
     value: function getTriangles(points) {
-      //this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
-      //const key = JSON.stringify(points);
-      //if(this.trianglesCache[key]) return this.trianglesCache[key];
+      this.trianglesCache = this.trianglesCache || (this.trianglesCache = {});
+      var key = JSON.stringify(points);
+      if (this.trianglesCache[key]) return this.trianglesCache[key];
       var res = [];
       var polygons = this.getPolygon(points);
 
@@ -7093,9 +7105,9 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
         } finally {
           _iterator3.f();
         }
-      } //this.trianglesCache[key] = res;
+      }
 
-
+      this.trianglesCache[key] = res;
       return res;
     } // 画线条
 
@@ -7211,25 +7223,33 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
     key: "fillPolygons",
     value: function fillPolygons(points) {
       var isTexture = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-      //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
-      //this.deleteBuffer(indexBuffer);
 
-      /*if(points.length > 3 && (!regular || this.needCut)) {
-          const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
-          if(triangles.length) {   
-              for(const triangle of triangles) {
-                  this.fillPolygons(triangle, isTexture);// 这里就变成了规则的图形了
-              }
+      if (points.length > 3) {
+        var triangles = this.needCut ? this.earCutPointsToTriangles(points) : this.getTriangles(points);
+
+        if (triangles.length) {
+          var _iterator4 = _createForOfIteratorHelper(triangles),
+              _step4;
+
+          try {
+            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+              var triangle = _step4.value;
+              this.fillPolygons(triangle, isTexture); // 这里就变成了规则的图形了
+            }
+          } catch (err) {
+            _iterator4.e(err);
+          } finally {
+            _iterator4.f();
           }
-      }
-      else {*/
-      var buffer = this.writePoints(points); // 纹理坐标
+        }
+      } else {
+        var buffer = this.writePoints(points); // 纹理坐标
 
-      var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
-      this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-      this.deleteBuffer(buffer);
-      coordBuffer && this.deleteBuffer(coordBuffer); //}
+        var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
+        this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+        this.deleteBuffer(buffer);
+        coordBuffer && this.deleteBuffer(coordBuffer);
+      }
     } // 填充图形
 
   }, {

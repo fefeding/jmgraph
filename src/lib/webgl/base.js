@@ -377,6 +377,10 @@ class WeblBase {
     // 多边切割, 得到三角形顶点
     // polygonIndices 顶点索引，
     earCutPointsToTriangles(points) {
+        this.earCutCache = this.earCutCache || (this.earCutCache = {});
+        const key = JSON.stringify(points);
+        if (this.earCutCache[key]) return this.earCutCache[key];
+
         const ps = this.earCutPoints(points);// 切割得到3角色顶点索引，
         const triangles = [];
         // 用顶点索引再组合成坐标数组
@@ -387,6 +391,8 @@ class WeblBase {
 
             triangles.push([p1, p2, p3]);// 每三个顶点构成一个三角
         }
+        
+        this.earCutCache[key] = triangles;
         return triangles;
     }
 

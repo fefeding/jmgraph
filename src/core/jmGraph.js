@@ -73,7 +73,13 @@ export default class jmGraph extends jmControl {
 			}
 		}	
 		this.canvas = canvas;	
-		this.context = canvas.getContext(this.mode);
+		// Create context with preserveDrawingBuffer for webgl to prevent flickering
+		if(this.mode === 'webgl') {
+			this.context = canvas.getContext(this.mode, { preserveDrawingBuffer: true });
+		}
+		else {
+			this.context = canvas.getContext(this.mode);
+		}
 
 		this.textureCanvas = option.textureCanvas || null;
 		

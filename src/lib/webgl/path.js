@@ -371,9 +371,9 @@ class WebglPath extends WebglBase {
     // 分割成一个个规则的三角形，不规则的多边形不全割的话纹理就会没法正确覆盖
     getTriangles(points) {
         
-        //this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
-        //const key = JSON.stringify(points);
-        //if(this.trianglesCache[key]) return this.trianglesCache[key];
+        this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
+        const key = JSON.stringify(points);
+        if(this.trianglesCache[key]) return this.trianglesCache[key];
 
         const res = [];
         const polygons = this.getPolygon(points);                
@@ -384,7 +384,7 @@ class WebglPath extends WebglBase {
                 res.push(...triangles);
             }   
         }
-        //this.trianglesCache[key] = res;
+        this.trianglesCache[key] = res;
         return res;
     }
 
@@ -486,18 +486,15 @@ class WebglPath extends WebglBase {
 
     // 进行多边形填充
     fillPolygons(points, isTexture = false) {   
-        //const indexBuffer = this.createUint16Buffer(triangles, this.context.ELEMENT_ARRAY_BUFFER);
-        //this.context.drawElements(this.context.TRIANGLES, triangles.length, this.context.UNSIGMED_SHORT, 0);
-        //this.deleteBuffer(indexBuffer);
-        /*if(points.length > 3 && (!regular || this.needCut)) {
-            const triangles = regular && this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
+        if(points.length > 3) {
+            const triangles = this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
             if(triangles.length) {   
                 for(const triangle of triangles) {
                     this.fillPolygons(triangle, isTexture);// 这里就变成了规则的图形了
                 }
             }
         }
-        else {*/
+        else {
             const buffer = this.writePoints(points);
             // 纹理坐标
             const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
@@ -505,7 +502,7 @@ class WebglPath extends WebglBase {
             this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
             this.deleteBuffer(buffer);
             coordBuffer && this.deleteBuffer(coordBuffer);    
-        //}
+        }
     }
 
     // 填充图形

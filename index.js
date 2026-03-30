@@ -12,6 +12,9 @@ import {jmArrowLine} from "./src/shapes/jmArrowLine.js";
 import {jmImage} from "./src/shapes/jmImage.js";
 import {jmLabel} from "./src/shapes/jmLabel.js";
 import {jmResize} from "./src/shapes/jmResize.js";
+import {jmEllipse} from "./src/shapes/jmEllipse.js";
+import {jmPolygon} from "./src/shapes/jmPolygon.js";
+import {jmStar} from "./src/shapes/jmStar.js";
 
 import { jmGraph as jmGraphCore, 
     jmUtils,
@@ -21,7 +24,8 @@ import { jmGraph as jmGraphCore,
 	jmGradient,
 	jmEvents,
 	jmControl,
-	jmPath, } from "./src/core/jmGraph.js";
+	jmPath,
+	jmLayer } from "./src/core/jmGraph.js";
 
 const shapes = {
     "arc": jmArc,
@@ -36,7 +40,10 @@ const shapes = {
     "image": jmImage,
     "img": jmImage,
     "label": jmLabel,
-    "resize": jmResize
+    "resize": jmResize,
+    "ellipse": jmEllipse,
+    "polygon": jmPolygon,
+    "star": jmStar
 }
 
 export default class jmGraph extends jmGraphCore {
@@ -93,6 +100,10 @@ export {
 	jmImage,
 	jmLabel,
     jmResize,
+    jmEllipse,
+    jmPolygon,
+    jmStar,
+    jmLayer,
     jmGraph,
     createJmGraph as create
 };

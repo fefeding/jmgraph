@@ -6,6 +6,7 @@ import {jmGradient} from "./jmGradient.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
+import {jmLayer} from "./jmLayer.js";
 
 /**
  * jmGraph画图类库
@@ -45,6 +46,10 @@ export default class jmGraph extends jmControl {
 		this.util = this.utils = jmUtils;	
 		// 模式 webgl | 2d
 		this.mode = option.mode || '2d';
+
+		// 缩放和平移相关
+		this.scaleFactor = 1;
+		this.translation = {x: 0, y: 0};
 
 		//如果是小程序
 		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
@@ -119,14 +124,24 @@ export default class jmGraph extends jmControl {
 		 * 画控件前初始化
 		 * 为了解决一像素线条问题
 		 */
-		this.on('beginDraw', function() {	
+		this.on('beginDraw', function() {  
 			this.context.translate && this.context.translate(0.5, 0.5);
+			// 应用缩放和平移变换
+			if(this.context.translate && this.context.scale) {
+				this.context.translate(this.translation.x, this.translation.y);
+				this.context.scale(this.scaleFactor, this.scaleFactor);
+			}
 		});
 		/**
 		 * 结束控件绘制 为了解决一像素线条问题
 		 */
-		this.on('endDraw', function() {	
-			this.context.translate && this.context.translate(-0.5, -0.5);		
+		this.on('endDraw', function() {  
+			this.context.translate && this.context.translate(-0.5, -0.5);
+			// 恢复缩放和平移变换
+			if(this.context.translate && this.context.scale) {
+				this.context.scale(1/this.scaleFactor, 1/this.scaleFactor);
+				this.context.translate(-this.translation.x, -this.translation.y);
+			}
 		});
 
 		// devicePixelRatio初始化
@@ -272,6 +287,8 @@ export default class jmGraph extends jmControl {
 			if(!args) args = {};
 			args.graph = this;
 			let obj = new shape(args);
+			// 添加到活动图层
+			this.addShapeToLayer(obj);
 			return obj;
 		}
 	}
@@ -501,7 +518,7 @@ export default class jmGraph extends jmControl {
 			this.normalSize = {
 				width: this.canvas.width,
 				height: this.canvas.height
-			};		
+			};
 		}
 		
 		//this.context.scale && this.context.scale(dx,dy);
@@ -515,6 +532,312 @@ export default class jmGraph extends jmControl {
 	}
 
 	/**
+	 * 设置缩放因子
+	 * 支持以指定点为中心进行缩放，保持该点在屏幕上的位置不变
+	 * 
+	 * @method setZoom
+	 * @param {number} zoom 缩放因子（建议范围：0.1 - 10）
+	 * @param {number} [x] 缩放中心X坐标（画布坐标）
+	 * @param {number} [y] 缩放中心Y坐标（画布坐标）
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	setZoom(zoom, x, y) {
+		// 参数验证
+		if(typeof zoom !== 'number' || isNaN(zoom)) {
+			console.warn('jmGraph: setZoom - 无效的缩放因子');
+			return this;
+		}
+		
+		// 限制缩放范围，防止过度缩放导致性能问题或显示异常
+		const minZoom = 0.1;  // 最小缩放到10%
+		const maxZoom = 10;   // 最大放大到10倍
+		zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+		
+		if (x !== undefined && y !== undefined) {
+			// 计算缩放前后的坐标偏移
+			// 保持缩放中心点在屏幕上的位置不变
+			const oldZoom = this.scaleFactor;
+			const newZoom = zoom;
+			
+			// 调整平移量以保持缩放中心位置不变
+			this.translation.x = x - (x - this.translation.x) * (newZoom / oldZoom);
+			this.translation.y = y - (y - this.translation.y) * (newZoom / oldZoom);
+		}
+		
+		this.scaleFactor = zoom;
+		this.needUpdate = true;
+		this.redraw();
+		
+		return this; // 支持链式调用
+	}
+
+	/**
+	 * 平移画布
+	 * 移动画布视图，改变可视区域
+	 * 
+	 * @method pan
+	 * @param {number} dx X轴平移量（像素）
+	 * @param {number} dy Y轴平移量（像素）
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	pan(dx, dy) {
+		// 参数验证
+		if(typeof dx !== 'number' || typeof dy !== 'number' || isNaN(dx) || isNaN(dy)) {
+			console.warn('jmGraph: pan - 无效的平移参数');
+			return this;
+		}
+		
+		this.translation.x += dx;
+		this.translation.y += dy;
+		this.needUpdate = true;
+		this.redraw();
+		
+		return this; // 支持链式调用
+	}
+
+	/**
+	 * 重置缩放和平移
+	 * 恢复画布到初始状态（缩放为1，平移为0）
+	 * 
+	 * @method resetTransform
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	resetTransform() {
+		this.scaleFactor = 1;
+		this.translation = {x: 0, y: 0};
+		this.needUpdate = true;
+		this.redraw();
+		
+		return this; // 支持链式调用
+	}
+
+	/**
+	 * 初始化图层系统
+	 * 创建图层管理的基础结构，包括默认图层
+	 * 
+	 * @method initLayers
+	 * @private
+	 */
+	initLayers() {
+		if(!this.layers) {
+			this.layers = new jmList();
+			// 创建默认图层
+			const defaultLayer = this.createLayer('Default Layer');
+			this.activeLayer = defaultLayer;
+		}
+	}
+
+	/**
+	 * 创建新图层
+	 * 图层用于组织和管理图形对象，支持可见性和锁定控制
+	 * 
+	 * @method createLayer
+	 * @param {string} name 图层名称（必须唯一）
+	 * @param {object} [options] 图层选项
+	 * @param {boolean} [options.visible=true] 图层是否可见
+	 * @param {boolean} [options.locked=false] 图层是否锁定（锁定后不可交互）
+	 * @return {jmLayer} 新创建的图层
+	 */
+	createLayer(name, options = {}) {
+		// 参数验证
+		if(!name || typeof name !== 'string') {
+			console.warn('jmGraph: createLayer - 图层名称必须是非空字符串');
+			name = `Layer_${Date.now()}`;
+		}
+		
+		this.initLayers();
+		
+		// 检查图层名称是否已存在
+		const existingLayer = this.getLayer(name);
+		if(existingLayer) {
+			console.warn(`jmGraph: 图层 "${name}" 已存在，将返回现有图层`);
+			return existingLayer;
+		}
+		
+		const layer = new jmLayer({
+			name: name,
+			graph: this,
+			...options
+		});
+		
+		this.layers.add(layer);
+		this.children.add(layer);
+		this.needUpdate = true;
+		return layer;
+	}
+
+	/**
+	 * 获取所有图层
+	 * 
+	 * @method getLayers
+	 * @return {jmList} 图层列表
+	 */
+	getLayers() {
+		this.initLayers();
+		return this.layers;
+	}
+
+	/**
+	 * 根据名称获取图层
+	 * 
+	 * @method getLayer
+	 * @param {string} name 图层名称
+	 * @return {jmLayer|null} 图层对象，如果不存在则返回null
+	 */
+	getLayer(name) {
+		this.initLayers();
+		
+		if(!name) return null;
+		
+		let result = null;
+		this.layers.each((i, layer) => {
+			if(layer.name === name) {
+				result = layer;
+				return false; // 找到后停止遍历
+			}
+		});
+		return result;
+	}
+
+	/**
+	 * 设置活动图层
+	 * 新创建的图形将自动添加到活动图层
+	 * 
+	 * @method setActiveLayer
+	 * @param {string|jmLayer} layer 图层名称或图层对象
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	setActiveLayer(layer) {
+		this.initLayers();
+		
+		// 支持传入图层名称或图层对象
+		if(typeof layer === 'string') {
+			layer = this.getLayer(layer);
+		}
+		
+		if(!layer || !(layer instanceof jmLayer)) {
+			console.warn('jmGraph: setActiveLayer - 无效的图层');
+			return this;
+		}
+		
+		this.activeLayer = layer;
+		return this;
+	}
+
+	/**
+	 * 获取当前活动图层
+	 * 活动图层是新创建图形的默认容器
+	 * 
+	 * @method getActiveLayer
+	 * @return {jmLayer} 当前活动图层
+	 */
+	getActiveLayer() {
+		this.initLayers();
+		return this.activeLayer;
+	}
+
+	/**
+	 * 移除图层
+	 * 删除指定图层及其包含的所有图形
+	 * 注意：默认图层不可删除
+	 * 
+	 * @method removeLayer
+	 * @param {string|jmLayer} layer 图层名称或图层对象
+	 * @return {boolean} 是否成功删除
+	 */
+	removeLayer(layer) {
+		this.initLayers();
+		
+		// 支持传入图层名称或图层对象
+		if(typeof layer === 'string') {
+			layer = this.getLayer(layer);
+		}
+		
+		if(!layer) {
+			console.warn('jmGraph: removeLayer - 图层不存在');
+			return false;
+		}
+		
+		// 禁止删除默认图层
+		if(layer.name === 'Default Layer') {
+			console.warn('jmGraph: 不能删除默认图层');
+			return false;
+		}
+		
+		// 如果删除的是当前活动图层，切换到默认图层
+		if(this.activeLayer === layer) {
+			this.activeLayer = this.getLayer('Default Layer');
+		}
+		
+		this.layers.remove(layer);
+		this.children.remove(layer);
+		this.needUpdate = true;
+		return true;
+	}
+
+	/**
+	 * 将形状添加到指定图层
+	 * 如果未指定图层，则添加到当前活动图层
+	 * 
+	 * @method addShapeToLayer
+	 * @param {jmControl} shape 要添加的形状对象
+	 * @param {string|jmLayer} [layer] 图层名称或图层对象，默认为当前活动图层
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	addShapeToLayer(shape, layer) {
+		this.initLayers();
+		
+		// 参数验证
+		if(!shape) {
+			console.warn('jmGraph: addShapeToLayer - 无效的形状对象');
+			return this;
+		}
+		
+		// 确定目标图层
+		if(!layer) {
+			layer = this.activeLayer;
+		} else if(typeof layer === 'string') {
+			layer = this.getLayer(layer);
+		}
+		
+		if(!layer) {
+			console.warn('jmGraph: addShapeToLayer - 图层不存在');
+			return this;
+		}
+		
+		layer.children.add(shape);
+		this.needUpdate = true;
+		return this;
+	}
+
+	/**
+	 * 从图层中移除形状
+	 * 
+	 * @method removeShapeFromLayer
+	 * @param {jmControl} shape 要移除的形状对象
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	removeShapeFromLayer(shape) {
+		if(!shape) {
+			console.warn('jmGraph: removeShapeFromLayer - 无效的形状对象');
+			return this;
+		}
+		
+		// 从所有图层中查找并移除
+		if(this.layers) {
+			this.layers.each((i, layer) => {
+				if(layer.children.contains(shape)) {
+					layer.children.remove(shape);
+					this.needUpdate = true;
+					return false; // 找到后停止遍历
+				}
+			});
+		}
+		
+		return this;
+	}
+
+	/**
 	 * 保存为base64图形数据
 	 * 
 	 * @method toDataURL
@@ -523,6 +846,131 @@ export default class jmGraph extends jmControl {
 	toDataURL() {
 		let data = this.canvas.toDataURL?this.canvas.toDataURL():'';
 		return data;
+	}
+
+	/**
+	 * 导出为PNG图片
+	 * 使用Canvas的toDataURL方法导出当前画布内容
+	 * 
+	 * @method exportToPNG
+	 * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+	 * @param {string} [format='image/png'] 图片格式，支持image/png和image/jpeg
+	 * @param {number} [quality=0.9] 图片质量（0-1之间，仅对JPEG格式有效）
+	 */
+	exportToPNG(fileName = 'jmgraph-export', format = 'image/png', quality = 0.9) {
+		try {
+			// 确保画布已渲染
+			this.redraw();
+			
+			const dataURL = this.canvas.toDataURL(format, quality);
+			this.downloadFile(dataURL, fileName, 'png');
+		} catch(error) {
+			console.error('jmGraph: exportToPNG - 导出失败', error);
+		}
+	}
+
+	/**
+	 * 导出为JPEG图片
+	 * 
+	 * @method exportToJPEG
+	 * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+	 * @param {number} [quality=0.9] 图片质量（0-1之间）
+	 */
+	exportToJPEG(fileName = 'jmgraph-export', quality = 0.9) {
+		this.exportToPNG(fileName, 'image/jpeg', quality);
+	}
+
+	/**
+	 * 导出为SVG文件
+	 * 将当前画布内容转换为SVG格式
+	 * 注意：只有实现了toSVG方法的形状才能被导出
+	 * 
+	 * @method exportToSVG
+	 * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+	 */
+	exportToSVG(fileName = 'jmgraph-export') {
+		try {
+			const svg = this.toSVG();
+			const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+			const url = URL.createObjectURL(blob);
+			this.downloadFile(url, fileName, 'svg');
+			
+			// 释放URL对象，避免内存泄漏
+			setTimeout(() => URL.revokeObjectURL(url), 100);
+		} catch(error) {
+			console.error('jmGraph: exportToSVG - 导出失败', error);
+		}
+	}
+
+	/**
+	 * 转换为SVG字符串
+	 * 遍历所有图层和形状，生成SVG标记
+	 * 
+	 * @method toSVG
+	 * @return {string} SVG字符串
+	 */
+	toSVG() {
+		// SVG头部，包含命名空间和画布尺寸
+		let svg = `<svg width="${this.width}" height="${this.height}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.width} ${this.height}">`;
+		
+		// 添加背景色（如果有）
+		if(this.style && this.style.fill) {
+			svg += `<rect width="100%" height="100%" fill="${this.style.fill}"/>`;
+		}
+		
+		// 遍历所有图层
+		if(this.layers) {
+			this.layers.each((i, layer) => {
+				if(layer.visible) {
+					// 添加图层组，方便管理
+					svg += `<g id="${layer.name}" opacity="${layer.opacity || 1}">`;
+					
+					// 遍历图层中的所有形状
+					layer.children.each((j, shape) => {
+						if(shape.toSVG) {
+							svg += shape.toSVG();
+						}
+					});
+					
+					svg += '</g>';
+				}
+			});
+		}
+		else {
+			// 遍历直接添加的形状（兼容没有图层系统的情况）
+			this.children.each((i, shape) => {
+				if(shape.toSVG) {
+					svg += shape.toSVG();
+				}
+			});
+		}
+		
+		svg += '</svg>';
+		return svg;
+	}
+
+	/**
+	 * 下载文件
+	 * 创建临时链接元素触发浏览器下载
+	 * 
+	 * @method downloadFile
+	 * @private
+	 * @param {string} url 文件URL或Data URL
+	 * @param {string} fileName 文件名（不含扩展名）
+	 * @param {string} extension 文件扩展名
+	 */
+	downloadFile(url, fileName, extension) {
+		// 创建临时链接元素
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = `${fileName}.${extension}`;
+		
+		// 添加到DOM并触发点击
+		document.body.appendChild(link);
+		link.click();
+		
+		// 清理DOM
+		document.body.removeChild(link);
 	}
 
 	/** 
@@ -572,4 +1020,5 @@ export {
 	jmEvents,
 	jmControl,
 	jmPath,
+	jmLayer,
  };

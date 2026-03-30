@@ -16,6 +16,10 @@
 - 🎭 **事件系统** - 完整的鼠标和触摸事件支持
 - 🔧 **可扩展** - 支持自定义图形控件
 - 🌈 **样式丰富** - 支持渐变、阴影、透明度等样式
+- 📐 **图层管理** - 支持多图层操作，包括创建、切换、删除图层
+- 🔍 **缩放平移** - 支持画布缩放和平移操作
+- 📤 **导出功能** - 支持导出为 PNG、JPEG 和 SVG 格式
+- 📝 **文本换行** - 支持文本自动换行显示
 
 ## 📦 安装
 
@@ -96,6 +100,7 @@ g.redraw();
 ## 📚 文档
 
 - [在线示例](https://fefeding.github.io/jmgraph/example/index.html)
+- [新特性示例](https://fefeding.github.io/jmgraph/example/new-features.html)
 - [基于 jmGraph 的图表库](https://github.com/fefeding/jmchart)
 
 ## 🎨 样式说明
@@ -121,6 +126,7 @@ jmGraph 支持简化的样式名称和原生 Canvas 样式：
 | textBaseline | textBaseline | 文本垂直对齐 |
 | lineJoin | lineJoin | 线条连接样式 |
 | lineCap | lineCap | 线条端点样式 |
+| maxWidth | maxWidth | 文本最大宽度（用于自动换行） |
 
 ## 🎯 内置图形
 
@@ -195,12 +201,47 @@ const label = g.createShape('label', {
     textAlign: 'center',
     textBaseline: 'middle',
     fontSize: 24,
-    fontFamily: 'Arial'
+    fontFamily: 'Arial',
+    maxWidth: 200 // 文本最大宽度，超过会自动换行
   },
   position: {x: 200, y: 150},
-  text: 'Hello World',
+  text: '这是一段测试文本，展示文本换行功能',
+  width: 200,
+  height: 100
+});
+```
+
+### 椭圆 (Ellipse)
+
+```javascript
+const ellipse = g.createShape('ellipse', {
+  style: style,
+  center: {x: 100, y: 150},
   width: 120,
   height: 80
+});
+```
+
+### 多边形 (Polygon)
+
+```javascript
+const polygon = g.createShape('polygon', {
+  style: style,
+  center: {x: 100, y: 150},
+  sides: 6, // 边数
+  radius: 50 // 半径
+});
+```
+
+### 星形 (Star)
+
+```javascript
+const star = g.createShape('star', {
+  style: style,
+  center: {x: 100, y: 150},
+  points: 5, // 顶点数
+  radius: 50, // 外半径
+  innerRadius: 25 // 内半径
 });
 ```
 
@@ -285,6 +326,137 @@ this.canvastouchmove = function (...arg) {
 this.canvastouchend = function (...arg) {
   return g.eventHandler.touchEnd(...arg);
 }
+```
+
+## 🔍 缩放平移功能
+
+### 设置缩放
+
+```javascript
+// 设置缩放因子，以指定点为中心
+// 缩放因子，1为原始大小
+// x, y 缩放中心坐标
+g.setZoom(1.5, 400, 300);
+```
+
+### 平移画布
+
+```javascript
+// 平移画布
+// dx, dy 平移距离
+g.pan(100, 50);
+```
+
+### 重置视图
+
+```javascript
+// 重置缩放和平移
+g.resetTransform();
+```
+
+## 📐 图层管理
+
+### 创建图层
+
+```javascript
+// 创建新图层
+// name 图层名称
+// options 图层选项
+const layer = g.createLayer('My Layer', {
+  visible: true,
+  locked: false
+});
+```
+
+### 切换图层
+
+```javascript
+// 切换到指定图层
+// layer 图层名称或图层对象
+g.setActiveLayer('My Layer');
+```
+
+### 获取图层
+
+```javascript
+// 获取所有图层
+const layers = g.getLayers();
+
+// 获取指定名称的图层
+const layer = g.getLayer('My Layer');
+
+// 获取当前活动图层
+const activeLayer = g.getActiveLayer();
+```
+
+### 移除图层
+
+```javascript
+// 移除指定图层
+// layer 图层名称或图层对象
+const success = g.removeLayer('My Layer');
+```
+
+### 图层操作
+
+```javascript
+// 将形状添加到指定图层
+// shape 形状对象
+// layer 图层名称或图层对象，默认为当前活动图层
+g.addShapeToLayer(shape, 'My Layer');
+
+// 从图层中移除形状
+// shape 形状对象
+g.removeShapeFromLayer(shape);
+```
+
+## 📤 导出功能
+
+### 导出为 PNG
+
+```javascript
+// 导出为 PNG 图片
+// fileName 文件名
+// format 图片格式，默认为 image/png
+// quality 图片质量，0-1之间
+g.exportToPNG('my-graph', 'image/png', 0.9);
+```
+
+### 导出为 JPEG
+
+```javascript
+// 导出为 JPEG 图片
+// fileName 文件名
+// quality 图片质量，0-1之间
+g.exportToJPEG('my-graph', 0.8);
+```
+
+### 导出为 SVG
+
+```javascript
+// 导出为 SVG
+// fileName 文件名
+g.exportToSVG('my-graph');
+```
+
+## 📝 文本换行
+
+当文本长度超过 `maxWidth` 时，会自动换行显示：
+
+```javascript
+const label = g.createShape('label', {
+  style: {
+    fill: '#333',
+    fontSize: 14,
+    fontFamily: 'Arial',
+    textAlign: 'center',
+    maxWidth: 200 // 文本最大宽度，超过会自动换行
+  },
+  position: {x: 200, y: 150},
+  text: '这是一段测试文本，当文本长度超过最大宽度时，会自动换行显示。',
+  width: 200,
+  height: 100
+});
 ```
 
 ## 🛠️ 开发

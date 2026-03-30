@@ -108,28 +108,57 @@ export default class jmLabel extends jmControl {
 
 	/**
 	 * 测试获取文本所占大小
-	 *
+	 * 计算文本渲染所需的宽度和高度，支持自动换行
+	 * 
 	 * @method testSize
-	 * @return {object} 含文本大小的对象
+	 * @return {object} 含文本大小的对象 {width, height}
 	 */
 	testSize() {
+		// 使用缓存提高性能，避免重复计算
 		if(this.__size) return this.__size;
 
-		if(this.webglControl) this.__size = this.webglControl.testSize(this.text, this.style);
+		if(this.webglControl) {
+			this.__size = this.webglControl.testSize(this.text, this.style);
+		}
 		else {
 			this.context.save && this.context.save();
-			// 修改字体，用来计算
+			
+			// 设置字体样式用于测量
 			this.setStyle({
 				font: this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily)
 			});
-			//计算宽度
-			this.__size = this.context.measureText?
-								this.context.measureText(this.text):
-								{width:15};
+			
+			// 计算文本尺寸
+			if(this.style.maxWidth && this.text) {
+				// 文本换行处理
+				const lines = this.wrapText(this.text, this.style.maxWidth);
+				let maxWidth = 0;
+				
+				// 找出最宽的一行
+				for(let line of lines) {
+					const width = this.context.measureText(line).width;
+					if(width > maxWidth) maxWidth = width;
+				}
+				
+				// 计算总高度（行数 × 行高）
+				const lineHeight = this.style.lineHeight || this.style.fontSize * 1.2;
+				this.__size = {
+					width: maxWidth,
+					height: lineHeight * lines.length
+				};
+			}
+			else {
+				// 单行文本
+				this.__size = this.context.measureText ?
+								this.context.measureText(this.text) :
+								{width: 15};
+				this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+			}
+			
 			this.context.restore && this.context.restore();
-			this.__size.height = this.style.fontSize?this.style.fontSize:15;
 		}
 
+		// 设置默认宽高
 		if(!this.width) this.width = this.__size.width;
 		if(!this.height) this.height = this.__size.height;
 		
@@ -137,14 +166,79 @@ export default class jmLabel extends jmControl {
 	}
 
 	/**
+	 * 文本换行处理
+	 * 根据最大宽度将文本分割成多行
+	 * 支持中英文混合文本，优先在空格处换行
+	 * 
+	 * @method wrapText
+	 * @param {string} text 文本内容
+	 * @param {number} maxWidth 最大宽度（像素）
+	 * @return {array} 换行后的文本数组
+	 */
+	wrapText(text, maxWidth) {
+		// 参数验证
+		if(!text || !maxWidth) return [text || ''];
+		
+		// 检查缓存，避免重复计算
+		const cacheKey = `${text}_${maxWidth}`;
+		if(this.__wrapTextCache && this.__wrapTextCache.key === cacheKey) {
+			return this.__wrapTextCache.lines;
+		}
+		
+		const lines = [];
+		
+		// 先按换行符分割
+		const paragraphs = text.split('\n');
+		
+		for(let paragraph of paragraphs) {
+			// 如果段落为空，添加空行
+			if(!paragraph) {
+				lines.push('');
+				continue;
+			}
+			
+			// 按空格分割单词
+			const words = paragraph.split(' ');
+			let currentLine = words[0];
+			
+			for(let i = 1; i < words.length; i++) {
+				const word = words[i];
+				const testLine = currentLine + ' ' + word;
+				const metrics = this.context.measureText(testLine);
+				const testWidth = metrics.width;
+				
+				if(testWidth <= maxWidth) {
+					// 当前行还能容纳这个单词
+					currentLine = testLine;
+				} else {
+					// 当前行已满，保存当前行并开始新行
+					if(currentLine) lines.push(currentLine);
+					currentLine = word;
+				}
+			}
+			
+			// 添加最后一行
+			if(currentLine) lines.push(currentLine);
+		}
+		
+		// 缓存结果
+		this.__wrapTextCache = {
+			key: cacheKey,
+			lines: lines
+		};
+		
+		return lines;
+	}
+
+	/**
 	 * 根据位置偏移画字符串
 	 * 
 	 * @method draw
 	 */
-	draw() {	
+	draw() {
 		
 		//获取当前控件的绝对位置
-		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;		
+		let bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 		const size = this.testSize();
 		let location = this.location;
 		let x = location.left + bounds.left;
@@ -184,7 +278,16 @@ export default class jmLabel extends jmControl {
 			}
 			else if(this.style.fill && this.context.fillText) {
 				if(this.style.maxWidth) {
-					this.context.fillText(txt,x,y, this.style.maxWidth);
+					// 绘制换行文本
+					const lines = this.wrapText(txt, this.style.maxWidth);
+					const lineHeight = this.style.fontSize;
+					// 调整起始Y位置以支持垂直对齐
+					const startY = y - (lines.length - 1) * lineHeight / 2;
+					
+					for(let i = 0; i < lines.length; i++) {
+						const lineY = startY + i * lineHeight;
+						this.context.fillText(lines[i], x, lineY);
+					}
 				}
 				else {
 					this.context.fillText(txt,x,y);
@@ -192,7 +295,16 @@ export default class jmLabel extends jmControl {
 			}
 			else if(this.context.strokeText) {
 				if(this.style.maxWidth) {
-					this.context.strokeText(txt,x,y, this.style.maxWidth);
+					// 绘制换行文本
+					const lines = this.wrapText(txt, this.style.maxWidth);
+					const lineHeight = this.style.fontSize;
+					// 调整起始Y位置以支持垂直对齐
+					const startY = y - (lines.length - 1) * lineHeight / 2;
+					
+					for(let i = 0; i < lines.length; i++) {
+						const lineY = startY + i * lineHeight;
+						this.context.strokeText(lines[i], x, lineY);
+					}
 				}
 				else {
 					this.context.strokeText(txt,x,y);
@@ -223,7 +335,7 @@ export default class jmLabel extends jmControl {
 				}
 				
 				if(this.style.border.left) {
-					this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);	
+					this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
 					this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
 				}
 			}
@@ -259,7 +371,7 @@ export default class jmLabel extends jmControl {
 				}
 				points.length && this.webglControl && this.webglControl.stroke(points);
 			}
-		}	
+		}
 	}
 
 	endDraw() {

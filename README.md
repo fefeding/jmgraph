@@ -95,8 +95,7 @@ g.redraw();
 
 ## 📚 文档
 
-- [在线示例](https://fefeding.github.io/jmgraph/)
-- [API 文档](https://fefeding.github.io/jmgraph/example/index.html)
+- [在线示例](https://fefeding.github.io/jmgraph/example/index.html)
 - [基于 jmGraph 的图表库](https://github.com/fefeding/jmchart)
 
 ## 🎨 样式说明

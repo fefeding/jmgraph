@@ -3,6 +3,8 @@ import {jmList} from "./jmList.js";
 import {jmProperty} from './jmProperty.js';
 import {jmShadow} from "./jmShadow.js";
 import {jmGradient} from "./jmGradient.js";
+import {jmFilter} from "./jmFilter.js";
+import {jmBorder} from "./jmBorder.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
@@ -287,8 +289,9 @@ export default class jmGraph extends jmControl {
 			if(!args) args = {};
 			args.graph = this;
 			let obj = new shape(args);
-			// 添加到活动图层
-			this.addShapeToLayer(obj);
+			// 直接添加到画布 children
+			this.children.add(obj);
+			this.needUpdate = true;
 			return obj;
 		}
 	}
@@ -1017,6 +1020,8 @@ export {
 	jmProperty,
 	jmShadow,
 	jmGradient,
+	jmFilter,
+	jmBorder,
 	jmEvents,
 	jmControl,
 	jmPath,

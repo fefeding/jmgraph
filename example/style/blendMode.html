@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>globalCompositeOperation - 混合模式</title>
+    <style>
+        html, body { margin: 0; padding: 20px; background: #1a1a2e; color: #e0e0e0; font-family: sans-serif; }
+        h2 { color: #00d4ff; margin-bottom: 10px; }
+        p.desc { color: #8899aa; font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
+        canvas { display: block; border-radius: 8px; background: #0a0a1a; margin-bottom: 20px; }
+        code { background: #16213e; padding: 2px 6px; border-radius: 3px; color: #ffd93d; font-size: 12px; }
+        pre { background: #16213e; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; line-height: 1.5; color: #c0c0c0; }
+    </style>
+</head>
+<body>
+    <h2>globalCompositeOperation - 混合模式</h2>
+    <p class="desc">
+        通过 <code>globalCompositeOperation</code> 属性设置 Canvas 混合模式。
+        常用值: <code>source-over</code>(默认), <code>multiply</code>, <code>screen</code>,
+        <code>overlay</code>, <code>darken</code>, <code>lighten</code>, <code>color-dodge</code>,
+        <code>color-burn</code>, <code>difference</code>, <code>exclusion</code>, <code>xor</code> 等。
+    </p>
+    <canvas id="canvas" width="600" height="480"></canvas>
+
+    <h3>用法</h3>
+<pre>
+// 两个圆形使用 multiply 混合
+g.createShape('circle', { center: {x: 120, y: 120}, radius: 60, style: { fill: '#e94560' } });
+g.createShape('circle', { center: {x: 170, y: 120}, radius: 60,
+    style: { fill: '#00d4ff', globalCompositeOperation: 'multiply' }
+});
+
+// 使用 screen 混合
+style: { fill: '#00ff88', globalCompositeOperation: 'screen' }
+</pre>
+
+    <script type="module">
+        import jmGraph from '../../index.js';
+        const g = jmGraph('canvas');
+
+        const demos = [
+            { name: 'multiply', color1: '#e94560', color2: '#00d4ff', op: 'multiply' },
+            { name: 'screen', color1: '#e94560', color2: '#00ff88', op: 'screen' },
+            { name: 'overlay', color1: '#f59e0b', color2: '#8b5cf6', op: 'overlay' },
+            { name: 'darken', color1: '#e94560', color2: '#ffd93d', op: 'darken' },
+            { name: 'lighten', color1: '#3b82f6', color2: '#f472b6', op: 'lighten' },
+            { name: 'difference', color1: '#e94560', color2: '#00d4ff', op: 'difference' },
+        ];
+
+        demos.forEach((d, i) => {
+            const col = i % 3;
+            const row = Math.floor(i / 3);
+            const cx = 110 + col * 200;
+            const cy = 120 + row * 220;
+
+            // 底层圆
+            g.createShape('circle', {
+                center: {x: cx - 15, y: cy}, radius: 50,
+                style: { fill: d.color1 }
+            });
+            // 混合圆
+            g.createShape('circle', {
+                center: {x: cx + 15, y: cy}, radius: 50,
+                style: { fill: d.color2, globalCompositeOperation: d.op }
+            });
+            // 标签
+            g.createShape('label', {
+                position: {x: cx - 80, y: cy + 65}, width: 160,
+                value: d.op,
+                style: { fill: '#e0e0e0', fontSize: 13, textAlign: 'center', font: 'bold 13px sans-serif' }
+            });
+        });
+    </script>
+</body>
+</html>

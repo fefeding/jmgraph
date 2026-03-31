@@ -22,6 +22,8 @@ import { jmGraph as jmGraphCore,
 	jmProperty,
 	jmShadow,
 	jmGradient,
+	jmFilter,
+	jmBorder,
 	jmEvents,
 	jmControl,
 	jmPath,
@@ -46,22 +48,11 @@ const shapes = {
     "star": jmStar
 }
 
-export default class jmGraph extends jmGraphCore {
+class jmGraphImpl extends jmGraphCore {
     constructor(canvas, option, callback) {
-        
-        const targetType = new.target;
-
         // 合并shapes
         option = Object.assign({}, option);
         option.shapes = Object.assign(shapes, option.shapes||{});
-        
-        //不是用new实例化的话，返回一个promise
-		if(!targetType || !(targetType.prototype instanceof jmGraphCore)) {
-			return new Promise(function(resolve, reject){				
-				var g = new jmGraph(canvas, option, callback);
-				if(resolve) resolve(g);				
-			});
-        }
 
         if(typeof option == 'function') {
 			callback = option;
@@ -70,16 +61,14 @@ export default class jmGraph extends jmGraphCore {
         
         super(canvas, option, callback);
     }
-
-    static create(...args) {
-        return createJmGraph(...args);
-    }
 }
 
-//创建实例
+//创建实例，支持不加 new 直接调用
 const createJmGraph = (...args) => {
-	return new jmGraph(...args);
+	return new jmGraphImpl(...args);
 }
+
+export default createJmGraph;
 
 export {   
     jmUtils, 
@@ -88,6 +77,8 @@ export {
     jmPath,
     jmShadow,
     jmGradient,
+    jmFilter,
+    jmBorder,
 	jmArc,
 	jmArrow,
 	jmBezier,
@@ -104,7 +95,7 @@ export {
     jmPolygon,
     jmStar,
     jmLayer,
-    jmGraph,
+    createJmGraph as jmGraph,
     createJmGraph as create
 };
 

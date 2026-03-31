@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clipPath - 裁剪路径</title>
+    <style>
+        html, body { margin: 0; padding: 20px; background: #1a1a2e; color: #e0e0e0; font-family: sans-serif; }
+        h2 { color: #00d4ff; margin-bottom: 10px; }
+        p.desc { color: #8899aa; font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
+        canvas { display: block; border-radius: 8px; background: #0a0a1a; margin-bottom: 20px; }
+        code { background: #16213e; padding: 2px 6px; border-radius: 3px; color: #ffd93d; font-size: 12px; }
+        pre { background: #16213e; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; line-height: 1.5; color: #c0c0c0; }
+    </style>
+</head>
+<body>
+    <h2>clipPath - 裁剪路径</h2>
+    <p class="desc">
+        通过 <code>clipPath</code> 属性传入一个图形控件实例作为裁剪区域，
+        被裁剪的图形只会在裁剪区域内可见。利用 Canvas 原生的 <code>clip()</code> API 实现。
+    </p>
+    <canvas id="canvas" width="600" height="460"></canvas>
+
+    <h3>用法</h3>
+<pre>
+// 创建裁剪区域（一个圆形）
+const clipCircle = g.createShape('circle', {
+    center: {x: 300, y: 200}, radius: 80,
+    style: { close: true }
+});
+clipCircle.initPoints();
+
+// 被裁剪的矩形
+g.createShape('rect', {
+    position: {x: 180, y: 120}, width: 240, height: 160, radius: 12,
+    style: {
+        fill: 'linear-gradient(0 0 240 160, #e94560 0, #00d4ff 1)',
+        clipPath: clipCircle  // 传入裁剪区域
+    }
+});
+</pre>
+
+    <script type="module">
+        import jmGraph from '../../index.js';
+        const g = jmGraph('canvas');
+
+        // === 示例1：圆形裁剪 ===
+        const clipCircle = g.createShape('circle', {
+            center: {x: 130, y: 140}, radius: 80,
+            style: { close: true, visible: false }
+        });
+        clipCircle.initPoints();
+
+        // 被裁剪的渐变矩形
+        g.createShape('rect', {
+            position: {x: 50, y: 60}, width: 160, height: 160, radius: 12,
+            style: {
+                fill: 'linear-gradient(0 0 160 160, #e94560 0, #ffd93d 0.5, #00d4ff 1)',
+                clipPath: clipCircle
+            }
+        });
+
+        // 显示裁剪区域轮廓
+        g.createShape('circle', {
+            center: {x: 130, y: 140}, radius: 80,
+            style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5] }
+        });
+
+        // === 示例2：矩形裁剪 ===
+        const clipRect = g.createShape('rect', {
+            position: {x: 280, y: 60}, width: 120, height: 160, radius: 20,
+            style: { close: true, visible: false }
+        });
+        clipRect.initPoints();
+
+        g.createShape('rect', {
+            position: {x: 240, y: 40}, width: 200, height: 200, radius: 0,
+            style: {
+                fill: 'linear-gradient(0 0 200 200, #00ff88 0, #c084fc 1)',
+                clipPath: clipRect
+            }
+        });
+
+        g.createShape('rect', {
+            position: {x: 280, y: 60}, width: 120, height: 160, radius: 20,
+            style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
+        });
+
+        // === 示例3：多图形裁剪 ===
+        const clipStar = g.createShape('star', {
+            center: {x: 130, y: 370}, points: 5, radius: 80, innerRadius: 40,
+            style: { close: true, visible: false }
+        });
+        clipStar.initPoints();
+
+        g.createShape('rect', {
+            position: {x: 50, y: 290}, width: 160, height: 160,
+            style: {
+                fill: 'linear-gradient(0 0 160 160, #fb923c 0, #e94560 1)',
+                clipPath: clipStar
+            }
+        });
+
+        g.createShape('star', {
+            center: {x: 130, y: 370}, points: 5, radius: 80, innerRadius: 40,
+            style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
+        });
+
+        // === 示例4：椭圆裁剪 ===
+        const clipEllipse = g.createShape('ellipse', {
+            center: {x: 380, y: 370}, width: 180, height: 120,
+            style: { close: true, visible: false }
+        });
+        clipEllipse.initPoints();
+
+        g.createShape('rect', {
+            position: {x: 280, y: 300}, width: 200, height: 140,
+            style: {
+                fill: 'linear-gradient(0 0 200 140, #38bdf8 0, #8b5cf6 1)',
+                clipPath: clipEllipse
+            }
+        });
+
+        g.createShape('ellipse', {
+            center: {x: 380, y: 370}, width: 180, height: 120,
+            style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
+        });
+
+        // 标签
+        g.createShape('label', {
+            position: {x: 50, y: 225}, width: 160,
+            value: '圆形裁剪',
+            style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
+        });
+        g.createShape('label', {
+            position: {x: 280, y: 245}, width: 120,
+            value: '圆角矩形裁剪',
+            style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
+        });
+        g.createShape('label', {
+            position: {x: 50, y: 430}, width: 160,
+            value: '星形裁剪',
+            style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
+        });
+        g.createShape('label', {
+            position: {x: 300, y: 430}, width: 160,
+            value: '椭圆裁剪',
+            style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
+        });
+    </script>
+</body>
+</html>

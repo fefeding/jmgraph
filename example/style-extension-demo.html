@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jmGraph 样式扩展特性总览</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        h1 { text-align: center; margin: 20px 0 30px; color: #00d4ff; font-size: 24px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #16213e; border-radius: 12px; padding: 16px; border: 1px solid #0f3460; }
+        .card h2 { font-size: 14px; color: #e94560; margin-bottom: 8px; }
+        .card p { font-size: 12px; color: #8899aa; margin-bottom: 10px; line-height: 1.5; }
+        .card a { display: inline-block; margin-top: 6px; color: #00d4ff; font-size: 12px; text-decoration: none; }
+        .card a:hover { text-decoration: underline; }
+        canvas { display: block; border-radius: 8px; background: #0a0a1a; }
+    </style>
+</head>
+<body>
+    <h1>jmGraph 样式扩展特性总览</h1>
+    <div class="grid">
+        <div class="card">
+            <h2>lineDash - 自定义虚线</h2>
+            <p>通过 lineDash 数组或字符串定义任意虚线模式，支持 lineDashOffset 偏移。</p>
+            <canvas id="c1" width="320" height="200"></canvas>
+            <a href="style/lineDash.html" target="_blank">查看完整示例 →</a>
+        </div>
+        <div class="card">
+            <h2>filter - CSS 滤镜</h2>
+            <p>支持 blur、grayscale、sepia、brightness、contrast、saturate、hue-rotate 等。</p>
+            <canvas id="c2" width="320" height="200"></canvas>
+            <a href="style/filter.html" target="_blank">查看完整示例 →</a>
+        </div>
+        <div class="card">
+            <h2>混合模式</h2>
+            <p>支持 globalCompositeOperation：multiply、screen、overlay、darken 等。</p>
+            <canvas id="c3" width="320" height="200"></canvas>
+            <a href="style/blendMode.html" target="_blank">查看完整示例 →</a>
+        </div>
+        <div class="card">
+            <h2>border - 边框系统</h2>
+            <p>完整的 border 属性：宽度、样式(solid/dashed/dotted/double)、颜色。</p>
+            <canvas id="c4" width="320" height="200"></canvas>
+            <a href="style/border.html" target="_blank">查看完整示例 →</a>
+        </div>
+        <div class="card">
+            <h2>borderRadius - 四角独立圆角</h2>
+            <p>radius 支持对象格式 { topLeft, topRight, bottomRight, bottomLeft }。</p>
+            <canvas id="c5" width="320" height="200"></canvas>
+            <a href="style/borderRadius.html" target="_blank">查看完整示例 →</a>
+        </div>
+        <div class="card">
+            <h2>clipPath - 裁剪路径</h2>
+            <p>传入图形控件实例作为裁剪区域，限制可见范围。</p>
+            <canvas id="c6" width="320" height="200"></canvas>
+            <a href="style/clipPath.html" target="_blank">查看完整示例 →</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import jmGraph from '../index.js';
+
+        // 1. lineDash
+        ;(function() {
+            const g = jmGraph('c1');
+            g.createShape('line', { start: {x: 20, y: 40}, end: {x: 300, y: 40}, style: { stroke: '#00d4ff', lineWidth: 2, lineDash: [10, 5] } });
+            g.createShape('line', { start: {x: 20, y: 80}, end: {x: 300, y: 80}, style: { stroke: '#00ff88', lineWidth: 3, lineDash: [2, 8] } });
+            g.createShape('line', { start: {x: 20, y: 120}, end: {x: 300, y: 120}, style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [20, 5, 5, 5] } });
+            g.createShape('rect', { position: {x: 60, y: 145}, width: 200, height: 40, style: { stroke: '#e94560', lineWidth: 2, lineDash: [8, 4], close: true, fill: 'transparent' } });
+        })();
+
+        // 2. filter
+        ;(function() {
+            const g = jmGraph('c2');
+            g.createShape('circle', { center: {x: 55, y: 70}, radius: 35, style: { fill: '#e94560' } });
+            g.createShape('circle', { center: {x: 160, y: 70}, radius: 35, style: { fill: '#00d4ff', filter: 'blur(3px)' } });
+            g.createShape('circle', { center: {x: 265, y: 70}, radius: 35, style: { fill: '#00ff88', filter: 'grayscale(100%)' } });
+            g.createShape('rect', { position: {x: 20, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#ffd93d', filter: 'sepia(80%)' } });
+            g.createShape('rect', { position: {x: 125, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#8b5cf6', filter: 'brightness(1.6)' } });
+            g.createShape('rect', { position: {x: 230, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#e94560', filter: 'hue-rotate(120deg)' } });
+        })();
+
+        // 3. blend
+        ;(function() {
+            const g = jmGraph('c3');
+            g.createShape('circle', { center: {x: 120, y: 80}, radius: 55, style: { fill: '#e94560' } });
+            g.createShape('circle', { center: {x: 170, y: 80}, radius: 55, style: { fill: '#00d4ff', globalCompositeOperation: 'multiply' } });
+            g.createShape('label', { position: {x: 60, y: 155}, width: 180, value: 'multiply', style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' } });
+        })();
+
+        // 4. border
+        ;(function() {
+            const g = jmGraph('c4');
+            g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } } });
+            g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' } });
+            g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } } });
+            g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(192,132,252,0.1)', border: { width: 3, style: 'double', color: '#c084fc' } } });
+        })();
+
+        // 5. borderRadius
+        ;(function() {
+            const g = jmGraph('c5');
+            g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 20, style: { fill: '#e94560' } });
+            g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: { topLeft: 30, topRight: 5, bottomRight: 30, bottomLeft: 5 }, style: { fill: '#00d4ff' } });
+            g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 50, radius: 25, style: { fill: '#00ff88' } });
+            g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: { topLeft: 40, topRight: 0, bottomRight: 0, bottomLeft: 40 }, style: { fill: '#ffd93d' } });
+        })();
+
+        // 6. clipPath
+        ;(function() {
+            const g = jmGraph('c6');
+            const clip = g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { close: true, visible: false } });
+            clip.initPoints();
+            g.createShape('rect', { position: {x: 60, y: 30}, width: 200, height: 140, radius: 12, style: { fill: 'linear-gradient(0 0 200 140, #e94560 0, #00d4ff 1)', clipPath: clip } });
+            g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [4, 4] } });
+        })();
+    </script>
+</body>
+</html>

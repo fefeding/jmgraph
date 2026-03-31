@@ -15,7 +15,9 @@
 - 🎯 **丰富图形** - 内置矩形、圆形、线条、箭头、贝塞尔曲线等常用图形
 - 🎭 **事件系统** - 完整的鼠标和触摸事件支持
 - 🔧 **可扩展** - 支持自定义图形控件
-- 🌈 **样式丰富** - 支持渐变、阴影、透明度等样式
+- 🌈 **样式丰富** - 支持渐变、阴影、透明度、滤镜、虚线、混合模式等样式
+- 🖼️ **边框系统** - 完整的 border 支持（宽度/样式/颜色），四角独立圆角
+- ✂️ **裁剪遮罩** - 支持 clipPath 裁剪路径和 mask 遮罩效果
 - 📐 **图层管理** - 支持多图层操作，包括创建、切换、删除图层
 - 🔍 **缩放平移** - 支持画布缩放和平移操作
 - 📤 **导出功能** - 支持导出为 PNG、JPEG 和 SVG 格式
@@ -45,6 +47,8 @@ yarn add jmgraph
 
 ## 🚀 快速开始
 
+> **注意**：`g.createShape()` 创建图形后会**自动添加到当前活动图层**，无需手动调用 `g.children.add()`。若设置了 `autoRefresh: true`（默认值），画布会自动刷新，也无需手动调用 `g.redraw()`。
+
 ### ES6 模块方式
 
 ```html
@@ -52,7 +56,7 @@ yarn add jmgraph
   import jmGraph from "jmgraph";
   
   const container = document.getElementById('mycanvas_container');
-  const g = new jmGraph(container, {
+  const g = jmGraph(container, {
     width: 800,
     height: 600,
     autoRefresh: true,
@@ -93,14 +97,15 @@ const rect = g.createShape('rect', {
   height: 100
 });
 
-g.children.add(rect);
-g.redraw();
+// createShape 会自动将图形添加到当前活动图层，无需手动 g.children.add()
+// 如果 autoRefresh 为 true（默认），也不需要手动调用 g.redraw()
 ```
 
 ## 📚 文档
 
 - [在线示例](https://fefeding.github.io/jmgraph/example/index.html)
 - [新特性示例](https://fefeding.github.io/jmgraph/example/new-features.html)
+- [样式扩展特性](https://fefeding.github.io/jmgraph/example/style-extension-demo.html)
 - [基于 jmGraph 的图表库](https://github.com/fefeding/jmchart)
 
 ## 🎨 样式说明
@@ -127,6 +132,135 @@ jmGraph 支持简化的样式名称和原生 Canvas 样式：
 | lineJoin | lineJoin | 线条连接样式 |
 | lineCap | lineCap | 线条端点样式 |
 | maxWidth | maxWidth | 文本最大宽度（用于自动换行） |
+| lineDash | - | 自定义虚线模式，数组或字符串格式，如 `[10, 5]` 或 `'10,5'` |
+| lineDashOffset | lineDashOffset | 虚线偏移量 |
+| filter | filter | CSS 滤镜效果，如 `'blur(3px) grayscale(50%)'` 或对象 `{ blur: 3, brightness: 1.2 }` |
+| globalCompositeOperation | globalCompositeOperation | 混合模式，如 `multiply`、`screen`、`overlay` |
+| border | - | 边框系统，对象 `{ width, style, color }` 或字符串 `'2px solid #ff0000'` |
+| clipPath | - | 裁剪路径，传入图形控件实例 |
+| mask | - | 遮罩效果，传入图形控件实例 |
+
+### filter 滤镜
+
+支持 CSS 标准滤镜，可用值包括：
+
+| 滤镜 | 说明 | 示例 |
+| :- | :- | :- |
+| blur | 模糊 | `'blur(3px)'` |
+| grayscale | 灰度 (0-1) | `'grayscale(100%)'` |
+| sepia | 怀旧 (0-1) | `'sepia(80%)'` |
+| brightness | 亮度 (数值) | `'brightness(1.5)'` |
+| contrast | 对比度 (数值) | `'contrast(2)'` |
+| saturate | 饱和度 (数值) | `'saturate(1.5)'` |
+| hue-rotate | 色相旋转 (deg) | `'hue-rotate(90deg)'` |
+| invert | 反转 (0-1) | `'invert(100%)'` |
+| opacity | 不透明度 (0-1) | `'opacity(0.5)'` |
+
+支持字符串格式、对象格式或 `jmFilter` 实例：
+
+```javascript
+// 字符串格式（多个滤镜组合）
+style: { fill: '#e94560', filter: 'blur(1px) brightness(1.2) saturate(1.5)' }
+
+// 对象格式
+style: { fill: '#00d4ff', filter: { blur: 3, grayscale: 0.5 } }
+
+// 使用 jmFilter 类
+import { jmFilter } from 'jmgraph';
+const f = new jmFilter({ blur: 2, brightness: 1.3 });
+style: { fill: '#ffd93d', filter: f }
+```
+
+### lineDash 自定义虚线
+
+通过 `lineDash` 定义自定义虚线模式，替代原有的 `lineType: 'dotted'`：
+
+```javascript
+// 等间距虚线
+style: { stroke: '#00d4ff', lineWidth: 2, lineDash: [10, 5] }
+
+// 字符串格式
+style: { stroke: '#ff6b6b', lineWidth: 2, lineDash: '10, 5, 2, 5' }
+
+// 带偏移量
+style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [10, 10], lineDashOffset: 5 }
+```
+
+### border 边框系统
+
+支持完整的边框属性，内部自动映射为 `lineWidth`、`strokeStyle` 和 `lineDash`：
+
+```javascript
+// 对象格式
+style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } }
+
+// CSS 字符串格式
+style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' }
+
+// 可用样式: solid, dashed, dotted, double
+style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } }
+
+// 使用 jmBorder 类
+import { jmBorder } from 'jmgraph';
+const b = new jmBorder({ width: 4, style: 'dashed', color: '#ffd93d', radius: 8 });
+style: { border: b }
+```
+
+### borderRadius 四角独立圆角
+
+`radius` 属性支持数字（四角相同）和对象格式（四角独立）：
+
+```javascript
+// 统一圆角（向后兼容）
+g.createShape('rect', { position: {x: 20, y: 20}, width: 200, height: 80, radius: 20,
+    style: { fill: '#e94560' }
+});
+
+// 四角独立圆角
+g.createShape('rect', { position: {x: 20, y: 130}, width: 200, height: 80,
+    radius: { topLeft: 30, topRight: 5, bottomRight: 30, bottomLeft: 5 },
+    style: { fill: '#00d4ff' }
+});
+
+// 通过 style.borderRadius 设置
+g.createShape('rect', { position: {x: 20, y: 240}, width: 200, height: 80,
+    style: { fill: '#00ff88', borderRadius: { topLeft: 40, topRight: 0, bottomRight: 0, bottomLeft: 40 } }
+});
+```
+
+### globalCompositeOperation 混合模式
+
+支持 Canvas 标准混合模式：
+
+```javascript
+// multiply 混合
+g.createShape('circle', { center: {x: 120, y: 120}, radius: 60, style: { fill: '#e94560' } });
+g.createShape('circle', { center: {x: 170, y: 120}, radius: 60,
+    style: { fill: '#00d4ff', globalCompositeOperation: 'multiply' }
+});
+```
+
+### clipPath 裁剪路径
+
+传入一个图形控件实例作为裁剪区域：
+
+```javascript
+// 创建裁剪区域（圆形）
+const clipCircle = g.createShape('circle', {
+    center: {x: 300, y: 200}, radius: 80,
+    style: { close: true }
+});
+clipCircle.initPoints();
+
+// 被裁剪的矩形，只在圆形区域内可见
+g.createShape('rect', {
+    position: {x: 180, y: 120}, width: 240, height: 160, radius: 12,
+    style: {
+        fill: 'linear-gradient(0 0 240 160, #e94560 0, #00d4ff 1)',
+        clipPath: clipCircle
+    }
+});
+```
 
 ## 🎯 内置图形
 
@@ -438,6 +572,24 @@ g.exportToJPEG('my-graph', 0.8);
 // fileName 文件名
 g.exportToSVG('my-graph');
 ```
+
+## 🗑️ 销毁实例
+
+当不再需要 jmGraph 实例时，调用 `destroy()` 释放资源（如事件监听、动画帧等）：
+
+```javascript
+const g = jmGraph('mycanvas', { ... });
+
+// 使用完毕后销毁
+g.destroy();
+
+// 销毁后可通过 destroyed 标志判断状态
+if (g.destroyed) {
+  console.log('实例已销毁');
+}
+```
+
+> `destroy()` 会内部调用 `eventHandler.destroy()` 清除所有事件绑定，并设置 `destroyed = true` 标记。调用后不应再使用该实例。
 
 ## 📝 文本换行
 

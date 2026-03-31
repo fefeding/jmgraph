@@ -3,6 +3,8 @@ import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 import {jmGradient} from "./jmGradient.js";
 import {jmShadow} from "./jmShadow.js";
+import {jmFilter} from "./jmFilter.js";
+import {jmBorder} from "./jmBorder.js";
 import {jmProperty} from "./jmProperty.js";
 import WebglPath from "../lib/webgl/path.js";
 
@@ -27,7 +29,11 @@ const jmStyleMap = {
 	'shadowOffsetY' : 'shadowOffsetY',
 	'shadowColor' : 'shadowColor',
 	'lineJoin': 'lineJoin',
-	'lineCap':'lineCap'
+	'lineCap':'lineCap',
+	'lineDashOffset': 'lineDashOffset',
+	'globalCompositeOperation': 'globalCompositeOperation',
+	'border.width': 'lineWidth',
+	'border.color': 'strokeStyle'
 };
 
 export default class jmControl extends jmProperty {
@@ -322,6 +328,162 @@ export default class jmControl extends jmProperty {
 							this.cursor = styleValue;
 							break;
 						}
+						// ===== 新增样式特性 =====
+
+						// 虚线样式：支持自定义lineDash模式 (如 [5, 3, 2] 或 "5,3,2")
+						case 'lineDash' : {
+							if(!this.context.setLineDash) break;
+							let dash;
+							if(typeof styleValue === 'string') {
+								dash = styleValue.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+							}
+							else if(Array.isArray(styleValue)) {
+								dash = styleValue.map(v => parseFloat(v)).filter(v => !isNaN(v));
+							}
+							if(dash && dash.length) {
+								this.context.setLineDash(dash);
+							}
+							else {
+								this.context.setLineDash([]);
+							}
+							break;
+						}
+						// 虚线偏移量
+						case 'lineDashOffset' : {
+							if(!this.context.setLineDash) break;
+							this.context.lineDashOffset = Number(styleValue) || 0;
+							break;
+						}
+						// CSS滤镜效果 (blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity)
+						case 'filter' : {
+							if(this.context.filter === undefined) break;
+							if(styleValue instanceof jmFilter) {
+								this.context.filter = styleValue.toCanvasFilter();
+							}
+							else if(typeof styleValue === 'string') {
+								this.context.filter = styleValue || 'none';
+							}
+							else if(typeof styleValue === 'object') {
+								this.context.filter = (new jmFilter(styleValue)).toCanvasFilter();
+							}
+							break;
+						}
+						// 混合模式 (source-over, multiply, screen, overlay, darken, lighten, etc.)
+						case 'globalCompositeOperation' : {
+							if(!this.context.globalCompositeOperation) break;
+							this.context.globalCompositeOperation = styleValue;
+							break;
+						}
+						// 边框系统：支持字符串格式 "2px solid #ff0000" 或对象格式
+						case 'border' : {
+							let border = styleValue;
+							if(t === 'string') {
+								border = new jmBorder(styleValue);
+							}
+							else if(!(styleValue instanceof jmBorder)) {
+								border = new jmBorder(styleValue);
+							}
+							if(border instanceof jmBorder && border.isVisible()) {
+								// 应用边框宽度
+								if(border.width) {
+									if(this.webglControl) {
+										this.webglControl.setStyle('lineWidth', border.width);
+									}
+									else {
+										this.context.lineWidth = border.width;
+									}
+								}
+								// 应用边框颜色
+								if(border.color) {
+									if(this.webglControl) {
+										this.webglControl.setStyle('strokeStyle', border.color);
+									}
+									else {
+										this.context.strokeStyle = jmUtils.toColor(border.color);
+									}
+								}
+								// 应用边框线型对应的lineDash
+								const dash = border.toLineDash();
+								if(dash && this.context.setLineDash) {
+									this.context.setLineDash(dash);
+								}
+								// 应用边框圆角（如果控件支持）
+								if(border.radius && typeof this.radius !== 'undefined') {
+									if(typeof border.radius === 'number') {
+										this.radius = border.radius;
+									}
+								}
+							}
+							break;
+						}
+						// 裁剪路径：通过canvas clip实现
+						case 'clipPath' : {
+							if(!this.context.clip) break;
+							// clipPath可以是一个图形控件实例
+							if(styleValue && styleValue.points && styleValue.points.length > 0) {
+								const bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+								this.context.beginPath();
+								this.context.moveTo(styleValue.points[0].x + (bounds ? bounds.left : 0), styleValue.points[0].y + (bounds ? bounds.top : 0));
+								for(let i = 1; i < styleValue.points.length; i++) {
+									if(styleValue.points[i].m) {
+										this.context.moveTo(styleValue.points[i].x + (bounds ? bounds.left : 0), styleValue.points[i].y + (bounds ? bounds.top : 0));
+									}
+									else {
+										this.context.lineTo(styleValue.points[i].x + (bounds ? bounds.left : 0), styleValue.points[i].y + (bounds ? bounds.top : 0));
+									}
+								}
+								if(styleValue.style && styleValue.style.close) {
+									this.context.closePath();
+								}
+								this.context.clip();
+							}
+							break;
+						}
+						// 遮罩效果：通过globalCompositeOperation + destination-in实现
+						case 'mask' : {
+							if(!this.context.globalCompositeOperation) break;
+							// mask是一个图形控件实例，在绘制前需要先应用mask
+							// 这里只是标记，实际绘制在paint流程中处理
+							this.__mask = styleValue;
+							break;
+						}
+						// 图片阴影描边阴影（WebGL纹理canvas用）
+						case 'shadowColor' : {
+							if(this.webglControl) {
+								this.webglControl.setStyle('shadowColor', styleValue);
+							}
+							else {
+								this.context.shadowColor = jmUtils.toColor(styleValue);
+							}
+							break;
+						}
+						case 'shadowBlur' : {
+							if(this.webglControl) {
+								this.webglControl.setStyle('shadowBlur', styleValue);
+							}
+							else {
+								this.context.shadowBlur = Number(styleValue) || 0;
+							}
+							break;
+						}
+						case 'shadowOffsetX' : {
+							if(this.webglControl) {
+								this.webglControl.setStyle('shadowOffsetX', styleValue);
+							}
+							else {
+								this.context.shadowOffsetX = Number(styleValue) || 0;
+							}
+							break;
+						}
+						case 'shadowOffsetY' : {
+							if(this.webglControl) {
+								this.webglControl.setStyle('shadowOffsetY', styleValue);
+							}
+							else {
+								this.context.shadowOffsetY = Number(styleValue) || 0;
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -341,6 +503,12 @@ export default class jmControl extends jmProperty {
 			}
 			else if(t == 'string' && k == 'shadow') {
 				style[k] = new jmShadow(style[k]);
+			}
+			else if(t == 'string' && k == 'filter') {
+				style[k] = new jmFilter(style[k]);
+			}
+			else if(t == 'string' && k == 'border') {
+				style[k] = new jmBorder(style[k]);
 			}
 			__setStyle(style[k], k);
 		}
@@ -853,9 +1021,44 @@ export default class jmControl extends jmProperty {
 			
 			this.setStyle();//设定样式
 
-			if(needDraw && this.beginDraw) this.beginDraw();
-			if(needDraw && this.draw) this.draw();	
-			if(needDraw && this.endDraw) this.endDraw();
+			// 应用mask遮罩效果：在mask区域内绘制当前控件
+			// 使用 destination-in 合成模式，只保留mask区域内的内容
+			const maskStyle = this.style.mask || this.__mask;
+			if(maskStyle && maskStyle.points && this.context.globalCompositeOperation) {
+				// 先绘制当前控件
+				if(needDraw && this.beginDraw) this.beginDraw();
+				if(needDraw && this.draw) this.draw();	
+				if(needDraw && this.endDraw) this.endDraw();
+
+				// 再应用mask裁剪
+				this.context.globalCompositeOperation = 'destination-in';
+				if(maskStyle.initPoints) maskStyle.initPoints();
+				const mBounds = maskStyle.parent && maskStyle.parent.absoluteBounds ? maskStyle.parent.absoluteBounds : this.absoluteBounds;
+				this.context.beginPath();
+				if(maskStyle.points && maskStyle.points.length > 0) {
+					this.context.moveTo(maskStyle.points[0].x + (mBounds ? mBounds.left : 0), maskStyle.points[0].y + (mBounds ? mBounds.top : 0));
+					for(let i = 1; i < maskStyle.points.length; i++) {
+						if(maskStyle.points[i].m) {
+							this.context.moveTo(maskStyle.points[i].x + (mBounds ? mBounds.left : 0), maskStyle.points[i].y + (mBounds ? mBounds.top : 0));
+						}
+						else {
+							this.context.lineTo(maskStyle.points[i].x + (mBounds ? mBounds.left : 0), maskStyle.points[i].y + (mBounds ? mBounds.top : 0));
+						}
+					}
+					if(maskStyle.style && maskStyle.style.close) {
+						this.context.closePath();
+					}
+				}
+				this.context.fillStyle = '#ffffff';
+				this.context.fill();
+				// 恢复合成模式
+				this.context.globalCompositeOperation = 'source-over';
+			}
+			else {
+				if(needDraw && this.beginDraw) this.beginDraw();
+				if(needDraw && this.draw) this.draw();	
+				if(needDraw && this.endDraw) this.endDraw();
+			}
 
 			if(this.children) {
 				this.children.each(function(i,item) {

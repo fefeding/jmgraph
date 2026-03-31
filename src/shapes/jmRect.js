@@ -1,6 +1,7 @@
 import {jmPath} from "../core/jmPath.js";
 import {jmArc} from './jmArc.js';
 import {jmLine} from './jmLine.js';
+import {jmBorder} from "../core/jmBorder.js";
 
 /**
  * 画矩形
@@ -8,6 +9,7 @@ import {jmLine} from './jmLine.js';
  * @class jmRect
  * @extends jmPath
  * @param {object} params 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度
+ *   radius支持数字(四角相同)或对象 { topLeft, topRight, bottomRight, bottomLeft }
  */ 
 export default class jmRect extends jmPath {		
 
@@ -17,12 +19,38 @@ export default class jmRect extends jmPath {
 		super(params, t);
 
 		this.style.close = true;
-		this.radius = params.radius || this.style.radius || 0;
+		const r = params.radius || this.style.radius || this.style.borderRadius || 0;
+		if(typeof r === 'object' && r !== null) {
+			// 四角独立圆角
+			this.radius = {
+				topLeft: Number(r.topLeft) || 0,
+				topRight: Number(r.topRight) || 0,
+				bottomRight: Number(r.bottomRight) || 0,
+				bottomLeft: Number(r.bottomLeft) || 0
+			};
+		}
+		else {
+			this.radius = r;
+		}
+
+		// 解析border样式中的圆角
+		if(this.style.border) {
+			let border = this.style.border;
+			if(typeof border === 'string') border = new jmBorder(border);
+			if(border instanceof jmBorder && border.radius) {
+				if(typeof border.radius === 'object') {
+					this.radius = border.radius;
+				}
+				else if(border.radius > 0) {
+					this.radius = border.radius;
+				}
+			}
+		}
 	}
 	/**
-	 * 圆角半径
+	 * 圆角半径，支持数字或四角独立对象
 	 * @property radius
-	 * @type {number}
+	 * @type {number|object}
 	 */
 	get radius() {
 		return this.property('radius');
@@ -30,6 +58,36 @@ export default class jmRect extends jmPath {
 	set radius(v) {
 		this.needUpdate = true;
 		return this.property('radius', v);
+	}
+
+	/**
+	 * 获取规范化的圆角值（四角独立）
+	 * @returns {object} { topLeft, topRight, bottomRight, bottomLeft }
+	 */
+	getNormalizedRadius() {
+		const r = this.radius;
+		if(typeof r === 'number') {
+			const v = Math.max(0, r);
+			return { topLeft: v, topRight: v, bottomRight: v, bottomLeft: v };
+		}
+		if(typeof r === 'object' && r !== null) {
+			return {
+				topLeft: Math.max(0, Number(r.topLeft) || 0),
+				topRight: Math.max(0, Number(r.topRight) || 0),
+				bottomRight: Math.max(0, Number(r.bottomRight) || 0),
+				bottomLeft: Math.max(0, Number(r.bottomLeft) || 0)
+			};
+		}
+		return { topLeft: 0, topRight: 0, bottomRight: 0, bottomLeft: 0 };
+	}
+
+	/**
+	 * 检查是否有圆角
+	 * @returns {boolean}
+	 */
+	hasRadius() {
+		const nr = this.getNormalizedRadius();
+		return nr.topLeft > 0 || nr.topRight > 0 || nr.bottomRight > 0 || nr.bottomLeft > 0;
 	}	
 
 	/**
@@ -92,7 +150,7 @@ export default class jmRect extends jmPath {
 
 	/**
 	 * 初始化图形点
-	 * 如果有边角弧度则类型圆绝计算其描点
+	 * 支持四角独立圆角，借助圆弧对象计算描点
 	 * 
 	 * @method initPoints
 	 * @private
@@ -109,32 +167,67 @@ export default class jmRect extends jmPath {
 			this.dottedLine = this.graph.createShape(jmLine, {style: this.style});
 		}
 		
-		//如果有边界弧度则借助圆弧对象计算描点
-		if(location.radius && location.radius < location.width/2 && location.radius < location.height/2) {
+		const nr = this.getNormalizedRadius();
+		const hasRadius = this.hasRadius();
+
+		// 如果有圆角（支持四角独立），借助圆弧对象计算描点
+		if(hasRadius) {
 			let q = Math.PI / 2;
-			let arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
-			arc.center = {x:location.left + location.radius,y:location.top+location.radius};
-			arc.startAngle = Math.PI;
-			arc.endAngle = Math.PI + q;
-			let ps1 = arc.initPoints();
-			
-			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
-			arc.center = {x:p2.x - location.radius,y:p2.y + location.radius};
-			arc.startAngle = Math.PI + q;
-			arc.endAngle = Math.PI * 2;
-			let ps2 = arc.initPoints();
-			
-			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
-			arc.center = {x:p3.x - location.radius,y:p3.y - location.radius};
-			arc.startAngle = 0;
-			arc.endAngle = q;
-			let ps3 = arc.initPoints();
-			
-			arc = this.graph.createShape(jmArc,{radius:location.radius,anticlockwise:false});
-			arc.center = {x:p4.x + location.radius,y:p4.y - location.radius};
-			arc.startAngle = q;
-			arc.endAngle = Math.PI;
-			let ps4 = arc.initPoints();
+
+			// 限制圆角不超过短边的一半
+			const maxR = Math.min(location.width / 2, location.height / 2);
+			const rtl = Math.min(nr.topLeft, maxR);
+			const rtr = Math.min(nr.topRight, maxR);
+			const rbr = Math.min(nr.bottomRight, maxR);
+			const rbl = Math.min(nr.bottomLeft, maxR);
+
+			// 左上角圆弧
+			if(rtl > 0) {
+				let arc = this.graph.createShape(jmArc,{radius:rtl,anticlockwise:false});
+				arc.center = {x:location.left + rtl, y:location.top + rtl};
+				arc.startAngle = Math.PI;
+				arc.endAngle = Math.PI + q;
+				var ps1 = arc.initPoints();
+			}
+			else {
+				var ps1 = [p1];
+			}
+
+			// 右上角圆弧
+			if(rtr > 0) {
+				let arc = this.graph.createShape(jmArc,{radius:rtr,anticlockwise:false});
+				arc.center = {x:p2.x - rtr, y:p2.y + rtr};
+				arc.startAngle = Math.PI + q;
+				arc.endAngle = Math.PI * 2;
+				var ps2 = arc.initPoints();
+			}
+			else {
+				var ps2 = [p2];
+			}
+
+			// 右下角圆弧
+			if(rbr > 0) {
+				let arc = this.graph.createShape(jmArc,{radius:rbr,anticlockwise:false});
+				arc.center = {x:p3.x - rbr, y:p3.y - rbr};
+				arc.startAngle = 0;
+				arc.endAngle = q;
+				var ps3 = arc.initPoints();
+			}
+			else {
+				var ps3 = [p3];
+			}
+
+			// 左下角圆弧
+			if(rbl > 0) {
+				let arc = this.graph.createShape(jmArc,{radius:rbl,anticlockwise:false});
+				arc.center = {x:p4.x + rbl, y:p4.y - rbl};
+				arc.startAngle = q;
+				arc.endAngle = Math.PI;
+				var ps4 = arc.initPoints();
+			}
+			else {
+				var ps4 = [p4];
+			}
 			this.points = ps1.concat(ps2,ps3,ps4);
 		}
 		else {

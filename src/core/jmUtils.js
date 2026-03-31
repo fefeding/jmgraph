@@ -165,66 +165,75 @@ export default class jmUtils {
      * @param {function} copyHandler 复制对象回调，如果返回undefined，就走后面的逻辑，否则到这里中止
      * @return {object} 参数source的拷贝对象
      */
-    static clone(source, target, deep = false, copyHandler = null, deepIndex = 0) {
+    static clone(source, target, deep = false, copyHandler = null, deepIndex = 0, cloned = null) {
         // 如果有指定回调，则用回调处理，否则走后面的复制逻辑
         if(typeof copyHandler === 'function') {
             const obj = copyHandler(source, deep, deepIndex);
             if(obj) return obj;
         }
-        deepIndex++; // 每执行一次，需要判断最大拷贝深度        
+
+        // 首次调用时初始化克隆映射表（用于处理循环引用）
+        if(!cloned) cloned = new WeakMap();
 
         if(typeof target === 'boolean') {
             deep = target;
             target = undefined;
         }
 
-        // 超过100拷贝深度，直接返回
-        if(deepIndex > 100) {
-            return target;
+        // 非对象直接返回
+        if(!source || typeof source !== 'object') {
+            return typeof target !== 'undefined' ? target : source;
         }
 
-        if(source && typeof source === 'object') {
-            target = target || {};
+        // 如果source已经被克隆过，直接返回之前的克隆对象，打破循环引用
+        if(cloned.has(source)) return cloned.get(source);
 
+        // 数组处理
+        if(Array.isArray(source)) {
             //如果为当前泛型，则直接new
             if(this.isType(source, jmList)) {
                 return new jmList(source);
             }
-            else if(Array.isArray(source)) {
-                //如果是深度复，则拷贝每个对象
-                if(deep) {
-                    let dest = [];
-                    for(let i=0; i<source.length; i++) {
-                        dest.push(this.clone(source[i], target[i], deep, copyHandler, deepIndex));
-                    }
-                    return dest;
+            if(deep) {
+                let dest = [];
+                cloned.set(source, dest);
+                for(let i = 0; i < source.length; i++) {
+                    dest.push(this.clone(source[i], undefined, deep, copyHandler, deepIndex + 1, cloned));
                 }
-                return source.slice(0);
+                return dest;
             }
-           
-            if(source.__proto__) target.__proto__ = source.__proto__;
-            
-            for(let k in source) {
-                if(k === 'constructor') continue;
-                const v = source[k];
-                // 不复制页面元素和class对象
-                if(v && (v.tagName || v.getContext)) {
-                    target[k] = v;
-                    continue;
-                }
-
-                // 如果不是对象和空，则采用target的属性
-                if(typeof target[k] === 'object' || typeof target[k] === 'undefined') {                    
-                    target[k] = this.clone(v, target[k], deep, copyHandler, deepIndex);
-                }
-            }
-            return target;
-        }
-        else if(typeof target != 'undefined') {
-            return target;
+            return source.slice(0);
         }
 
-        return source;
+        // 不复制页面元素和class对象（如jmControl实例等复杂对象保持引用）
+        if(source.tagName || source.getContext || source.emit) {
+            return source;
+        }
+
+        // 普通对象处理
+        target = target || {};
+        cloned.set(source, target);
+
+        // 保持原型链一致
+        if(source.__proto__) target.__proto__ = source.__proto__;
+        
+        // 遍历自身可枚举属性（字符串键 + Symbol键），避免触发原型链上宿主对象的getter
+        const keys = Object.keys(source).concat(Object.getOwnPropertySymbols(source));
+        for(const k of keys) {
+            if(k === 'constructor') continue;
+            const v = source[k];
+            // 不复制页面元素和class对象
+            if(v && (v.tagName || v.getContext || v.emit)) {
+                target[k] = v;
+                continue;
+            }
+
+            // 如果不是对象和空，则采用target的属性
+            if(typeof target[k] === 'object' || typeof target[k] === 'undefined') {                    
+                target[k] = this.clone(v, target[k], deep, copyHandler, deepIndex + 1, cloned);
+            }
+        }
+        return target;
     }
 
     /**

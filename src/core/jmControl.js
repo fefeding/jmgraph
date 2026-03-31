@@ -943,21 +943,30 @@ export default class jmControl extends jmProperty {
 			if(this.webglControl) this.webglControl.closePath();
 			this.context.closePath && this.context.closePath();
 		}
-		
-		const fill = this.style['fill'] || this.style['fillStyle'];
-		if(fill) {
-			if(this.webglControl) {
+
+		// 根据渲染模式选择不同的绘制路径
+		if(this.webglControl) {
+			// WebGL 模式：使用 WebGL 绘制
+			const fill = this.style['fill'] || this.style['fillStyle'];
+			if(fill) {
 				const bounds = this.getBounds();
 				this.webglControl.fill(bounds);
 			}
-			this.context.fill && this.context.fill();
+			if(this.style['stroke'] || (!fill && !this.is('jmGraph'))) {
+				this.webglControl.stroke();
+			}
+			if(this.webglControl.endDraw) this.webglControl.endDraw();
 		}
-		if(this.style['stroke'] || (!fill && !this.is('jmGraph'))) {
-			if(this.webglControl) this.webglControl.stroke();
-			this.context.stroke && this.context.stroke();
+		else {
+			// 2D 模式：使用 Canvas 2D API 绘制
+			const fill = this.style['fill'] || this.style['fillStyle'];
+			if(fill) {
+				this.context.fill && this.context.fill();
+			}
+			if(this.style['stroke'] || (!fill && !this.is('jmGraph'))) {
+				this.context.stroke && this.context.stroke();
+			}
 		}
-
-		if(this.webglControl && this.webglControl.endDraw) this.webglControl.endDraw();
 
 		this.needUpdate = false;
 	}

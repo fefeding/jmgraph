@@ -288,10 +288,7 @@ export default class jmGraph extends jmControl {
 		if(shape) {
 			if(!args) args = {};
 			args.graph = this;
-			let obj = new shape(args);
-			// 直接添加到画布 children
-			this.children.add(obj);
-			this.needUpdate = true;
+			const obj = new shape(args);
 			return obj;
 		}
 	}

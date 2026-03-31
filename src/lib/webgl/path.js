@@ -9,6 +9,40 @@ class WebglPath extends WebglBase {
         this.needCut = option.needCut || false;
         this.control = option.control;
         this.points = [];
+        // 缓存 buffer 和纹理，避免每帧创建/销毁
+        this.__cachedBuffers = [];
+        this.__cachedTexture = null;
+        this.__cachedTextureKey = null;
+    }
+
+    // 释放缓存的 WebGL 资源
+    dispose() {
+        for(const buf of this.__cachedBuffers) {
+            this.deleteBuffer(buf);
+        }
+        this.__cachedBuffers = [];
+        if(this.__cachedTexture) {
+            this.deleteTexture(this.__cachedTexture);
+            this.__cachedTexture = null;
+            this.__cachedTextureKey = null;
+        }
+    }
+
+    // 获取或创建 buffer，优先复用缓存
+    getOrCreateBuffer(data, attr) {
+        let buffer = this.__cachedBuffers.find(b => b.attr === attr);
+        if(buffer) {
+            const gl = this.context;
+            const float32 = new Float32Array(data);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, float32, gl.DYNAMIC_DRAW);
+            buffer.data = data;
+            return buffer;
+        }
+        buffer = this.createFloat32Buffer(data);
+        buffer.attr = attr;
+        this.__cachedBuffers.push(buffer);
+        return buffer;
     }
 
     // 应用变换到点
@@ -63,6 +97,7 @@ class WebglPath extends WebglBase {
     endDraw() {
         if(this.points) delete this.points;
         if(this.pathPoints) delete this.pathPoints;
+        // 缓存的纹理保留到下次绘制（渐变可能不变）
     }
 
     // 图形封闭
@@ -74,21 +109,47 @@ class WebglPath extends WebglBase {
         }
     }
 
-    // 绘制点数组
+    // 绘制点数组（使用 DYNAMIC_DRAW 复用 buffer，避免每帧 create/delete）
     writePoints(points, attr = this.program.attrs.a_position) {
-       
         const fixedPoints = [];
-        for(const p of points) {
-            // 应用变换矩阵
-            const transformedPoint = this.applyTransform(p);
-            fixedPoints.push(
-                transformedPoint.x + this.parentAbsoluteBounds.left,
-                transformedPoint.y + this.parentAbsoluteBounds.top
-            );
+        const [a, b, c, d, tx, ty] = this.transformMatrix;
+        const isIdentity = (a === 1 && b === 0 && c === 0 && d === 1 && tx === 0 && ty === 0);
+        const offsetLeft = this.parentAbsoluteBounds.left;
+        const offsetTop = this.parentAbsoluteBounds.top;
+
+        if(isIdentity) {
+            // 单位矩阵时直接加偏移，避免逐点调用 applyTransform
+            for(let i = 0; i < points.length; i++) {
+                fixedPoints.push(points[i].x + offsetLeft, points[i].y + offsetTop);
+            }
+        } else {
+            for(const p of points) {
+                const transformedPoint = this.applyTransform(p);
+                fixedPoints.push(
+                    transformedPoint.x + offsetLeft,
+                    transformedPoint.y + offsetTop
+                );
+            }
         }
-        const vertexBuffer = this.createFloat32Buffer(fixedPoints); 
+        const float32 = new Float32Array(fixedPoints);
+        const gl = this.context;
+
+        // 复用已有 buffer 或创建新的
+        if(this.__cachedBuffers.length > 0) {
+            // 找一个同 attr 的 buffer 复用
+            let buffer = this.__cachedBuffers.find(b => b.attr === attr);
+            if(buffer) {
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, float32, gl.DYNAMIC_DRAW);
+                buffer.data = fixedPoints;
+                this.writeVertexAttrib(buffer, attr, 2, 0, 0);
+                return buffer;
+            }
+        }
+        const vertexBuffer = this.createFloat32Buffer(float32, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW); 
         this.writeVertexAttrib(vertexBuffer, attr, 2, 0, 0);
         vertexBuffer.attr = attr;
+        this.__cachedBuffers.push(vertexBuffer);
         return vertexBuffer;
     }
 
@@ -370,9 +431,10 @@ class WebglPath extends WebglBase {
 
     // 分割成一个个规则的三角形，不规则的多边形不全割的话纹理就会没法正确覆盖
     getTriangles(points) {
-        
         this.trianglesCache = this.trianglesCache||(this.trianglesCache={});
-        const key = JSON.stringify(points);
+        // 快速缓存 key：用长度和首尾点坐标（比 JSON.stringify 快几个数量级）
+        const len = points.length;
+        const key = len + '_' + points[0].x + '_' + points[0].y + '_' + points[len-1].x + '_' + points[len-1].y;
         if(this.trianglesCache[key]) return this.trianglesCache[key];
 
         const res = [];
@@ -411,10 +473,9 @@ class WebglPath extends WebglBase {
             points = regular? points : this.pathToPoints(points);
             const buffer = this.writePoints(points);
             this.context.drawArrays(regular? this.context.LINE_LOOP: this.context.POINTS, 0, points.length);
-            this.deleteBuffer(buffer);
+            // buffer 由 endDraw 统一清理
         }
-        colorBuffer && this.deleteBuffer(colorBuffer);
-        colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
+        colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
     }
 
     // 填充图形
@@ -445,8 +506,7 @@ class WebglPath extends WebglBase {
 
         this.fillPolygons(points);                
 
-        colorBuffer && this.deleteBuffer(colorBuffer);
-        colorBuffer && this.disableVertexAttribArray(colorBuffer.attr);
+        colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
 
     }
 
@@ -456,8 +516,24 @@ class WebglPath extends WebglBase {
     fillImage(img, points, bounds) {
         if(!img) return;
 
-        // 设置纹理
-        const texture = img instanceof ImageData? this.createDataTexture(img) : this.createImgTexture(img);
+        // 对于 ImageData，生成缓存 key（基于渐变参数或 bounds），复用纹理
+        let texture = null;
+        if(img instanceof ImageData) {
+            const key = `${img.width}_${img.height}_${bounds.width}_${bounds.height}_${bounds.left}_${bounds.top}`;
+            if(this.__cachedTexture && this.__cachedTextureKey === key) {
+                texture = this.__cachedTexture;
+            } else {
+                texture = this.createDataTexture(img);
+                // 释放旧纹理
+                if(this.__cachedTexture) {
+                    this.deleteTexture(this.__cachedTexture);
+                }
+                this.__cachedTexture = texture;
+                this.__cachedTextureKey = key;
+            }
+        } else {
+            texture = this.createImgTexture(img);
+        }
         this.context.uniform1i(this.program.uniforms.u_sample.location, 0); // 纹理单元传递给着色器
 
         // 指定纹理区域尺寸
@@ -470,7 +546,10 @@ class WebglPath extends WebglBase {
 
         this.fillTexture(points);
         
-        this.deleteTexture(texture);
+        // 仅对非缓存纹理（非 ImageData）立即删除
+        if(!(img instanceof ImageData)) {
+            this.deleteTexture(texture);
+        }
     }
 
     fillTexture(points) {        
@@ -486,23 +565,67 @@ class WebglPath extends WebglBase {
 
     // 进行多边形填充
     fillPolygons(points, isTexture = false) {   
-        if(points.length > 3) {
-            const triangles = this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);                
-            if(triangles.length) {   
-                for(const triangle of triangles) {
-                    this.fillPolygons(triangle, isTexture);// 这里就变成了规则的图形了
-                }
+        if(points.length <= 3) {
+            // 3个点以下的三角形直接画
+            const buffer = this.writePoints(points);
+            const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
+            this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+            return;
+        }
+
+        // 规则图形（凸多边形，如圆）：直接用 TRIANGLE_FAN 一次性绘制，无需 earcut
+        if(this.isRegular) {
+            const buffer = this.writePoints(points);
+            const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
+            this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+            return;
+        }
+
+        // 不规则图形：需要 earcut 三角化后，合并为一个大的顶点缓冲区，单次 drawArrays
+        const triangles = this.needCut? this.earCutPointsToTriangles(points): this.getTriangles(points);
+        if(!triangles.length) return;
+
+        // 合并所有三角形的顶点到一个数组
+        const allVertices = [];
+        const allTexCoords = [];
+        for(const triangle of triangles) {
+            for(const p of triangle) {
+                allVertices.push(p.x, p.y);
+                if(isTexture) allTexCoords.push(p.x, p.y);
             }
         }
-        else {
-            const buffer = this.writePoints(points);
-            // 纹理坐标
-            const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
 
-            this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
-            this.deleteBuffer(buffer);
-            coordBuffer && this.deleteBuffer(coordBuffer);    
+        // 一次性上传所有数据并绘制
+        const vertexData = new Float32Array(allVertices);
+        const gl = this.context;
+
+        // 复用或创建 position buffer
+        let posBuffer = this.__cachedBuffers.find(b => b.attr === this.program.attrs.a_position);
+        if(!posBuffer) {
+            posBuffer = this.createFloat32Buffer(vertexData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+            posBuffer.attr = this.program.attrs.a_position;
+            this.__cachedBuffers.push(posBuffer);
+        } else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer.buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertexData, gl.DYNAMIC_DRAW);
         }
+        this.writeVertexAttrib(posBuffer, this.program.attrs.a_position, 2, 0, 0);
+
+        if(isTexture && allTexCoords.length) {
+            const texData = new Float32Array(allTexCoords);
+            let texBuffer = this.__cachedBuffers.find(b => b.attr === this.program.attrs.a_text_coord);
+            if(!texBuffer) {
+                texBuffer = this.createFloat32Buffer(texData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+                texBuffer.attr = this.program.attrs.a_text_coord;
+                this.__cachedBuffers.push(texBuffer);
+            } else {
+                gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, texData, gl.DYNAMIC_DRAW);
+            }
+            this.writeVertexAttrib(texBuffer, this.program.attrs.a_text_coord, 2, 0, 0);
+        }
+
+        gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
     }
 
     // 填充图形

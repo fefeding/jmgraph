@@ -942,9 +942,7 @@ export default class jmControl extends jmProperty {
 			const bounds = this.parent && this.parent.absoluteBounds?this.parent.absoluteBounds:this.absoluteBounds;
 			if(this.webglControl) {
 				this.webglControl.setParentBounds(bounds);
-				this.webglControl.draw([
-					...this.points
-				]);
+				this.webglControl.draw(this.points);
 			}
 			else if(this.context && this.context.moveTo) {
 				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);

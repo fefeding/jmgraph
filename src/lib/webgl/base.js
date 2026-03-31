@@ -265,7 +265,6 @@ class WeblBase {
 
     // 创建程序
     createProgram(vertexSrc, fragmentSrc) {        
-        this.context.lineWidth(1);
         return createProgram(this.context, vertexSrc, fragmentSrc);
     }
 
@@ -378,7 +377,9 @@ class WeblBase {
     // polygonIndices 顶点索引，
     earCutPointsToTriangles(points) {
         this.earCutCache = this.earCutCache || (this.earCutCache = {});
-        const key = JSON.stringify(points);
+        // 快速缓存 key：用长度和首尾点坐标
+        const len = points.length;
+        const key = len + '_' + points[0].x + '_' + points[0].y + '_' + points[len-1].x + '_' + points[len-1].y;
         if (this.earCutCache[key]) return this.earCutCache[key];
 
         const ps = this.earCutPoints(points);// 切割得到3角色顶点索引，
@@ -473,31 +474,11 @@ class WeblBase {
 
         this.textureContext.fillStyle = fillStyle;
 
-        this.textureContext.beginPath();
+        // 规则图形用 fillRect，比 beginPath/lineTo/fill 快
         if(!points || !points.length) {
-            points = [];
-            points.push({
-                x: bounds.left,
-                y: bounds.top
-            });
-            points.push({
-                x: bounds.left + bounds.width,
-                y: bounds.top
-            });
-            points.push({
-                x: bounds.left + bounds.width,
-                y: bounds.top + bounds.height
-            });
-            points.push({
-                x: bounds.left,
-                y: bounds.top + bounds.height
-            });
-            points.push({
-                x: bounds.left,
-                y: bounds.top
-            });
-        }
-        if(points && points.length) {
+            this.textureContext.fillRect(0, 0, bounds.width, bounds.height);
+        } else {
+            this.textureContext.beginPath();
             for(const p of points) {
                 //移至当前坐标
                 if(p.m) {
@@ -506,17 +487,10 @@ class WeblBase {
                 else {
                     this.textureContext.lineTo(p.x - bounds.left, p.y - bounds.top);
                 }			
-            }	
+            }
+            this.textureContext.closePath();
+            this.textureContext.fill();
         }
-        else {
-            this.textureContext.moveTo(0, 0);
-            this.textureContext.lineTo(bounds.width, 0);
-            this.textureContext.lineTo(bounds.width, bounds.height);
-            this.textureContext.lineTo(0, bounds.height);
-            this.textureContext.lineTo(0, 0);
-        }
-        this.textureContext.closePath();
-        this.textureContext.fill();
 
         const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
         return {

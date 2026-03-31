@@ -35,18 +35,23 @@
 	var balls = [];
 	//初始化jmgraph
 	var graph = new jmGraph('mycanvas', {
-		mode: '2d'
+		mode: 'webgl'
 	});
 	graph.util.bindEvent(window,'resize',resize);	
 
-	refreshBall(graph);
-
 	//实时更新画布
-	function update() {
-		if(graph.needUpdate) graph.redraw();
-		graph.requestAnimationFrame(update);
+	var updateLoop = null;
+	function startUpdateLoop(animateFn) {
+		if(updateLoop) return;
+		function update() {
+			animateFn();
+			if(graph.needUpdate) graph.redraw();
+			updateLoop = graph.requestAnimationFrame(update);
+		}
+		update();
 	}
-	update();
+
+	refreshBall(graph);
 	
 	function createPosition(radius,i) {
 		var canvas = document.getElementById('mycanvas');
@@ -202,9 +207,9 @@
 				y = Math.min(maxY,y);
 				b1.y(y);						
 			}	
-			graph.needUpdate = true;	
-			setTimeout(animate,20);				
-		};
+			graph.needUpdate = true;
+		}
+		startUpdateLoop(animate); // 传入 animate 函数
 		animate();		
 	}
 	function resize() {				

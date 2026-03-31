@@ -53,8 +53,14 @@ class WebglGradient {
 
     // 转为渐变为纹理
     toImageData(control, bounds, points=null) {
-        //const key = this.key || this.toString();
-        //if(WebglGradientTextureCache[key]) return WebglGradientTextureCache[key];
+        // 缓存基于渐变参数（不含 bounds，因为同一个渐变只是位置不同时纹理相同）
+        const gradientKey = this.toString();
+        if(this.__cachedData && this.__cacheKey === gradientKey && 
+           this.__cachedData.data && this.__cachedData.data.width === Math.ceil(bounds.width) &&
+           this.__cachedData.data.data && this.__cachedData.data.data.height === Math.ceil(bounds.height)) {
+            return this.__cachedData;
+        }
+
         if(!control.textureContext) {
             return null;
         }
@@ -72,9 +78,16 @@ class WebglGradient {
         
         const data = control.toFillTexture(gradient, bounds, points);
 
-        //WebglGradientTextureCache[key] = data;
+        this.__cachedData = data;
+        this.__cacheKey = gradientKey;
 
         return data;
+    }
+
+    // 当渐变参数变化时使缓存失效
+    invalidateCache() {
+        this.__cachedData = null;
+        this.__cacheKey = null;
     }
 
     // 根据绘制图形的坐标计算出对应点的颜色

@@ -105,12 +105,13 @@ class webgl {
         // 由具体的绘制方法处理
     }
 
-    // 测量文本宽度
+    // 测量文本宽度（复用纹理 canvas 的 context）
     measureText(text) {
-        // 使用 2D canvas 测量
+        const ctx = this.base.textureContext;
+        if(ctx && ctx.measureText) return ctx.measureText(text);
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        return ctx.measureText(text);
+        const ctx2 = canvas.getContext('2d');
+        return ctx2.measureText(text);
     }
 
     // 创建线性渐变

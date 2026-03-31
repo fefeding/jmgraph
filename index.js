@@ -68,7 +68,7 @@ const createJmGraph = (...args) => {
 	return new jmGraphImpl(...args);
 }
 
-export default createJmGraph;
+export default jmGraphImpl;
 
 export {   
     jmUtils, 
@@ -95,7 +95,7 @@ export {
     jmPolygon,
     jmStar,
     jmLayer,
-    createJmGraph as jmGraph,
+    jmGraphImpl as jmGraph,
     createJmGraph as create
 };
 

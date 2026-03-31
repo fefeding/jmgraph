@@ -59,61 +59,73 @@
     </div>
 
     <script type="module">
-        import jmGraph from '../index.js';
+        import { create } from '../index.js';
+
+        function addShape(g, shape) {
+            g.children.add(shape);
+            return shape;
+        }
 
         // 1. lineDash
         ;(function() {
-            const g = jmGraph('c1');
-            g.createShape('line', { start: {x: 20, y: 40}, end: {x: 300, y: 40}, style: { stroke: '#00d4ff', lineWidth: 2, lineDash: [10, 5] } });
-            g.createShape('line', { start: {x: 20, y: 80}, end: {x: 300, y: 80}, style: { stroke: '#00ff88', lineWidth: 3, lineDash: [2, 8] } });
-            g.createShape('line', { start: {x: 20, y: 120}, end: {x: 300, y: 120}, style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [20, 5, 5, 5] } });
-            g.createShape('rect', { position: {x: 60, y: 145}, width: 200, height: 40, style: { stroke: '#e94560', lineWidth: 2, lineDash: [8, 4], close: true, fill: 'transparent' } });
+            const g = create('c1');
+            addShape(g, g.createShape('line', { start: {x: 20, y: 40}, end: {x: 300, y: 40}, style: { stroke: '#00d4ff', lineWidth: 2, lineDash: [10, 5] } }));
+            addShape(g, g.createShape('line', { start: {x: 20, y: 80}, end: {x: 300, y: 80}, style: { stroke: '#00ff88', lineWidth: 3, lineDash: [2, 8] } }));
+            addShape(g, g.createShape('line', { start: {x: 20, y: 120}, end: {x: 300, y: 120}, style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [20, 5, 5, 5] } }));
+            addShape(g, g.createShape('rect', { position: {x: 60, y: 145}, width: 200, height: 40, style: { stroke: '#e94560', lineWidth: 2, lineDash: [8, 4], close: true, fill: 'transparent' } }));
+            g.refresh();
         })();
 
         // 2. filter
         ;(function() {
-            const g = jmGraph('c2');
-            g.createShape('circle', { center: {x: 55, y: 70}, radius: 35, style: { fill: '#e94560' } });
-            g.createShape('circle', { center: {x: 160, y: 70}, radius: 35, style: { fill: '#00d4ff', filter: 'blur(3px)' } });
-            g.createShape('circle', { center: {x: 265, y: 70}, radius: 35, style: { fill: '#00ff88', filter: 'grayscale(100%)' } });
-            g.createShape('rect', { position: {x: 20, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#ffd93d', filter: 'sepia(80%)' } });
-            g.createShape('rect', { position: {x: 125, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#8b5cf6', filter: 'brightness(1.6)' } });
-            g.createShape('rect', { position: {x: 230, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#e94560', filter: 'hue-rotate(120deg)' } });
+            const g = create('c2');
+            addShape(g, g.createShape('circle', { center: {x: 55, y: 70}, radius: 35, style: { fill: '#e94560' } }));
+            addShape(g, g.createShape('circle', { center: {x: 160, y: 70}, radius: 35, style: { fill: '#00d4ff', filter: 'blur(3px)' } }));
+            addShape(g, g.createShape('circle', { center: {x: 265, y: 70}, radius: 35, style: { fill: '#00ff88', filter: 'grayscale(100%)' } }));
+            addShape(g, g.createShape('rect', { position: {x: 20, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#ffd93d', filter: 'sepia(80%)' } }));
+            addShape(g, g.createShape('rect', { position: {x: 125, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#8b5cf6', filter: 'brightness(1.6)' } }));
+            addShape(g, g.createShape('rect', { position: {x: 230, y: 120}, width: 90, height: 55, radius: 8, style: { fill: '#e94560', filter: 'hue-rotate(120deg)' } }));
+            g.refresh();
         })();
 
         // 3. blend
         ;(function() {
-            const g = jmGraph('c3');
-            g.createShape('circle', { center: {x: 120, y: 80}, radius: 55, style: { fill: '#e94560' } });
-            g.createShape('circle', { center: {x: 170, y: 80}, radius: 55, style: { fill: '#00d4ff', globalCompositeOperation: 'multiply' } });
-            g.createShape('label', { position: {x: 60, y: 155}, width: 180, value: 'multiply', style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' } });
+            const g = create('c3');
+            addShape(g, g.createShape('circle', { center: {x: 120, y: 80}, radius: 55, style: { fill: '#e94560' } }));
+            addShape(g, g.createShape('circle', { center: {x: 170, y: 80}, radius: 55, style: { fill: '#00d4ff', globalCompositeOperation: 'multiply' } }));
+            addShape(g, g.createShape('label', { position: {x: 60, y: 155}, width: 180, value: 'multiply', style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' } }));
+            g.refresh();
         })();
 
         // 4. border
         ;(function() {
-            const g = jmGraph('c4');
-            g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } } });
-            g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' } });
-            g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } } });
-            g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(192,132,252,0.1)', border: { width: 3, style: 'double', color: '#c084fc' } } });
+            const g = create('c4');
+            addShape(g, g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } } }));
+            addShape(g, g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' } }));
+            addShape(g, g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } } }));
+            addShape(g, g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(192,132,252,0.1)', border: { width: 3, style: 'double', color: '#c084fc' } } }));
+            g.refresh();
         })();
 
         // 5. borderRadius
         ;(function() {
-            const g = jmGraph('c5');
-            g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 20, style: { fill: '#e94560' } });
-            g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: { topLeft: 30, topRight: 5, bottomRight: 30, bottomLeft: 5 }, style: { fill: '#00d4ff' } });
-            g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 50, radius: 25, style: { fill: '#00ff88' } });
-            g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: { topLeft: 40, topRight: 0, bottomRight: 0, bottomLeft: 40 }, style: { fill: '#ffd93d' } });
+            const g = create('c5');
+            addShape(g, g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 20, style: { fill: '#e94560' } }));
+            addShape(g, g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: { topLeft: 30, topRight: 5, bottomRight: 30, bottomLeft: 5 }, style: { fill: '#00d4ff' } }));
+            addShape(g, g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 50, radius: 25, style: { fill: '#00ff88' } }));
+            addShape(g, g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: { topLeft: 40, topRight: 0, bottomRight: 0, bottomLeft: 40 }, style: { fill: '#ffd93d' } }));
+            g.refresh();
         })();
 
         // 6. clipPath
         ;(function() {
-            const g = jmGraph('c6');
+            const g = create('c6');
             const clip = g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { close: true, visible: false } });
             clip.initPoints();
-            g.createShape('rect', { position: {x: 60, y: 30}, width: 200, height: 140, radius: 12, style: { fill: 'linear-gradient(0 0 200 140, #e94560 0, #00d4ff 1)', clipPath: clip } });
-            g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [4, 4] } });
+            addShape(g, clip);
+            addShape(g, g.createShape('rect', { position: {x: 60, y: 30}, width: 200, height: 140, radius: 12, style: { fill: 'linear-gradient(0 0 200 140, #e94560 0, #00d4ff 1)', clipPath: clip } }));
+            addShape(g, g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [4, 4] } }));
+            g.refresh();
         })();
     </script>
 </body>

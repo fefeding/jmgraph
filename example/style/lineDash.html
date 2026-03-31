@@ -44,58 +44,65 @@ g.createShape('rect', {
 </pre>
 
     <script type="module">
-        import jmGraph from '../../index.js';
-        const g = jmGraph('canvas');
+        import { create } from '../../index.js';
+        const g = create('canvas');
+
+        function addShape(shape) {
+            g.children.add(shape);
+            return shape;
+        }
 
         // 实线（空数组）
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 40}, end: {x: 570, y: 40},
             style: { stroke: '#00d4ff', lineWidth: 2, lineDash: [] }
-        });
+        }));
 
         // 等间距虚线 [10, 5]
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 90}, end: {x: 570, y: 90},
             style: { stroke: '#00ff88', lineWidth: 2, lineDash: [10, 5] }
-        });
+        }));
 
         // 点线 [2, 8]
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 140}, end: {x: 570, y: 140},
             style: { stroke: '#ff6b6b', lineWidth: 3, lineDash: [2, 8] }
-        });
+        }));
 
         // 长短交替 [20, 5, 5, 5]
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 190}, end: {x: 570, y: 190},
             style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [20, 5, 5, 5] }
-        });
+        }));
 
         // 字符串格式 "15,5,5,5,15"
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 240}, end: {x: 570, y: 240},
             style: { stroke: '#c084fc', lineWidth: 2, lineDash: '15, 5, 5, 5, 15' }
-        });
+        }));
 
         // 带偏移量
-        g.createShape('line', {
+        addShape(g.createShape('line', {
             start: {x: 30, y: 290}, end: {x: 570, y: 290},
             style: { stroke: '#fb923c', lineWidth: 2, lineDash: [10, 10], lineDashOffset: 5 }
-        });
+        }));
 
         // 虚线矩形
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 30, y: 320}, width: 160, height: 60,
             style: { stroke: '#38bdf8', lineWidth: 2, lineDash: [8, 4], close: true, fill: 'rgba(56,189,248,0.1)' }
-        });
-        g.createShape('rect', {
+        }));
+        addShape(g.createShape('rect', {
             position: {x: 220, y: 320}, width: 160, height: 60,
             style: { stroke: '#00ff88', lineWidth: 3, lineDash: [12, 6, 3, 6], close: true, fill: 'rgba(0,255,136,0.1)' }
-        });
-        g.createShape('rect', {
+        }));
+        addShape(g.createShape('rect', {
             position: {x: 410, y: 320}, width: 160, height: 60,
             style: { stroke: '#e94560', lineWidth: 2, lineDash: '4, 4', close: true, fill: 'rgba(233,69,96,0.1)' }
-        });
+        }));
+
+        g.refresh();
     </script>
 </body>
 </html>

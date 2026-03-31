@@ -47,97 +47,104 @@ g.createShape('rect', { position: {x: 300, y: 20}, width: 200, height: 60, radiu
 </pre>
 
     <script type="module">
-        import jmGraph from '../../index.js';
-        const g = jmGraph('canvas');
+        import { create } from '../../index.js';
+        const g = create('canvas');
+
+        function addShape(shape) {
+            g.children.add(shape);
+            return shape;
+        }
 
         // 第一行：对比
         // 统一圆角
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 20}, width: 260, height: 90, radius: 20,
             style: { fill: '#e94560' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 115}, width: 260,
             value: 'radius: 20 (统一圆角)',
             style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' }
-        });
+        }));
 
         // 四角独立
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 320, y: 20}, width: 260, height: 90,
             radius: { topLeft: 40, topRight: 5, bottomRight: 40, bottomLeft: 5 },
             style: { fill: '#00d4ff' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 320, y: 115}, width: 260,
             value: 'topLeft:40, topRight:5, bottomRight:40, bottomLeft:5',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // 第二行
         // 胶囊形
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 145}, width: 260, height: 60, radius: 30,
             style: { fill: '#ffd93d' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 210}, width: 260,
             value: 'radius: 30 (胶囊形)',
             style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' }
-        });
+        }));
 
         // 不对称
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 320, y: 145}, width: 260, height: 90,
             radius: { topLeft: 50, topRight: 0, bottomRight: 25, bottomLeft: 0 },
             style: { fill: '#00ff88' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 320, y: 240}, width: 260,
             value: 'topLeft:50, topRight:0, bottomRight:25, bottomLeft:0',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // 第三行
         // 右侧圆角
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 270}, width: 260, height: 80,
             radius: { topLeft: 0, topRight: 30, bottomRight: 30, bottomLeft: 0 },
             style: { fill: '#c084fc' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 355}, width: 260,
             value: 'topRight:30, bottomRight:30 (右侧圆角)',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // 渐变 + 四角圆角
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 320, y: 270}, width: 260, height: 80,
             radius: { topLeft: 10, topRight: 35, bottomRight: 10, bottomLeft: 35 },
             style: {
                 fill: 'linear-gradient(0 0 260 80, #e94560 0, #ffd93d 0.5, #00d4ff 1)'
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 320, y: 355}, width: 260,
             value: '渐变 + 四角独立圆角',
             style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' }
-        });
+        }));
 
         // 第四行：通过 style.borderRadius 设置
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 120, y: 390}, width: 360, height: 70,
             style: {
                 fill: 'linear-gradient(0 0 360 70, #fb923c 0, #e94560 1)',
                 borderRadius: { topLeft: 0, topRight: 35, bottomRight: 0, bottomLeft: 35 }
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 120, y: 465}, width: 360,
             value: '通过 style.borderRadius 设置',
             style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' }
-        });
+        }));
+
+        g.refresh();
     </script>
 </body>
 </html>

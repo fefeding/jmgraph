@@ -16,7 +16,7 @@ import {jmEllipse} from "./src/shapes/jmEllipse.js";
 import {jmPolygon} from "./src/shapes/jmPolygon.js";
 import {jmStar} from "./src/shapes/jmStar.js";
 
-import { jmGraph as jmGraphCore, 
+import { jmGraph as jmGraphCore,
     jmUtils,
 	jmList,
 	jmProperty,
@@ -26,8 +26,7 @@ import { jmGraph as jmGraphCore,
 	jmBorder,
 	jmEvents,
 	jmControl,
-	jmPath,
-	jmLayer } from "./src/core/jmGraph.js";
+	jmPath } from "./src/core/jmGraph.js";
 
 const shapes = {
     "arc": jmArc,
@@ -70,9 +69,9 @@ const createJmGraph = (...args) => {
 
 export default jmGraphImpl;
 
-export {   
-    jmUtils, 
-    jmList,    
+export {
+    jmUtils,
+    jmList,
     jmControl,
     jmPath,
     jmShadow,
@@ -94,7 +93,6 @@ export {
     jmEllipse,
     jmPolygon,
     jmStar,
-    jmLayer,
     jmGraphImpl as jmGraph,
     createJmGraph as create
 };

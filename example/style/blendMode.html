@@ -36,8 +36,8 @@ style: { fill: '#00ff88', globalCompositeOperation: 'screen' }
 </pre>
 
     <script type="module">
-        import jmGraph from '../../index.js';
-        const g = jmGraph('canvas');
+        import { create } from '../../index.js';
+        const g = create('canvas');
 
         const demos = [
             { name: 'multiply', color1: '#e94560', color2: '#00d4ff', op: 'multiply' },
@@ -55,22 +55,27 @@ style: { fill: '#00ff88', globalCompositeOperation: 'screen' }
             const cy = 120 + row * 220;
 
             // 底层圆
-            g.createShape('circle', {
+            const circle1 = g.createShape('circle', {
                 center: {x: cx - 15, y: cy}, radius: 50,
                 style: { fill: d.color1 }
             });
+            g.children.add(circle1);
             // 混合圆
-            g.createShape('circle', {
+            const circle2 = g.createShape('circle', {
                 center: {x: cx + 15, y: cy}, radius: 50,
                 style: { fill: d.color2, globalCompositeOperation: d.op }
             });
+            g.children.add(circle2);
             // 标签
-            g.createShape('label', {
+            const label = g.createShape('label', {
                 position: {x: cx - 80, y: cy + 65}, width: 160,
                 value: d.op,
                 style: { fill: '#e0e0e0', fontSize: 13, textAlign: 'center', font: 'bold 13px sans-serif' }
             });
+            g.children.add(label);
         });
+
+        g.refresh();
     </script>
 </body>
 </html>

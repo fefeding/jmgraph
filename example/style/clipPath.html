@@ -41,8 +41,13 @@ g.createShape('rect', {
 </pre>
 
     <script type="module">
-        import jmGraph from '../../index.js';
-        const g = jmGraph('canvas');
+        import { create } from '../../index.js';
+        const g = create('canvas');
+
+        function addShape(shape) {
+            g.children.add(shape);
+            return shape;
+        }
 
         // === 示例1：圆形裁剪 ===
         const clipCircle = g.createShape('circle', {
@@ -50,21 +55,22 @@ g.createShape('rect', {
             style: { close: true, visible: false }
         });
         clipCircle.initPoints();
+        addShape(clipCircle);
 
         // 被裁剪的渐变矩形
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 50, y: 60}, width: 160, height: 160, radius: 12,
             style: {
                 fill: 'linear-gradient(0 0 160 160, #e94560 0, #ffd93d 0.5, #00d4ff 1)',
                 clipPath: clipCircle
             }
-        });
+        }));
 
         // 显示裁剪区域轮廓
-        g.createShape('circle', {
+        addShape(g.createShape('circle', {
             center: {x: 130, y: 140}, radius: 80,
             style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5] }
-        });
+        }));
 
         // === 示例2：矩形裁剪 ===
         const clipRect = g.createShape('rect', {
@@ -72,19 +78,20 @@ g.createShape('rect', {
             style: { close: true, visible: false }
         });
         clipRect.initPoints();
+        addShape(clipRect);
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 240, y: 40}, width: 200, height: 200, radius: 0,
             style: {
                 fill: 'linear-gradient(0 0 200 200, #00ff88 0, #c084fc 1)',
                 clipPath: clipRect
             }
-        });
+        }));
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 280, y: 60}, width: 120, height: 160, radius: 20,
             style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
-        });
+        }));
 
         // === 示例3：多图形裁剪 ===
         const clipStar = g.createShape('star', {
@@ -92,19 +99,20 @@ g.createShape('rect', {
             style: { close: true, visible: false }
         });
         clipStar.initPoints();
+        addShape(clipStar);
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 50, y: 290}, width: 160, height: 160,
             style: {
                 fill: 'linear-gradient(0 0 160 160, #fb923c 0, #e94560 1)',
                 clipPath: clipStar
             }
-        });
+        }));
 
-        g.createShape('star', {
+        addShape(g.createShape('star', {
             center: {x: 130, y: 370}, points: 5, radius: 80, innerRadius: 40,
             style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
-        });
+        }));
 
         // === 示例4：椭圆裁剪 ===
         const clipEllipse = g.createShape('ellipse', {
@@ -112,41 +120,44 @@ g.createShape('rect', {
             style: { close: true, visible: false }
         });
         clipEllipse.initPoints();
+        addShape(clipEllipse);
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 280, y: 300}, width: 200, height: 140,
             style: {
                 fill: 'linear-gradient(0 0 200 140, #38bdf8 0, #8b5cf6 1)',
                 clipPath: clipEllipse
             }
-        });
+        }));
 
-        g.createShape('ellipse', {
+        addShape(g.createShape('ellipse', {
             center: {x: 380, y: 370}, width: 180, height: 120,
             style: { stroke: 'rgba(255,255,255,0.3)', lineWidth: 1, lineDash: [5, 5], close: true }
-        });
+        }));
 
         // 标签
-        g.createShape('label', {
+        addShape(g.createShape('label', {
             position: {x: 50, y: 225}, width: 160,
             value: '圆形裁剪',
             style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 280, y: 245}, width: 120,
             value: '圆角矩形裁剪',
             style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 50, y: 430}, width: 160,
             value: '星形裁剪',
             style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 300, y: 430}, width: 160,
             value: '椭圆裁剪',
             style: { fill: '#8899aa', fontSize: 12, textAlign: 'center' }
-        });
+        }));
+
+        g.refresh();
     </script>
 </body>
 </html>

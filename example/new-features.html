@@ -65,7 +65,7 @@
 </head>
 <body>
     <h1>jmgraph 新特性示例</h1>
-    <p>本示例展示了 jmgraph 的新特性，包括：新形状、缩放平移、图层管理、导出功能和文本换行。</p>
+    <p>本示例展示了 jmgraph 的新特性，包括：新形状、缩放平移、导出功能和文本换行。</p>
     <p><strong>提示：</strong>使用鼠标滚轮缩放，中键拖拽平移画布，点击图形可拖动。</p>
     
     <div class="container">
@@ -73,8 +73,7 @@
             <canvas id="canvas" width="800" height="600"></canvas>
             <div style="margin-top: 10px; color: #666; font-size: 12px;">
                 <span id="zoomLevel">缩放: 100%</span> | 
-                <span id="shapeCount">图形数量: 0</span> |
-                <span id="layerInfo">当前图层: Default Layer</span>
+                <span id="shapeCount">图形数量: 0</span>
             </div>
         </div>
         
@@ -98,15 +97,6 @@
             </div>
             
             <div class="control-group">
-                <h4>图层管理</h4>
-                <input type="text" id="layerName" placeholder="图层名称" value="New Layer">
-                <button onclick="createLayer()">创建图层</button>
-                <button onclick="switchLayer()">切换图层</button>
-                <button onclick="removeLayer()">删除图层</button>
-                <button onclick="listLayers()">列出所有图层</button>
-            </div>
-            
-            <div class="control-group">
                 <h4>导出功能</h4>
                 <button onclick="exportPNG()">导出 PNG</button>
                 <button onclick="exportSVG()">导出 SVG</button>
@@ -126,7 +116,6 @@
         });
         
         // 全局变量
-        let currentLayer = 'Default Layer';
         let shapeCount = 0;
         
         // 添加椭圆
@@ -227,42 +216,6 @@
             updateStatus();
         }
         
-        // 创建图层
-        window.createLayer = function() {
-            const layerName = document.getElementById('layerName').value;
-            graph.createLayer(layerName);
-            currentLayer = layerName;
-            graph.setActiveLayer(currentLayer);
-            alert(`创建并切换到图层: ${layerName}`);
-            updateStatus();
-        }
-        
-        // 切换图层
-        window.switchLayer = function() {
-            const layerName = document.getElementById('layerName').value;
-            const layer = graph.getLayer(layerName);
-            if(layer) {
-                graph.setActiveLayer(layer);
-                currentLayer = layerName;
-                alert(`切换到图层: ${layerName}`);
-                updateStatus();
-            } else {
-                alert(`图层 ${layerName} 不存在`);
-            }
-        }
-        
-        // 删除图层
-        window.removeLayer = function() {
-            const layerName = document.getElementById('layerName').value;
-            const success = graph.removeLayer(layerName);
-            if(success) {
-                alert(`删除图层: ${layerName}`);
-                updateStatus();
-            } else {
-                alert(`无法删除图层: ${layerName}`);
-            }
-        }
-        
         // 导出 PNG
         window.exportPNG = function() {
             graph.exportToPNG('jmgraph-example');
@@ -283,17 +236,6 @@
             }
         }
         
-        // 列出所有图层
-        window.listLayers = function() {
-            const layers = graph.getLayers();
-            let message = '图层列表：\n';
-            layers.each(function(i, layer) {
-                const info = layer.getInfo();
-                message += `${i+1}. ${info.name} (${info.shapeCount}个图形, ${info.visible ? '可见' : '隐藏'}, ${info.locked ? '锁定' : '未锁定'})\n`;
-            });
-            alert(message);
-        }
-        
         // 更新状态显示
         function updateStatus() {
             // 更新缩放级别
@@ -302,17 +244,11 @@
             // 更新图形数量
             let count = 0;
             graph.children.each(function(i, child) {
-                if(child.type !== 'jmLayer') {
+                if(child && child.type && child.type !== 'jmGraph') {
                     count++;
                 }
             });
             document.getElementById('shapeCount').textContent = `图形数量: ${count}`;
-            
-            // 更新当前图层
-            const activeLayer = graph.getActiveLayer();
-            if(activeLayer) {
-                document.getElementById('layerInfo').textContent = `当前图层: ${activeLayer.name}`;
-            }
         }
         
         // 初始化

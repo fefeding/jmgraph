@@ -22,7 +22,7 @@ export default class jmLabel extends jmControl {
 		this.style.textAlign = this.style.textAlign || 'left';
 		//文字垂直对齐
 		this.style.textBaseline = this.style.textBaseline || 'middle';
-		this.text = params.text || '';
+		this.text = params.text || params.value || '';
 
 		this.center = params.center || null;
 	}

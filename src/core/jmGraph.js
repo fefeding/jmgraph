@@ -8,7 +8,6 @@ import {jmBorder} from "./jmBorder.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
-import {jmLayer} from "./jmLayer.js";
 
 /**
  * jmGraph画图类库
@@ -612,232 +611,6 @@ export default class jmGraph extends jmControl {
 	}
 
 	/**
-	 * 初始化图层系统
-	 * 创建图层管理的基础结构，包括默认图层
-	 * 
-	 * @method initLayers
-	 * @private
-	 */
-	initLayers() {
-		if(!this.layers) {
-			this.layers = new jmList();
-			// 创建默认图层
-			const defaultLayer = this.createLayer('Default Layer');
-			this.activeLayer = defaultLayer;
-		}
-	}
-
-	/**
-	 * 创建新图层
-	 * 图层用于组织和管理图形对象，支持可见性和锁定控制
-	 * 
-	 * @method createLayer
-	 * @param {string} name 图层名称（必须唯一）
-	 * @param {object} [options] 图层选项
-	 * @param {boolean} [options.visible=true] 图层是否可见
-	 * @param {boolean} [options.locked=false] 图层是否锁定（锁定后不可交互）
-	 * @return {jmLayer} 新创建的图层
-	 */
-	createLayer(name, options = {}) {
-		// 参数验证
-		if(!name || typeof name !== 'string') {
-			console.warn('jmGraph: createLayer - 图层名称必须是非空字符串');
-			name = `Layer_${Date.now()}`;
-		}
-		
-		this.initLayers();
-		
-		// 检查图层名称是否已存在
-		const existingLayer = this.getLayer(name);
-		if(existingLayer) {
-			console.warn(`jmGraph: 图层 "${name}" 已存在，将返回现有图层`);
-			return existingLayer;
-		}
-		
-		const layer = new jmLayer({
-			name: name,
-			graph: this,
-			...options
-		});
-		
-		this.layers.add(layer);
-		this.children.add(layer);
-		this.needUpdate = true;
-		return layer;
-	}
-
-	/**
-	 * 获取所有图层
-	 * 
-	 * @method getLayers
-	 * @return {jmList} 图层列表
-	 */
-	getLayers() {
-		this.initLayers();
-		return this.layers;
-	}
-
-	/**
-	 * 根据名称获取图层
-	 * 
-	 * @method getLayer
-	 * @param {string} name 图层名称
-	 * @return {jmLayer|null} 图层对象，如果不存在则返回null
-	 */
-	getLayer(name) {
-		this.initLayers();
-		
-		if(!name) return null;
-		
-		let result = null;
-		this.layers.each((i, layer) => {
-			if(layer.name === name) {
-				result = layer;
-				return false; // 找到后停止遍历
-			}
-		});
-		return result;
-	}
-
-	/**
-	 * 设置活动图层
-	 * 新创建的图形将自动添加到活动图层
-	 * 
-	 * @method setActiveLayer
-	 * @param {string|jmLayer} layer 图层名称或图层对象
-	 * @return {jmGraph} 返回当前实例，支持链式调用
-	 */
-	setActiveLayer(layer) {
-		this.initLayers();
-		
-		// 支持传入图层名称或图层对象
-		if(typeof layer === 'string') {
-			layer = this.getLayer(layer);
-		}
-		
-		if(!layer || !(layer instanceof jmLayer)) {
-			console.warn('jmGraph: setActiveLayer - 无效的图层');
-			return this;
-		}
-		
-		this.activeLayer = layer;
-		return this;
-	}
-
-	/**
-	 * 获取当前活动图层
-	 * 活动图层是新创建图形的默认容器
-	 * 
-	 * @method getActiveLayer
-	 * @return {jmLayer} 当前活动图层
-	 */
-	getActiveLayer() {
-		this.initLayers();
-		return this.activeLayer;
-	}
-
-	/**
-	 * 移除图层
-	 * 删除指定图层及其包含的所有图形
-	 * 注意：默认图层不可删除
-	 * 
-	 * @method removeLayer
-	 * @param {string|jmLayer} layer 图层名称或图层对象
-	 * @return {boolean} 是否成功删除
-	 */
-	removeLayer(layer) {
-		this.initLayers();
-		
-		// 支持传入图层名称或图层对象
-		if(typeof layer === 'string') {
-			layer = this.getLayer(layer);
-		}
-		
-		if(!layer) {
-			console.warn('jmGraph: removeLayer - 图层不存在');
-			return false;
-		}
-		
-		// 禁止删除默认图层
-		if(layer.name === 'Default Layer') {
-			console.warn('jmGraph: 不能删除默认图层');
-			return false;
-		}
-		
-		// 如果删除的是当前活动图层，切换到默认图层
-		if(this.activeLayer === layer) {
-			this.activeLayer = this.getLayer('Default Layer');
-		}
-		
-		this.layers.remove(layer);
-		this.children.remove(layer);
-		this.needUpdate = true;
-		return true;
-	}
-
-	/**
-	 * 将形状添加到指定图层
-	 * 如果未指定图层，则添加到当前活动图层
-	 * 
-	 * @method addShapeToLayer
-	 * @param {jmControl} shape 要添加的形状对象
-	 * @param {string|jmLayer} [layer] 图层名称或图层对象，默认为当前活动图层
-	 * @return {jmGraph} 返回当前实例，支持链式调用
-	 */
-	addShapeToLayer(shape, layer) {
-		this.initLayers();
-		
-		// 参数验证
-		if(!shape) {
-			console.warn('jmGraph: addShapeToLayer - 无效的形状对象');
-			return this;
-		}
-		
-		// 确定目标图层
-		if(!layer) {
-			layer = this.activeLayer;
-		} else if(typeof layer === 'string') {
-			layer = this.getLayer(layer);
-		}
-		
-		if(!layer) {
-			console.warn('jmGraph: addShapeToLayer - 图层不存在');
-			return this;
-		}
-		
-		layer.children.add(shape);
-		this.needUpdate = true;
-		return this;
-	}
-
-	/**
-	 * 从图层中移除形状
-	 * 
-	 * @method removeShapeFromLayer
-	 * @param {jmControl} shape 要移除的形状对象
-	 * @return {jmGraph} 返回当前实例，支持链式调用
-	 */
-	removeShapeFromLayer(shape) {
-		if(!shape) {
-			console.warn('jmGraph: removeShapeFromLayer - 无效的形状对象');
-			return this;
-		}
-		
-		// 从所有图层中查找并移除
-		if(this.layers) {
-			this.layers.each((i, layer) => {
-				if(layer.children.contains(shape)) {
-					layer.children.remove(shape);
-					this.needUpdate = true;
-					return false; // 找到后停止遍历
-				}
-			});
-		}
-		
-		return this;
-	}
-
-	/**
 	 * 保存为base64图形数据
 	 * 
 	 * @method toDataURL
@@ -903,48 +676,27 @@ export default class jmGraph extends jmControl {
 	}
 
 	/**
-	 * 转换为SVG字符串
-	 * 遍历所有图层和形状，生成SVG标记
-	 * 
+	 * 遍历所有形状，生成SVG标记
+	 *
 	 * @method toSVG
 	 * @return {string} SVG字符串
 	 */
 	toSVG() {
 		// SVG头部，包含命名空间和画布尺寸
 		let svg = `<svg width="${this.width}" height="${this.height}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.width} ${this.height}">`;
-		
+
 		// 添加背景色（如果有）
 		if(this.style && this.style.fill) {
 			svg += `<rect width="100%" height="100%" fill="${this.style.fill}"/>`;
 		}
-		
-		// 遍历所有图层
-		if(this.layers) {
-			this.layers.each((i, layer) => {
-				if(layer.visible) {
-					// 添加图层组，方便管理
-					svg += `<g id="${layer.name}" opacity="${layer.opacity || 1}">`;
-					
-					// 遍历图层中的所有形状
-					layer.children.each((j, shape) => {
-						if(shape.toSVG) {
-							svg += shape.toSVG();
-						}
-					});
-					
-					svg += '</g>';
-				}
-			});
-		}
-		else {
-			// 遍历直接添加的形状（兼容没有图层系统的情况）
-			this.children.each((i, shape) => {
-				if(shape.toSVG) {
-					svg += shape.toSVG();
-				}
-			});
-		}
-		
+
+		// 遍历所有直接添加的形状
+		this.children.each((i, shape) => {
+			if(shape.toSVG) {
+				svg += shape.toSVG();
+			}
+		});
+
 		svg += '</svg>';
 		return svg;
 	}
@@ -1010,8 +762,8 @@ export default class jmGraph extends jmControl {
 	}
 }
 
-export { 
-	jmGraph, 
+export {
+	jmGraph,
 	jmUtils,
 	jmList,
 	jmProperty,
@@ -1022,5 +774,4 @@ export {
 	jmEvents,
 	jmControl,
 	jmPath,
-	jmLayer,
  };

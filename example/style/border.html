@@ -43,106 +43,113 @@ style: { border: b }
 </pre>
 
     <script type="module">
-        import jmGraph from '../../index.js';
-        const g = jmGraph('canvas');
+        import { create } from '../../index.js';
+        const g = create('canvas');
+
+        function addShape(shape) {
+            g.children.add(shape);
+            return shape;
+        }
 
         // 第一行
         // solid 边框（对象）
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 20}, width: 260, height: 80, radius: 8,
             style: {
                 fill: 'rgba(0,212,255,0.1)',
                 border: { width: 3, style: 'solid', color: '#00d4ff' }
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 105}, width: 260,
             value: '{ width: 3, style: "solid", color: "#00d4ff" }',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // dashed 边框（字符串）
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 320, y: 20}, width: 260, height: 80, radius: 8,
             style: {
                 fill: 'rgba(233,69,96,0.1)',
                 border: '3px dashed #e94560'
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 320, y: 105}, width: 260,
             value: '"3px dashed #e94560"',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // 第二行
         // dotted 边框
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 135}, width: 260, height: 80, radius: 8,
             style: {
                 fill: 'rgba(0,255,136,0.1)',
                 border: { width: 3, style: 'dotted', color: '#00ff88' }
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 220}, width: 260,
             value: '{ width: 3, style: "dotted", color: "#00ff88" }',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // double 边框
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 320, y: 135}, width: 260, height: 80, radius: 8,
             style: {
                 fill: 'rgba(192,132,252,0.1)',
                 border: { width: 3, style: 'double', color: '#c084fc' }
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 320, y: 220}, width: 260,
             value: '{ width: 3, style: "double", color: "#c084fc" }',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
         // 第三行：粗边框
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 20, y: 250}, width: 170, height: 80, radius: 10,
             style: {
                 fill: 'rgba(255,217,61,0.1)',
                 border: { width: 5, style: 'solid', color: '#ffd93d' }
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 20, y: 335}, width: 170,
             value: 'width: 5 solid',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 215, y: 250}, width: 170, height: 80, radius: 10,
             style: {
                 fill: 'rgba(251,146,60,0.1)',
                 border: '4px dotted #fb923c'
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 215, y: 335}, width: 170,
             value: '4px dotted',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
 
-        g.createShape('rect', {
+        addShape(g.createShape('rect', {
             position: {x: 410, y: 250}, width: 170, height: 80, radius: 10,
             style: {
                 fill: 'rgba(56,189,248,0.1)',
                 border: '6px dashed #38bdf8'
             }
-        });
-        g.createShape('label', {
+        }));
+        addShape(g.createShape('label', {
             position: {x: 410, y: 335}, width: 170,
             value: '6px dashed',
             style: { fill: '#8899aa', fontSize: 10, textAlign: 'center' }
-        });
+        }));
+
+        g.refresh();
     </script>
 </body>
 </html>

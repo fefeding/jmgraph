@@ -4,7 +4,6 @@ import {jmList} from "./jmList.js";
 import {jmGradient} from "./jmGradient.js";
 import {jmShadow} from "./jmShadow.js";
 import {jmFilter} from "./jmFilter.js";
-import {jmBorder} from "./jmBorder.js";
 import {jmProperty} from "./jmProperty.js";
 import WebglPath from "../lib/webgl/path.js";
 
@@ -31,9 +30,7 @@ const jmStyleMap = {
 	'lineJoin': 'lineJoin',
 	'lineCap':'lineCap',
 	'lineDashOffset': 'lineDashOffset',
-	'globalCompositeOperation': 'globalCompositeOperation',
-	'border.width': 'lineWidth',
-	'border.color': 'strokeStyle'
+	'globalCompositeOperation': 'globalCompositeOperation'
 };
 
 export default class jmControl extends jmProperty {
@@ -374,48 +371,6 @@ export default class jmControl extends jmProperty {
 							this.context.globalCompositeOperation = styleValue;
 							break;
 						}
-						// 边框系统：支持字符串格式 "2px solid #ff0000" 或对象格式
-						case 'border' : {
-							let border = styleValue;
-							if(t === 'string') {
-								border = new jmBorder(styleValue);
-							}
-							else if(!(styleValue instanceof jmBorder)) {
-								border = new jmBorder(styleValue);
-							}
-							if(border instanceof jmBorder && border.isVisible()) {
-								// 应用边框宽度
-								if(border.width) {
-									if(this.webglControl) {
-										this.webglControl.setStyle('lineWidth', border.width);
-									}
-									else {
-										this.context.lineWidth = border.width;
-									}
-								}
-								// 应用边框颜色
-								if(border.color) {
-									if(this.webglControl) {
-										this.webglControl.setStyle('strokeStyle', border.color);
-									}
-									else {
-										this.context.strokeStyle = jmUtils.toColor(border.color);
-									}
-								}
-								// 应用边框线型对应的lineDash
-								const dash = border.toLineDash();
-								if(dash && this.context.setLineDash) {
-									this.context.setLineDash(dash);
-								}
-								// 应用边框圆角（如果控件支持）
-								if(border.radius && typeof this.radius !== 'undefined') {
-									if(typeof border.radius === 'number') {
-										this.radius = border.radius;
-									}
-								}
-							}
-							break;
-						}
 						// 裁剪路径：通过canvas clip实现
 						case 'clipPath' : {
 							if(!this.context.clip) break;
@@ -506,9 +461,6 @@ export default class jmControl extends jmProperty {
 			}
 			else if(t == 'string' && k == 'filter') {
 				style[k] = new jmFilter(style[k]);
-			}
-			else if(t == 'string' && k == 'border') {
-				style[k] = new jmBorder(style[k]);
 			}
 			__setStyle(style[k], k);
 		}

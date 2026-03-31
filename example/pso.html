@@ -31,7 +31,7 @@
         width: window.innerWidth,
         height: window.innerHeight,
         autoRefresh: true,
-        mode: 'webgl'
+        mode: '2d'
     });    
 
     function createItems(count) {
@@ -139,10 +139,10 @@
         curPos.y = e.position.y;
     });
 
-    setInterval(()=>{
-        curPos.x = Math.random() * graph.width;
-        curPos.y = Math.random() * graph.height;
-    }, 1000);
+    // setInterval(()=>{
+    //     curPos.x = Math.random() * graph.width;
+    //     curPos.y = Math.random() * graph.height;
+    // }, 1000);
 </script>
 </body>
 </html>

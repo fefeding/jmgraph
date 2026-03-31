@@ -39,21 +39,15 @@
             <a href="style/blendMode.html" target="_blank">查看完整示例 →</a>
         </div>
         <div class="card">
-            <h2>border - 边框系统</h2>
-            <p>完整的 border 属性：宽度、样式(solid/dashed/dotted/double)、颜色。</p>
-            <canvas id="c4" width="320" height="200"></canvas>
-            <a href="style/border.html" target="_blank">查看完整示例 →</a>
-        </div>
-        <div class="card">
             <h2>borderRadius - 四角独立圆角</h2>
             <p>radius 支持对象格式 { topLeft, topRight, bottomRight, bottomLeft }。</p>
-            <canvas id="c5" width="320" height="200"></canvas>
+            <canvas id="c4" width="320" height="200"></canvas>
             <a href="style/borderRadius.html" target="_blank">查看完整示例 →</a>
         </div>
         <div class="card">
             <h2>clipPath - 裁剪路径</h2>
             <p>传入图形控件实例作为裁剪区域，限制可见范围。</p>
-            <canvas id="c6" width="320" height="200"></canvas>
+            <canvas id="c5" width="320" height="200"></canvas>
             <a href="style/clipPath.html" target="_blank">查看完整示例 →</a>
         </div>
     </div>
@@ -97,19 +91,9 @@
             g.refresh();
         })();
 
-        // 4. border
+        // 4. borderRadius
         ;(function() {
             const g = create('c4');
-            addShape(g, g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } } }));
-            addShape(g, g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' } }));
-            addShape(g, g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } } }));
-            addShape(g, g.createShape('rect', { position: {x: 170, y: 105}, width: 140, height: 70, radius: 8, style: { fill: 'rgba(192,132,252,0.1)', border: { width: 3, style: 'double', color: '#c084fc' } } }));
-            g.refresh();
-        })();
-
-        // 5. borderRadius
-        ;(function() {
-            const g = create('c5');
             addShape(g, g.createShape('rect', { position: {x: 15, y: 15}, width: 140, height: 70, radius: 20, style: { fill: '#e94560' } }));
             addShape(g, g.createShape('rect', { position: {x: 170, y: 15}, width: 140, height: 70, radius: { topLeft: 30, topRight: 5, bottomRight: 30, bottomLeft: 5 }, style: { fill: '#00d4ff' } }));
             addShape(g, g.createShape('rect', { position: {x: 15, y: 105}, width: 140, height: 50, radius: 25, style: { fill: '#00ff88' } }));
@@ -117,9 +101,9 @@
             g.refresh();
         })();
 
-        // 6. clipPath
+        // 5. clipPath
         ;(function() {
-            const g = create('c6');
+            const g = create('c5');
             const clip = g.createShape('circle', { center: {x: 160, y: 100}, radius: 65, style: { close: true, visible: false } });
             clip.initPoints();
             addShape(g, clip);

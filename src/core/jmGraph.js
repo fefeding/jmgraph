@@ -4,7 +4,6 @@ import {jmProperty} from './jmProperty.js';
 import {jmShadow} from "./jmShadow.js";
 import {jmGradient} from "./jmGradient.js";
 import {jmFilter} from "./jmFilter.js";
-import {jmBorder} from "./jmBorder.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
@@ -770,7 +769,6 @@ export {
 	jmShadow,
 	jmGradient,
 	jmFilter,
-	jmBorder,
 	jmEvents,
 	jmControl,
 	jmPath,

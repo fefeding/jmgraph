@@ -1,7 +1,6 @@
 import {jmPath} from "../core/jmPath.js";
 import {jmArc} from './jmArc.js';
 import {jmLine} from './jmLine.js';
-import {jmBorder} from "../core/jmBorder.js";
 
 /**
  * 画矩形
@@ -31,20 +30,6 @@ export default class jmRect extends jmPath {
 		}
 		else {
 			this.radius = r;
-		}
-
-		// 解析border样式中的圆角
-		if(this.style.border) {
-			let border = this.style.border;
-			if(typeof border === 'string') border = new jmBorder(border);
-			if(border instanceof jmBorder && border.radius) {
-				if(typeof border.radius === 'object') {
-					this.radius = border.radius;
-				}
-				else if(border.radius > 0) {
-					this.radius = border.radius;
-				}
-			}
 		}
 	}
 	/**

@@ -311,67 +311,6 @@ export default class jmLabel extends jmControl {
 				}
 			}
 		}
-		//如果有指定边框，则画出边框
-		if(this.style.border) {
-			//如果指定了边框样式
-			if(this.style.border.style) {
-				this.context.save && this.context.save();
-				this.setStyle(this.style.border.style);
-			}
-			if(this.mode === '2d') {
-				this.context.moveTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-				if(this.style.border.top) {
-					this.context.lineTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
-				}
-				
-				if(this.style.border.right) {
-					this.context.moveTo(this.points[1].x + bounds.left,this.points[1].y + bounds.top);
-					this.context.lineTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
-				}
-				
-				if(this.style.border.bottom) {
-					this.context.moveTo(this.points[2].x + bounds.left,this.points[2].y + bounds.top);
-					this.context.lineTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
-				}
-				
-				if(this.style.border.left) {
-					this.context.moveTo(this.points[3].x + bounds.left,this.points[3].y + bounds.top);
-					this.context.lineTo(this.points[0].x + bounds.left,this.points[0].y + bounds.top);
-				}
-			}
-			else {
-				const points = [];
-				if(this.style.border.top) {
-					points.push(this.points[0]);
-					points.push(this.points[1]);
-				}
-				
-				if(this.style.border.right) {
-					points.push({
-						...this.points[1],
-						m: true
-					});
-					points.push(this.points[2]);
-				}
-				
-				if(this.style.border.bottom) {
-					points.push({
-						...this.points[2],
-						m: true
-					});
-					points.push(this.points[3]);
-				}
-				
-				if(this.style.border.left) {
-					points.push({
-						...this.points[3],
-						m: true
-					});
-					points.push(this.points[0]);
-				}
-				points.length && this.webglControl && this.webglControl.stroke(points);
-			}
-		}
 	}
 
 	endDraw() {

@@ -186,25 +186,6 @@ style: { stroke: '#ff6b6b', lineWidth: 2, lineDash: '10, 5, 2, 5' }
 style: { stroke: '#ffd93d', lineWidth: 2, lineDash: [10, 10], lineDashOffset: 5 }
 ```
 
-### border 边框系统
-
-支持完整的边框属性，内部自动映射为 `lineWidth`、`strokeStyle` 和 `lineDash`：
-
-```javascript
-// 对象格式
-style: { fill: 'rgba(0,212,255,0.1)', border: { width: 3, style: 'solid', color: '#00d4ff' } }
-
-// CSS 字符串格式
-style: { fill: 'rgba(233,69,96,0.1)', border: '3px dashed #e94560' }
-
-// 可用样式: solid, dashed, dotted, double
-style: { fill: 'rgba(0,255,136,0.1)', border: { width: 3, style: 'dotted', color: '#00ff88' } }
-
-// 使用 jmBorder 类
-import { jmBorder } from 'jmgraph';
-const b = new jmBorder({ width: 4, style: 'dashed', color: '#ffd93d', radius: 8 });
-style: { border: b }
-```
 
 ### borderRadius 四角独立圆角
 

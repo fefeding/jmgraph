@@ -123,7 +123,6 @@ export default class jmArc extends jmPath {
 		if((mw == 0 && mh == 0) || start == end) return;
 
 		let anticlockwise = this.anticlockwise;
-		this.points = [];
 		let step = 1 / Math.max(mw, mh);
 
 		//如果是逆时针绘制，则角度为负数，并且结束角为2Math.PI-end
@@ -134,18 +133,33 @@ export default class jmArc extends jmPath {
 		}
 		if(start > end) step = -step;
 
-		if(this.isFan) this.points.push(location.center);// 如果是扇形，则从中心开始画
+		// 预计算需要的点数量
+		let pointCount = Math.ceil(Math.abs(end - start) / Math.abs(step)) + 1;
+		if(this.isFan) pointCount++;
+
+		// 复用已有数组，避免每帧分配；大小变化时才重建
+		if(!this.points || this.points.length !== pointCount) {
+			this.points = new Array(pointCount);
+			for(let i = 0; i < pointCount; i++) {
+				this.points[i] = { x: 0, y: 0 };
+			}
+		}
+
+		let idx = 0;
+		if(this.isFan) {
+			this.points[idx].x = location.center.x;
+			this.points[idx].y = location.center.y;
+			idx++;
+		}
 		
 		//椭圆方程x=a*cos(r) ,y=b*sin(r)	
 		for(let r=start;;r += step) {	
 			if(step > 0 && r > end) r = end;
 			else if(step < 0 && r < end) r = end;
 
-			const p = {
-				x : Math.cos(r) * mw + cx,
-				y : Math.sin(r) * mh + cy
-			};
-			this.points.push(p);
+			this.points[idx].x = Math.cos(r) * mw + cx;
+			this.points[idx].y = Math.sin(r) * mh + cy;
+			idx++;
 
 			if(r == end) break;
 		}

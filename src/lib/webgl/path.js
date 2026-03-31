@@ -55,8 +55,14 @@ class WebglPath extends WebglBase {
         //this.useProgram();
 
         if(parentBounds) this.parentAbsoluteBounds = parentBounds;
-        // 写入当前canvas大小
-        this.context.uniform2f(this.program.uniforms.a_center_point.location, this.graph.width / 2, this.graph.height / 2);
+        // 缓存中心点值，只在变化时才更新 uniform
+        const cx = this.graph.width / 2;
+        const cy = this.graph.height / 2;
+        if(this.__lastCenterX !== cx || this.__lastCenterY !== cy) {
+            this.context.uniform2f(this.program.uniforms.a_center_point.location, cx, cy);
+            this.__lastCenterX = cx;
+            this.__lastCenterY = cy;
+        }
     }
 
     setFragColor(color) {

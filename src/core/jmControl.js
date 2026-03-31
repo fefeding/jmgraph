@@ -1114,7 +1114,15 @@ export default class jmControl extends jmProperty {
 	 * @param {array} args 事件参数数组
 	 */
 	emit(...args) {			
-		this.runEventHandle(args[0], args.slice(1));
+		// 避免每帧 args.slice(1) 分配临时数组
+		// runEventHandle 内部会把非数组参数包装成数组
+		if(args.length > 2) {
+			this.runEventHandle(args[0], args.slice(1));
+		} else if(args.length === 2) {
+			this.runEventHandle(args[0], [args[1]]);
+		} else {
+			this.runEventHandle(args[0], []);
+		}
 		return this;
 	}
 

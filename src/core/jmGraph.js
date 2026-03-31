@@ -412,13 +412,19 @@ export default class jmGraph extends jmControl {
 			this.context.clearRect(0, 0, w, h);
 		}
 		else if(this.mode === 'webgl' && this.context.clear) {
-			const color = this.style && this.style.fill? this.utils.hexToRGBA(this.style.fill): {
-				r: 0,
-				g: 0,
-				b: 0,
-				a: 0
-			};
-			this.context.clearColor(color.r, color.g, color.b, color.a); // 设置清空颜色缓冲时的颜色值
+			// 缓存 clearColor 对象，避免每帧创建
+			if(this.style && this.style.fill) {
+				const color = this.utils.hexToRGBA(this.style.fill);
+				this.__lastClearColor = color;
+				this.context.clearColor(color.r, color.g, color.b, color.a);
+			}
+			else if(!this.__lastClearColor) {
+				this.__lastClearColor = { r: 0, g: 0, b: 0, a: 0 };
+				this.context.clearColor(0, 0, 0, 0);
+			}
+			else {
+				this.context.clearColor(this.__lastClearColor.r, this.__lastClearColor.g, this.__lastClearColor.b, this.__lastClearColor.a);
+			}
         	this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
 		}
 	}
@@ -745,7 +751,7 @@ export default class jmGraph extends jmControl {
 			// 触发刷新事件
 			self.emit('update', time);
 
-			self.__requestAnimationFrameFunHandler && self.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+			// 直接 requestAnimationFrame，无需先 cancel
 			self.__requestAnimationFrameFunHandler = self.requestAnimationFrame(update);
 			if(callback) callback();
 		}

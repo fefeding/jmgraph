@@ -241,7 +241,9 @@ export default class jmControl extends jmProperty {
 	} 
 
 	setStyle(style) {
-		style = style || jmUtils.clone(this.style, true);
+		if(!style) {
+			style = this.style;
+		}
 		if(!style) return;
 
 		const __setStyle = (style, name, mpkey) => {
@@ -606,25 +608,30 @@ export default class jmControl extends jmProperty {
 	 * @method getLocation
 	 * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
 	 */
-	getLocation(clone=true) {
+	getLocation() {
 		//如果已经计算过则直接返回
 		//在开画之前会清空此对象
 		//if(reset !== true && this.location) return this.location;
 
 		let local = this.location = {left: 0,top: 0,width: 0,height: 0};
-		local.position = typeof this.position == 'function'? this.position(): jmUtils.clone(this.position);	
-		local.center = this.center && typeof this.center === 'function'?this.center(): jmUtils.clone(this.center);//中心
-		local.start = this.start && typeof this.start === 'function'?this.start(): jmUtils.clone(this.start);//起点
-		local.end = this.end && typeof this.end === 'function'?this.end(): jmUtils.clone(this.end);//起点
+
+		// 检查是否有百分比参数需要解析，没有则直接引用避免克隆开销
+		const needResolve = this.parent && (jmUtils.checkPercent(this.width) || jmUtils.checkPercent(this.height) ||
+			(this.position && jmUtils.checkPercent(this.position.x)) || (this.position && jmUtils.checkPercent(this.position.y)));
+		local.position = typeof this.position == 'function'? this.position(): (needResolve? jmUtils.clone(this.position) : this.position);	
+		local.center = this.center && typeof this.center === 'function'?this.center(): (needResolve? jmUtils.clone(this.center) : this.center);//中心
+		local.start = this.start && typeof this.start === 'function'?this.start(): (needResolve? jmUtils.clone(this.start) : this.start);//起点
+		local.end = this.end && typeof this.end === 'function'?this.end(): (needResolve? jmUtils.clone(this.end) : this.end);//起点
 		local.radius = this.radius;//半径
 		local.width = this.width;
 		local.height = this.height;
 
-		const margin = jmUtils.clone(this.style.margin, {});
-		margin.left = (margin.left || 0);
-		margin.top = (margin.top || 0);
-		margin.right = (margin.right || 0);
-		margin.bottom = (margin.bottom || 0);
+		const margin = this.style.margin;
+		const marginObj = needResolve && margin ? jmUtils.clone(margin, {}) : (margin || {});
+		marginObj.left = (marginObj.left || 0);
+		marginObj.top = (marginObj.top || 0);
+		marginObj.right = (marginObj.right || 0);
+		marginObj.bottom = (marginObj.bottom || 0);
 		
 		//如果没有指定位置，但指定了margin。则位置取margin偏移量
 		if(local.position) {
@@ -632,8 +639,8 @@ export default class jmControl extends jmProperty {
 			local.top = local.position.y;
 		}
 		else {
-			local.left = margin.left;
-			local.top = margin.top;
+			local.left = marginObj.left;
+			local.top = marginObj.top;
 		}
 
 		if(this.parent) {

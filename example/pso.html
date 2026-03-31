@@ -31,37 +31,31 @@
         width: window.innerWidth,
         height: window.innerHeight,
         autoRefresh: true,
-        mode: '2d'
+        mode: 'webgl'
     });    
 
     function createItems(count) {
-        var style = {				
-            lineWidth:1,
-            close:true,
-            //stroke:'#fff',
-            fill:'#05a2e2'
-        };		
         let radius = 2;
                 
         let items = [];
         for(let i=0; i<count; i++) {
-
-            var styletmp = graph.util.clone(style);
-            styletmp.fill = graph.createRadialGradient(radius, radius, 0, radius, radius, radius);
             var rr1 = Math.floor(Math.random() * 255);
             var gg1 = Math.floor(Math.random() * 255);
             var bb1 = Math.floor(Math.random() * 255);
-            var rr2 = Math.floor(Math.random() * 255);
-            var gg2 = Math.floor(Math.random() * 255);
-            var bb2 = Math.floor(Math.random() * 255);
-            styletmp.fill.addStop(0, graph.util.toColor(rr1,gg1,bb1));
-            styletmp.fill.addStop(1, graph.util.toColor(rr2,gg2,bb2));
-
             let pos = {
                     x: Math.random() * graph.width,
                     y: Math.random() * graph.height
                 };
-            let shape = graph.createShape('circle',{style: styletmp, center: pos, radius: radius, anticlockwise:true});
+            let shape = graph.createShape('circle',{
+                style: {
+                    lineWidth:1,
+                    close:true,
+                    fill:'rgb(' + rr1 + ',' + gg1 + ',' + bb1 + ')'
+                },
+                center: pos,
+                radius: radius,
+                anticlockwise:true
+            });
             graph.children.add(shape);
             items.push({
                 velocity:{
@@ -119,7 +113,7 @@
         graph.needUpdate = true;
     }
     
-    const items = createItems(1000); 
+    const items = createItems(2000); 
 
     //实时更新画布
     function update() {

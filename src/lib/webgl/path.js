@@ -1,4 +1,4 @@
-import WebglBase from './base.js';
+import WebglBase, { MAX_STOPS } from './base.js';
 
 // path 绘制类
 class WebglPath extends WebglBase {
@@ -500,10 +500,9 @@ class WebglPath extends WebglBase {
 
     fillColor(color, points, bounds, type=1) {
         
-        // 如果是渐变色，则需要计算偏移量的颜色
+        // 如果是渐变色，使用 GLSL 着色器直接计算
         if(this.isGradient(color)) {
-            const imgData = color.toImageData(this, bounds, points);
-            return this.fillImage(imgData.data, imgData.points, bounds);
+            return this.fillGradient(color, points, bounds);
         }
         
         // 标注为fill
@@ -514,6 +513,83 @@ class WebglPath extends WebglBase {
 
         colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
 
+    }
+
+    /**
+     * 使用 GLSL 着色器渲染渐变填充
+     * 无需 textureCanvas，直接通过 uniform 传递渐变参数给 GPU
+     */
+    fillGradient(gradient, points, bounds) {
+        const params = gradient.toUniformParams();
+        if(!params) return;
+
+        // 标注为 GLSL 渐变 (type=5)
+        this.context.uniform1i(this.program.uniforms.a_type.location, 5);
+
+        // 设置 globalAlpha（通过 v_single_color.a 传递给着色器）
+        this.context.uniform4f(this.program.uniforms.v_single_color.location, 1.0, 1.0, 1.0, this.style.globalAlpha);
+
+        // 设置渐变类型
+        if(this.program.uniforms.u_gradient_type) {
+            this.context.uniform1i(this.program.uniforms.u_gradient_type.location, params.gradientType);
+        }
+
+        // 设置渐变起点/终点
+        if(this.program.uniforms.u_gradient_start) {
+            this.context.uniform4fv(this.program.uniforms.u_gradient_start.location, params.gradientStart);
+        }
+        if(this.program.uniforms.u_gradient_end) {
+            this.context.uniform4fv(this.program.uniforms.u_gradient_end.location, params.gradientEnd);
+        }
+
+        // 设置颜色断点数量
+        if(this.program.uniforms.u_gradient_stop_count) {
+            this.context.uniform1i(this.program.uniforms.u_gradient_stop_count.location, params.stopCount);
+        }
+
+        // 设置每个 stop 的 offset
+        // 关键：必须填充完整的 MAX_STOPS 长度数组，否则未初始化元素默认为 0
+        // 会导致着色器循环中 t >= 0 始终为 true，返回黑色
+        if(this.program.uniforms.u_gradient_offsets) {
+            const offsets = new Float32Array(MAX_STOPS);
+            for(let i = 0; i < params.stopCount; i++) {
+                offsets[i] = params.stops[i * 5];
+            }
+            // 用 2.0 填充剩余项，使 t(0~1) >= 2.0 为 false，不会被匹配
+            for(let i = params.stopCount; i < MAX_STOPS; i++) {
+                offsets[i] = 2.0;
+            }
+            this.context.uniform1fv(this.program.uniforms.u_gradient_offsets.location, offsets);
+        }
+
+        // 设置每个 stop 的颜色 (rgba)
+        if(this.program.uniforms.u_gradient_colors) {
+            const colors = new Float32Array(MAX_STOPS * 4);
+            for(let i = 0; i < params.stopCount; i++) {
+                colors[i * 4 + 0] = params.stops[i * 5 + 1]; // r
+                colors[i * 4 + 1] = params.stops[i * 5 + 2]; // g
+                colors[i * 4 + 2] = params.stops[i * 5 + 3]; // b
+                colors[i * 4 + 3] = params.stops[i * 5 + 4]; // a
+            }
+            // 用最后一个 stop 的颜色填充剩余项，确保不会返回黑色
+            if(params.stopCount > 0) {
+                const lastR = params.stops[(params.stopCount - 1) * 5 + 1];
+                const lastG = params.stops[(params.stopCount - 1) * 5 + 2];
+                const lastB = params.stops[(params.stopCount - 1) * 5 + 3];
+                const lastA = params.stops[(params.stopCount - 1) * 5 + 4];
+                for(let i = params.stopCount; i < MAX_STOPS; i++) {
+                    colors[i * 4 + 0] = lastR;
+                    colors[i * 4 + 1] = lastG;
+                    colors[i * 4 + 2] = lastB;
+                    colors[i * 4 + 3] = lastA;
+                }
+            }
+            this.context.uniform4fv(this.program.uniforms.u_gradient_colors.location, colors);
+        }
+
+        // 填充多边形（需要纹理坐标来计算渐变位置）
+        this.fillPolygons(points, true);
+        this.disableVertexAttribArray(this.program.attrs.a_text_coord);
     }
 
     // 区域填充图片
@@ -648,46 +724,73 @@ class WebglPath extends WebglBase {
     }
 
     drawText(text, x, y, bounds) {
-        let canvas = this.textureCanvas;
+        // 文本渲染仍需要 2D canvas 绘制字形，然后作为纹理上传
+        // 使用临时 canvas，不依赖共享的 textureCanvas
+        if(!bounds.width || !bounds.height) return null;
+        if(typeof document === 'undefined') return null;
+
+        let canvas = this.__textCanvas;
         if(!canvas) {
-            return null;
+            canvas = document.createElement('canvas');
+            this.__textCanvas = canvas;
         }
         canvas.width = bounds.width;
         canvas.height = bounds.height;
 
-        if(!canvas.width || !canvas.height) {
-            return null;
-        }
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        this.textureContext.clearRect(0, 0, canvas.width, canvas.height);
         // 修改字体
-		this.textureContext.font = this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily);
+        ctx.font = this.style.font || (this.style.fontSize + 'px ' + this.style.fontFamily);
 
         x -= bounds.left;
         y -= bounds.top;
 
-        this.setTextureStyle(this.style);
+        // 设置文本样式
+        if(this.style.fillStyle) {
+            ctx.fillStyle = this.graph.utils.toColor(this.style.fillStyle);
+        }
+        if(this.style.strokeStyle) {
+            ctx.strokeStyle = this.graph.utils.toColor(this.style.strokeStyle);
+        }
+        if(this.style.shadowColor) {
+            ctx.shadowColor = this.graph.utils.toColor(this.style.shadowColor);
+        }
+        if(this.style.shadowBlur) {
+            ctx.shadowBlur = this.style.shadowBlur;
+        }
+        if(this.style.shadowOffsetX !== undefined) {
+            ctx.shadowOffsetX = this.style.shadowOffsetX;
+        }
+        if(this.style.shadowOffsetY !== undefined) {
+            ctx.shadowOffsetY = this.style.shadowOffsetY;
+        }
+        if(this.style.textAlign) {
+            ctx.textAlign = this.style.textAlign;
+        }
+        if(this.style.textBaseline) {
+            ctx.textBaseline = this.style.textBaseline;
+        }
 
-        if(this.style.fillStyle && this.textureContext.fillText) {
-
+        if(this.style.fillStyle && ctx.fillText) {
             if(this.style.maxWidth) {
-                this.textureContext.fillText(text, x, y, this.style.maxWidth);
+                ctx.fillText(text, x, y, this.style.maxWidth);
             }
             else {
-                this.textureContext.fillText(text, x, y);
+                ctx.fillText(text, x, y);
             }
         }
-        if(this.textureContext.strokeText) {
-
+        if(this.style.strokeStyle && ctx.strokeText) {
             if(this.style.maxWidth) {
-                this.textureContext.strokeText(text, x, y, this.style.maxWidth);
+                ctx.strokeText(text, x, y, this.style.maxWidth);
             }
             else {
-                this.textureContext.strokeText(text, x, y);
+                ctx.strokeText(text, x, y);
             }
         }
+
         // 用纹理图片代替文字
-        const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
         this.fillImage(data, this.points, bounds);
     }
 }

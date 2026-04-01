@@ -105,23 +105,22 @@ class webgl {
         // 由具体的绘制方法处理
     }
 
-    // 测量文本宽度（复用纹理 canvas 的 context）
+    // 测量文本宽度
     measureText(text) {
-        const ctx = this.base.textureContext;
-        if(ctx && ctx.measureText) return ctx.measureText(text);
-        const canvas = document.createElement('canvas');
-        const ctx2 = canvas.getContext('2d');
-        return ctx2.measureText(text);
+        if(this.base && this.base._measureCtx) {
+            return this.base._measureCtx.measureText(text);
+        }
+        return { width: 15 };
     }
 
     // 创建线性渐变
-    createLinearGradient(x1, y1, x2, y2) {
-        return this.base.createLinearGradient(x1, y1, x2, y2);
+    createLinearGradient(x1, y1, x2, y2, bounds) {
+        return this.base.createLinearGradient(x1, y1, x2, y2, bounds);
     }
 
     // 创建径向渐变
-    createRadialGradient(x1, y1, r1, x2, y2, r2) {
-        return this.base.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    createRadialGradient(x1, y1, r1, x2, y2, r2, bounds) {
+        return this.base.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
     }
 
     // 绘制图像

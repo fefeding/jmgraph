@@ -55,9 +55,13 @@ class jmGraphImpl extends jmGraphCore {
         if(typeof option == 'function') {
 			callback = option;
 			option = {};
-        } 
+		} 
         
         super(canvas, option, callback);
+    }
+
+    static create(...args) {
+        return new jmGraphImpl(...args);
     }
 }
 

@@ -1,6 +1,6 @@
 
 import earcut from '../earcut.js';
-import webglGradient from './gradient.js';
+import webglGradient, { MAX_STOPS } from './gradient.js';
 import {
     createProgram,
     useProgram,
@@ -56,8 +56,8 @@ const pathVertexSource = `
         vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);
         gl_Position = pos;
         v_color = a_color;
-        if(a_type == 2) {
-            v_text_coord = a_text_coord;
+        if(a_type == 2 || a_type == 5) {
+            v_text_coord = a_position.xy;
         }
     }
 `;
@@ -67,20 +67,72 @@ const pathFragmentSource = `
     uniform sampler2D u_sample;
     uniform vec4 v_texture_bounds; // 纹理的左上坐标和大小 x,y,z,w
     uniform vec4 v_single_color;
+    // GLSL 渐变 uniforms
+    uniform int u_gradient_type;     // 0=无 1=线性 2=径向
+    uniform vec4 u_gradient_start;   // 线性:{x1,y1,0,0} 径向:{cx,cy,r1,0}
+    uniform vec4 u_gradient_end;     // 线性:{x2,y2,0,0} 径向:{cx,cy,r2,0}
+    uniform int u_gradient_stop_count;
+    uniform float u_gradient_offsets[${MAX_STOPS}];
+    uniform vec4 u_gradient_colors[${MAX_STOPS}]; // {r, g, b, a} 0~1 范围
     varying float v_type;
     varying vec4 v_color;
     varying vec2 v_text_coord;
 
     ${convertTexturePosition}
 
+    // 在 sorted stops 中按 t 值采样颜色
+    // 兼容 GLSL ES 1.0：循环仅与常量比较，无 break/continue
+    vec4 sampleGradient(float t) {
+        t = clamp(t, 0.0, 1.0);
+        // 正向扫描：始终遍历 MAX_STOPS-1 次，找到 t 所在段并覆盖结果
+        float localT = 0.0;
+        vec4 c0 = u_gradient_colors[0];
+        vec4 c1 = u_gradient_colors[0];
+        for(int i = 0; i < ${MAX_STOPS - 1}; i++) {
+            float s0 = u_gradient_offsets[i];
+            float s1 = u_gradient_offsets[i + 1];
+            if(t >= s0) {
+                float range = s1 - s0;
+                localT = range > 0.0001 ? clamp((t - s0) / range, 0.0, 1.0) : 0.0;
+                c0 = u_gradient_colors[i];
+                c1 = u_gradient_colors[i + 1];
+            }
+        }
+        return mix(c0, c1, localT);
+    }
+
     void main() {
         // 如果是fill，则直接填充颜色
         if(v_type == 1.0) {
             gl_FragColor = v_single_color;
         }
-        // 渐变色
+        // 渐变色 (旧方式，顶点颜色插值)
         else if(v_type == 3.0) {
             gl_FragColor = v_color;
+        }
+        // GLSL 渐变填充 (type=5)
+        else if(v_type == 5.0) {
+            float t;
+            if(u_gradient_type == 2) {
+                // 径向渐变
+                vec2 d = v_text_coord - u_gradient_start.xy;
+                float dist = length(d);
+                float r1 = u_gradient_start.z;
+                float r2 = u_gradient_end.z;
+                float range = r2 - r1;
+                t = range > 0.001 ? (dist - r1) / range : 0.0;
+            } else {
+                // 线性渐变
+                vec2 dir = u_gradient_end.xy - u_gradient_start.xy;
+                float lenSq = dot(dir, dir);
+                if(lenSq > 0.001) {
+                    vec2 pos = v_text_coord - u_gradient_start.xy;
+                    t = dot(pos, dir) / lenSq;
+                } else {
+                    t = 0.0;
+                }
+            }
+            gl_FragColor = sampleGradient(t) * v_single_color.a;
         }
         else if(v_type == 2.0) {
             vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);
@@ -183,21 +235,20 @@ class WeblBase {
         };
     }
 
-    // 纹理绘制canvas
-    get textureCanvas() {
-        let canvas = this.graph.textureCanvas;
-        if(!canvas) {
-            if(typeof document === 'undefined') return null;
-            canvas = this.graph.textureCanvas = document.createElement('canvas');
+    // 文本测量用的离屏 canvas context（1x1 单例缓存，不依赖 textureCanvas）
+    get _measureCtx() {
+        if(!this.__measureCtx) {
+            try {
+                if(typeof document !== 'undefined') {
+                    const c = document.createElement('canvas');
+                    c.width = c.height = 1;
+                    this.__measureCtx = c.getContext('2d');
+                }
+            } catch(e) {
+                this.__measureCtx = null;
+            }
         }
-        return canvas;
-    }
-    // 纹理绘制canvas ctx
-    get textureContext() {
-        const ctx = this.textureCanvas.ctx || (this.textureCanvas.ctx = this.textureCanvas.getContext('2d', {
-            willReadFrequently: true
-        }));
-        return ctx;
+        return this.__measureCtx;
     }
 
     // i当前程序
@@ -247,7 +298,7 @@ class WeblBase {
             // 先尝试 hexToRGBA 解析
             color = this.graph.utils.hexToRGBA(color);
             // hexToRGBA 对无法识别的格式（如 hsl）会原样返回字符串
-            // 利用浏览器 canvas 将任意 CSS 颜色转为 rgba
+            // 利用离屏 canvas 将任意 CSS 颜色转为 rgba
             if(typeof color === 'string') {
                 color = this.__parseCSSColor(color);
             }
@@ -258,42 +309,22 @@ class WeblBase {
         return color;
     }
 
-    // 利用浏览器 Canvas 解析任意 CSS 颜色（hsl/hsla/命名颜色等）
+    // 利用离屏 canvas 解析任意 CSS 颜色（hsl/hsla/命名颜色等）
     __parseCSSColor(colorStr) {
-        if(!this.__colorCtx) {
-            try {
-                const c = document.createElement('canvas');
-                c.width = c.height = 1;
-                this.__colorCtx = c.getContext('2d');
-            } catch(e) {
+        const ctx = this._measureCtx;
+        if(!ctx) return { r: 0, g: 0, b: 0, a: 0 };
+        try {
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = '#000000';
+            ctx.fillStyle = colorStr;
+            ctx.fillRect(0, 0, 1, 1);
+            const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+            if(ctx.fillStyle === '#000000' && colorStr !== '#000000' && colorStr !== 'black') {
                 return { r: 0, g: 0, b: 0, a: 0 };
             }
-        }
-        this.__colorCtx.clearRect(0, 0, 1, 1);
-        this.__colorCtx.fillStyle = '#000000';
-        this.__colorCtx.fillStyle = colorStr;
-        this.__colorCtx.fillRect(0, 0, 1, 1);
-        const [r, g, b, a] = this.__colorCtx.getImageData(0, 0, 1, 1).data;
-        // 如果 fillStyle 没变，说明颜色解析失败
-        if(this.__colorCtx.fillStyle === '#000000' && colorStr !== '#000000' && colorStr !== 'black') {
+            return { r, g, b, a: a / 255 };
+        } catch(e) {
             return { r: 0, g: 0, b: 0, a: 0 };
-        }
-        return { r, g, b, a: a / 255 };
-    }
-
-    setTextureStyle(style, value='') {
-        
-        if(typeof style === 'string') {
-            if(['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(style) > -1) {
-                value = this.graph.utils.toColor(value);
-            }
-            this.textureContext[style] = value;
-        }
-        else {
-            for(const name in style) {
-                if(name === 'constructor') continue;
-                this.setTextureStyle(name, style[name]);
-            }
         }
     }
 
@@ -468,70 +499,24 @@ class WeblBase {
         return obj && obj instanceof webglGradient;
     }
 
-    /**
+	/**
 	 * 测试获取文本所占大小
 	 *
 	 * @method testSize
 	 * @return {object} 含文本大小的对象
 	 */
 	testSize(text, style=this.style) {
-		
-		this.textureContext.save && this.textureContext.save();
-		// 修改字体，用来计算
-		if(style.font || style.fontSize) this.textureContext.font = style.font || (style.fontSize + 'px ' + style.fontFamily);
-		
-		//计算宽度
-		const size = this.textureContext.measureText?
-                        this.textureContext.measureText(text):
-							{width:15};
-        this.textureContext.restore &&this.textureContext.restore();
-		size.height = this.style.fontSize? this.style.fontSize: 15;
+		const ctx = this._measureCtx;
+		if(!ctx) return { width: 15, height: style.fontSize || 15 };
+
+		ctx.save && ctx.save();
+		if(style.font || style.fontSize) ctx.font = style.font || (style.fontSize + 'px ' + style.fontFamily);
+		const size = ctx.measureText ? ctx.measureText(text) : { width: 15 };
+        ctx.restore && ctx.restore();
+		size.height = style.fontSize ? parseInt(style.fontSize) : 15;
 		return size;
 	}
-
-    // 使用纹理canvas生成图，
-    // 填充可以是颜色或渐变对象
-    // 如果指定了points，则表明要绘制不规则的图形
-    toFillTexture(fillStyle, bounds, points=null) {
-        const canvas = this.textureCanvas;
-        if(!canvas) {
-            return fillStyle;
-        }
-        canvas.width = bounds.width;
-        canvas.height = bounds.height;
-
-        if(!canvas.width || !canvas.height) {
-            return fillStyle;
-        }
-
-        this.textureContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        this.textureContext.fillStyle = fillStyle;
-
-        // 规则图形用 fillRect，比 beginPath/lineTo/fill 快
-        if(!points || !points.length) {
-            this.textureContext.fillRect(0, 0, bounds.width, bounds.height);
-        } else {
-            this.textureContext.beginPath();
-            for(const p of points) {
-                //移至当前坐标
-                if(p.m) {
-                    this.textureContext.moveTo(p.x - bounds.left, p.y - bounds.top);
-                }
-                else {
-                    this.textureContext.lineTo(p.x - bounds.left, p.y - bounds.top);
-                }			
-            }
-            this.textureContext.closePath();
-            this.textureContext.fill();
-        }
-
-        const data = this.textureContext.getImageData(0, 0, canvas.width, canvas.height);
-        return {
-            data,
-            points
-        };
-    }
 }
 
 export default WeblBase;
+export { pathVertexSource, pathFragmentSource, MAX_STOPS };

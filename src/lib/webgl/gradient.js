@@ -1,8 +1,11 @@
-const WebglGradientTextureCache = {};
-// 渐变
+const MAX_STOPS = 16;
+
+/**
+ * WebGL 渐变对象
+ * 支持 GLSL 着色器直接计算渐变色，无需 textureCanvas
+ */
 class WebglGradient {
-    // type:[linear= 线性渐变,radial=放射性渐变] 
-    constructor(type='linear', params={}) {
+    constructor(type = 'linear', params = {}) {
         this.type = type || 'linear';
 
         this.x1 = params.x1 || 0;
@@ -17,166 +20,120 @@ class WebglGradient {
             top: 0,
             width: 0,
             height: 0
-        }
+        };
 
         this.control = params.control;
 
         this.stops = [];
-        this.init();
+        this._sortedStops = null;
+        this._paramsHash = null;
     }
 
-    init() {
-        const dx = this.x2 - this.x1;
-        const dy = this.y2 - this.y1;
-
-        if(this.type === 'radial') {
-            this.length = this.r2 - this.r1;
-        }
-        else if(dx === 0 && dy === 0) {
-            this.length = 0;
-        }
-        else {
-            // 渐变中心的距离
-            this.length = Math.sqrt(Math.pow(dx, 2), Math.pow(dy, 2));
-            this.sin = dy / this.length;
-            this.cos = dx / this.length;
-        }
-    }
-
-    // 渐变颜色
+    /**
+     * 添加颜色断点
+     */
     addColorStop(offset, color) {
         this.stops.push({
-            offset,
+            offset: Math.max(0, Math.min(1, offset)),
             color
         });
+        this._sortedStops = null;
+        this._paramsHash = null;
     }
 
-    // 转为渐变为纹理
-    toImageData(control, bounds, points=null) {
-        // 缓存基于渐变参数（不含 bounds，因为同一个渐变只是位置不同时纹理相同）
-        const gradientKey = this.toString();
-        if(this.__cachedData && this.__cacheKey === gradientKey && 
-           this.__cachedData.data && this.__cachedData.data.width === Math.ceil(bounds.width) &&
-           this.__cachedData.data.data && this.__cachedData.data.data.height === Math.ceil(bounds.height)) {
-            return this.__cachedData;
+    /**
+     * 获取排序后的 stops（带解析后的颜色）
+     */
+    _getSortedStops() {
+        if (this._sortedStops) return this._sortedStops;
+
+        const utils = this.control && this.control.graph && this.control.graph.utils;
+        this._sortedStops = this.stops
+            .map(s => {
+                let c = s.color;
+                if (utils && typeof c === 'string') {
+                    c = utils.hexToRGBA(c);
+                }
+                if (typeof c === 'object' && c !== null) {
+                    // hexToRGBA 返回 r/g/b 为 0~255，a 为 0~1
+                    // 但如果已经是 0~1 范围（由 rgbToDecimal 处理过），需要检测
+                    const needNormalize = (c.r > 1 || c.g > 1 || c.b > 1) ? 255 : 1;
+                    return {
+                        offset: s.offset,
+                        r: (c.r !== undefined ? c.r : 0) / needNormalize,
+                        g: (c.g !== undefined ? c.g : 0) / needNormalize,
+                        b: (c.b !== undefined ? c.b : 0) / needNormalize,
+                        a: c.a !== undefined ? c.a : 1
+                    };
+                }
+                return { offset: s.offset, r: 0, g: 0, b: 0, a: 1 };
+            })
+            .sort((a, b) => a.offset - b.offset);
+
+        return this._sortedStops;
+    }
+
+    /**
+     * 将渐变参数以 uniform 形式传递给着色器
+     * 返回 { type, start, end, stopCount, stops } 供着色器使用
+     */
+    toUniformParams() {
+        const stops = this._getSortedStops();
+        const count = Math.min(stops.length, MAX_STOPS);
+
+        // 展平为 Float32Array: [offset, r, g, b, a, ...]
+        const flatStops = new Float32Array(count * 5);
+        for (let i = 0; i < count; i++) {
+            const s = stops[i];
+            flatStops[i * 5 + 0] = s.offset;
+            flatStops[i * 5 + 1] = s.r;
+            flatStops[i * 5 + 2] = s.g;
+            flatStops[i * 5 + 3] = s.b;
+            flatStops[i * 5 + 4] = s.a;
         }
 
-        if(!control.textureContext) {
-            return null;
-        }
-        let gradient = null;
-        if(this.type === 'linear') {
-            gradient = control.textureContext.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+        return {
+            gradientType: this.type === 'radial' ? 2 : 1,
+            gradientStart: new Float32Array([
+                this.x1, this.y1,
+                this.type === 'radial' ? Math.max(0, this.r1) : 0,
+                0
+            ]),
+            gradientEnd: new Float32Array([
+                this.x2, this.y2,
+                this.type === 'radial' ? Math.max(0, this.r2) : 0,
+                0
+            ]),
+            stopCount: count,
+            stops: flatStops
+        };
+    }
+
+    /**
+     * 使缓存失效
+     */
+    invalidateCache() {
+        this._sortedStops = null;
+        this._paramsHash = null;
+    }
+
+    /**
+     * 转换为渐变的字符串表达
+     */
+    toString() {
+        let str = this.type + '-gradient(';
+        if (this.type == 'linear') {
+            str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
         }
         else {
-            gradient = control.textureContext.createRadialGradient(this.x1, this.y1, this.r1, this.x2, this.y2, this.r2);
+            str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
         }
-        this.stops.forEach(function(s, i) {	
-            const c = control.graph.utils.toColor(s.color);
-            gradient && gradient.addColorStop(s.offset, c);		
+        this.stops.forEach(function(s) {
+            str += ',' + s.color + ' ' + s.offset;
         });
-        
-        const data = control.toFillTexture(gradient, bounds, points);
-
-        this.__cachedData = data;
-        this.__cacheKey = gradientKey;
-
-        return data;
+        return str + ')';
     }
-
-    // 当渐变参数变化时使缓存失效
-    invalidateCache() {
-        this.__cachedData = null;
-        this.__cacheKey = null;
-    }
-
-    // 根据绘制图形的坐标计算出对应点的颜色
-    /*
-    toPointColors(points) {
-        const stops = this.getStops();
-        const colors = [];
-        for(let i=0; i<points.length; i+=2) {
-            const p = {
-                x: points[i],
-                y: points[i+1]
-            }
-            if(this.type === 'radial') {
-                const dx = p.x - this.x1;
-                const dy = p.y - this.y1;
-                const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-                const rang = this.getStopRange(len, stops);
-                if(!rang.start && rang.end) {
-                    colors.push(rang.end.color);
-                }
-                else if(!rang.end && rang.start) {
-                    colors.push(rang.start.color);
-                }
-                else {
-                    const rangLength = rang.end.length - rang.start.length;
-                    const offlen = len - rang.start.length;
-                    const per = offlen / rangLength;
-                    const color = {
-                        r: rang.start.color.r + (rang.end.color.r - rang.start.color.r) * per,
-                        g: rang.start.color.g + (rang.end.color.g - rang.start.color.g) * per,
-                        b: rang.start.color.b + (rang.end.color.b - rang.start.color.b) * per,
-                        a: rang.start.color.a + (rang.end.color.a - rang.start.color.a) * per,
-                    };
-                    colors.push(color);
-                }
-            }
-        }
-        return colors;
-    }
-*/
-    // 根据起点距离获取边界stop
-    /*
-    getStopRange(len, stops) {
-        const res = {};
-        for(const s of stops) {
-            if(s.length <= len) {
-                res.start = s;
-            }
-            else {
-                res.end = s;
-            }
-        }
-        return res;
-    }
-
-    // 根据stop计算offset长度
-    getStops() {
-        const stops = this.stops.sort((p1, p2) => p1.offset - p2.offset); // 渐变色排序从小于大
-        for(const s of stops) {
-            
-            const color = typeof s.color === 'string'? this.control.graph.utils.hexToRGBA(s.color) : s.color;
-            console.log(s, color);
-            s.color = this.control.graph.utils.rgbToDecimal(color);
-            s.length = s.offset * this.length;
-        }
-        return stops;
-    }
-*/
-    /**
-	 * 转换为渐变的字符串表达
-	 *
-	 * @method toString
-	 * @for jmGradient
-	 * @return {string} linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
-	 */
-	toString() {
-		let str = this.type + '-gradient(';
-		if(this.type == 'linear') {
-			str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
-		}
-		else {
-			str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
-		}
-		//颜色渐变
-		this.stops.forEach(function(s) {	
-			str += ',' + s.color + ' ' + s.offset;
-		});
-		return str + ')';
-	}
 }
 
 export default WebglGradient;
+export { MAX_STOPS };

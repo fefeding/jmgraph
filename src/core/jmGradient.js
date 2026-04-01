@@ -90,7 +90,8 @@ export default class jmGradient {
 		let sy2 = Number(y2) + bounds.top;
 		if(this.type === 'linear') {
 			if(control.mode === 'webgl' && control.webglControl) {
-				gradient = control.webglControl.createLinearGradient(x1, y1, x2, y2, bounds);
+				// WebGL 着色器中 v_text_coord 是绝对坐标，需要传递绝对坐标
+				gradient = control.webglControl.createLinearGradient(sx1, sy1, sx2, sy2, bounds);
 				gradient.key = this.toString();
 			}	
 			else {		
@@ -109,7 +110,8 @@ export default class jmGradient {
 				r2 = d * r2;
 			}
 			if(control.mode === 'webgl' && control.webglControl) {
-				gradient = control.webglControl.createRadialGradient(x1, y1, r1, x2, y2, r2, bounds);
+				// WebGL 着色器中 v_text_coord 是绝对坐标，需要传递绝对坐标
+				gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2, bounds);
 				gradient.key = this.toString();
 			}	
 			//offsetLine = Math.abs(r2 - r1);//二圆半径差

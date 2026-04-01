@@ -75,6 +75,21 @@ input[type=number] { width:70px; }
   opacity:0; transition: opacity .3s; pointer-events:none; z-index:200;
 }
 .toast.show { opacity:1; }
+
+/* loading 遮罩 */
+#loading-overlay {
+  position:fixed; top:56px; left:0; right:0; bottom:0; z-index:150;
+  display:none; align-items:center; justify-content:center; flex-direction:column;
+  background:rgba(10,10,15,0.85);
+}
+#loading-overlay.show { display:flex; }
+.loader-spinner {
+  width:48px; height:48px; border:3px solid #2a2a3a; border-top-color:#8be9fd;
+  border-radius:50%; animation:spin .8s linear infinite; margin-bottom:16px;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loader-text { font-size:14px; color:#8be9fd; }
+.loader-progress { font-size:12px; color:#666; margin-top:8px; }
 </style>
 </head>
 <body>
@@ -157,6 +172,12 @@ input[type=number] { width:70px; }
 
 <div class="toast" id="toast"></div>
 
+<div id="loading-overlay">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">正在初始化...</div>
+  <div class="loader-progress" id="loading-progress"></div>
+</div>
+
 <script type="module">
 import jmGraph from "../index.js";
 
@@ -184,6 +205,36 @@ const $anim = document.getElementById('anim-select');
 const $btnRun = document.getElementById('btn-run');
 const $btnReset = document.getElementById('btn-reset');
 const $btnClear = document.getElementById('btn-clear');
+const $loading = document.getElementById('loading-overlay');
+const $loadingProgress = document.getElementById('loading-progress');
+
+// ========== Loading 控制 ==========
+let _loadingActive = false;
+function showLoading(text) {
+  _loadingActive = true;
+  setControlsDisabled(true);
+  $loadingProgress.textContent = '';
+  $loading.querySelector('.loader-text').textContent = text || '正在初始化...';
+  $loading.classList.add('show');
+}
+function updateLoadingProgress(text) {
+  $loadingProgress.textContent = text;
+}
+function hideLoading() {
+  _loadingActive = false;
+  $loading.classList.remove('show');
+  setControlsDisabled(false);
+}
+function setControlsDisabled(disabled) {
+  $btnRun.disabled = disabled;
+  $btnReset.disabled = disabled;
+  $btnClear.disabled = disabled;
+  $mode.disabled = disabled;
+  $shape.disabled = disabled;
+  $count.disabled = disabled;
+  $anim.disabled = disabled;
+  document.querySelectorAll('[data-preset]').forEach(b => b.disabled = disabled);
+}
 
 // ========== 工具函数 ==========
 function toast(msg) {
@@ -645,11 +696,31 @@ function runTest(params) {
     ? ['circle', 'rect', 'arc', 'line', 'star', 'polygon', 'ellipse', 'bezier']
     : [shapeType];
 
-  for (let i = 0; i < count; i++) {
-    const type = types[i % types.length];
-    const result = createShape(type, i, count);
-    if (result) shapes.push(result);
+  showLoading('正在生成图形...');
+
+  const BATCH = 200;
+  let i = 0;
+
+  function batch() {
+    const end = Math.min(i + BATCH, count);
+    for (; i < end; i++) {
+      const type = types[i % types.length];
+      const result = createShape(type, i, count);
+      if (result) shapes.push(result);
+    }
+    updateLoadingProgress(Math.round(i / count * 100) + '% (' + i + '/' + count + ')');
+
+    if (i < count) {
+      setTimeout(batch, 0);
+    } else {
+      finishTest(params, shapeType, count);
+    }
   }
+  batch();
+}
+
+function finishTest(params, shapeType, count) {
+  hideLoading();
 
   document.getElementById('s-count').textContent = shapes.length;
   document.getElementById('s-shape').textContent = shapeType;
@@ -678,122 +749,135 @@ function runTest(params) {
 function runPreset(name) {
   initGraph($mode.value);
 
-  switch (name) {
-    case 'particles': {
-      const count = 3000;
-      for (let i = 0; i < count; i++) {
-        const x = Math.random() * graph.width;
-        const y = Math.random() * graph.height;
-        const r = Math.random() * 4 + 1;
-        const ri = Math.floor(Math.random() * 200 + 55);
-        const gi = Math.floor(Math.random() * 200 + 55);
-        const bi = Math.floor(Math.random() * 200 + 55);
-        const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
-        const shape = graph.createShape('circle', {
-          style: { fill: color, close: true },
-          center: { x, y },
-          radius: r,
-          anticlockwise: true
-        });
-        graph.children.add(shape);
-        shapes.push({
-          shape, meta: {
-            type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
-            vx: (Math.random() - 0.5) * 1.5,
-            vy: (Math.random() - 0.5) * 1.5 - 0.5
-          }
-        });
-      }
-      $shape.value = 'circle';
-      $anim.value = 'all';
-      $count.value = 3000;
-      document.getElementById('s-shape').textContent = 'circle';
-      document.getElementById('s-anim').textContent = '全部';
-      break;
+  showLoading('正在加载预设场景...');
+
+  const BATCH = 200;
+  let i = 0;
+
+  function presetBatch() {
+    const presetFn = presetGenerators[name];
+    if (!presetFn) { hideLoading(); $btnRun.disabled = false; return; }
+
+    const end = Math.min(i + BATCH, presetFn.total);
+    for (; i < end; i++) {
+      presetFn.create(i, end);
     }
-    case 'bouncing': {
-      const count = 500;
-      for (let i = 0; i < count; i++) {
-        const x = Math.random() * graph.width;
-        const y = Math.random() * graph.height;
-        const r = Math.random() * 12 + 6;
-        const color = randomColor();
-        const shape = graph.createShape('circle', {
-          style: { fill: color, stroke: color, lineWidth: 1, close: true },
-          center: { x, y },
-          radius: r,
-          anticlockwise: true
-        });
-        graph.children.add(shape);
-        shapes.push({
-          shape, meta: {
-            type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
-            vx: (Math.random() - 0.5) * 6,
-            vy: (Math.random() - 0.5) * 6
-          }
-        });
-      }
-      $shape.value = 'circle';
-      $anim.value = 'move';
-      $count.value = 500;
-      document.getElementById('s-shape').textContent = 'circle';
-      document.getElementById('s-anim').textContent = '平移';
-      break;
+    updateLoadingProgress(Math.round(i / presetFn.total * 100) + '% (' + i + '/' + presetFn.total + ')');
+
+    if (i < presetFn.total) {
+      setTimeout(presetBatch, 0);
+    } else {
+      finishPreset(name, presetFn);
     }
-    case 'spiral': {
-      const count = 1000;
+  }
+
+  presetBatch();
+}
+
+const presetGenerators = {
+  particles: {
+    total: 3000,
+    create(i) {
+      const x = Math.random() * graph.width;
+      const y = Math.random() * graph.height;
+      const r = Math.random() * 4 + 1;
+      const ri = Math.floor(Math.random() * 200 + 55);
+      const gi = Math.floor(Math.random() * 200 + 55);
+      const bi = Math.floor(Math.random() * 200 + 55);
+      const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
+      const shape = graph.createShape('circle', {
+        style: { fill: color, close: true },
+        center: { x, y }, radius: r, anticlockwise: true
+      });
+      graph.children.add(shape);
+      shapes.push({
+        shape, meta: {
+          type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5 - 0.5
+        }
+      });
+    }
+  },
+  bouncing: {
+    total: 500,
+    create(i) {
+      const x = Math.random() * graph.width;
+      const y = Math.random() * graph.height;
+      const r = Math.random() * 12 + 6;
+      const color = randomColor();
+      const shape = graph.createShape('circle', {
+        style: { fill: color, stroke: color, lineWidth: 1, close: true },
+        center: { x, y }, radius: r, anticlockwise: true
+      });
+      graph.children.add(shape);
+      shapes.push({
+        shape, meta: {
+          type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6
+        }
+      });
+    }
+  },
+  spiral: {
+    total: 1000,
+    create(i) {
       const cx = graph.width / 2;
       const cy = graph.height / 2;
       const maxR = Math.min(graph.width, graph.height) * 0.45;
-      for (let i = 0; i < count; i++) {
-        const angle = (i / count) * Math.PI * 8;
-        const dist = (i / count) * maxR;
-        const px = cx + Math.cos(angle) * dist;
-        const py = cy + Math.sin(angle) * dist;
-        const outerR = 5 + (1 - i / count) * 12;
-        const ri = Math.floor(200 * i / count + 55);
-        const gi = Math.floor(200 * (1 - i / count) + 55);
-        const bi = 150;
-        const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
-        const shape = graph.createShape('star', {
-          style: { fill: color, stroke: '#ffffff', lineWidth: 0.3, close: true },
-          center: { x: px, y: py },
-          radius: outerR,
-          innerRadius: outerR * 0.4,
-          points: 5
-        });
-        graph.children.add(shape);
-        shapes.push({
-          shape, meta: {
-            type: 'star', cx: px, cy: py, outerR: outerR, innerR: outerR * 0.4,
-            radius: outerR, points: 5, origRadius: outerR,
-            vx: 0, vy: 0,
-            spiralAngle: angle, spiralDist: dist
-          }
-        });
-      }
-      $shape.value = 'star';
-      $anim.value = 'scale';
-      $count.value = 1000;
-      document.getElementById('s-shape').textContent = 'star';
-      document.getElementById('s-anim').textContent = '缩放';
-      break;
+      const count = 1000;
+      const angle = (i / count) * Math.PI * 8;
+      const dist = (i / count) * maxR;
+      const px = cx + Math.cos(angle) * dist;
+      const py = cy + Math.sin(angle) * dist;
+      const outerR = 5 + (1 - i / count) * 12;
+      const ri = Math.floor(200 * i / count + 55);
+      const gi = Math.floor(200 * (1 - i / count) + 55);
+      const bi = 150;
+      const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
+      const shape = graph.createShape('star', {
+        style: { fill: color, stroke: '#ffffff', lineWidth: 0.3, close: true },
+        center: { x: px, y: py },
+        radius: outerR, innerRadius: outerR * 0.4, points: 5
+      });
+      graph.children.add(shape);
+      shapes.push({
+        shape, meta: {
+          type: 'star', cx: px, cy: py, outerR: outerR, innerR: outerR * 0.4,
+          radius: outerR, points: 5, origRadius: outerR,
+          vx: 0, vy: 0, spiralAngle: angle, spiralDist: dist
+        }
+      });
     }
-    case 'stress': {
-      const count = 5000;
+  },
+  stress: {
+    total: 5000,
+    create(i) {
       const types = ['circle', 'rect', 'arc', 'star', 'polygon', 'ellipse'];
-      for (let i = 0; i < count; i++) {
-        const type = types[i % types.length];
-        const result = createShape(type, i, count);
-        if (result) shapes.push(result);
-      }
-      $shape.value = 'mixed';
-      $anim.value = 'move';
-      $count.value = 5000;
-      document.getElementById('s-shape').textContent = 'mixed';
-      document.getElementById('s-anim').textContent = '平移';
-      break;
+      const type = types[i % types.length];
+      const result = createShape(type, i, 5000);
+      if (result) shapes.push(result);
     }
+  }
+};
+
+function finishPreset(name, presetFn) {
+  hideLoading();
+
+  const labelMap = {
+    particles: { shape: 'circle', anim: '全部', shapeVal: 'circle', animVal: 'all', countVal: 3000 },
+    bouncing:  { shape: 'circle', anim: '平移', shapeVal: 'circle', animVal: 'move', countVal: 500 },
+    spiral:    { shape: 'star',   anim: '缩放', shapeVal: 'star',   animVal: 'scale', countVal: 1000 },
+    stress:    { shape: 'mixed',  anim: '平移', shapeVal: 'mixed',  animVal: 'move', countVal: 5000 }
+  };
+  const label = labelMap[name];
+  if (label) {
+    $shape.value = label.shapeVal;
+    $anim.value = label.animVal;
+    $count.value = label.countVal;
+    document.getElementById('s-shape').textContent = label.shape;
+    document.getElementById('s-anim').textContent = label.anim;
   }
 
   document.getElementById('s-count').textContent = shapes.length;

@@ -103,8 +103,8 @@ export default class jmHArc extends jmArc {
 		
 		maxps.reverse();//大圆逆序
 		if(!this.style || !this.style.close) {
-			maxps[0].m = true;//开始画大圆时表示为移动
-		}		
+			maxps[0].m = true;//非闭合时标记 moveTo，分隔内外两个子路径
+		}
 		this.points = minps.concat(maxps);
 	}
 }

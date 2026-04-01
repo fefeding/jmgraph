@@ -1,4 +1,5 @@
 import WebglBase, { MAX_STOPS } from './base.js';
+import earcut from '../earcut.js';
 
 // path 绘制类
 class WebglPath extends WebglBase {
@@ -203,6 +204,112 @@ class WebglPath extends WebglBase {
     // 二点是否重合
     equalPoint(p1, p2) {
         return p1.x === p2.x && p1.y === p2.y;
+    }
+
+    // 将带 moveTo 标记的点集拆分为外轮廓和多个洞
+    splitSubPaths(points) {
+        const subPaths = [];
+        let current = [];
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            if(p.m && current.length > 0) {
+                subPaths.push(current);
+                current = [];
+            }
+            current.push(p);
+        }
+        if(current.length > 0) subPaths.push(current);
+
+        // 面积最大的作为外轮廓，其余作为洞
+        let maxArea = -1;
+        let outerIdx = 0;
+        for(let i = 0; i < subPaths.length; i++) {
+            const area = Math.abs(this.polygonArea(subPaths[i]));
+            if(area > maxArea) {
+                maxArea = area;
+                outerIdx = i;
+            }
+        }
+
+        const outerPoints = subPaths[outerIdx];
+        const holes = [];
+        for(let i = 0; i < subPaths.length; i++) {
+            if(i !== outerIdx) holes.push(subPaths[i]);
+        }
+        return { outerPoints, holes };
+    }
+
+    // 计算多边形面积（Shoelace 公式）
+    polygonArea(points) {
+        let area = 0;
+        const n = points.length;
+        for(let i = 0; i < n; i++) {
+            const j = (i + 1) % n;
+            area += points[i].x * points[j].y;
+            area -= points[j].x * points[i].y;
+        }
+        return area / 2;
+    }
+
+    // 使用 earcut 带 holes 填充多边形
+    fillWithHoles(outerPoints, holes, isTexture = false) {
+        // 将所有点合并：外轮廓 + 各个洞，并记录洞的起始索引
+        const allPoints = [...outerPoints];
+        const holeIndices = [];
+        for(const hole of holes) {
+            holeIndices.push(allPoints.length);
+            allPoints.push(...hole);
+        }
+
+        const dim = 2;
+        const vertexData = [];
+        for(const p of allPoints) {
+            vertexData.push(p.x, p.y);
+        }
+
+        // 用 earcut 进行带洞三角化
+        const indices = earcut(vertexData, holeIndices, dim);
+
+        if(!indices || indices.length < 3) return;
+
+        // 构建 GPU 顶点数据
+        const allVertices = [];
+        const allTexCoords = [];
+        for(let i = 0; i < indices.length; i++) {
+            const p = allPoints[indices[i]];
+            allVertices.push(p.x, p.y);
+            if(isTexture) allTexCoords.push(p.x, p.y);
+        }
+
+        const gl = this.context;
+        const vertexArr = new Float32Array(allVertices);
+
+        let posBuffer = this.__cachedBuffers.find(b => b.attr === this.program.attrs.a_position);
+        if(!posBuffer) {
+            posBuffer = this.createFloat32Buffer(vertexArr, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+            posBuffer.attr = this.program.attrs.a_position;
+            this.__cachedBuffers.push(posBuffer);
+        } else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer.buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertexArr, gl.DYNAMIC_DRAW);
+        }
+        this.writeVertexAttrib(posBuffer, this.program.attrs.a_position, 2, 0, 0);
+
+        if(isTexture && allTexCoords.length) {
+            const texData = new Float32Array(allTexCoords);
+            let texBuffer = this.__cachedBuffers.find(b => b.attr === this.program.attrs.a_text_coord);
+            if(!texBuffer) {
+                texBuffer = this.createFloat32Buffer(texData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+                texBuffer.attr = this.program.attrs.a_text_coord;
+                this.__cachedBuffers.push(texBuffer);
+            } else {
+                gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, texData, gl.DYNAMIC_DRAW);
+            }
+            this.writeVertexAttrib(texBuffer, this.program.attrs.a_text_coord, 2, 0, 0);
+        }
+
+        gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
     }
     // 把path坐标集合转为线段集
     pathToLines(points) {
@@ -476,9 +583,46 @@ class WebglPath extends WebglBase {
         }
         if(points && points.length) {
             const regular = lineWidth <= 1.2;
-            points = regular? points : this.pathToPoints(points);
-            const buffer = this.writePoints(points);
-            this.context.drawArrays(regular? this.context.LINE_LOOP: this.context.POINTS, 0, points.length);
+            const hasMoveTo = points.some && points.some(p => p.m);
+            const isRing = !hasMoveTo && this.needCut; // 空心形状（jmHArc close=true 时无 m 标记）
+            if(regular && (hasMoveTo || isRing)) {
+                // 有 moveTo 标记或空心形状时，分段绘制每个子路径的 LINE_LOOP
+                // 避免 LINE_LOOP 把不同子路径的点连起来产生拉扯线
+                if(hasMoveTo) {
+                    let subPath = [];
+                    for(let i = 0; i < points.length; i++) {
+                        if(points[i].m && subPath.length > 0) {
+                            const buffer = this.writePoints(subPath);
+                            this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+                            subPath = [];
+                        }
+                        subPath.push(points[i]);
+                    }
+                    if(subPath.length > 1) {
+                        const buffer = this.writePoints(subPath);
+                        this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+                    }
+                }
+                else if(isRing) {
+                    // 空心形状：前半段为内弧，后半段为外弧（反向），各自 LINE_LOOP
+                    const mid = Math.floor(points.length / 2);
+                    const inner = points.slice(0, mid);
+                    const outer = points.slice(mid);
+                    if(inner.length > 1) {
+                        this.writePoints(inner);
+                        this.context.drawArrays(this.context.LINE_LOOP, 0, inner.length);
+                    }
+                    if(outer.length > 1) {
+                        this.writePoints(outer);
+                        this.context.drawArrays(this.context.LINE_LOOP, 0, outer.length);
+                    }
+                }
+            }
+            else {
+                points = regular? points : this.pathToPoints(points);
+                const buffer = this.writePoints(points);
+                this.context.drawArrays(regular? this.context.LINE_LOOP: this.context.POINTS, 0, points.length);
+            }
             // buffer 由 endDraw 统一清理
         }
         colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
@@ -657,6 +801,29 @@ class WebglPath extends WebglBase {
 
         // 规则图形（凸多边形，如圆）：直接用 TRIANGLE_FAN 一次性绘制，无需 earcut
         if(this.isRegular) {
+            // 检查是否有 moveTo 标记，如果有说明路径包含多个子路径（如空心圆弧 jmHArc）
+            const hasMoveTo = points.some && points.some(p => p.m);
+            if(hasMoveTo) {
+                // 有 m 标记：按 m 标记拆分子路径
+                const { outerPoints, holes } = this.splitSubPaths(points);
+                this.fillWithHoles(outerPoints, holes, isTexture);
+                return;
+            }
+            // 无 m 标记但 needCut=true 表示空心形状（如 jmHArc close=true）
+            // 前半段为内弧，后半段为外弧（反向），按中点拆分
+            if(this.needCut && points.length >= 6) {
+                const mid = Math.floor(points.length / 2);
+                const inner = points.slice(0, mid);
+                const outer = points.slice(mid);
+                const innerArea = Math.abs(this.polygonArea(inner));
+                const outerArea = Math.abs(this.polygonArea(outer));
+                if(outerArea >= innerArea) {
+                    this.fillWithHoles(outer, [inner], isTexture);
+                } else {
+                    this.fillWithHoles(inner, [outer], isTexture);
+                }
+                return;
+            }
             const buffer = this.writePoints(points);
             const coordBuffer = isTexture? this.writePoints(points, this.program.attrs.a_text_coord): null;
             this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);

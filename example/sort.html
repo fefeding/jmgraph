@@ -4,7 +4,10 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
 		<title>排序算法演示</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="common.css">
 	</head>
+	<body style="width:100%;">
+		<div style="padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 8px;">
 	<button id="btn_quick">快速排序</button>
 	<button id="btn_straightinsertion">直接插入排序</button>
 	<button id="btn_shell">希尔排序</button>
@@ -12,9 +15,9 @@
 	<button id="btn_simpleselection2">二元选择排序</button>
 	<button id="btn_bubble">冒泡排序</button>
 		<button id="btn_heap">堆排序</button>
-	<body style="width:100%;">
-		<div id="mycanvas" style="border:1px solid #ddd;width:100%;"></div>
-		<div id="console" style="border:1px solid #ccc;background-color:#000;color:green; width: 100%;height: 300px;overflow-y:auto;padding:4px;"></div>	
+		</div>
+		<div id="mycanvas" style="width:100%;"></div>
+		<div id="console" style="background-color:#1a1a1a;color:#0f0;border:1px solid #333; width: 100%;height: 300px;overflow-y:auto;padding:4px;"></div>	
 	</body>
 	<script type="module">
 		import jmGraph from "../index.js";

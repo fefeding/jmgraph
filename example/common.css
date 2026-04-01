@@ -1,0 +1,50 @@
+/* ========== jmGraph 示例共享样式 ========== */
+/* 统一暗色主题，现代风格 */
+
+html, body {
+  margin: 0; padding: 0;
+  background: #0a0a0f;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* Canvas 容器 */
+#mycanvas_container {
+  overflow: hidden;
+}
+#mycanvas {
+  width: 100%; height: 100%;
+  background: #0a0a0f;
+}
+
+/* 按钮 */
+button, .btn {
+  padding: 5px 14px;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  background: #1a1a2e;
+  color: #ddd;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+button:hover, .btn:hover {
+  background: #2a2a4e;
+  border-color: #8be9fd;
+  color: #8be9fd;
+}
+
+/* 输入框 / 下拉 */
+input, select {
+  background: #1a1a2e;
+  border: 1px solid #2a2a3a;
+  color: #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  outline: none;
+}
+input:focus, select:focus {
+  border-color: #8be9fd;
+}

@@ -1,64 +1,168 @@
 <!doctype html>
 <html>
-	<head>
-		<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<style>
-.left{
-	float:left;
-	width:20%;
-}
-.left ul {
-	list-style: none;
-	padding-left:4px;
-}
-.left h3 {
-	color: #333;
-	margin: 8px 0 4px;
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="common.css">
+	<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+	display: flex;
+	background: #0a0a0f;
+	color: #ccc;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 13px;
-	border-bottom: 1px solid #eee;
-	padding-bottom: 4px;
 }
-.right{
-	float:right;
-	width:80%;
+
+/* Sidebar */
+.sidebar {
+	width: 220px;
+	min-width: 220px;
+	height: 100vh;
+	background: #12121e;
+	overflow-y: auto;
+	border-right: 1px solid #1e1e2e;
+	display: flex;
+	flex-direction: column;
 }
-		</style>
+.sidebar-title {
+	padding: 16px 18px 12px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #8be9fd;
+	letter-spacing: 0.5px;
+	border-bottom: 1px solid #1e1e2e;
+	flex-shrink: 0;
+}
+.sidebar ul {
+	list-style: none;
+	padding: 6px 0;
+}
+.sidebar li a {
+	display: block;
+	padding: 7px 18px;
+	color: #aaa;
+	text-decoration: none;
+	transition: color .15s, background .15s;
+	border-left: 3px solid transparent;
+}
+.sidebar li a:hover {
+	color: #8be9fd;
+	background: rgba(139,233,253,.06);
+}
+.sidebar li a.active {
+	color: #8be9fd;
+	background: rgba(139,233,253,.1);
+	border-left-color: #8be9fd;
+}
+.section-title {
+	padding: 14px 18px 6px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #8be9fd;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	border-bottom: 1px solid #1e1e2e;
+	margin-top: 4px;
+	flex-shrink: 0;
+}
+
+/* Scrollbar */
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: #3a3a5e; }
+
+/* Content */
+.content {
+	flex: 1;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+.content iframe {
+	flex: 1;
+	border: none;
+	width: 100%;
+	background: #0a0a0f;
+}
+	</style>
 </head>
 <body>
-	<div class="right"><iframe width="100%" height="1024" frameborder="0" scrolling="no" name="webbrowers" src="sort.html"></iframe></div>
 
-<div class="left"> 
-<ul>
-	<li><a href="sort.html" target="webbrowers">排序算法演示</a></li>
-	<li><a href="cell.html" target="webbrowers">孢子游戏</a></li>
-	<li><a href="ball.html" target="webbrowers">球碰撞试验</a></li>
-	<li><a href="progress.html" target="webbrowers">动画</a></li>
-	<li><a href="controls/arc.html" target="webbrowers">画圆</a></li>
-	<li><a href="controls/line.html" target="webbrowers">线条</a></li>
-	<li><a href="controls/bezier.html" target="webbrowers">贝塞尔曲线</a></li>
-	<li><a href="controls/arrowline.html" target="webbrowers">箭头</a></li>
-	<li><a href="controls/img.html" target="webbrowers">图片</a></li>
-	<li><a href="controls/label.html" target="webbrowers">文字</a></li>
-	<li><a href="controls/prismatic.html" target="webbrowers">棱形</a></li>
-	<li><a href="controls/resize.html" target="webbrowers">可缩放方块</a></li>
-	<li><a href="music.html" target="webbrowers">音乐图谱</a></li>
-	<li><a href="pso.html" target="webbrowers">PSO</a></li>
-	<li><a href="heartarc.html" target="webbrowers">心图</a></li>
-	<li><a href="new-features.html" target="webbrowers">新特性示例</a></li>
-</ul>
+<div class="sidebar">
+	<div class="sidebar-title">jmGraph 示例</div>
 
-<h3>样式扩展特性</h3>
-<ul>
-	<li><a href="style-extension-demo.html" target="webbrowers">样式扩展总览</a></li>
-	<li><a href="style/lineDash.html" target="webbrowers">lineDash - 自定义虚线</a></li>
-	<li><a href="style/filter.html" target="webbrowers">filter - CSS 滤镜</a></li>
-	<li><a href="style/blendMode.html" target="webbrowers">混合模式</a></li>
-	<li><a href="style/border.html" target="webbrowers">border - 边框系统</a></li>
-	<li><a href="style/borderRadius.html" target="webbrowers">borderRadius - 四角圆角</a></li>
-	<li><a href="style/clipPath.html" target="webbrowers">clipPath - 裁剪路径</a></li>
-</ul>
+	<div class="section-title">基础示例</div>
+	<ul>
+		<li><a href="sort.html" target="webbrowers">排序算法演示</a></li>
+		<li><a href="cell.html" target="webbrowers">孢子游戏</a></li>
+		<li><a href="ball.html" target="webbrowers">球碰撞试验</a></li>
+		<li><a href="progress.html" target="webbrowers">动画</a></li>
+		<li><a href="music.html" target="webbrowers">音乐图谱</a></li>
+		<li><a href="pso.html" target="webbrowers">PSO</a></li>
+		<li><a href="heartarc.html" target="webbrowers">心图</a></li>
+	</ul>
+
+	<div class="section-title">控件示例</div>
+	<ul>
+		<li><a href="controls/arc.html" target="webbrowers">画圆</a></li>
+		<li><a href="controls/line.html" target="webbrowers">线条</a></li>
+		<li><a href="controls/bezier.html" target="webbrowers">贝塞尔曲线</a></li>
+		<li><a href="controls/arrowline.html" target="webbrowers">箭头</a></li>
+		<li><a href="controls/img.html" target="webbrowers">图片</a></li>
+		<li><a href="controls/label.html" target="webbrowers">文字</a></li>
+		<li><a href="controls/prismatic.html" target="webbrowers">棱形</a></li>
+		<li><a href="controls/resize.html" target="webbrowers">可缩放方块</a></li>
+		<li><a href="new-features.html" target="webbrowers">新特性示例</a></li>
+	</ul>
+
+	<div class="section-title">样式扩展特性</div>
+	<ul>
+		<li><a href="style-extension-demo.html" target="webbrowers">样式扩展总览</a></li>
+		<li><a href="style/lineDash.html" target="webbrowers">lineDash - 自定义虚线</a></li>
+		<li><a href="style/filter.html" target="webbrowers">filter - CSS 滤镜</a></li>
+		<li><a href="style/blendMode.html" target="webbrowers">混合模式</a></li>
+		<li><a href="style/borderRadius.html" target="webbrowers">borderRadius - 四角圆角</a></li>
+		<li><a href="style/clipPath.html" target="webbrowers">clipPath - 裁剪路径</a></li>
+	</ul>
+
+	<div class="section-title">性能测试</div>
+	<ul>
+		<li><a href="perf-test.html" target="webbrowers">性能极限测试</a></li>
+	</ul>
 </div>
-	
+
+<div class="content">
+	<iframe name="webbrowers" src="sort.html"></iframe>
+</div>
+
+<script>
+// Highlight active link
+(function() {
+	var links = document.querySelectorAll('.sidebar a');
+	var iframe = document.querySelector('.content iframe');
+	function setActive() {
+		try {
+			var path = new URL(iframe.contentWindow.location.href).pathname;
+		} catch(e) {
+			path = iframe.src;
+		}
+		var base = location.pathname.replace(/[^/]*$/, '');
+		links.forEach(function(a) {
+			var href = a.getAttribute('href');
+			if (path.endsWith(href) || iframe.src.endsWith(href)) {
+				a.classList.add('active');
+			} else {
+				a.classList.remove('active');
+			}
+		});
+	}
+	iframe.addEventListener('load', setActive);
+	setActive();
+})();
+</script>
+
 </body>
 </html>

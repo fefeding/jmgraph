@@ -107,6 +107,7 @@ const rect = g.createShape('rect', {
 - [新特性示例](https://fefeding.github.io/jmgraph/example/new-features.html)
 - [样式扩展特性](https://fefeding.github.io/jmgraph/example/style-extension-demo.html)
 - [基于 jmGraph 的图表库](https://github.com/fefeding/jmchart)
+- [性能极限测试](https://fefeding.github.io/jmgraph/example/perf-test.html)
 
 ## 🎨 样式说明
 

@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="common.css">
     <title>jmgraph 新特性示例</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f5f5f5;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
         }
         .container {
             display: flex;
@@ -16,32 +18,33 @@
         }
         .canvas-container {
             flex: 1;
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: #1a1a2e;
+            border: 1px solid #2a2a3a;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .controls {
             width: 300px;
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: #1a1a2e;
+            border: 1px solid #2a2a3a;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         button {
             display: block;
             width: 100%;
             padding: 10px;
             margin: 5px 0;
-            border: 1px solid #ddd;
+            border: 1px solid #2a2a3a;
             border-radius: 4px;
-            background-color: #f0f0f0;
+            background-color: #2a2a3a;
+            color: #e0e0e0;
             cursor: pointer;
         }
         button:hover {
-            background-color: #e0e0e0;
+            background-color: #3a3a4a;
         }
         .control-group {
             margin-bottom: 20px;
@@ -50,16 +53,19 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: #e0e0e0;
         }
         input, select {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid #2a2a3a;
             border-radius: 4px;
+            background-color: #16162a;
+            color: #e0e0e0;
         }
         canvas {
-            border: 1px solid #eee;
-            background-color: #fafafa;
+            border: 1px solid #2a2a3a;
+            background-color: #0a0a1a;
         }
     </style>
 </head>
@@ -71,7 +77,7 @@
     <div class="container">
         <div class="canvas-container">
             <canvas id="canvas" width="800" height="600"></canvas>
-            <div style="margin-top: 10px; color: #666; font-size: 12px;">
+            <div style="margin-top: 10px; color: #888; font-size: 12px;">
                 <span id="zoomLevel">缩放: 100%</span> | 
                 <span id="shapeCount">图形数量: 0</span>
             </div>

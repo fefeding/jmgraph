@@ -1,10 +1,24 @@
+<head>
+<link rel="stylesheet" href="common.css">
+</head>
+<!doctype html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="common.css">
+<style>
+body { padding: 20px; display: flex; gap: 20px; }
+canvas { border: 1px solid #2a2a3a; border-radius: 4px; }
+</style>
+</head>
   <body>
-    <canvas id="cvs" width="600" height="600" style="border: dashed 1px red">
+    <canvas id="cvs" width="600" height="600">
       你的浏览器不支持画布元素
     </canvas>
-    <canvas id="cvs2d" width="600" height="600" style="border: dashed 1px red">
+    <canvas id="cvs2d" width="600" height="600">
         你的浏览器不支持画布元素
-      </canvas>
+    </canvas>
     <script type="module">
         import {
             createProgram,

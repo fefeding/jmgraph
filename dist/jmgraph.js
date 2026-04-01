@@ -8123,9 +8123,56 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
 
       if (points && points.length) {
         var regular = lineWidth <= 1.2;
-        points = regular ? points : this.pathToPoints(points);
-        var buffer = this.writePoints(points);
-        this.context.drawArrays(regular ? this.context.LINE_LOOP : this.context.POINTS, 0, points.length); // buffer 由 endDraw 统一清理
+        var hasMoveTo = points.some && points.some(function (p) {
+          return p.m;
+        });
+        var isRing = !hasMoveTo && this.needCut; // 空心形状（jmHArc close=true 时无 m 标记）
+
+        if (regular && (hasMoveTo || isRing)) {
+          // 有 moveTo 标记或空心形状时，分段绘制每个子路径的 LINE_LOOP
+          // 避免 LINE_LOOP 把不同子路径的点连起来产生拉扯线
+          if (hasMoveTo) {
+            var subPath = [];
+
+            for (var i = 0; i < points.length; i++) {
+              if (points[i].m && subPath.length > 0) {
+                var buffer = this.writePoints(subPath);
+                this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+                subPath = [];
+              }
+
+              subPath.push(points[i]);
+            }
+
+            if (subPath.length > 1) {
+              var _buffer = this.writePoints(subPath);
+
+              this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+            }
+          } else if (isRing) {
+            // 空心形状：前半段为内弧，后半段为外弧（反向），各自 LINE_LOOP
+            var mid = Math.floor(points.length / 2);
+            var inner = points.slice(0, mid);
+            var outer = points.slice(mid);
+
+            if (inner.length > 1) {
+              this.writePoints(inner);
+              this.context.drawArrays(this.context.LINE_LOOP, 0, inner.length);
+            }
+
+            if (outer.length > 1) {
+              this.writePoints(outer);
+              this.context.drawArrays(this.context.LINE_LOOP, 0, outer.length);
+            }
+          }
+        } else {
+          points = regular ? points : this.pathToPoints(points);
+
+          var _buffer2 = this.writePoints(points);
+
+          this.context.drawArrays(regular ? this.context.LINE_LOOP : this.context.POINTS, 0, points.length);
+        } // buffer 由 endDraw 统一清理
+
       }
 
       colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
@@ -8333,16 +8380,34 @@ var WebglPath = /*#__PURE__*/function (_WebglBase) {
         });
 
         if (hasMoveTo) {
-          // 多子路径：拆分后用 earcut 带 holes 三角化
+          // 有 m 标记：按 m 标记拆分子路径
           var _this$splitSubPaths = this.splitSubPaths(points),
               outerPoints = _this$splitSubPaths.outerPoints,
               holes = _this$splitSubPaths.holes;
 
           this.fillWithHoles(outerPoints, holes, isTexture);
           return;
+        } // 无 m 标记但 needCut=true 表示空心形状（如 jmHArc close=true）
+        // 前半段为内弧，后半段为外弧（反向），按中点拆分
+
+
+        if (this.needCut && points.length >= 6) {
+          var mid = Math.floor(points.length / 2);
+          var inner = points.slice(0, mid);
+          var outer = points.slice(mid);
+          var innerArea = Math.abs(this.polygonArea(inner));
+          var outerArea = Math.abs(this.polygonArea(outer));
+
+          if (outerArea >= innerArea) {
+            this.fillWithHoles(outer, [inner], isTexture);
+          } else {
+            this.fillWithHoles(inner, [outer], isTexture);
+          }
+
+          return;
         }
 
-        var _buffer = this.writePoints(points);
+        var _buffer3 = this.writePoints(points);
 
         var _coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
 
@@ -9672,7 +9737,7 @@ var jmHArc = /*#__PURE__*/function (_jmArc) {
       maxps.reverse(); //大圆逆序
 
       if (!this.style || !this.style.close) {
-        maxps[0].m = true; //开始画大圆时表示为移动
+        maxps[0].m = true; //非闭合时标记 moveTo，分隔内外两个子路径
       }
 
       this.points = minps.concat(maxps);

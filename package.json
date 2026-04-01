@@ -1,7 +1,7 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "3.2.24",
+  "version": "3.2.25",
   "description": "一个简单的canvas画图库",
   "homepage": "https://surl.fit/tools/tools/jmgraph",
   "keywords": [
@@ -23,6 +23,7 @@
     "url": "git+https://github.com/fefeding/jmgraph.git"
   },
   "main": "./index.js",
+  "types": "./index.d.ts",
   "spm": {
     "alias": {},
     "output": [

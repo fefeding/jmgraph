@@ -6209,6 +6209,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -6312,13 +6314,11 @@ var WeblBase = /*#__PURE__*/function () {
       var cos = Math.cos(angle);
       var sin = Math.sin(angle);
 
-      var _this$transformMatrix = _slicedToArray(this.transformMatrix, 6),
+      var _this$transformMatrix = _slicedToArray(this.transformMatrix, 4),
           a = _this$transformMatrix[0],
           b = _this$transformMatrix[1],
           c = _this$transformMatrix[2],
-          d = _this$transformMatrix[3],
-          tx = _this$transformMatrix[4],
-          ty = _this$transformMatrix[5]; // 更新变换矩阵
+          d = _this$transformMatrix[3]; // 更新变换矩阵
 
 
       this.transformMatrix[0] = a * cos - b * sin;
@@ -6432,8 +6432,71 @@ var WeblBase = /*#__PURE__*/function () {
     key: "convertColor",
     value: function convertColor(color) {
       if (this.isGradient(color)) return color;
-      if (typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-      return this.graph.utils.rgbToDecimal(color);
+
+      if (typeof color === 'string') {
+        // 先尝试 hexToRGBA 解析
+        color = this.graph.utils.hexToRGBA(color); // hexToRGBA 对无法识别的格式（如 hsl）会原样返回字符串
+        // 利用浏览器 canvas 将任意 CSS 颜色转为 rgba
+
+        if (typeof color === 'string') {
+          color = this.__parseCSSColor(color);
+        }
+      }
+
+      if (_typeof(color) === 'object' && color.r !== undefined) {
+        return this.graph.utils.rgbToDecimal(color);
+      }
+
+      return color;
+    } // 利用浏览器 Canvas 解析任意 CSS 颜色（hsl/hsla/命名颜色等）
+
+  }, {
+    key: "__parseCSSColor",
+    value: function __parseCSSColor(colorStr) {
+      if (!this.__colorCtx) {
+        try {
+          var c = document.createElement('canvas');
+          c.width = c.height = 1;
+          this.__colorCtx = c.getContext('2d');
+        } catch (e) {
+          return {
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 0
+          };
+        }
+      }
+
+      this.__colorCtx.clearRect(0, 0, 1, 1);
+
+      this.__colorCtx.fillStyle = '#000000';
+      this.__colorCtx.fillStyle = colorStr;
+
+      this.__colorCtx.fillRect(0, 0, 1, 1);
+
+      var _this$__colorCtx$getI = _slicedToArray(this.__colorCtx.getImageData(0, 0, 1, 1).data, 4),
+          r = _this$__colorCtx$getI[0],
+          g = _this$__colorCtx$getI[1],
+          b = _this$__colorCtx$getI[2],
+          a = _this$__colorCtx$getI[3]; // 如果 fillStyle 没变，说明颜色解析失败
+
+
+      if (this.__colorCtx.fillStyle === '#000000' && colorStr !== '#000000' && colorStr !== 'black') {
+        return {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0
+        };
+      }
+
+      return {
+        r: r,
+        g: g,
+        b: b,
+        a: a / 255
+      };
     }
   }, {
     key: "setTextureStyle",

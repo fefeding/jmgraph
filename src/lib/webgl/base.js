@@ -152,7 +152,7 @@ class WeblBase {
     rotate(angle) {
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
-        const [a, b, c, d, tx, ty] = this.transformMatrix;
+        const [a, b, c, d] = this.transformMatrix;
         
         // 更新变换矩阵
         this.transformMatrix[0] = a * cos - b * sin;
@@ -243,8 +243,42 @@ class WeblBase {
     // 把传统颜色转为webgl识别的
     convertColor(color) {
         if(this.isGradient(color)) return color;
-        if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-        return this.graph.utils.rgbToDecimal(color);
+        if(typeof color === 'string') {
+            // 先尝试 hexToRGBA 解析
+            color = this.graph.utils.hexToRGBA(color);
+            // hexToRGBA 对无法识别的格式（如 hsl）会原样返回字符串
+            // 利用浏览器 canvas 将任意 CSS 颜色转为 rgba
+            if(typeof color === 'string') {
+                color = this.__parseCSSColor(color);
+            }
+        }
+        if(typeof color === 'object' && color.r !== undefined) {
+            return this.graph.utils.rgbToDecimal(color);
+        }
+        return color;
+    }
+
+    // 利用浏览器 Canvas 解析任意 CSS 颜色（hsl/hsla/命名颜色等）
+    __parseCSSColor(colorStr) {
+        if(!this.__colorCtx) {
+            try {
+                const c = document.createElement('canvas');
+                c.width = c.height = 1;
+                this.__colorCtx = c.getContext('2d');
+            } catch(e) {
+                return { r: 0, g: 0, b: 0, a: 0 };
+            }
+        }
+        this.__colorCtx.clearRect(0, 0, 1, 1);
+        this.__colorCtx.fillStyle = '#000000';
+        this.__colorCtx.fillStyle = colorStr;
+        this.__colorCtx.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = this.__colorCtx.getImageData(0, 0, 1, 1).data;
+        // 如果 fillStyle 没变，说明颜色解析失败
+        if(this.__colorCtx.fillStyle === '#000000' && colorStr !== '#000000' && colorStr !== 'black') {
+            return { r: 0, g: 0, b: 0, a: 0 };
+        }
+        return { r, g, b, a: a / 255 };
     }
 
     setTextureStyle(style, value='') {

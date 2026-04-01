@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>jmGraph 性能极限测试</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#0a0a0f; font-family:'Segoe UI','PingFang SC',sans-serif; color:#e0e0e0; }
+
+/* 顶部控制栏 */
+#toolbar {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(15,15,25,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #2a2a3a;
+  padding: 10px 16px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+#toolbar h1 {
+  font-size:15px; font-weight:600; color:#8be9fd; white-space:nowrap; margin-right:4px;
+}
+.sep { width:1px; height:24px; background:#2a2a3a; flex-shrink:0; }
+.ctrl-group { display:flex; align-items:center; gap:6px; }
+.ctrl-group label { font-size:12px; color:#888; white-space:nowrap; }
+.ctrl-group select, .ctrl-group input[type=number] {
+  background:#1a1a2e; border:1px solid #333; color:#ddd; border-radius:4px;
+  padding:4px 8px; font-size:12px; outline:none;
+}
+.ctrl-group select:focus, .ctrl-group input:focus { border-color:#8be9fd; }
+input[type=number] { width:70px; }
+
+.btn {
+  padding:5px 14px; border:1px solid #333; border-radius:4px;
+  background:#1a1a2e; color:#ddd; font-size:12px; cursor:pointer; white-space:nowrap;
+  transition: all .15s;
+}
+.btn:hover { background:#2a2a4e; border-color:#8be9fd; color:#8be9fd; }
+.btn.active { background:#8be9fd22; border-color:#8be9fd; color:#8be9fd; }
+.btn.primary { background:#0d47a1; border-color:#1976d2; color:#fff; }
+.btn.primary:hover { background:#1565c0; }
+.btn.danger { border-color:#e53935; color:#e53935; }
+.btn.danger:hover { background:#e5393522; }
+
+/* 统计面板 */
+#stats {
+  position:fixed; top:56px; right:12px; z-index:100;
+  background: rgba(10,10,20,0.88);
+  backdrop-filter: blur(8px);
+  border:1px solid #2a2a3a; border-radius:8px;
+  padding:12px 16px; min-width:200px;
+  font-size:12px; line-height:1.8;
+}
+#stats .stat-title { color:#8be9fd; font-weight:600; font-size:13px; margin-bottom:4px; }
+#stats .stat-row { display:flex; justify-content:space-between; }
+#stats .stat-label { color:#888; }
+#stats .stat-val { color:#ddd; font-variant-numeric:tabular-nums; }
+#stats .stat-val.good { color:#4caf50; }
+#stats .stat-val.warn { color:#ff9800; }
+#stats .stat-val.bad { color:#f44336; }
+
+#canvas-wrap {
+  position:absolute; top:56px; left:0; right:0; bottom:0;
+}
+#mycanvas {
+  width:100%; height:100%;
+  background:#0a0a0f;
+}
+
+/* toast */
+.toast {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  background:rgba(30,30,50,0.95); border:1px solid #8be9fd; color:#8be9fd;
+  padding:8px 20px; border-radius:6px; font-size:13px;
+  opacity:0; transition: opacity .3s; pointer-events:none; z-index:200;
+}
+.toast.show { opacity:1; }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <h1>jmGraph Performance</h1>
+  <div class="sep"></div>
+
+  <div class="ctrl-group">
+    <label>渲染模式</label>
+    <select id="mode-select">
+      <option value="webgl">WebGL</option>
+      <option value="2d">Canvas 2D</option>
+    </select>
+  </div>
+
+  <div class="ctrl-group">
+    <label>图形类型</label>
+    <select id="shape-select">
+      <option value="circle">圆形 Circle</option>
+      <option value="rect">矩形 Rect</option>
+      <option value="arc">弧形 Arc</option>
+      <option value="line">直线 Line</option>
+      <option value="star">星形 Star</option>
+      <option value="polygon">多边形 Polygon</option>
+      <option value="ellipse">椭圆 Ellipse</option>
+      <option value="bezier">贝塞尔 Bezier</option>
+      <option value="mixed">混合 Mixed</option>
+    </select>
+  </div>
+
+  <div class="ctrl-group">
+    <label>数量</label>
+    <input type="number" id="count-input" value="1000" min="10" max="50000" step="100">
+  </div>
+
+  <div class="ctrl-group">
+    <label>动画</label>
+    <select id="anim-select">
+      <option value="move">平移</option>
+      <option value="rotate">旋转</option>
+      <option value="scale">缩放</option>
+      <option value="color">变色</option>
+      <option value="all">全部</option>
+      <option value="none">无</option>
+    </select>
+  </div>
+
+  <button class="btn primary" id="btn-run">▶ 开始测试</button>
+  <button class="btn" id="btn-reset">↺ 重置</button>
+  <button class="btn danger" id="btn-clear">✕ 清空</button>
+
+  <div class="sep"></div>
+  <div class="ctrl-group">
+    <label>预设场景</label>
+    <button class="btn" data-preset="particles">粒子飘动</button>
+    <button class="btn" data-preset="bouncing">弹球碰撞</button>
+    <button class="btn" data-preset="spiral">螺旋旋转</button>
+    <button class="btn" data-preset="stress">极限压力</button>
+  </div>
+</div>
+
+<div id="stats">
+  <div class="stat-title">📊 性能监控</div>
+  <div class="stat-row"><span class="stat-label">FPS</span><span class="stat-val" id="s-fps">--</span></div>
+  <div class="stat-row"><span class="stat-label">帧耗时</span><span class="stat-val" id="s-frametime">--</span></div>
+  <div class="stat-row"><span class="stat-label">图形数</span><span class="stat-val" id="s-count">0</span></div>
+  <div class="stat-row"><span class="stat-label">渲染模式</span><span class="stat-val" id="s-mode">--</span></div>
+  <div class="stat-row"><span class="stat-label">图形类型</span><span class="stat-val" id="s-shape">--</span></div>
+  <div class="stat-row"><span class="stat-label">动画类型</span><span class="stat-val" id="s-anim">--</span></div>
+  <hr style="border:none;border-top:1px solid #2a2a3a;margin:6px 0">
+  <div class="stat-row"><span class="stat-label">最低 FPS</span><span class="stat-val" id="s-minfps">--</span></div>
+  <div class="stat-row"><span class="stat-label">平均 FPS</span><span class="stat-val" id="s-avgfps">--</span></div>
+  <div class="stat-row"><span class="stat-label">总帧数</span><span class="stat-val" id="s-totalframes">0</span></div>
+  <div class="stat-row"><span class="stat-label">运行时间</span><span class="stat-val" id="s-runtime">0s</span></div>
+</div>
+
+<div id="canvas-wrap">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import jmGraph from "../index.js";
+
+// ========== 全局状态 ==========
+let graph = null;
+let shapes = [];      // { shape, meta }
+let running = false;
+let animFrameId = null;
+let startTime = 0;
+
+// FPS 统计
+let frameCount = 0;
+let lastFpsTime = 0;
+let currentFps = 0;
+let minFps = Infinity;
+let fpsHistory = [];
+let lastFrameTime = 0;
+let resizeHandler = null;
+
+// DOM 引用
+const $mode = document.getElementById('mode-select');
+const $shape = document.getElementById('shape-select');
+const $count = document.getElementById('count-input');
+const $anim = document.getElementById('anim-select');
+const $btnRun = document.getElementById('btn-run');
+const $btnReset = document.getElementById('btn-reset');
+const $btnClear = document.getElementById('btn-clear');
+
+// ========== 工具函数 ==========
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// 使用 rgb 格式，避免 hsl 在 WebGL 下解析问题
+function randomColor() {
+  const r = Math.floor(Math.random() * 200 + 55);
+  const g = Math.floor(Math.random() * 200 + 55);
+  const b = Math.floor(Math.random() * 200 + 55);
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function getParams() {
+  return {
+    mode: $mode.value,
+    shapeType: $shape.value,
+    count: Math.max(10, Math.min(50000, parseInt($count.value) || 1000)),
+    anim: $anim.value
+  };
+}
+
+function fpsClass(fps) {
+  if (fps >= 55) return 'good';
+  if (fps >= 30) return 'warn';
+  return 'bad';
+}
+
+// ========== 统计更新 ==========
+function updateStats() {
+  const now = performance.now();
+
+  frameCount++;
+  const dt = now - lastFrameTime;
+  lastFrameTime = now;
+
+  if (now - lastFpsTime >= 1000) {
+    currentFps = Math.round(frameCount * 1000 / (now - lastFpsTime));
+    frameCount = 0;
+    lastFpsTime = now;
+
+    if (currentFps > 0 && currentFps < minFps) minFps = currentFps;
+    fpsHistory.push(currentFps);
+
+    const $fps = document.getElementById('s-fps');
+    $fps.textContent = currentFps;
+    $fps.className = 'stat-val ' + fpsClass(currentFps);
+
+    document.getElementById('s-minfps').textContent = minFps === Infinity ? '--' : minFps;
+    document.getElementById('s-minfps').className = 'stat-val ' + fpsClass(minFps);
+
+    const avg = Math.round(fpsHistory.reduce((a, b) => a + b, 0) / fpsHistory.length);
+    document.getElementById('s-avgfps').textContent = avg;
+    document.getElementById('s-avgfps').className = 'stat-val ' + fpsClass(avg);
+  }
+
+  document.getElementById('s-frametime').textContent = dt.toFixed(1) + 'ms';
+  document.getElementById('s-totalframes').textContent =
+    (parseInt(document.getElementById('s-totalframes').textContent) || 0) + 1;
+
+  if (startTime) {
+    const elapsed = ((now - startTime) / 1000).toFixed(1);
+    document.getElementById('s-runtime').textContent = elapsed + 's';
+  }
+}
+
+// ========== 图形创建 ==========
+function createShape(type, idx, total) {
+  const g = graph;
+  const w = g.width;
+  const h = g.height;
+  const margin = 30;
+
+  const color = randomColor();
+  const x = margin + Math.random() * (w - margin * 2);
+  const y = margin + Math.random() * (h - margin * 2);
+  const radius = Math.random() * 15 + 5;
+
+  let shape;
+  const meta = { type, vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3, angle: 0, origRadius: radius };
+
+  switch (type) {
+    case 'circle': {
+      shape = g.createShape('circle', {
+        style: { fill: color, stroke: color, lineWidth: 1, close: true },
+        center: { x, y },
+        radius: radius,
+        anticlockwise: true
+      });
+      meta.cx = x; meta.cy = y; meta.radius = radius;
+      break;
+    }
+    case 'rect': {
+      const rw = Math.random() * 30 + 10;
+      const rh = Math.random() * 30 + 10;
+      shape = g.createShape('rect', {
+        style: { fill: color, stroke: color, lineWidth: 1, close: true },
+        position: { x: x - rw / 2, y: y - rh / 2 },
+        width: rw,
+        height: rh
+      });
+      meta.x = x; meta.y = y; meta.w = rw; meta.h = rh;
+      break;
+    }
+    case 'arc': {
+      const startAngle = Math.random() * Math.PI;
+      const endAngle = startAngle + Math.random() * Math.PI + Math.PI / 2;
+      shape = g.createShape('arc', {
+        style: { fill: color, stroke: '#ffffff', lineWidth: 2, close: true },
+        center: { x, y },
+        radius: radius,
+        startAngle: startAngle,
+        endAngle: Math.min(endAngle, Math.PI * 2),
+        anticlockwise: false
+      });
+      meta.cx = x; meta.cy = y; meta.radius = radius;
+      meta.startAngle = startAngle; meta.endAngle = Math.min(endAngle, Math.PI * 2);
+      break;
+    }
+    case 'line': {
+      const x2 = x + (Math.random() - 0.5) * 80;
+      const y2 = y + (Math.random() - 0.5) * 80;
+      shape = g.createShape('line', {
+        style: { stroke: color, lineWidth: Math.random() * 2 + 0.5 },
+        start: { x, y },
+        end: { x: x2, y: y2 }
+      });
+      meta.x1 = x; meta.y1 = y; meta.x2 = x2; meta.y2 = y2;
+      break;
+    }
+    case 'star': {
+      const outerR = Math.random() * 15 + 8;
+      const innerR = outerR * (Math.random() * 0.3 + 0.3);
+      const points = Math.floor(Math.random() * 4) + 4;
+      shape = g.createShape('star', {
+        style: { fill: color, stroke: '#ffffff', lineWidth: 0.5, close: true },
+        center: { x, y },
+        radius: outerR,
+        innerRadius: innerR,
+        points: points
+      });
+      meta.cx = x; meta.cy = y; meta.outerR = outerR; meta.innerR = innerR; meta.points = points;
+      break;
+    }
+    case 'polygon': {
+      const pr = Math.random() * 15 + 8;
+      const sides = Math.floor(Math.random() * 5) + 3;
+      shape = g.createShape('polygon', {
+        style: { fill: color, stroke: '#ffffff', lineWidth: 0.5, close: true },
+        center: { x, y },
+        radius: pr,
+        sides: sides
+      });
+      meta.cx = x; meta.cy = y; meta.radius = pr; meta.sides = sides;
+      break;
+    }
+    case 'ellipse': {
+      const ew = Math.random() * 25 + 8;
+      const eh = Math.random() * 25 + 8;
+      shape = g.createShape('ellipse', {
+        style: { fill: color, stroke: color, lineWidth: 1, close: true },
+        center: { x, y },
+        width: ew * 2,
+        height: eh * 2
+      });
+      meta.cx = x; meta.cy = y; meta.rx = ew; meta.ry = eh;
+      break;
+    }
+    case 'bezier': {
+      // bezier 的控制点通过 points 参数传入 cpoints
+      const cp = [
+        { x, y },
+        { x: x + (Math.random() - 0.5) * 100, y: y + (Math.random() - 0.5) * 100 },
+        { x: x + (Math.random() - 0.5) * 100, y: y + (Math.random() - 0.5) * 100 },
+        { x: x + (Math.random() - 0.5) * 80, y: y + (Math.random() - 0.5) * 80 }
+      ];
+      shape = g.createShape('bezier', {
+        style: { stroke: color, lineWidth: Math.random() * 2 + 1, close: false },
+        points: cp
+      });
+      meta.cpoints = cp;
+      meta.cx = x; meta.cy = y;
+      meta.offsetX = (Math.random() - 0.5) * 100;
+      meta.offsetY = (Math.random() - 0.5) * 100;
+      break;
+    }
+  }
+  console.log('createShape', shape, meta);
+  if (shape) {
+    g.children.add(shape);
+    return { shape, meta };
+  }
+  return null;
+}
+
+// ========== 动画更新 ==========
+function animateShapes(animType) {
+  const w = graph.width;
+  const h = graph.height;
+  const t = performance.now() / 1000;
+
+  for (let i = 0; i < shapes.length; i++) {
+    const item = shapes[i];
+    const shape = item.shape;
+    const meta = item.meta;
+    if (!shape) continue;
+
+    const doMove = animType === 'move' || animType === 'all';
+    const doRotate = animType === 'rotate' || animType === 'all';
+    const doScale = animType === 'scale' || animType === 'all';
+    const doColor = animType === 'color' || animType === 'all';
+
+    switch (meta.type) {
+      case 'circle': {
+        if (doMove) {
+          meta.cx += meta.vx;
+          meta.cy += meta.vy;
+          const r = meta.radius;
+          if (meta.cx < r || meta.cx > w - r) meta.vx *= -1;
+          if (meta.cy < r || meta.cy > h - r) meta.vy *= -1;
+          meta.cx = Math.max(r, Math.min(w - r, meta.cx));
+          meta.cy = Math.max(r, Math.min(h - r, meta.cy));
+          shape.center = { x: meta.cx, y: meta.cy };
+        }
+        if (doScale) {
+          const s = 1 + 0.3 * Math.sin(t * 2 + i * 0.1);
+          shape.radius = meta.origRadius * s;
+        }
+        break;
+      }
+      case 'rect': {
+        if (doMove) {
+          meta.x += meta.vx;
+          meta.y += meta.vy;
+          if (meta.x < 0 || meta.x > w - meta.w) meta.vx *= -1;
+          if (meta.y < 0 || meta.y > h - meta.h) meta.vy *= -1;
+          meta.x = Math.max(0, Math.min(w - meta.w, meta.x));
+          meta.y = Math.max(0, Math.min(h - meta.h, meta.y));
+          shape.position = { x: meta.x, y: meta.y };
+        }
+        if (doScale) {
+          const s = 1 + 0.3 * Math.sin(t * 2 + i * 0.1);
+          shape.width = meta.w * s;
+          shape.height = meta.h * s;
+        }
+        break;
+      }
+      case 'arc': {
+        if (doMove) {
+          meta.cx += meta.vx;
+          meta.cy += meta.vy;
+          if (meta.cx < meta.radius || meta.cx > w - meta.radius) meta.vx *= -1;
+          if (meta.cy < meta.radius || meta.cy > h - meta.radius) meta.vy *= -1;
+          meta.cx = Math.max(meta.radius, Math.min(w - meta.radius, meta.cx));
+          meta.cy = Math.max(meta.radius, Math.min(h - meta.radius, meta.cy));
+          shape.center = { x: meta.cx, y: meta.cy };
+        }
+        if (doRotate) {
+          const speed = 1.5;
+          shape.startAngle = (meta.startAngle + t * speed) % (Math.PI * 2);
+          shape.endAngle = (meta.endAngle + t * speed) % (Math.PI * 2);
+        }
+        break;
+      }
+      case 'line': {
+        if (doMove) {
+          meta.x1 += meta.vx;
+          meta.y1 += meta.vy;
+          meta.x2 += meta.vx;
+          meta.y2 += meta.vy;
+          if (meta.x1 < 0 || meta.x1 > w) meta.vx *= -1;
+          if (meta.y1 < 0 || meta.y1 > h) meta.vy *= -1;
+          shape.start = { x: meta.x1, y: meta.y1 };
+          shape.end = { x: meta.x2, y: meta.y2 };
+        }
+        break;
+      }
+      case 'star':
+      case 'polygon': {
+        if (doMove) {
+          meta.cx += meta.vx;
+          meta.cy += meta.vy;
+          const r = meta.radius || meta.outerR || 10;
+          if (meta.cx < r || meta.cx > w - r) meta.vx *= -1;
+          if (meta.cy < r || meta.cy > h - r) meta.vy *= -1;
+          meta.cx = Math.max(r, Math.min(w - r, meta.cx));
+          meta.cy = Math.max(r, Math.min(h - r, meta.cy));
+          // star/polygon 修改 center 后需要清除 points 让 initPoints 重算
+          shape.center = { x: meta.cx, y: meta.cy };
+          shape.points = null;
+        }
+        if (doScale) {
+          const s = 1 + 0.3 * Math.sin(t * 2 + i * 0.1);
+          if (meta.type === 'star') {
+            shape.radius = meta.outerR * s;
+            shape.innerRadius = meta.innerR * s;
+          } else {
+            shape.radius = meta.radius * s;
+          }
+          shape.points = null;
+        }
+        if (doRotate) {
+          // 通过修改 startAngle 实现视觉旋转（对 star/polygon 改变起始角度）
+          // 这不是完美旋转但能展示性能
+          shape.points = null; // 强制重算
+        }
+        break;
+      }
+      case 'ellipse': {
+        if (doMove) {
+          meta.cx += meta.vx;
+          meta.cy += meta.vy;
+          if (meta.cx < meta.rx || meta.cx > w - meta.rx) meta.vx *= -1;
+          if (meta.cy < meta.ry || meta.cy > h - meta.ry) meta.vy *= -1;
+          meta.cx = Math.max(meta.rx, Math.min(w - meta.rx, meta.cx));
+          meta.cy = Math.max(meta.ry, Math.min(h - meta.ry, meta.cy));
+          shape.center = { x: meta.cx, y: meta.cy };
+        }
+        if (doScale) {
+          const s = 1 + 0.3 * Math.sin(t * 2 + i * 0.1);
+          shape.width = meta.rx * 2 * s;
+          shape.height = meta.ry * 2 * s;
+        }
+        break;
+      }
+      case 'bezier': {
+        if (doMove) {
+          meta.cx += meta.vx;
+          meta.cy += meta.vy;
+          if (meta.cx < 0 || meta.cx > w) meta.vx *= -1;
+          if (meta.cy < 0 || meta.cy > h) meta.vy *= -1;
+          // 直接偏移控制点
+          const dx = meta.vx, dy = meta.vy;
+          for (let p of meta.cpoints) {
+            p.x += dx;
+            p.y += dy;
+          }
+          // cpoints 变化后需要让 initPoints 重算
+          shape.points = null;
+        }
+        break;
+      }
+    }
+
+    // 变色动画 — 使用 rgb 格式
+    if (doColor && shape.style) {
+      const phase = (t * 30 + i * 3) % 360;
+      const r = Math.floor(128 + 127 * Math.sin(phase * Math.PI / 180));
+      const g2 = Math.floor(128 + 127 * Math.sin((phase + 120) * Math.PI / 180));
+      const b = Math.floor(128 + 127 * Math.sin((phase + 240) * Math.PI / 180));
+      const c = 'rgb(' + r + ',' + g2 + ',' + b + ')';
+      if (meta.type !== 'line' && meta.type !== 'bezier') {
+        if (shape.style.fill) shape.style.fill = c;
+      }
+      if (meta.type === 'line' || meta.type === 'bezier' || meta.type === 'arc') {
+        shape.style.stroke = c;
+      }
+    }
+  }
+}
+
+// ========== 渲染循环 ==========
+function onAnimate() {
+  if (!running) return;
+  const params = getParams();
+
+  if (params.anim !== 'none') {
+    animateShapes(params.anim);
+  }
+  updateStats();
+}
+
+// ========== 清理 ==========
+function clearAll() {
+  running = false;
+  if (animFrameId) { clearTimeout(animFrameId); animFrameId = null; }
+  if (graph && graph._animateHandler) {
+    graph.unbind('update', graph._animateHandler);
+    graph._animateHandler = null;
+  }
+  shapes = [];
+
+  frameCount = 0;
+  lastFpsTime = performance.now();
+  lastFrameTime = performance.now();
+  minFps = Infinity;
+  fpsHistory = [];
+  startTime = 0;
+
+  if (graph) {
+    graph.children.clear();
+    graph.needUpdate = true;
+  }
+
+  ['s-fps','s-frametime','s-minfps','s-avgfps'].forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = '--';
+    el.className = 'stat-val';
+  });
+  document.getElementById('s-totalframes').textContent = '0';
+  document.getElementById('s-runtime').textContent = '0s';
+  document.getElementById('s-count').textContent = '0';
+}
+
+// ========== 初始化 / 切换 Graph ==========
+let _canvasEl = null;
+function initGraph(mode) {
+  if (graph) {
+    graph.destroy && graph.destroy();
+  }
+  shapes = [];
+  running = false;
+  if (animFrameId) { clearTimeout(animFrameId); animFrameId = null; }
+  if (resizeHandler) { window.removeEventListener('resize', resizeHandler); resizeHandler = null; }
+
+  const wrap = document.getElementById('canvas-wrap');
+  const cw = wrap.clientWidth || window.innerWidth;
+  const ch = wrap.clientHeight || (window.innerHeight - 56);
+
+  // 移除旧 canvas，确保只存在一个 canvas 元素
+  if (_canvasEl && _canvasEl.parentElement) {
+    _canvasEl.parentElement.removeChild(_canvasEl);
+  }
+  _canvasEl = document.createElement('canvas');
+  wrap.appendChild(_canvasEl);
+
+  graph = new jmGraph(_canvasEl, {
+    mode: mode,
+    width: cw,
+    height: ch,
+    autoRefresh: true
+  });
+
+  resizeHandler = () => {
+    if (graph && !graph.destroyed) {
+      const w = wrap.clientWidth || window.innerWidth;
+      const h = wrap.clientHeight || (window.innerHeight - 56);
+      graph.width = w;
+      graph.height = h;
+    }
+  };
+  window.addEventListener('resize', resizeHandler);
+
+  document.getElementById('s-mode').textContent = mode === 'webgl' ? 'WebGL' : 'Canvas 2D';
+  toast('已切换到 ' + (mode === 'webgl' ? 'WebGL' : 'Canvas 2D') + ' 模式');
+}
+
+// ========== 运行测试 ==========
+function runTest(params) {
+  initGraph(params.mode);
+
+  const shapeType = params.shapeType;
+  const count = params.count;
+  const types = shapeType === 'mixed'
+    ? ['circle', 'rect', 'arc', 'line', 'star', 'polygon', 'ellipse', 'bezier']
+    : [shapeType];
+
+  for (let i = 0; i < count; i++) {
+    const type = types[i % types.length];
+    const result = createShape(type, i, count);
+    if (result) shapes.push(result);
+  }
+
+  document.getElementById('s-count').textContent = shapes.length;
+  document.getElementById('s-shape').textContent = shapeType;
+  document.getElementById('s-anim').textContent =
+    params.anim === 'none' ? '无' :
+    params.anim === 'move' ? '平移' :
+    params.anim === 'rotate' ? '旋转' :
+    params.anim === 'scale' ? '缩放' :
+    params.anim === 'color' ? '变色' : '全部';
+
+  running = true;
+  startTime = performance.now();
+  lastFpsTime = startTime;
+  lastFrameTime = startTime;
+  frameCount = 0;
+
+  graph._animateHandler = onAnimate;
+  graph.on('update', onAnimate);
+
+  $btnRun.textContent = '⏸ 停止';
+  $btnRun.classList.add('active');
+  toast('测试启动: ' + count + ' 个 ' + shapeType + ' (' + params.mode + ')');
+}
+
+// ========== 预设场景 ==========
+function runPreset(name) {
+  initGraph($mode.value);
+
+  switch (name) {
+    case 'particles': {
+      const count = 3000;
+      for (let i = 0; i < count; i++) {
+        const x = Math.random() * graph.width;
+        const y = Math.random() * graph.height;
+        const r = Math.random() * 4 + 1;
+        const ri = Math.floor(Math.random() * 200 + 55);
+        const gi = Math.floor(Math.random() * 200 + 55);
+        const bi = Math.floor(Math.random() * 200 + 55);
+        const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
+        const shape = graph.createShape('circle', {
+          style: { fill: color, close: true },
+          center: { x, y },
+          radius: r,
+          anticlockwise: true
+        });
+        graph.children.add(shape);
+        shapes.push({
+          shape, meta: {
+            type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5 - 0.5
+          }
+        });
+      }
+      $shape.value = 'circle';
+      $anim.value = 'all';
+      $count.value = 3000;
+      document.getElementById('s-shape').textContent = 'circle';
+      document.getElementById('s-anim').textContent = '全部';
+      break;
+    }
+    case 'bouncing': {
+      const count = 500;
+      for (let i = 0; i < count; i++) {
+        const x = Math.random() * graph.width;
+        const y = Math.random() * graph.height;
+        const r = Math.random() * 12 + 6;
+        const color = randomColor();
+        const shape = graph.createShape('circle', {
+          style: { fill: color, stroke: color, lineWidth: 1, close: true },
+          center: { x, y },
+          radius: r,
+          anticlockwise: true
+        });
+        graph.children.add(shape);
+        shapes.push({
+          shape, meta: {
+            type: 'circle', cx: x, cy: y, radius: r, origRadius: r,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6
+          }
+        });
+      }
+      $shape.value = 'circle';
+      $anim.value = 'move';
+      $count.value = 500;
+      document.getElementById('s-shape').textContent = 'circle';
+      document.getElementById('s-anim').textContent = '平移';
+      break;
+    }
+    case 'spiral': {
+      const count = 1000;
+      const cx = graph.width / 2;
+      const cy = graph.height / 2;
+      const maxR = Math.min(graph.width, graph.height) * 0.45;
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 8;
+        const dist = (i / count) * maxR;
+        const px = cx + Math.cos(angle) * dist;
+        const py = cy + Math.sin(angle) * dist;
+        const outerR = 5 + (1 - i / count) * 12;
+        const ri = Math.floor(200 * i / count + 55);
+        const gi = Math.floor(200 * (1 - i / count) + 55);
+        const bi = 150;
+        const color = 'rgb(' + ri + ',' + gi + ',' + bi + ')';
+        const shape = graph.createShape('star', {
+          style: { fill: color, stroke: '#ffffff', lineWidth: 0.3, close: true },
+          center: { x: px, y: py },
+          radius: outerR,
+          innerRadius: outerR * 0.4,
+          points: 5
+        });
+        graph.children.add(shape);
+        shapes.push({
+          shape, meta: {
+            type: 'star', cx: px, cy: py, outerR: outerR, innerR: outerR * 0.4,
+            radius: outerR, points: 5, origRadius: outerR,
+            vx: 0, vy: 0,
+            spiralAngle: angle, spiralDist: dist
+          }
+        });
+      }
+      $shape.value = 'star';
+      $anim.value = 'scale';
+      $count.value = 1000;
+      document.getElementById('s-shape').textContent = 'star';
+      document.getElementById('s-anim').textContent = '缩放';
+      break;
+    }
+    case 'stress': {
+      const count = 5000;
+      const types = ['circle', 'rect', 'arc', 'star', 'polygon', 'ellipse'];
+      for (let i = 0; i < count; i++) {
+        const type = types[i % types.length];
+        const result = createShape(type, i, count);
+        if (result) shapes.push(result);
+      }
+      $shape.value = 'mixed';
+      $anim.value = 'move';
+      $count.value = 5000;
+      document.getElementById('s-shape').textContent = 'mixed';
+      document.getElementById('s-anim').textContent = '平移';
+      break;
+    }
+  }
+
+  document.getElementById('s-count').textContent = shapes.length;
+
+  running = true;
+  startTime = performance.now();
+  lastFpsTime = startTime;
+  lastFrameTime = startTime;
+  frameCount = 0;
+  graph._animateHandler = onAnimate;
+  graph.on('update', onAnimate);
+
+  $btnRun.textContent = '⏸ 停止';
+  $btnRun.classList.add('active');
+  toast('预设场景 [' + name + '] 启动: ' + shapes.length + ' 个图形');
+}
+
+// ========== 事件绑定 ==========
+$btnRun.addEventListener('click', () => {
+  if (running) {
+    running = false;
+    if (graph && graph._animateHandler) {
+      graph.unbind('update', graph._animateHandler);
+    }
+    $btnRun.textContent = '▶ 继续测试';
+    $btnRun.classList.remove('active');
+    toast('测试已暂停');
+  } else if (shapes.length > 0 && graph) {
+    running = true;
+    $btnRun.textContent = '⏸ 停止';
+    $btnRun.classList.add('active');
+    lastFpsTime = performance.now();
+    lastFrameTime = performance.now();
+    frameCount = 0;
+    graph._animateHandler = onAnimate;
+    graph.on('update', onAnimate);
+    toast('测试继续');
+  } else {
+    runTest(getParams());
+  }
+});
+
+$btnReset.addEventListener('click', () => {
+  clearAll();
+  $btnRun.textContent = '▶ 开始测试';
+  $btnRun.classList.remove('active');
+  toast('已重置');
+});
+
+$btnClear.addEventListener('click', () => {
+  clearAll();
+  $btnRun.textContent = '▶ 开始测试';
+  $btnRun.classList.remove('active');
+  toast('已清空');
+});
+
+$mode.addEventListener('change', () => {
+  if (shapes.length > 0) {
+    runTest(getParams());
+  } else {
+    initGraph($mode.value);
+  }
+});
+
+document.querySelectorAll('[data-preset]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    runPreset(btn.dataset.preset);
+  });
+});
+
+initGraph('webgl');
+</script>
+</body>
+</html>

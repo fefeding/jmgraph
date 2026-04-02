@@ -2714,31 +2714,63 @@ var jmGradient = /*#__PURE__*/function () {
       }
 
       if (!d) {
-        d = Math.min(location.width, location.height);
-      } //let offsetLine = 1;//渐变长度或半径
-      //处理百分比参数
+        d = Math.min(location.width || 0, location.height || 0);
+      }
 
+      if (d <= 0) {
+        d = Math.max(bounds.width || 0, bounds.height || 0, 100);
+      }
+
+      var width = bounds.width || d;
+      var height = bounds.height || d;
 
       if (_jmUtils.jmUtils.checkPercent(x1)) {
-        x1 = _jmUtils.jmUtils.percentToNumber(x1) * (bounds.width || d);
+        x1 = _jmUtils.jmUtils.percentToNumber(x1) * width;
+      } else if (typeof x1 === 'number' && x1 >= 0 && x1 <= 1) {
+        x1 = x1 * width;
+      } else if (typeof x1 === 'string') {
+        var num = parseFloat(x1);
+        if (!isNaN(num)) x1 = num;
       }
 
       if (_jmUtils.jmUtils.checkPercent(x2)) {
-        x2 = _jmUtils.jmUtils.percentToNumber(x2) * (bounds.width || d);
+        x2 = _jmUtils.jmUtils.percentToNumber(x2) * width;
+      } else if (typeof x2 === 'number' && x2 >= 0 && x2 <= 1) {
+        x2 = x2 * width;
+      } else if (typeof x2 === 'string') {
+        var _num = parseFloat(x2);
+
+        if (!isNaN(_num)) x2 = _num;
       }
 
       if (_jmUtils.jmUtils.checkPercent(y1)) {
-        y1 = _jmUtils.jmUtils.percentToNumber(y1) * (bounds.height || d);
+        y1 = _jmUtils.jmUtils.percentToNumber(y1) * height;
+      } else if (typeof y1 === 'number' && y1 >= 0 && y1 <= 1) {
+        y1 = y1 * height;
+      } else if (typeof y1 === 'string') {
+        var _num2 = parseFloat(y1);
+
+        if (!isNaN(_num2)) y1 = _num2;
       }
 
       if (_jmUtils.jmUtils.checkPercent(y2)) {
-        y2 = _jmUtils.jmUtils.percentToNumber(y2) * (bounds.height || d);
+        y2 = _jmUtils.jmUtils.percentToNumber(y2) * height;
+      } else if (typeof y2 === 'number' && y2 >= 0 && y2 <= 1) {
+        y2 = y2 * height;
+      } else if (typeof y2 === 'string') {
+        var _num3 = parseFloat(y2);
+
+        if (!isNaN(_num3)) y2 = _num3;
       }
 
-      var sx1 = Number(x1) + bounds.left;
-      var sy1 = Number(y1) + bounds.top;
-      var sx2 = Number(x2) + bounds.left;
-      var sy2 = Number(y2) + bounds.top;
+      x1 = Number(x1) || 0;
+      y1 = Number(y1) || 0;
+      x2 = Number(x2) || 0;
+      y2 = Number(y2) || 0;
+      var sx1 = x1 + (bounds.left || 0);
+      var sy1 = y1 + (bounds.top || 0);
+      var sx2 = x2 + (bounds.left || 0);
+      var sy2 = y2 + (bounds.top || 0);
 
       if (this.type === 'linear') {
         if (control.mode === 'webgl' && control.webglControl) {
@@ -2752,25 +2784,41 @@ var jmGradient = /*#__PURE__*/function () {
         var r1 = this.r1 || 0;
         var r2 = this.r2;
 
+        if (d <= 0) {
+          d = Math.max(bounds.width || 0, bounds.height || 0, 1);
+        }
+
         if (_jmUtils.jmUtils.checkPercent(r1)) {
           r1 = _jmUtils.jmUtils.percentToNumber(r1);
           r1 = d * r1;
+        } else if (typeof r1 === 'number' && r1 >= 0 && r1 <= 1) {
+          r1 = r1 * d;
+        } else if (typeof r1 === 'string') {
+          r1 = parseFloat(r1) || 0;
         }
 
         if (_jmUtils.jmUtils.checkPercent(r2)) {
           r2 = _jmUtils.jmUtils.percentToNumber(r2);
           r2 = d * r2;
+        } else if (typeof r2 === 'number' && r2 >= 0 && r2 <= 1) {
+          r2 = r2 * d;
+        } else if (typeof r2 === 'string') {
+          r2 = parseFloat(r2);
         }
 
+        if (r2 === undefined || r2 === null || isNaN(Number(r2)) || Number(r2) <= 0) {
+          r2 = d / 2;
+        }
+
+        r1 = Number(r1) || 0;
+        r2 = Number(r2) || d / 2;
+
         if (control.mode === 'webgl' && control.webglControl) {
-          // WebGL 着色器中 v_text_coord 是绝对坐标，需要传递绝对坐标
           gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2, bounds);
           gradient.key = this.toString();
-        } //offsetLine = Math.abs(r2 - r1);//二圆半径差
-        else if (context.createRadialGradient) {
+        } else if (context.createRadialGradient) {
           gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
-        } //小程序的接口特殊
-        else if (context.createCircularGradient) {
+        } else if (context.createCircularGradient) {
           gradient = context.createCircularGradient(sx1, sy1, r2);
         }
       } //颜色渐变
@@ -2791,74 +2839,690 @@ var jmGradient = /*#__PURE__*/function () {
       return gradient;
     }
     /**
-     * 变换为字条串格式
-     * linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
-     * linear-gradient线性渐变，x1 y1表示起点，x2 y2表示结束点,color表颜色，step为当前颜色偏移
-     * radial-gradient径向渐变,x1 y1 r1分别表示内圆中心和半径，x2 y2 r2为结束圆 中心和半径，颜色例似线性渐变 step为0-1之间
+     * 解析渐变字符串
+     * 支持的格式:
+     * - linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)
+     * - linear-gradient(to top, red, blue)
+     * - linear-gradient(to right bottom, red, blue)
+     * - linear-gradient(45deg, red, blue)
+     * - linear-gradient(0.5turn, red, blue)
+     * - radial-gradient(circle, red, blue)
+     * - radial-gradient(ellipse at top, red, blue)
      *
      * @method fromString
      * @for jmGradient
-     * @return {string} 
+     * @param {string} s 渐变字符串
      */
 
   }, {
     key: "fromString",
     value: function fromString(s) {
-      if (!s) return;
-      var ms = s.match(/(linear|radial)-gradient\s*\(\s*([^,]+)\s*,\s*((.|\s)+)\)/i);
-      if (!ms || ms.length < 3) return;
-      this.type = ms[1].toLowerCase();
+      if (!s) {
+        console.warn('jmGradient: 渐变字符串为空');
+        return;
+      }
 
-      var ps = _jmUtils.jmUtils.trim(ms[2]).split(/\s+/); //线性渐变
+      var gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*(.+)\)/i);
 
+      if (!gradientMatch || gradientMatch.length < 3) {
+        console.warn('jmGradient: 无效的渐变字符串格式: "' + s + '"');
+        return;
+      }
 
-      if (this.type == 'linear') {
-        if (ps.length <= 2) {
-          this.x2 = ps[0];
-          this.y2 = ps[1] || 0;
-        } else {
-          this.x1 = ps[0];
-          this.y1 = ps[1];
-          this.x2 = ps[2];
-          this.y2 = ps[3];
+      var type = gradientMatch[1].toLowerCase();
+
+      if (type !== 'linear' && type !== 'radial') {
+        console.warn('jmGradient: 不支持的渐变类型 "' + type + '"，仅支持 linear 和 radial');
+        return;
+      }
+
+      this.type = type;
+
+      var content = _jmUtils.jmUtils.trim(gradientMatch[2]);
+
+      var splitIndex = this._findSplitIndex(content);
+
+      if (splitIndex < 0) {
+        console.warn('jmGradient: 无法解析渐变内容: "' + content + '"');
+        return;
+      }
+
+      var params = content.substring(0, splitIndex).trim();
+      var colorPart = content.substring(splitIndex + 1).trim();
+
+      if (!colorPart) {
+        console.warn('jmGradient: 未找到颜色停止点');
+        return;
+      }
+
+      if (this.type === 'linear') {
+        this._parseLinearParams(params);
+      } else {
+        this._parseRadialParams(params);
+      }
+
+      var colorCount = this._parseColorStops(colorPart);
+
+      if (colorCount === 0) {
+        console.warn('jmGradient: 未找到有效的颜色停止点: "' + colorPart + '"');
+      } else if (colorCount < 2) {
+        console.warn('jmGradient: 颜色停止点至少需要2个，当前只有 ' + colorCount + ' 个');
+      }
+    }
+    /**
+     * 找到参数和颜色的分割位置（第一个不在括号内的逗号）
+     * @param {string} content 内容字符串
+     * @returns {number} 分割位置索引
+     */
+
+  }, {
+    key: "_findSplitIndex",
+    value: function _findSplitIndex(content) {
+      var depth = 0;
+
+      for (var i = 0; i < content.length; i++) {
+        var _char = content[i];
+
+        if (_char === '(') {
+          depth++;
+        } else if (_char === ')') {
+          depth--;
+        } else if (_char === ',' && depth === 0) {
+          return i;
         }
-      } //径向渐变
-      else {
-        if (ps.length <= 3) {
-          this.x2 = ps[0];
-          this.y2 = ps[1] || 0;
-          this.r2 = ps[2] || 0;
-        } else {
-          this.x1 = ps[0];
-          this.y1 = ps[1];
-          this.r1 = ps[2];
-          this.x2 = ps[3];
-          this.y2 = ps[3];
-          this.r2 = ps[3];
+      }
+
+      return -1;
+    }
+    /**
+     * 验证渐变配置是否有效
+     * @returns {boolean} 是否有效
+     */
+
+  }, {
+    key: "isValid",
+    value: function isValid() {
+      if (!this.type) return false;
+
+      if (this.type === 'linear') {
+        return typeof this.x1 !== 'undefined' || typeof this.x2 !== 'undefined' || typeof this._angle !== 'undefined';
+      }
+
+      if (this.type === 'radial') {
+        return this.stops && this.stops.length >= 2;
+      }
+
+      return false;
+    }
+    /**
+     * 解析线性渐变参数
+     * @param {string} params 参数字符串
+     */
+
+  }, {
+    key: "_parseLinearParams",
+    value: function _parseLinearParams(params) {
+      var trimmed = _jmUtils.jmUtils.trim(params);
+
+      if (trimmed.startsWith('to ')) {
+        var direction = trimmed.substring(3).toLowerCase().trim();
+
+        var dir = this._directionToAngle(direction);
+
+        this._angle = dir.angle;
+        this.x1 = dir.x1;
+        this.y1 = dir.y1;
+        this.x2 = dir.x2;
+        this.y2 = dir.y2;
+      } else if (this._hasAngleUnit(trimmed)) {
+        var angle = this._parseAngle(trimmed);
+
+        this._angle = angle;
+
+        var coords = this._angleToCoords(angle);
+
+        this.x1 = coords.x1;
+        this.y1 = coords.y1;
+        this.x2 = coords.x2;
+        this.y2 = coords.y2;
+      } else if (trimmed.startsWith('at ')) {
+        var radialMatch = trimmed.match(/at\s+(.+)/i);
+
+        if (radialMatch) {
+          this._parseRadialParams(trimmed);
         }
-      } //解析颜色偏移
-      //color step
+      } else {
+        var parts = trimmed.split(/\s+/);
 
+        if (parts.length >= 4) {
+          this.x1 = parts[0];
+          this.y1 = parts[1];
+          this.x2 = parts[2];
+          this.y2 = parts[3];
+        } else if (parts.length === 2) {
+          this.x1 = 0;
+          this.y1 = 0;
+          this.x2 = parts[0];
+          this.y2 = parts[1];
+        }
+      }
+    }
+    /**
+     * 解析径向渐变参数
+     * @param {string} params 参数字符串
+     */
 
-      var pars = ms[3].match(/((rgb(a)?\s*\([\d,\.\s]+\))|(#[a-zA-Z\d]+))\s+([\d\.]+)/ig);
+  }, {
+    key: "_parseRadialParams",
+    value: function _parseRadialParams(params) {
+      var trimmed = _jmUtils.jmUtils.trim(params);
 
-      if (pars && pars.length) {
-        for (var i = 0; i < pars.length; i++) {
-          var par = _jmUtils.jmUtils.trim(pars[i]);
+      this.shape = 'ellipse';
+      this.position = {
+        x: '50%',
+        y: '50%'
+      };
+      var atMatch = trimmed.match(/^(.+?)\s+at\s+(.+)$/i);
 
-          var spindex = par.lastIndexOf(' ');
+      if (atMatch) {
+        var shapePart = _jmUtils.jmUtils.trim(atMatch[1]);
 
-          if (spindex > -1) {
-            var offset = Number(par.substr(spindex + 1));
+        var posPart = _jmUtils.jmUtils.trim(atMatch[2]);
 
-            var color = _jmUtils.jmUtils.trim(par.substr(0, spindex));
+        this._parseRadialShape(shapePart);
 
-            if (!isNaN(offset) && color) {
-              this.addStop(offset, color);
-            }
+        this._parseRadialPosition(posPart);
+      } else if (trimmed.startsWith('circle') || trimmed.startsWith('ellipse')) {
+        this._parseRadialShape(trimmed);
+
+        this.x1 = '50%';
+        this.y1 = '50%';
+        this.x2 = '50%';
+        this.y2 = '50%';
+      } else {
+        var parts = trimmed.split(/\s+/);
+
+        if (parts.length >= 3) {
+          this.x1 = parts[0];
+          this.y1 = parts[1];
+          this.r1 = parts[2];
+        }
+
+        if (parts.length >= 6) {
+          this.x2 = parts[3];
+          this.y2 = parts[4];
+          this.r2 = parts[5];
+        }
+      }
+
+      if (this.x1 === undefined && this.y1 === undefined) {
+        this.x1 = '50%';
+        this.y1 = '50%';
+      }
+
+      if (this.x2 === undefined && this.y2 === undefined) {
+        this.x2 = '50%';
+        this.y2 = '50%';
+      }
+
+      if (this.r2 === undefined) {
+        this.r2 = '50%';
+      }
+    }
+    /**
+     * 解析径向渐变形状
+     * @param {string} shapePart 形状描述
+     */
+
+  }, {
+    key: "_parseRadialShape",
+    value: function _parseRadialShape(shapePart) {
+      if (shapePart.startsWith('circle')) {
+        this.shape = 'circle';
+        var sizeMatch = shapePart.match(/circle\s*\(\s*([^)]+)\s*\)/i);
+
+        if (sizeMatch) {
+          this.r2 = _jmUtils.jmUtils.trim(sizeMatch[1]);
+        }
+      } else if (shapePart.startsWith('ellipse')) {
+        this.shape = 'ellipse';
+
+        var _sizeMatch = shapePart.match(/ellipse\s*\(\s*([^)]+)\s*\)/i);
+
+        if (_sizeMatch) {
+          var sizes = _jmUtils.jmUtils.trim(_sizeMatch[1]).split(/\s+/);
+
+          if (sizes.length >= 2) {
+            this.rx = sizes[0];
+            this.ry = sizes[1];
           }
         }
       }
+    }
+    /**
+     * 解析径向渐变位置
+     * @param {string} posPart 位置描述
+     */
+
+  }, {
+    key: "_parseRadialPosition",
+    value: function _parseRadialPosition(posPart) {
+      var parts = posPart.split(/\s+/);
+
+      if (parts.length >= 2) {
+        this.x1 = parts[0];
+        this.y1 = parts[1];
+        this.x2 = parts[0];
+        this.y2 = parts[1];
+      }
+    }
+    /**
+     * 解析颜色停止点
+     * @param {string} colorPart 颜色部分字符串
+     * @returns {number} 成功解析的颜色数量
+     */
+
+  }, {
+    key: "_parseColorStops",
+    value: function _parseColorStops(colorPart) {
+      if (!colorPart) {
+        return 0;
+      }
+
+      var stops = this._splitColorStops(colorPart);
+
+      var lastOffset = -1;
+      var colorCount = 0;
+
+      for (var i = 0; i < stops.length; i++) {
+        var stop = _jmUtils.jmUtils.trim(stops[i]);
+
+        if (!stop) continue;
+
+        var parsed = this._parseSingleColorStop(stop);
+
+        if (!parsed) {
+          continue;
+        }
+
+        var color = parsed.color,
+            offset = parsed.offset;
+
+        if (color === 'transparent') {
+          color = 'rgba(0,0,0,0)';
+        }
+
+        if (!this._isValidColor(color)) {
+          console.warn('jmGradient: 无效的颜色格式 "' + color + '"');
+          continue;
+        }
+
+        var normalizedOffset = this._normalizeOffset(offset);
+
+        var finalOffset = normalizedOffset;
+
+        if (finalOffset === null) {
+          if (i === 0) {
+            finalOffset = 0;
+          } else if (i === stops.length - 1) {
+            finalOffset = 1;
+          } else {
+            var nextOffset = this._findNextOffset(stops, i);
+
+            if (nextOffset !== null) {
+              finalOffset = (lastOffset + nextOffset) / 2;
+            } else {
+              finalOffset = Math.min(1, lastOffset + (1 - lastOffset) / (stops.length - i));
+            }
+          }
+        }
+
+        if (finalOffset !== null) {
+          if (finalOffset < 0 || finalOffset > 1) {
+            console.warn('jmGradient: 颜色偏移量 ' + finalOffset + ' 超出有效范围 [0, 1]，将调整为有效范围');
+            finalOffset = Math.max(0, Math.min(1, finalOffset));
+          }
+
+          lastOffset = finalOffset;
+          this.addStop(finalOffset, color);
+          colorCount++;
+        }
+      }
+
+      return colorCount;
+    }
+    /**
+     * 分割颜色停止点字符串
+     * @param {string} colorPart 颜色部分字符串
+     * @returns {string[]} 颜色停止点数组
+     */
+
+  }, {
+    key: "_splitColorStops",
+    value: function _splitColorStops(colorPart) {
+      var stops = [];
+      var depth = 0;
+      var current = '';
+
+      for (var i = 0; i < colorPart.length; i++) {
+        var _char2 = colorPart[i];
+
+        if (_char2 === '(') {
+          depth++;
+          current += _char2;
+        } else if (_char2 === ')') {
+          depth--;
+          current += _char2;
+        } else if (_char2 === ',' && depth === 0) {
+          stops.push(current.trim());
+          current = '';
+        } else {
+          current += _char2;
+        }
+      }
+
+      if (current.trim()) {
+        stops.push(current.trim());
+      }
+
+      return stops;
+    }
+    /**
+     * 解析单个颜色停止点
+     * @param {string} stop 单个颜色停止点字符串
+     * @returns {object|null} {color, offset} 或 null
+     */
+
+  }, {
+    key: "_parseSingleColorStop",
+    value: function _parseSingleColorStop(stop) {
+      var hexMatch = stop.match(/^(#[a-fA-F0-9]{3,8})\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (hexMatch) {
+        return {
+          color: hexMatch[1],
+          offset: hexMatch[2] || null
+        };
+      }
+
+      var rgbaMatch = stop.match(/^(rgba?\s*\([^)]+\))\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (rgbaMatch) {
+        return {
+          color: rgbaMatch[1],
+          offset: rgbaMatch[2] || null
+        };
+      }
+
+      var hslaMatch = stop.match(/^(hsla?\s*\([^)]+\))\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (hslaMatch) {
+        return {
+          color: hslaMatch[1],
+          offset: hslaMatch[2] || null
+        };
+      }
+
+      var namedMatch = stop.match(/^([a-zA-Z]+)\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (namedMatch && this._isValidColor(namedMatch[1])) {
+        return {
+          color: namedMatch[1],
+          offset: namedMatch[2] || null
+        };
+      }
+
+      return null;
+    }
+    /**
+     * 查找下一个有偏移量的颜色停止点
+     * @param {string[]} stops 颜色停止点数组
+     * @param {number} currentIndex 当前索引
+     * @returns {number|null} 下一个偏移量或null
+     */
+
+  }, {
+    key: "_findNextOffset",
+    value: function _findNextOffset(stops, currentIndex) {
+      for (var i = currentIndex + 1; i < stops.length; i++) {
+        var parsed = this._parseSingleColorStop(_jmUtils.jmUtils.trim(stops[i]));
+
+        if (parsed && parsed.offset) {
+          return this._normalizeOffset(parsed.offset);
+        }
+      }
+
+      return null;
+    }
+    /**
+     * 验证颜色格式是否有效
+     * @param {string} color 颜色字符串
+     * @returns {boolean} 是否有效
+     */
+
+  }, {
+    key: "_isValidColor",
+    value: function _isValidColor(color) {
+      if (!color) return false;
+      var hexPattern = /^#([a-fA-F0-9]{3,8})$/;
+      if (hexPattern.test(color)) return true;
+      var rgbPattern = /^rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (rgbPattern.test(color)) return true;
+      var hslPattern = /^hsla?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%?\s*,\s*(\d{1,3})%?\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (hslPattern.test(color)) return true;
+      var namedColors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'white', 'black', 'cyan', 'magenta', 'gray', 'grey', 'brown', 'navy', 'teal', 'olive', 'maroon', 'silver', 'lime', 'aqua', 'fuchsia', 'violet', 'indigo', 'gold', 'silver', 'transparent'];
+      if (namedColors.includes(color.toLowerCase())) return true;
+      return false;
+    }
+    /**
+     * 标准化偏移值
+     * @param {string} offset 偏移字符串
+     * @returns {number|null} 0-1之间的数值或null
+     */
+
+  }, {
+    key: "_normalizeOffset",
+    value: function _normalizeOffset(offset) {
+      if (!offset) return null;
+      offset = _jmUtils.jmUtils.trim(offset);
+
+      if (offset.endsWith('%')) {
+        return parseFloat(offset) / 100;
+      }
+
+      var num = parseFloat(offset);
+      if (isNaN(num)) return null;
+
+      if (num > 1) {
+        return num / 100;
+      }
+
+      return num;
+    }
+    /**
+     * 检查字符串是否包含角度单位
+     * @param {string} str 待检查字符串
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "_hasAngleUnit",
+    value: function _hasAngleUnit(str) {
+      return /^-?\d+(\.\d+)?\s*(deg|rad|grad|turn)$/i.test(str);
+    }
+    /**
+     * 解析角度值
+     * @param {string} angleStr 角度字符串
+     * @returns {number} 弧度值
+     */
+
+  }, {
+    key: "_parseAngle",
+    value: function _parseAngle(angleStr) {
+      angleStr = _jmUtils.jmUtils.trim(angleStr);
+      var match = angleStr.match(/^(-?\d+(\.\d+)?)\s*(deg|rad|grad|turn)?$/i);
+      if (!match) return 0;
+      var value = parseFloat(match[1]);
+      var unit = (match[3] || 'deg').toLowerCase();
+
+      switch (unit) {
+        case 'deg':
+          return value * Math.PI / 180;
+
+        case 'rad':
+          return value;
+
+        case 'grad':
+          return value * Math.PI / 200;
+
+        case 'turn':
+          return value * 2 * Math.PI;
+
+        default:
+          return value * Math.PI / 180;
+      }
+    }
+    /**
+     * 将角度转换为起点和终点坐标
+     * @param {number} angle 弧度值
+     * @returns {object} 坐标对象
+     */
+
+  }, {
+    key: "_angleToCoords",
+    value: function _angleToCoords(angle) {
+      var x = Math.cos(angle);
+      var y = -Math.sin(angle);
+      return {
+        x1: Math.round((0.5 - x * 0.5) * 1000) / 1000,
+        y1: Math.round((0.5 + y * 0.5) * 1000) / 1000,
+        x2: Math.round((0.5 + x * 0.5) * 1000) / 1000,
+        y2: Math.round((0.5 - y * 0.5) * 1000) / 1000
+      };
+    }
+    /**
+     * 将方向关键词转换为角度和坐标
+     * @param {string} direction 方向描述
+     * @returns {object} 包含angle和坐标的对象
+     */
+
+  }, {
+    key: "_directionToAngle",
+    value: function _directionToAngle(direction) {
+      var directions = {
+        'to top': {
+          angle: 0,
+          x1: '50%',
+          y1: '100%',
+          x2: '50%',
+          y2: '0%'
+        },
+        'to bottom': {
+          angle: Math.PI,
+          x1: '50%',
+          y1: '0%',
+          x2: '50%',
+          y2: '100%'
+        },
+        'to left': {
+          angle: -Math.PI / 2,
+          x1: '100%',
+          y1: '50%',
+          x2: '0%',
+          y2: '50%'
+        },
+        'to right': {
+          angle: Math.PI / 2,
+          x1: '0%',
+          y1: '50%',
+          x2: '100%',
+          y2: '50%'
+        },
+        'to top left': {
+          angle: -Math.PI * 3 / 4,
+          x1: '100%',
+          y1: '100%',
+          x2: '0%',
+          y2: '0%'
+        },
+        'to top right': {
+          angle: -Math.PI / 4,
+          x1: '0%',
+          y1: '100%',
+          x2: '100%',
+          y2: '0%'
+        },
+        'to bottom left': {
+          angle: Math.PI * 3 / 4,
+          x1: '100%',
+          y1: '0%',
+          x2: '0%',
+          y2: '100%'
+        },
+        'to bottom right': {
+          angle: Math.PI / 4,
+          x1: '0%',
+          y1: '0%',
+          x2: '100%',
+          y2: '100%'
+        },
+        'top': {
+          angle: 0,
+          x1: '50%',
+          y1: '100%',
+          x2: '50%',
+          y2: '0%'
+        },
+        'bottom': {
+          angle: Math.PI,
+          x1: '50%',
+          y1: '0%',
+          x2: '50%',
+          y2: '100%'
+        },
+        'left': {
+          angle: -Math.PI / 2,
+          x1: '100%',
+          y1: '50%',
+          x2: '0%',
+          y2: '50%'
+        },
+        'right': {
+          angle: Math.PI / 2,
+          x1: '0%',
+          y1: '50%',
+          x2: '100%',
+          y2: '50%'
+        }
+      };
+      var dir = directions[direction];
+
+      if (dir) {
+        return dir;
+      }
+
+      var keywordMatch = direction.match(/to\s+(top|bottom|left|right)/i);
+
+      if (keywordMatch) {
+        var mainDir = keywordMatch[1].toLowerCase();
+        var secDir = direction.replace(keywordMatch[0], '').trim();
+
+        if (secDir) {
+          var combined = "to ".concat(mainDir, " ").concat(secDir);
+
+          if (directions[combined]) {
+            return directions[combined];
+          }
+        }
+      }
+
+      return {
+        angle: 0,
+        x1: '50%',
+        y1: '100%',
+        x2: '50%',
+        y2: '0%'
+      };
     }
     /**
      * 转换为渐变的字符串表达

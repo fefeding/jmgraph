@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渐变效果 - jmGradient</title>
+    <style>
+        html, body { margin: 0; padding: 20px; background: #1a1a2e; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        h2 { color: #00d4ff; margin-bottom: 10px; }
+        p.desc { color: #8899aa; font-size: 13px; margin-bottom 16px; line-height: 1.6; }
+        canvas { display: block; border-radius: 8px; background: #0a0a1a; margin-bottom: 20px; }
+        code { background: #16213e; padding: 2px 6px; border-radius: 3px; color: #ffd93d; font-size: 12px; }
+        pre { background: #16213e; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; line-height: 1.5; color: #c0c0c0; margin: 10px 0; }
+        .section { margin-bottom: 30px; }
+        .section-title { color: #8be9fd; font-size: 14px; margin: 20px 0 10px; border-left: 3px solid #00d4ff; padding-left: 10px; }
+    </style>
+</head>
+<body>
+    <h2>渐变效果 - jmGradient</h2>
+    <p class="desc">
+        支持完整的 CSS 渐变语法，包括：角度格式（deg/rad/grad/turn）、方向关键词（to top/to right 等）、
+        百分比颜色偏移、各种颜色格式（hex/rgb/rgba/hsl/hsla）。可以在控制台查看格式校验警告。
+    </p>
+    <canvas id="canvas" width="700" height="1100"></canvas>
+
+    <div class="section">
+        <div class="section-title">线性渐变 - 角度格式</div>
+<pre>
+// 180度（从上到下）
+'linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)'
+
+// 90度（从左到右）
+'linear-gradient(90deg, #f59e0b 0%, #ef4444 50%, #dc2626 100%)'
+
+// 45度对角线
+'linear-gradient(45deg, #10b981 0%, #06b6d4 100%)'
+</pre>
+    </div>
+
+    <div class="section">
+        <div class="section-title">线性渐变 - 方向关键词</div>
+<pre>
+// to top (从下到上)
+'linear-gradient(to top, #e94560, #00d4ff)'
+
+// to right (从左到右)
+'linear-gradient(to right, #ffd93d, #e94560)'
+
+// to top right (从左下到右上)
+'linear-gradient(to top right, #8b5cf6, #f59e0b)'
+</pre>
+    </div>
+
+    <div class="section">
+        <div class="section-title">线性渐变 - 弧度/圈数单位</div>
+<pre>
+// 0.5turn (半圈，相当于180deg)
+'linear-gradient(0.5turn, #10b981, #3b82f6)'
+
+// 1turn (一圈，相当于360deg)
+'linear-gradient(1turn, #f59e0b, #ef4444)'
+</pre>
+    </div>
+
+    <div class="section">
+        <div class="section-title">径向渐变</div>
+<pre>
+// 圆形渐变
+'radial-gradient(circle, #e94560, #8b5cf6)'
+
+// 椭圆渐变 at 位置
+'radial-gradient(ellipse at top, #06b6d4, #8b5cf6)'
+
+// 径向渐变坐标格式
+'radial-gradient(50% 50% 100% 50% 50% 0%, #ffd93d 0%, #f59e0b 100%)'
+</pre>
+    </div>
+
+    <div class="section">
+        <div class="section-title">颜色格式支持</div>
+<pre>
+// hex格式
+'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)'
+
+// rgba格式
+'linear-gradient(180deg, rgba(233,69,96,0.8) 0%, rgba(0,212,255,0.8) 100%)'
+
+// hsl格式
+'linear-gradient(180deg, hsl(345, 82%, 62%) 0%, hsl(191, 100%, 50%) 100%)'
+
+// 命名颜色
+'linear-gradient(to top, red, blue, green)'
+</pre>
+    </div>
+
+    <script type="module">
+        import { create } from '../../index.js';
+        const g = create('canvas');
+
+        function addShape(shape) {
+            g.children.add(shape);
+            return shape;
+        }
+
+        function addLabel(text, x, y, width) {
+            return addShape(g.createShape('label', {
+                position: {x, y}, width,
+                value: text,
+                style: { fill: '#8899aa', fontSize: 11, textAlign: 'center' }
+            }));
+        }
+
+        // ==================== 第一行：角度格式 ====================
+        // 180deg
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 20}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)' }
+        }));
+        addLabel('180deg', 20, 85, 100);
+
+        // 90deg
+        addShape(g.createShape('rect', {
+            position: {x: 140, y: 20}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(90deg, #f59e0b 0%, #ef4444 50%, #dc2626 100%)' }
+        }));
+        addLabel('90deg', 140, 85, 100);
+
+        // 45deg
+        addShape(g.createShape('rect', {
+            position: {x: 260, y: 20}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(45deg, #10b981 0%, #06b6d4 100%)' }
+        }));
+        addLabel('45deg', 260, 85, 100);
+
+        // 0deg
+        addShape(g.createShape('rect', {
+            position: {x: 380, y: 20}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(0deg, #e94560, #00d4ff)' }
+        }));
+        addLabel('0deg', 380, 85, 100);
+
+        // -90deg
+        addShape(g.createShape('rect', {
+            position: {x: 500, y: 20}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(-90deg, #8b5cf6, #f59e0b)' }
+        }));
+        addLabel('-90deg', 500, 85, 100);
+
+        // ==================== 第二行：方向关键词 ====================
+        // to top
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 120}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to top, #e94560, #00d4ff)' }
+        }));
+        addLabel('to top', 20, 185, 100);
+
+        // to bottom
+        addShape(g.createShape('rect', {
+            position: {x: 140, y: 120}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to bottom, #e94560, #00d4ff)' }
+        }));
+        addLabel('to bottom', 140, 185, 100);
+
+        // to left
+        addShape(g.createShape('rect', {
+            position: {x: 260, y: 120}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to left, #ffd93d, #e94560)' }
+        }));
+        addLabel('to left', 260, 185, 100);
+
+        // to right
+        addShape(g.createShape('rect', {
+            position: {x: 380, y: 120}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to right, #ffd93d, #e94560)' }
+        }));
+        addLabel('to right', 380, 185, 100);
+
+        // to top right
+        addShape(g.createShape('rect', {
+            position: {x: 500, y: 120}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to top right, #8b5cf6, #f59e0b)' }
+        }));
+        addLabel('to top right', 500, 185, 100);
+
+        // ==================== 第三行：更多方向关键词 ====================
+        // to top left
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 220}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to top left, #8b5cf6, #f59e0b)' }
+        }));
+        addLabel('to top left', 20, 285, 100);
+
+        // to bottom left
+        addShape(g.createShape('rect', {
+            position: {x: 140, y: 220}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to bottom left, #10b981, #06b6d4)' }
+        }));
+        addLabel('to bottom left', 140, 285, 100);
+
+        // to bottom right
+        addShape(g.createShape('rect', {
+            position: {x: 260, y: 220}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to bottom right, #10b981, #06b6d4)' }
+        }));
+        addLabel('to bottom right', 260, 285, 100);
+
+        // turn单位
+        addShape(g.createShape('rect', {
+            position: {x: 380, y: 220}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(0.5turn, #10b981, #3b82f6)' }
+        }));
+        addLabel('0.5turn', 380, 285, 100);
+
+        // rad单位
+        addShape(g.createShape('rect', {
+            position: {x: 500, y: 220}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(3.14159rad, #f59e0b, #ef4444)' }
+        }));
+        addLabel('3.14159rad', 500, 285, 100);
+
+        // ==================== 第四行：径向渐变 ====================
+        // circle
+        addShape(g.createShape('circle', {
+            center: {x: 70, y: 385}, radius: 40,
+            style: { fill: 'radial-gradient(circle, #e94560, #8b5cf6)' }
+        }));
+        addLabel('circle', 20, 430, 100);
+
+        // radial ellipse at top
+        addShape(g.createShape('circle', {
+            center: {x: 190, y: 385}, radius: 40,
+            style: { fill: 'radial-gradient(ellipse at top, #06b6d4, #8b5cf6)' }
+        }));
+        addLabel('ellipse at top', 140, 430, 100);
+
+        // radial ellipse at center
+        addShape(g.createShape('circle', {
+            center: {x: 310, y: 385}, radius: 40,
+            style: { fill: 'radial-gradient(ellipse at center, #ffd93d, #f59e0b)' }
+        }));
+        addLabel('ellipse at center', 260, 430, 100);
+
+        // radial ellipse at bottom right
+        addShape(g.createShape('circle', {
+            center: {x: 430, y: 385}, radius: 40,
+            style: { fill: 'radial-gradient(ellipse at bottom right, #10b981, #3b82f6)' }
+        }));
+        addLabel('ellipse at\nbottom right', 380, 430, 100);
+
+        // radial with position
+        addShape(g.createShape('circle', {
+            center: {x: 550, y: 385}, radius: 40,
+            style: { fill: 'radial-gradient(ellipse at 20% 30%, #e94560, #00d4ff)' }
+        }));
+        addLabel('ellipse at 20% 30%', 500, 430, 100);
+
+        // ==================== 第五行：颜色格式 ====================
+        // rgba颜色
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 480}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(180deg, rgba(233,69,96,0.9) 0%, rgba(0,212,255,0.9) 100%)' }
+        }));
+        addLabel('rgba格式', 20, 545, 100);
+
+        // hsl颜色
+        addShape(g.createShape('rect', {
+            position: {x: 140, y: 480}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(180deg, hsl(345, 82%, 62%) 0%, hsl(191, 100%, 50%) 100%)' }
+        }));
+        addLabel('hsl格式', 140, 545, 100);
+
+        // hsla颜色
+        addShape(g.createShape('rect', {
+            position: {x: 260, y: 480}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(180deg, hsla(345, 82%, 62%, 0.8) 0%, hsla(191, 100%, 50%, 0.8) 100%)' }
+        }));
+        addLabel('hsla格式', 260, 545, 100);
+
+        // 命名颜色
+        addShape(g.createShape('rect', {
+            position: {x: 380, y: 480}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to top, red, blue, green)' }
+        }));
+        addLabel('命名颜色', 380, 545, 100);
+
+        // transparent
+        addShape(g.createShape('rect', {
+            position: {x: 500, y: 480}, width: 100, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(180deg, transparent, rgba(233,69,96,0.7))' }
+        }));
+        addLabel('transparent', 500, 545, 100);
+
+        // ==================== 第六行：多色渐变 ====================
+        // 五色渐变
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 580}, width: 300, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(90deg, #e94560 0%, #f59e0b 25%, #10b981 50%, #06b6d4 75%, #8b5cf6 100%)' }
+        }));
+        addLabel('多色渐变', 20, 645, 300);
+
+        // 彩虹渐变
+        addShape(g.createShape('rect', {
+            position: {x: 340, y: 580}, width: 260, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff)' }
+        }));
+        addLabel('彩虹渐变', 340, 645, 260);
+
+        // ==================== 第七行：复杂渐变 ====================
+        // 带百分比的复杂渐变
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 690}, width: 300, height: 80, radius: 12,
+            style: {
+                fill: 'linear-gradient(135deg, #e94560 0%, #f59e0b 15%, #10b981 30%, #06b6d4 45%, #8b5cf6 60%, #ec4899 75%, #f59e0b 100%)',
+                filter: 'brightness(1.1) saturate(1.3)'
+            }
+        }));
+        addLabel('复杂多停点渐变', 20, 775, 300);
+
+        // 径向多色
+        addShape(g.createShape('circle', {
+            center: {x: 490, y: 730}, radius: 50,
+            style: { fill: 'radial-gradient(circle, #ffd93d 0%, #f59e0b 30%, #e94560 60%, #8b5cf6 100%)' }
+        }));
+        addLabel('径向多色', 440, 785, 100);
+
+        // 玻璃效果
+        addShape(g.createShape('rect', {
+            position: {x: 560, y: 690}, width: 120, height: 80, radius: 12,
+            style: {
+                fill: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 100%)',
+                stroke: 'rgba(255,255,255,0.5)',
+                lineWidth: 1
+            }
+        }));
+        addLabel('玻璃效果', 560, 775, 120);
+
+        // ==================== 第八行：与filter组合 ====================
+        // 渐变 + blur
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 830}, width: 150, height: 70, radius: 10,
+            style: {
+                fill: 'linear-gradient(180deg, #8b5cf6 0%, #ec4899 50%, #f59e0b 100%)',
+                filter: 'blur(2px)'
+            }
+        }));
+        addLabel('渐变 + blur', 20, 905, 150);
+
+        // 渐变 + brightness
+        addShape(g.createShape('rect', {
+            position: {x: 190, y: 830}, width: 150, height: 70, radius: 10,
+            style: {
+                fill: 'linear-gradient(180deg, #10b981 0%, #06b6d4 100%)',
+                filter: 'brightness(1.5)'
+            }
+        }));
+        addLabel('渐变 + brightness', 190, 905, 150);
+
+        // 渐变 + saturate
+        addShape(g.createShape('rect', {
+            position: {x: 360, y: 830}, width: 150, height: 70, radius: 10,
+            style: {
+                fill: 'linear-gradient(180deg, #e94560 0%, #ffd93d 100%)',
+                filter: 'saturate(2)'
+            }
+        }));
+        addLabel('渐变 + saturate', 360, 905, 150);
+
+        // 渐变 + hue-rotate
+        addShape(g.createShape('rect', {
+            position: {x: 530, y: 830}, width: 150, height: 70, radius: 10,
+            style: {
+                fill: 'linear-gradient(180deg, #8b5cf6 0%, #f59e0b 100%)',
+                filter: 'hue-rotate(90deg)'
+            }
+        }));
+        addLabel('渐变 + hue-rotate', 530, 905, 150);
+
+        // ==================== 第九行：大面积渐变展示 ====================
+        // 紫色主题渐变
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 960}, width: 660, height: 60, radius: 12,
+            style: {
+                fill: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'
+            }
+        }));
+        addLabel('紫色主题渐变', 20, 1025, 660);
+
+        // 日落渐变
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 1040}, width: 660, height: 40, radius: 8,
+            style: {
+                fill: 'linear-gradient(to right, #ff7e5f 0%, #feb47b 50%, #ffc371 100%)'
+            }
+        }));
+        addLabel('日落渐变', 20, 1085, 660);
+
+        g.refresh();
+    </script>
+</body>
+</html>

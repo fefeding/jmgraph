@@ -1,4 +1,17 @@
 
+/**
+ * @fileoverview GLSL 类型大小映射模块
+ * 
+ * 本模块提供了 GLSL 类型到其元素数量的映射。
+ * 
+ * @module lib/webgl/core/mapSize
+ * @author jmGraph Team
+ */
+
+/**
+ * GLSL 类型到元素数量的映射表
+ * @constant {Object.<string, number>}
+ */
 const GLSL_TO_SIZE = {
     'float':    1,
     'vec2':     2,
@@ -23,17 +36,13 @@ const GLSL_TO_SIZE = {
 };
 
 /**
- * @class
- * @memberof PIXI.glCore.shader
- * @param type {String}
- * @return {Number}
+ * 根据 GLSL 类型名获取元素数量
+ * @param {string} type GLSL 类型名
+ * @returns {number} 元素数量
  */
 const mapSize = function(type) { 
     return GLSL_TO_SIZE[type];
 };
-
-
-
 
 export {
     mapSize

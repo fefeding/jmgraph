@@ -1,10 +1,49 @@
-import {jmControl} from "../core/jmControl.js";
 /**
- * 显示文字控件
+ * @fileoverview jmLabel 文本标签类
+ * 
+ * jmLabel 提供了文本显示功能。
+ * 支持单行和多行文本，支持自动换行。
+ * 
+ * 主要功能：
+ * - 文本绘制
+ * - 自动换行
+ * - 文本对齐（水平/垂直）
+ * - 字体样式设置
+ * 
+ * @module jmLabel
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmControl} from "../core/jmControl.js";
+
+/**
+ * 文本标签类
+ * 
+ * 显示文字控件，支持多种文本样式和对齐方式。
  *
  * @class jmLabel
  * @extends jmControl
- * @param {object} params params参数:style=样式，value=显示的文字
+ * @param {object} params 参数
+ * @param {string} [params.text=''] 显示的文字内容
+ * @param {object} [params.center] 文本中心点坐标
+ * @param {object} [params.style] 样式对象
+ * @param {string} [params.style.font] 字体样式
+ * @param {string} [params.style.textAlign='left'] 水平对齐方式
+ * @param {string} [params.style.textBaseline='middle'] 垂直对齐方式
+ * @param {number} [params.style.maxWidth] 最大宽度（用于自动换行）
+ * 
+ * @example
+ * // 创建文本标签
+ * const label = graph.createShape('label', {
+ *     position: {x: 100, y: 100},
+ *     text: 'Hello World',
+ *     style: {
+ *         fill: '#000',
+ *         font: '20px Arial',
+ *         textAlign: 'center'
+ *     }
+ * });
  */
 export default class jmLabel extends jmControl {
 

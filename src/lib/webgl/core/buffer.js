@@ -1,45 +1,76 @@
 
-// 创建缓冲区
+/**
+ * @fileoverview WebGL 缓冲区管理模块
+ * 
+ * 本模块提供了 WebGL 缓冲区的创建和管理功能，包括：
+ * - 创建通用缓冲区
+ * - 创建 Float32 类型缓冲区
+ * - 创建 Uint16 类型缓冲区
+ * - 删除缓冲区
+ * 
+ * @module lib/webgl/core/buffer
+ * @author jmGraph Team
+ */
+
+/**
+ * 创建 WebGL 缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array|TypedArray} data 缓冲区数据
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象 {type, drawType, buffer, unitSize}
+ */
 function createBuffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
-    //先创建一个缓存对象
     const buffer = gl.createBuffer();
     if(!buffer) {
         throw Error('创建缓冲区对象失败');
     }
-    //说明缓存对象保存的类型
     gl.bindBuffer(type, buffer);
-    //写入坐标数据
-    // 因为会将数据发送到 GPU，为了省去数据解析，这里使用 Float32Array 直接传送数据
-    // data.buffer这里要使用data.buffer，否则在edge下可能导至数据发生较大的改变
-    gl.bufferData(type, data.buffer || data, drawType); // 表示缓冲区的内容不会经常更改
+    gl.bufferData(type, data.buffer || data, drawType);
     return {
         type,
         drawType,
         buffer,
-        // 获取到数组中单个元素的字节数
         unitSize: data.BYTES_PER_ELEMENT
     };
 }
 
-// 创建float32的buffer
+/**
+ * 创建 Float32 类型缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array} data 数据数组
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象
+ */
 function createFloat32Buffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
     const vertices = new Float32Array(data);
     const buffer = createBuffer(gl, vertices, type, drawType);
     return buffer;
 }
 
-// 创建uint16的bugger
+/**
+ * 创建 Uint16 类型缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array} data 数据数组
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象
+ */
 function createUint16Buffer(gl, data, type=gl.ARRAY_BUFFER, drawType=gl.STATIC_DRAW) {
     const vertices = new Uint16Array(data);
     const buffer = createBuffer(gl, vertices, type, drawType);
     return buffer;
 }
 
-// 释放
+/**
+ * 删除缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object|WebGLBuffer} buffer 缓冲区对象或 WebGL 缓冲区
+ */
 function deleteBuffer(gl, buffer) {
     gl.deleteBuffer(buffer.buffer || buffer);
 }
-
 
 export {
     createBuffer,

@@ -1,11 +1,49 @@
-import {jmRect} from "./jmRect.js";
 /**
- * 可拉伸的缩放控件
- * 继承jmRect
- * 如果此控件加入到了当前控制的对象的子控件中，请在参数中加入movable:false，否则导致当前控件会偏离被控制的控件。
+ * @fileoverview jmResize 可缩放控件类
+ * 
+ * jmResize 提供了可缩放的矩形控件功能。
+ * 在矩形四边和四角添加可拖拽的控制点，实现图形的缩放和调整。
+ * 
+ * 主要功能：
+ * - 8个方向的控制点
+ * - 鼠标拖拽缩放
+ * - 支持旋转后的缩放
+ * - 自定义最小尺寸
+ * 
+ * @module jmResize
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmRect} from "./jmRect.js";
+
+/**
+ * 可缩放控件类
+ * 
+ * 继承自 jmRect，在矩形四边和四角添加可拖拽的控制点。
+ * 用于实现图形的缩放和调整功能。
  *
  * @class jmResize
  * @extends jmRect
+ * @param {object} params 控件参数
+ * @param {boolean} [params.resizable=true] 是否可缩放
+ * @param {boolean} [params.movable] 是否可移动
+ * @param {number} [params.rectSize=8] 控制点大小
+ * 
+ * @example
+ * // 创建可缩放矩形
+ * const resize = graph.createShape('resize', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     resizable: true,
+ *     movable: true
+ * });
+ * 
+ * // 监听缩放事件
+ * resize.on('resize', (px, py, dx, dy) => {
+ *     console.log('缩放中', px, py, dx, dy);
+ * });
  */
 export default class jmResize extends jmRect {	
 
@@ -315,7 +353,7 @@ export default class jmResize extends jmRect {
 					break;
 				}
 				case 6: {
-					r.position.x = (newLocation.width - r.height) / 2;
+					r.position.x = (newLocation.width - r.width) / 2;
 					r.position.y = newLocation.height - r.height / 2;
 					break;
 				}

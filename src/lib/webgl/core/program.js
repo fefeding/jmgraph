@@ -1,32 +1,39 @@
-import {
-    createShader
-} from './shader.js';
-import {
-    mapSize
-} from './mapSize.js';
-import {
-    mapType
-} from './mapType.js';
+/**
+ * @fileoverview WebGL 着色器程序管理模块
+ * 
+ * 本模块提供了 WebGL 着色器程序的创建和管理功能，包括：
+ * - 创建着色器程序
+ * - 提取属性和 uniform 变量
+ * - 顶点属性绑定
+ * 
+ * @module lib/webgl/core/program
+ * @author jmGraph Team
+ */
+import { createShader } from './shader.js';
+import { mapSize } from './mapSize.js';
+import { mapType } from './mapType.js';
 
-// 创建程序
+/**
+ * 创建着色器程序
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {string} vertexSrc 顶点着色器源码
+ * @param {string} fragmentSrc 片段着色器源码
+ * @returns {Object} 程序对象 {program, attrs, uniforms}
+ */
 function createProgram(gl, vertexSrc, fragmentSrc) {
-    // 创建顶点着色器
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSrc);
-    // 创建片段着色器
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSrc);
 
-    const program = gl.createProgram() // 创建一个程序
-    gl.attachShader(program, vertexShader) // 添加顶点着色器
-    gl.attachShader(program, fragmentShader) // 添加片元着色器
-    gl.linkProgram(program) // 连接 program 中的着色器
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
 
-    // 检查程序链接状态
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         console.error('PError: Could not initialize shader.');
         console.error('gl.VALIDATE_STATUS', gl.getProgramParameter(program, gl.VALIDATE_STATUS));
         console.error('gl.getError()', gl.getError());
 
-        // if there is a program info log, log it
         if (gl.getProgramInfoLog(program) !== '') {
             console.warn('Warning: gl.getProgramInfoLog()', gl.getProgramInfoLog(program));
         }
@@ -36,28 +43,32 @@ function createProgram(gl, vertexSrc, fragmentSrc) {
 
     useProgram(gl, program);
 
-    // clean up some shaders
     gl.deleteShader(vertexShader);
     gl.deleteShader(fragmentShader);
 
     const attrs = extractAttributes(gl, program);
     const uniforms = extractUniforms(gl, program);
     
-    return {
-        program,
-        attrs,
-        uniforms
-    };
+    return { program, attrs, uniforms };
 }
 
-// 采用program
+/**
+ * 使用指定的着色器程序
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ */
 function useProgram(gl, program) {
-    return gl.useProgram(program); // 告诉 webgl 用这个 program 进行渲染
+    return gl.useProgram(program);
 }
 
+/**
+ * 提取着色器程序中的所有属性
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @returns {Object} 属性对象字典
+ */
 function extractAttributes(gl, program) {
     const attributes = {};
-
     const count = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
 
     for (let i = 0; i < count; i++){
@@ -74,55 +85,84 @@ function extractAttributes(gl, program) {
     return attributes;
 }
 
+/**
+ * 提取着色器程序中的所有 uniform 变量
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @returns {Object} uniform 变量对象字典
+ */
 function extractUniforms(gl, program) {
-	const uniforms = {};
-
+    const uniforms = {};
     const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
 
     for (let i = 0; i < count; i++) {
-    	const uniformData = gl.getActiveUniform(program, i);
-    	const name = uniformData.name.replace(/\[.*?\]/, "");
-        const type = mapType(gl, uniformData.type );
+        const uniformData = gl.getActiveUniform(program, i);
+        const name = uniformData.name.replace(/\[.*?\]/, "");
+        const type = mapType(gl, uniformData.type);
 
-    	uniforms[name] = {
+        uniforms[name] = {
             uniformData,
-    		type: type,
-    		size: uniformData.size,
-    		location: gl.getUniformLocation(program, name),
-    	};
+            type: type,
+            size: uniformData.size,
+            location: gl.getUniformLocation(program, name),
+        };
     }
 
-	return uniforms;
-};
+    return uniforms;
+}
 
-
-// 把缓冲区的值写入变量
-// size: 组成数量，必须是1，2，3或4.  每个单元由多少个数组成
-// strip: 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
-// offset: 字节偏移量，必须是类型的字节长度的倍数。
-// dataType: 每个元素的数据类型
+/**
+ * 将缓冲区数据写入顶点属性
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object} buffer 缓冲区对象
+ * @param {Object} attr 属性对象
+ * @param {number} [size=2] 每个顶点的分量数（1-4）
+ * @param {number} [strip=0] 步长，0 表示紧密排列
+ * @param {number} [offset=0] 字节偏移量
+ * @param {number} [dataType=gl.FLOAT] 数据类型
+ * @returns {Object} 缓冲区对象
+ */
 function writeVertexAttrib(gl, buffer, attr, size=2, strip=0, offset=0, dataType=gl.FLOAT) {
     gl.bindBuffer(buffer.type, buffer.buffer);
-    gl.vertexAttribPointer( // 告诉 OpenGL 如何从 Buffer 中获取数据
-            attr.location, // 顶点属性的索引
-            size, // 组成数量，必须是1，2，3或4。我们只提供了 x 和 y
-            dataType,
-            false, // 是否归一化到特定的范围，对 FLOAT 类型数据设置无效
-            strip * buffer.unitSize,
-            offset
-        );
+    gl.vertexAttribPointer(
+        attr.location,
+        size,
+        dataType,
+        false,
+        strip * buffer.unitSize,
+        offset
+    );
     gl.enableVertexAttribArray(attr.location);
     return buffer;
 }
 
+/**
+ * 禁用顶点属性数组
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object} attr 属性对象
+ */
 function disableVertexAttribArray(gl, attr) {
     return gl.disableVertexAttribArray(attr.location);
 }
 
+/**
+ * 获取属性位置
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @param {string} name 属性名
+ * @returns {number} 属性位置
+ */
 function getAttribLocation(gl, program, name) {
     return gl.getAttribLocation(program, name);
 }
 
+/**
+ * 获取 uniform 位置
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @param {string} name uniform 变量名
+ * @returns {WebGLUniformLocation} uniform 位置
+ */
 function getUniformLocation(gl, program, name) {
     return gl.getUniformLocation(program, name);
 }

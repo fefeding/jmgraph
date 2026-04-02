@@ -1,9 +1,26 @@
+/**
+ * @fileoverview jmEllipse 椭圆类
+ * 
+ * jmEllipse 提供了椭圆图形的绘制功能。
+ * 椭圆是通过缩放圆形来实现的，支持完整的椭圆和椭圆弧。
+ * 
+ * 主要功能：
+ * - 椭圆绘制
+ * - 椭圆弧绘制
+ * - 支持 WebGL 和 Canvas 2D 模式
+ * 
+ * @module jmEllipse
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmArc} from "./jmArc.js";
 
 /**
- * 画椭圆
- * 椭圆是通过缩放圆形来实现的，支持完整的椭圆和椭圆弧
- * 可以指定起始角度和结束角度来绘制椭圆弧
+ * 椭圆类
+ * 
+ * 绘制椭圆图形，继承自 jmArc。
+ * 可以指定起始角度和结束角度来绘制椭圆弧。
  *
  * @class jmEllipse
  * @extends jmArc
@@ -14,6 +31,15 @@ import {jmArc} from "./jmArc.js";
  * @param {number} [params.startAngle=0] 起始角度（弧度）
  * @param {number} [params.endAngle=Math.PI*2] 结束角度（弧度）
  * @param {boolean} [params.anticlockwise=false] 是否逆时针绘制
+ * 
+ * @example
+ * // 创建椭圆
+ * const ellipse = graph.createShape('ellipse', {
+ *     center: {x: 200, y: 200},
+ *     width: 200,
+ *     height: 100,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
  */
 export default class jmEllipse extends jmArc {
 	

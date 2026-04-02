@@ -1,15 +1,44 @@
+/**
+ * @fileoverview jmShadow 阴影类
+ * 
+ * jmShadow 提供了图形阴影效果的创建和管理功能。
+ * 支持设置阴影的偏移、模糊程度和颜色。
+ * 
+ * 主要功能：
+ * - 阴影偏移设置（x, y）
+ * - 模糊程度设置（blur）
+ * - 阴影颜色设置（color）
+ * - 字符串解析和序列化
+ * 
+ * @module jmShadow
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils} from "./jmUtils.js";
 
 /**
- * 画图阴影对象表示法
- *
+ * 阴影类
+ * 
+ * 用于创建图形的阴影效果。阴影可以应用于任何图形控件。
+ * 
  * @class jmShadow
- * @param {number} x 横坐标偏移量
- * @param {number} y 纵坐标编移量
- * @param {number} blur 模糊值
- * @param {string} color 阴影的颜色
+ * 
+ * @param {number|string} x 横坐标偏移量，或阴影字符串格式 'x,y,blur,color'
+ * @param {number} [y] 纵坐标偏移量
+ * @param {number} [blur] 模糊值
+ * @param {string} [color] 阴影颜色
+ * 
+ * @example
+ * // 创建阴影
+ * const shadow = new jmShadow(5, 5, 10, 'rgba(0,0,0,0.5)');
+ * 
+ * // 从字符串创建
+ * const shadow = new jmShadow('5, 5, 10, rgba(0,0,0,0.5)');
+ * 
+ * // 应用到图形
+ * rect.style.shadow = shadow;
  */
-
 export default class jmShadow {
 	constructor(x, y, blur, color) {
 		if(typeof x == 'string' && !y && !blur && !color) {

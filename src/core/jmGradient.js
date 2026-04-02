@@ -1,11 +1,56 @@
+/**
+ * @fileoverview jmGradient 渐变类
+ * 
+ * jmGradient 提供了线性渐变和径向渐变的创建和管理功能。
+ * 支持从 CSS 渐变字符串解析，以及转换为 Canvas 渐变对象。
+ * 
+ * 主要功能：
+ * - 线性渐变（linear-gradient）
+ * - 径向渐变（radial-gradient）
+ * - CSS 渐变字符串解析
+ * - Canvas 渐变对象生成
+ * - WebGL 渐变支持
+ * 
+ * @module jmGradient
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils, colorKeywords} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 
 /**
  * 渐变类
- *
+ * 
+ * 用于创建和管理线性渐变或径向渐变效果。
+ * 支持 CSS 渐变字符串格式解析，可以转换为 Canvas 或 WebGL 兼容的渐变对象。
+ * 
  * @class jmGradient
- * @param {object} op 渐变参数,type:[linear= 线性渐变,radial=放射性渐变] 
+ * 
+ * @param {Object|string} opt 渐变参数对象或 CSS 渐变字符串
+ * @param {string} [opt.type='linear'] 渐变类型：'linear' 或 'radial'
+ * @param {number|string} [opt.x1] 起点X坐标（支持百分比）
+ * @param {number|string} [opt.y1] 起点Y坐标（支持百分比）
+ * @param {number|string} [opt.x2] 终点X坐标（支持百分比）
+ * @param {number|string} [opt.y2] 终点Y坐标（支持百分比）
+ * @param {number|string} [opt.r1] 内圆半径（径向渐变）
+ * @param {number|string} [opt.r2] 外圆半径（径向渐变）
+ * @param {Array} [opt.stops] 颜色停止点数组 [{offset, color}, ...]
+ * 
+ * @example
+ * // 创建线性渐变
+ * const gradient = new jmGradient({
+ *     type: 'linear',
+ *     x1: 0, y1: 0,
+ *     x2: '100%', y2: '100%',
+ *     stops: [
+ *         { offset: 0, color: '#ff0000' },
+ *         { offset: 1, color: '#0000ff' }
+ *     ]
+ * });
+ * 
+ * // 从 CSS 字符串创建
+ * const gradient = new jmGradient('linear-gradient(180deg, #ff0000, #0000ff)');
  */
 export default class jmGradient {
 	constructor(opt) {

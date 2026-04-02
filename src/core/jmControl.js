@@ -1,4 +1,22 @@
 
+/**
+ * @fileoverview jmGraph 控件基类
+ * 
+ * jmControl 是 jmGraph 库中所有可视化控件的基类，继承自 jmProperty。
+ * 提供了完整的控件生命周期管理：
+ * - 样式系统：支持填充、描边、阴影、渐变、滤镜等
+ * - 变换系统：支持平移、旋转、缩放
+ * - 事件系统：支持鼠标、键盘、触摸事件
+ * - 渲染系统：支持 Canvas 2D 和 WebGL 双渲染模式
+ * - 层级管理：支持 zIndex 排序和父子关系
+ * - 碰撞检测：支持点击测试和命中区域
+ * 
+ * @module jmControl
+ * @extends jmProperty
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 import {jmGradient} from "./jmGradient.js";
@@ -7,51 +25,164 @@ import {jmFilter} from "./jmFilter.js";
 import {jmProperty} from "./jmProperty.js";
 import WebglPath from "../lib/webgl/path.js";
 
+/**
+ * 样式名称映射表
+ * 
+ * 将简化的样式名称映射到 Canvas API 的标准属性名。
+ * 例如：'fill' -> 'fillStyle', 'stroke' -> 'strokeStyle'
+ * 
+ * @constant {Object.<string, string>}
+ * @private
+ */
 const jmStyleMap = {
-	'fill':'fillStyle',
-	'fillImage':'fillImage',
-	'stroke':'strokeStyle',
-	'shadow.blur':'shadowBlur',
-	'shadow.x':'shadowOffsetX',
-	'shadow.y':'shadowOffsetY',
-	'shadow.color':'shadowColor',
-	'lineWidth' : 'lineWidth',
-	'miterLimit': 'miterLimit',
-	'fillStyle' : 'fillStyle',
-	'strokeStyle' : 'strokeStyle',
-	'font' : 'font',
-	'opacity' : 'globalAlpha',
-	'textAlign' : 'textAlign',
-	'textBaseline' : 'textBaseline',
-	'shadowBlur' : 'shadowBlur',
-	'shadowOffsetX' : 'shadowOffsetX',
-	'shadowOffsetY' : 'shadowOffsetY',
-	'shadowColor' : 'shadowColor',
-	'lineJoin': 'lineJoin',
-	'lineCap':'lineCap',
-	'lineDashOffset': 'lineDashOffset',
-	'globalCompositeOperation': 'globalCompositeOperation'
+	'fill':'fillStyle',           // 填充颜色
+	'fillImage':'fillImage',      // 填充图片
+	'stroke':'strokeStyle',       // 描边颜色
+	'shadow.blur':'shadowBlur',   // 阴影模糊度
+	'shadow.x':'shadowOffsetX',   // 阴影X偏移
+	'shadow.y':'shadowOffsetY',   // 阴影Y偏移
+	'shadow.color':'shadowColor', // 阴影颜色
+	'lineWidth' : 'lineWidth',    // 线宽
+	'miterLimit': 'miterLimit',   // 斜接限制
+	'fillStyle' : 'fillStyle',    // 填充样式
+	'strokeStyle' : 'strokeStyle',// 描边样式
+	'font' : 'font',              // 字体
+	'opacity' : 'globalAlpha',    // 透明度
+	'textAlign' : 'textAlign',    // 文本对齐
+	'textBaseline' : 'textBaseline', // 文本基线
+	'shadowBlur' : 'shadowBlur',  // 阴影模糊
+	'shadowOffsetX' : 'shadowOffsetX', // 阴影X偏移
+	'shadowOffsetY' : 'shadowOffsetY', // 阴影Y偏移
+	'shadowColor' : 'shadowColor', // 阴影颜色
+	'lineJoin': 'lineJoin',       // 线条连接样式
+	'lineCap':'lineCap',          // 线条端点样式
+	'lineDashOffset': 'lineDashOffset', // 虚线偏移
+	'globalCompositeOperation': 'globalCompositeOperation' // 合成操作
 };
 
+/**
+ * jmGraph 控件基类
+ * 
+ * jmControl 是所有可视化图形控件的基类，提供了完整的图形渲染和交互能力。
+ * 
+ * **核心功能：**
+ * 
+ * 1. **样式系统**
+ *    - 支持填充色、描边色、渐变、图片填充
+ *    - 支持阴影、滤镜、混合模式
+ *    - 支持虚线、线宽、线帽等线条样式
+ * 
+ * 2. **变换系统**
+ *    - 支持 translate（平移）
+ *    - 支持 rotation（旋转）
+ *    - 支持 transform（矩阵变换）
+ * 
+ * 3. **事件系统**
+ *    - 鼠标事件：mousedown, mouseup, mousemove, click, dblclick
+ *    - 触摸事件：touchstart, touchmove, touchend
+ *    - 焦点事件：mouseover, mouseleave, touchover, touchleave
+ *    - 自定义事件：支持任意事件类型
+ * 
+ * 4. **渲染系统**
+ *    - 自动选择 Canvas 2D 或 WebGL 渲染器
+ *    - 支持脏矩形优化
+ *    - 支持层级排序（zIndex）
+ * 
+ * 5. **碰撞检测**
+ *    - 支持点在多边形内判断
+ *    - 支持自定义命中区域
+ *    - 支持旋转后的碰撞检测
+ * 
+ * @class jmControl
+ * @extends jmProperty
+ * 
+ * @example
+ * // 创建自定义控件
+ * class MyShape extends jmControl {
+ *     constructor(params) {
+ *         super(params, 'myShape');
+ *     }
+ *     
+ *     // 重写绘制方法
+ *     draw() {
+ *         // 自定义绘制逻辑
+ *     }
+ * }
+ * 
+ * // 使用控件
+ * const shape = new MyShape({
+ *     position: { x: 100, y: 100 },
+ *     width: 50,
+ *     height: 50,
+ *     style: {
+ *         fill: 'red',
+ *         stroke: 'black',
+ *         lineWidth: 2
+ *     }
+ * });
+ * graph.children.add(shape);
+ */
 export default class jmControl extends jmProperty {
 
+	/**
+	 * 构造函数
+	 * 
+	 * 创建一个新的控件实例。子类应该调用 super(params, 'typeName') 来设置类型名称。
+	 * 
+	 * @constructor
+	 * @param {Object} [params] - 控件初始化参数
+	 * @param {Object} [params.style] - 样式对象，包含填充、描边等属性
+	 * @param {number} [params.width=0] - 控件宽度
+	 * @param {number} [params.height=0] - 控件高度
+	 * @param {Object} [params.position] - 控件位置 {x, y}
+	 * @param {jmGraph} [params.graph] - 所属画布实例
+	 * @param {number} [params.zIndex=0] - 层级顺序
+	 * @param {boolean} [params.interactive=false] - 是否响应交互事件
+	 * @param {Object} [params.hitArea] - 自定义命中区域 {x, y, width, height}
+	 * @param {boolean} [params.isRegular] - 是否为规则图形（WebGL优化）
+	 * @param {boolean} [params.needCut] - 是否需要裁剪（WebGL）
+	 * @param {string} [t] - 控件类型名称，默认使用类名
+	 * 
+	 * @example
+	 * // 创建矩形控件
+	 * const rect = new jmControl({
+	 *     position: { x: 10, y: 10 },
+	 *     width: 100,
+	 *     height: 50,
+	 *     style: {
+	 *         fill: '#ff0000',
+	 *         stroke: '#000000',
+	 *         lineWidth: 2
+	 *     },
+	 *     interactive: true
+	 * }, 'jmRect');
+	 */
 	constructor(params, t) {
 		params = params||{};
 		super(params);
+		// 设置控件类型标识
 		this.property('type', t || new.target.name);
+		// 初始化样式对象
 		this.style = params && params.style ? params.style : {};
+		// 设置尺寸
 		this.width = params.width || 0;
 		this.height = params.height  || 0;
+		// 自定义命中区域（用于点击测试）
 		this.hitArea = params.hitArea || null;
 
+		// 设置位置
 		if(params.position) {
 			this.position = params.position;
 		}
 
+		// 关联画布
 		this.graph = params.graph || null;
+		// 层级顺序（用于排序）
 		this.zIndex = params.zIndex || 0;
+		// 是否响应交互事件
 		this.interactive = typeof params.interactive == 'undefined'? false : params.interactive;
 
+		// WebGL 模式下创建对应的渲染控制器
 		if(this.mode === 'webgl') {
 			this.webglControl = new WebglPath(this.graph, {
 				style: this.style,
@@ -61,17 +192,47 @@ export default class jmControl extends jmProperty {
 			});
 		}
 
+		// 执行初始化
 		this.initializing();
 		
+		// 别名：on 等同于 bind
 		this.on = this.bind;
 		
+		// 保存原始参数
 		this.option = params;
 	}
 
+	/**
+	 * 控件类型标识
+	 * 
+	 * 用于类型检查和调试，由构造函数自动设置。
+	 * 
+	 * @type {string}
+	 * @readonly
+	 * 
+	 * @example
+	 * console.log(rect.type); // 'jmRect'
+	 * if(control.type === 'jmCircle') { ... }
+	 */
 	get type() {
 		return this.property('type');
 	}
 
+	/**
+	 * 绘图上下文
+	 * 
+	 * 获取当前控件的 Canvas 2D 或 WebGL 渲染上下文。
+	 * 如果控件本身不是 jmGraph，会返回所属 graph 的上下文。
+	 * 
+	 * @type {CanvasRenderingContext2D|WebGLRenderingContext}
+	 * @readonly
+	 * 
+	 * @example
+	 * // 获取上下文并绘制
+	 * const ctx = control.context;
+	 * ctx.fillStyle = 'red';
+	 * ctx.fillRect(0, 0, 100, 100);
+	 */
 	get context() {
 		let s = this.property('context');
 		if(s) return s;
@@ -86,6 +247,35 @@ export default class jmControl extends jmProperty {
 		return this.property('context', v);
 	}
 
+	/**
+	 * 样式对象
+	 * 
+	 * 控件的视觉样式配置，包括：
+	 * - fill: 填充颜色或渐变
+	 * - stroke: 描边颜色
+	 * - lineWidth: 线宽
+	 * - shadow: 阴影配置
+	 * - font: 字体（文本控件）
+	 * - opacity: 透明度
+	 * 
+	 * 设置新样式会触发 needUpdate。
+	 * 
+	 * @type {Object}
+	 * 
+	 * @example
+	 * // 设置样式
+	 * control.style = {
+	 *     fill: '#ff0000',
+	 *     stroke: '#000000',
+	 *     lineWidth: 2,
+	 *     shadow: {
+	 *         blur: 10,
+	 *         x: 5,
+	 *         y: 5,
+	 *         color: 'rgba(0,0,0,0.5)'
+	 *     }
+	 * };
+	 */
 	get style() {
 		let s = this.property('style');
 		if(!s) s = this.property('style', {});
@@ -96,6 +286,22 @@ export default class jmControl extends jmProperty {
 		return this.property('style', v);
 	}
 
+	/**
+	 * 是否可见
+	 * 
+	 * 控制控件是否参与渲染和事件响应。
+	 * 不可见的控件不会被绘制，也不会响应鼠标/触摸事件。
+	 * 
+	 * @type {boolean}
+	 * @default true
+	 * 
+	 * @example
+	 * // 隐藏控件
+	 * control.visible = false;
+	 * 
+	 * // 显示控件
+	 * control.visible = true;
+	 */
 	get visible() {
 		let s = this.property('visible');
 		if(typeof s == 'undefined') s = this.property('visible', true);
@@ -106,6 +312,22 @@ export default class jmControl extends jmProperty {
 		return this.property('visible', v);
 	}
 
+	/**
+	 * 是否响应交互事件
+	 * 
+	 * 设置为 true 时，控件会响应鼠标和触摸事件。
+	 * 设置为 false 时，事件会穿透到下层控件。
+	 * 
+	 * @type {boolean}
+	 * @default false
+	 * 
+	 * @example
+	 * // 启用交互
+	 * control.interactive = true;
+	 * control.bind('click', (evt) => {
+	 *     console.log('clicked!');
+	 * });
+	 */
 	get interactive() {
 		const s = this.property('interactive');
 		return s;
@@ -114,6 +336,23 @@ export default class jmControl extends jmProperty {
 		return this.property('interactive', v);
 	}
 
+	/**
+	 * 自定义命中区域
+	 * 
+	 * 用于点击测试的自定义区域，格式为 {x, y, width, height}。
+	 * 如果设置，点击测试会使用此区域而非实际图形边界。
+	 * 
+	 * @type {Object|null}
+	 * 
+	 * @example
+	 * // 设置更大的点击区域
+	 * control.hitArea = {
+	 *     x: -10,
+	 *     y: -10,
+	 *     width: control.width + 20,
+	 *     height: control.height + 20
+	 * };
+	 */
 	get hitArea() {
 		const s = this.property('hitArea');
 		return s;
@@ -122,6 +361,26 @@ export default class jmControl extends jmProperty {
 		return this.property('hitArea', v);
 	}
 		
+	/**
+	 * 子控件列表
+	 * 
+	 * 当前控件的所有子控件。子控件会按 zIndex 排序后绘制。
+	 * 添加子控件时会自动建立父子关系。
+	 * 
+	 * @type {jmList}
+	 * 
+	 * @example
+	 * // 添加子控件
+	 * parent.children.add(child);
+	 * 
+	 * // 移除子控件
+	 * parent.children.remove(child);
+	 * 
+	 * // 遍历子控件
+	 * parent.children.each((i, child) => {
+	 *     console.log(child);
+	 * });
+	 */
 	get children() {
 		let s = this.property('children');
 		if(!s) s = this.property('children', new jmList());
@@ -132,6 +391,21 @@ export default class jmControl extends jmProperty {
 		return this.property('children', v);
 	}
 
+	/**
+	 * 控件宽度
+	 * 
+	 * 可以是具体数值或百分比字符串（如 '50%'）。
+	 * 百分比会相对于父容器宽度计算。
+	 * 
+	 * @type {number|string}
+	 * 
+	 * @example
+	 * // 设置固定宽度
+	 * control.width = 100;
+	 * 
+	 * // 设置百分比宽度
+	 * control.width = '50%';
+	 */
 	get width() {
 		let s = this.property('width');
 		if(typeof s == 'undefined') s = this.property('width', 0);
@@ -142,6 +416,21 @@ export default class jmControl extends jmProperty {
 		return this.property('width', v);
 	}
 
+	/**
+	 * 控件高度
+	 * 
+	 * 可以是具体数值或百分比字符串（如 '50%'）。
+	 * 百分比会相对于父容器高度计算。
+	 * 
+	 * @type {number|string}
+	 * 
+	 * @example
+	 * // 设置固定高度
+	 * control.height = 100;
+	 * 
+	 * // 设置百分比高度
+	 * control.height = '50%';
+	 */
 	get height() {
 		let s = this.property('height');
 		if(typeof s == 'undefined') s = this.property('height', 0);
@@ -152,6 +441,22 @@ export default class jmControl extends jmProperty {
 		return this.property('height', v);
 	}
 
+	/**
+	 * 层级顺序
+	 * 
+	 * 控制控件的绘制顺序，值越大越靠上。
+	 * 设置 zIndex 会触发子控件重新排序。
+	 * 
+	 * @type {number}
+	 * @default 0
+	 * 
+	 * @example
+	 * // 将控件置于最上层
+	 * control.zIndex = 100;
+	 * 
+	 * // 将控件置于最下层
+	 * control.zIndex = -1;
+	 */
 	get zIndex() {
 		let s = this.property('zIndex');
 		if(!s) s = this.property('zIndex', 0);
@@ -164,6 +469,21 @@ export default class jmControl extends jmProperty {
 		return v;
 	}
 
+	/**
+	 * 鼠标样式
+	 * 
+	 * 鼠标悬停在控件上时显示的光标样式。
+	 * 常用值：'default', 'pointer', 'move', 'text', 'crosshair'
+	 * 
+	 * @type {string}
+	 * 
+	 * @example
+	 * // 设置为手型指针
+	 * control.cursor = 'pointer';
+	 * 
+	 * // 设置为移动样式
+	 * control.cursor = 'move';
+	 */
 	set cursor(cur) {
 		const graph = this.graph;
 		if(graph) {
@@ -177,18 +497,35 @@ export default class jmControl extends jmProperty {
 		}
 	}
 
+	/**
+	 * 初始化控件
+	 * 
+	 * 在构造函数末尾调用，用于设置子控件管理逻辑。
+	 * 重写了 children 的 add、remove、sort、clear 方法，
+	 * 实现自动的父子关系维护和脏标记传播。
+	 * 
+	 * @method initializing
+	 * @protected
+	 */
 	initializing() {
 
 		const self = this;
 		this.children = this.children || new jmList();
 		const oadd = this.children.add;
 		
+		/**
+		 * 重写 add 方法，自动建立父子关系
+		 * @param {jmControl} obj - 要添加的子控件
+		 * @returns {jmControl} 添加的子控件
+		 */
 		this.children.add = function(obj) {
 			if(typeof obj === 'object') {
+				// 如果对象已有父级，先从原父级移除
 				if(obj.parent && obj.parent != self && obj.parent.children) {
 					obj.parent.children.remove(obj);
 				}
 				obj.parent = self;
+				// 如果已存在，先移除再添加
 				if(this.contain(obj)) {
 					this.oremove(obj);
 				}
@@ -196,6 +533,7 @@ export default class jmControl extends jmProperty {
 				obj.emit('add', obj);
 
 				self.needUpdate = true;
+				// 传播 graph 引用
 				if(self.graph) obj.graph = self.graph;
 				this.sort();
 				return obj;
@@ -203,6 +541,10 @@ export default class jmControl extends jmProperty {
 		};
 		this.children.oremove= this.children.remove;
 		
+		/**
+		 * 重写 remove 方法，清理父子关系
+		 * @param {jmControl} obj - 要移除的子控件
+		 */
 		this.children.remove = function(obj) {
 			if(typeof obj === 'object') {
 				obj.parent = null;
@@ -213,6 +555,9 @@ export default class jmControl extends jmProperty {
 			}
 		};
 		
+		/**
+		 * 按 zIndex 排序子控件
+		 */
 		this.children.sort = function() {
 			const levelItems = {};
 			this.each(function(i, obj) {
@@ -232,6 +577,10 @@ export default class jmControl extends jmProperty {
 				oadd.call(this, levelItems[index]);
 			}
 		}
+		
+		/**
+		 * 清空所有子控件
+		 */
 		this.children.clear = function() {
 			this.each(function(i,obj) {
 				this.remove(obj);
@@ -240,15 +589,55 @@ export default class jmControl extends jmProperty {
 		this.needUpdate = true;
 	} 
 
+	/**
+	 * 设置控件样式到绘图上下文
+	 * 
+	 * 将样式对象应用到 Canvas 上下文，支持：
+	 * - 基础样式：fill, stroke, lineWidth, opacity 等
+	 * - 阴影效果：shadow.blur, shadow.x, shadow.y, shadow.color
+	 * - 渐变填充：支持线性渐变和径向渐变
+	 * - 变换效果：rotation（旋转）、translate（平移）、transform（矩阵变换）
+	 * - 高级效果：lineDash（虚线）、filter（滤镜）、clipPath（裁剪）、mask（遮罩）
+	 * 
+	 * @method setStyle
+	 * @param {Object} [style] - 要应用的样式对象，默认使用 this.style
+	 * 
+	 * @example
+	 * // 应用样式
+	 * control.setStyle({
+	 *     fill: '#ff0000',
+	 *     stroke: '#000000',
+	 *     lineWidth: 2,
+	 *     shadow: {
+	 *         blur: 10,
+	 *         x: 5,
+	 *         y: 5,
+	 *         color: 'rgba(0,0,0,0.5)'
+	 *     }
+	 * });
+	 * 
+	 * // 使用渐变
+	 * control.setStyle({
+	 *     fill: 'linear-gradient(0,0,100,0,#ff0000,#0000ff)'
+	 * });
+	 */
 	setStyle(style) {
 		if(!style) {
 			style = this.style;
 		}
 		if(!style) return;
 
+		/**
+		 * 内部样式设置函数
+		 * @param {*} styleValue - 样式值
+		 * @param {string} name - 样式名称
+		 * @param {string} [mpkey] - 映射键名
+		 * @private
+		 */
 		const __setStyle = (style, name, mpkey) => {
 			if(style) {
 				let styleValue = style;
+				// 支持函数形式的样式值
 				if(typeof styleValue === 'function') {
 					try {
 						styleValue = styleValue.call(this);
@@ -261,12 +650,14 @@ export default class jmControl extends jmProperty {
 				let t = typeof styleValue;
 				let mpname = jmStyleMap[mpkey || name];
 
+				// 处理渐变
 				if((styleValue instanceof jmGradient) || (t == 'string' && styleValue.indexOf('-gradient') > -1)) {
 					if(t == 'string' && styleValue.indexOf('-gradient') > -1) {
 						styleValue = new jmGradient(styleValue);
 					}
 					__setStyle(styleValue.toGradient(this), mpname||name);
 				}
+				// 处理标准样式映射
 				else if(mpname) {
 					if(this.webglControl) {
 						this.webglControl.setStyle(mpname, styleValue);
@@ -278,8 +669,10 @@ export default class jmControl extends jmProperty {
 						this.context[mpname] = styleValue;
 					}
 				}
+				// 处理特殊样式
 				else {
 					switch(name) {
+						// 阴影样式
 						case 'shadow' : {
 							if(t == 'string') {
 								__setStyle(new jmShadow(styleValue), name);
@@ -290,9 +683,11 @@ export default class jmControl extends jmProperty {
 							}
 							break;
 						}
+						// 平移变换
 						case 'translate' : {
 							break;
 						}
+						// 旋转变换
 						case 'rotation' : {
 							if(typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;
 							styleValue = this.getRotation(styleValue);
@@ -306,6 +701,7 @@ export default class jmControl extends jmProperty {
 							this.context.translate && this.context.translate(-this.__translateAbsolutePosition.x, -this.__translateAbsolutePosition.y);
 							break;
 						}
+						// 矩阵变换
 						case 'transform' : {
 							if(!this.context.transform) break;
 							if(Array.isArray(styleValue)) {
@@ -323,13 +719,19 @@ export default class jmControl extends jmProperty {
 							}
 							break;
 						}
+						// 鼠标样式
 						case 'cursor' : {
 							this.cursor = styleValue;
 							break;
 						}
 						// ===== 新增样式特性 =====
 
-						// 虚线样式：支持自定义lineDash模式 (如 [5, 3, 2] 或 "5,3,2")
+						/**
+						 * 虚线样式
+						 * 支持数组格式 [5, 3, 2] 或字符串格式 "5,3,2"
+						 * @example
+						 * style: { lineDash: [5, 3] } // 5px实线，3px空白
+						 */
 						case 'lineDash' : {
 							if(!this.context.setLineDash) break;
 							let dash;
@@ -353,7 +755,14 @@ export default class jmControl extends jmProperty {
 							this.context.lineDashOffset = Number(styleValue) || 0;
 							break;
 						}
-						// CSS滤镜效果 (blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity)
+						/**
+						 * CSS滤镜效果
+						 * 支持 blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity
+						 * @example
+						 * style: { filter: 'blur(5px) grayscale(50%)' }
+						 * // 或使用对象
+						 * style: { filter: { blur: 5, grayscale: 0.5 } }
+						 */
 						case 'filter' : {
 							if(this.context.filter === undefined) break;
 							if(styleValue instanceof jmFilter) {
@@ -367,13 +776,23 @@ export default class jmControl extends jmProperty {
 							}
 							break;
 						}
-						// 混合模式 (source-over, multiply, screen, overlay, darken, lighten, etc.)
+						/**
+						 * 混合模式
+						 * 常用值：source-over, multiply, screen, overlay, darken, lighten
+						 * @example
+						 * style: { globalCompositeOperation: 'multiply' }
+						 */
 						case 'globalCompositeOperation' : {
 							if(!this.context.globalCompositeOperation) break;
 							this.context.globalCompositeOperation = styleValue;
 							break;
 						}
-						// 裁剪路径：通过canvas clip实现
+						/**
+						 * 裁剪路径
+						 * 通过 canvas clip 实现裁剪效果
+						 * @example
+						 * style: { clipPath: clipShape } // clipShape 是一个图形控件
+						 */
 						case 'clipPath' : {
 							if(!this.context.clip) break;
 							// clipPath可以是一个图形控件实例
@@ -396,7 +815,12 @@ export default class jmControl extends jmProperty {
 							}
 							break;
 						}
-						// 遮罩效果：通过globalCompositeOperation + destination-in实现
+						/**
+						 * 遮罩效果
+						 * 通过 globalCompositeOperation + destination-in 实现
+						 * @example
+						 * style: { mask: maskShape } // maskShape 是一个图形控件
+						 */
 						case 'mask' : {
 							if(!this.context.globalCompositeOperation) break;
 							// mask是一个图形控件实例，在绘制前需要先应用mask
@@ -404,7 +828,7 @@ export default class jmControl extends jmProperty {
 							this.__mask = styleValue;
 							break;
 						}
-						// 图片阴影描边阴影（WebGL纹理canvas用）
+						// 阴影相关样式（WebGL兼容）
 						case 'shadowColor' : {
 							if(this.webglControl) {
 								this.webglControl.setStyle('shadowColor', styleValue);
@@ -446,21 +870,27 @@ export default class jmControl extends jmProperty {
 			}
 		}
 
+		// 应用平移变换
 		if(this.translate) {
 			__setStyle(this.translate, 'translate');
 		}
+		// 应用矩阵变换
 		if(this.transform) {
 			__setStyle(this.transform, 'transform');
 		}
+		// 遍历应用所有样式
 		for(let k in style) {
 			if(k === 'constructor') continue;
 			let t = typeof style[k];
+			// 自动转换渐变字符串
 			if(t == 'string' && style[k].indexOf('-gradient') > -1) {
 				style[k] = new jmGradient(style[k]);
 			}
+			// 自动转换阴影字符串
 			else if(t == 'string' && k == 'shadow') {
 				style[k] = new jmShadow(style[k]);
 			}
+			// 自动转换滤镜字符串
 			else if(t == 'string' && k == 'filter') {
 				style[k] = new jmFilter(style[k]);
 			}
@@ -469,13 +899,29 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取当前控件的边界
-	 * 通过分析控件的描点或位置加宽高得到为方形的边界
-	 *
+	 * 获取当前控件的边界矩形
+	 * 
+	 * 通过分析控件的描点或位置加宽高得到边界矩形。
+	 * 对于 jmGraph，边界为画布尺寸。
+	 * 对于有 points 的控件，边界为所有点的最小包围矩形。
+	 * 
 	 * @method getBounds
-	 * @for jmControl
-	 * @param {boolean} [isReset=false] 是否强制重新计算
-	 * @return {object} 控件的边界描述对象(left,top,right,bottom,width,height)
+	 * @param {boolean} [isReset=false] - 是否强制重新计算（忽略缓存）
+	 * @returns {Object} 边界对象
+	 * @returns {number} returns.left - 左边界 X 坐标
+	 * @returns {number} returns.top - 上边界 Y 坐标
+	 * @returns {number} returns.right - 右边界 X 坐标
+	 * @returns {number} returns.bottom - 下边界 Y 坐标
+	 * @returns {number} returns.width - 宽度
+	 * @returns {number} returns.height - 高度
+	 * 
+	 * @example
+	 * // 获取边界
+	 * const bounds = control.getBounds();
+	 * console.log(`宽: ${bounds.width}, 高: ${bounds.height}`);
+	 * 
+	 * // 强制重新计算
+	 * const newBounds = control.getBounds(true);
 	 */
 	getBounds(isReset) {
 		//如果当次计算过，则不重复计算
@@ -498,6 +944,7 @@ export default class jmControl extends jmProperty {
 				rect.bottom = this.height;
 			}
 		}
+		// 根据 points 计算边界
 		else if(this.points && this.points.length > 0) {		
 			for(const p of this.points) {
 				if(typeof rect.left === 'undefined' || rect.left > p.x) {
@@ -515,6 +962,7 @@ export default class jmControl extends jmProperty {
 				}
 			}
 		}
+		// 根据位置和尺寸计算边界
 		else if(this.getLocation) {
 			let p = this.getLocation();
 			if(p) {
@@ -524,10 +972,10 @@ export default class jmControl extends jmProperty {
 				rect.bottom = p.top + p.height;
 			}		
 		}
-		if(!rect.left) rect.left = 0; 
-		if(!rect.top) rect.top = 0; 
-		if(!rect.right) rect.right = 0; 
-		if(!rect.bottom) rect.bottom = 0; 
+		if(rect.left === undefined) rect.left = 0; 
+		if(rect.top === undefined) rect.top = 0; 
+		if(rect.right === undefined) rect.right = 0; 
+		if(rect.bottom === undefined) rect.bottom = 0; 
 		rect.width = rect.right - rect.left;
 		rect.height = rect.bottom - rect.top;
 		
@@ -535,7 +983,23 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取被旋转后的边界
+	 * 获取旋转后的边界矩形
+	 * 
+	 * 计算控件旋转后的最小包围矩形。
+	 * 当控件有旋转变换时，实际占据的空间会发生变化。
+	 * 
+	 * @method getRotationBounds
+	 * @param {Object} [rotation] - 旋转参数，默认使用 style.rotation
+	 * @param {number} rotation.x - 旋转中心 X（相对于控件）
+	 * @param {number} rotation.y - 旋转中心 Y（相对于控件）
+	 * @param {number} rotation.angle - 旋转角度（弧度）
+	 * @param {Object} [bounds] - 基础边界，默认使用 getBounds()
+	 * @returns {Object} 旋转后的边界对象
+	 * 
+	 * @example
+	 * // 获取旋转后的边界
+	 * const bounds = control.getRotationBounds();
+	 * console.log(`旋转后宽度: ${bounds.width}`);
 	 */
 	getRotationBounds(rotation=null) {
 		rotation = rotation || this.getRotation();
@@ -602,11 +1066,26 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取当前控件的位置相关参数
-	 * 解析百分比和margin参数
-	 *
+	 * 获取当前控件的位置参数
+	 * 
+	 * 解析百分比和 margin 参数，返回标准化的位置信息。
+	 * 支持百分比定位（如 '50%'）和 margin 偏移。
+	 * 
 	 * @method getLocation
-	 * @return {object} 当前控件位置参数，包括中心点坐标，右上角坐标，宽高
+	 * @returns {Object} 位置参数对象
+	 * @returns {number} returns.left - 左边距
+	 * @returns {number} returns.top - 上边距
+	 * @returns {number} returns.width - 宽度
+	 * @returns {number} returns.height - 高度
+	 * @returns {Object} [returns.position] - 位置对象 {x, y}
+	 * @returns {Object} [returns.center] - 中心点
+	 * @returns {Object} [returns.start] - 起点（线条类）
+	 * @returns {Object} [returns.end] - 终点（线条类）
+	 * @returns {number} [returns.radius] - 半径（圆形类）
+	 * 
+	 * @example
+	 * const loc = control.getLocation();
+	 * console.log(`位置: (${loc.left}, ${loc.top})`);
 	 */
 	getLocation() {
 		//如果已经计算过则直接返回
@@ -682,8 +1161,26 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取当前控制的旋转信息
-	 * @returns {object} 旋转中心和角度
+	 * 获取当前控件的旋转信息
+	 * 
+	 * 解析旋转参数，支持百分比形式的旋转中心。
+	 * 如果控件本身没有旋转，会继承父级的旋转。
+	 * 
+	 * @method getRotation
+	 * @param {Object} [rotation] - 旋转参数，默认使用 style.rotation
+	 * @param {Object} [bounds] - 基础边界
+	 * @returns {Object} 旋转信息
+	 * @returns {number} returns.x - 旋转中心 X（相对于控件）
+	 * @returns {number} returns.y - 旋转中心 Y（相对于控件）
+	 * @returns {number} returns.angle - 旋转角度（弧度）
+	 * @returns {Object} returns.bounds - 控件边界
+	 * 
+	 * @example
+	 * // 获取旋转信息
+	 * const rot = control.getRotation();
+	 * if(rot.angle) {
+	 *     console.log(`旋转角度: ${rot.angle} 弧度`);
+	 * }
 	 */
 	getRotation(rotation, bounds = null) {
 		rotation = rotation || jmUtils.clone(this.style.rotation);
@@ -716,7 +1213,20 @@ export default class jmControl extends jmProperty {
 
 	}
 
-	// 计算位移偏移量
+	/**
+	 * 计算位移偏移量
+	 * 
+	 * 解析 translate 样式，支持百分比形式。
+	 * 
+	 * @method getTranslate
+	 * @param {Object} [translate] - 平移参数，默认使用 style.translate
+	 * @param {Object} [bounds] - 参考边界
+	 * @returns {Object} 平移信息 {x, y}
+	 * 
+	 * @example
+	 * const trans = control.getTranslate();
+	 * console.log(`平移: (${trans.x}, ${trans.y})`);
+	 */
 	getTranslate(translate, bounds = null) {
 		translate = translate || this.style.translate;
 		if(!translate) return {x: 0, y: 0};
@@ -738,9 +1248,15 @@ export default class jmControl extends jmProperty {
 
 	/**
 	 * 移除当前控件
-	 * 如果是VML元素，则调用其删除元素
-	 *
-	 * @method remove 
+	 * 
+	 * 从父控件的子控件列表中移除当前控件。
+	 * 移除后会触发 needUpdate 重绘。
+	 * 
+	 * @method remove
+	 * 
+	 * @example
+	 * // 移除控件
+	 * control.remove();
 	 */
 	remove() {	
 		if(this.parent) {
@@ -750,13 +1266,19 @@ export default class jmControl extends jmProperty {
 
 	/**
 	 * 对控件进行平移
+	 * 
 	 * 遍历控件所有描点或位置，设置其偏移量。
-	 *
+	 * 支持移动 position、center、start、end、points 等属性。
+	 * 
 	 * @method offset
-	 * @param {number} x x轴偏移量
-	 * @param {number} y y轴偏移量
-	 * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
-	 * @param {object} [evt] 如果是事件触发，则传递move事件参数
+	 * @param {number} x - X 轴偏移量
+	 * @param {number} y - Y 轴偏移量
+	 * @param {boolean} [trans=true] - 是否传递给监听者
+	 * @param {Object} [evt] - 如果是事件触发，传递 move 事件参数
+	 * 
+	 * @example
+	 * // 向右移动 10px，向下移动 5px
+	 * control.offset(10, 5);
 	 */
 	offset(x, y, trans, evt) {
 		trans = trans === false?false:true;	
@@ -824,11 +1346,17 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取控件相对于画布的绝对边界，
-	 * 与getBounds不同的是：getBounds获取的是相对于父容器的边界.
-	 *
+	 * 获取控件相对于画布的绝对边界
+	 * 
+	 * 与 getBounds 不同的是：getBounds 获取的是相对于父容器的边界，
+	 * 而 getAbsoluteBounds 获取的是相对于画布的边界。
+	 * 
 	 * @method getAbsoluteBounds
-	 * @return {object} 边界对象(left,top,right,bottom,width,height)
+	 * @returns {Object} 绝对边界对象
+	 * 
+	 * @example
+	 * const absBounds = control.getAbsoluteBounds();
+	 * console.log(`画布上的位置: (${absBounds.left}, ${absBounds.top})`);
 	 */
 	getAbsoluteBounds() {
 		//当前控件的边界，
@@ -850,10 +1378,14 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 把当前控制内部坐标转为canvas绝对定位坐标
+	 * 把当前控件内部坐标转为画布绝对坐标
 	 * 
 	 * @method toAbsolutePoint
-	 * @param {x: number, y: number} 内部坐标
+	 * @param {Object} point - 内部坐标 {x, y}
+	 * @returns {Object} 绝对坐标
+	 * 
+	 * @example
+	 * const absPoint = control.toAbsolutePoint({x: 10, y: 10});
 	 */
 	toAbsolutePoint(point) {
 		if(point.x || point.y) {
@@ -866,8 +1398,14 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 把绝对定位坐标转为当前控件坐标系内
-	 * @param {*} point 
+	 * 把画布绝对坐标转为当前控件坐标系内
+	 * 
+	 * @method toLocalPosition
+	 * @param {Object} point - 绝对坐标
+	 * @returns {Object|false} 相对坐标，如果无法转换返回 false
+	 * 
+	 * @example
+	 * const localPoint = control.toLocalPosition({x: 100, y: 100});
 	 */
 	toLocalPosition(point) {
 		
@@ -881,9 +1419,21 @@ export default class jmControl extends jmProperty {
 
 	/**
 	 * 画控件前初始化
-	 * 执行beginPath开始控件的绘制
+	 * 
+	 * 执行 beginPath 开始控件的绘制路径。
+	 * 重置位置信息缓存，确保使用最新的位置数据。
 	 * 
 	 * @method beginDraw
+	 * @protected
+	 * 
+	 * @example
+	 * // 子类重写时需要调用父类方法
+	 * class MyShape extends jmControl {
+	 *     beginDraw() {
+	 *         super.beginDraw();
+	 *         // 自定义初始化逻辑
+	 *     }
+	 * }
 	 */
 	beginDraw() {	
 		this.getLocation(true);//重置位置信息
@@ -893,8 +1443,18 @@ export default class jmControl extends jmProperty {
 
 	/**
 	 * 结束控件绘制
-	 *
+	 * 
+	 * 根据样式执行 fill 或 stroke 操作。
+	 * 如果设置了 close 样式，会先闭合路径。
+	 * 
 	 * @method endDraw
+	 * @protected
+	 * 
+	 * @example
+	 * // 绘制流程
+	 * control.beginDraw();
+	 * control.draw();
+	 * control.endDraw();
 	 */
 	endDraw() {
 		//如果当前为封闭路径
@@ -931,10 +1491,24 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 绘制控件
-	 * 在画布上描点
+	 * 绘制控件路径
+	 * 
+	 * 在画布上绘制控件的路径点。
+	 * 子类应该重写此方法实现自定义绘制逻辑。
 	 * 
 	 * @method draw
+	 * @protected
+	 * 
+	 * @example
+	 * // 子类重写绘制方法
+	 * class MyShape extends jmControl {
+	 *     draw() {
+	 *         const ctx = this.context;
+	 *         ctx.moveTo(0, 0);
+	 *         ctx.lineTo(100, 100);
+	 *         // ... 更多绘制逻辑
+	 *     }
+	 * }
 	 */
 	draw() {	
 		if(this.points && this.points.length > 0) {
@@ -962,10 +1536,23 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 绘制当前控件
-	 * 协调控件的绘制，先从其子控件开始绘制，再往上冒。
-	 *
+	 * 绘制当前控件及其子控件
+	 * 
+	 * 协调控件的绘制流程：
+	 * 1. 检查可见性
+	 * 2. 初始化点数据
+	 * 3. 计算边界
+	 * 4. 应用样式
+	 * 5. 绘制自身
+	 * 6. 绘制子控件
+	 * 7. 触发事件
+	 * 
 	 * @method paint
+	 * @param {boolean} [v] - 是否可见，false 时跳过绘制
+	 * 
+	 * @example
+	 * // 手动触发重绘
+	 * control.paint();
 	 */
 	paint(v) {
 		if(v !== false && this.visible !== false) {		
@@ -1040,23 +1627,50 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 获取指定事件的集合
-	 * 比如mousedown,mouseup等
-	 *
+	 * 获取指定事件的监听器集合
+	 * 
+	 * 返回绑定到指定事件名称的所有事件处理函数。
+	 * 
 	 * @method getEvent
-	 * @param {string} name 事件名称
-	 * @return {list} 事件委托的集合
+	 * @param {string} name - 事件名称（如 'click', 'mousedown'）
+	 * @returns {jmList|null} 事件处理函数集合，不存在则返回 null
+	 * 
+	 * @example
+	 * const handlers = control.getEvent('click');
+	 * if(handlers) {
+	 *     console.log(`有 ${handlers.count()} 个点击事件处理器`);
+	 * }
 	 */
 	getEvent(name) {		
 		return this.__events?this.__events[name]:null;
 	}
 
 	/**
-	 * 绑定控件的事件
-	 *
+	 * 绑定控件事件
+	 * 
+	 * 为控件添加事件监听器。支持同时绑定多个事件（用空格分隔）。
+	 * 同一个处理函数不会被重复添加。
+	 * 
 	 * @method bind
-	 * @param {string} name 事件名称
-	 * @param {function} handle 事件委托
+	 * @param {string} name - 事件名称，多个事件用空格分隔
+	 * @param {Function} handle - 事件处理函数
+	 * @returns {void}
+	 * 
+	 * @example
+	 * // 绑定单个事件
+	 * control.bind('click', (evt) => {
+	 *     console.log('被点击了', evt);
+	 * });
+	 * 
+	 * // 绑定多个事件
+	 * control.bind('mousedown mouseup', (evt) => {
+	 *     console.log('鼠标事件', evt);
+	 * });
+	 * 
+	 * // 使用 on 别名
+	 * control.on('mousemove', (evt) => {
+	 *     console.log('鼠标移动', evt.position);
+	 * });
 	 */
 	bind(name, handle) {	
 		if(name && name.indexOf(' ') > -1) {
@@ -1083,11 +1697,23 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 移除控件的事件
-	 *
-	 * @method unbind 
-	 * @param {string} name 事件名称
-	 * @param {function} handle 从控件中移除事件的委托
+	 * 移除控件事件
+	 * 
+	 * 移除已绑定的事件处理函数。如果不指定处理函数，则移除该事件的所有处理函数。
+	 * 
+	 * @method unbind
+	 * @param {string} name - 事件名称，多个事件用空格分隔
+	 * @param {Function} [handle] - 要移除的事件处理函数，不指定则移除所有
+	 * 
+	 * @example
+	 * // 移除特定处理函数
+	 * control.unbind('click', myHandler);
+	 * 
+	 * // 移除所有点击事件
+	 * control.unbind('click');
+	 * 
+	 * // 移除多个事件
+	 * control.unbind('mousedown mouseup');
 	 */
 	unbind(name, handle) {	
 		if(name && name.indexOf(' ') > -1) {
@@ -1106,12 +1732,22 @@ export default class jmControl extends jmProperty {
 
 
 	/**
-	 * 执行监听回调
+	 * 触发事件
+	 * 
+	 * 执行指定事件的所有监听器。
+	 * 支持传递多个参数给事件处理函数。
 	 * 
 	 * @method emit
-	 * @for jmControl
-	 * @param {string} name 触发事件的名称
-	 * @param {array} args 事件参数数组
+	 * @param {string} name - 事件名称
+	 * @param {...*} args - 传递给事件处理函数的参数
+	 * @returns {jmControl} 返回 this 以支持链式调用
+	 * 
+	 * @example
+	 * // 触发自定义事件
+	 * control.emit('customEvent', { data: 'value' });
+	 * 
+	 * // 触发带多个参数的事件
+	 * control.emit('dataChange', oldValue, newValue);
 	 */
 	emit(...args) {			
 		// 避免每帧 args.slice(1) 分配临时数组
@@ -1127,15 +1763,24 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 独立执行事件委托
-	 *
+	 * 执行事件处理函数
+	 * 
+	 * 内部方法，用于执行指定事件的所有监听器。
+	 * 如果任一处理函数返回 false，会设置 args.cancel = true。
+	 * 
 	 * @method runEventHandle
-	 * @param {string} 将执行的事件名称
-	 * @param {object} 事件执行的参数，包括触发事件的对象和位置
+	 * @param {string} name - 事件名称
+	 * @param {Array|Object} args - 事件参数
+	 * @returns {boolean} 是否被取消
+	 * @protected
 	 */
 	runEventHandle(name, args) {
 		let events = this.getEvent(name);		
 		if(events) {
+			
+		if(name === 'mousemove' && this.type == 'jmResize') {
+			console.log('resize mousemove', args, events);
+		}
 			var self = this;
 			if(!Array.isArray(args)) args = [args];	
 			events.each(function(i, handle) {
@@ -1149,25 +1794,35 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 检 查坐标是否落在当前控件区域中..true=在区域内
-	 *
+	 * 检查坐标是否落在当前控件区域中
+	 * 
+	 * 用于点击测试和碰撞检测。
+	 * 支持旋转后的碰撞检测，以及自定义命中区域。
+	 * 
 	 * @method checkPoint
-	 * @param {point} p 位置参数
-	 * @param {number} [pad] 可选参数，表示线条多远内都算在线上
-	 * @return {boolean} 当前位置如果在区域内则为true,否则为false。
+	 * @param {Object} p - 要检测的点坐标
+	 * @param {number} p.x - X 坐标
+	 * @param {number} p.y - Y 坐标
+	 * @param {number} [pad] - 容差范围，默认使用 lineWidth 或 1
+	 * @returns {boolean} 点是否在控件区域内
+	 * 
+	 * @example
+	 * // 检查点击位置
+	 * graph.bind('click', (evt) => {
+	 *     if(control.checkPoint(evt.position)) {
+	 *         console.log('点击了控件');
+	 *     }
+	 * });
 	 */
 	checkPoint(p, pad) {
 		//jmGraph 需要判断dom位置
 		if(this.type == 'jmGraph') {
 			//获取dom位置
-			let position = this.getPosition();
-			// 由于高清屏会有放大坐标，所以这里用pagex就只能用真实的canvas大小
-			const right = position.left + this.width;
-			const bottom = position.top + this.height;
-			if(p.x > right || p.x < position.left) {
+			const position = this.getPosition();
+			if(p.pageX > position.right || p.pageX < position.left) {
 				return false;
 			}
-			if(p.y > bottom || p.y < position.top) {
+			if(p.pageY > position.bottom || p.pageY < position.top) {
 				return false;
 			}	
 			return true;
@@ -1254,15 +1909,23 @@ export default class jmControl extends jmProperty {
 
 
 	/**
-	 * 触发控件事件，组合参数并按控件层级关系执行事件冒泡。
-	 *
+	 * 触发控件事件并执行事件冒泡
+	 * 
+	 * 组合事件参数，按控件层级关系执行事件冒泡。
+	 * 事件从最上层的子控件开始触发，向上冒泡到父控件。
+	 * 
 	 * @method raiseEvent
-	 * @param {string} name 事件名称
-	 * @param {object} args 事件执行参数
-	 * @return {boolean} 如果事件被组止冒泡则返回false,否则返回true
+	 * @param {string} name - 事件名称
+	 * @param {Object} args - 原生事件对象
+	 * @returns {boolean} 如果事件被阻止冒泡则返回 false，否则返回 true
+	 * 
+	 * @example
+	 * // 通常由框架内部调用，用户一般不需要直接调用
+	 * // 框架会自动处理鼠标/触摸事件
 	 */
 	raiseEvent(name, args) {
 		if(this.visible === false) return ;//如果不显示则不响应事件	
+		
 		if(!args.position) {		
 			const graph = this.graph;
 			args.isWXMiniApp = graph.isWXMiniApp;
@@ -1310,6 +1973,10 @@ export default class jmControl extends jmProperty {
 
 		// 是否在当前控件内操作
 		const inpos = this.interactive !== false && this.checkPoint(args.position);
+
+		if(name === 'mousemove' && this.type == 'jmGraph' && !inpos) {
+			console.log('mousemove out', args.position, abounds);
+		}
 		
 		//事件发生在边界内或健盘事件发生在画布中才触发
 		if(inpos) {
@@ -1340,9 +2007,14 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 执行事件，并进行冒泡
-	 * @param {string} name 事件名称 
-	 * @param {object} args 事件参数
+	 * 执行事件并进行冒泡
+	 * 
+	 * 内部方法，用于执行事件处理并添加到事件路径。
+	 * 
+	 * @method runEventAndPopEvent
+	 * @param {string} name - 事件名称
+	 * @param {Object} args - 事件参数
+	 * @protected
 	 */
 	runEventAndPopEvent(name, args) {	
 
@@ -1368,23 +2040,38 @@ export default class jmControl extends jmProperty {
 
 	/**
 	 * 清空控件指定事件
-	 *
+	 * 
+	 * 移除指定事件名称下的所有事件处理函数。
+	 * 
 	 * @method clearEvents
-	 * @param {string} name 需要清除的事件名称
+	 * @param {string} name - 需要清除的事件名称
+	 * 
+	 * @example
+	 * // 清除所有点击事件
+	 * control.clearEvents('click');
 	 */
 	clearEvents(name) {
-		var eventCollection = this.getEvent(name) ;		
+		var eventCollection = this.getEvent(name);		
 		if(eventCollection) {
-			eventCollection.clear;
+			eventCollection.clear();
 		}
 	}
 
 	/**
-	 * 查找其父级类型为type的元素，直到找到指定的对象或到最顶级控件后返回空。
-	 *
-	 * @method findParent 
-	 * @param {object} 类型名称或类型对象
-	 * @return {object} 指定类型的实例
+	 * 查找指定类型的父级控件
+	 * 
+	 * 沿着父级链向上查找，直到找到指定类型的控件或到达最顶级。
+	 * 
+	 * @method findParent
+	 * @param {string|Function} type - 类型名称（字符串）或类构造函数
+	 * @returns {jmControl|null} 找到的父级控件实例，未找到返回 null
+	 * 
+	 * @example
+	 * // 查找 jmGraph 实例
+	 * const graph = control.findParent('jmGraph');
+	 * 
+	 * // 查找特定类的实例
+	 * const parent = control.findParent(MyCustomControl);
 	 */
 	findParent(type) {
 		//如果为类型名称，则返回名称相同的类型对象
@@ -1402,12 +2089,26 @@ export default class jmControl extends jmProperty {
 	}
 
 	/**
-	 * 设定是否可以移动
-	 * 此方法需指定jmgraph或在控件添加到jmgraph后再调用才能生效。
-	 *
+	 * 设置控件是否可拖动
+	 * 
+	 * 启用或禁用控件的拖动功能。
+	 * 拖动时会触发 movestart、move、moveend 事件。
+	 * 
 	 * @method canMove
-	 * @param {boolean} m true=可以移动，false=不可移动或清除移动。
-	 * @param {jmGraph} [graph] 当前画布，如果为空的话必需是已加入画布的控件，否则得指定画布。
+	 * @param {boolean} m - true 启用拖动，false 禁用拖动
+	 * @param {jmGraph} [graph] - 画布实例，如果控件已添加到画布可省略
+	 * @returns {jmControl} 返回 this 以支持链式调用
+	 * 
+	 * @example
+	 * // 启用拖动
+	 * control.canMove(true);
+	 * 
+	 * // 禁用拖动
+	 * control.canMove(false);
+	 * 
+	 * // 监听拖动事件
+	 * control.on('movestart', (evt) => console.log('开始拖动'));
+	 * control.on('moveend', (evt) => console.log('结束拖动'));
 	 */
 	canMove(m, graph) {
 		if(!this.__mvMonitor) {
@@ -1433,7 +2134,6 @@ export default class jmControl extends jmProperty {
 				//if(evt.path && evt.path.indexOf(_this)>-1) {
 				//	_this.cursor('move');	
 				//}
-
 				if(_this.__mvMonitor.mouseDown) {
 					_this.parent.bounds = null;
 					//let parentbounds = _this.parent.getAbsoluteBounds();		
@@ -1467,7 +2167,7 @@ export default class jmControl extends jmProperty {
 						_this.offset(offsetx, offsety, true, evt);
 						if(offsetx) _this.__mvMonitor.curposition.x = evt.position.offsetX;
 						if(offsety) _this.__mvMonitor.curposition.y = evt.position.offsetY;	
-						//console.log(offsetx + '.' + offsety);
+						//console.log('mouse move',offsetx + '.' + offsety);
 					}
 					return false;
 				}

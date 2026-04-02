@@ -1,10 +1,47 @@
-import {jmArc} from "./jmArc.js";
 /**
- * 画空心圆弧,继承自jmPath
+ * @fileoverview jmHArc 空心圆弧类
+ * 
+ * jmHArc 提供了空心圆弧（圆环弧）的绘制功能。
+ * 由内圆和外圆两个半径定义，形成一个环形的弧。
+ * 
+ * 主要功能：
+ * - 空心圆弧绘制
+ * - 支持顺时针/逆时针绘制
+ * - 支持填充和描边
+ * 
+ * @module jmHArc
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmArc} from "./jmArc.js";
+
+/**
+ * 空心圆弧类
+ * 
+ * 绘制空心圆弧（圆环弧），继承自 jmArc。
+ * 由内圆半径和外圆半径定义环形区域。
  *
  * @class jmHArc
  * @extends jmArc
- * @param {object} params 空心圆参数:minRadius=中心小圆半径,maxRadius=大圆半径,start=起始角度,end=结束角度,anticlockwise=false  顺时针，true 逆时针
+ * @param {object} params 空心圆弧参数
+ * @param {object} [params.center] 圆弧中心点 {x, y}
+ * @param {number} [params.minRadius] 内圆半径
+ * @param {number} [params.maxRadius] 外圆半径
+ * @param {number} [params.start=0] 起始角度（弧度）
+ * @param {number} [params.end=Math.PI*2] 结束角度（弧度）
+ * @param {boolean} [params.anticlockwise=false] 是否逆时针绘制
+ * 
+ * @example
+ * // 创建空心圆弧
+ * const hArc = graph.createShape('hArc', {
+ *     center: {x: 200, y: 200},
+ *     minRadius: 30,
+ *     maxRadius: 50,
+ *     start: 0,
+ *     end: Math.PI,
+ *     style: { fill: '#ff0000' }
+ * });
  */
 
 export default class jmHArc extends jmArc {

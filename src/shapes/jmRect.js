@@ -1,14 +1,56 @@
+/**
+ * @fileoverview jmRect 矩形类
+ * 
+ * jmRect 提供了矩形图形的绘制功能，支持圆角矩形。
+ * 圆角支持四角独立设置，可以创建各种样式的矩形。
+ * 
+ * 主要功能：
+ * - 矩形绘制
+ * - 圆角矩形（支持四角独立圆角）
+ * - 虚线边框
+ * - 填充和描边样式
+ * 
+ * @module jmRect
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmPath} from "../core/jmPath.js";
 import {jmArc} from './jmArc.js';
 import {jmLine} from './jmLine.js';
 
 /**
- * 画矩形
+ * 矩形类
+ * 
+ * 绘制矩形图形，支持圆角和虚线边框。
+ * 圆角可以统一设置或四角独立设置。
  *
  * @class jmRect
  * @extends jmPath
- * @param {object} params 参数 position=矩形左上角顶点坐标,width=宽，height=高,radius=边角弧度
- *   radius支持数字(四角相同)或对象 { topLeft, topRight, bottomRight, bottomLeft }
+ * @param {object} params 参数
+ * @param {object} [params.position] 矩形左上角顶点坐标 {x, y}
+ * @param {number} [params.width] 矩形宽度
+ * @param {number} [params.height] 矩形高度
+ * @param {number|object} [params.radius] 边角弧度，支持数字(四角相同)或对象 { topLeft, topRight, bottomRight, bottomLeft }
+ * 
+ * @example
+ * // 创建普通矩形
+ * const rect = graph.createShape('rect', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建圆角矩形
+ * const roundedRect = graph.createShape('rect', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     radius: 10,  // 四角统一圆角
+ *     // 或 radius: { topLeft: 5, topRight: 10, bottomRight: 15, bottomLeft: 20 }
+ *     style: { fill: '#00ff00' }
+ * });
  */ 
 export default class jmRect extends jmPath {		
 

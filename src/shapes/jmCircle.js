@@ -1,10 +1,43 @@
-import {jmArc} from "./jmArc.js";
 /**
- * 画规则的圆弧
+ * @fileoverview jmCircle 圆形类
+ * 
+ * jmCircle 提供了圆形图形的绘制功能。
+ * 继承自 jmArc，可以绘制完整的圆或部分圆弧。
+ * 
+ * 主要功能：
+ * - 圆形绘制
+ * - 支持填充和描边
+ * - 支持 WebGL 和 Canvas 2D 模式
+ * 
+ * @module jmCircle
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmArc} from "./jmArc.js";
+
+/**
+ * 圆形类
+ * 
+ * 绘制圆形图形，继承自 jmArc。
+ * 可以通过 center 和 radius 指定圆心和半径，
+ * 也可以通过 width 和 height 指定圆的尺寸。
  *
  * @class jmCircle
  * @extends jmArc
- * @param {object} params 圆的参数:center=圆中心,radius=圆半径,优先取此属性，如果没有则取宽和高,width=圆宽,height=圆高
+ * @param {object} params 圆的参数
+ * @param {object} [params.center] 圆心坐标 {x, y}
+ * @param {number} [params.radius] 圆半径（优先使用）
+ * @param {number} [params.width] 圆宽度（无 radius 时使用）
+ * @param {number} [params.height] 圆高度（无 radius 时使用）
+ * 
+ * @example
+ * // 创建圆形
+ * const circle = graph.createShape('circle', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
  */
 export default class jmCircle extends jmArc {		
 	

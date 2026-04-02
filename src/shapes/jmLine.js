@@ -1,10 +1,50 @@
-import {jmPath} from "../core/jmPath.js";
 /**
- * 画一条直线
+ * @fileoverview jmLine 直线类
+ * 
+ * jmLine 提供了直线图形的绘制功能，支持实线和虚线。
+ * 虚线支持自定义间隔长度。
+ * 
+ * 主要功能：
+ * - 直线绘制
+ * - 虚线模式
+ * - 自定义虚线间隔
+ * 
+ * @module jmLine
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmPath} from "../core/jmPath.js";
+
+/**
+ * 直线类
+ * 
+ * 绘制从起点到终点的直线，支持实线和虚线两种模式。
  *
  * @class jmLine
  * @extends jmPath
- * @param {object} params 直线参数:start=起始点,end=结束点,lineType=线类型(solid=实线，dotted=虚线),dashLength=虚线间隔(=4)
+ * @param {object} params 直线参数
+ * @param {object} [params.start] 起始点 {x, y}
+ * @param {object} [params.end] 结束点 {x, y}
+ * @param {string} [params.lineType='solid'] 线类型：'solid'=实线，'dotted'=虚线
+ * @param {number} [params.dashLength=4] 虚线间隔长度
+ * 
+ * @example
+ * // 创建实线
+ * const line = graph.createShape('line', {
+ *     start: {x: 0, y: 0},
+ *     end: {x: 100, y: 100},
+ *     style: { stroke: '#000', lineWidth: 2 }
+ * });
+ * 
+ * // 创建虚线
+ * const dottedLine = graph.createShape('line', {
+ *     start: {x: 0, y: 0},
+ *     end: {x: 100, y: 100},
+ *     lineType: 'dotted',
+ *     dashLength: 5,
+ *     style: { stroke: '#000' }
+ * });
  */
 export default class jmLine extends jmPath {	
 	

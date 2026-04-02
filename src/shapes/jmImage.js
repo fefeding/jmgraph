@@ -1,12 +1,58 @@
-import {jmControl} from "../core/jmControl.js";
 /**
- * 图片控件，继承自jmControl
- * params参数中image为指定的图片源地址或图片img对象，
- * postion=当前控件的位置，width=其宽度，height=高度，sourcePosition=从当前图片中展示的位置，sourceWidth=从图片中截取的宽度,sourceHeight=从图片中截取的高度。
+ * @fileoverview jmImage 图片类
  * 
+ * jmImage 提供了图片显示功能。
+ * 支持从 URL 或 Image 对象加载图片，支持图片裁剪和缩放。
+ * 
+ * 主要功能：
+ * - 图片加载和显示
+ * - 图片裁剪
+ * - 图片缩放
+ * - 支持 WebGL 和 Canvas 2D 模式
+ * 
+ * @module jmImage
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmControl} from "../core/jmControl.js";
+
+/**
+ * 图片类
+ * 
+ * 显示图片控件，支持从 URL 或 Image 对象加载图片。
+ * 支持图片裁剪和缩放功能。
+ *
  * @class jmImage
  * @extends jmControl
  * @param {object} params 控件参数
+ * @param {string|HTMLImageElement} [params.image] 图片源地址或图片对象
+ * @param {object} [params.position] 图片位置 {x, y}
+ * @param {number} [params.width] 图片显示宽度
+ * @param {number} [params.height] 图片显示高度
+ * @param {object} [params.sourcePosition] 图片裁剪起始位置 {x, y}
+ * @param {number} [params.sourceWidth] 图片裁剪宽度
+ * @param {number} [params.sourceHeight] 图片裁剪高度
+ * 
+ * @example
+ * // 从 URL 加载图片
+ * const img = graph.createShape('image', {
+ *     image: 'path/to/image.png',
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150
+ * });
+ * 
+ * // 裁剪图片
+ * const croppedImg = graph.createShape('image', {
+ *     image: 'path/to/sprite.png',
+ *     position: {x: 100, y: 100},
+ *     sourcePosition: {x: 0, y: 0},
+ *     sourceWidth: 50,
+ *     sourceHeight: 50,
+ *     width: 100,
+ *     height: 100
+ * });
  */
 export default class jmImage extends jmControl {
 

@@ -1,6 +1,33 @@
 
+/**
+ * @fileoverview jmGraph 工具类
+ * 
+ * jmUtils 是 jmGraph 库的核心工具类，提供了一系列静态工具方法：
+ * - 对象克隆与深拷贝
+ * - 事件绑定与解绑
+ * - DOM 元素位置计算
+ * - 几何计算（点在多边形内判断、旋转等）
+ * - 颜色解析与转换
+ * - 字符串处理
+ * 
+ * 所有方法都是静态的，可以直接通过 jmUtils.methodName() 调用。
+ * 
+ * @module jmUtils
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import { jmList } from './jmList.js';
 
+/**
+ * CSS 颜色关键字映射表
+ * 
+ * 包含所有 CSS 标准颜色名称到十六进制值的映射。
+ * 支持 147 种命名颜色 + CSS 系统颜色。
+ * 
+ * @constant {Object.<string, string>}
+ * @private
+ */
 const colorKeywords = {
     aliceblue:            "#f0f8ff",
     antiquewhite:         "#faebd7",
@@ -182,11 +209,22 @@ const colorKeywords = {
   };
 
 /**
- * 画图基础对象
- * 当前库的工具类
+ * jmGraph 工具类
+ * 
+ * 提供常用的静态工具方法，包括对象操作、事件处理、几何计算、颜色转换等。
  * 
  * @class jmUtils
  * @static
+ * 
+ * @example
+ * // 克隆对象
+ * const newObj = jmUtils.clone({ a: 1, b: 2 });
+ * 
+ * // 绑定事件
+ * jmUtils.bindEvent(element, 'click', handler);
+ * 
+ * // 检查点是否在多边形内
+ * const inside = jmUtils.pointInPolygon({x: 10, y: 10}, polygonPoints);
  */
 export default class jmUtils {
     /**
@@ -342,12 +380,12 @@ export default class jmUtils {
                 el = el.offsetParent;
             }
         }
-        else if(el.x) {
-            pos.left += el.x;
-        }
-        else if(el.x){
-            pos.top += el.y;
-        } 
+		else if(el.x) {
+			pos.left += el.x;
+		}
+		else if(el.y){
+			pos.top += el.y;
+		}
         return pos;
     }
     /**
@@ -471,6 +509,30 @@ export default class jmUtils {
         return this.rayCasting(pt, polygon, offset);
     }
 
+    /**
+     * 判断点是否在线段上
+     * 
+     * 通过计算点到线段的垂直距离来判断点是否在线段上。
+     * 同时检查点是否在线段的范围内（不仅仅是直线上）。
+     * 
+     * @method pointOnLine
+     * @static
+     * @private
+     * @param {Object} pt 待检测的点 {x, y}
+     * @param {Object} p1 线段起点 {x, y}
+     * @param {Object} p2 线段终点 {x, y}
+     * @param {number} offset 允许的偏差值（像素）
+     * @returns {number} 0=不在线段上, 1=在线段上
+     * 
+     * @example
+     * const onLine = jmUtils.pointOnLine(
+     *     {x: 5, y: 5},      // 待检测点
+     *     {x: 0, y: 0},      // 起点
+     *     {x: 10, y: 10},    // 终点
+     *     2                  // 允许偏差
+     * );
+     * // 返回 1，点在对角线上
+     */
     static pointOnLine(pt, p1, p2, offset) {
         const minX = Math.min(p1.x, p2.x);
         const maxX = Math.max(p1.x, p2.x);
@@ -511,6 +573,25 @@ export default class jmUtils {
         return 0;
     }
 
+    /**
+     * 射线法判断点是否在多边形内部
+     * 
+     * 从待测点向右发射一条水平射线，计算与多边形边界的交点数量。
+     * - 交点数为奇数：点在多边形内部
+     * - 交点数为偶数：点在多边形外部
+     * 
+     * 这是判断点是否在任意多边形内的经典算法，时间复杂度 O(n)。
+     * 
+     * @method rayCasting
+     * @static
+     * @private
+     * @param {Object} pt 待检测的点 {x, y}
+     * @param {Array<Object>} polygon 多边形顶点数组 [{x, y}, ...]
+     * @param {number} offset 允许的偏差值（未使用）
+     * @returns {number} 0=在多边形外部, 2=在多边形内部
+     * 
+     * @see {@link https://en.wikipedia.org/wiki/Point_in_polygon Point in polygon - Wikipedia}
+     */
     static rayCasting(pt, polygon, offset) {
         const n = polygon.length;
         let inside = false;
@@ -884,8 +965,19 @@ export default class jmUtils {
     }
 
     /**
-     * 把255的rgb值转为0-1的值
-     * @param {rgba} color 颜色
+     * 将 RGB 颜色值从 0-255 范围转换为 0-1 范围
+     * 
+     * WebGL 中的颜色值通常使用 0-1 的浮点数表示，
+     * 此方法用于将标准 RGB 值转换为 WebGL 兼容格式。
+     * 
+     * @method rgbToDecimal
+     * @static
+     * @param {Object} color 颜色对象 {r, g, b, a?}
+     * @returns {Object} 转换后的颜色对象 {r, g, b, a?}，其中 r/g/b 为 0-1 范围
+     * 
+     * @example
+     * const color = jmUtils.rgbToDecimal({ r: 255, g: 128, b: 64 });
+     * // 返回 { r: 1, g: 0.502, b: 0.251 }
      */
     static rgbToDecimal(color) {
         color = this.clone(color);
@@ -895,7 +987,15 @@ export default class jmUtils {
         return color;
     }
 
-    //255值转为0-1的小数
+    /**
+     * 将字节值（0-255）转换为小数（0-1）
+     * 
+     * @method byteToDecimal
+     * @static
+     * @private
+     * @param {number} b 字节值（0-255）
+     * @returns {number} 小数值（0-1）
+     */
     static byteToDecimal(b) {
         return b / 255;
     }
@@ -938,11 +1038,48 @@ export default class jmUtils {
         }
         return r;
     }
-    // window.requestAnimationFrame() 告诉浏览器——你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
+    /**
+     * 请求动画帧
+     * 
+     * 封装浏览器原生的 requestAnimationFrame 方法，提供跨浏览器兼容性。
+     * 在不支持 requestAnimationFrame 的环境中降级为 setTimeout。
+     * 
+     * @method requestAnimationFrame
+     * @static
+     * @param {Function} callback 动画帧回调函数，接收时间戳参数
+     * @param {Window} [win] 可选的窗口对象（用于多窗口环境）
+     * @returns {number} 动画帧请求ID，用于取消
+     * 
+     * @example
+     * let animationId;
+     * function animate(timestamp) {
+     *     // 更新动画
+     *     animationId = jmUtils.requestAnimationFrame(animate);
+     * }
+     * animationId = jmUtils.requestAnimationFrame(animate);
+     * 
+     * // 取消动画
+     * jmUtils.cancelAnimationFrame(animationId);
+     */
     static requestAnimationFrame(callback, win) {
         let fun = win && win.requestAnimationFrame? win.requestAnimationFrame: (typeof window !== 'undefined' && window.requestAnimationFrame? window.requestAnimationFrame: setTimeout);        
 		return fun(callback, 20);
     }
+    /**
+     * 取消动画帧请求
+     * 
+     * 取消之前通过 requestAnimationFrame 注册的回调。
+     * 在不支持 cancelAnimationFrame 的环境中降级为 clearTimeout。
+     * 
+     * @method cancelAnimationFrame
+     * @static
+     * @param {number} handler requestAnimationFrame 返回的请求ID
+     * @param {Window} [win] 可选的窗口对象（用于多窗口环境）
+     * 
+     * @example
+     * const animationId = jmUtils.requestAnimationFrame(animate);
+     * jmUtils.cancelAnimationFrame(animationId);
+     */
     static cancelAnimationFrame(handler, win) {
         let fun = win && win.cancelAnimationFrame? win.cancelAnimationFrame: (typeof window !== 'undefined' && window.cancelAnimationFrame? window.cancelAnimationFrame: clearTimeout);        
 		return fun(handler);

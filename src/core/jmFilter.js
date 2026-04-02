@@ -1,13 +1,50 @@
+/**
+ * @fileoverview jmFilter 滤镜类
+ * 
+ * jmFilter 提供了 CSS 滤镜效果的管理和应用功能。
+ * 支持多种滤镜效果，可以组合使用。
+ * 
+ * 支持的滤镜：
+ * - blur: 模糊效果
+ * - grayscale: 灰度效果
+ * - sepia: 复古效果
+ * - brightness: 亮度调节
+ * - contrast: 对比度调节
+ * - saturate: 饱和度调节
+ * - hue-rotate: 色相旋转
+ * - invert: 反色效果
+ * - opacity: 透明度调节
+ * 
+ * @module jmFilter
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils} from "./jmUtils.js";
 
 /**
- * CSS滤镜效果类
+ * CSS 滤镜效果类
+ * 
  * 支持的滤镜: blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity
  *
  * @class jmFilter
  * @param {string|object} opt 滤镜参数
  *   字符串格式: "blur(2px) grayscale(50%) brightness(1.2)"
  *   对象格式: { blur: 2, grayscale: 0.5, brightness: 1.2 }
+ * 
+ * @example
+ * // 从字符串创建
+ * const filter = new jmFilter('blur(2px) grayscale(50%)');
+ * 
+ * // 从对象创建
+ * const filter = new jmFilter({
+ *     blur: 2,
+ *     grayscale: 0.5,
+ *     brightness: 1.2
+ * });
+ * 
+ * // 应用到图形
+ * shape.style.filter = filter;
  */
 export default class jmFilter {
 	constructor(opt) {

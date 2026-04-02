@@ -1,3 +1,23 @@
+/**
+ * @fileoverview jmGraph 主画布类
+ * 
+ * jmGraph 是 jmGraph 库的核心类，代表一个完整的画布实例。
+ * 它继承自 jmControl，提供了完整的图形渲染、事件处理、缩放平移等功能。
+ * 
+ * 主要功能：
+ * - Canvas/WebGL 双渲染模式支持
+ * - 图形创建与管理（createShape, createLine, createPath 等）
+ * - 渐变和阴影效果（createLinearGradient, createRadialGradient, createShadow）
+ * - 缩放和平移（setZoom, pan, resetTransform）
+ * - 导出功能（toDataURL, exportToPNG, exportToJPEG, exportToSVG）
+ * - 自动刷新动画循环（autoRefresh）
+ * - 微信小程序支持
+ * 
+ * @module jmGraph
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 import {jmProperty} from './jmProperty.js';
@@ -9,15 +29,39 @@ import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
 
 /**
- * jmGraph画图类库
- * 对canvas画图api进行二次封装，使其更易调用，省去很多重复的工作。
- *
- * @module jmGraph
+ * jmGraph 画图类
+ * 
+ * 对 Canvas 画图 API 进行二次封装，使其更易调用，省去很多重复的工作。
+ * 支持多种图形的创建、渲染、交互和导出。
+ * 
  * @class jmGraph
  * @extends jmControl
- * @param {element} canvas 标签canvas
- * @param {object} option 参数：{width:宽,height:高}
- * @param {function} callback 初始化后的回调
+ * 
+ * @param {HTMLElement|string} canvas Canvas 元素或元素 ID
+ * @param {Object} [option] 配置选项
+ * @param {number} [option.width] 画布宽度
+ * @param {number} [option.height] 画布高度
+ * @param {string} [option.mode='2d'] 渲染模式：'2d' 或 'webgl'
+ * @param {boolean} [option.autoRefresh=false] 是否自动刷新
+ * @param {Object} [option.shapes] 自定义图形类型映射
+ * @param {function} [callback] 初始化完成后的回调函数
+ * 
+ * @example
+ * // 创建画布实例
+ * const graph = new jmGraph('canvasId', {
+ *     width: 800,
+ *     height: 600,
+ *     mode: '2d'
+ * });
+ * 
+ * // 创建一个矩形
+ * const rect = graph.createShape('rect', {
+ *     x: 100, y: 100,
+ *     width: 200, height: 150,
+ *     style: { fill: '#ff0000' }
+ * });
+ * graph.children.add(rect);
+ * graph.refresh();
  */
 export default class jmGraph extends jmControl {
 

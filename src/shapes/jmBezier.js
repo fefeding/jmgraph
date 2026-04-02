@@ -1,17 +1,63 @@
-import {jmPath} from "../core/jmPath.js";
 /**
- * 贝塞尔曲线,继承jmPath
- * N阶，参数points中为控制点
+ * @fileoverview jmBezier 贝塞尔曲线类
+ * 
+ * jmBezier 提供了 N 阶贝塞尔曲线的绘制功能。
+ * 通过控制点定义曲线形状，支持任意阶数的贝塞尔曲线。
+ * 
+ * 主要功能：
+ * - N 阶贝塞尔曲线
+ * - 控制点管理
+ * - 曲线平移
+ * 
+ * @module jmBezier
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+import {jmPath} from "../core/jmPath.js";
+
+/**
+ * 贝塞尔曲线类
+ * 
+ * 绘制 N 阶贝塞尔曲线，参数 points 中为控制点。
+ * 支持 2 阶（二次贝塞尔）、3 阶（三次贝塞尔）及更高阶曲线。
  *
  * @class jmBezier
  * @extends jmPath
  * @param {object} params 参数
+ * @param {array} [params.points] 控制点数组 [{x, y}, ...]
+ * 
+ * @example
+ * // 创建二次贝塞尔曲线（3个控制点）
+ * const quadBezier = graph.createShape('bezier', {
+ *     points: [
+ *         {x: 100, y: 100},  // 起点
+ *         {x: 200, y: 50},   // 控制点
+ *         {x: 300, y: 100}   // 终点
+ *     ],
+ *     style: { stroke: '#000', lineWidth: 2 }
+ * });
+ * 
+ * // 创建三次贝塞尔曲线（4个控制点）
+ * const cubicBezier = graph.createShape('bezier', {
+ *     points: [
+ *         {x: 100, y: 100},  // 起点
+ *         {x: 150, y: 50},   // 控制点1
+ *         {x: 250, y: 50},   // 控制点2
+ *         {x: 300, y: 100}   // 终点
+ *     ],
+ *     style: { stroke: '#ff0000' }
+ * });
  */ 
 export default class jmBezier extends jmPath {	
 	
 	constructor(params, t='jmBezier') {
-		// 典线默认不封闭
-		if(params.style && typeof params.style.close !== true) {
+		// 参数初始化
+		params = params || {};
+		
+		// 曲线默认不封闭
+		if(!params.style) params.style = {};
+		if(typeof params.style.close !== true) {
 			params.style.close = false;
 		}
 

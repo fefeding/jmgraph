@@ -1,11 +1,57 @@
+/**
+ * @fileoverview jmArc 圆弧类
+ * 
+ * jmArc 提供了圆弧图形的绘制功能。
+ * 可以绘制完整的圆、部分圆弧或扇形。
+ * 
+ * 主要功能：
+ * - 圆弧绘制
+ * - 扇形绘制（isFan=true）
+ * - 顺时针/逆时针绘制
+ * - 支持 WebGL 和 Canvas 2D 模式
+ * 
+ * @module jmArc
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmPath} from "../core/jmPath.js";
 
 /**
- * 圆弧图型 继承自jmPath
+ * 圆弧类
+ * 
+ * 绘制圆弧或扇形图形，继承自 jmPath。
+ * 支持设置圆心、半径、起始角度和结束角度。
  *
  * @class jmArc
  * @extends jmPath
- * @param {object} params center=当前圆弧中心,radius=圆弧半径,start=圆弧起始角度,end=圆弧结束角度,anticlockwise=  false  顺时针，true 逆时针
+ * @param {object} params 圆弧参数
+ * @param {object} [params.center] 圆弧中心点 {x, y}
+ * @param {number} [params.radius] 圆弧半径
+ * @param {number} [params.start=0] 圆弧起始角度（弧度）
+ * @param {number} [params.end=Math.PI*2] 圆弧结束角度（弧度）
+ * @param {boolean} [params.anticlockwise=false] 绘制方向：false=顺时针，true=逆时针
+ * @param {boolean} [params.isFan=false] 是否绘制为扇形
+ * 
+ * @example
+ * // 创建圆弧
+ * const arc = graph.createShape('arc', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     start: 0,
+ *     end: Math.PI,
+ *     style: { stroke: '#000' }
+ * });
+ * 
+ * // 创建扇形
+ * const fan = graph.createShape('arc', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     start: 0,
+ *     end: Math.PI / 2,
+ *     isFan: true,
+ *     style: { fill: '#ff0000' }
+ * });
  */
 export default class jmArc extends jmPath {
 

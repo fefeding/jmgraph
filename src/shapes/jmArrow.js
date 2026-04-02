@@ -1,11 +1,44 @@
+/**
+ * @fileoverview jmArrow 箭头类
+ * 
+ * jmArrow 提供了箭头图形的绘制功能。
+ * 可以单独使用，也可以与直线组合使用。
+ * 
+ * 主要功能：
+ * - 箭头绘制
+ * - 支持空心和实心箭头
+ * - 自定义箭头大小和角度
+ * 
+ * @module jmArrow
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmPath} from "../core/jmPath.js";
 import {jmUtils} from "../core/jmUtils.js";
+
 /**
- * 画箭头,继承自jmPath
+ * 箭头类
+ * 
+ * 绘制箭头图形，支持空心和实心两种样式。
+ * 箭头方向由起点和终点决定。
  *
  * @class jmArrow
  * @extends jmPath
- * @param {object} 生成箭头所需的参数
+ * @param {object} params 箭头参数
+ * @param {object} [params.start] 箭头起始点 {x, y}
+ * @param {object} [params.end] 箭头终点（箭头尖端）{x, y}
+ * @param {number} [params.angle] 箭头角度（弧度），不指定则自动计算
+ * @param {number} [params.offsetX=5] 箭头X方向偏移量
+ * @param {number} [params.offsetY=8] 箭头Y方向偏移量
+ * 
+ * @example
+ * // 创建箭头
+ * const arrow = graph.createShape('arrow', {
+ *     start: {x: 100, y: 100},
+ *     end: {x: 200, y: 100},
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
  */
 export default class jmArrow extends jmPath {	
 

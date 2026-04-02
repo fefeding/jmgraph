@@ -1,4 +1,18 @@
 
+/**
+ * @fileoverview WebGL 基础渲染类
+ * 
+ * 本模块提供了 WebGL 渲染的核心功能，包括：
+ * - 着色器程序管理
+ * - 缓冲区管理
+ * - 纹理管理
+ * - 变换矩阵操作
+ * - 多边形三角化（使用 earcut 算法）
+ * - 渐变支持
+ * 
+ * @module lib/webgl/base
+ * @author jmGraph Team
+ */
 import earcut from '../earcut.js';
 import webglGradient, { MAX_STOPS } from './gradient.js';
 import {
@@ -152,7 +166,21 @@ const pathFragmentSource = `
     }
 `;
 
+/**
+ * WebGL 基础渲染类
+ * 提供 WebGL 渲染的核心功能，包括着色器、缓冲区、纹理管理等
+ * 
+ * @class WeblBase
+ * @example
+ * const base = new WeblBase(graph, { mode: 'webgl' });
+ * base.setStyle({ fillStyle: '#ff0000' });
+ */
 class WeblBase {
+    /**
+     * 构造函数
+     * @param {jmGraph} graph jmGraph 实例
+     * @param {Object} option 配置选项
+     */
     constructor(graph, option) {
         this.graph = graph;
         this.option = option || {};
@@ -160,14 +188,16 @@ class WeblBase {
             globalAlpha: 1
         };
         this.stateStack = [];
-        this.transformMatrix = [1, 0, 0, 1, 0, 0]; // 2D 变换矩阵
+        /** @type {number[]} 2D 变换矩阵 [a, b, c, d, tx, ty] */
+        this.transformMatrix = [1, 0, 0, 1, 0, 0];
     }
 
+    /** @returns {WebGLRenderingContext} WebGL 渲染上下文 */
     get context() {
         if(this.graph) return this.graph.context;
     }
 
-    // 保存当前状态
+    /** 保存当前状态到状态栈 */
     save() {
         this.stateStack.push({
             transformMatrix: [...this.transformMatrix],
@@ -175,7 +205,7 @@ class WeblBase {
         });
     }
 
-    // 恢复上一个状态
+    /** 从状态栈恢复上一个状态 */
     restore() {
         if (this.stateStack.length > 0) {
             const state = this.stateStack.pop();
@@ -184,40 +214,53 @@ class WeblBase {
         }
     }
 
-    // 平移变换
+    /**
+     * 平移变换
+     * @param {number} x X 轴平移量
+     * @param {number} y Y 轴平移量
+     */
     translate(x, y) {
-        // 更新变换矩阵
         this.transformMatrix[4] += x * this.transformMatrix[0] + y * this.transformMatrix[2];
         this.transformMatrix[5] += x * this.transformMatrix[1] + y * this.transformMatrix[3];
     }
 
-    // 缩放变换
+    /**
+     * 缩放变换
+     * @param {number} sx X 轴缩放比例
+     * @param {number} sy Y 轴缩放比例
+     */
     scale(sx, sy) {
-        // 更新变换矩阵
         this.transformMatrix[0] *= sx;
         this.transformMatrix[1] *= sx;
         this.transformMatrix[2] *= sy;
         this.transformMatrix[3] *= sy;
     }
 
-    // 旋转变换
+    /**
+     * 旋转变换
+     * @param {number} angle 旋转角度（弧度）
+     */
     rotate(angle) {
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
         const [a, b, c, d] = this.transformMatrix;
-        
-        // 更新变换矩阵
         this.transformMatrix[0] = a * cos - b * sin;
         this.transformMatrix[1] = a * sin + b * cos;
         this.transformMatrix[2] = c * cos - d * sin;
         this.transformMatrix[3] = c * sin + d * cos;
     }
 
-    // 矩阵变换
+    /**
+     * 矩阵变换
+     * @param {number} a 水平缩放
+     * @param {number} b 垂直倾斜
+     * @param {number} c 水平倾斜
+     * @param {number} d 垂直缩放
+     * @param {number} e 水平移动
+     * @param {number} f 垂直移动
+     */
     transform(a, b, c, d, e, f) {
         const [currentA, currentB, currentC, currentD, currentE, currentF] = this.transformMatrix;
-        
-        // 矩阵乘法
         this.transformMatrix[0] = a * currentA + b * currentC;
         this.transformMatrix[1] = a * currentB + b * currentD;
         this.transformMatrix[2] = c * currentA + d * currentC;
@@ -226,7 +269,11 @@ class WeblBase {
         this.transformMatrix[5] = e * currentB + f * currentD + currentF;
     }
 
-    // 应用变换到点
+    /**
+     * 应用变换到点
+     * @param {Object} point 点坐标 {x, y}
+     * @returns {Object} 变换后的点坐标 {x, y}
+     */
     applyTransform(point) {
         const [a, b, c, d, tx, ty] = this.transformMatrix;
         return {
@@ -235,7 +282,11 @@ class WeblBase {
         };
     }
 
-    // 文本测量用的离屏 canvas context（1x1 单例缓存，不依赖 textureCanvas）
+    /**
+     * 文本测量用的离屏 canvas context
+     * @private
+     * @returns {CanvasRenderingContext2D|null}
+     */
     get _measureCtx() {
         if(!this.__measureCtx) {
             try {
@@ -251,54 +302,40 @@ class WeblBase {
         return this.__measureCtx;
     }
 
-    // i当前程序
+    /**
+     * 获取当前着色器程序
+     * @returns {Object} 着色器程序对象
+     */
     get program() {
-        // 默认所有path用同一个编译好的program
         return this.graph.context.pathProgram || (this.graph.context.pathProgram=this.createProgram(pathVertexSource, pathFragmentSource));
     }
 
-    // 设置样式
+    /**
+     * 设置样式
+     * @param {Object|string} style 样式对象或样式属性名
+     * @param {string} [value] 样式值（当 style 为字符串时使用）
+     */
     setStyle(style = this.style, value = '') {
-
         if(typeof style === 'string') {
             const obj = {};
             obj[style] = value;
             style = obj;
         }
-       /*
-        // 设置线条颜色或填充色
-        if(style.strokeStyle) {
-            let color = style.strokeStyle;
-            if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-            this.style.strokeStyle = this.graph.utils.rgbToDecimal(color);
-            delete style.strokeStyle;
-        }
-        else if(style.fillStyle) {
-            let color = style.fillStyle;
-            if(this.isGradient(color)) {
-                this.style.fillStyle = color;
-            }
-            else {
-                if(typeof color === 'string') color = this.graph.utils.hexToRGBA(color);
-                this.style.fillStyle =  this.graph.utils.rgbToDecimal(color);
-            }
-            delete style.fillStyle;
-        } */       
-
         this.style = {
             ...this.style,
             ...style
         }
     }
 
-    // 把传统颜色转为webgl识别的
+    /**
+     * 将颜色转换为 WebGL 可识别的格式
+     * @param {string|Object} color 颜色值
+     * @returns {Object} RGBA 对象 {r, g, b, a}，范围 0-1
+     */
     convertColor(color) {
         if(this.isGradient(color)) return color;
         if(typeof color === 'string') {
-            // 先尝试 hexToRGBA 解析
             color = this.graph.utils.hexToRGBA(color);
-            // hexToRGBA 对无法识别的格式（如 hsl）会原样返回字符串
-            // 利用离屏 canvas 将任意 CSS 颜色转为 rgba
             if(typeof color === 'string') {
                 color = this.__parseCSSColor(color);
             }
@@ -309,7 +346,12 @@ class WeblBase {
         return color;
     }
 
-    // 利用离屏 canvas 解析任意 CSS 颜色（hsl/hsla/命名颜色等）
+    /**
+     * 利用离屏 canvas 解析任意 CSS 颜色
+     * @private
+     * @param {string} colorStr CSS 颜色字符串
+     * @returns {Object} RGBA 对象 {r, g, b, a}
+     */
     __parseCSSColor(colorStr) {
         const ctx = this._measureCtx;
         if(!ctx) return { r: 0, g: 0, b: 0, a: 0 };
@@ -328,12 +370,21 @@ class WeblBase {
         }
     }
 
-    // 创建程序
+    /**
+     * 创建着色器程序
+     * @param {string} vertexSrc 顶点着色器源码
+     * @param {string} fragmentSrc 片段着色器源码
+     * @returns {Object} 着色器程序对象
+     */
     createProgram(vertexSrc, fragmentSrc) {        
         return createProgram(this.context, vertexSrc, fragmentSrc);
     }
 
-    // 指定使用某个程序
+    /**
+     * 使用指定的着色器程序
+     * @param {Object} [program] 着色器程序，默认使用当前程序
+     * @returns {Object} 着色器程序
+     */
     useProgram(program=this.program) {
         program = program.program || program;
         if(this.context.__curent_program === program) return program;
@@ -342,26 +393,44 @@ class WeblBase {
         return program;
     }
 
+    /**
+     * 获取属性位置
+     * @param {string} name 属性名
+     * @returns {number} 属性位置
+     */
     getAttribLocation(name) {
         return this.context.getAttribLocation(this.program.program, name);
     }
     
+    /**
+     * 获取 uniform 位置
+     * @param {string} name uniform 变量名
+     * @returns {WebGLUniformLocation} uniform 位置
+     */
     getUniformLocation(name) {
         return this.context.getUniformLocation(this.program.program, name);
     }
 
-    // 把缓冲区的值写入变量
-    // buffer: 缓冲区
-    // size: 组成数量，必须是1，2，3或4.  每个单元由多少个数组成
-    // strip: 步长 数组中一行长度，0 表示数据是紧密的没有空隙，让OpenGL决定具体步长
-    // offset: 字节偏移量，必须是类型的字节长度的倍数。
-    // dataType: 每个元素的数据类型
+    /**
+     * 将缓冲区数据写入顶点属性
+     * @param {Object} buffer 缓冲区对象
+     * @param {Object} attr 属性对象
+     * @param {number} [size=2] 每个顶点的分量数（1-4）
+     * @param {number} [strip=0] 步长，0 表示紧密排列
+     * @param {number} [offset=0] 字节偏移量
+     * @param {number} [dataType=FLOAT] 数据类型
+     * @returns {Object} 缓冲区对象
+     */
     writeVertexAttrib(buffer, attr, size=2, strip=0, offset=0, dataType=this.context.FLOAT) {
         buffer.attr = attr;
         return writeVertexAttrib(this.context, buffer, attr, size, strip, offset, dataType);
     }
 
-    // 禁用attri
+    /**
+     * 禁用顶点属性数组
+     * @param {Object} attr 属性对象
+     * @returns {Object} 属性对象
+     */
     disableVertexAttribArray(attr) {
         try{
             if(!attr) return attr;
@@ -373,24 +442,35 @@ class WeblBase {
         return attr;
     }
 
-    // 创建float32的buffer
+    /**
+     * 创建 Float32 缓冲区
+     * @param {Array} data 数据数组
+     * @param {number} [type=ARRAY_BUFFER] 缓冲区类型
+     * @param {number} [drawType=STATIC_DRAW] 绘制类型
+     * @returns {Object} 缓冲区对象
+     */
     createFloat32Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
         const buffer = createFloat32Buffer(this.context, data, type, drawType);
-        return {
-            data,
-            ...buffer
-        };
+        return { data, ...buffer };
     }
 
+    /**
+     * 创建 Uint16 缓冲区
+     * @param {Array} data 数据数组
+     * @param {number} [type=ARRAY_BUFFER] 缓冲区类型
+     * @param {number} [drawType=STATIC_DRAW] 绘制类型
+     * @returns {Object} 缓冲区对象
+     */
     createUint16Buffer(data, type=this.context.ARRAY_BUFFER, drawType=this.context.STATIC_DRAW) {
         const buffer = createUint16Buffer(this.context, data, type, drawType);
-        return {
-            data,
-            ...buffer
-        };
+        return { data, ...buffer };
     }
 
-    // 释放
+    /**
+     * 删除缓冲区
+     * @param {Object} buffer 缓冲区对象
+     * @returns {Object} 缓冲区对象
+     */
     deleteBuffer(buffer) {
         try {
             if(!buffer) return;
@@ -404,22 +484,34 @@ class WeblBase {
         return buffer;
     }
 
-    // 生成纹理
+    /** @returns {WebGLTexture} 2D 纹理对象 */
     create2DTexture() { 
         return create2DTexture(this.context);
     }
 
-    // 创建图片纹理
+    /**
+     * 创建图片纹理
+     * @param {Image|HTMLImageElement} img 图像对象
+     * @returns {Object} 纹理对象
+     */
     createImgTexture(img) {
         return createImgTexture(this.context, img);
     }
 
-    // 根根像素值生成纹理
+    /**
+     * 根据像素数据创建纹理
+     * @param {ImageData|Uint8Array} data 像素数据
+     * @returns {Object} 纹理对象
+     */
     createDataTexture(data) {
         return createDataTexture(this.context, data);
     }
 
-    // 删除纹理
+    /**
+     * 删除纹理
+     * @param {Object} texture 纹理对象
+     * @returns {Object} 纹理对象
+     */
     deleteTexture(texture) {
         try {
             return deleteTexture(this.context, texture.texture || texture);
@@ -430,43 +522,55 @@ class WeblBase {
         return texture;
     }
 
-    // 多边切割, 得到三角形顶点索引数组
-    // polygonIndices 顶点索引，
+    /**
+     * 多边形三角化，得到三角形顶点索引数组
+     * @param {Array<Object>} points 多边形顶点数组
+     * @returns {Array<number>} 三角形顶点索引数组
+     */
     earCutPoints(points) {
         const arr = this.pointsToArray(points);
-        const ps = earcut(arr);// 切割得到3角色顶点索引，
+        const ps = earcut(arr);
         return ps;
     }
 
-    // 多边切割, 得到三角形顶点
-    // polygonIndices 顶点索引，
+    /**
+     * 多边形三角化，得到三角形顶点数组
+     * @param {Array<Object>} points 多边形顶点数组
+     * @returns {Array<Array<Object>>} 三角形数组，每个三角形包含3个顶点
+     */
     earCutPointsToTriangles(points) {
         this.earCutCache = this.earCutCache || (this.earCutCache = {});
-        // 快速缓存 key：用长度和首尾点坐标
         const len = points.length;
         const key = len + '_' + points[0].x + '_' + points[0].y + '_' + points[len-1].x + '_' + points[len-1].y;
         if (this.earCutCache[key]) return this.earCutCache[key];
 
-        const ps = this.earCutPoints(points);// 切割得到3角色顶点索引，
+        const ps = this.earCutPoints(points);
         const triangles = [];
-        // 用顶点索引再组合成坐标数组
         for(let i=0;i<ps.length; i+=3) {
             const p1 = points[ps[i]];
             const p2 = points[ps[i+1]];
             const p3 = points[ps[i+2]];
-
-            triangles.push([p1, p2, p3]);// 每三个顶点构成一个三角
+            triangles.push([p1, p2, p3]);
         }
         
         this.earCutCache[key] = triangles;
         return triangles;
     }
 
-    // 点坐标数组转为一维数组
+    /**
+     * 点坐标数组转为一维数组
+     * @param {Array<Object>} points 点数组 [{x, y}, ...]
+     * @returns {Array<number>} 一维数组 [x1, y1, x2, y2, ...]
+     */
     pointsToArray(points) {
-        return [].concat(...points.map(p=>[p.x,p.y]));// 把x,y转为数组元素
+        return [].concat(...points.map(p=>[p.x,p.y]));
     }
-    // 每2位表示坐标x,y转为坐标点对象
+
+    /**
+     * 一维数组转为点坐标数组
+     * @param {Array<number>} arr 一维数组 [x1, y1, x2, y2, ...]
+     * @returns {Array<Object>} 点数组 [{x, y}, ...]
+     */
     arrayToPoints(arr) {
         const points = [];
         for(let i=0;i<arr.length; i+=2) {
@@ -478,14 +582,33 @@ class WeblBase {
         return points;
     }
 
-    // 创建线性渐变
+    /**
+     * 创建线性渐变
+     * @param {number} x1 起点X坐标
+     * @param {number} y1 起点Y坐标
+     * @param {number} x2 终点X坐标
+     * @param {number} y2 终点Y坐标
+     * @param {Object} bounds 渐变边界
+     * @returns {WebglGradient} 渐变对象
+     */
     createLinearGradient(x1, y1, x2, y2, bounds) {
         return new webglGradient('linear', {
             x1, y1, x2, y2, bounds,
             control: this
         });
     }
-    // 创建放射性渐变
+
+    /**
+     * 创建径向渐变
+     * @param {number} x1 内圆中心X坐标
+     * @param {number} y1 内圆中心Y坐标
+     * @param {number} r1 内圆半径
+     * @param {number} x2 外圆中心X坐标
+     * @param {number} y2 外圆中心Y坐标
+     * @param {number} r2 外圆半径
+     * @param {Object} bounds 渐变边界
+     * @returns {WebglGradient} 渐变对象
+     */
     createRadialGradient(x1, y1, r1, x2, y2, r2, bounds) {
         return new webglGradient('radial', {
             x1, y1, r1,
@@ -494,7 +617,12 @@ class WeblBase {
             control: this
         });
     }
-    // 判断是否是一个渐变对象
+
+    /**
+     * 判断是否为渐变对象
+     * @param {Object} obj 待检测对象
+     * @returns {boolean} 是否为渐变对象
+     */
     isGradient(obj) {
         return obj && obj instanceof webglGradient;
     }

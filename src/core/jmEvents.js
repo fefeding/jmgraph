@@ -1,14 +1,75 @@
+/**
+ * @fileoverview jmEvents 事件处理系统
+ * 
+ * jmEvents 是 jmGraph 库的事件处理模块，负责管理所有用户交互事件。
+ * 包括鼠标事件、触摸事件和键盘事件的绑定、分发和销毁。
+ * 
+ * 主要功能：
+ * - 鼠标事件：mousedown, mousemove, mouseup, click, dblclick 等
+ * - 触摸事件：touchstart, touchmove, touchend, touchcancel, tap
+ * - 键盘事件：keydown, keyup, keypress
+ * - 事件冒泡和委托机制
+ * 
+ * @module jmEvents
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmUtils} from "./jmUtils.js";
 
+/**
+ * jmEvents 事件处理类
+ * 
+ * 统一管理画布上的所有交互事件，包括鼠标、触摸和键盘事件。
+ * 支持事件冒泡机制，可以将事件传递给子控件处理。
+ * 
+ * @class jmEvents
+ * 
+ * @param {jmGraph} container jmGraph 实例
+ * @param {HTMLElement} target 事件目标元素（通常是 canvas 元素）
+ * 
+ * @example
+ * // 通常由 jmGraph 内部创建，不需要手动实例化
+ * const events = new jmEvents(graph, canvasElement);
+ */
 export default class jmEvents {
 
+	/**
+	 * 构造函数
+	 * 
+	 * @param {jmGraph} container jmGraph 实例
+	 * @param {HTMLElement} target 事件目标元素
+	 */
 	constructor(container, target) {
+		/**
+		 * jmGraph 实例
+		 * @type {jmGraph}
+		 */
 		this.container = container;
+		/**
+		 * 事件目标元素
+		 * @type {HTMLElement}
+		 */
 		this.target = target || container;
+		/**
+		 * 鼠标事件处理器
+		 * @type {jmMouseEvent}
+		 */
 		this.mouseHandler = new jmMouseEvent(this, container, target);
+		/**
+		 * 键盘事件处理器
+		 * @type {jmKeyEvent}
+		 */
 		this.keyHandler = new jmKeyEvent(this, container, target);
 	}
 
+	/**
+	 * 触摸开始事件处理
+	 * 
+	 * @method touchStart
+	 * @param {TouchEvent} evt 触摸事件对象
+	 * @return {boolean} 如果事件目标为画布本身则返回 false
+	 */
 	touchStart(evt) {
 		evt = evt || window.event;
 		evt.eventName = 'touchstart';
@@ -19,6 +80,13 @@ export default class jmEvents {
 		}
 	};
 
+	/**
+	 * 触摸移动事件处理
+	 * 
+	 * @method touchMove
+	 * @param {TouchEvent} evt 触摸事件对象
+	 * @return {boolean} 如果事件目标为画布本身则返回 false
+	 */
 	touchMove(evt) {
 		evt = evt || window.event;
 		evt.eventName = 'touchmove';
@@ -29,6 +97,13 @@ export default class jmEvents {
 		}
 	};
 
+	/**
+	 * 触摸结束事件处理
+	 * 
+	 * @method touchEnd
+	 * @param {TouchEvent} evt 触摸事件对象
+	 * @return {boolean} 如果事件目标为画布本身则返回 false
+	 */
 	touchEnd(evt) {
 		evt = evt || window.event;
 		evt.eventName = 'touchend';
@@ -40,6 +115,13 @@ export default class jmEvents {
 		}
 	};
 
+	/**
+	 * 触摸取消事件处理
+	 * 
+	 * @method touchCancel
+	 * @param {TouchEvent} evt 触摸事件对象
+	 * @return {boolean} 如果事件目标为画布本身则返回 false
+	 */
 	touchCancel(evt) {
 		evt = evt || window.event;
 		evt.eventName = 'touchcancel';
@@ -51,6 +133,13 @@ export default class jmEvents {
 		}
 	};
 
+	/**
+	 * 轻触事件处理
+	 * 
+	 * @method tap
+	 * @param {Event} evt 事件对象
+	 * @return {boolean} 如果事件目标为画布本身则返回 false
+	 */
 	tap(evt) {
 		evt = evt || window.event;
 		evt.eventName = 'tap';
@@ -62,23 +151,56 @@ export default class jmEvents {
 		}
 	};
 
+	/**
+	 * 销毁事件处理器
+	 * 
+	 * 移除所有绑定的事件监听器，释放资源。
+	 * 
+	 * @method destroy
+	 */
 	destroy() {
 		this.mouseHandler.destroy();
 		this.keyHandler.destroy();
 	}
 }
 
+/**
+ * 鼠标事件处理器
+ * 
+ * @class jmMouseEvent
+ * @private
+ */
 class jmMouseEvent {
+	/**
+	 * 构造函数
+	 * 
+	 * @param {jmEvents} instance jmEvents 实例
+	 * @param {jmGraph} container jmGraph 实例
+	 * @param {HTMLElement} target 事件目标元素
+	 */
 	constructor(instance, container, target) {
 		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 
+		/**
+		 * 已绑定的事件映射表
+		 * @type {Object}
+		 */
 		this.eventEvents = {};
 
 		this.init(instance, container, target);
 	}
 	
+	/**
+	 * 初始化鼠标事件绑定
+	 * 
+	 * @method init
+	 * @private
+	 * @param {jmEvents} instance jmEvents 实例
+	 * @param {jmGraph} container jmGraph 实例
+	 * @param {HTMLElement} target 事件目标元素
+	 */
 	init(instance, container, target) {
 		const canvas = this.target;
 		const doc = typeof document != 'undefined'? document: null;
@@ -163,6 +285,13 @@ class jmMouseEvent {
 		},{ passive: false }));
 	}
 
+	/**
+	 * 销毁鼠标事件处理器
+	 * 
+	 * 移除所有绑定的鼠标事件监听器。
+	 * 
+	 * @method destroy
+	 */
 	destroy() {
 		for(const name in this.eventEvents) {
 			const event = this.eventEvents[name];
@@ -172,17 +301,42 @@ class jmMouseEvent {
 	}
 }
 
+/**
+ * 键盘事件处理器
+ * 
+ * @class jmKeyEvent
+ * @private
+ */
 class jmKeyEvent {
+	/**
+	 * 构造函数
+	 * 
+	 * @param {jmEvents} instance jmEvents 实例
+	 * @param {jmGraph} container jmGraph 实例
+	 * @param {HTMLElement} target 事件目标元素
+	 */
 	constructor(instance, container,target) {
 		this.instance = instance;
 		this.container = container;
 		this.target = target || container;
 
+		/**
+		 * 已绑定的事件映射表
+		 * @type {Object}
+		 */
 		this.eventEvents = {};
 
 		this.init(container, target);
 	}
 
+	/**
+	 * 初始化键盘事件绑定
+	 * 
+	 * @method init
+	 * @private
+	 * @param {jmGraph} container jmGraph 实例
+	 * @param {HTMLElement} target 事件目标元素
+	 */
 	init(container, target) {
 		const doc = typeof document != 'undefined'? document: null;
 

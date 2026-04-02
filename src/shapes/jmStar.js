@@ -1,18 +1,52 @@
+/**
+ * @fileoverview jmStar 星形类
+ * 
+ * jmStar 提供了星形图形的绘制功能。
+ * 支持自定义顶点数和内外半径，创建各种星形图案。
+ * 
+ * 主要功能：
+ * - 星形绘制
+ * - 自定义角数
+ * - 自定义内外半径
+ * 
+ * @module jmStar
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmPath} from "../core/jmPath.js";
 
 /**
- * 画星形
- * 支持自定义顶点数和内外半径，创建各种星形图案
- * 星形由交替的外半径和内半径顶点组成
+ * 星形类
+ * 
+ * 绘制星形图形，支持自定义顶点数和内外半径。
+ * 星形由交替的外半径和内半径顶点组成。
  *
  * @class jmStar
  * @extends jmPath
  * @param {object} params 星形的参数
- * @param {array} [params.points] 自定义顶点数组，如果提供则忽略其他参数
  * @param {number} [params.points=5] 星形顶点数（角数，3-50）
  * @param {number} [params.radius=50] 星形外半径（从中心到尖角的距离）
  * @param {number} [params.innerRadius=25] 星形内半径（从中心到凹陷处的距离）
  * @param {object} [params.center={x:0,y:0}] 星形中心点坐标
+ * 
+ * @example
+ * // 创建五角星
+ * const star = graph.createShape('star', {
+ *     center: {x: 200, y: 200},
+ *     points: 5,
+ *     radius: 50,
+ *     innerRadius: 25,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建六角星
+ * const hexStar = graph.createShape('star', {
+ *     center: {x: 200, y: 200},
+ *     points: 6,
+ *     radius: 60,
+ *     innerRadius: 30
+ * });
  */
 export default class jmStar extends jmPath {
 	

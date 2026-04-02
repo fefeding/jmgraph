@@ -1,13 +1,51 @@
-import {jmControl} from "./jmControl.js";
 /**
- * 基础路径,大部分图型的基类
- * 指定一系列点，画出图形
- *
- * @class jmPath
- * @extends jmControl
- * @param {object} params 路径参数 points=所有描点
+ * @fileoverview jmPath 路径基类
+ * 
+ * jmPath 是大部分图形的基类，提供了基于点序列的路径绘制能力。
+ * 所有需要通过点序列定义形状的图形（如多边形、线条、贝塞尔曲线等）
+ * 都可以继承此类。
+ * 
+ * 主要功能：
+ * - 点序列管理（points 属性）
+ * - SVG 导出支持（toSVG 方法）
+ * - 路径闭合控制
+ * 
+ * @module jmPath
+ * @author jmGraph Team
+ * @license MIT
  */
 
+import {jmControl} from "./jmControl.js";
+
+/**
+ * 基础路径类
+ * 
+ * 大部分图形的基类，通过指定一系列点来画出图形。
+ * 支持开放路径和闭合路径，支持 SVG 导出。
+ * 
+ * @class jmPath
+ * @extends jmControl
+ * 
+ * @param {Object} params 路径参数
+ * @param {Array<Object>} [params.points] 点序列，每个点格式：{x:0, y:0, m:false}
+ * @param {string} [t='jmPath'] 类型标识
+ * 
+ * @example
+ * // 创建自定义路径
+ * const path = new jmPath({
+ *     points: [
+ *         {x: 0, y: 0},
+ *         {x: 100, y: 0},
+ *         {x: 100, y: 100},
+ *         {x: 0, y: 100}
+ *     ],
+ *     style: {
+ *         fill: '#ff0000',
+ *         stroke: '#000000',
+ *         close: true  // 闭合路径
+ *     }
+ * });
+ */
 export default class jmPath extends jmControl {	
 
 	constructor(params, t='jmPath') {

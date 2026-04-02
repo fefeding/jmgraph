@@ -1,22 +1,58 @@
+/**
+ * @fileoverview WebGL 路径绘制类
+ * 
+ * 本模块提供了 WebGL 路径绘制功能，包括：
+ * - 线条绘制（stroke）
+ * - 填充绘制（fill）
+ * - 纹理填充
+ * - 渐变填充
+ * - 文本绘制
+ * - 多边形三角化
+ * 
+ * @module lib/webgl/path
+ * @author jmGraph Team
+ */
 import WebglBase, { MAX_STOPS } from './base.js';
 import earcut from '../earcut.js';
 
-// path 绘制类
+/**
+ * WebGL 路径绘制类
+ * 继承自 WeblBase，提供路径绘制功能
+ * 
+ * @class WebglPath
+ * @extends WeblBase
+ * @example
+ * const path = new WebglPath(graph, { isRegular: false, needCut: true });
+ * path.draw(points);
+ * path.stroke(points, '#ff0000', 2);
+ */
 class WebglPath extends WebglBase {
+    /**
+     * 构造函数
+     * @param {jmGraph} graph jmGraph 实例
+     * @param {Object} option 配置选项
+     * @param {boolean} [option.isRegular=false] 是否为规则图形（凸多边形）
+     * @param {boolean} [option.needCut=false] 是否需要切割处理
+     * @param {Object} [option.control] 控制器对象
+     */
     constructor(graph, option) {
         super(graph, option);
-        // 是否是规则的，不规则的处理方式更为复杂和耗性能
+        /** @type {boolean} 是否为规则图形（凸多边形），规则图形处理更高效 */
         this.isRegular = option.isRegular || false;
+        /** @type {boolean} 是否需要切割处理 */
         this.needCut = option.needCut || false;
         this.control = option.control;
+        /** @type {Array<Object>} 路径点数组 */
         this.points = [];
-        // 缓存 buffer 和纹理，避免每帧创建/销毁
+        /** @type {Array} 缓存的缓冲区，避免每帧创建/销毁 */
         this.__cachedBuffers = [];
+        /** @type {Object} 缓存的纹理 */
         this.__cachedTexture = null;
+        /** @type {string} 缓存纹理的 key */
         this.__cachedTextureKey = null;
     }
 
-    // 释放缓存的 WebGL 资源
+    /** 释放缓存的 WebGL 资源 */
     dispose() {
         for(const buf of this.__cachedBuffers) {
             this.deleteBuffer(buf);
@@ -29,7 +65,12 @@ class WebglPath extends WebglBase {
         }
     }
 
-    // 获取或创建 buffer，优先复用缓存
+    /**
+     * 获取或创建缓冲区，优先复用缓存
+     * @param {Array} data 数据数组
+     * @param {Object} attr 属性对象
+     * @returns {Object} 缓冲区对象
+     */
     getOrCreateBuffer(data, attr) {
         let buffer = this.__cachedBuffers.find(b => b.attr === attr);
         if(buffer) {
@@ -46,11 +87,19 @@ class WebglPath extends WebglBase {
         return buffer;
     }
 
-    // 应用变换到点
+    /**
+     * 应用变换到点
+     * @param {Object} point 点坐标 {x, y}
+     * @returns {Object} 变换后的点坐标
+     */
     applyTransform(point) {
         return super.applyTransform(point);
     }
 
+    /**
+     * 设置父级边界
+     * @param {Object} [parentBounds] 父级边界 {left, top, width, height}
+     */
     setParentBounds(parentBounds = this.parentAbsoluteBounds) {
 
         //this.useProgram();
@@ -104,16 +153,16 @@ class WebglPath extends WebglBase {
     endDraw() {
         if(this.points) delete this.points;
         if(this.pathPoints) delete this.pathPoints;
+        this.needClose = false;
         // 缓存的纹理保留到下次绘制（渐变可能不变）
     }
 
-    // 图形封闭
+    /**
+     * 标记路径需要闭合（不修改原始 points 数组）
+     * 闭合逻辑由 stroke/fill 绘制方法自行处理
+     */
     closePath() {
-        if(this.points && this.points.length > 2 && this.points[0] !== this.points[this.points.length-1]) {
-            const start = this.points[0];
-            const end = this.points[this.points.length-1];
-            if(start != end && !(start.x === end.x && start.y === end.y)) this.points.push(start);
-        }
+        this.needClose = true;
     }
 
     // 绘制点数组（使用 DYNAMIC_DRAW 复用 buffer，避免每帧 create/delete）

@@ -1,9 +1,27 @@
+/**
+ * @fileoverview jmPolygon 多边形类
+ * 
+ * jmPolygon 提供了多边形图形的绘制功能。
+ * 支持规则多边形（正多边形）和自定义多边形。
+ * 
+ * 主要功能：
+ * - 规则多边形（正三角形、正方形、正五边形等）
+ * - 自定义多边形（通过顶点数组定义）
+ * - 填充和描边样式
+ * 
+ * @module jmPolygon
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmPath} from "../core/jmPath.js";
 
 /**
- * 画多边形
- * 支持规则多边形（正多边形）和自定义多边形
- * 规则多边形通过边数和半径自动计算顶点，自定义多边形通过顶点数组定义
+ * 多边形类
+ * 
+ * 绘制多边形图形，支持规则多边形和自定义多边形。
+ * 规则多边形通过边数和半径自动计算顶点，
+ * 自定义多边形通过顶点数组定义。
  *
  * @class jmPolygon
  * @extends jmPath
@@ -12,6 +30,27 @@ import {jmPath} from "../core/jmPath.js";
  * @param {number} [params.sides=3] 多边形边数（3-100）
  * @param {number} [params.radius=50] 多边形半径（像素）
  * @param {object} [params.center={x:0,y:0}] 多边形中心点坐标
+ * 
+ * @example
+ * // 创建正六边形
+ * const hexagon = graph.createShape('polygon', {
+ *     center: {x: 200, y: 200},
+ *     sides: 6,
+ *     radius: 50,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建自定义多边形
+ * const polygon = graph.createShape('polygon', {
+ *     points: [
+ *         {x: 100, y: 100},
+ *         {x: 200, y: 50},
+ *         {x: 300, y: 100},
+ *         {x: 250, y: 200},
+ *         {x: 150, y: 200}
+ *     ],
+ *     style: { fill: '#00ff00' }
+ * });
  */
 export default class jmPolygon extends jmPath {
 	

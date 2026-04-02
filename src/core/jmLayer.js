@@ -1,9 +1,27 @@
+/**
+ * @fileoverview jmLayer 图层类
+ * 
+ * jmLayer 提供了图层管理功能，用于组织和控制图形对象的显示和交互。
+ * 图层可以包含多个图形对象，支持可见性和锁定控制。
+ * 
+ * 主要功能：
+ * - 图层可见性控制
+ * - 图层锁定（防止交互）
+ * - 图形对象组织和管理
+ * - 批量操作支持
+ * 
+ * @module jmLayer
+ * @author jmGraph Team
+ * @license MIT
+ */
+
 import {jmControl} from "./jmControl.js";
 
 /**
  * 图层类
- * 用于组织和管理图形对象，支持可见性和锁定控制
- * 图层可以包含多个图形对象，并控制它们的显示和交互
+ * 
+ * 用于组织和管理图形对象，支持可见性和锁定控制。
+ * 图层可以包含多个图形对象，并控制它们的显示和交互。
  *
  * @class jmLayer
  * @extends jmControl
@@ -12,6 +30,20 @@ import {jmControl} from "./jmControl.js";
  * @param {boolean} [params.visible=true] 图层是否可见
  * @param {boolean} [params.locked=false] 图层是否锁定（锁定后不可交互）
  * @param {jmGraph} [params.graph] 所属的画布对象
+ * 
+ * @example
+ * // 创建图层
+ * const layer = new jmLayer({
+ *     name: 'background',
+ *     visible: true,
+ *     locked: false
+ * });
+ * 
+ * // 添加图形到图层
+ * layer.children.add(rect);
+ * 
+ * // 锁定图层
+ * layer.locked = true;
  */
 export default class jmLayer extends jmControl {
 	

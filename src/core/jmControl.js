@@ -1777,10 +1777,7 @@ export default class jmControl extends jmProperty {
 	runEventHandle(name, args) {
 		let events = this.getEvent(name);		
 		if(events) {
-			
-		if(name === 'mousemove' && this.type == 'jmResize') {
-			console.log('resize mousemove', args, events);
-		}
+		
 			var self = this;
 			if(!Array.isArray(args)) args = [args];	
 			events.each(function(i, handle) {

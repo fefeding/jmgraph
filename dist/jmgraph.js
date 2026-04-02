@@ -2299,10 +2299,6 @@ var jmControl = /*#__PURE__*/function (_jmProperty) {
       var events = this.getEvent(name);
 
       if (events) {
-        if (name === 'mousemove' && this.type == 'jmResize') {
-          console.log('resize mousemove', args, events);
-        }
-
         var self = this;
         if (!Array.isArray(args)) args = [args];
         events.each(function (i, handle) {

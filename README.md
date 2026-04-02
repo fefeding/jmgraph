@@ -141,6 +141,194 @@ jmGraph 支持简化的样式名称和原生 Canvas 样式：
 | clipPath | - | 裁剪路径，传入图形控件实例 |
 | mask | - | 遮罩效果，传入图形控件实例 |
 
+### 渐变 (jmGradient)
+
+jmGraph 支持完整的 CSS 渐变语法，通过 `jmGradient` 类实现。支持线性渐变和径向渐变。
+
+#### 支持的格式
+
+```javascript
+// 1. 角度格式（deg/rad/grad/turn）
+'linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)'
+'linear-gradient(0.5turn, #10b981, #3b82f6)'
+'linear-gradient(3.14159rad, #f59e0b, #ef4444)'
+
+// 2. 方向关键词
+'linear-gradient(to top, #e94560, #00d4ff)'
+'linear-gradient(to right, #ffd93d, #e94560)'
+'linear-gradient(to top right, #8b5cf6, #f59e0b)'
+
+// 3. 坐标格式（x1 y1 x2 y2）—— 注意：坐标之间用空格分隔，不要用逗号
+'linear-gradient(50% 0 50% 100%, rgba(36,159,218,0) 1, rgba(36,159,218,0.8) 0)'
+
+// 4. 径向渐变
+'radial-gradient(circle, #e94560, #8b5cf6)'
+'radial-gradient(ellipse at top, #06b6d4, #8b5cf6)'
+'radial-gradient(50% 50% 100% 50% 50% 0%, #ffd93d 0%, #f59e0b 100%)'
+```
+
+#### 使用方式
+
+```javascript
+// 方式一：直接使用字符串（最简单）
+const rect = g.createShape('rect', {
+    position: {x: 100, y: 100}, width: 200, height: 100,
+    style: { fill: 'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)' }
+});
+
+// 方式二：使用 jmGradient 对象
+import { jmGradient } from 'jmgraph';
+const gradient = new jmGradient({
+    type: 'linear',
+    x1: '50%', y1: '0%',
+    x2: '50%', y2: '100%',
+    stops: [
+        { offset: 0, color: 'rgba(36,159,218,0)' },
+        { offset: 1, color: 'rgba(36,159,218,0.8)' }
+    ]
+});
+
+const rect2 = g.createShape('rect', {
+    position: {x: 100, y: 220}, width: 200, height: 100,
+    style: { fill: gradient }
+});
+
+// 方式三：使用 createLinearGradient / createRadialGradient 便捷方法
+const linearGradient = g.createLinearGradient(0, 0, 0, 100);
+linearGradient.addStop(0, '#e94560');
+linearGradient.addStop(1, '#00d4ff');
+
+const radialGradient = g.createRadialGradient(100, 100, 0, 100, 100, 50);
+radialGradient.addStop(0, '#ffd93d');
+radialGradient.addStop(1, '#f59e0b');
+```
+
+#### 偏移量格式
+
+偏移量（offset）表示颜色在渐变中的位置，支持三种写法：
+
+```javascript
+// 小数（0~1）—— 0 表示渐变起点，1 表示渐变终点
+'linear-gradient(180deg, #e94560 0, #00d4ff 0.5, #8b5cf6 1)'
+
+// 百分比（0%~100%）
+'linear-gradient(180deg, #e94560 0%, #00d4ff 50%, #8b5cf6 100%)'
+
+// 省略偏移量（首尾自动为 0 和 1，中间均匀分布）
+'linear-gradient(180deg, #e94560, #00d4ff, #8b5cf6)'
+// 等价于 'linear-gradient(180deg, #e94560 0, #00d4ff 0.5, #8b5cf6 1)'
+```
+
+> **注意**：偏移量 `1` 和 `100%` 是等价的，都表示渐变终点。偏移量会自动归一化到 0~1 范围。
+
+#### 颜色格式支持
+
+支持多种颜色格式：
+
+```javascript
+// hex
+'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)'
+
+// rgba —— 逗号后有无空格均可
+'linear-gradient(180deg, rgba(233,69,96,0.8) 0%, rgba(0,212,255,0.8) 100%)'
+'linear-gradient(180deg, rgba(233, 69, 96, 0.8) 0%, rgba(0, 212, 255, 0.8) 100%)'
+
+// hsl/hsla
+'linear-gradient(180deg, hsl(345, 82%, 62%) 0%, hsl(191, 100%, 50%) 100%)'
+
+// 命名颜色
+'linear-gradient(to top, red, blue, green)'
+
+// transparent
+'linear-gradient(180deg, transparent, rgba(233,69,96,0.7))'
+```
+
+#### 坐标格式说明
+
+坐标参数支持多种形式：
+
+```javascript
+// 百分比（推荐）—— 相对于控件边界尺寸计算
+x1: '50%'  // 控件宽度的一半
+
+// 小数（0~1）—— 自动乘以控件尺寸，效果等同于百分比
+x1: 0.5    // 同 '50%'
+
+// 绝对像素值
+x1: 100    // 固定 100 像素位置
+```
+
+#### 常见错误与注意事项
+
+<details>
+<summary><b>点击展开常见问题</b></summary>
+
+1. **坐标分隔符错误**：坐标格式中坐标之间用**空格**分隔，不要用逗号
+
+```javascript
+// 正确
+'linear-gradient(50% 0 50% 100%, rgba(36,159,218,0) 1, rgba(36,159,218,0.8) 0)'
+
+// 错误 - 坐标之间不能有逗号
+'linear-gradient(50%, 0, 50%, 100%, rgba(36,159,218,0) 1, ...)'
+```
+
+2. **颜色停止点之间必须有逗号**：颜色停止点用逗号分隔
+
+```javascript
+// 正确
+'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)'
+
+// 错误 - 颜色停止点之间缺少逗号
+'linear-gradient(180deg #e94560 0% #00d4ff 100%)'
+```
+
+3. **rgba 透明度为 0 时必须写完整**：不能只写 `rgba(r,g,b, 0)` 而不写颜色值
+
+```javascript
+// 正确
+'linear-gradient(50% 0 50% 100%, rgba(36,159,218,0) 1, rgba(36,159,218,0.8) 0)'
+
+// rgba 中透明度参数是最后一个值，逗号后可以有空格
+'rgba(36,159,218, 0)'   // 正确
+'rgba(36,159,218,0)'     // 正确
+'rgba(36, 159, 218, 0)'  // 正确
+```
+
+4. **渐变至少需要 2 个颜色停止点**
+
+```javascript
+// 正确 - 至少 2 个颜色
+'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)'
+
+// 错误 - 只有 1 个颜色，无法产生渐变效果
+'linear-gradient(180deg, #e94560)'
+```
+
+5. **多行渐变字符串**：支持换行符
+
+```javascript
+// 正确 - 多行字符串也能正常解析
+`linear-gradient(50% 0 50% 100%,
+  rgba(36,159,218,0) 1,
+  rgba(36,159,218,0.8) 0)`
+```
+
+6. **addStop 偏移量范围**：使用 `addStop()` 方法时，偏移量必须在 0~1 之间
+
+```javascript
+// 正确
+gradient.addStop(0, '#e94560');
+gradient.addStop(0.5, '#00d4ff');
+gradient.addStop(1, '#8b5cf6');
+
+// 错误 - 偏移量超出 0~1 范围会被自动裁剪并输出警告
+gradient.addStop(1.5, '#e94560');  // 会被调整为 1
+gradient.addStop(-0.5, '#e94560'); // 会被调整为 0
+```
+
+</details>
+
 ### filter 滤镜
 
 支持 CSS 标准滤镜，可用值包括：

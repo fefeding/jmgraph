@@ -66,6 +66,16 @@ export interface ShadowStyle {
 
 /**
  * 渐变色停止点
+ *
+ * @example
+ * // 偏移量支持 0~1 小数 或 0%~100% 百分比
+ * { offset: 0, color: '#e94560' }
+ * { offset: 0.5, color: 'rgba(233,69,96,0.8)' }
+ * { offset: 1, color: 'blue' }
+ *
+ * // 字符串格式中，偏移量也可以直接用数值（内部会自动归一化）
+ * // 'rgba(233,69,96,0.8) 50'  等价于  { offset: 0.5, color: 'rgba(233,69,96,0.8)' }
+ * // '#e94560 50%'              等价于  { offset: 0.5, color: '#e94560' }
  */
 export interface GradientStop {
   offset: number;
@@ -73,16 +83,37 @@ export interface GradientStop {
 }
 
 /**
- * 渐变配置（线性或放射）
+ * 渐变配置（线性或径向）
+ *
+ * @example
+ * // 线性渐变 - 方式一：方向关键词
+ * { type: 'linear', x1: '50%', y1: '0%', x2: '50%', y2: '100%' }
+ *
+ * // 线性渐变 - 方式二：绝对坐标（相对于控件边界）
+ * { type: 'linear', x1: 0, y1: 0, x2: 0, y2: 200 }
+ *
+ * // 径向渐变
+ * { type: 'radial', x1: '50%', y1: '50%', x2: '50%', y2: '50%', r1: 0, r2: '50%' }
  */
 export interface GradientOptions {
   type?: 'linear' | 'radial';
+  /** 起点 x 坐标，支持数字(像素)、百分比字符串(如 '50%')、小数(0~1 自动乘以尺寸) */
   x1?: number | string;
+  /** 起点 y 坐标 */
   y1?: number | string;
+  /** 终点 x 坐标 */
   x2?: number | string;
+  /** 终点 y 坐标 */
   y2?: number | string;
+  /** 径向渐变起始半径 */
   r1?: number | string;
+  /** 径向渐变结束半径 */
   r2?: number | string;
+  /** 形状参数（径向渐变） */
+  shape?: 'circle' | 'ellipse';
+  /** 位置参数（径向渐变） */
+  position?: { x: string | number; y: string | number };
+  /** 渐变颜色停止点 */
   stops?: GradientStop[];
 }
 
@@ -661,23 +692,133 @@ export declare class jmShadow {
 
 /**
  * 渐变对象
+ *
+ * 支持完整的 CSS 渐变语法解析，同时也可以通过对象参数或方法链式调用创建渐变。
+ *
+ * @example
+ * // ===== 方式一：CSS 字符串格式 =====
+ *
+ * // 角度格式（deg/rad/grad/turn）
+ * const g1 = new jmGradient('linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)');
+ *
+ * // 方向关键词
+ * const g2 = new jmGradient('linear-gradient(to top, #e94560, #00d4ff)');
+ * const g3 = new jmGradient('linear-gradient(to right bottom, #ffd93d, #e94560)');
+ *
+ * // 坐标格式（x1 y1 x2 y2）—— 注意坐标用空格分隔
+ * const g4 = new jmGradient('linear-gradient(50% 0 50% 100%, rgba(36,159,218,0) 1, rgba(36,159,218,0.8) 0)');
+ *
+ * // 径向渐变
+ * const g5 = new jmGradient('radial-gradient(circle, #e94560, #8b5cf6)');
+ * const g6 = new jmGradient('radial-gradient(ellipse at top, #06b6d4, #8b5cf6)');
+ *
+ * // ===== 方式二：对象参数 =====
+ * const g7 = new jmGradient({
+ *   type: 'linear',
+ *   x1: '50%', y1: '0%',
+ *   x2: '50%', y2: '100%',
+ *   stops: [
+ *     { offset: 0, color: 'rgba(36,159,218,0)' },
+ *     { offset: 1, color: 'rgba(36,159,218,0.8)' }
+ *   ]
+ * });
+ *
+ * // ===== 方式三：链式调用 =====
+ * const g8 = new jmGradient();
+ * g8.type = 'linear';
+ * g8.x1 = '50%'; g8.y1 = '0%';
+ * g8.x2 = '50%'; g8.y2 = '100%';
+ * g8.addStop(0, '#e94560');
+ * g8.addStop(1, '#00d4ff');
+ *
+ * // ===== 方式四：使用 jmGraph 便捷方法 =====
+ * const lg = graph.createLinearGradient(0, 0, 0, 100);
+ * lg.addStop(0, '#e94560');
+ * lg.addStop(1, '#00d4ff');
+ *
+ * const rg = graph.createRadialGradient(100, 100, 0, 100, 100, 50);
+ * rg.addStop(0, '#ffd93d');
+ * rg.addStop(1, '#f59e0b');
+ *
+ * @example
+ * // ===== 应用到图形样式 =====
+ * const rect = graph.createShape('rect', {
+ *   position: { x: 100, y: 100 }, width: 200, height: 100,
+ *   style: { fill: 'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)' }
+ * });
+ *
+ * // 也可以传 jmGradient 实例
+ * rect.style.fill = g1;
  */
 export declare class jmGradient {
+  /** 渐变类型：'linear' 线性渐变 | 'radial' 径向渐变 */
   type: 'linear' | 'radial';
+  /**
+   * 起点/终点坐标，支持多种格式：
+   * - 数字：绝对像素值
+   * - 百分比字符串（如 '50%'）：相对于控件边界尺寸
+   * - 0~1 小数：自动乘以控件尺寸
+   */
   x1?: number | string;
   y1?: number | string;
   x2?: number | string;
   y2?: number | string;
+  /** 径向渐变半径 */
   r1?: number | string;
   r2?: number | string;
+  /** 径向渐变形状（'circle' | 'ellipse'） */
+  shape?: string;
+  /** 径向渐变中心位置 */
+  position?: { x: string | number; y: string | number };
+  /** 颜色停止点列表 */
   stops: jmList<GradientStop>;
 
+  /**
+   * 构造函数
+   * @param opt 渐变字符串（CSS格式）或渐变配置对象
+   *
+   * @example
+   * new jmGradient('linear-gradient(180deg, #e94560 0%, #00d4ff 100%)')
+   * new jmGradient({ type: 'linear', x1: 0, y1: 0, x2: 0, y2: 100, stops: [...] })
+   */
   constructor(opt?: string | GradientOptions);
 
+  /**
+   * 添加颜色停止点
+   * @param offset 偏移量（0~1 之间）
+   * @param color 颜色值，支持 hex、rgb/rgba、hsl/hsla、命名颜色
+   */
   addStop(offset: number, color: string): void;
+
+  /**
+   * 生成 canvas/WebGL 可用的渐变对象
+   * @param control 当前渐变对应的控件
+   */
   toGradient(control: jmControl): any;
+
+  /**
+   * 从 CSS 渐变字符串解析渐变参数
+   * @param s CSS 渐变字符串
+   *
+   * @example
+   * gradient.fromString('linear-gradient(180deg, #e94560 0%, #00d4ff 100%)');
+   * gradient.fromString('radial-gradient(circle, #e94560, #8b5cf6)');
+   * gradient.fromString('linear-gradient(50% 0 50% 100%, rgba(36,159,218,0) 1, rgba(36,159,218,0.8) 0)');
+   */
   fromString(s: string): void;
+
+  /**
+   * 转换为渐变字符串表达
+   * @returns 线性: 'linear-gradient(x1 y1 x2 y2, color1 offset, color2 offset, ...)'
+   *          径向: 'radial-gradient(x1 y1 r1 x2 y2 r2, color1 offset, color2 offset, ...)'
+   */
   toString(): string;
+
+  /**
+   * 验证渐变配置是否有效
+   * @returns 是否包含必要的渐变参数和至少一个颜色停止点
+   */
+  isValid(): boolean;
 }
 
 /**

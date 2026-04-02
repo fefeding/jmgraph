@@ -21,7 +21,7 @@
         支持完整的 CSS 渐变语法，包括：角度格式（deg/rad/grad/turn）、方向关键词（to top/to right 等）、
         百分比颜色偏移、各种颜色格式（hex/rgb/rgba/hsl/hsla）。可以在控制台查看格式校验警告。
     </p>
-    <canvas id="canvas" width="700" height="1100"></canvas>
+    <canvas id="canvas" width="700" height="1200"></canvas>
 
     <div class="section">
         <div class="section-title">线性渐变 - 角度格式</div>
@@ -82,7 +82,7 @@
 // hex格式
 'linear-gradient(180deg, #e94560 0%, #00d4ff 100%)'
 
-// rgba格式
+// rgba格式（支持逗号后有无空格）
 'linear-gradient(180deg, rgba(233,69,96,0.8) 0%, rgba(0,212,255,0.8) 100%)'
 
 // hsl格式
@@ -90,6 +90,18 @@
 
 // 命名颜色
 'linear-gradient(to top, red, blue, green)'
+</pre>
+    </div>
+
+    <div class="section">
+        <div class="section-title">坐标格式（兼容旧格式）</div>
+<pre>
+// 线性渐变坐标格式: x1 y1 x2 y2
+// 从顶部中心到底部中心的垂直渐变
+'linear-gradient(50% 0 50% 100%, rgba(36,159,218, 0) 1, rgba(36,159,218, 0.8) 0)'
+
+// 径向渐变坐标格式: x1 y1 r1 x2 y2 r2
+'radial-gradient(50% 50% 100% 50% 50% 0%, #ffd93d 0%, #f59e0b 100%)'
 </pre>
     </div>
 
@@ -375,24 +387,46 @@
         }));
         addLabel('渐变 + hue-rotate', 530, 905, 150);
 
-        // ==================== 第九行：大面积渐变展示 ====================
+        // ==================== 第九行：坐标格式渐变 ====================
+        // 线性渐变坐标格式 - 垂直渐变
+        addShape(g.createShape('rect', {
+            position: {x: 20, y: 960}, width: 200, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(50% 0 50% 100%, rgba(36,159,218, 0) 1, rgba(36,159,218, 0.8) 0)' }
+        }));
+        addLabel('坐标格式-垂直渐变', 20, 1025, 200);
+
+        // 线性渐变坐标格式 - 水平渐变
+        addShape(g.createShape('rect', {
+            position: {x: 240, y: 960}, width: 200, height: 60, radius: 8,
+            style: { fill: 'linear-gradient(0 50% 100% 50%, rgba(233,69,96, 0) 1, rgba(233,69,96, 0.8) 0)' }
+        }));
+        addLabel('坐标格式-水平渐变', 240, 1025, 200);
+
+        // 径向渐变坐标格式
+        addShape(g.createShape('circle', {
+            center: {x: 550, y: 990}, radius: 40,
+            style: { fill: 'radial-gradient(50% 50% 100% 50% 50% 0%, rgba(255,217,61, 0) 1, rgba(245,158,11, 0.8) 0)' }
+        }));
+        addLabel('径向坐标格式', 500, 1035, 100);
+
+        // ==================== 第十行：大面积渐变展示 ====================
         // 紫色主题渐变
         addShape(g.createShape('rect', {
-            position: {x: 20, y: 960}, width: 660, height: 60, radius: 12,
+            position: {x: 20, y: 1060}, width: 660, height: 60, radius: 12,
             style: {
                 fill: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)'
             }
         }));
-        addLabel('紫色主题渐变', 20, 1025, 660);
+        addLabel('紫色主题渐变', 20, 1125, 660);
 
         // 日落渐变
         addShape(g.createShape('rect', {
-            position: {x: 20, y: 1040}, width: 660, height: 40, radius: 8,
+            position: {x: 20, y: 1140}, width: 660, height: 40, radius: 8,
             style: {
                 fill: 'linear-gradient(to right, #ff7e5f 0%, #feb47b 50%, #ffc371 100%)'
             }
         }));
-        addLabel('日落渐变', 20, 1085, 660);
+        addLabel('日落渐变', 20, 1185, 660);
 
         g.refresh();
     </script>

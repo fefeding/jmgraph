@@ -38,11 +38,13 @@ const colorKeywords = {
     darkseagreen:         "#8fbc8f",
     darkslateblue:        "#483d8b",
     darkslategray:        "#2f4f4f",
+    darkslategrey:        "#2f4f4f",
     darkturquoise:        "#00ced1",
     darkviolet:           "#9400d3",
     deeppink:             "#ff1493",
     deepskyblue:          "#00bfff",
     dimgray:              "#696969",
+    dimgrey:              "#696969",
     dodgerblue:           "#1e90ff",
     firebrick:            "#b22222",
     floralwhite:          "#fffaf0",
@@ -77,6 +79,7 @@ const colorKeywords = {
     lightseagreen:        "#20b2aa",
     lightskyblue:         "#87cefa",
     lightslategray:       "#778899",
+    lightslategrey:       "#778899",
     lightsteelblue:       "#b0c4de",
     lightyellow:          "#ffffe0",
     lime:                 "#00ff00",
@@ -117,6 +120,7 @@ const colorKeywords = {
     powderblue:           "#b0e0e6",
     purple:               "#800080",
     red:                  "#ff0000",
+    rebeccapurple:        "#663399",
     rosybrown:            "#bc8f8f",
     royalblue:            "#4169e1",
     saddlebrown:          "#8b4513",
@@ -129,6 +133,7 @@ const colorKeywords = {
     skyblue:              "#87ceeb",
     slateblue:            "#6a5acd",
     slategray:            "#708090",
+    slategrey:            "#708090",
     snow:                 "#fffafa",
     springgreen:          "#00ff7f",
     steelblue:            "#4682b4",
@@ -143,7 +148,37 @@ const colorKeywords = {
     whitesmoke:           "#f5f5f5",
     yellow:               "#ffff00",
     yellowgreen:          "#9acd32",
-    transparent:          "rgba(0,0,0,0)"
+    transparent:          "rgba(0,0,0,0)",
+    // grey 别名（已有 darkslategrey/lightslategrey/slategrey/dimgrey）
+    // 以下为 CSS 系统颜色
+    activeborder:         "#bfcaca",
+    activecaption:        "#000080",
+    appworkspace:         "#ababab",
+    background:           "#636363",
+    buttonface:           "#c0c0c0",
+    buttonhighlight:      "#dedede",
+    buttonshadow:         "#808080",
+    buttontext:           "#000000",
+    captiontext:          "#000000",
+    graytext:             "#808080",
+    highlight:            "#b3d4fc",
+    highlighttext:        "#000000",
+    inactiveborder:       "#d4d0c8",
+    inactivecaption:      "#bfbbb0",
+    inactivecaptiontext:  "#545454",
+    infobackground:       "#fbfcc5",
+    infotext:             "#000000",
+    menu:                 "#c0c0c0",
+    menutext:             "#000000",
+    scrollbar:            "#c0c0c0",
+    threeddarkshadow:     "#696969",
+    threedface:           "#c0c0c0",
+    threedhighlight:      "#dfdfdf",
+    threedlightshadow:    "#dcdcdc",
+    threedshadow:         "#808080",
+    window:               "#ffffff",
+    windowframe:          "#646464",
+    windowtext:           "#000000"
   };
 
 /**
@@ -914,3 +949,4 @@ export default class jmUtils {
     }	
 }
 export { jmUtils };
+export { colorKeywords };

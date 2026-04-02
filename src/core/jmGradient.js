@@ -1,4 +1,4 @@
-import {jmUtils} from "./jmUtils.js";
+import {jmUtils, colorKeywords} from "./jmUtils.js";
 import {jmList} from "./jmList.js";
 
 /**
@@ -220,7 +220,8 @@ export default class jmGradient {
 			console.warn('jmGradient: 渐变字符串为空');
 			return;
 		}
-		const gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*(.+)\)/i);
+		// 使用 [\s\S] 匹配任意字符（包括换行符），支持多行渐变字符串
+		const gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*([\s\S]+)\)/i);
 		if(!gradientMatch || gradientMatch.length < 3) {
 			console.warn('jmGradient: 无效的渐变字符串格式: "' + s + '"');
 			return;
@@ -605,14 +606,19 @@ export default class jmGradient {
 		const hexPattern = /^#([a-fA-F0-9]{3,8})$/;
 		if(hexPattern.test(color)) return true;
 
-		const rgbPattern = /^rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*[\d.]+\s*)?\)$/i;
+		// 支持 rgba(r,g,b,a) 和 rgba(r, g, b, a) 等各种空格格式
+		const rgbPattern = /^rgba?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/i;
 		if(rgbPattern.test(color)) return true;
 
-		const hslPattern = /^hsla?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%?\s*,\s*(\d{1,3})%?\s*(,\s*[\d.]+\s*)?\)$/i;
+		const hslPattern = /^hsla?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*(,\s*[\d.]+\s*)?\)$/i;
 		if(hslPattern.test(color)) return true;
 
-		const namedColors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'white', 'black', 'cyan', 'magenta', 'gray', 'grey', 'brown', 'navy', 'teal', 'olive', 'maroon', 'silver', 'lime', 'aqua', 'fuchsia', 'violet', 'indigo', 'gold', 'silver', 'transparent'];
-		if(namedColors.includes(color.toLowerCase())) return true;
+		// 使用 jmUtils 中的完整 CSS 颜色关键字表
+		if(colorKeywords && colorKeywords[color.toLowerCase()]) return true;
+
+		// 宽松处理：符合 CSS 关键字命名规则的字符串也视为有效颜色
+		// (纯字母，可能在运行时被浏览器或其他环境解析)
+		if(/^[a-zA-Z]+$/.test(color)) return true;
 
 		return false;
 	}

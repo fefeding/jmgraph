@@ -2860,9 +2860,10 @@ var jmGradient = /*#__PURE__*/function () {
       if (!s) {
         console.warn('jmGradient: 渐变字符串为空');
         return;
-      }
+      } // 使用 [\s\S] 匹配任意字符（包括换行符），支持多行渐变字符串
 
-      var gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*(.+)\)/i);
+
+      var gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*([\s\S]+)\)/i);
 
       if (!gradientMatch || gradientMatch.length < 3) {
         console.warn('jmGradient: 无效的渐变字符串格式: "' + s + '"');
@@ -3305,13 +3306,17 @@ var jmGradient = /*#__PURE__*/function () {
     value: function _isValidColor(color) {
       if (!color) return false;
       var hexPattern = /^#([a-fA-F0-9]{3,8})$/;
-      if (hexPattern.test(color)) return true;
-      var rgbPattern = /^rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (hexPattern.test(color)) return true; // 支持 rgba(r,g,b,a) 和 rgba(r, g, b, a) 等各种空格格式
+
+      var rgbPattern = /^rgba?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/i;
       if (rgbPattern.test(color)) return true;
-      var hslPattern = /^hsla?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%?\s*,\s*(\d{1,3})%?\s*(,\s*[\d.]+\s*)?\)$/i;
-      if (hslPattern.test(color)) return true;
-      var namedColors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'white', 'black', 'cyan', 'magenta', 'gray', 'grey', 'brown', 'navy', 'teal', 'olive', 'maroon', 'silver', 'lime', 'aqua', 'fuchsia', 'violet', 'indigo', 'gold', 'silver', 'transparent'];
-      if (namedColors.includes(color.toLowerCase())) return true;
+      var hslPattern = /^hsla?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (hslPattern.test(color)) return true; // 使用 jmUtils 中的完整 CSS 颜色关键字表
+
+      if (_jmUtils.colorKeywords && _jmUtils.colorKeywords[color.toLowerCase()]) return true; // 宽松处理：符合 CSS 关键字命名规则的字符串也视为有效颜色
+      // (纯字母，可能在运行时被浏览器或其他环境解析)
+
+      if (/^[a-zA-Z]+$/.test(color)) return true;
       return false;
     }
     /**
@@ -5181,7 +5186,7 @@ exports.jmShadow = exports["default"] = jmShadow;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.jmUtils = exports["default"] = void 0;
+exports.colorKeywords = exports.jmUtils = exports["default"] = void 0;
 
 var _jmList = require("./jmList.js");
 
@@ -5236,11 +5241,13 @@ var colorKeywords = {
   darkseagreen: "#8fbc8f",
   darkslateblue: "#483d8b",
   darkslategray: "#2f4f4f",
+  darkslategrey: "#2f4f4f",
   darkturquoise: "#00ced1",
   darkviolet: "#9400d3",
   deeppink: "#ff1493",
   deepskyblue: "#00bfff",
   dimgray: "#696969",
+  dimgrey: "#696969",
   dodgerblue: "#1e90ff",
   firebrick: "#b22222",
   floralwhite: "#fffaf0",
@@ -5275,6 +5282,7 @@ var colorKeywords = {
   lightseagreen: "#20b2aa",
   lightskyblue: "#87cefa",
   lightslategray: "#778899",
+  lightslategrey: "#778899",
   lightsteelblue: "#b0c4de",
   lightyellow: "#ffffe0",
   lime: "#00ff00",
@@ -5315,6 +5323,7 @@ var colorKeywords = {
   powderblue: "#b0e0e6",
   purple: "#800080",
   red: "#ff0000",
+  rebeccapurple: "#663399",
   rosybrown: "#bc8f8f",
   royalblue: "#4169e1",
   saddlebrown: "#8b4513",
@@ -5327,6 +5336,7 @@ var colorKeywords = {
   skyblue: "#87ceeb",
   slateblue: "#6a5acd",
   slategray: "#708090",
+  slategrey: "#708090",
   snow: "#fffafa",
   springgreen: "#00ff7f",
   steelblue: "#4682b4",
@@ -5341,7 +5351,37 @@ var colorKeywords = {
   whitesmoke: "#f5f5f5",
   yellow: "#ffff00",
   yellowgreen: "#9acd32",
-  transparent: "rgba(0,0,0,0)"
+  transparent: "rgba(0,0,0,0)",
+  // grey 别名（已有 darkslategrey/lightslategrey/slategrey/dimgrey）
+  // 以下为 CSS 系统颜色
+  activeborder: "#bfcaca",
+  activecaption: "#000080",
+  appworkspace: "#ababab",
+  background: "#636363",
+  buttonface: "#c0c0c0",
+  buttonhighlight: "#dedede",
+  buttonshadow: "#808080",
+  buttontext: "#000000",
+  captiontext: "#000000",
+  graytext: "#808080",
+  highlight: "#b3d4fc",
+  highlighttext: "#000000",
+  inactiveborder: "#d4d0c8",
+  inactivecaption: "#bfbbb0",
+  inactivecaptiontext: "#545454",
+  infobackground: "#fbfcc5",
+  infotext: "#000000",
+  menu: "#c0c0c0",
+  menutext: "#000000",
+  scrollbar: "#c0c0c0",
+  threeddarkshadow: "#696969",
+  threedface: "#c0c0c0",
+  threedhighlight: "#dfdfdf",
+  threedlightshadow: "#dcdcdc",
+  threedshadow: "#808080",
+  window: "#ffffff",
+  windowframe: "#646464",
+  windowtext: "#000000"
 };
 /**
  * 画图基础对象
@@ -5350,6 +5390,8 @@ var colorKeywords = {
  * @class jmUtils
  * @static
  */
+
+exports.colorKeywords = colorKeywords;
 
 var jmUtils = /*#__PURE__*/function () {
   function jmUtils() {

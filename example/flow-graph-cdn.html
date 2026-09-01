@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>jmGraph FlowGraph - 第三方使用示例（CDN）</title>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+    #app { width: 100vw; height: 100vh; background: #f8fafc; }
+    .bar { position: fixed; top: 12px; left: 12px; z-index: 10; display: flex; gap: 8px; }
+    button { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; cursor: pointer; }
+    button:hover { border-color: #6366f1; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <button data-act="layout">自动布局</button>
+    <button data-act="fit">适应视图</button>
+    <button data-act="zoom-in">放大</button>
+    <button data-act="zoom-out">缩小</button>
+    <button data-act="run">模拟运行</button>
+    <button data-act="png">导出PNG</button>
+  </div>
+  <div id="app"></div>
+
+  <!--
+    第三方项目最小形态：直接 import 已发布的 jmgraph 包的子路径，
+    无需本地安装。等价于本地项目里的 `import { createFlowGraph } from 'jmgraph/components'`。
+  -->
+  <script type="module">
+    import { createFlowGraph, STATUS_META } from 'https://esm.sh/jmgraph/components';
+
+    const stages = [
+      { id: 'fetch_user', type: 'fetch',     inputs: [],                              outputs: ['user'],   dependsOn: [] },
+      { id: 'fetch_order', type: 'fetch',    inputs: [],                              outputs: ['order'],  dependsOn: [] },
+      { id: 'normalize',  type: 'transform', inputs: [{ from: 'fetch_user.user' }, { from: 'fetch_order.order' }], outputs: ['rows'], dependsOn: ['fetch_user', 'fetch_order'] },
+      { id: 'score',      type: 'script',    inputs: [{ from: 'normalize.rows' }],    outputs: ['scores'],  dependsOn: ['normalize'] },
+      { id: 'notify',     type: 'agent',     inputs: [{ from: 'score.scores' }],      outputs: [],         dependsOn: ['score'] }
+    ];
+
+    const fg = createFlowGraph('#app', {
+      stages,
+      mode: 'edit',
+      onSelect: id => console.log('选中节点:', id),
+      onError: (err, ctx) => console.error('[flow]', ctx, err)
+    });
+
+    fg.autoLayout();
+    fg.fit();
+
+    document.querySelector('.bar').addEventListener('click', e => {
+      const act = e.target.dataset.act;
+      if (!act) return;
+      if (act === 'layout') fg.autoLayout();
+      else if (act === 'fit') fg.fit();
+      else if (act === 'zoom-in') fg.zoomIn();
+      else if (act === 'zoom-out') fg.zoomOut();
+      else if (act === 'png') fg.exportPNG('jmgraph-flow');
+      else if (act === 'run') {
+        fg.setRunStatus({ fetch_user: 'success', fetch_order: 'success', normalize: 'running' });
+        setTimeout(() => fg.setRunStatus({
+          fetch_user: 'success', fetch_order: 'success',
+          normalize: 'success', score: 'running', notify: 'pending'
+        }), 900);
+      }
+    });
+  </script>
+</body>
+</html>

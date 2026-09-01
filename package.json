@@ -1,7 +1,7 @@
 {
   "family": "jmgraph",
   "name": "jmgraph",
-  "version": "3.2.29",
+  "version": "3.2.30",
   "description": "一个简单的canvas画图库",
   "homepage": "https://surl.fit/tools/tools/jmgraph",
   "keywords": [
@@ -27,6 +27,8 @@
   "type": "module",
   "exports": {
     ".": "./index.js",
+    "./components": "./src/components/index.js",
+    "./src/components": "./src/components/index.js",
     "./src/*": "./src/*"
   },
   "licenses": [

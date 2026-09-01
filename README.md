@@ -831,6 +831,26 @@ const label = g.createShape('label', {
 });
 ```
 
+## 🧩 流程图组件
+
+内置基于 jmGraph 的工作流流程图（DAG）组件，**原生 JS 实现、零框架依赖**，不绑定任何 UI 框架。
+
+- [组件使用文档](src/components/README.md)
+- [流程图组件示例（仓库内完整 demo）](example/flow-graph.html)
+- [第三方使用示例（CDN 直引，开箱即用）](example/flow-graph-cdn.html)
+
+本组件**随 `jmgraph` 包一起发布**，第三方 `npm install jmgraph` 后通过子路径引入：
+
+```js
+// 子路径（推荐，等价）
+import { createFlowGraph } from 'jmgraph/components';
+// 或完整源码子路径
+import { createFlowGraph } from 'jmgraph/src/components';
+const fg = createFlowGraph('#app', { stages });
+```
+
+> 组件不在根入口 `jmgraph` 中导出，必须用上述子路径。Vue / React 等框架请在业务侧自行封装（挂载 `new FlowGraphComponent(o).mount(el)`、数据走 `update(patch)`、卸载 `destroy()`），详见组件文档「框架封装示例」「第三方最小可运行示例」。
+
 ## 🛠️ 开发
 
 ### 构建

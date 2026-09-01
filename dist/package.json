@@ -1,0 +1,7 @@
+{
+  "name": "jmgraph-dist",
+  "version": "3.2.29",
+  "private": true,
+  "type": "commonjs",
+  "description": "jmgraph 构建产物目录（CommonJS 作用域，保证 dist 内 UMD 产物可被 require 加载）"
+}

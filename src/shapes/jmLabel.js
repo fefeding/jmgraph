@@ -134,8 +134,22 @@ export default class jmLabel extends jmControl {
 	 * @return {array} 所有边界点数组
 	 * @private
 	 */
+	/**
+	 * 生成文本尺寸缓存 key（text/字体/换行宽度任一变化时缓存自动失效）
+	 * @private
+	 */
+	_sizeCacheKey() {
+		return (this.text||'') + '|' + (this.style.font||'') + '|' + (this.style.fontSize||'') +
+			'|' + (this.style.fontFamily||'') + '|' + (this.style.maxWidth||'');
+	}
+
 	initPoints() {	
-		this.__size = null;
+		// 仅在文本或字体相关属性变化时失效测量缓存，避免每帧重复 measureText
+		const key = this._sizeCacheKey();
+		if(this.__size && this.__sizeKey !== key) {
+			this.__size = null;
+		}
+		this.__sizeKey = key;
 		let location = this.getLocation();
 
 		this.points = [{x: location.left, y: location.top}];
@@ -153,8 +167,8 @@ export default class jmLabel extends jmControl {
 	 * @return {object} 含文本大小的对象 {width, height}
 	 */
 	testSize() {
-		// 使用缓存提高性能，避免重复计算
-		if(this.__size) return this.__size;
+		// 使用缓存提高性能，避免重复计算（key 变化时缓存已由 initPoints 失效）
+		if(this.__size && this.__sizeKey === this._sizeCacheKey()) return this.__size;
 
 		if(this.webglControl) {
 			this.__size = this.webglControl.testSize(this.text, this.style);
@@ -200,7 +214,8 @@ export default class jmLabel extends jmControl {
 		// 设置默认宽高
 		if(!this.width) this.width = this.__size.width;
 		if(!this.height) this.height = this.__size.height;
-		
+
+		this.__sizeKey = this._sizeCacheKey();
 		return this.__size;
 	}
 

@@ -658,6 +658,56 @@ g.pan(100, 50);
 g.resetTransform();
 ```
 
+### 自适应视图
+
+```javascript
+// 根据画布内容自动缩放并居中（留白比例 0-0.9，默认 0.15）
+g.fitView(0.15);
+```
+
+### 坐标转换
+
+```javascript
+// 屏幕坐标 → 世界坐标（图形坐标）
+const world = g.screenToWorld({x: 400, y: 300});
+
+// 世界坐标 → 屏幕坐标
+const screen = g.worldToScreen({x: 100, y: 100});
+```
+
+### 缩放范围限制
+
+```javascript
+const g = jmGraph('canvas', {
+  minZoom: 0.5,   // 最小缩放，默认 0.1
+  maxZoom: 4      // 最大缩放，默认 10
+});
+```
+
+缩放和平移统一由 `g.viewport`（`jmViewport`）管理，`scaleFactor` / `translation` 仍可直接读写。
+
+## 🚀 性能与架构优化
+
+本版本对性能与架构做了全面重构，核心思路是「职责单一、可替换、按需计算」。
+
+### 架构组件化
+
+| 模块 | 职责 |
+| :- | :- |
+| `jmViewport` | 统一管理缩放、平移、坐标转换与视口剔除，`graph.viewport` 可独立使用与测试 |
+| `jmSpatialIndex` | 均匀网格空间索引，加速事件命中，`graph.hitIndex`（`option.hitIndex === false` 可关闭） |
+| `jmRenderer` / `Canvas2DRenderer` | 渲染器抽象，隔离画布变换与清屏，WebGL 渲染器可基于同一接口扩展 |
+| `jmPlatform` | 平台适配层，统一处理浏览器 / 微信小程序 / Node 的环境差异 |
+
+### 性能优化
+
+- **脏标记缓存**：控件位置或尺寸变化时仅标记 `__boundsDirty`，绘制时按需重算，避免每帧重复计算边界
+- **批量操作 + 惰性排序**：`children.addAll([...])` 批量添加控件，排序延迟到绘制前统一执行
+- **刷新节流**：`refresh()` 通过 `requestAnimationFrame` 合并多帧刷新，避免重复绘制
+- **事件命中优化**：启用空间索引后，命中测试只遍历事件点所在网格单元（及相邻单元）的候选控件
+- **文本测量缓存**：字体、内容不变时复用 `measureText` 结果，避免逐帧测量
+- **高清屏适配**：`option.dprScale` 支持高清屏渲染，`false` 关闭，数字指定倍数，默认自动
+
 ## 📐 图层管理
 
 ### 创建图层

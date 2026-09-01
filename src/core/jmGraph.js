@@ -27,6 +27,10 @@ import {jmFilter} from "./jmFilter.js";
 import {jmEvents} from "./jmEvents.js";
 import {jmControl} from "./jmControl.js";
 import {jmPath} from "./jmPath.js";
+import jmViewport from "./jmViewport.js";
+import jmSpatialIndex from "./jmSpatialIndex.js";
+import {Canvas2DRenderer, jmRenderer} from "./jmRenderer.js";
+import {jmPlatform} from "./jmPlatform.js";
 
 /**
  * jmGraph 画图类
@@ -91,27 +95,47 @@ export default class jmGraph extends jmControl {
 		// 模式 webgl | 2d
 		this.mode = option.mode || '2d';
 
-		// 缩放和平移相关
-		this.scaleFactor = 1;
-		this.translation = {x: 0, y: 0};
+		// 视口管理器：统一负责缩放/平移/坐标转换/视口剔除
+		this.viewport = new jmViewport(option.width || 0, option.height || 0, {
+			scaleFactor: 1,
+			x: 0,
+			y: 0,
+			minZoom: typeof option.minZoom === 'number' ? option.minZoom : 0.1,
+			maxZoom: typeof option.maxZoom === 'number' ? option.maxZoom : 10
+		});
+		// 空间命中索引（大图交互优化），可通过 option.hitIndex === false 关闭
+		this.hitIndex = option.hitIndex === false ? null : new jmSpatialIndex(option.hitIndexCellSize || 100);
+		this.__hitIndexDirty = true;
+
+		// 兼容旧 API：scaleFactor / translation 委托到 viewport
+		Object.defineProperty(this, 'scaleFactor', {
+			get: () => this.viewport.scaleFactor,
+			set: v => {
+				this.viewport.scaleFactor = v;
+				this.viewport._stamp++;
+				return v;
+			},
+			configurable: true
+		});
+		this.translation = this.viewport.translation;
 
 		//如果是小程序
-		if(typeof wx != 'undefined' && wx.canIUse && wx.canIUse('canvas')) {			
+		if(jmPlatform.isWX()) {			
 			if(typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
 			this.isWXMiniApp = true;// 微信小程序平台
 			this.container = canvas;
 		}
 		else {
-			if(typeof canvas === 'string' && typeof document != 'undefined') {
-				canvas = document.getElementById(canvas);
+			if(typeof canvas === 'string') {
+				canvas = jmPlatform.resolveCanvas(canvas);
 			}
 			else if(canvas.length) {
 				canvas = canvas[0];
 			}
 
-			if(!canvas.getContext && typeof document != 'undefined') {
+			if(!canvas.getContext && jmPlatform.getDocument()) {
 				this.container = canvas;
-				let cn = document.createElement('canvas');
+				let cn = jmPlatform.createCanvas();
 				canvas.appendChild(cn);
 				cn.width = canvas.offsetWidth||canvas.clientWidth;
 				cn.height = canvas.offsetHeight||canvas.clientHeight;
@@ -164,40 +188,41 @@ export default class jmGraph extends jmControl {
 		
 		/**
 		 * 画控件前初始化
-		 * 为了解决一像素线条问题
+		 * 为了解决一像素线条问题 + 应用视口（缩放/平移）变换
+		 * 变换逻辑统一收口到 renderer.begin/end，避免散落在事件闭包中
 		 */
-		this.on('beginDraw', function() {  
-			this.context.translate && this.context.translate(0.5, 0.5);
-			// 应用缩放和平移变换
-			if(this.context.translate && this.context.scale) {
-				this.context.translate(this.translation.x, this.translation.y);
-				this.context.scale(this.scaleFactor, this.scaleFactor);
-			}
+		this.on('beginDraw', function() {
+			if(this.renderer) this.renderer.begin();
 		});
 		/**
-		 * 结束控件绘制 为了解决一像素线条问题
+		 * 结束控件绘制
 		 */
-		this.on('endDraw', function() {  
-			this.context.translate && this.context.translate(-0.5, -0.5);
-			// 恢复缩放和平移变换
-			if(this.context.translate && this.context.scale) {
-				this.context.scale(1/this.scaleFactor, 1/this.scaleFactor);
-				this.context.translate(-this.translation.x, -this.translation.y);
-			}
+		this.on('endDraw', function() {
+			if(this.renderer) this.renderer.end();
 		});
 
-		// devicePixelRatio初始化
-		let dpr = typeof window != 'undefined' && window.devicePixelRatio > 1? window.devicePixelRatio : 1;
-		if(this.isWXMiniApp) {
-			dpr = wx.getWindowInfo().pixelRatio || 1;
-		}		
-		this.devicePixelRatio = dpr;
-		// 为了解决锯齿问题，先放大canvas再缩放
-		this.dprScaleSize = this.devicePixelRatio > 1? this.devicePixelRatio : 2;
-		
+		// devicePixelRatio初始化（平台适配层）
+		let dpr = jmPlatform.getDevicePixelRatio();
+		this.devicePixelRatio = dpr > 1 ? dpr : 1;
+		// 为了解决锯齿问题，先放大canvas再缩放。
+		// 可通过 option.dprScale === false 关闭（性能优先）或指定具体倍数
+		const dprOpt = this.option.dprScale;
+		if(dprOpt === false) {
+			this.dprScaleSize = 1;
+		}
+		else if(typeof dprOpt === 'number' && dprOpt > 0) {
+			this.dprScaleSize = dprOpt;
+		}
+		else {
+			this.dprScaleSize = this.devicePixelRatio > 1? this.devicePixelRatio : 2;
+		}
+
+		// 渲染器：统一管理视口变换与清屏（Canvas2D / WebGL 可替换）
+		this.renderer = new Canvas2DRenderer(this);
+
 		if(this.option.width > 0) this.width = this.option.width;
 		if(this.option.height > 0) this.height = this.option.height;	
-		this.resize();		
+		this.resize();
 
 		//绑定事件
 		this.eventHandler = new jmEvents(this, this.canvas.canvas || this.canvas);	
@@ -233,8 +258,11 @@ export default class jmGraph extends jmControl {
 		}
 
 		this.context.viewport && this.context.viewport(0, 0, w, h);
+		// 同步视口尺寸（世界坐标可见区域依赖画布尺寸）
+		this.viewport.width = w;
+		this.viewport.height = h;
 		this.needUpdate = true;
-	}
+		}
 
 	/**
 	 * 宽度
@@ -403,11 +431,22 @@ export default class jmGraph extends jmControl {
 	 * @method refresh
 	 */
 	refresh() {	
-		//加入动画，触发redraw，会导致多次refresh只redraw一次
-		/*this.animate(function() {
-			return false;
-		},100,'jmgraph_refresh');*/
-		this.redraw();
+		// 刷新节流：连续多次 refresh 合并为一次重绘（rAF 对齐），
+		// 避免非 autoRefresh 模式下高频调用导致每帧多次全量重绘
+		if(this.__refreshScheduled) return this;
+		this.__refreshScheduled = true;
+		const self = this;
+		const flush = () => {
+			self.__refreshScheduled = false;
+			self.redraw();
+		};
+		if(typeof requestAnimationFrame !== 'undefined' && !this.isWXMiniApp) {
+			requestAnimationFrame(flush);
+		}
+		else {
+			setTimeout(flush, 16);
+		}
+		return this;
 	}
 
 	/**
@@ -441,17 +480,13 @@ export default class jmGraph extends jmControl {
 		}
 		
 		if(this.context.clearRect) {
-			if(this.style && this.style.fill) {
-				this.points = [
-					{x:0, y:0},
-					{x:w, y:0},
-					{x:w, y:h},
-					{x:0, y:h}
-				];
-				this.style.close = true;// 封闭填充
+			// 清屏统一走渲染器（背景填充在 webgl 分支用 clearColor，2d 分支只清透明画布）
+			if(this.renderer) {
+				this.renderer.clear(w, h);
 			}
-
-			this.context.clearRect(0, 0, w, h);
+			else {
+				this.context.clearRect(0, 0, w, h);
+			}
 		}
 		else if(this.mode === 'webgl' && this.context.clear) {
 			// 缓存 clearColor 对象，避免每帧创建
@@ -593,24 +628,8 @@ export default class jmGraph extends jmControl {
 			console.warn('jmGraph: setZoom - 无效的缩放因子');
 			return this;
 		}
-		
-		// 限制缩放范围，防止过度缩放导致性能问题或显示异常
-		const minZoom = 0.1;  // 最小缩放到10%
-		const maxZoom = 10;   // 最大放大到10倍
-		zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
-		
-		if (x !== undefined && y !== undefined) {
-			// 计算缩放前后的坐标偏移
-			// 保持缩放中心点在屏幕上的位置不变
-			const oldZoom = this.scaleFactor;
-			const newZoom = zoom;
-			
-			// 调整平移量以保持缩放中心位置不变
-			this.translation.x = x - (x - this.translation.x) * (newZoom / oldZoom);
-			this.translation.y = y - (y - this.translation.y) * (newZoom / oldZoom);
-		}
-		
-		this.scaleFactor = zoom;
+		// 统一委托 viewport（含缩放范围钳制与以指定点为中心的保持逻辑）
+		this.viewport.zoomAt(zoom, x, y);
 		this.needUpdate = true;
 		this.redraw();
 		
@@ -633,8 +652,7 @@ export default class jmGraph extends jmControl {
 			return this;
 		}
 		
-		this.translation.x += dx;
-		this.translation.y += dy;
+		this.viewport.pan(dx, dy);
 		this.needUpdate = true;
 		this.redraw();
 		
@@ -649,12 +667,171 @@ export default class jmGraph extends jmControl {
 	 * @return {jmGraph} 返回当前实例，支持链式调用
 	 */
 	resetTransform() {
-		this.scaleFactor = 1;
-		this.translation = {x: 0, y: 0};
+		this.viewport.reset();
 		this.needUpdate = true;
 		this.redraw();
 		
 		return this; // 支持链式调用
+	}
+
+	/**
+	 * 把屏幕坐标（画布像素坐标）转换为世界坐标（图形坐标）
+	 * 
+	 * 画布通过 translation/scaleFactor 做平移缩放，图形的 position 一律使用世界坐标，
+	 * 因此涉及鼠标交互时需要用本方法把屏幕坐标换算回世界坐标。
+	 * 
+	 * @method screenToWorld
+	 * @param {point} point 屏幕坐标 {x, y}
+	 * @return {point} 世界坐标 {x, y}
+	 */
+	screenToWorld(point) {
+		return this.viewport.screenToWorld(point);
+	}
+
+	/**
+	 * 把世界坐标（图形坐标）转换为屏幕坐标（画布像素坐标）
+	 * 
+	 * @method worldToScreen
+	 * @param {point} point 世界坐标 {x, y}
+	 * @return {point} 屏幕坐标 {x, y}
+	 */
+	worldToScreen(point) {
+		return this.viewport.worldToScreen(point);
+	}
+
+	/**
+	 * 获取当前所有图形的内容边界（世界坐标）
+	 *
+	 * 会递归遍历图层/容器等子级，忽略无实际内容的图形（如图层容器本身）。
+	 *
+	 * @method getContentBounds
+	 * @param {function} [filter] 过滤回调，返回 false 的图形会被忽略（其子级也不再遍历）
+	 * @return {object|null} 边界对象 {left, top, right, bottom, width, height}，无图形时返回 null
+	 */
+	getContentBounds(filter) {
+		let rect = null;
+		const walk = control => {
+			if(!control || !control.children) return;
+			control.children.each((i, shape) => {
+				if(!shape || shape === this || shape.visible === false) return;
+				if(typeof filter === 'function' && filter(shape) === false) return;
+				// 使用相对画布的绝对边界，保证不同层级的图形在同一坐标系下合并
+				if(shape.bounds !== undefined) shape.__boundsDirty = true;
+				const b = shape.getAbsoluteBounds ? shape.getAbsoluteBounds() :
+					(shape.getBounds ? shape.getBounds(true) : null);
+				if(b && (b.width || b.height)) {
+					if(!rect) {
+						rect = { left: b.left, top: b.top, right: b.right, bottom: b.bottom };
+					}
+					else {
+						if(b.left < rect.left) rect.left = b.left;
+						if(b.top < rect.top) rect.top = b.top;
+						if(b.right > rect.right) rect.right = b.right;
+						if(b.bottom > rect.bottom) rect.bottom = b.bottom;
+					}
+				}
+				walk(shape);
+			});
+		};
+		walk(this);
+		if(rect) {
+			rect.width = rect.right - rect.left;
+			rect.height = rect.bottom - rect.top;
+		}
+		return rect;
+	}
+
+	/**
+	 * 缩放并平移到刚好容纳全部图形
+	 * 
+	 * @method fitView
+	 * @param {number} [padding=0.15] 内容与画布边缘的留白比例（0-0.9）
+	 * @param {function} [filter] 参与计算的内容过滤回调
+	 * @return {jmGraph} 返回当前实例，支持链式调用
+	 */
+	fitView(padding = 0.15, filter) {
+		const bounds = this.getContentBounds(filter);
+		if(!bounds || !bounds.width || !bounds.height || !this.width || !this.height) {
+			return this.resetTransform();
+		}
+		// 统一委托 viewport（含缩放范围钳制与居中计算）
+		this.viewport.fitBounds(bounds, padding);
+		this.needUpdate = true;
+		this.redraw();
+		return this;
+	}
+
+	/**
+	 * 触发事件
+	 * 
+	 * 重写以增加「缩放/平移感知」：当画布存在缩放或平移时，
+	 * 先把原生事件的屏幕坐标换算为世界坐标，再交给基类的命中检测，
+	 * 否则缩放、平移之后图形将无法被正确命中。
+	 * 
+	 * @method raiseEvent
+	 * @param {string} name 事件名称
+	 * @param {object} args 原生事件参数
+	 * @return {boolean}
+	 */
+	raiseEvent(name, args) {
+		// 事件前惰性重建命中索引（children 增删后只需重建一次）
+		if(this.hitIndex && this.__hitIndexDirty) {
+			this._syncHitIndex();
+		}
+		const transformed = this.viewport.transformed;
+		if(args && !args.position && transformed) {
+			const position = jmUtils.getEventPosition(args);
+			// 只转换相对画布的偏移，pageX/pageY 仍保留原始值供画布自身命中检测使用
+			const world = this.viewport.screenToWorld({
+				x: position.offsetX,
+				y: position.offsetY
+			});
+			position.offsetX = world.x;
+			position.offsetY = world.y;
+			position.x = world.x;
+			position.y = world.y;
+
+			args = {
+				position: position,
+				button: args.button == 0 || position.isTouch ? 1 : args.button,
+				keyCode: args.keyCode || args.charCode || args.which,
+				ctrlKey: args.ctrlKey,
+				cancel: false,
+				event: args,
+				srcElement: args.srcElement || args.target,
+				isWXMiniApp: this.isWXMiniApp
+			};
+		}
+		return super.raiseEvent(name, args);
+	}
+
+	/**
+	 * 重建空间命中索引（事件前惰性调用）
+	 * 收集所有 interactive 的图形边界到均匀网格中，
+	 * 使 mousemove 等高频事件只对候选图形做精确命中。
+	 * @private
+	 */
+	_syncHitIndex() {
+		this.__hitIndexDirty = false;
+		const index = this.hitIndex;
+		if(!index) return;
+		index.clear();
+		const collect = control => {
+			if(!control || !control.children) return;
+			control.children.each((i, shape) => {
+				if(!shape || shape === this || shape.visible === false) return;
+				if(shape.interactive !== false) {
+					try {
+						index.upsert(shape);
+					}
+					catch(e) {
+						// 忽略尚无边界的图形（例如尚未初始化完成）
+					}
+				}
+				collect(shape);
+			});
+		};
+		collect(this);
 	}
 
 	/**
@@ -711,12 +888,11 @@ export default class jmGraph extends jmControl {
 	exportToSVG(fileName = 'jmgraph-export') {
 		try {
 			const svg = this.toSVG();
-			const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-			const url = URL.createObjectURL(blob);
+			const url = jmPlatform.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
 			this.downloadFile(url, fileName, 'svg');
 			
 			// 释放URL对象，避免内存泄漏
-			setTimeout(() => URL.revokeObjectURL(url), 100);
+			if(url) setTimeout(() => jmPlatform.revokeObjectURL(url), 100);
 		} catch(error) {
 			console.error('jmGraph: exportToSVG - 导出失败', error);
 		}
@@ -737,12 +913,16 @@ export default class jmGraph extends jmControl {
 			svg += `<rect width="100%" height="100%" fill="${this.style.fill}"/>`;
 		}
 
-		// 遍历所有直接添加的形状
-		this.children.each((i, shape) => {
-			if(shape.toSVG) {
+		// 递归遍历所有层级的形状（含嵌套容器/图层）
+		const walk = shape => {
+			if(shape && shape.toSVG) {
 				svg += shape.toSVG();
 			}
-		});
+			if(shape && shape.children) {
+				shape.children.each((i, child) => walk(child));
+			}
+		};
+		this.children.each((i, shape) => walk(shape));
 
 		svg += '</svg>';
 		return svg;
@@ -759,17 +939,8 @@ export default class jmGraph extends jmControl {
 	 * @param {string} extension 文件扩展名
 	 */
 	downloadFile(url, fileName, extension) {
-		// 创建临时链接元素
-		const link = document.createElement('a');
-		link.href = url;
-		link.download = `${fileName}.${extension}`;
-		
-		// 添加到DOM并触发点击
-		document.body.appendChild(link);
-		link.click();
-		
-		// 清理DOM
-		document.body.removeChild(link);
+		// 平台适配层统一处理下载
+		jmPlatform.download(url, `${fileName}.${extension}`);
 	}
 
 	/** 
@@ -804,7 +975,11 @@ export default class jmGraph extends jmControl {
 
 	// 销毁当前对象
 	destroy() {
-		this.eventHandler.destroy();
+		if(this.eventHandler) this.eventHandler.destroy();
+		if(this.hitIndex) {
+			this.hitIndex.clear();
+			this.hitIndex = null;
+		}
 		this.destroyed = true;// 标记已销毁
 	}
 }
@@ -820,4 +995,9 @@ export {
 	jmEvents,
 	jmControl,
 	jmPath,
+	jmViewport,
+	jmSpatialIndex,
+	jmPlatform,
+	Canvas2DRenderer,
+	jmRenderer,
  };

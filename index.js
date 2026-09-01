@@ -17,7 +17,7 @@ import {jmPolygon} from "./src/shapes/jmPolygon.js";
 import {jmStar} from "./src/shapes/jmStar.js";
 
 import { jmGraph as jmGraphCore,
-    jmUtils,
+	jmUtils,
 	jmList,
 	jmProperty,
 	jmShadow,
@@ -25,7 +25,13 @@ import { jmGraph as jmGraphCore,
 	jmFilter,
 	jmEvents,
 	jmControl,
-	jmPath } from "./src/core/jmGraph.js";
+	jmPath,
+	jmViewport,
+	jmSpatialIndex,
+	jmPlatform,
+	Canvas2DRenderer,
+	jmRenderer } from "./src/core/jmGraph.js";
+import { jmLayer } from "./src/core/jmLayer.js";
 
 const shapes = {
     "arc": jmArc,
@@ -77,6 +83,7 @@ export {
     jmList,
     jmControl,
     jmPath,
+	jmLayer,
     jmShadow,
     jmGradient,
     jmFilter,
@@ -95,6 +102,11 @@ export {
     jmEllipse,
     jmPolygon,
     jmStar,
+    jmViewport,
+    jmSpatialIndex,
+    jmPlatform,
+    Canvas2DRenderer,
+    jmRenderer,
     jmGraphImpl as jmGraph,
     createJmGraph as create
 };

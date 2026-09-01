@@ -247,6 +247,16 @@ class jmMouseEvent {
 			}
 		}));
 		
+		this.eventEvents['wheel'] = jmUtils.bindEvent(this.target,'wheel',function(evt) {
+			evt = evt || window.event;
+			evt.eventName = 'wheel';
+			const r = container.raiseEvent('wheel',evt);
+			if(r === false) {
+				if(evt.preventDefault) evt.preventDefault();
+				return false;
+			}
+		},{ passive: false });
+
 		this.eventEvents['dblclick'] = jmUtils.bindEvent(this.target,'dblclick',function(evt) {
 			evt = evt || window.event;
 			evt.eventName = 'dblclick';

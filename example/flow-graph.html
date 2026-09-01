@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>jmGraph 工作流流程图（DAG）示例</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		html, body { height: 100%; overflow: hidden; }
+		body {
+			display: flex;
+			background: #f8fafc;
+			color: #1e293b;
+			font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+			font-size: 13px;
+		}
+
+		/* ---------- 左侧：节点面板 ---------- */
+		.palette {
+			width: 200px;
+			min-width: 200px;
+			height: 100vh;
+			background: #fff;
+			border-right: 1px solid #e2e8f0;
+			padding: 14px 12px;
+			overflow-y: auto;
+		}
+		.palette h3 { font-size: 13px; color: #0f172a; margin-bottom: 4px; }
+		.palette .tip { font-size: 11px; color: #94a3b8; line-height: 1.6; margin-bottom: 10px; }
+		.p-item {
+			display: flex; align-items: center; gap: 8px;
+			border: 1px solid #e2e8f0; border-radius: 8px;
+			padding: 8px 10px; margin-bottom: 8px;
+			cursor: grab; user-select: none;
+			transition: box-shadow .15s, transform .15s;
+			background: #fff;
+		}
+		.p-item:hover { box-shadow: 0 2px 10px rgba(16,24,40,.1); transform: translateY(-1px); }
+		.p-item:active { cursor: grabbing; }
+		.p-icon {
+			width: 24px; height: 24px; border-radius: 6px; color: #fff;
+			display: flex; align-items: center; justify-content: center;
+			font-size: 13px; font-weight: 700; flex-shrink: 0;
+		}
+		.p-name { font-size: 12px; font-weight: 600; }
+		.p-desc { font-size: 10px; color: #94a3b8; }
+
+		/* ---------- 中间：画布 ---------- */
+		.main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; position: relative; }
+		.toolbar {
+			display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+			padding: 8px 12px; background: #fff; border-bottom: 1px solid #e2e8f0;
+		}
+		.toolbar .group { display: flex; align-items: center; gap: 4px; }
+		.toolbar .sep { width: 1px; height: 18px; background: #e2e8f0; margin: 0 4px; }
+		.toolbar .title { font-weight: 700; color: #0f172a; margin-right: 6px; }
+		.toolbar .zoom { font-size: 12px; color: #64748b; min-width: 44px; text-align: center; }
+		button {
+			border: 1px solid #e2e8f0; background: #fff; color: #334155;
+			padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;
+			font-family: inherit; transition: background .15s, border-color .15s;
+		}
+		button:hover { background: #f1f5f9; border-color: #cbd5e1; }
+		button.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+		button.primary:hover { background: #1d4ed8; }
+		button.on { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; font-weight: 600; }
+
+		.canvas-wrap { flex: 1; position: relative; min-height: 0; overflow: hidden; }
+		#canvas { width: 100%; height: 100%; }
+		.empty {
+			position: absolute; inset: 0; display: none;
+			flex-direction: column; align-items: center; justify-content: center;
+			color: #cbd5e1; pointer-events: none; font-size: 13px; gap: 6px;
+		}
+		.empty .ico { font-size: 40px; }
+		.minimap {
+			position: absolute; right: 12px; bottom: 12px;
+			border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;
+			box-shadow: 0 2px 10px rgba(16,24,40,.12); background: #f1f5f9;
+		}
+		.minimap canvas { display: block; cursor: pointer; }
+
+		/* ---------- 右侧：详情 ---------- */
+		.panel {
+			width: 260px; min-width: 260px; height: 100vh; overflow-y: auto;
+			background: #fff; border-left: 1px solid #e2e8f0; padding: 14px 12px;
+		}
+		.panel h4 { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 14px 0 8px; }
+		.panel h4:first-child { margin-top: 0; }
+		.kv { display: flex; font-size: 12px; padding: 3px 0; }
+		.kv b { color: #64748b; font-weight: 500; width: 62px; flex-shrink: 0; }
+		.kv span { color: #0f172a; word-break: break-all; }
+		.none { font-size: 12px; color: #cbd5e1; }
+		.rename { display: flex; gap: 6px; margin-top: 8px; }
+		.rename input {
+			flex: 1; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 8px;
+			font-size: 12px; font-family: inherit; min-width: 0;
+		}
+		.rename input:focus { outline: none; border-color: #93c5fd; }
+		.legend { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+		.legend i {
+			width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+			margin-right: 5px; vertical-align: -1px;
+		}
+		.legend span { font-size: 11px; color: #475569; }
+		.log {
+			background: #0f172a; border-radius: 8px; padding: 8px;
+			height: 200px; overflow-y: auto; font-size: 11px; line-height: 1.7;
+			font-family: Consolas, Menlo, monospace;
+		}
+		.log div { color: #94a3b8; }
+		.log .ok { color: #4ade80; }
+		.log .error { color: #f87171; }
+		.log .warn { color: #fbbf24; }
+		.log .info { color: #7dd3fc; }
+
+		/* ---------- 右键菜单 ---------- */
+		.menu {
+			position: absolute; display: none; z-index: 99;
+			background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+			box-shadow: 0 8px 24px rgba(16,24,40,.16); padding: 4px; min-width: 132px;
+		}
+		.menu div { padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+		.menu div:hover { background: #f1f5f9; }
+		.menu div.danger { color: #dc2626; }
+		.menu div.danger:hover { background: #fef2f2; }
+	</style>
+</head>
+<body>
+
+<aside class="palette">
+	<h3>节点面板</h3>
+	<div class="tip">编辑模式下拖拽到画布添加节点；拖动节点边上的连接点可建立依赖。</div>
+	<div id="palette"></div>
+</aside>
+
+<section class="main">
+	<div class="toolbar">
+		<span class="title">jmGraph 流程图</span>
+		<div class="group">
+			<button id="btnMode">✏️ 编辑模式</button>
+		</div>
+		<div class="sep"></div>
+		<div class="group">
+			<button id="btnRun" class="primary">▶ 执行流程</button>
+			<button id="btnResetRun">重置状态</button>
+		</div>
+		<div class="sep"></div>
+		<div class="group">
+			<button id="btnLayout">自动布局</button>
+			<button id="btnFit">适应视图</button>
+		</div>
+		<div class="sep"></div>
+		<div class="group">
+			<button id="btnZoomOut">－</button>
+			<span class="zoom" id="zoom">100%</span>
+			<button id="btnZoomIn">＋</button>
+			<button id="btnReset">1:1</button>
+		</div>
+		<div class="sep"></div>
+		<div class="group">
+			<button id="btnExport">导出 PNG</button>
+		</div>
+	</div>
+	<div class="canvas-wrap" id="wrap">
+		<div id="canvas"></div>
+		<div class="empty" id="empty"><div class="ico">▦</div><div>暂无节点，切换到编辑模式拖入节点</div></div>
+		<div class="minimap"><canvas id="minimap" width="220" height="150"></canvas></div>
+		<div class="menu" id="menu"></div>
+	</div>
+</section>
+
+<aside class="panel">
+	<h4>节点详情</h4>
+	<div id="detail"><div class="none">点击节点查看详情</div></div>
+	<div class="rename" id="renameBox" style="display:none">
+		<input id="renameInput" placeholder="节点 ID" />
+		<button id="btnRename">保存</button>
+	</div>
+
+	<h4>运行状态图例</h4>
+	<div class="legend" id="legend"></div>
+
+	<h4>运行日志</h4>
+	<div class="log" id="log"></div>
+</aside>
+
+<script type="module">
+	import { createFlowGraph, NODE_TYPES, STATUS_META, typeColor } from './js/flow-graph.js';
+
+	// ---------- 示例数据 ----------
+	const STAGES = [
+		{ id: 'fetch_user', type: 'fetch', config: {}, inputs: [], outputs: ['user'], dependsOn: [] },
+		{ id: 'fetch_order', type: 'fetch', config: {}, inputs: [], outputs: ['orders'], dependsOn: [] },
+		{
+			id: 'normalize', type: 'transform', config: {}, outputs: ['rows'],
+			inputs: [{ from: 'fetch_user.user' }, { from: 'fetch_order.orders' }],
+			dependsOn: ['fetch_user', 'fetch_order']
+		},
+		{
+			id: 'score', type: 'script', config: {}, outputs: ['scores'],
+			inputs: [{ from: 'normalize.rows' }],
+			dependsOn: ['normalize'], retry: { maxRetries: 2, intervalMs: 1000 }
+		},
+		{
+			id: 'summary', type: 'agent', config: {}, outputs: ['report'],
+			inputs: [{ from: 'score.scores' }],
+			dependsOn: ['score']
+		},
+		{
+			id: 'export', type: 'custom', config: {}, inputs: [{ from: 'summary.report' }],
+			outputs: [], dependsOn: ['summary']
+		},
+		{
+			id: 'notify', type: 'custom', config: {}, inputs: [{ from: 'summary.report' }],
+			outputs: [], dependsOn: ['summary']
+		}
+	];
+
+	// ---------- 节点面板 ----------
+	const palette = document.getElementById('palette');
+	NODE_TYPES.forEach(t => {
+		const el = document.createElement('div');
+		el.className = 'p-item';
+		el.draggable = true;
+		el.innerHTML = '<div class="p-icon" style="background:' + typeColor[t.type] + '">' + t.icon +
+			'</div><div><div class="p-name">' + t.label + '</div><div class="p-desc">' + t.desc + '</div></div>';
+		el.addEventListener('dragstart', e => {
+			e.dataTransfer.setData('text/flow-type', t.type);
+			e.dataTransfer.effectAllowed = 'move';
+		});
+		palette.appendChild(el);
+	});
+
+	// ---------- 图例 ----------
+	const legend = document.getElementById('legend');
+	Object.keys(STATUS_META).forEach(k => {
+		const m = STATUS_META[k];
+		const s = document.createElement('span');
+		s.innerHTML = '<i style="background:' + m.color + '"></i>' + m.label;
+		legend.appendChild(s);
+	});
+
+	// ---------- 日志 ----------
+	const logBox = document.getElementById('log');
+	function log(msg, level) {
+		const d = document.createElement('div');
+		if (level) d.className = level;
+		d.textContent = msg;
+		logBox.appendChild(d);
+		logBox.scrollTop = logBox.scrollHeight;
+		while (logBox.childNodes.length > 200) logBox.removeChild(logBox.firstChild);
+	}
+
+	// ---------- 创建流程图 ----------
+	const wrap = document.getElementById('wrap');
+	const canvasEl = document.getElementById('canvas');
+	const menu = document.getElementById('menu');
+	const detail = document.getElementById('detail');
+	const renameBox = document.getElementById('renameBox');
+	const renameInput = document.getElementById('renameInput');
+	let mode = 'view';
+	let selected = null;
+	let uiReady = false;   // fg 初始化期间回调会触发渲染，此时 DOM/fg 尚未就绪
+	const fg = createFlowGraph(canvasEl, {
+		stages: STAGES,
+		mode: 'view',
+		onSelect: id => { selected = id; renderDetail(); },
+		onEdgeClick: edge => log('点击连线：' + edge.source + ' → ' + edge.target),
+		onNodeEdit: () => { renameInput.focus(); renameInput.select(); },
+		onLog: log
+	});
+	fg.attachMinimap(document.getElementById('minimap'));
+	uiReady = true;
+	renderDetail();
+
+	// ---------- 工具栏 ----------
+	const btnMode = document.getElementById('btnMode');
+	function refreshModeBtn() {
+		btnMode.textContent = mode === 'edit' ? '👁 查看（编辑中）' : '✏️ 编辑模式';
+		btnMode.classList.toggle('on', mode === 'edit');
+	}
+	btnMode.onclick = () => {
+		mode = fg.setMode(mode === 'edit' ? 'view' : 'edit');
+		refreshModeBtn();
+		renderDetail();
+		log(mode === 'edit' ? '已进入编辑模式：可拖动节点、拖拽连接点建边、右键删除' : '已切换到查看模式');
+	};
+	refreshModeBtn();
+
+	document.getElementById('btnRun').onclick = () => {
+		if (fg.isRunning()) return;
+		document.getElementById('btnRun').textContent = '⏳ 执行中…';
+		fg.run().then(() => {
+			document.getElementById('btnRun').textContent = '▶ 执行流程';
+		});
+	};
+	document.getElementById('btnResetRun').onclick = () => fg.resetRun();
+	document.getElementById('btnLayout').onclick = () => fg.autoLayout();
+	document.getElementById('btnFit').onclick = () => fg.fit();
+	document.getElementById('btnZoomIn').onclick = () => fg.zoomIn();
+	document.getElementById('btnZoomOut').onclick = () => fg.zoomOut();
+	document.getElementById('btnReset').onclick = () => fg.resetView();
+	document.getElementById('btnExport').onclick = () => fg.exportPNG('jmgraph-flow');
+
+	// 缩放比例显示
+	setInterval(() => {
+		document.getElementById('zoom').textContent = Math.round(fg.getZoom() * 100) + '%';
+	}, 200);
+
+	// ---------- 详情面板 ----------
+	function renderDetail() {
+		if (!uiReady) return;
+		const stage = fg.getStages().find(s => s.id === selected);
+		if (!stage) {
+			detail.innerHTML = '<div class="none">点击节点查看详情</div>';
+			renameBox.style.display = 'none';
+			return;
+		}
+		const meta = STATUS_META[fg.getRunStatus()[stage.id] || 'idle'] || STATUS_META.idle;
+		const rows = [
+			['ID', stage.id],
+			['类型', stage.type],
+			['状态', meta.label],
+			['输入', (stage.inputs || []).map(i => i.from || '(value)').join(', ') || '—'],
+			['输出', (stage.outputs || []).join(', ') || '—'],
+			['依赖', (stage.dependsOn || []).join(', ') || '—'],
+			['重试', stage.retry ? stage.retry.maxRetries + ' 次 / ' + stage.retry.intervalMs + 'ms' : '—']
+		];
+		detail.innerHTML = rows.map(r =>
+			'<div class="kv"><b>' + r[0] + '</b><span>' + r[1] + '</span></div>').join('');
+		renameBox.style.display = mode === 'edit' ? 'flex' : 'none';
+		renameInput.value = stage.id;
+	}
+	document.getElementById('btnRename').onclick = () => {
+		if (fg.renameStage(selected, renameInput.value)) renderDetail();
+	};
+	renameInput.addEventListener('keydown', e => {
+		if (e.key === 'Enter') document.getElementById('btnRename').click();
+	});
+
+	// ---------- 拖拽新增节点 ----------
+	wrap.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+	wrap.addEventListener('drop', e => {
+		e.preventDefault();
+		if (fg.getMode() !== 'edit') { log('请先切换到编辑模式再添加节点', 'warn'); return; }
+		const type = e.dataTransfer.getData('text/flow-type');
+		if (!type) return;
+		const pos = fg.graph.getPosition();
+		const world = fg.graph.screenToWorld({ x: e.pageX - pos.left, y: e.pageY - pos.top });
+		fg.addStage(type, world);
+	});
+
+	// ---------- 右键菜单 ----------
+	function showMenu(x, y, items) {
+		menu.innerHTML = '';
+		items.forEach(it => {
+			const d = document.createElement('div');
+			d.textContent = it.label;
+			if (it.danger) d.className = 'danger';
+			d.onclick = () => { hideMenu(); it.action(); };
+			menu.appendChild(d);
+		});
+		menu.style.display = 'block';
+		const rect = wrap.getBoundingClientRect();
+		const mw = menu.offsetWidth, mh = menu.offsetHeight;
+		menu.style.left = Math.min(x - rect.left, rect.width - mw - 6) + 'px';
+		menu.style.top = Math.min(y - rect.top, rect.height - mh - 6) + 'px';
+	}
+	function hideMenu() { menu.style.display = 'none'; }
+	document.addEventListener('mousedown', e => { if (!menu.contains(e.target)) hideMenu(); });
+
+	wrap.addEventListener('contextmenu', e => {
+		e.preventDefault();
+		const pos = fg.graph.getPosition();
+		const world = fg.graph.screenToWorld({ x: e.pageX - pos.left, y: e.pageY - pos.top });
+		const node = fg.nodeAt(world);
+		if (node) {
+			fg.select(node.stage.id);
+			showMenu(e.clientX, e.clientY, [
+				{ label: '✏️ 重命名节点', action: () => { renameInput.focus(); renameInput.select(); } },
+				{ label: '▶ 从该节点执行', action: () => log('（示例）从 ' + node.stage.id + ' 开始执行') },
+				{ label: '🗑 删除节点', danger: true, action: () => fg.removeStage(node.stage.id) }
+			]);
+		}
+		else {
+			showMenu(e.clientX, e.clientY, [
+				{ label: '🔍 适应视图', action: () => fg.fit() },
+				{ label: '📐 自动布局', action: () => fg.autoLayout() },
+				{ label: '➕ 添加节点（编辑模式）', action: () => {
+					if (fg.getMode() !== 'edit') { log('请先切换到编辑模式', 'warn'); return; }
+					fg.addStage('custom', world);
+				} }
+			]);
+		}
+	});
+
+	// ---------- 删除键 ----------
+	document.addEventListener('keydown', e => {
+		if (e.key !== 'Delete' && e.key !== 'Backspace') return;
+		if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+		if (fg.getMode() !== 'edit' || !selected) return;
+		fg.removeStage(selected);
+	});
+
+	// ---------- 尺寸自适应 ----------
+	window.addEventListener('resize', () => fg.resize());
+	setTimeout(() => fg.resize(), 0);
+
+	log('jmGraph 流程图示例已就绪');
+	log('提示：滚轮缩放 / 空白处拖拽平移 / 点击节点查看详情', 'info');
+</script>
+</body>
+</html>

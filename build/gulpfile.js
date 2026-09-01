@@ -15,21 +15,50 @@ const rollup = require('rollup');
 const rollupugify = require('rollup-plugin-uglify');
 const rollupbabel = require('rollup-plugin-babel');
 const cleanimport = require('gulp-clean-import');
-const gulpJsdoc2md = require('gulp-jsdoc-to-markdown')
+const gulpJsdoc2md = require('gulp-jsdoc-to-markdown');
+const glob = require('glob');
+const path = require('path');
 
-const jsSources = [
-    "../src/core/jmList.js",
-    "../src/core/jmUtils.js",
-    "../src/core/jmObject.js",
-    "../src/core/jmProperty.js",
-    "../src/core/jmEvents.js",
-    "../src/core/jmGradient.js",
-    "../src/core/jmShadow.js",
-    "../src/core/jmControl.js",
-    "../src/core/jmPath.js",
-    "../src/shapes/*.js",
-    "../src/core/jmGraph.js"
-   ];
+/**
+ * 从配置文件动态生成 jsSources 数组
+ * 
+ * 配置结构见 build.sources.json，按依赖分层组织核心模块：
+ * - foundation: 基础工具层（无外部依赖）
+ * - object-model: 对象模型层（依赖 foundation）
+ * - style: 样式层（依赖 object-model）
+ * - control: 控件基类层（依赖 style）
+ * - architecture: 架构优化层（依赖 control）
+ * - shapes: 图形组件（自动扫描目录）
+ * - entry: 入口文件（jmGraph.js，最后加载）
+ */
+function loadJsSources() {
+  const configPath = path.join(__dirname, 'build.sources.json');
+  const config = require(configPath);
+  const sources = [];
+
+  // 按层顺序添加核心模块
+  for (const layer of config.core.layers) {
+    for (const file of layer.files) {
+      sources.push(path.join('..', file));
+    }
+  }
+
+  // 添加 shapes 目录（glob 模式，按文件名排序保证构建稳定性）
+  const shapesPattern = path.join(__dirname, '..', config.shapes.pattern);
+  const shapeFiles = glob.sync(shapesPattern).sort();
+  for (const file of shapeFiles) {
+    // 转换为相对于 build 目录的路径（如 ../src/shapes/jmRect.js）
+    const relPath = '../' + path.relative(path.join(__dirname, '..'), file).split(path.sep).join('/');
+    sources.push(relPath);
+  }
+
+  // 添加入口文件
+  sources.push(path.join('..', config.core.entry));
+
+  return sources;
+}
+
+const jsSources = loadJsSources();
 
 //语法检测
 gulp.task('jshint', function () { 

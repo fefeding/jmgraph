@@ -98,6 +98,26 @@ export default class jmList extends Array {
     }
 
     /**
+     * 批量添加元素
+     * 
+     * 比逐个调用 add 更高效（去重仍为 O(n)，但避免每次 add 的数组包装开销）。
+     * 
+     * @method addAll
+     * @param {Array} objs 要添加的元素数组
+     * @returns {Array} 传入的数组
+     * 
+     * @example
+     * list.addAll([1, 2, 3]);
+     */
+    addAll(objs) {
+        if(!Array.isArray(objs)) return objs;
+        for(let i = 0; i < objs.length; i++) {
+            if(!this.includes(objs[i])) this.push(objs[i]);
+        }
+        return objs;
+    }
+
+    /**
      * 从列表中移除元素
      * 
      * 移除所有匹配的元素，并触发移除回调。

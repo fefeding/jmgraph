@@ -1,0 +1,62 @@
+- generic [active] [ref=f1e1]:
+  - complementary [ref=f1e2]:
+    - heading "节点面板" [level=3] [ref=f1e3]
+    - generic [ref=f1e4]: 编辑模式下拖拽到画布添加节点；拖动节点边上的连接点可建立依赖。
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - generic [ref=f1e7]: ↓
+        - generic [ref=f1e8]:
+          - generic [ref=f1e9]: fetch
+          - generic [ref=f1e10]: 通过 MCP 拉取数据
+      - generic [ref=f1e11]:
+        - generic [ref=f1e12]: ❯
+        - generic [ref=f1e13]:
+          - generic [ref=f1e14]: script
+          - generic [ref=f1e15]: 沙箱中执行脚本
+      - generic [ref=f1e16]:
+        - generic [ref=f1e17]: ⇄
+        - generic [ref=f1e18]:
+          - generic [ref=f1e19]: transform
+          - generic [ref=f1e20]: 数据转换表达式
+      - generic [ref=f1e21]:
+        - generic [ref=f1e22]: ✦
+        - generic [ref=f1e23]:
+          - generic [ref=f1e24]: custom
+          - generic [ref=f1e25]: 自定义处理器
+      - generic [ref=f1e26]:
+        - generic [ref=f1e27]: ★
+        - generic [ref=f1e28]:
+          - generic [ref=f1e29]: agent
+          - generic [ref=f1e30]: 调用 Agent 推理
+  - generic [ref=f1e31]:
+    - generic [ref=f1e32]:
+      - generic [ref=f1e33]: jmGraph 流程图
+      - button "✏️ 编辑模式" [ref=f1e35] [cursor=pointer]
+      - generic [ref=f1e37]:
+        - button "▶ 执行流程" [ref=f1e38] [cursor=pointer]
+        - button "重置状态" [ref=f1e39] [cursor=pointer]
+      - generic [ref=f1e41]:
+        - button "自动布局" [ref=f1e42] [cursor=pointer]
+        - button "适应视图" [ref=f1e43] [cursor=pointer]
+      - generic [ref=f1e45]:
+        - button "－" [ref=f1e46] [cursor=pointer]
+        - generic [ref=f1e47]: 109%
+        - button "＋" [ref=f1e48] [cursor=pointer]
+        - button "1:1" [ref=f1e49] [cursor=pointer]
+      - button "导出 PNG" [ref=f1e52] [cursor=pointer]
+    - generic [ref=f1e57] [cursor=pointer]
+  - complementary [ref=f1e58]:
+    - heading "节点详情" [level=4] [ref=f1e59]
+    - generic [ref=f1e60]: 点击节点查看详情
+    - heading "运行状态图例" [level=4] [ref=f1e62]
+    - generic [ref=f1e63]:
+      - generic [ref=f1e64]: 待运行
+      - generic [ref=f1e66]: 排队中
+      - generic [ref=f1e68]: 运行中
+      - generic [ref=f1e70]: 成功
+      - generic [ref=f1e72]: 失败
+      - generic [ref=f1e74]: 已跳过
+    - heading "运行日志" [level=4] [ref=f1e76]
+    - generic [ref=f1e77]:
+      - generic [ref=f1e78]: jmGraph 流程图示例已就绪
+      - generic [ref=f1e79]: 提示：滚轮缩放 / 空白处拖拽平移 / 点击节点查看详情

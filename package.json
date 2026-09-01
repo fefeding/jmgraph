@@ -24,11 +24,10 @@
   },
   "main": "./index.js",
   "types": "./index.d.ts",
-  "spm": {
-    "alias": {},
-    "output": [
-      "main.js"
-    ]
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./src/*": "./src/*"
   },
   "licenses": [
     {
@@ -45,7 +44,10 @@
   "scripts": {
     "build": "cd build && npm i --legacy-peer-deps && npx gulp && cd ..",
     "push": "npm publish --registry=https://registry.npmjs.org",
-    "dev": "node dev"
+    "dev": "node dev",
+    "test": "node --test test/*.test.mjs",
+    "test:watch": "node --test --watch test/*.test.mjs",
+    "check": "node --check index.js && find src -name '*.js' -print0 | xargs -0 -n1 node --check"
   },
   "license": "MIT",
   "publishConfig": {

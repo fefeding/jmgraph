@@ -207,6 +207,16 @@ export interface jmGraphOptions {
   interactive?: boolean;
   style?: jmStyle;
   shapes?: Record<string, new (...args: any[]) => any>;
+  /** 缩放范围下限，默认 0.1 */
+  minZoom?: number;
+  /** 缩放范围上限，默认 10 */
+  maxZoom?: number;
+  /** 高DPI渲染倍数。false 关闭（性能优先），或指定具体倍数，默认取设备像素比（>=1）或 2 */
+  dprScale?: number | false;
+  /** 是否启用空间命中索引（大图交互优化），默认 true */
+  hitIndex?: boolean;
+  /** 空间索引网格单元大小（世界坐标单位），默认 100 */
+  hitIndexCellSize?: number;
   [key: string]: any;
 }
 
@@ -924,6 +934,101 @@ export type ShapeTypes = {
 /**
  * jmGraph 画图类库主类
  */
+/**
+ * 视口管理器：统一负责缩放/平移/坐标转换/视口剔除
+ */
+export declare class jmViewport {
+  width: number;
+  height: number;
+  scaleFactor: number;
+  translation: { x: number; y: number };
+  minZoom: number;
+  maxZoom: number;
+  /** 变换版本号，任何缩放/平移变化都会自增 */
+  readonly stamp: number;
+  /** 是否发生过缩放或平移 */
+  readonly transformed: boolean;
+
+  constructor(width?: number, height?: number, option?: {
+    scaleFactor?: number;
+    x?: number;
+    y?: number;
+    minZoom?: number;
+    maxZoom?: number;
+  });
+
+  reset(): this;
+  pan(dx: number, dy: number): this;
+  zoomAt(zoom: number, cx?: number, cy?: number): this;
+  setTranslation(x: number, y: number): this;
+  clampZoom(zoom: number): number;
+  screenToWorld(p: Point): Point;
+  worldToScreen(p: Point): Point;
+  worldRectToScreen(bounds: Bounds): Bounds;
+  getVisibleWorldRect(): Bounds;
+  isVisible(bounds: Bounds, pad?: number): boolean;
+  containsPoint(p: Point): boolean;
+  fitBounds(bounds: Bounds, padding?: number): this;
+  toJSON(): { scaleFactor: number; translation: Point; width: number; height: number };
+}
+
+/**
+ * 空间命中索引（均匀网格），用于大图事件命中加速
+ */
+export declare class jmSpatialIndex {
+  cellSize: number;
+  readonly size: number;
+
+  constructor(cellSize?: number);
+
+  upsert(control: jmControl): void;
+  remove(control: jmControl): void;
+  query(p: Point): Set<jmControl> | null;
+  queryRect(rect: Bounds): Set<jmControl>;
+  clear(): void;
+}
+
+/**
+ * 渲染器抽象基类
+ */
+export declare class jmRenderer {
+  graph: jmGraph;
+  constructor(graph: jmGraph);
+  readonly context: CanvasRenderingContext2D | any;
+  begin(): void;
+  end(): void;
+  clear(w: number, h: number): void;
+  save(): void;
+  restore(): void;
+  beginPath(): void;
+  moveTo(x: number, y: number): void;
+  lineTo(x: number, y: number): void;
+  closePath(): void;
+  fill(): void;
+  stroke(): void;
+}
+
+/**
+ * Canvas 2D 渲染器
+ */
+export declare class Canvas2DRenderer extends jmRenderer {
+}
+
+/**
+ * 平台适配层（浏览器/微信小程序/Node 差异隔离）
+ */
+export declare class jmPlatform {
+  static isWX(): boolean;
+  static getDocument(): Document | null;
+  static getWindow(): Window | null;
+  static getDevicePixelRatio(): number;
+  static resolveCanvas(canvas: HTMLElement | string): HTMLElement | null;
+  static createCanvas(): HTMLCanvasElement | null;
+  static createObjectURL(blob: Blob): string;
+  static revokeObjectURL(url: string): void;
+  static download(url: string, fileName: string): void;
+}
+
 export declare class jmGraph extends jmControl {
   constructor(canvas: HTMLElement | string, option?: jmGraphOptions | ((graph: jmGraph) => void), callback?: (graph: jmGraph) => void);
 
@@ -943,6 +1048,12 @@ export declare class jmGraph extends jmControl {
   normalSize?: { width: number; height: number };
   scaleSize?: { x: number; y: number };
   destroyed?: boolean;
+  /** 视口管理器（缩放/平移/坐标转换/视口剔除的唯一入口） */
+  viewport: jmViewport;
+  /** 空间命中索引（option.hitIndex === false 时为 null） */
+  hitIndex: jmSpatialIndex | null;
+  /** 渲染器实例 */
+  renderer: jmRenderer;
 
   static create(...args: ConstructorParameters<typeof jmGraph>): jmGraph;
 
@@ -966,6 +1077,10 @@ export declare class jmGraph extends jmControl {
   setZoom(zoom: number, x?: number, y?: number): this;
   pan(dx: number, dy: number): this;
   resetTransform(): this;
+  screenToWorld(point: Point): Point;
+  worldToScreen(point: Point): Point;
+  getContentBounds(filter?: (shape: jmControl) => boolean): Bounds | null;
+  fitView(padding?: number, filter?: (shape: jmControl) => boolean): this;
   toDataURL(): string;
   exportToPNG(fileName?: string, format?: string, quality?: number): void;
   exportToJPEG(fileName?: string, quality?: number): void;

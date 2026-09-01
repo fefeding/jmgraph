@@ -1,0 +1,56 @@
+{
+  "core": {
+    "description": "核心模块（按依赖顺序分层）",
+    "layers": [
+      {
+        "name": "foundation",
+        "description": "基础层：无外部依赖的工具和数据结构",
+        "files": [
+          "src/core/jmList.js",
+          "src/core/jmUtils.js"
+        ]
+      },
+      {
+        "name": "object-model",
+        "description": "对象模型层：属性系统和事件系统",
+        "files": [
+          "src/core/jmObject.js",
+          "src/core/jmProperty.js",
+          "src/core/jmEvents.js"
+        ]
+      },
+      {
+        "name": "style",
+        "description": "样式层：渐变、阴影、滤镜",
+        "files": [
+          "src/core/jmGradient.js",
+          "src/core/jmShadow.js",
+          "src/core/jmFilter.js"
+        ]
+      },
+      {
+        "name": "control",
+        "description": "控件基类层",
+        "files": [
+          "src/core/jmControl.js",
+          "src/core/jmPath.js"
+        ]
+      },
+      {
+        "name": "architecture",
+        "description": "架构优化层：视口、空间索引、渲染器、平台适配",
+        "files": [
+          "src/core/jmViewport.js",
+          "src/core/jmSpatialIndex.js",
+          "src/core/jmRenderer.js",
+          "src/core/jmPlatform.js"
+        ]
+      }
+    ],
+    "entry": "src/core/jmGraph.js"
+  },
+  "shapes": {
+    "description": "图形组件（自动扫描 src/shapes/*.js）",
+    "pattern": "src/shapes/*.js"
+  }
+}

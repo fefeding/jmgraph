@@ -464,7 +464,8 @@ export default class jmControl extends jmProperty {
 	}
 	set zIndex(v) {
 		this.property('zIndex', v);
-		this.children.sort();
+		// 惰性排序：仅标记，绘制前再排序，避免高频改 zIndex 时反复全量排序
+		if(this.__childrenSortDirty !== undefined) this.__childrenSortDirty = true;
 		this.needUpdate = true;
 		return v;
 	}
@@ -512,7 +513,19 @@ export default class jmControl extends jmProperty {
 		const self = this;
 		this.children = this.children || new jmList();
 		const oadd = this.children.add;
-		
+		// 惰性排序标记：add/remove/zIndex 变更时置位，绘制前才真正排序，
+		// 避免批量添加 N 个节点导致 O(n²) 的反复排序
+		this.__childrenSortDirty = false;
+
+		/**
+		 * 同步命中索引脏标记（大图事件命中优化）
+		 * @private
+		 */
+		const markHitIndexDirty = () => {
+			const g = self.graph;
+			if(g && g.hitIndex) g.__hitIndexDirty = true;
+		};
+
 		/**
 		 * 重写 add 方法，自动建立父子关系
 		 * @param {jmControl} obj - 要添加的子控件
@@ -535,11 +548,26 @@ export default class jmControl extends jmProperty {
 				self.needUpdate = true;
 				// 传播 graph 引用
 				if(self.graph) obj.graph = self.graph;
-				this.sort();
+				// 惰性排序：不再每次 add 后立即全量排序
+				self.__childrenSortDirty = true;
+				markHitIndexDirty();
 				return obj;
 			}
 		};
 		this.children.oremove= this.children.remove;
+		
+		/**
+		 * 批量添加子控件（避免逐个 add 的重复去重/排序开销）
+		 * @param {Array<jmControl>} objs 子控件数组
+		 * @returns {Array<jmControl>}
+		 */
+		this.children.addAll = function(objs) {
+			if(!Array.isArray(objs)) return objs;
+			for(const obj of objs) {
+				this.add(obj);
+			}
+			return objs;
+		};
 		
 		/**
 		 * 重写 remove 方法，清理父子关系
@@ -552,6 +580,7 @@ export default class jmControl extends jmProperty {
 				obj.remove(true);
 				this.oremove(obj);
 				self.needUpdate = true;
+				markHitIndexDirty();
 			}
 		};
 		
@@ -576,6 +605,7 @@ export default class jmControl extends jmProperty {
 			for(let index in levelItems) {
 				oadd.call(this, levelItems[index]);
 			}
+			self.__childrenSortDirty = false;
 		}
 		
 		/**
@@ -627,6 +657,30 @@ export default class jmControl extends jmProperty {
 		}
 		if(!style) return;
 
+		// 样式快照优化：样式未发生变化时，跳过字符串解析/渐变重建，
+		// 仅重放上次应用时写入 context 的写入序列（快速恢复）。
+		// 说明：paint 外层 save/restore 会在每帧结束时把 context 重置为默认状态，
+		// 因此样式必须每帧都重写到 context，不能整体跳过；快照只缓存"解析结果"。
+		// 存在 transform/clipPath/mask 类样式时始终完整应用（受 restore 影响，必须重建）。
+		const hasTransform = style.rotation || style.transform || style.translate ||
+			style.clipPath || style.mask;
+		if(!hasTransform && this._styleUnchanged(style)) {
+			this._restoreStyleContext();
+			return;
+		}
+
+		// 本轮完整应用时记录 context 写入序列，供后续帧快速恢复
+		const ctxCache = [];
+		this.__styleContextCache = ctxCache;
+		const __apply = (name, value) => {
+			ctxCache.push({ n: name, v: value });
+			this.context[name] = value;
+		};
+		const __call = (name, args) => {
+			ctxCache.push({ n: name, a: args });
+			this.context[name](...args);
+		};
+
 		/**
 		 * 内部样式设置函数
 		 * @param {*} styleValue - 样式值
@@ -655,7 +709,14 @@ export default class jmControl extends jmProperty {
 					if(t == 'string' && styleValue.indexOf('-gradient') > -1) {
 						styleValue = new jmGradient(styleValue);
 					}
-					__setStyle(styleValue.toGradient(this), mpname||name);
+					// 渐变对象缓存：避免每帧重复调用 toGradient 创建 canvas gradient
+					if(!this.__gradientCache) this.__gradientCache = new WeakMap();
+					let grad = this.__gradientCache.get(styleValue);
+					if(!grad) {
+						grad = styleValue.toGradient(this);
+						this.__gradientCache.set(styleValue, grad);
+					}
+					__setStyle(grad, mpname||name);
 				}
 				// 处理标准样式映射
 				else if(mpname) {
@@ -666,7 +727,7 @@ export default class jmControl extends jmProperty {
 						if(t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
 							styleValue = jmUtils.toColor(styleValue);
 						}
-						this.context[mpname] = styleValue;
+						__apply(mpname, styleValue);
 					}
 				}
 				// 处理特殊样式
@@ -742,17 +803,17 @@ export default class jmControl extends jmProperty {
 								dash = styleValue.map(v => parseFloat(v)).filter(v => !isNaN(v));
 							}
 							if(dash && dash.length) {
-								this.context.setLineDash(dash);
+								__call('setLineDash', [dash]);
 							}
 							else {
-								this.context.setLineDash([]);
+								__call('setLineDash', [[]]);
 							}
 							break;
 						}
 						// 虚线偏移量
 						case 'lineDashOffset' : {
 							if(!this.context.setLineDash) break;
-							this.context.lineDashOffset = Number(styleValue) || 0;
+							__apply('lineDashOffset', Number(styleValue) || 0);
 							break;
 						}
 						/**
@@ -766,13 +827,13 @@ export default class jmControl extends jmProperty {
 						case 'filter' : {
 							if(this.context.filter === undefined) break;
 							if(styleValue instanceof jmFilter) {
-								this.context.filter = styleValue.toCanvasFilter();
+								__apply('filter', styleValue.toCanvasFilter());
 							}
 							else if(typeof styleValue === 'string') {
-								this.context.filter = styleValue || 'none';
+								__apply('filter', styleValue || 'none');
 							}
 							else if(typeof styleValue === 'object') {
-								this.context.filter = (new jmFilter(styleValue)).toCanvasFilter();
+								__apply('filter', (new jmFilter(styleValue)).toCanvasFilter());
 							}
 							break;
 						}
@@ -784,7 +845,7 @@ export default class jmControl extends jmProperty {
 						 */
 						case 'globalCompositeOperation' : {
 							if(!this.context.globalCompositeOperation) break;
-							this.context.globalCompositeOperation = styleValue;
+							__apply('globalCompositeOperation', styleValue);
 							break;
 						}
 						/**
@@ -834,7 +895,7 @@ export default class jmControl extends jmProperty {
 								this.webglControl.setStyle('shadowColor', styleValue);
 							}
 							else {
-								this.context.shadowColor = jmUtils.toColor(styleValue);
+								__apply('shadowColor', jmUtils.toColor(styleValue));
 							}
 							break;
 						}
@@ -843,7 +904,7 @@ export default class jmControl extends jmProperty {
 								this.webglControl.setStyle('shadowBlur', styleValue);
 							}
 							else {
-								this.context.shadowBlur = Number(styleValue) || 0;
+								__apply('shadowBlur', Number(styleValue) || 0);
 							}
 							break;
 						}
@@ -852,7 +913,7 @@ export default class jmControl extends jmProperty {
 								this.webglControl.setStyle('shadowOffsetX', styleValue);
 							}
 							else {
-								this.context.shadowOffsetX = Number(styleValue) || 0;
+								__apply('shadowOffsetX', Number(styleValue) || 0);
 							}
 							break;
 						}
@@ -861,7 +922,7 @@ export default class jmControl extends jmProperty {
 								this.webglControl.setStyle('shadowOffsetY', styleValue);
 							}
 							else {
-								this.context.shadowOffsetY = Number(styleValue) || 0;
+								__apply('shadowOffsetY', Number(styleValue) || 0);
 							}
 							break;
 						}
@@ -896,6 +957,81 @@ export default class jmControl extends jmProperty {
 			}
 			__setStyle(style[k], k);
 		}
+		this._snapshotStyle(style);
+	}
+
+	/**
+	 * 判断当前样式与上次应用时是否一致
+	 * @param {Object} style 样式对象
+	 * @return {boolean} true=一致（可跳过应用）
+	 * @private
+	 */
+	_styleUnchanged(style) {
+		const snap = this.__styleSnapshot;
+		if(!snap) return false;
+		if(!style) return false;
+		const keys = Object.keys(style);
+		if(keys.length !== snap.size) return false;
+		for(const k of keys) {
+			const cur = style[k];
+			// 函数样式每次都需要重新计算，不参与快照
+			if(typeof cur === 'function') return false;
+			const prev = snap.get(k);
+			if(cur === prev) continue;
+			// 嵌套对象（如 shadow/rotation/lineDash）支持原地修改：
+			// 快照保存的是浅拷贝，此处做浅比较
+			if(cur && prev && typeof cur === 'object' && typeof prev === 'object') {
+				const ck = Object.keys(cur);
+				const pk = Object.keys(prev);
+				if(ck.length !== pk.length) return false;
+				let same = true;
+				for(let i = 0; i < ck.length; i++) {
+					if(cur[ck[i]] !== prev[ck[i]]) { same = false; break; }
+				}
+				if(same) continue;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 记录当前样式快照
+	 * @param {Object} style 样式对象
+	 * @private
+	 */
+	_snapshotStyle(style) {
+		const snap = new Map();
+		for(const k in style) {
+			const v = style[k];
+			// 嵌套对象浅拷贝，使快照与当前 style 解耦（支持原地修改检测）
+			if(v && typeof v === 'object' && !(v instanceof jmGradient) &&
+				!(v instanceof jmShadow) && !(v instanceof jmFilter)) {
+				snap.set(k, Array.isArray(v) ? v.slice() : Object.assign({}, v));
+			}
+			else {
+				snap.set(k, v);
+			}
+		}
+		this.__styleSnapshot = snap;
+	}
+
+	/**
+	 * 样式未变化时，重放上次应用样式写入 context 的序列。
+	 * paint 的 save/restore 每帧会重置 context，必须重写才能保持样式正确。
+	 * @private
+	 */
+	_restoreStyleContext() {
+		const cache = this.__styleContextCache;
+		if(!cache) return;
+		for(const item of cache) {
+			if(item.a) {
+				if(this.context[item.n]) this.context[item.n](...item.a);
+			}
+			else {
+				this.context[item.n] = item.v;
+			}
+		}
 	}
 
 	/**
@@ -924,8 +1060,8 @@ export default class jmControl extends jmProperty {
 	 * const newBounds = control.getBounds(true);
 	 */
 	getBounds(isReset) {
-		//如果当次计算过，则不重复计算
-		if(this.bounds && !isReset) return this.bounds;
+		//如果当次计算过且无脏标记，则不重复计算
+		if(this.bounds && !isReset && !this.__boundsDirty) return this.bounds;
 
 		const rect = {}; // left top
 		//jmGraph，特殊处理
@@ -978,7 +1114,9 @@ export default class jmControl extends jmProperty {
 		if(rect.bottom === undefined) rect.bottom = 0; 
 		rect.width = rect.right - rect.left;
 		rect.height = rect.bottom - rect.top;
-		
+
+		// 本次计算后清除脏标记（子级 absoluteBounds 缓存依赖此标记）
+		this.__boundsDirty = false;
 		return this.bounds=rect;
 	}
 
@@ -1343,6 +1481,11 @@ export default class jmControl extends jmProperty {
 		});
 
 		this.needUpdate = true;
+		// 移动后更新空间索引（拖动热路径下避免全量重建）
+		const g = this.graph;
+		if(g && g.hitIndex && g.hitIndex.size) {
+			g.hitIndex.upsert(this);
+		}
 	}
 
 	/**
@@ -1359,22 +1502,33 @@ export default class jmControl extends jmProperty {
 	 * console.log(`画布上的位置: (${absBounds.left}, ${absBounds.top})`);
 	 */
 	getAbsoluteBounds() {
+		// 父级绝对边界引用（作为缓存失效依据：父级边界变化后引用随之变化）
+		const parentAbs = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : null;
+		// 缓存命中：自身边界无脏标记、父级绝对边界未变化
+		if(this.__absBounds && !this.__boundsDirty && this.__absParentAbs === parentAbs) {
+			return this.__absBounds;
+		}
 		//当前控件的边界，
 		let rec = this.getBounds();
-		if(this.parent && this.parent.absoluteBounds) {
+		let result;
+		if(parentAbs) {
 			//父容器的绝对边界
-			let prec = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();
-			
-			return {
-				left : prec.left + rec.left,
-				top : prec.top + rec.top,
-				right : prec.left + rec.right,
-				bottom : prec.top + rec.bottom,
+			result = {
+				left : parentAbs.left + rec.left,
+				top : parentAbs.top + rec.top,
+				right : parentAbs.left + rec.right,
+				bottom : parentAbs.top + rec.bottom,
 				width : rec.width,
 				height : rec.height
 			};
 		}
-		return rec;
+		else {
+			result = rec;
+		}
+		this.__absBounds = result;
+		this.__absParentAbs = parentAbs;
+		this.__boundsDirty = false;
+		return result;
 	}
 
 	/**
@@ -1557,15 +1711,30 @@ export default class jmControl extends jmProperty {
 	paint(v) {
 		if(v !== false && this.visible !== false) {		
 			if(this.initPoints) this.initPoints();
-			//计算当前边界
-			this.bounds = null;
+			// 计算当前边界（脏标记方式失效，替代直接清空，便于 getAbsoluteBounds 复用缓存）
+			this.__boundsDirty = true;
 			this.absoluteBounds = this.getAbsoluteBounds();
 			let needDraw = true;//是否需要绘制
 			if(!this.is('jmGraph') && this.graph) {
-				if(this.absoluteBounds.left >= this.graph.width) needDraw = false;
-				else if(this.absoluteBounds.top >= this.graph.height) needDraw = false;
-				else if(this.absoluteBounds.right <= 0) needDraw = false;
-				else if(this.absoluteBounds.bottom <= 0) needDraw = false;
+				const g = this.graph;
+				if(g.viewport) {
+					// 统一走 viewport 视口剔除：世界坐标边界，内部完成屏幕坐标变换与画布尺寸比较
+					needDraw = g.viewport.isVisible(this.absoluteBounds);
+				}
+				else {
+					// 兼容无 viewport 的环境（保留原逻辑）
+					const s = g.scaleFactor || 1;
+					const tx = g.translation ? g.translation.x : 0;
+					const ty = g.translation ? g.translation.y : 0;
+					const sl = this.absoluteBounds.left * s + tx;
+					const st = this.absoluteBounds.top * s + ty;
+					const sr = this.absoluteBounds.right * s + tx;
+					const sb = this.absoluteBounds.bottom * s + ty;
+					if(sl >= g.width) needDraw = false;
+					else if(st >= g.height) needDraw = false;
+					else if(sr <= 0) needDraw = false;
+					else if(sb <= 0) needDraw = false;
+				}
 			}
 			
 			this.context.save && this.context.save();
@@ -1614,6 +1783,10 @@ export default class jmControl extends jmProperty {
 			}
 
 			if(this.children) {
+				// 惰性排序：仅在添加/移除/zIndex 变化后排序一次
+				if(this.__childrenSortDirty) {
+					this.children.sort();
+				}
 				this.children.each(function(i,item) {
 					if(item && item.paint) item.paint();
 				});
@@ -1843,65 +2016,57 @@ export default class jmControl extends jmProperty {
 			return true;
 		}
 		
-		let ps = this.points;
-		//如果不是路径组成，则采用边界做为顶点
-		if(!ps || !ps.length) {
-			ps = [];
-			ps.push({x: bounds.left, y: bounds.top}); //左上角
-			ps.push({x: bounds.right, y: bounds.top});//右上角
-			ps.push({x: bounds.right, y: bounds.bottom});//右下角
-			ps.push({x: bounds.left, y: bounds.bottom}); //左下
-			ps.push({x: bounds.left, y: bounds.top}); //左上角   //闭合
-		}
 		//如果有指定padding 表示接受区域加宽，命中更易
 		pad = Number(pad || this.style['touchPadding'] || this.style['lineWidth'] || 1);
-		if(ps && ps.length) {
-			const rotation = this.getRotation(null, bounds);//获取当前旋转参数
-			//如果有旋转参数，则需要转换坐标再处理
-			if(rotation && rotation.angle) {
-				ps = jmUtils.clone(ps, true);//拷贝一份数据
-				//rotateX ,rotateY 是相对当前控件的位置
-				ps = jmUtils.rotatePoints(ps, {
-					x: rotation.x + bounds.left,
-					y: rotation.y + bounds.top
-				}, rotation.angle || 0);
-			}
-			//如果当前路径不是实心的
-			//就只用判断点是否在边上即可	
-			if(ps.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
-				let i = 0;
-				const count = ps.length;
-				for(let j = i+1; j <= count; j = (++i + 1)) {
-					//如果j超出最后一个
-					//则当为封闭图形时跟第一点连线处理.否则直接返回false
-					if(j == count) {
-						if(this.style.close) {
-							const r = jmUtils.pointInPolygon(p,[ps[i],ps[0]], pad);
-							if(r) return true;
-						}
-					} 
-					else {
-						//判断是否在点i,j连成的线上
-						const s = jmUtils.pointInPolygon(p,[ps[i],ps[j]], pad);
-						if(s) return true;
-					}			
-				}
-				//不是封闭的图形，则直接返回
-				if(!this.style['fill']) return false;
-			}
+		const rotation = this.getRotation(null, bounds);//获取当前旋转参数
 
-			const r = jmUtils.pointInPolygon(p,ps, pad);		
-			return r;
+		// AABB 粗筛：未旋转时，点不在边界（含容差）内直接排除，
+		// 避免对每个控件都执行昂贵的 pointInPolygon 精判
+		if(!rotation || !rotation.angle) {
+			if(p.x < bounds.left - pad || p.x > bounds.right + pad) return false;
+			if(p.y < bounds.top - pad || p.y > bounds.bottom + pad) return false;
 		}
 
-		if(p.x > bounds.right || p.x < bounds.left) {
-			return false;
+		const ps = this.points;
+		// 没有路径点：边界矩形即命中区域（粗筛已判定）
+		if(!ps || !ps.length) return true;
+
+		let pts = ps;
+		//如果有旋转参数，则需要转换坐标再处理
+		if(rotation && rotation.angle) {
+			pts = jmUtils.clone(ps, true);//拷贝一份数据
+			//rotateX ,rotateY 是相对当前控件的位置
+			pts = jmUtils.rotatePoints(pts, {
+				x: rotation.x + bounds.left,
+				y: rotation.y + bounds.top
+			}, rotation.angle || 0);
 		}
-		if(p.y > bounds.bottom || p.y < bounds.top) {
-			return false;
+		//如果当前路径不是实心的
+		//就只用判断点是否在边上即可	
+		if(pts.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
+			let i = 0;
+			const count = pts.length;
+			for(let j = i+1; j <= count; j = (++i + 1)) {
+				//如果j超出最后一个
+				//则当为封闭图形时跟第一点连线处理.否则直接返回false
+				if(j == count) {
+					if(this.style.close) {
+						const r = jmUtils.pointInPolygon(p,[pts[i],pts[0]], pad);
+						if(r) return true;
+					}
+				} 
+				else {
+					//判断是否在点i,j连成的线上
+					const s = jmUtils.pointInPolygon(p,[pts[i],pts[j]], pad);
+					if(s) return true;
+				}			
+			}
+			//不是封闭的图形，则直接返回
+			if(!this.style['fill']) return false;
 		}
-		
-		return true;
+
+		const r = jmUtils.pointInPolygon(p,pts, pad);		
+		return r;
 	}
 
 
@@ -1946,10 +2111,20 @@ export default class jmControl extends jmProperty {
 
 		//先执行子元素事件，如果事件没有被阻断，则向上冒泡
 		let stoped = false;
+		// 命中索引候选集：当根画布启用空间索引且事件点已知时，
+		// 只对候选控件做递归命中，大幅减少大图场景的命中测试量
+		let candidates = null;
+		if(this.type === 'jmGraph' && this.hitIndex && this.hitIndex.size > 0 && args.position) {
+			candidates = this.hitIndex.query(args.position);
+		}
 		if(this.children) {
 			this.children.each(function(j, el) {
 				//未被阻止才执行			
 				if(args.cancel !== true) {
+					if(candidates) {
+						// 叶子控件必须命中候选集；容器总是参与递归（其子级可能溢出）
+						if(!candidates.has(el) && !(el.children && el.children.length)) return;
+					}
 					//如果被阻止冒泡，
 					stoped = el.raiseEvent(name, args) === false? true: stoped;
 					// 不再响应其它元素
@@ -1971,10 +2146,6 @@ export default class jmControl extends jmProperty {
 		// 是否在当前控件内操作
 		const inpos = this.interactive !== false && this.checkPoint(args.position);
 
-		if(name === 'mousemove' && this.type == 'jmGraph' && !inpos) {
-			console.log('mousemove out', args.position, abounds);
-		}
-		
 		//事件发生在边界内或健盘事件发生在画布中才触发
 		if(inpos) {
 			//如果没有指定触发对象，则认为当前为第一触发对象
@@ -2132,7 +2303,7 @@ export default class jmControl extends jmProperty {
 				//	_this.cursor('move');	
 				//}
 				if(_this.__mvMonitor.mouseDown) {
-					_this.parent.bounds = null;
+					if(_this.parent) _this.parent.__boundsDirty = true;
 					//let parentbounds = _this.parent.getAbsoluteBounds();		
 					let offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
 					let offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y;				

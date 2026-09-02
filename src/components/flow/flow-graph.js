@@ -479,7 +479,7 @@ class FlowNode extends jmControl {
 
 		// 名称
 		this.nameText = g.createShape('label', {
-			position: { x: 9, y: 25 }, width: NODE_W - 18, height: 18, text: this.stage.id,
+			position: { x: 9, y: 25 }, width: NODE_W - 18, height: 18, text: this.stage.name || this.stage.id,
 			style: labelStyle(12, '#111827', 600)
 		});
 		this.nameText.__boxW = NODE_W - 18;
@@ -564,7 +564,7 @@ class FlowNode extends jmControl {
 		this.header.style.fill = color;
 		setText(this.iconText, meta.icon);
 		setText(this.typeText, meta.label);
-		setText(this.nameText, truncate(s.id, 24));
+		setText(this.nameText, truncate(s.name || s.id, 24));
 		const retries = s.retry && s.retry.maxRetries;
 		setText(this.retryText, retries ? '↻' + retries : '');
 		const inputs = (s.inputs || []).length;

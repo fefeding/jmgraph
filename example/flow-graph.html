@@ -358,9 +358,16 @@
 	}
 	btnMode.onclick = () => {
 		mode = fg.setMode(mode === 'edit' ? 'view' : 'edit');
+		if (mode !== 'edit') {
+			pendingAddType = null;
+			document.querySelectorAll('.p-item').forEach(p => p.classList.remove('active'));
+			hideHint();
+		} else if (isMobile()) {
+			log('移动端提示：点选上方「节点」面板中的类型，再点画布空白处即可添加节点', 'info');
+		}
 		refreshModeBtn();
 		renderDetail();
-		log(mode === 'edit' ? '已进入编辑模式：可拖动节点、拖拽连接点建边、右键删除' : '已切换到查看模式');
+		log(mode === 'edit' ? '已进入编辑模式：可拖动节点、拖拽连接点建边、长按节点操作' : '已切换到查看模式');
 	};
 	refreshModeBtn();
 
@@ -446,21 +453,21 @@
 	function hideMenu() { menu.style.display = 'none'; }
 	document.addEventListener('mousedown', e => { if (!menu.contains(e.target)) hideMenu(); });
 
-	wrap.addEventListener('contextmenu', e => {
-		e.preventDefault();
-		const pos = fg.graph.getPosition();
-		const world = fg.graph.screenToWorld({ x: e.pageX - pos.left, y: e.pageY - pos.top });
+	// ---------- 右键 / 长按 菜单 ----------
+	function openContextMenu(clientX, clientY) {
+		const rect = wrap.getBoundingClientRect();
+		const world = fg.graph.screenToWorld({ x: clientX - rect.left, y: clientY - rect.top });
 		const node = fg.nodeAt(world);
 		if (node) {
 			fg.select(node.stage.id);
-			showMenu(e.clientX, e.clientY, [
+			showMenu(clientX, clientY, [
 				{ label: '✏️ 重命名节点', action: () => { renameInput.focus(); renameInput.select(); } },
 				{ label: '▶ 从该节点执行', action: () => log('（示例）从 ' + node.stage.id + ' 开始执行') },
 				{ label: '🗑 删除节点', danger: true, action: () => fg.removeStage(node.stage.id) }
 			]);
 		}
 		else {
-			showMenu(e.clientX, e.clientY, [
+			showMenu(clientX, clientY, [
 				{ label: '🔍 适应视图', action: () => fg.fit() },
 				{ label: '📐 自动布局', action: () => fg.autoLayout() },
 				{ label: '➕ 添加节点（编辑模式）', action: () => {
@@ -469,7 +476,110 @@
 				} }
 			]);
 		}
+	}
+
+	wrap.addEventListener('contextmenu', e => {
+		e.preventDefault();
+		openContextMenu(e.clientX, e.clientY);
 	});
+
+	// ---------- 移动端通用工具 ----------
+	function isMobile() { return window.matchMedia('(max-width: 820px)').matches; }
+	function showHint(msg) { const h = document.getElementById('hint'); h.textContent = msg; h.classList.add('show'); }
+	function hideHint() { document.getElementById('hint').classList.remove('show'); }
+
+	// ---------- 移动端抽屉（节点面板 / 详情） ----------
+	const paletteEl = document.querySelector('.palette');
+	const panelEl = document.querySelector('.panel');
+	const backdrop = document.getElementById('backdrop');
+	function openDrawer(el) { closeDrawers(); el.classList.add('open'); backdrop.classList.add('show'); }
+	function closeDrawers() {
+		paletteEl.classList.remove('open');
+		panelEl.classList.remove('open');
+		backdrop.classList.remove('show');
+	}
+	document.getElementById('btnPalette').onclick = () =>
+		paletteEl.classList.contains('open') ? closeDrawers() : openDrawer(paletteEl);
+	document.getElementById('btnPanel').onclick = () =>
+		panelEl.classList.contains('open') ? closeDrawers() : openDrawer(panelEl);
+	backdrop.onclick = closeDrawers;
+
+	// ---------- 移动端：点选面板项后点画布空白处添加节点 ----------
+	wrap.addEventListener('click', e => {
+		if (!pendingAddType) return;
+		const rect = wrap.getBoundingClientRect();
+		const world = fg.graph.screenToWorld({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+		if (fg.nodeAt(world)) return;  // 点中已有节点则不放置
+		fg.addStage(pendingAddType, world);
+		pendingAddType = null;
+		document.querySelectorAll('.p-item').forEach(p => p.classList.remove('active'));
+		hideHint();
+	});
+
+	// ---------- 移动端：长按菜单 + 双指缩放 ----------
+	let lpTimer = null, lpPt = null, lpMoved = false, lpFired = false, pinch = null;
+	function clearLp() { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } lpPt = null; lpMoved = false; lpFired = false; }
+
+	wrap.addEventListener('touchstart', e => {
+		if (e.touches.length === 2) {
+			clearLp();
+			const [a, b] = [e.touches[0], e.touches[1]];
+			pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) };
+			return;
+		}
+		if (e.touches.length !== 1) { clearLp(); return; }
+		lpPt = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+		lpMoved = false;
+		lpTimer = setTimeout(() => {
+			lpTimer = null;
+			if (!lpMoved) { lpFired = true; openContextMenu(lpPt.x, lpPt.y); }
+		}, 500);
+	}, { passive: true });
+
+	wrap.addEventListener('touchmove', e => {
+		if (e.touches.length === 2 && pinch) {
+			e.preventDefault();
+			const [a, b] = [e.touches[0], e.touches[1]];
+			const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+			if (d > 0 && pinch.d > 0) {
+				const rect = wrap.getBoundingClientRect();
+				const cx = (a.clientX + b.clientX) / 2, cy = (a.clientY + b.clientY) / 2;
+				fg.graph.setZoom(fg.graph.scaleFactor * (d / pinch.d), cx - rect.left, cy - rect.top);
+			}
+			pinch.d = d;
+			return;
+		}
+		if (lpPt && e.touches[0]) {
+			const dx = e.touches[0].clientX - lpPt.x, dy = e.touches[0].clientY - lpPt.y;
+			if (Math.hypot(dx, dy) > 10) { lpMoved = true; clearLp(); }
+		}
+	}, { passive: false });
+
+	wrap.addEventListener('touchend', e => {
+		if (e.touches.length < 2) pinch = null;
+		if (!lpMoved && !lpFired && lpPt && e.changedTouches.length === 1) {
+			const t = e.changedTouches[0];
+			const rect = wrap.getBoundingClientRect();
+			const world = fg.graph.screenToWorld({ x: t.clientX - rect.left, y: t.clientY - rect.top });
+			const node = fg.nodeAt(world);
+			if (pendingAddType) {
+				if (!node) {
+					fg.addStage(pendingAddType, world);
+					pendingAddType = null;
+					document.querySelectorAll('.p-item').forEach(p => p.classList.remove('active'));
+					hideHint();
+				}
+			} else if (node) {
+				fg.select(node.stage.id);
+			} else {
+				fg.select(null);
+			}
+		}
+		clearLp();
+	}, { passive: true });
+
+	// 触控点击空白处关闭菜单
+	document.addEventListener('touchstart', e => { if (!menu.contains(e.target)) hideMenu(); }, true);
 
 	// ---------- 删除键 ----------
 	document.addEventListener('keydown', e => {

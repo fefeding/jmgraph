@@ -346,6 +346,7 @@
 		onNodeEdit: () => { renameInput.focus(); renameInput.select(); },
 		onLog: log
 	});
+	window.__fg = fg; // temp for debugging
 	fg.attachMinimap(document.getElementById('minimap'));
 	uiReady = true;
 	renderDetail();

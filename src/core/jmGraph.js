@@ -245,9 +245,23 @@ export default class jmGraph extends jmControl {
 		if(w) this.__normalSize.width = w;
 		if(h) this.__normalSize.height = h;
 	
+		// 每次 resize 都按当前设备像素比重算 dprScaleSize：
+		// 移动端/跨屏/浏览器缩放时 devicePixelRatio 会在初始化之后变化，
+		// 若只在构造时算一次，高 DPR 屏会被低采样而模糊。
+		const dprOpt = this.option.dprScale;
+		if(dprOpt === false) {
+			this.dprScaleSize = 1;
+		}
+		else if(typeof dprOpt === 'number' && dprOpt > 0) {
+			this.dprScaleSize = dprOpt;
+		}
+		else {
+			this.dprScaleSize = jmPlatform.getDevicePixelRatio() || 1;
+		}
+
 		// 高清屏：放大后备分辨率并按 dpr 缩放绘制。
 		// 关键：CSS 尺寸用「后备像素 / dpr」反推，保证 CSS:device 比例恰好等于 dpr，
-		// 消除 Windows 下 fractional DPR（125%/150%）因后备分辨率取整造成的亚像素模糊。
+		// 消除 Windows 下 fractional DPR（125%/150%）及移动端高 DPR 的亚像素模糊。
 		const dpr = this.dprScaleSize;
 		const bw = Math.round(w * dpr);
 		const bh = Math.round(h * dpr);

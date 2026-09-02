@@ -1095,4 +1095,61 @@ export declare class jmGraph extends jmControl {
  */
 export declare function create(...args: ConstructorParameters<typeof jmGraph>): jmGraph;
 
+// ===================== 官方组件（流程图 / flow-graph） =====================
+
+/** 组件生命周期状态机常量 */
+export declare const STATE: Record<string, string>;
+
+/** 组件默认配置 */
+export declare const DEFAULT_OPTIONS: any;
+
+/** 组件基类（FlowGraphComponent 等可子类化） */
+export declare class ComponentBase {
+  constructor(options?: any);
+  mount(container: string | HTMLElement): void;
+  update(partial: any): void;
+  destroy(): void;
+  on(event: string, fn: (...args: any[]) => void): () => void;
+  [key: string]: any;
+}
+
+/** 流程图组件实例 */
+export declare class FlowGraphComponent extends ComponentBase {
+  graph: jmGraph;
+  errors: any[];
+  stage?: any;
+}
+
+/** 创建并挂载流程图组件 */
+export declare function createFlowGraph(container: string | HTMLElement, options?: any): FlowGraphComponent;
+
+/** 底层工厂（无生命周期托管） */
+export declare function createFlowGraphCore(container: string | HTMLElement, options?: any): any;
+
+/** 节点类型元数据 */
+export declare const NODE_TYPES: Array<{ type: string; label: string; icon: string; desc: string }>;
+/** 运行状态元数据 */
+export declare const STATUS_META: Record<string, { label: string; color: string; glyph: string }>;
+/** 类型配色 */
+export declare const typeColor: Record<string, string>;
+
+export declare function normalizeOptions(options?: any): any;
+export declare function resolveContainer(container: string | HTMLElement): HTMLElement | null;
+export declare function validateStages(stages: any): any;
+export declare function measureContainer(el: HTMLElement): { width: number; height: number };
+export declare function computeLevels(stages: any): Map<string, number>;
+export declare function computeLayout(stages: any, opts?: any): any;
+export declare function edgeLabel(edge: any): string;
+export declare function anchor(side: string, bounds: any): any;
+
+export declare class FlowNode extends jmControl {
+  constructor(params?: any, t?: string);
+}
+export declare class FlowEdge extends jmPath {
+  constructor(params?: any, t?: string);
+}
+export declare class FlowGrid extends jmPath {
+  constructor(params?: any, t?: string);
+}
+
 export default jmGraph;

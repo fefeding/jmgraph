@@ -12,7 +12,7 @@
 
 本组件**随 `jmgraph` 包一起发布**，不需要单独安装。组件源码位于 `jmgraph/src/components`，包已通过 `exports` 暴露子路径，因此第三方项目可直接引入。
 
-> 注意：组件**不**在包的根入口 `jmgraph` 中导出（`import jmGraph from 'jmgraph'` 拿不到 `createFlowGraph`）。请使用下面的子路径。
+> 组件既可经根入口 `jmgraph` 直接导入（见「方式零」），也可经下面的子路径导入。根入口已随 `npm run build` 一并把组件构建进 `dist/jmgraph.js` / `jmgraph.min.js`（UMD 全局 `jmGraph.createFlowGraph` 可用）。
 
 ### 1. 安装
 
@@ -25,6 +25,8 @@ npm install jmgraph   # 或 pnpm add jmgraph / yarn add jmgraph
 `jmgraph` 提供了两条等价的子路径（指向同一文件）：
 
 ```js
+// 方式零：直接从根入口导入（随包主入口一并构建，UMD/ESM 均可用）
+import jmGraph, { createFlowGraph, FlowGraphComponent } from 'jmgraph';
 // 推荐：简短子路径
 import { createFlowGraph, FlowGraphComponent } from 'jmgraph/components';
 // 等价：完整源码子路径

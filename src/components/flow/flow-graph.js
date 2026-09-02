@@ -8,7 +8,12 @@
  * - 连线运行态「蚂蚁线」动画、运行中节点角标旋转
  * - 自动布局 / 适应视图 / 缩放控制 / 导出 PNG / 小地图
  */
-import jmGraph, { jmControl, jmPath, jmLayer } from '../../../index.js';
+// jmGraph 仍从根入口导入，以复用默认图形（rect/label/circle…）注册；
+// 基类从 core 直接导入，避免 index.js 反向导出组件时形成顶层循环依赖。
+import jmGraph from '../../../index.js';
+import { jmControl } from '../../core/jmControl.js';
+import { jmPath } from '../../core/jmPath.js';
+import { jmLayer } from '../../core/jmLayer.js';
 
 // ==================== 常量与元数据 ====================
 

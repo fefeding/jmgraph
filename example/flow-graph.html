@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 	<title>jmGraph 工作流流程图（DAG）示例</title>
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
@@ -124,6 +124,55 @@
 		.menu div:hover { background: #f1f5f9; }
 		.menu div.danger { color: #dc2626; }
 		.menu div.danger:hover { background: #fef2f2; }
+
+		/* ---------- 移动端适配 ---------- */
+		.canvas-wrap, #canvas {
+			touch-action: none;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			user-select: none;
+		}
+		.drawer-toggle { display: none; }
+		.backdrop {
+			position: fixed; inset: 0; background: rgba(15,23,42,.42);
+			z-index: 55; opacity: 0; visibility: hidden; transition: opacity .22s;
+		}
+		.backdrop.show { opacity: 1; visibility: visible; }
+		.hint {
+			position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+			z-index: 58; background: #0f172a; color: #fff; padding: 8px 14px;
+			border-radius: 999px; font-size: 12px; box-shadow: 0 4px 16px rgba(16,24,40,.3);
+			display: none; max-width: 90%; text-align: center;
+		}
+		.hint.show { display: block; }
+
+		@media (max-width: 820px) {
+			body { font-size: 12px; }
+			.palette, .panel {
+				position: fixed; top: 0; bottom: 0; z-index: 60;
+				width: 78%; max-width: 320px; min-width: 0; height: 100%;
+				box-shadow: 0 0 28px rgba(16,24,40,.2);
+				transition: transform .25s ease; will-change: transform;
+			}
+			.palette { left: 0; transform: translateX(-106%); }
+			.panel { right: 0; transform: translateX(106%); }
+			.palette.open, .panel.open { transform: translateX(0); }
+			.drawer-toggle { display: inline-flex; }
+			.main { height: 100%; }
+			.toolbar { padding: 6px 8px; gap: 6px; }
+			.toolbar .title { display: none; }
+			.toolbar .sep { display: none; }
+			.toolbar .group { gap: 4px; }
+			button { padding: 5px 9px; font-size: 12px; }
+			.zoom { min-width: 38px; }
+			.minimap { display: none; }
+			.p-item.active { box-shadow: 0 0 0 2px #2563eb inset; }
+			html, body { height: 100%; }
+		}
+		@media (max-width: 820px) and (display-mode: browser) {
+			/* 处理移动端地址栏导致的 100vh 抖动 */
+			.palette, .panel, .main { height: 100dvh; }
+		}
 	</style>
 </head>
 <body>
@@ -136,6 +185,8 @@
 
 <section class="main">
 	<div class="toolbar">
+		<button id="btnPalette" class="drawer-toggle" title="节点面板">☰ 节点</button>
+		<button id="btnPanel" class="drawer-toggle" title="详情">ℹ 详情</button>
 		<span class="title">jmGraph 流程图</span>
 		<div class="group">
 			<button id="btnMode">✏️ 编辑模式</button>
@@ -185,6 +236,9 @@
 	<div class="log" id="log"></div>
 </aside>
 
+<div class="backdrop" id="backdrop"></div>
+<div class="hint" id="hint"></div>
+
 <script type="module">
 	// 引入官方流程图组件（createFlowGraph 返回 FlowGraphComponent 实例）
 	import { createFlowGraph, NODE_TYPES, STATUS_META, typeColor } from './js/flow-graph.js';
@@ -230,6 +284,20 @@
 			e.dataTransfer.setData('text/flow-type', t.type);
 			e.dataTransfer.effectAllowed = 'move';
 		});
+		// 移动端：点选面板项 -> 选中待添加类型，再点画布空白处放置
+		el.addEventListener('click', () => {
+			if (!isMobile()) return;
+			if (fg.getMode() !== 'edit') { log('请先切换到编辑模式再添加节点', 'warn'); return; }
+			pendingAddType = (pendingAddType === t.type) ? null : t.type;
+			document.querySelectorAll('.p-item').forEach(p => p.classList.remove('active'));
+			if (pendingAddType) {
+				el.classList.add('active');
+				showHint('已选择「' + t.label + '」，点击画布空白处放置节点');
+				closeDrawers();
+			} else {
+				hideHint();
+			}
+		});
 		palette.appendChild(el);
 	});
 
@@ -263,10 +331,17 @@
 	let mode = 'view';
 	let selected = null;
 	let uiReady = false;   // fg 初始化期间回调会触发渲染，此时 DOM/fg 尚未就绪
+	let pendingAddType = null;  // 移动端：待放置的节点类型（点选面板后点画布添加）
+	function handleSelect(id) {
+		selected = id;
+		renderDetail();
+		if (isMobile() && id) openDrawer(panelEl);
+	}
+
 	const fg = createFlowGraph(canvasEl, {
 		stages: STAGES,
 		mode: 'view',
-		onSelect: id => { selected = id; renderDetail(); },
+		onSelect: handleSelect,
 		onEdgeClick: edge => log('点击连线：' + edge.source + ' → ' + edge.target),
 		onNodeEdit: () => { renameInput.focus(); renameInput.select(); },
 		onLog: log

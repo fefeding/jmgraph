@@ -245,12 +245,18 @@ export default class jmGraph extends jmControl {
 		if(w) this.__normalSize.width = w;
 		if(h) this.__normalSize.height = h;
 	
-		this.css('width', w + "px");
-		this.css('height', h + "px");
+		// 高清屏：放大后备分辨率并按 dpr 缩放绘制。
+		// 关键：CSS 尺寸用「后备像素 / dpr」反推，保证 CSS:device 比例恰好等于 dpr，
+		// 消除 Windows 下 fractional DPR（125%/150%）因后备分辨率取整造成的亚像素模糊。
+		const dpr = this.dprScaleSize;
+		const bw = Math.round(w * dpr);
+		const bh = Math.round(h * dpr);
 		if(this.mode === '2d') {
-			this.canvas.height = h * this.dprScaleSize;
-			this.canvas.width = w * this.dprScaleSize;
-			if(this.dprScaleSize !== 1) this.context.scale && this.context.scale(this.dprScaleSize, this.dprScaleSize);	
+			this.canvas.width = bw;
+			this.canvas.height = bh;
+			this.css('width', (bw / dpr) + 'px');
+			this.css('height', (bh / dpr) + 'px');
+			if(dpr !== 1) this.context.scale && this.context.scale(dpr, dpr);
 		}
 		else {
 			this.canvas.width = w;

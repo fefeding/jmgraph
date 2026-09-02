@@ -1,0 +1,31 @@
+name: Release
+
+# 在打 tag（vX.Y.Z）推送后自动发布到 npm 并生成 GitHub Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write      # 创建 GitHub Release
+  id-token: write      # npm publish --provenance 需要
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm run check
+      - run: npm test
+      # 需要仓库 Secrets: NPM_TOKEN（npmjs 的 Automation/Publish Token）
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

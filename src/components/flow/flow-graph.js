@@ -564,7 +564,7 @@ class FlowNode extends jmControl {
 		this.header.style.fill = color;
 		setText(this.iconText, meta.icon);
 		setText(this.typeText, meta.label);
-		setText(this.nameText, truncate(s.name || s.id, 24));
+		setText(this.nameText, this.fitName(s.name || s.id));
 		const retries = s.retry && s.retry.maxRetries;
 		setText(this.retryText, retries ? '↻' + retries : '');
 		const inputs = (s.inputs || []).length;
@@ -578,6 +578,36 @@ class FlowNode extends jmControl {
 			this.ports[dir].needUpdate = true;
 		}
 		this.needUpdate = true;
+	}
+
+	/**
+	 * 名称按像素宽度截断为单行省略号
+	 *
+	 * canvas 文本没有 CSS 式的自动省略，旧的「按 24 字符截断」对中英文
+	 * 宽度差异不敏感，这里改为基于 measureText 的像素级省略。
+	 */
+	fitName(text) {
+		const maxW = NODE_W - 18;
+		const g = this.graph;
+		if (g && g.canvas && g.canvas.getContext) {
+			const ctx = g.canvas.getContext('2d');
+			if (ctx && typeof ctx.measureText === 'function') {
+				// 与 nameText 实际绘制字体保持一致，保证测量准确
+				ctx.font = (this.nameText.style && this.nameText.style.font) || font(12, 600);
+				text = String(text == null ? '' : text);
+				if (ctx.measureText(text).width <= maxW) return text;
+				const ell = '…';
+				const ellW = ctx.measureText(ell).width;
+				let lo = 0, hi = text.length, best = 0;
+				while (lo <= hi) {
+					const mid = (lo + hi) >> 1;
+					if (ctx.measureText(text.slice(0, mid)).width + ellW <= maxW) { best = mid; lo = mid + 1; }
+					else hi = mid - 1;
+				}
+				return (best > 0 ? text.slice(0, best) : (text[0] || '')) + ell;
+			}
+		}
+		return truncate(text, 24);
 	}
 
 	setStatus(status) {
@@ -731,8 +761,26 @@ export function createFlowGraph(container, options) {
 
 	// ---------- 数据操作 ----------
 
+	/**
+	 * 快照当前 stages（隔离外部修改）
+	 *
+	 * onChange / getStages 均返回副本，宿主无论怎么改返回值
+	 * 都不会污染内部模型，避免出现「改了返回值但画布不变」的疑难问题。
+	 */
+	function cloneStages() {
+		return state.stages.map(s => {
+			const c = Object.assign({}, s);
+			if (Array.isArray(c.dependsOn)) c.dependsOn = c.dependsOn.slice();
+			if (Array.isArray(c.inputs)) c.inputs = c.inputs.map(i => (i && typeof i === 'object') ? Object.assign({}, i) : i);
+			if (Array.isArray(c.outputs)) c.outputs = c.outputs.map(o => (o && typeof o === 'object') ? Object.assign({}, o) : o);
+			if (c.config && typeof c.config === 'object') c.config = Object.assign({}, c.config);
+			if (c._pos) c._pos = { x: c._pos.x, y: c._pos.y };
+			return c;
+		});
+	}
+
 	function emitChange() {
-		options.onChange && options.onChange(state.stages);
+		options.onChange && options.onChange(cloneStages());
 	}
 
 	/** b 是否可以沿着 dependsOn 到达 a */
@@ -787,6 +835,8 @@ export function createFlowGraph(container, options) {
 		state.stages = state.stages.filter(s => s.id !== id);
 		state.stages.forEach(s => {
 			if (s.dependsOn) s.dependsOn = s.dependsOn.filter(d => d !== id);
+			// 清理指向被删节点输出端口的 inputs（形如 `${id}.port`）
+			if (s.inputs) s.inputs = s.inputs.filter(i => !(i && i.from && String(i.from).indexOf(id + '.') === 0));
 		});
 		delete state.runStatus[id];
 		if (state.selectedId === id) state.selectedId = null;
@@ -807,6 +857,13 @@ export function createFlowGraph(container, options) {
 		stage.id = name;
 		state.stages.forEach(s => {
 			if (s.dependsOn) s.dependsOn = s.dependsOn.map(d => (d === old ? name : d));
+			// 同步改写 inputs.from 的 `${old}.` 前缀（保留端口部分）
+			if (s.inputs) s.inputs = s.inputs.map(i => {
+				if (i && i.from && String(i.from).indexOf(old + '.') === 0) {
+					return Object.assign({}, i, { from: name + String(i.from).slice(old.length) });
+				}
+				return i;
+			});
 		});
 		state.runStatus[name] = state.runStatus[old];
 		delete state.runStatus[old];
@@ -1090,6 +1147,8 @@ export function createFlowGraph(container, options) {
 
 	g.bind('mousedown', evt => {
 		if (evt.target && evt.target !== g) return;
+		const raw = evt.event || {};
+		if (raw.button === 2) return; // 右键交由 contextmenu 处理，不触发画布平移
 		pan = { x: evt.position.pageX, y: evt.position.pageY, moved: false };
 		g.css('cursor', 'grabbing');
 	});
@@ -1143,6 +1202,82 @@ export function createFlowGraph(container, options) {
 	g.bind('mouseleave', () => {
 		if (pan) { pan = null; g.css('cursor', 'default'); }
 	});
+
+	// ---------- 右键菜单（命中节点/连线/空白画布） ----------
+
+	/** 命中检测：世界坐标 -> 连线（按折线段最近距离） */
+	function edgeAt(p) {
+		const threshold = 12;
+		let best = null, bestD = threshold;
+		for (let i = 0; i < edges.length; i++) {
+			const item = edges[i];
+			const pts = item.shape.points || [];
+			for (let j = 1; j < pts.length; j++) {
+				const a = pts[j - 1], b = pts[j];
+				if (a.m || b.m) continue;
+				const abx = b.x - a.x, aby = b.y - a.y;
+				const len2 = abx * abx + aby * aby;
+				let t = len2 ? ((p.x - a.x) * abx + (p.y - a.y) * aby) / len2 : 0;
+				t = Math.max(0, Math.min(1, t));
+				const d = Math.hypot(p.x - (a.x + t * abx), p.y - (a.y + t * aby));
+				if (d < bestD) { bestD = d; best = item; }
+			}
+		}
+		return best;
+	}
+
+	/** 计算右键命中的对象信息（世界坐标换算见 contextMenuAt） */
+	function contextMenuAt(clientX, clientY) {
+		const pos = g.getPosition();
+		const world = g.screenToWorld({ x: clientX - pos.left, y: clientY - pos.top });
+		const node = nodeAt(world);
+		const edge = node ? null : edgeAt(world);
+		const info = {
+			type: node ? 'node' : (edge ? 'edge' : 'pane'),
+			id: node ? node.stage.id : null,
+			stage: node ? node.stage : null,
+			edge: edge ? { source: edge.source, target: edge.target, label: (edge.label && edge.label.text) || '' } : null,
+			x: world.x,
+			y: world.y,
+			clientX: clientX,
+			clientY: clientY
+		};
+		if (typeof options.onContextMenu === 'function') options.onContextMenu(info);
+		return info;
+	}
+
+	// jmEvents 未绑定 contextmenu，这里在画布 DOM 元素上自行挂载
+	const domCanvas = (g.canvas && g.canvas.canvas) || g.canvas;
+	const ctxHandler = e => {
+		if (e.preventDefault) e.preventDefault();
+		contextMenuAt(e.clientX, e.clientY);
+		return false;
+	};
+	if (domCanvas && typeof domCanvas.addEventListener === 'function') {
+		domCanvas.addEventListener('contextmenu', ctxHandler);
+	}
+
+	// ---------- 键盘快捷键（Delete 删除选中节点 / Esc 取消选中） ----------
+	const keyHandler = e => {
+		e = e || {};
+		// 焦点在输入框/可编辑区域时不拦截按键
+		if (typeof document !== 'undefined' && document && document.activeElement) {
+			const ae = document.activeElement;
+			if (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable) return;
+		}
+		const code = e.key != null ? String(e.key).toLowerCase() : String(e.keyCode || e.which || '');
+		if ((code === 'delete' || code === 'del' || code === '46') && state.mode === 'edit' && state.selectedId) {
+			if (e.preventDefault) e.preventDefault();
+			removeStage(state.selectedId);
+		}
+		else if (code === 'escape' || code === '27') {
+			if (e.preventDefault) e.preventDefault();
+			if (state.selectedId) select(null);
+		}
+	};
+	if (typeof document !== 'undefined' && document && typeof document.addEventListener === 'function') {
+		document.addEventListener('keydown', keyHandler);
+	}
 
 	/** 命中检测：世界坐标 -> 节点 */
 	function nodeAt(p) {
@@ -1262,7 +1397,7 @@ export function createFlowGraph(container, options) {
 			state.stages = (stages || []).map(s => Object.assign({}, s));
 			rebuild({ fit: true });
 		},
-		getStages: () => state.stages,
+		getStages: () => cloneStages(),
 		setRunStatus: setRunStatus,
 		getRunStatus: () => state.runStatus,
 		setMode: setMode,
@@ -1295,6 +1430,12 @@ export function createFlowGraph(container, options) {
 		nodeAt: nodeAt,
 		refresh: () => rebuild(),
 		destroy() {
+			if (typeof document !== 'undefined' && document && typeof document.removeEventListener === 'function') {
+				document.removeEventListener('keydown', keyHandler);
+			}
+			if (domCanvas && typeof domCanvas.removeEventListener === 'function') {
+				domCanvas.removeEventListener('contextmenu', ctxHandler);
+			}
 			g.destroy();
 		}
 	};

@@ -344,7 +344,8 @@
 		onSelect: handleSelect,
 		onEdgeClick: edge => log('点击连线：' + edge.source + ' → ' + edge.target),
 		onNodeEdit: () => { renameInput.focus(); renameInput.select(); },
-		onLog: log
+		onLog: log,
+		onContextMenu: openContextMenu
 	});
 	window.__fg = fg; // temp for debugging
 	fg.attachMinimap(document.getElementById('minimap'));
@@ -442,7 +443,7 @@
 			const d = document.createElement('div');
 			d.textContent = it.label;
 			if (it.danger) d.className = 'danger';
-			d.onclick = () => { hideMenu(); it.action(); };
+			d.onclick = () => { hideMenu(); if (it.action) it.action(); };
 			menu.appendChild(d);
 		});
 		menu.style.display = 'block';
@@ -454,35 +455,44 @@
 	function hideMenu() { menu.style.display = 'none'; }
 	document.addEventListener('mousedown', e => { if (!menu.contains(e.target)) hideMenu(); });
 
-	// ---------- 右键 / 长按 菜单 ----------
-	function openContextMenu(clientX, clientY) {
+	// ---------- 右键 / 长按 菜单（基于组件 onContextMenu 事件） ----------
+	// 桌面端由库的 onContextMenu 事件驱动（已含命中结果与世界坐标）；
+	// 移动端长按不是原生 contextmenu 事件，需自行换算坐标后复用同一处理函数。
+	function contextMenuAtClient(clientX, clientY) {
 		const rect = wrap.getBoundingClientRect();
 		const world = fg.graph.screenToWorld({ x: clientX - rect.left, y: clientY - rect.top });
 		const node = fg.nodeAt(world);
-		if (node) {
-			fg.select(node.stage.id);
-			showMenu(clientX, clientY, [
-				{ label: '✏️ 重命名节点', action: () => { renameInput.focus(); renameInput.select(); } },
-				{ label: '▶ 从该节点执行', action: () => log('（示例）从 ' + node.stage.id + ' 开始执行') },
-				{ label: '🗑 删除节点', danger: true, action: () => fg.removeStage(node.stage.id) }
-			]);
-		}
-		else {
-			showMenu(clientX, clientY, [
-				{ label: '🔍 适应视图', action: () => fg.fit() },
-				{ label: '📐 自动布局', action: () => fg.autoLayout() },
-				{ label: '➕ 添加节点（编辑模式）', action: () => {
-					if (fg.getMode() !== 'edit') { log('请先切换到编辑模式', 'warn'); return; }
-					fg.addStage('custom', world);
-				} }
-			]);
-		}
+		if (node) return { type: 'node', id: node.stage.id, stage: node.stage, clientX, clientY, x: world.x, y: world.y };
+		return { type: 'pane', id: null, stage: null, clientX, clientY, x: world.x, y: world.y };
 	}
 
-	wrap.addEventListener('contextmenu', e => {
-		e.preventDefault();
-		openContextMenu(e.clientX, e.clientY);
-	});
+	function openContextMenu(info) {
+		const { clientX, clientY, type } = info;
+		if (type === 'node') {
+			fg.select(info.id);
+			showMenu(clientX, clientY, [
+				{ label: '✏️ 重命名节点', action: () => { renameInput.focus(); renameInput.select(); } },
+				{ label: '▶ 从该节点执行', action: () => log('（示例）从 ' + info.id + ' 开始执行') },
+				{ label: '🗑 删除节点', danger: true, action: () => fg.removeStage(info.id) }
+			]);
+			return;
+		}
+		// edge / pane：空白区与连线上的操作（info.x/info.y 为世界坐标）
+		const world = { x: info.x, y: info.y };
+		const items = [];
+		if (type === 'edge' && info.edge) {
+			items.push({ label: '🔗 ' + info.edge.source + ' → ' + info.edge.target });
+		}
+		items.push(
+			{ label: '🔍 适应视图', action: () => fg.fit() },
+			{ label: '📐 自动布局', action: () => fg.autoLayout() },
+			{ label: '➕ 添加节点（编辑模式）', action: () => {
+				if (fg.getMode() !== 'edit') { log('请先切换到编辑模式', 'warn'); return; }
+				fg.addStage('custom', world);
+			} }
+		);
+		showMenu(clientX, clientY, items);
+	}
 
 	// ---------- 移动端通用工具 ----------
 	function isMobile() { return window.matchMedia('(max-width: 820px)').matches; }
@@ -533,7 +543,7 @@
 		lpMoved = false;
 		lpTimer = setTimeout(() => {
 			lpTimer = null;
-			if (!lpMoved) { lpFired = true; openContextMenu(lpPt.x, lpPt.y); }
+			if (!lpMoved) { lpFired = true; openContextMenu(contextMenuAtClient(lpPt.x, lpPt.y)); }
 		}, 500);
 	}, { passive: true });
 

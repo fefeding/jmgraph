@@ -46,6 +46,8 @@ export const DEFAULT_OPTIONS = {
 	onEdgeClick: null,
 	/** @type {(id: string) => void} 触发节点重命名/编辑 */
 	onNodeEdit: null,
+	/** @type {(info: {type: string, id: string|null, stage: object|null, edge: object|null, x: number, y: number}) => void} 右键菜单（命中节点/连线/空白画布） */
+	onContextMenu: null,
 	/** @type {(msg: string, level?: string) => void} 运行日志 */
 	onLog: null,
 	/** @type {(instance: object) => void} 实例就绪（可拿到完整 api） */
@@ -137,7 +139,7 @@ export function normalizeOptions(options) {
 	// 回调：非函数一律置 null，避免调用时报错
 	[
 		'onSelect', 'onChange', 'onEdgeClick',
-		'onNodeEdit', 'onLog', 'onReady', 'onError'
+		'onNodeEdit', 'onContextMenu', 'onLog', 'onReady', 'onError'
 	].forEach(k => {
 		if (typeof o[k] !== 'function') o[k] = null;
 	});

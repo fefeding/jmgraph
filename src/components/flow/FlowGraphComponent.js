@@ -39,6 +39,8 @@ export class FlowGraphComponent extends ComponentBase {
 			onChange: stages => this.emit('change', stages),
 			onEdgeClick: edge => this.emit('edgeClick', edge),
 			onNodeEdit: id => this.emit('nodeEdit', id),
+			// 事件名用 contextMenu：emit 自动映射到 onContextMenu 配置回调
+			onContextMenu: info => this.emit('contextMenu', info),
 			onLog: (msg, level) => this.emit('log', msg, level)
 		});
 	}

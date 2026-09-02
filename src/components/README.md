@@ -53,6 +53,26 @@ import { NODE_TYPES, STATUS_META, typeColor } from 'jmgraph/components';
 
 > 已移除 `components/vue`、`components/react` 子入口。框架用户请参考文末「框架封装示例」自行实现。
 
+### 5. TypeScript
+
+`jmgraph/components` 自 `3.3.0` 起随包提供官方类型声明（`src/components/index.d.ts`，经 `exports` 的 `types` 条件自动命中），覆盖全部选项、事件、`FlowStage` / `ContextMenuInfo` / `RunStatusMap` 等数据结构与命令式 API：
+
+```ts
+import {
+  createFlowGraph, FlowGraphComponent,
+  type FlowStage, type FlowGraphOptions, type ContextMenuInfo
+} from 'jmgraph/components';
+
+const options: FlowGraphOptions = {
+  mode: 'edit',
+  stages: [{ id: 'fetch', type: 'fetch' }],
+  onContextMenu: (info: ContextMenuInfo) => { /* ... */ }
+};
+const fg: FlowGraphComponent = createFlowGraph('#app', options);
+```
+
+> 需要 TypeScript `moduleResolution: "bundler"` / `"node16"` / `"nodenext"`（或按路径解析到 `package.json` 的 `exports`）。
+
 ## 快速开始
 
 ```html
@@ -150,6 +170,7 @@ import { createFlowGraph } from 'jmgraph/components';
 | `onChange` | `(stages: Array) => void` | — | 数据变化（增删改） |
 | `onEdgeClick` | `(edge: {source,target}) => void` | — | 点击连线 |
 | `onNodeEdit` | `(id: string) => void` | — | 触发节点重命名 / 编辑 |
+| `onContextMenu` | `(info: ContextMenuInfo) => void` | — | 右键菜单：命中节点/连线/空白画布时回调 `{ type, id, stage, edge, x, y, clientX, clientY }`，已自动 `preventDefault` 原生菜单 |
 | `onLog` | `(msg: string, level?: string) => void` | — | 运行日志 |
 | `onReady` | `(instance) => void` | — | 实例就绪（可拿到完整 api） |
 | `onError` | `(err: Error, ctx: string) => void` | — | 内部异常上报（不冒泡到宿主应用） |
@@ -162,11 +183,11 @@ import { createFlowGraph } from 'jmgraph/components';
 
 | 方法 | 说明 |
 | --- | --- |
-| `getStages()` | 获取当前 stages 副本 |
+| `getStages()` | 获取当前 stages 快照（与内部模型隔离，改返回值不影响画布） |
 | `setStages(stages)` | 全量替换并重建 |
 | `addStage(type, worldPos?)` | 新增节点（返回新 id） |
-| `removeStage(id)` | 删除节点及其依赖引用 |
-| `renameStage(id, newId)` | 重命名（自动修正依赖） |
+| `removeStage(id)` | 删除节点；同时清理其他节点对该节点 `dependsOn` 与 `inputs.from` 的引用 |
+| `renameStage(id, newId)` | 重命名（自动改写依赖引用与 `inputs.from` 前缀）；重名返回 `false` |
 | `updateStage(id, patch)` | 局部更新单个节点 |
 
 ### 运行态
@@ -218,17 +239,26 @@ import { createFlowGraph } from 'jmgraph/components';
 | 事件 | 参数 |
 | --- | --- |
 | `select` | `id` |
-| `change` | `stages` |
+| `change` | `stages`（快照副本） |
 | `edgeClick` | `edge` |
 | `nodeEdit` | `id` |
+| `contextMenu` | `info`（与 `onContextMenu` 等价） |
 | `ready` | `instance` |
 | `log` | `msg, level` |
 | `error` | `err, context` |
 
 ```js
 const off = fg.on('select', id => renderDetail(id));
-// off() 取消订阅
+const off2 = fg.on('contextMenu', info => {
+  if (info.type === 'node') openMenu(info.id, info.clientX, info.clientY);
+});
+// off() / off2() 取消订阅
 ```
+
+### 内置键盘快捷键
+
+- `Delete`：`edit` 模式且有选中节点时删除该节点（焦点在输入框/可编辑区域时不拦截）
+- `Esc`：取消当前选中
 
 ## 运行状态（runStatus）
 

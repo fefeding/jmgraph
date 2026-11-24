@@ -8,3 +8,4 @@ node_modules
 build/package-lock.json
 /package-lock.json
 pnpm-lock.yaml
+.DS_Store

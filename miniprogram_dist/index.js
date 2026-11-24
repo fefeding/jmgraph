@@ -1,0 +1,16648 @@
+(function(_g){(function(f){if(typeof exports==='object'&&typeof module!=='undefined'){module.exports=f()}else if(typeof define==='function'&&define.amd){define([],f.bind(_g))}else{f()}})(function(define,module,exports){var _m =(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "jmArc", {
+  enumerable: true,
+  get: function get() {
+    return _jmArc.jmArc;
+  }
+});
+Object.defineProperty(exports, "jmArrow", {
+  enumerable: true,
+  get: function get() {
+    return _jmArrow.jmArrow;
+  }
+});
+Object.defineProperty(exports, "jmBezier", {
+  enumerable: true,
+  get: function get() {
+    return _jmBezier.jmBezier;
+  }
+});
+Object.defineProperty(exports, "jmCircle", {
+  enumerable: true,
+  get: function get() {
+    return _jmCircle.jmCircle;
+  }
+});
+Object.defineProperty(exports, "jmHArc", {
+  enumerable: true,
+  get: function get() {
+    return _jmHArc.jmHArc;
+  }
+});
+Object.defineProperty(exports, "jmLine", {
+  enumerable: true,
+  get: function get() {
+    return _jmLine.jmLine;
+  }
+});
+Object.defineProperty(exports, "jmPrismatic", {
+  enumerable: true,
+  get: function get() {
+    return _jmPrismatic.jmPrismatic;
+  }
+});
+Object.defineProperty(exports, "jmRect", {
+  enumerable: true,
+  get: function get() {
+    return _jmRect.jmRect;
+  }
+});
+Object.defineProperty(exports, "jmArrowLine", {
+  enumerable: true,
+  get: function get() {
+    return _jmArrowLine.jmArrowLine;
+  }
+});
+Object.defineProperty(exports, "jmImage", {
+  enumerable: true,
+  get: function get() {
+    return _jmImage.jmImage;
+  }
+});
+Object.defineProperty(exports, "jmLabel", {
+  enumerable: true,
+  get: function get() {
+    return _jmLabel.jmLabel;
+  }
+});
+Object.defineProperty(exports, "jmResize", {
+  enumerable: true,
+  get: function get() {
+    return _jmResize.jmResize;
+  }
+});
+Object.defineProperty(exports, "jmEllipse", {
+  enumerable: true,
+  get: function get() {
+    return _jmEllipse.jmEllipse;
+  }
+});
+Object.defineProperty(exports, "jmPolygon", {
+  enumerable: true,
+  get: function get() {
+    return _jmPolygon.jmPolygon;
+  }
+});
+Object.defineProperty(exports, "jmStar", {
+  enumerable: true,
+  get: function get() {
+    return _jmStar.jmStar;
+  }
+});
+Object.defineProperty(exports, "jmUtils", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmUtils;
+  }
+});
+Object.defineProperty(exports, "jmList", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmList;
+  }
+});
+Object.defineProperty(exports, "jmShadow", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmShadow;
+  }
+});
+Object.defineProperty(exports, "jmGradient", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmGradient;
+  }
+});
+Object.defineProperty(exports, "jmFilter", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmFilter;
+  }
+});
+Object.defineProperty(exports, "jmControl", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmControl;
+  }
+});
+Object.defineProperty(exports, "jmPath", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmPath;
+  }
+});
+Object.defineProperty(exports, "jmViewport", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmViewport;
+  }
+});
+Object.defineProperty(exports, "jmSpatialIndex", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmSpatialIndex;
+  }
+});
+Object.defineProperty(exports, "jmPlatform", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmPlatform;
+  }
+});
+Object.defineProperty(exports, "Canvas2DRenderer", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.Canvas2DRenderer;
+  }
+});
+Object.defineProperty(exports, "jmRenderer", {
+  enumerable: true,
+  get: function get() {
+    return _jmGraph.jmRenderer;
+  }
+});
+Object.defineProperty(exports, "jmLayer", {
+  enumerable: true,
+  get: function get() {
+    return _jmLayer.jmLayer;
+  }
+});
+exports.create = exports.jmGraph = exports["default"] = void 0;
+
+var _jmArc = require("./src/shapes/jmArc.js");
+
+var _jmArrow = require("./src/shapes/jmArrow.js");
+
+var _jmBezier = require("./src/shapes/jmBezier.js");
+
+var _jmCircle = require("./src/shapes/jmCircle.js");
+
+var _jmHArc = require("./src/shapes/jmHArc.js");
+
+var _jmLine = require("./src/shapes/jmLine.js");
+
+var _jmPrismatic = require("./src/shapes/jmPrismatic.js");
+
+var _jmRect = require("./src/shapes/jmRect.js");
+
+var _jmArrowLine = require("./src/shapes/jmArrowLine.js");
+
+var _jmImage = require("./src/shapes/jmImage.js");
+
+var _jmLabel = require("./src/shapes/jmLabel.js");
+
+var _jmResize = require("./src/shapes/jmResize.js");
+
+var _jmEllipse = require("./src/shapes/jmEllipse.js");
+
+var _jmPolygon = require("./src/shapes/jmPolygon.js");
+
+var _jmStar = require("./src/shapes/jmStar.js");
+
+var _jmGraph = require("./src/core/jmGraph.js");
+
+var _jmLayer = require("./src/core/jmLayer.js");
+
+function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var shapes = {
+  "arc": _jmArc.jmArc,
+  "arrow": _jmArrow.jmArrow,
+  "bezier": _jmBezier.jmBezier,
+  "circle": _jmCircle.jmCircle,
+  "harc": _jmHArc.jmHArc,
+  "line": _jmLine.jmLine,
+  "prismatic": _jmPrismatic.jmPrismatic,
+  "rect": _jmRect.jmRect,
+  "arrowline": _jmArrowLine.jmArrowLine,
+  "image": _jmImage.jmImage,
+  "img": _jmImage.jmImage,
+  "label": _jmLabel.jmLabel,
+  "resize": _jmResize.jmResize,
+  "ellipse": _jmEllipse.jmEllipse,
+  "polygon": _jmPolygon.jmPolygon,
+  "star": _jmStar.jmStar
+};
+
+var jmGraphImpl = /*#__PURE__*/function (_jmGraphCore) {
+  _inherits(jmGraphImpl, _jmGraphCore);
+
+  var _super = _createSuper(jmGraphImpl);
+
+  function jmGraphImpl(canvas, option, callback) {
+    _classCallCheck(this, jmGraphImpl);
+
+    // 合并shapes
+    option = Object.assign({}, option);
+    option.shapes = Object.assign(shapes, option.shapes || {});
+
+    if (typeof option == 'function') {
+      callback = option;
+      option = {};
+    }
+
+    return _super.call(this, canvas, option, callback);
+  }
+
+  _createClass(jmGraphImpl, null, [{
+    key: "create",
+    value: function create() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _construct(jmGraphImpl, args);
+    }
+  }]);
+
+  return jmGraphImpl;
+}(_jmGraph.jmGraph); //创建实例，支持不加 new 直接调用
+
+
+exports.jmGraph = jmGraphImpl;
+
+var createJmGraph = function createJmGraph() {
+  for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  return _construct(jmGraphImpl, args);
+};
+
+exports.create = createJmGraph;
+var _default = jmGraphImpl;
+exports["default"] = _default;
+
+},{"./src/core/jmGraph.js":6,"./src/core/jmLayer.js":7,"./src/shapes/jmArc.js":28,"./src/shapes/jmArrow.js":29,"./src/shapes/jmArrowLine.js":30,"./src/shapes/jmBezier.js":31,"./src/shapes/jmCircle.js":32,"./src/shapes/jmEllipse.js":33,"./src/shapes/jmHArc.js":34,"./src/shapes/jmImage.js":35,"./src/shapes/jmLabel.js":36,"./src/shapes/jmLine.js":37,"./src/shapes/jmPolygon.js":38,"./src/shapes/jmPrismatic.js":39,"./src/shapes/jmRect.js":40,"./src/shapes/jmResize.js":41,"./src/shapes/jmStar.js":42}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmControl = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+var _jmList = require("./jmList.js");
+
+var _jmGradient = require("./jmGradient.js");
+
+var _jmShadow = require("./jmShadow.js");
+
+var _jmFilter = require("./jmFilter.js");
+
+var _jmProperty2 = require("./jmProperty.js");
+
+var _path = _interopRequireDefault(require("../lib/webgl/path.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 样式名称映射表
+ * 
+ * 将简化的样式名称映射到 Canvas API 的标准属性名。
+ * 例如：'fill' -> 'fillStyle', 'stroke' -> 'strokeStyle'
+ * 
+ * @constant {Object.<string, string>}
+ * @private
+ */
+var jmStyleMap = {
+  'fill': 'fillStyle',
+  // 填充颜色
+  'fillImage': 'fillImage',
+  // 填充图片
+  'stroke': 'strokeStyle',
+  // 描边颜色
+  'shadow.blur': 'shadowBlur',
+  // 阴影模糊度
+  'shadow.x': 'shadowOffsetX',
+  // 阴影X偏移
+  'shadow.y': 'shadowOffsetY',
+  // 阴影Y偏移
+  'shadow.color': 'shadowColor',
+  // 阴影颜色
+  'lineWidth': 'lineWidth',
+  // 线宽
+  'miterLimit': 'miterLimit',
+  // 斜接限制
+  'fillStyle': 'fillStyle',
+  // 填充样式
+  'strokeStyle': 'strokeStyle',
+  // 描边样式
+  'font': 'font',
+  // 字体
+  'opacity': 'globalAlpha',
+  // 透明度
+  'textAlign': 'textAlign',
+  // 文本对齐
+  'textBaseline': 'textBaseline',
+  // 文本基线
+  'shadowBlur': 'shadowBlur',
+  // 阴影模糊
+  'shadowOffsetX': 'shadowOffsetX',
+  // 阴影X偏移
+  'shadowOffsetY': 'shadowOffsetY',
+  // 阴影Y偏移
+  'shadowColor': 'shadowColor',
+  // 阴影颜色
+  'lineJoin': 'lineJoin',
+  // 线条连接样式
+  'lineCap': 'lineCap',
+  // 线条端点样式
+  'lineDashOffset': 'lineDashOffset',
+  // 虚线偏移
+  'globalCompositeOperation': 'globalCompositeOperation' // 合成操作
+
+};
+/**
+ * jmGraph 控件基类
+ * 
+ * jmControl 是所有可视化图形控件的基类，提供了完整的图形渲染和交互能力。
+ * 
+ * **核心功能：**
+ * 
+ * 1. **样式系统**
+ *    - 支持填充色、描边色、渐变、图片填充
+ *    - 支持阴影、滤镜、混合模式
+ *    - 支持虚线、线宽、线帽等线条样式
+ * 
+ * 2. **变换系统**
+ *    - 支持 translate（平移）
+ *    - 支持 rotation（旋转）
+ *    - 支持 transform（矩阵变换）
+ * 
+ * 3. **事件系统**
+ *    - 鼠标事件：mousedown, mouseup, mousemove, click, dblclick
+ *    - 触摸事件：touchstart, touchmove, touchend
+ *    - 焦点事件：mouseover, mouseleave, touchover, touchleave
+ *    - 自定义事件：支持任意事件类型
+ * 
+ * 4. **渲染系统**
+ *    - 自动选择 Canvas 2D 或 WebGL 渲染器
+ *    - 支持脏矩形优化
+ *    - 支持层级排序（zIndex）
+ * 
+ * 5. **碰撞检测**
+ *    - 支持点在多边形内判断
+ *    - 支持自定义命中区域
+ *    - 支持旋转后的碰撞检测
+ * 
+ * @class jmControl
+ * @extends jmProperty
+ * 
+ * @example
+ * // 创建自定义控件
+ * class MyShape extends jmControl {
+ *     constructor(params) {
+ *         super(params, 'myShape');
+ *     }
+ *     
+ *     // 重写绘制方法
+ *     draw() {
+ *         // 自定义绘制逻辑
+ *     }
+ * }
+ * 
+ * // 使用控件
+ * const shape = new MyShape({
+ *     position: { x: 100, y: 100 },
+ *     width: 50,
+ *     height: 50,
+ *     style: {
+ *         fill: 'red',
+ *         stroke: 'black',
+ *         lineWidth: 2
+ *     }
+ * });
+ * graph.children.add(shape);
+ */
+
+var jmControl = /*#__PURE__*/function (_jmProperty) {
+  _inherits(jmControl, _jmProperty);
+
+  var _super = _createSuper(jmControl);
+
+  /**
+   * 构造函数
+   * 
+   * 创建一个新的控件实例。子类应该调用 super(params, 'typeName') 来设置类型名称。
+   * 
+   * @constructor
+   * @param {Object} [params] - 控件初始化参数
+   * @param {Object} [params.style] - 样式对象，包含填充、描边等属性
+   * @param {number} [params.width=0] - 控件宽度
+   * @param {number} [params.height=0] - 控件高度
+   * @param {Object} [params.position] - 控件位置 {x, y}
+   * @param {jmGraph} [params.graph] - 所属画布实例
+   * @param {number} [params.zIndex=0] - 层级顺序
+   * @param {boolean} [params.interactive=false] - 是否响应交互事件
+   * @param {Object} [params.hitArea] - 自定义命中区域 {x, y, width, height}
+   * @param {boolean} [params.isRegular] - 是否为规则图形（WebGL优化）
+   * @param {boolean} [params.needCut] - 是否需要裁剪（WebGL）
+   * @param {string} [t] - 控件类型名称，默认使用类名
+   * 
+   * @example
+   * // 创建矩形控件
+   * const rect = new jmControl({
+   *     position: { x: 10, y: 10 },
+   *     width: 100,
+   *     height: 50,
+   *     style: {
+   *         fill: '#ff0000',
+   *         stroke: '#000000',
+   *         lineWidth: 2
+   *     },
+   *     interactive: true
+   * }, 'jmRect');
+   */
+  function jmControl(params, t) {
+    var _this2;
+
+    _classCallCheck(this, jmControl);
+
+    params = params || {};
+    _this2 = _super.call(this, params); // 设置控件类型标识
+
+    _this2.property('type', t || (this instanceof jmControl ? this.constructor : void 0).name); // 初始化样式对象
+
+
+    _this2.style = params && params.style ? params.style : {}; // 设置尺寸
+
+    _this2.width = params.width || 0;
+    _this2.height = params.height || 0; // 自定义命中区域（用于点击测试）
+
+    _this2.hitArea = params.hitArea || null; // 设置位置
+
+    if (params.position) {
+      _this2.position = params.position;
+    } // 关联画布
+
+
+    _this2.graph = params.graph || null; // 层级顺序（用于排序）
+
+    _this2.zIndex = params.zIndex || 0; // 是否响应交互事件
+
+    _this2.interactive = typeof params.interactive == 'undefined' ? false : params.interactive; // WebGL 模式下创建对应的渲染控制器
+
+    if (_this2.mode === 'webgl') {
+      _this2.webglControl = new _path["default"](_this2.graph, {
+        style: _this2.style,
+        control: _assertThisInitialized(_this2),
+        isRegular: params.isRegular,
+        needCut: params.needCut
+      });
+    } // 执行初始化
+
+
+    _this2.initializing(); // 别名：on 等同于 bind
+
+
+    _this2.on = _this2.bind; // 保存原始参数
+
+    _this2.option = params;
+    return _this2;
+  }
+  /**
+   * 控件类型标识
+   * 
+   * 用于类型检查和调试，由构造函数自动设置。
+   * 
+   * @type {string}
+   * @readonly
+   * 
+   * @example
+   * console.log(rect.type); // 'jmRect'
+   * if(control.type === 'jmCircle') { ... }
+   */
+
+
+  _createClass(jmControl, [{
+    key: "type",
+    get: function get() {
+      return this.property('type');
+    }
+    /**
+     * 绘图上下文
+     * 
+     * 获取当前控件的 Canvas 2D 或 WebGL 渲染上下文。
+     * 如果控件本身不是 jmGraph，会返回所属 graph 的上下文。
+     * 
+     * @type {CanvasRenderingContext2D|WebGLRenderingContext}
+     * @readonly
+     * 
+     * @example
+     * // 获取上下文并绘制
+     * const ctx = control.context;
+     * ctx.fillStyle = 'red';
+     * ctx.fillRect(0, 0, 100, 100);
+     */
+
+  }, {
+    key: "context",
+    get: function get() {
+      var s = this.property('context');
+      if (s) return s;else if (this.is('jmGraph') && this.canvas && this.canvas.getContext) {
+        return this.context = this.canvas.getContext(this.mode || '2d');
+      }
+      var g = this.graph;
+      if (g) return g.context;
+      return g.canvas.getContext(this.mode || '2d');
+    },
+    set: function set(v) {
+      return this.property('context', v);
+    }
+    /**
+     * 样式对象
+     * 
+     * 控件的视觉样式配置，包括：
+     * - fill: 填充颜色或渐变
+     * - stroke: 描边颜色
+     * - lineWidth: 线宽
+     * - shadow: 阴影配置
+     * - font: 字体（文本控件）
+     * - opacity: 透明度
+     * 
+     * 设置新样式会触发 needUpdate。
+     * 
+     * @type {Object}
+     * 
+     * @example
+     * // 设置样式
+     * control.style = {
+     *     fill: '#ff0000',
+     *     stroke: '#000000',
+     *     lineWidth: 2,
+     *     shadow: {
+     *         blur: 10,
+     *         x: 5,
+     *         y: 5,
+     *         color: 'rgba(0,0,0,0.5)'
+     *     }
+     * };
+     */
+
+  }, {
+    key: "style",
+    get: function get() {
+      var s = this.property('style');
+      if (!s) s = this.property('style', {});
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('style', v);
+    }
+    /**
+     * 是否可见
+     * 
+     * 控制控件是否参与渲染和事件响应。
+     * 不可见的控件不会被绘制，也不会响应鼠标/触摸事件。
+     * 
+     * @type {boolean}
+     * @default true
+     * 
+     * @example
+     * // 隐藏控件
+     * control.visible = false;
+     * 
+     * // 显示控件
+     * control.visible = true;
+     */
+
+  }, {
+    key: "visible",
+    get: function get() {
+      var s = this.property('visible');
+      if (typeof s == 'undefined') s = this.property('visible', true);
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('visible', v);
+    }
+    /**
+     * 是否响应交互事件
+     * 
+     * 设置为 true 时，控件会响应鼠标和触摸事件。
+     * 设置为 false 时，事件会穿透到下层控件。
+     * 
+     * @type {boolean}
+     * @default false
+     * 
+     * @example
+     * // 启用交互
+     * control.interactive = true;
+     * control.bind('click', (evt) => {
+     *     console.log('clicked!');
+     * });
+     */
+
+  }, {
+    key: "interactive",
+    get: function get() {
+      var s = this.property('interactive');
+      return s;
+    },
+    set: function set(v) {
+      return this.property('interactive', v);
+    }
+    /**
+     * 自定义命中区域
+     * 
+     * 用于点击测试的自定义区域，格式为 {x, y, width, height}。
+     * 如果设置，点击测试会使用此区域而非实际图形边界。
+     * 
+     * @type {Object|null}
+     * 
+     * @example
+     * // 设置更大的点击区域
+     * control.hitArea = {
+     *     x: -10,
+     *     y: -10,
+     *     width: control.width + 20,
+     *     height: control.height + 20
+     * };
+     */
+
+  }, {
+    key: "hitArea",
+    get: function get() {
+      var s = this.property('hitArea');
+      return s;
+    },
+    set: function set(v) {
+      return this.property('hitArea', v);
+    }
+    /**
+     * 子控件列表
+     * 
+     * 当前控件的所有子控件。子控件会按 zIndex 排序后绘制。
+     * 添加子控件时会自动建立父子关系。
+     * 
+     * @type {jmList}
+     * 
+     * @example
+     * // 添加子控件
+     * parent.children.add(child);
+     * 
+     * // 移除子控件
+     * parent.children.remove(child);
+     * 
+     * // 遍历子控件
+     * parent.children.each((i, child) => {
+     *     console.log(child);
+     * });
+     */
+
+  }, {
+    key: "children",
+    get: function get() {
+      var s = this.property('children');
+      if (!s) s = this.property('children', new _jmList.jmList());
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('children', v);
+    }
+    /**
+     * 控件宽度
+     * 
+     * 可以是具体数值或百分比字符串（如 '50%'）。
+     * 百分比会相对于父容器宽度计算。
+     * 
+     * @type {number|string}
+     * 
+     * @example
+     * // 设置固定宽度
+     * control.width = 100;
+     * 
+     * // 设置百分比宽度
+     * control.width = '50%';
+     */
+
+  }, {
+    key: "width",
+    get: function get() {
+      var s = this.property('width');
+      if (typeof s == 'undefined') s = this.property('width', 0);
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('width', v);
+    }
+    /**
+     * 控件高度
+     * 
+     * 可以是具体数值或百分比字符串（如 '50%'）。
+     * 百分比会相对于父容器高度计算。
+     * 
+     * @type {number|string}
+     * 
+     * @example
+     * // 设置固定高度
+     * control.height = 100;
+     * 
+     * // 设置百分比高度
+     * control.height = '50%';
+     */
+
+  }, {
+    key: "height",
+    get: function get() {
+      var s = this.property('height');
+      if (typeof s == 'undefined') s = this.property('height', 0);
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('height', v);
+    }
+    /**
+     * 层级顺序
+     * 
+     * 控制控件的绘制顺序，值越大越靠上。
+     * 设置 zIndex 会触发子控件重新排序。
+     * 
+     * @type {number}
+     * @default 0
+     * 
+     * @example
+     * // 将控件置于最上层
+     * control.zIndex = 100;
+     * 
+     * // 将控件置于最下层
+     * control.zIndex = -1;
+     */
+
+  }, {
+    key: "zIndex",
+    get: function get() {
+      var s = this.property('zIndex');
+      if (!s) s = this.property('zIndex', 0);
+      return s;
+    },
+    set: function set(v) {
+      this.property('zIndex', v); // 惰性排序：仅标记，绘制前再排序，避免高频改 zIndex 时反复全量排序
+
+      if (this.__childrenSortDirty !== undefined) this.__childrenSortDirty = true;
+      this.needUpdate = true;
+      return v;
+    }
+    /**
+     * 鼠标样式
+     * 
+     * 鼠标悬停在控件上时显示的光标样式。
+     * 常用值：'default', 'pointer', 'move', 'text', 'crosshair'
+     * 
+     * @type {string}
+     * 
+     * @example
+     * // 设置为手型指针
+     * control.cursor = 'pointer';
+     * 
+     * // 设置为移动样式
+     * control.cursor = 'move';
+     */
+
+  }, {
+    key: "cursor",
+    get: function get() {
+      var graph = this.graph;
+
+      if (graph) {
+        return graph.css('cursor');
+      }
+    }
+    /**
+     * 初始化控件
+     * 
+     * 在构造函数末尾调用，用于设置子控件管理逻辑。
+     * 重写了 children 的 add、remove、sort、clear 方法，
+     * 实现自动的父子关系维护和脏标记传播。
+     * 
+     * @method initializing
+     * @protected
+     */
+    ,
+    set: function set(cur) {
+      var graph = this.graph;
+
+      if (graph) {
+        graph.css('cursor', cur);
+      }
+    }
+  }, {
+    key: "initializing",
+    value: function initializing() {
+      var self = this;
+      this.children = this.children || new _jmList.jmList();
+      var oadd = this.children.add; // 惰性排序标记：add/remove/zIndex 变更时置位，绘制前才真正排序，
+      // 避免批量添加 N 个节点导致 O(n²) 的反复排序
+
+      this.__childrenSortDirty = false;
+      /**
+       * 同步命中索引脏标记（大图事件命中优化）
+       * @private
+       */
+
+      var markHitIndexDirty = function markHitIndexDirty() {
+        var g = self.graph;
+        if (g && g.hitIndex) g.__hitIndexDirty = true;
+      };
+      /**
+       * 重写 add 方法，自动建立父子关系
+       * @param {jmControl} obj - 要添加的子控件
+       * @returns {jmControl} 添加的子控件
+       */
+
+
+      this.children.add = function (obj) {
+        if (_typeof(obj) === 'object') {
+          // 如果对象已有父级，先从原父级移除
+          if (obj.parent && obj.parent != self && obj.parent.children) {
+            obj.parent.children.remove(obj);
+          }
+
+          obj.parent = self; // 如果已存在，先移除再添加
+
+          if (this.contain(obj)) {
+            this.oremove(obj);
+          }
+
+          oadd.call(this, obj);
+          obj.emit('add', obj);
+          self.needUpdate = true; // 传播 graph 引用
+
+          if (self.graph) obj.graph = self.graph; // 惰性排序：不再每次 add 后立即全量排序
+
+          self.__childrenSortDirty = true;
+          markHitIndexDirty();
+          return obj;
+        }
+      };
+
+      this.children.oremove = this.children.remove;
+      /**
+       * 批量添加子控件（避免逐个 add 的重复去重/排序开销）
+       * @param {Array<jmControl>} objs 子控件数组
+       * @returns {Array<jmControl>}
+       */
+
+      this.children.addAll = function (objs) {
+        if (!Array.isArray(objs)) return objs;
+
+        var _iterator = _createForOfIteratorHelper(objs),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var obj = _step.value;
+            this.add(obj);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        return objs;
+      };
+      /**
+       * 重写 remove 方法，清理父子关系
+       * @param {jmControl} obj - 要移除的子控件
+       */
+
+
+      this.children.remove = function (obj) {
+        if (_typeof(obj) === 'object') {
+          obj.parent = null;
+          obj.graph = null;
+          obj.remove(true);
+          this.oremove(obj);
+          self.needUpdate = true;
+          markHitIndexDirty();
+        }
+      };
+      /**
+       * 按 zIndex 排序子控件
+       */
+
+
+      this.children.sort = function () {
+        var levelItems = {};
+        this.each(function (i, obj) {
+          if (!obj) return;
+          var zindex = obj.zIndex;
+
+          if (!zindex && obj.style && obj.style.zIndex) {
+            zindex = Number(obj.style.zIndex);
+            if (isNaN(zindex)) zindex = obj.style.zIndex || 0;
+          }
+
+          var items = levelItems[zindex] || (levelItems[zindex] = []);
+          items.push(obj);
+        });
+        this.splice(0, this.length);
+
+        for (var index in levelItems) {
+          oadd.call(this, levelItems[index]);
+        }
+
+        self.__childrenSortDirty = false;
+      };
+      /**
+       * 清空所有子控件
+       */
+
+
+      this.children.clear = function () {
+        this.each(function (i, obj) {
+          this.remove(obj);
+        }, true);
+      };
+
+      this.needUpdate = true;
+    }
+    /**
+     * 设置控件样式到绘图上下文
+     * 
+     * 将样式对象应用到 Canvas 上下文，支持：
+     * - 基础样式：fill, stroke, lineWidth, opacity 等
+     * - 阴影效果：shadow.blur, shadow.x, shadow.y, shadow.color
+     * - 渐变填充：支持线性渐变和径向渐变
+     * - 变换效果：rotation（旋转）、translate（平移）、transform（矩阵变换）
+     * - 高级效果：lineDash（虚线）、filter（滤镜）、clipPath（裁剪）、mask（遮罩）
+     * 
+     * @method setStyle
+     * @param {Object} [style] - 要应用的样式对象，默认使用 this.style
+     * 
+     * @example
+     * // 应用样式
+     * control.setStyle({
+     *     fill: '#ff0000',
+     *     stroke: '#000000',
+     *     lineWidth: 2,
+     *     shadow: {
+     *         blur: 10,
+     *         x: 5,
+     *         y: 5,
+     *         color: 'rgba(0,0,0,0.5)'
+     *     }
+     * });
+     * 
+     * // 使用渐变
+     * control.setStyle({
+     *     fill: 'linear-gradient(0,0,100,0,#ff0000,#0000ff)'
+     * });
+     */
+
+  }, {
+    key: "setStyle",
+    value: function setStyle(style) {
+      var _this3 = this;
+
+      if (!style) {
+        style = this.style;
+      }
+
+      if (!style) return; // 样式快照优化：样式未发生变化时，跳过字符串解析/渐变重建，
+      // 仅重放上次应用时写入 context 的写入序列（快速恢复）。
+      // 说明：paint 外层 save/restore 会在每帧结束时把 context 重置为默认状态，
+      // 因此样式必须每帧都重写到 context，不能整体跳过；快照只缓存"解析结果"。
+      // 存在 transform/clipPath/mask 类样式时始终完整应用（受 restore 影响，必须重建）。
+
+      var hasTransform = style.rotation || style.transform || style.translate || style.clipPath || style.mask;
+
+      if (!hasTransform && this._styleUnchanged(style)) {
+        this._restoreStyleContext();
+
+        return;
+      } // 本轮完整应用时记录 context 写入序列，供后续帧快速恢复
+
+
+      var ctxCache = [];
+      this.__styleContextCache = ctxCache;
+
+      var __apply = function __apply(name, value) {
+        ctxCache.push({
+          n: name,
+          v: value
+        });
+        _this3.context[name] = value;
+      };
+
+      var __call = function __call(name, args) {
+        var _this3$context;
+
+        ctxCache.push({
+          n: name,
+          a: args
+        });
+
+        (_this3$context = _this3.context)[name].apply(_this3$context, _toConsumableArray(args));
+      };
+      /**
+       * 内部样式设置函数
+       * @param {*} styleValue - 样式值
+       * @param {string} name - 样式名称
+       * @param {string} [mpkey] - 映射键名
+       * @private
+       */
+
+
+      var __setStyle = function __setStyle(style, name, mpkey) {
+        if (style) {
+          var styleValue = style; // 支持函数形式的样式值
+
+          if (typeof styleValue === 'function') {
+            try {
+              styleValue = styleValue.call(_this3);
+            } catch (e) {
+              console.warn(e);
+              return;
+            }
+          }
+
+          var t = _typeof(styleValue);
+
+          var mpname = jmStyleMap[mpkey || name]; // 处理渐变
+
+          if (styleValue instanceof _jmGradient.jmGradient || t == 'string' && styleValue.indexOf('-gradient') > -1) {
+            if (t == 'string' && styleValue.indexOf('-gradient') > -1) {
+              styleValue = new _jmGradient.jmGradient(styleValue);
+            } // 渐变对象缓存：避免每帧重复调用 toGradient 创建 canvas gradient
+
+
+            if (!_this3.__gradientCache) _this3.__gradientCache = new WeakMap();
+
+            var grad = _this3.__gradientCache.get(styleValue);
+
+            if (!grad) {
+              grad = styleValue.toGradient(_this3);
+
+              _this3.__gradientCache.set(styleValue, grad);
+            }
+
+            __setStyle(grad, mpname || name);
+          } // 处理标准样式映射
+          else if (mpname) {
+            if (_this3.webglControl) {
+              _this3.webglControl.setStyle(mpname, styleValue);
+            } else {
+              if (t == 'string' && ['fillStyle', 'strokeStyle', 'shadowColor'].indexOf(mpname) > -1) {
+                styleValue = _jmUtils.jmUtils.toColor(styleValue);
+              }
+
+              __apply(mpname, styleValue);
+            }
+          } // 处理特殊样式
+          else {
+            switch (name) {
+              // 阴影样式
+              case 'shadow':
+                {
+                  if (t == 'string') {
+                    __setStyle(new _jmShadow.jmShadow(styleValue), name);
+
+                    break;
+                  }
+
+                  for (var k in styleValue) {
+                    __setStyle(styleValue[k], k, name + '.' + k);
+                  }
+
+                  break;
+                }
+              // 平移变换
+
+              case 'translate':
+                {
+                  break;
+                }
+              // 旋转变换
+
+              case 'rotation':
+                {
+                  if (typeof styleValue.angle === 'undefined' || isNaN(styleValue.angle)) break;
+                  styleValue = _this3.getRotation(styleValue);
+                  _this3.__translateAbsolutePosition = _this3.toAbsolutePoint({
+                    x: styleValue.x,
+                    y: styleValue.y
+                  });
+                  _this3.context.translate && _this3.context.translate(_this3.__translateAbsolutePosition.x, _this3.__translateAbsolutePosition.y);
+                  _this3.context.rotate && _this3.context.rotate(styleValue.angle);
+                  _this3.context.translate && _this3.context.translate(-_this3.__translateAbsolutePosition.x, -_this3.__translateAbsolutePosition.y);
+                  break;
+                }
+              // 矩阵变换
+
+              case 'transform':
+                {
+                  if (!_this3.context.transform) break;
+
+                  if (Array.isArray(styleValue)) {
+                    _this3.context.transform.apply(_this3.context, styleValue);
+                  } else if (_typeof(styleValue) == 'object') {
+                    _this3.context.transform(styleValue.scaleX || 1, styleValue.skewX || 0, styleValue.skewY || 0, styleValue.scaleY || 1, styleValue.offsetX || 0, styleValue.offsetY || 0);
+                  }
+
+                  break;
+                }
+              // 鼠标样式
+
+              case 'cursor':
+                {
+                  _this3.cursor = styleValue;
+                  break;
+                }
+              // ===== 新增样式特性 =====
+
+              /**
+               * 虚线样式
+               * 支持数组格式 [5, 3, 2] 或字符串格式 "5,3,2"
+               * @example
+               * style: { lineDash: [5, 3] } // 5px实线，3px空白
+               */
+
+              case 'lineDash':
+                {
+                  if (!_this3.context.setLineDash) break;
+                  var dash;
+
+                  if (typeof styleValue === 'string') {
+                    dash = styleValue.split(',').map(function (v) {
+                      return parseFloat(v.trim());
+                    }).filter(function (v) {
+                      return !isNaN(v);
+                    });
+                  } else if (Array.isArray(styleValue)) {
+                    dash = styleValue.map(function (v) {
+                      return parseFloat(v);
+                    }).filter(function (v) {
+                      return !isNaN(v);
+                    });
+                  }
+
+                  if (dash && dash.length) {
+                    __call('setLineDash', [dash]);
+                  } else {
+                    __call('setLineDash', [[]]);
+                  }
+
+                  break;
+                }
+              // 虚线偏移量
+
+              case 'lineDashOffset':
+                {
+                  if (!_this3.context.setLineDash) break;
+
+                  __apply('lineDashOffset', Number(styleValue) || 0);
+
+                  break;
+                }
+
+              /**
+               * CSS滤镜效果
+               * 支持 blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity
+               * @example
+               * style: { filter: 'blur(5px) grayscale(50%)' }
+               * // 或使用对象
+               * style: { filter: { blur: 5, grayscale: 0.5 } }
+               */
+
+              case 'filter':
+                {
+                  if (_this3.context.filter === undefined) break;
+
+                  if (styleValue instanceof _jmFilter.jmFilter) {
+                    __apply('filter', styleValue.toCanvasFilter());
+                  } else if (typeof styleValue === 'string') {
+                    __apply('filter', styleValue || 'none');
+                  } else if (_typeof(styleValue) === 'object') {
+                    __apply('filter', new _jmFilter.jmFilter(styleValue).toCanvasFilter());
+                  }
+
+                  break;
+                }
+
+              /**
+               * 混合模式
+               * 常用值：source-over, multiply, screen, overlay, darken, lighten
+               * @example
+               * style: { globalCompositeOperation: 'multiply' }
+               */
+
+              case 'globalCompositeOperation':
+                {
+                  if (!_this3.context.globalCompositeOperation) break;
+
+                  __apply('globalCompositeOperation', styleValue);
+
+                  break;
+                }
+
+              /**
+               * 裁剪路径
+               * 通过 canvas clip 实现裁剪效果
+               * @example
+               * style: { clipPath: clipShape } // clipShape 是一个图形控件
+               */
+
+              case 'clipPath':
+                {
+                  if (!_this3.context.clip) break; // clipPath可以是一个图形控件实例
+
+                  if (styleValue && styleValue.points && styleValue.points.length > 0) {
+                    var bounds = _this3.parent && _this3.parent.absoluteBounds ? _this3.parent.absoluteBounds : _this3.absoluteBounds;
+
+                    _this3.context.beginPath();
+
+                    _this3.context.moveTo(styleValue.points[0].x + (bounds ? bounds.left : 0), styleValue.points[0].y + (bounds ? bounds.top : 0));
+
+                    for (var i = 1; i < styleValue.points.length; i++) {
+                      if (styleValue.points[i].m) {
+                        _this3.context.moveTo(styleValue.points[i].x + (bounds ? bounds.left : 0), styleValue.points[i].y + (bounds ? bounds.top : 0));
+                      } else {
+                        _this3.context.lineTo(styleValue.points[i].x + (bounds ? bounds.left : 0), styleValue.points[i].y + (bounds ? bounds.top : 0));
+                      }
+                    }
+
+                    if (styleValue.style && styleValue.style.close) {
+                      _this3.context.closePath();
+                    }
+
+                    _this3.context.clip();
+                  }
+
+                  break;
+                }
+
+              /**
+               * 遮罩效果
+               * 通过 globalCompositeOperation + destination-in 实现
+               * @example
+               * style: { mask: maskShape } // maskShape 是一个图形控件
+               */
+
+              case 'mask':
+                {
+                  if (!_this3.context.globalCompositeOperation) break; // mask是一个图形控件实例，在绘制前需要先应用mask
+                  // 这里只是标记，实际绘制在paint流程中处理
+
+                  _this3.__mask = styleValue;
+                  break;
+                }
+              // 阴影相关样式（WebGL兼容）
+
+              case 'shadowColor':
+                {
+                  if (_this3.webglControl) {
+                    _this3.webglControl.setStyle('shadowColor', styleValue);
+                  } else {
+                    __apply('shadowColor', _jmUtils.jmUtils.toColor(styleValue));
+                  }
+
+                  break;
+                }
+
+              case 'shadowBlur':
+                {
+                  if (_this3.webglControl) {
+                    _this3.webglControl.setStyle('shadowBlur', styleValue);
+                  } else {
+                    __apply('shadowBlur', Number(styleValue) || 0);
+                  }
+
+                  break;
+                }
+
+              case 'shadowOffsetX':
+                {
+                  if (_this3.webglControl) {
+                    _this3.webglControl.setStyle('shadowOffsetX', styleValue);
+                  } else {
+                    __apply('shadowOffsetX', Number(styleValue) || 0);
+                  }
+
+                  break;
+                }
+
+              case 'shadowOffsetY':
+                {
+                  if (_this3.webglControl) {
+                    _this3.webglControl.setStyle('shadowOffsetY', styleValue);
+                  } else {
+                    __apply('shadowOffsetY', Number(styleValue) || 0);
+                  }
+
+                  break;
+                }
+            }
+          }
+        }
+      }; // 应用平移变换
+
+
+      if (this.translate) {
+        __setStyle(this.translate, 'translate');
+      } // 应用矩阵变换
+
+
+      if (this.transform) {
+        __setStyle(this.transform, 'transform');
+      } // 遍历应用所有样式
+
+
+      for (var k in style) {
+        if (k === 'constructor') continue;
+
+        var t = _typeof(style[k]); // 自动转换渐变字符串
+
+
+        if (t == 'string' && style[k].indexOf('-gradient') > -1) {
+          style[k] = new _jmGradient.jmGradient(style[k]);
+        } // 自动转换阴影字符串
+        else if (t == 'string' && k == 'shadow') {
+          style[k] = new _jmShadow.jmShadow(style[k]);
+        } // 自动转换滤镜字符串
+        else if (t == 'string' && k == 'filter') {
+          style[k] = new _jmFilter.jmFilter(style[k]);
+        }
+
+        __setStyle(style[k], k);
+      }
+
+      this._snapshotStyle(style);
+    }
+    /**
+     * 判断当前样式与上次应用时是否一致
+     * @param {Object} style 样式对象
+     * @return {boolean} true=一致（可跳过应用）
+     * @private
+     */
+
+  }, {
+    key: "_styleUnchanged",
+    value: function _styleUnchanged(style) {
+      var snap = this.__styleSnapshot;
+      if (!snap) return false;
+      if (!style) return false;
+      var keys = Object.keys(style);
+      if (keys.length !== snap.size) return false;
+
+      for (var _i = 0, _keys = keys; _i < _keys.length; _i++) {
+        var k = _keys[_i];
+        var cur = style[k]; // 函数样式每次都需要重新计算，不参与快照
+
+        if (typeof cur === 'function') return false;
+        var prev = snap.get(k);
+        if (cur === prev) continue; // 嵌套对象（如 shadow/rotation/lineDash）支持原地修改：
+        // 快照保存的是浅拷贝，此处做浅比较
+
+        if (cur && prev && _typeof(cur) === 'object' && _typeof(prev) === 'object') {
+          var ck = Object.keys(cur);
+          var pk = Object.keys(prev);
+          if (ck.length !== pk.length) return false;
+          var same = true;
+
+          for (var i = 0; i < ck.length; i++) {
+            if (cur[ck[i]] !== prev[ck[i]]) {
+              same = false;
+              break;
+            }
+          }
+
+          if (same) continue;
+        }
+
+        return false;
+      }
+
+      return true;
+    }
+    /**
+     * 记录当前样式快照
+     * @param {Object} style 样式对象
+     * @private
+     */
+
+  }, {
+    key: "_snapshotStyle",
+    value: function _snapshotStyle(style) {
+      var snap = new Map();
+
+      for (var k in style) {
+        var v = style[k]; // 嵌套对象浅拷贝，使快照与当前 style 解耦（支持原地修改检测）
+
+        if (v && _typeof(v) === 'object' && !(v instanceof _jmGradient.jmGradient) && !(v instanceof _jmShadow.jmShadow) && !(v instanceof _jmFilter.jmFilter)) {
+          snap.set(k, Array.isArray(v) ? v.slice() : Object.assign({}, v));
+        } else {
+          snap.set(k, v);
+        }
+      }
+
+      this.__styleSnapshot = snap;
+    }
+    /**
+     * 样式未变化时，重放上次应用样式写入 context 的序列。
+     * paint 的 save/restore 每帧会重置 context，必须重写才能保持样式正确。
+     * @private
+     */
+
+  }, {
+    key: "_restoreStyleContext",
+    value: function _restoreStyleContext() {
+      var cache = this.__styleContextCache;
+      if (!cache) return;
+
+      var _iterator2 = _createForOfIteratorHelper(cache),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var item = _step2.value;
+
+          if (item.a) {
+            var _this$context;
+
+            if (this.context[item.n]) (_this$context = this.context)[item.n].apply(_this$context, _toConsumableArray(item.a));
+          } else {
+            this.context[item.n] = item.v;
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    }
+    /**
+     * 获取当前控件的边界矩形
+     * 
+     * 通过分析控件的描点或位置加宽高得到边界矩形。
+     * 对于 jmGraph，边界为画布尺寸。
+     * 对于有 points 的控件，边界为所有点的最小包围矩形。
+     * 
+     * @method getBounds
+     * @param {boolean} [isReset=false] - 是否强制重新计算（忽略缓存）
+     * @returns {Object} 边界对象
+     * @returns {number} returns.left - 左边界 X 坐标
+     * @returns {number} returns.top - 上边界 Y 坐标
+     * @returns {number} returns.right - 右边界 X 坐标
+     * @returns {number} returns.bottom - 下边界 Y 坐标
+     * @returns {number} returns.width - 宽度
+     * @returns {number} returns.height - 高度
+     * 
+     * @example
+     * // 获取边界
+     * const bounds = control.getBounds();
+     * console.log(`宽: ${bounds.width}, 高: ${bounds.height}`);
+     * 
+     * // 强制重新计算
+     * const newBounds = control.getBounds(true);
+     */
+
+  }, {
+    key: "getBounds",
+    value: function getBounds(isReset) {
+      //如果当次计算过且无脏标记，则不重复计算
+      if (this.bounds && !isReset && !this.__boundsDirty) return this.bounds;
+      var rect = {}; // left top
+      //jmGraph，特殊处理
+
+      if (this.type == 'jmGraph' && this.canvas) {
+        if (typeof this.canvas.width === 'function') {
+          rect.right = this.canvas.width();
+        } else if (this.width) {
+          rect.right = this.width;
+        }
+
+        if (typeof this.canvas.height === 'function') {
+          rect.bottom = this.canvas.height();
+        } else if (this.height) {
+          rect.bottom = this.height;
+        }
+      } // 根据 points 计算边界
+      else if (this.points && this.points.length > 0) {
+        var _iterator3 = _createForOfIteratorHelper(this.points),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var p = _step3.value;
+
+            if (typeof rect.left === 'undefined' || rect.left > p.x) {
+              rect.left = p.x;
+            }
+
+            if (typeof rect.top === 'undefined' || rect.top > p.y) {
+              rect.top = p.y;
+            }
+
+            if (typeof rect.right === 'undefined' || rect.right < p.x) {
+              rect.right = p.x;
+            }
+
+            if (typeof rect.bottom === 'undefined' || rect.bottom < p.y) {
+              rect.bottom = p.y;
+            }
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+      } // 根据位置和尺寸计算边界
+      else if (this.getLocation) {
+        var _p = this.getLocation();
+
+        if (_p) {
+          rect.left = _p.left;
+          rect.top = _p.top;
+          rect.right = _p.left + _p.width;
+          rect.bottom = _p.top + _p.height;
+        }
+      }
+
+      if (rect.left === undefined) rect.left = 0;
+      if (rect.top === undefined) rect.top = 0;
+      if (rect.right === undefined) rect.right = 0;
+      if (rect.bottom === undefined) rect.bottom = 0;
+      rect.width = rect.right - rect.left;
+      rect.height = rect.bottom - rect.top; // 本次计算后清除脏标记（子级 absoluteBounds 缓存依赖此标记）
+
+      this.__boundsDirty = false;
+      return this.bounds = rect;
+    }
+    /**
+     * 获取旋转后的边界矩形
+     * 
+     * 计算控件旋转后的最小包围矩形。
+     * 当控件有旋转变换时，实际占据的空间会发生变化。
+     * 
+     * @method getRotationBounds
+     * @param {Object} [rotation] - 旋转参数，默认使用 style.rotation
+     * @param {number} rotation.x - 旋转中心 X（相对于控件）
+     * @param {number} rotation.y - 旋转中心 Y（相对于控件）
+     * @param {number} rotation.angle - 旋转角度（弧度）
+     * @param {Object} [bounds] - 基础边界，默认使用 getBounds()
+     * @returns {Object} 旋转后的边界对象
+     * 
+     * @example
+     * // 获取旋转后的边界
+     * const bounds = control.getRotationBounds();
+     * console.log(`旋转后宽度: ${bounds.width}`);
+     */
+
+  }, {
+    key: "getRotationBounds",
+    value: function getRotationBounds() {
+      var rotation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      rotation = rotation || this.getRotation();
+      var bounds = this.getBounds();
+      if (!rotation || !rotation.angle) return bounds;
+      var rect = {
+        width: 0,
+        height: 0,
+        oldBounds: bounds
+      }; // left top
+
+      var points = [];
+
+      if (this.points && this.points.length > 0) {
+        points = _jmUtils.jmUtils.clone(this.points, true); // 深度拷贝			
+      } else if (this.getLocation) {
+        var local = this.getLocation();
+
+        if (local) {
+          points.push({
+            x: local.left,
+            y: local.top
+          }, {
+            x: local.left + local.width,
+            y: local.top
+          }, {
+            x: local.left + local.width,
+            y: local.top + local.height
+          }, {
+            x: local.left,
+            y: local.top + local.height
+          });
+        }
+      }
+
+      points = _jmUtils.jmUtils.rotatePoints(points, {
+        x: rotation.x + bounds.left,
+        y: rotation.y + bounds.top
+      }, rotation.angle); // 对现在点进行旋转
+
+      var _iterator4 = _createForOfIteratorHelper(points),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var p = _step4.value;
+
+          if (typeof rect.left === 'undefined' || rect.left > p.x) {
+            rect.left = p.x;
+          }
+
+          if (typeof rect.top === 'undefined' || rect.top > p.y) {
+            rect.top = p.y;
+          }
+
+          if (typeof rect.right === 'undefined' || rect.right < p.x) {
+            rect.right = p.x;
+          }
+
+          if (typeof rect.bottom === 'undefined' || rect.bottom < p.y) {
+            rect.bottom = p.y;
+          }
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      if (!rect.left) rect.left = 0;
+      if (!rect.top) rect.top = 0;
+      if (!rect.right) rect.right = 0;
+      if (!rect.bottom) rect.bottom = 0;
+      rect.width = rect.right - rect.left;
+      rect.height = rect.bottom - rect.top;
+      return rect;
+    }
+    /**
+     * 获取当前控件的位置参数
+     * 
+     * 解析百分比和 margin 参数，返回标准化的位置信息。
+     * 支持百分比定位（如 '50%'）和 margin 偏移。
+     * 
+     * @method getLocation
+     * @returns {Object} 位置参数对象
+     * @returns {number} returns.left - 左边距
+     * @returns {number} returns.top - 上边距
+     * @returns {number} returns.width - 宽度
+     * @returns {number} returns.height - 高度
+     * @returns {Object} [returns.position] - 位置对象 {x, y}
+     * @returns {Object} [returns.center] - 中心点
+     * @returns {Object} [returns.start] - 起点（线条类）
+     * @returns {Object} [returns.end] - 终点（线条类）
+     * @returns {number} [returns.radius] - 半径（圆形类）
+     * 
+     * @example
+     * const loc = control.getLocation();
+     * console.log(`位置: (${loc.left}, ${loc.top})`);
+     */
+
+  }, {
+    key: "getLocation",
+    value: function getLocation() {
+      //如果已经计算过则直接返回
+      //在开画之前会清空此对象
+      //if(reset !== true && this.location) return this.location;
+      var local = this.location = {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+      }; // 检查是否有百分比参数需要解析，没有则直接引用避免克隆开销
+
+      var needResolve = this.parent && (_jmUtils.jmUtils.checkPercent(this.width) || _jmUtils.jmUtils.checkPercent(this.height) || this.position && _jmUtils.jmUtils.checkPercent(this.position.x) || this.position && _jmUtils.jmUtils.checkPercent(this.position.y));
+
+      local.position = typeof this.position == 'function' ? this.position() : needResolve ? _jmUtils.jmUtils.clone(this.position) : this.position;
+      local.center = this.center && typeof this.center === 'function' ? this.center() : needResolve ? _jmUtils.jmUtils.clone(this.center) : this.center; //中心
+
+      local.start = this.start && typeof this.start === 'function' ? this.start() : needResolve ? _jmUtils.jmUtils.clone(this.start) : this.start; //起点
+
+      local.end = this.end && typeof this.end === 'function' ? this.end() : needResolve ? _jmUtils.jmUtils.clone(this.end) : this.end; //起点
+
+      local.radius = this.radius; //半径
+
+      local.width = this.width;
+      local.height = this.height;
+      var margin = this.style.margin;
+      var marginObj = needResolve && margin ? _jmUtils.jmUtils.clone(margin, {}) : margin || {};
+      marginObj.left = marginObj.left || 0;
+      marginObj.top = marginObj.top || 0;
+      marginObj.right = marginObj.right || 0;
+      marginObj.bottom = marginObj.bottom || 0; //如果没有指定位置，但指定了margin。则位置取margin偏移量
+
+      if (local.position) {
+        local.left = local.position.x;
+        local.top = local.position.y;
+      } else {
+        local.left = marginObj.left;
+        local.top = marginObj.top;
+      }
+
+      if (this.parent) {
+        var parentBounds = this.parent.getBounds(); //处理百分比参数
+
+        if (_jmUtils.jmUtils.checkPercent(local.left)) {
+          local.left = _jmUtils.jmUtils.percentToNumber(local.left) * parentBounds.width;
+        }
+
+        if (_jmUtils.jmUtils.checkPercent(local.top)) {
+          local.top = _jmUtils.jmUtils.percentToNumber(local.top) * parentBounds.height;
+        } //如果没有指定宽度或高度，则按百分之百计算其父宽度或高度
+
+
+        if (_jmUtils.jmUtils.checkPercent(local.width)) {
+          local.width = _jmUtils.jmUtils.percentToNumber(local.width) * parentBounds.width;
+        }
+
+        if (_jmUtils.jmUtils.checkPercent(local.height)) {
+          local.height = _jmUtils.jmUtils.percentToNumber(local.height) * parentBounds.height;
+        } //处理中心点
+
+
+        if (local.center) {
+          //处理百分比参数
+          if (_jmUtils.jmUtils.checkPercent(local.center.x)) {
+            local.center.x = _jmUtils.jmUtils.percentToNumber(local.center.x) * parentBounds.width;
+          }
+
+          if (_jmUtils.jmUtils.checkPercent(local.center.y)) {
+            local.center.y = _jmUtils.jmUtils.percentToNumber(local.center.y) * parentBounds.height;
+          }
+        }
+
+        if (local.radius) {
+          //处理百分比参数
+          if (_jmUtils.jmUtils.checkPercent(local.radius)) {
+            local.radius = _jmUtils.jmUtils.percentToNumber(local.radius) * Math.min(parentBounds.width, parentBounds.height);
+          }
+        }
+      }
+
+      return local;
+    }
+    /**
+     * 获取当前控件的旋转信息
+     * 
+     * 解析旋转参数，支持百分比形式的旋转中心。
+     * 如果控件本身没有旋转，会继承父级的旋转。
+     * 
+     * @method getRotation
+     * @param {Object} [rotation] - 旋转参数，默认使用 style.rotation
+     * @param {Object} [bounds] - 基础边界
+     * @returns {Object} 旋转信息
+     * @returns {number} returns.x - 旋转中心 X（相对于控件）
+     * @returns {number} returns.y - 旋转中心 Y（相对于控件）
+     * @returns {number} returns.angle - 旋转角度（弧度）
+     * @returns {Object} returns.bounds - 控件边界
+     * 
+     * @example
+     * // 获取旋转信息
+     * const rot = control.getRotation();
+     * if(rot.angle) {
+     *     console.log(`旋转角度: ${rot.angle} 弧度`);
+     * }
+     */
+
+  }, {
+    key: "getRotation",
+    value: function getRotation(rotation) {
+      var bounds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      rotation = rotation || _jmUtils.jmUtils.clone(this.style.rotation);
+
+      if (!rotation) {
+        //如果本身没有，则可以继承父级的
+        rotation = this.parent && this.parent.getRotation ? this.parent.getRotation() : null; //如果父级有旋转，则把坐标转换为当前控件区域
+
+        if (rotation) {
+          bounds = bounds || this.getBounds();
+          rotation.x -= bounds.left;
+          rotation.y -= bounds.top;
+        }
+      } else {
+        bounds = bounds || this.getBounds();
+        if (typeof rotation.x === 'undefined') rotation.x = '50%';
+        if (typeof rotation.y === 'undefined') rotation.y = '50%';
+
+        if (_jmUtils.jmUtils.checkPercent(rotation.x)) {
+          rotation.x = _jmUtils.jmUtils.percentToNumber(rotation.x) * bounds.width;
+        }
+
+        if (_jmUtils.jmUtils.checkPercent(rotation.y)) {
+          rotation.y = _jmUtils.jmUtils.percentToNumber(rotation.y) * bounds.height;
+        }
+      }
+
+      return _objectSpread(_objectSpread({}, rotation), {}, {
+        bounds: bounds
+      });
+    }
+    /**
+     * 计算位移偏移量
+     * 
+     * 解析 translate 样式，支持百分比形式。
+     * 
+     * @method getTranslate
+     * @param {Object} [translate] - 平移参数，默认使用 style.translate
+     * @param {Object} [bounds] - 参考边界
+     * @returns {Object} 平移信息 {x, y}
+     * 
+     * @example
+     * const trans = control.getTranslate();
+     * console.log(`平移: (${trans.x}, ${trans.y})`);
+     */
+
+  }, {
+    key: "getTranslate",
+    value: function getTranslate(translate) {
+      var bounds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      translate = translate || this.style.translate;
+      if (!translate) return {
+        x: 0,
+        y: 0
+      };
+      var result = {
+        x: translate.x || 0,
+        y: translate.y || 0
+      };
+
+      if (_jmUtils.jmUtils.checkPercent(result.x)) {
+        if (!bounds && this.parent) bounds = this.parent.getBounds();
+        result.x = _jmUtils.jmUtils.percentToNumber(result.x) * bounds.width;
+      }
+
+      if (_jmUtils.jmUtils.checkPercent(result.y)) {
+        if (!bounds && this.parent) bounds = this.parent.getBounds();
+        result.y = _jmUtils.jmUtils.percentToNumber(result.y) * bounds.height;
+      }
+
+      return result;
+    }
+    /**
+     * 移除当前控件
+     * 
+     * 从父控件的子控件列表中移除当前控件。
+     * 移除后会触发 needUpdate 重绘。
+     * 
+     * @method remove
+     * 
+     * @example
+     * // 移除控件
+     * control.remove();
+     */
+
+  }, {
+    key: "remove",
+    value: function remove() {
+      if (this.parent) {
+        this.parent.children.remove(this);
+      }
+    }
+    /**
+     * 对控件进行平移
+     * 
+     * 遍历控件所有描点或位置，设置其偏移量。
+     * 支持移动 position、center、start、end、points 等属性。
+     * 
+     * @method offset
+     * @param {number} x - X 轴偏移量
+     * @param {number} y - Y 轴偏移量
+     * @param {boolean} [trans=true] - 是否传递给监听者
+     * @param {Object} [evt] - 如果是事件触发，传递 move 事件参数
+     * 
+     * @example
+     * // 向右移动 10px，向下移动 5px
+     * control.offset(10, 5);
+     */
+
+  }, {
+    key: "offset",
+    value: function offset(x, y, trans, evt) {
+      trans = trans === false ? false : true;
+      var local = this.getLocation(true);
+      var offseted = false;
+
+      if (local.position) {
+        local.left += x;
+        local.top += y; // 由于local是clone出来的对象，为了保留位移，则要修改原属性
+
+        this.position.x = local.left;
+        this.position.y = local.top;
+        offseted = true;
+      }
+
+      if (local.center) {
+        this.center.x = local.center.x + x;
+        this.center.y = local.center.y + y;
+        offseted = true;
+      }
+
+      if (local.start && _typeof(local.start) == 'object') {
+        this.start.x = local.start.x + x;
+        this.start.y = local.start.y + y;
+        offseted = true;
+      }
+
+      if (local.end && _typeof(local.end) == 'object') {
+        this.end.x = local.end.x + x;
+        this.end.y = local.end.y + y;
+        offseted = true;
+      }
+
+      if (offseted == false && this.cpoints) {
+        var p = typeof this.cpoints == 'function' ? this.cpoints : this.cpoints;
+
+        if (p) {
+          var len = p.length;
+
+          for (var i = 0; i < len; i++) {
+            p[i].x += x;
+            p[i].y += y;
+          }
+
+          offseted = true;
+        }
+      }
+
+      if (offseted == false && this.points) {
+        var _len = this.points.length;
+
+        for (var _i2 = 0; _i2 < _len; _i2++) {
+          this.points[_i2].x += x;
+          this.points[_i2].y += y;
+        }
+
+        offseted = true;
+      } //触发控件移动事件	
+
+
+      this.emit('move', {
+        offsetX: x,
+        offsetY: y,
+        trans: trans,
+        evt: evt
+      });
+      this.needUpdate = true; // 移动后更新空间索引（拖动热路径下避免全量重建）
+
+      var g = this.graph;
+
+      if (g && g.hitIndex && g.hitIndex.size) {
+        g.hitIndex.upsert(this);
+      }
+    }
+    /**
+     * 获取控件相对于画布的绝对边界
+     * 
+     * 与 getBounds 不同的是：getBounds 获取的是相对于父容器的边界，
+     * 而 getAbsoluteBounds 获取的是相对于画布的边界。
+     * 
+     * @method getAbsoluteBounds
+     * @returns {Object} 绝对边界对象
+     * 
+     * @example
+     * const absBounds = control.getAbsoluteBounds();
+     * console.log(`画布上的位置: (${absBounds.left}, ${absBounds.top})`);
+     */
+
+  }, {
+    key: "getAbsoluteBounds",
+    value: function getAbsoluteBounds() {
+      // 父级绝对边界引用（作为缓存失效依据：父级边界变化后引用随之变化）
+      var parentAbs = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : null; // 缓存命中：自身边界无脏标记、父级绝对边界未变化
+
+      if (this.__absBounds && !this.__boundsDirty && this.__absParentAbs === parentAbs) {
+        return this.__absBounds;
+      } //当前控件的边界，
+
+
+      var rec = this.getBounds();
+      var result;
+
+      if (parentAbs) {
+        //父容器的绝对边界
+        result = {
+          left: parentAbs.left + rec.left,
+          top: parentAbs.top + rec.top,
+          right: parentAbs.left + rec.right,
+          bottom: parentAbs.top + rec.bottom,
+          width: rec.width,
+          height: rec.height
+        };
+      } else {
+        result = rec;
+      }
+
+      this.__absBounds = result;
+      this.__absParentAbs = parentAbs;
+      this.__boundsDirty = false;
+      return result;
+    }
+    /**
+     * 把当前控件内部坐标转为画布绝对坐标
+     * 
+     * @method toAbsolutePoint
+     * @param {Object} point - 内部坐标 {x, y}
+     * @returns {Object} 绝对坐标
+     * 
+     * @example
+     * const absPoint = control.toAbsolutePoint({x: 10, y: 10});
+     */
+
+  }, {
+    key: "toAbsolutePoint",
+    value: function toAbsolutePoint(point) {
+      if (point.x || point.y) {
+        var bounds = this.absoluteBounds ? this.absoluteBounds : this.getAbsoluteBounds();
+        point.x = (point.x || 0) + bounds.left;
+        point.y = (point.y || 0) + bounds.top;
+      }
+
+      return point;
+    }
+    /**
+     * 把画布绝对坐标转为当前控件坐标系内
+     * 
+     * @method toLocalPosition
+     * @param {Object} point - 绝对坐标
+     * @returns {Object|false} 相对坐标，如果无法转换返回 false
+     * 
+     * @example
+     * const localPoint = control.toLocalPosition({x: 100, y: 100});
+     */
+
+  }, {
+    key: "toLocalPosition",
+    value: function toLocalPosition(point) {
+      var bounds = this.absoluteBounds ? this.absoluteBounds : this.getAbsoluteBounds();
+      if (!bounds) return false;
+      return {
+        x: point.x - bounds.left,
+        y: point.y - bounds.top
+      };
+    }
+    /**
+     * 画控件前初始化
+     * 
+     * 执行 beginPath 开始控件的绘制路径。
+     * 重置位置信息缓存，确保使用最新的位置数据。
+     * 
+     * @method beginDraw
+     * @protected
+     * 
+     * @example
+     * // 子类重写时需要调用父类方法
+     * class MyShape extends jmControl {
+     *     beginDraw() {
+     *         super.beginDraw();
+     *         // 自定义初始化逻辑
+     *     }
+     * }
+     */
+
+  }, {
+    key: "beginDraw",
+    value: function beginDraw() {
+      this.getLocation(true); //重置位置信息
+
+      this.context.beginPath && this.context.beginPath();
+      if (this.webglControl && this.webglControl.beginDraw) this.webglControl.beginDraw();
+    }
+    /**
+     * 结束控件绘制
+     * 
+     * 根据样式执行 fill 或 stroke 操作。
+     * 如果设置了 close 样式，会先闭合路径。
+     * 
+     * @method endDraw
+     * @protected
+     * 
+     * @example
+     * // 绘制流程
+     * control.beginDraw();
+     * control.draw();
+     * control.endDraw();
+     */
+
+  }, {
+    key: "endDraw",
+    value: function endDraw() {
+      //如果当前为封闭路径
+      if (this.style.close) {
+        if (this.webglControl) this.webglControl.closePath();
+        this.context.closePath && this.context.closePath();
+      } // 根据渲染模式选择不同的绘制路径
+
+
+      if (this.webglControl) {
+        // WebGL 模式：使用 WebGL 绘制
+        var fill = this.style['fill'] || this.style['fillStyle'];
+
+        if (fill) {
+          var bounds = this.getBounds();
+          this.webglControl.fill(bounds);
+        }
+
+        if (this.style['stroke'] || !fill && !this.is('jmGraph')) {
+          this.webglControl.stroke();
+        }
+
+        if (this.webglControl.endDraw) this.webglControl.endDraw();
+      } else {
+        // 2D 模式：使用 Canvas 2D API 绘制
+        var _fill = this.style['fill'] || this.style['fillStyle'];
+
+        if (_fill) {
+          this.context.fill && this.context.fill();
+        }
+
+        if (this.style['stroke'] || !_fill && !this.is('jmGraph')) {
+          this.context.stroke && this.context.stroke();
+        }
+      }
+
+      this.needUpdate = false;
+    }
+    /**
+     * 绘制控件路径
+     * 
+     * 在画布上绘制控件的路径点。
+     * 子类应该重写此方法实现自定义绘制逻辑。
+     * 
+     * @method draw
+     * @protected
+     * 
+     * @example
+     * // 子类重写绘制方法
+     * class MyShape extends jmControl {
+     *     draw() {
+     *         const ctx = this.context;
+     *         ctx.moveTo(0, 0);
+     *         ctx.lineTo(100, 100);
+     *         // ... 更多绘制逻辑
+     *     }
+     * }
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      if (this.points && this.points.length > 0) {
+        //获取当前控件的绝对位置
+        var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+
+        if (this.webglControl) {
+          this.webglControl.setParentBounds(bounds);
+          this.webglControl.draw(this.points);
+        } else if (this.context && this.context.moveTo) {
+          this.context.moveTo(this.points[0].x + bounds.left, this.points[0].y + bounds.top);
+          var len = this.points.length;
+
+          for (var i = 1; i < len; i++) {
+            var p = this.points[i]; //移至当前坐标
+
+            if (p.m) {
+              this.context.moveTo(p.x + bounds.left, p.y + bounds.top);
+            } else {
+              this.context.lineTo(p.x + bounds.left, p.y + bounds.top);
+            }
+          }
+        }
+      }
+    }
+    /**
+     * 绘制当前控件及其子控件
+     * 
+     * 协调控件的绘制流程：
+     * 1. 检查可见性
+     * 2. 初始化点数据
+     * 3. 计算边界
+     * 4. 应用样式
+     * 5. 绘制自身
+     * 6. 绘制子控件
+     * 7. 触发事件
+     * 
+     * @method paint
+     * @param {boolean} [v] - 是否可见，false 时跳过绘制
+     * 
+     * @example
+     * // 手动触发重绘
+     * control.paint();
+     */
+
+  }, {
+    key: "paint",
+    value: function paint(v) {
+      if (v !== false && this.visible !== false) {
+        if (this.initPoints) this.initPoints(); // 计算当前边界（脏标记方式失效，替代直接清空，便于 getAbsoluteBounds 复用缓存）
+
+        this.__boundsDirty = true;
+        this.absoluteBounds = this.getAbsoluteBounds();
+        var needDraw = true; //是否需要绘制
+
+        if (!this.is('jmGraph') && this.graph) {
+          var g = this.graph;
+
+          if (g.viewport) {
+            // 统一走 viewport 视口剔除：世界坐标边界，内部完成屏幕坐标变换与画布尺寸比较
+            needDraw = g.viewport.isVisible(this.absoluteBounds);
+          } else {
+            // 兼容无 viewport 的环境（保留原逻辑）
+            var s = g.scaleFactor || 1;
+            var tx = g.translation ? g.translation.x : 0;
+            var ty = g.translation ? g.translation.y : 0;
+            var sl = this.absoluteBounds.left * s + tx;
+            var st = this.absoluteBounds.top * s + ty;
+            var sr = this.absoluteBounds.right * s + tx;
+            var sb = this.absoluteBounds.bottom * s + ty;
+            if (sl >= g.width) needDraw = false;else if (st >= g.height) needDraw = false;else if (sr <= 0) needDraw = false;else if (sb <= 0) needDraw = false;
+          }
+        }
+
+        this.context.save && this.context.save();
+        this.emit('beginDraw', this);
+        this.setStyle(); //设定样式
+        // 应用mask遮罩效果：在mask区域内绘制当前控件
+        // 使用 destination-in 合成模式，只保留mask区域内的内容
+
+        var maskStyle = this.style.mask || this.__mask;
+
+        if (maskStyle && maskStyle.points && this.context.globalCompositeOperation) {
+          // 先绘制当前控件
+          if (needDraw && this.beginDraw) this.beginDraw();
+          if (needDraw && this.draw) this.draw();
+          if (needDraw && this.endDraw) this.endDraw(); // 再应用mask裁剪
+
+          this.context.globalCompositeOperation = 'destination-in';
+          if (maskStyle.initPoints) maskStyle.initPoints();
+          var mBounds = maskStyle.parent && maskStyle.parent.absoluteBounds ? maskStyle.parent.absoluteBounds : this.absoluteBounds;
+          this.context.beginPath();
+
+          if (maskStyle.points && maskStyle.points.length > 0) {
+            this.context.moveTo(maskStyle.points[0].x + (mBounds ? mBounds.left : 0), maskStyle.points[0].y + (mBounds ? mBounds.top : 0));
+
+            for (var i = 1; i < maskStyle.points.length; i++) {
+              if (maskStyle.points[i].m) {
+                this.context.moveTo(maskStyle.points[i].x + (mBounds ? mBounds.left : 0), maskStyle.points[i].y + (mBounds ? mBounds.top : 0));
+              } else {
+                this.context.lineTo(maskStyle.points[i].x + (mBounds ? mBounds.left : 0), maskStyle.points[i].y + (mBounds ? mBounds.top : 0));
+              }
+            }
+
+            if (maskStyle.style && maskStyle.style.close) {
+              this.context.closePath();
+            }
+          }
+
+          this.context.fillStyle = '#ffffff';
+          this.context.fill(); // 恢复合成模式
+
+          this.context.globalCompositeOperation = 'source-over';
+        } else {
+          if (needDraw && this.beginDraw) this.beginDraw();
+          if (needDraw && this.draw) this.draw();
+          if (needDraw && this.endDraw) this.endDraw();
+        }
+
+        if (this.children) {
+          // 惰性排序：仅在添加/移除/zIndex 变化后排序一次
+          if (this.__childrenSortDirty) {
+            this.children.sort();
+          }
+
+          this.children.each(function (i, item) {
+            if (item && item.paint) item.paint();
+          });
+        }
+
+        this.emit('endDraw', this);
+        this.context.restore && this.context.restore();
+        this.needUpdate = false;
+      }
+    }
+    /**
+     * 获取指定事件的监听器集合
+     * 
+     * 返回绑定到指定事件名称的所有事件处理函数。
+     * 
+     * @method getEvent
+     * @param {string} name - 事件名称（如 'click', 'mousedown'）
+     * @returns {jmList|null} 事件处理函数集合，不存在则返回 null
+     * 
+     * @example
+     * const handlers = control.getEvent('click');
+     * if(handlers) {
+     *     console.log(`有 ${handlers.count()} 个点击事件处理器`);
+     * }
+     */
+
+  }, {
+    key: "getEvent",
+    value: function getEvent(name) {
+      return this.__events ? this.__events[name] : null;
+    }
+    /**
+     * 绑定控件事件
+     * 
+     * 为控件添加事件监听器。支持同时绑定多个事件（用空格分隔）。
+     * 同一个处理函数不会被重复添加。
+     * 
+     * @method bind
+     * @param {string} name - 事件名称，多个事件用空格分隔
+     * @param {Function} handle - 事件处理函数
+     * @returns {void}
+     * 
+     * @example
+     * // 绑定单个事件
+     * control.bind('click', (evt) => {
+     *     console.log('被点击了', evt);
+     * });
+     * 
+     * // 绑定多个事件
+     * control.bind('mousedown mouseup', (evt) => {
+     *     console.log('鼠标事件', evt);
+     * });
+     * 
+     * // 使用 on 别名
+     * control.on('mousemove', (evt) => {
+     *     console.log('鼠标移动', evt.position);
+     * });
+     */
+
+  }, {
+    key: "bind",
+    value: function bind(name, handle) {
+      if (name && name.indexOf(' ') > -1) {
+        name = name.split(' ');
+
+        var _iterator5 = _createForOfIteratorHelper(name),
+            _step5;
+
+        try {
+          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+            var n = _step5.value;
+            n && this.bind(n, handle);
+          }
+        } catch (err) {
+          _iterator5.e(err);
+        } finally {
+          _iterator5.f();
+        }
+
+        return;
+      }
+      /**
+       * 添加事件的集合
+       *
+       * @method _setEvent
+       * @private
+       */
+
+
+      function _setEvent(name, events) {
+        if (!this.__events) this.__events = {};
+        return this.__events[name] = events;
+      }
+
+      var eventCollection = this.getEvent(name) || _setEvent.call(this, name, new _jmList.jmList());
+
+      if (!eventCollection.contain(handle)) {
+        eventCollection.add(handle);
+      }
+    }
+    /**
+     * 移除控件事件
+     * 
+     * 移除已绑定的事件处理函数。如果不指定处理函数，则移除该事件的所有处理函数。
+     * 
+     * @method unbind
+     * @param {string} name - 事件名称，多个事件用空格分隔
+     * @param {Function} [handle] - 要移除的事件处理函数，不指定则移除所有
+     * 
+     * @example
+     * // 移除特定处理函数
+     * control.unbind('click', myHandler);
+     * 
+     * // 移除所有点击事件
+     * control.unbind('click');
+     * 
+     * // 移除多个事件
+     * control.unbind('mousedown mouseup');
+     */
+
+  }, {
+    key: "unbind",
+    value: function unbind(name, handle) {
+      if (name && name.indexOf(' ') > -1) {
+        name = name.split(' ');
+
+        var _iterator6 = _createForOfIteratorHelper(name),
+            _step6;
+
+        try {
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var n = _step6.value;
+            n && this.unbind(n, handle);
+          }
+        } catch (err) {
+          _iterator6.e(err);
+        } finally {
+          _iterator6.f();
+        }
+
+        return;
+      }
+
+      var eventCollection = this.getEvent(name);
+
+      if (eventCollection) {
+        if (handle) eventCollection.remove(handle);else eventCollection.clear();
+      }
+    }
+    /**
+     * 触发事件
+     * 
+     * 执行指定事件的所有监听器。
+     * 支持传递多个参数给事件处理函数。
+     * 
+     * @method emit
+     * @param {string} name - 事件名称
+     * @param {...*} args - 传递给事件处理函数的参数
+     * @returns {jmControl} 返回 this 以支持链式调用
+     * 
+     * @example
+     * // 触发自定义事件
+     * control.emit('customEvent', { data: 'value' });
+     * 
+     * // 触发带多个参数的事件
+     * control.emit('dataChange', oldValue, newValue);
+     */
+
+  }, {
+    key: "emit",
+    value: function emit() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key = 0; _key < _len2; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      // 避免每帧 args.slice(1) 分配临时数组
+      // runEventHandle 内部会把非数组参数包装成数组
+      if (args.length > 2) {
+        this.runEventHandle(args[0], args.slice(1));
+      } else if (args.length === 2) {
+        this.runEventHandle(args[0], [args[1]]);
+      } else {
+        this.runEventHandle(args[0], []);
+      }
+
+      return this;
+    }
+    /**
+     * 执行事件处理函数
+     * 
+     * 内部方法，用于执行指定事件的所有监听器。
+     * 如果任一处理函数返回 false，会设置 args.cancel = true。
+     * 
+     * @method runEventHandle
+     * @param {string} name - 事件名称
+     * @param {Array|Object} args - 事件参数
+     * @returns {boolean} 是否被取消
+     * @protected
+     */
+
+  }, {
+    key: "runEventHandle",
+    value: function runEventHandle(name, args) {
+      var events = this.getEvent(name);
+
+      if (events) {
+        var self = this;
+        if (!Array.isArray(args)) args = [args];
+        events.each(function (i, handle) {
+          //只要有一个事件被阻止，则不再处理同级事件，并设置冒泡被阻断
+          if (false === handle.apply(self, args)) {
+            args.cancel = true;
+          }
+        });
+      }
+
+      return args.cancel;
+    }
+    /**
+     * 检查坐标是否落在当前控件区域中
+     * 
+     * 用于点击测试和碰撞检测。
+     * 支持旋转后的碰撞检测，以及自定义命中区域。
+     * 
+     * @method checkPoint
+     * @param {Object} p - 要检测的点坐标
+     * @param {number} p.x - X 坐标
+     * @param {number} p.y - Y 坐标
+     * @param {number} [pad] - 容差范围，默认使用 lineWidth 或 1
+     * @returns {boolean} 点是否在控件区域内
+     * 
+     * @example
+     * // 检查点击位置
+     * graph.bind('click', (evt) => {
+     *     if(control.checkPoint(evt.position)) {
+     *         console.log('点击了控件');
+     *     }
+     * });
+     */
+
+  }, {
+    key: "checkPoint",
+    value: function checkPoint(p, pad) {
+      //jmGraph 需要判断dom位置
+      if (this.type == 'jmGraph') {
+        //获取dom位置
+        var position = this.getPosition();
+
+        if (p.pageX > position.right || p.pageX < position.left) {
+          return false;
+        }
+
+        if (p.pageY > position.bottom || p.pageY < position.top) {
+          return false;
+        }
+
+        return true;
+      }
+
+      var bounds = this.getBounds(); // 如果指定了合中区域，则以命中区域为准
+
+      if (this.hitArea) {
+        var hitArea = {
+          left: this.hitArea.x + bounds.left,
+          top: this.hitArea.y + bounds.top,
+          right: this.hitArea.width + bounds.left,
+          bottom: this.hitArea.height + bounds.top
+        };
+
+        if (p.x > hitArea.right || p.x < hitArea.left) {
+          return false;
+        }
+
+        if (p.y > hitArea.bottom || p.y < hitArea.top) {
+          return false;
+        }
+
+        return true;
+      } //如果有指定padding 表示接受区域加宽，命中更易
+
+
+      pad = Number(pad || this.style['touchPadding'] || this.style['lineWidth'] || 1);
+      var rotation = this.getRotation(null, bounds); //获取当前旋转参数
+      // AABB 粗筛：未旋转时，点不在边界（含容差）内直接排除，
+      // 避免对每个控件都执行昂贵的 pointInPolygon 精判
+
+      if (!rotation || !rotation.angle) {
+        if (p.x < bounds.left - pad || p.x > bounds.right + pad) return false;
+        if (p.y < bounds.top - pad || p.y > bounds.bottom + pad) return false;
+      }
+
+      var ps = this.points; // 没有路径点：边界矩形即命中区域（粗筛已判定）
+
+      if (!ps || !ps.length) return true;
+      var pts = ps; //如果有旋转参数，则需要转换坐标再处理
+
+      if (rotation && rotation.angle) {
+        pts = _jmUtils.jmUtils.clone(ps, true); //拷贝一份数据
+        //rotateX ,rotateY 是相对当前控件的位置
+
+        pts = _jmUtils.jmUtils.rotatePoints(pts, {
+          x: rotation.x + bounds.left,
+          y: rotation.y + bounds.top
+        }, rotation.angle || 0);
+      } //如果当前路径不是实心的
+      //就只用判断点是否在边上即可	
+
+
+      if (pts.length > 2 && (!this.style['fill'] || this.style['stroke'])) {
+        var i = 0;
+        var count = pts.length;
+
+        for (var j = i + 1; j <= count; j = ++i + 1) {
+          //如果j超出最后一个
+          //则当为封闭图形时跟第一点连线处理.否则直接返回false
+          if (j == count) {
+            if (this.style.close) {
+              var _r = _jmUtils.jmUtils.pointInPolygon(p, [pts[i], pts[0]], pad);
+
+              if (_r) return true;
+            }
+          } else {
+            //判断是否在点i,j连成的线上
+            var s = _jmUtils.jmUtils.pointInPolygon(p, [pts[i], pts[j]], pad);
+
+            if (s) return true;
+          }
+        } //不是封闭的图形，则直接返回
+
+
+        if (!this.style['fill']) return false;
+      }
+
+      var r = _jmUtils.jmUtils.pointInPolygon(p, pts, pad);
+
+      return r;
+    }
+    /**
+     * 触发控件事件并执行事件冒泡
+     * 
+     * 组合事件参数，按控件层级关系执行事件冒泡。
+     * 事件从最上层的子控件开始触发，向上冒泡到父控件。
+     * 
+     * @method raiseEvent
+     * @param {string} name - 事件名称
+     * @param {Object} args - 原生事件对象
+     * @returns {boolean} 如果事件被阻止冒泡则返回 false，否则返回 true
+     * 
+     * @example
+     * // 通常由框架内部调用，用户一般不需要直接调用
+     * // 框架会自动处理鼠标/触摸事件
+     */
+
+  }, {
+    key: "raiseEvent",
+    value: function raiseEvent(name, args) {
+      if (this.visible === false) return; //如果不显示则不响应事件	
+
+      if (!args.position) {
+        var graph = this.graph;
+        args.isWXMiniApp = graph.isWXMiniApp;
+        var srcElement = args.srcElement || args.target;
+
+        var position = _jmUtils.jmUtils.getEventPosition(args); //初始化事件位置
+
+
+        args = {
+          position: position,
+          button: args.button == 0 || position.isTouch ? 1 : args.button,
+          keyCode: args.keyCode || args.charCode || args.which,
+          ctrlKey: args.ctrlKey,
+          cancel: false,
+          event: args,
+          // 原生事件
+          srcElement: srcElement,
+          isWXMiniApp: graph.isWXMiniApp
+        };
+      }
+
+      args.path = args.path || []; //事件冒泡路径
+      //先执行子元素事件，如果事件没有被阻断，则向上冒泡
+
+      var stoped = false; // 命中索引候选集：当根画布启用空间索引且事件点已知时，
+      // 只对候选控件做递归命中，大幅减少大图场景的命中测试量
+
+      var candidates = null;
+
+      if (this.type === 'jmGraph' && this.hitIndex && this.hitIndex.size > 0 && args.position) {
+        candidates = this.hitIndex.query(args.position);
+      }
+
+      if (this.children) {
+        this.children.each(function (j, el) {
+          //未被阻止才执行			
+          if (args.cancel !== true) {
+            if (candidates) {
+              // 叶子控件必须命中候选集；容器总是参与递归（其子级可能溢出）
+              if (!candidates.has(el) && !(el.children && el.children.length)) return;
+            } //如果被阻止冒泡，
+
+
+            stoped = el.raiseEvent(name, args) === false ? true : stoped; // 不再响应其它元素
+
+            if (stoped) return false;
+          }
+        }, true); //按逆序处理
+      } // 如果已被阻止，不再响应上级事件
+
+
+      if (stoped) return false; //获取当前对象的父元素绝对位置
+      //生成当前坐标对应的父级元素的相对位置
+
+      var abounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      if (!abounds) return false; //args = jmUtils.clone(args);//参数副本
+
+      args.position.x = args.position.offsetX - abounds.left;
+      args.position.y = args.position.offsetY - abounds.top; // 是否在当前控件内操作
+
+      var inpos = this.interactive !== false && this.checkPoint(args.position); //事件发生在边界内或健盘事件发生在画布中才触发
+
+      if (inpos) {
+        //如果没有指定触发对象，则认为当前为第一触发对象
+        if (!args.target) {
+          args.target = this;
+        }
+
+        this.runEventAndPopEvent(name, args);
+
+        if (!this.focused && (name === 'mousemove' || name === 'touchmove')) {
+          this.focused = true; //表明当前焦点在此控件中
+
+          this.raiseEvent(name === 'mousemove' ? 'mouseover' : 'touchover', args);
+        }
+      } else {
+        //如果焦点不在，且原焦点在，则触发mouseleave事件
+        if (this.interactive !== false && !inpos && this.focused && (name === 'mousemove' || name === 'touchmove')) {
+          this.focused = false; //表明当前焦点离开
+
+          this.runEventHandle(name === 'mousemove' ? 'mouseleave' : 'touchleave', args); //执行事件	
+        }
+      }
+
+      return args.cancel === false; //如果被阻止则返回false,否则返回true
+    }
+    /**
+     * 执行事件并进行冒泡
+     * 
+     * 内部方法，用于执行事件处理并添加到事件路径。
+     * 
+     * @method runEventAndPopEvent
+     * @param {string} name - 事件名称
+     * @param {Object} args - 事件参数
+     * @protected
+     */
+
+  }, {
+    key: "runEventAndPopEvent",
+    value: function runEventAndPopEvent(name, args) {
+      if (args.cancel !== true) {
+        // 添加到触发路径
+        args.path.push(this); //如果返回true则阻断冒泡
+
+        this.runEventHandle(name, args); //执行事件
+        // // 向父节点冒泡事件		
+        // if(args.cancel !== true && this.parent && this.parent.runEventAndPopEvent) {
+        // 	// 相对位置需要改为父节点的
+        // 	if(args.position) {
+        // 		let bounds = this.parent.getBounds();
+        // 		args.position.x += bounds.left;
+        // 		args.position.y += bounds.top;
+        // 	}
+        // 	this.parent.runEventAndPopEvent(name, args);
+        // }		
+      }
+    }
+    /**
+     * 清空控件指定事件
+     * 
+     * 移除指定事件名称下的所有事件处理函数。
+     * 
+     * @method clearEvents
+     * @param {string} name - 需要清除的事件名称
+     * 
+     * @example
+     * // 清除所有点击事件
+     * control.clearEvents('click');
+     */
+
+  }, {
+    key: "clearEvents",
+    value: function clearEvents(name) {
+      var eventCollection = this.getEvent(name);
+
+      if (eventCollection) {
+        eventCollection.clear();
+      }
+    }
+    /**
+     * 查找指定类型的父级控件
+     * 
+     * 沿着父级链向上查找，直到找到指定类型的控件或到达最顶级。
+     * 
+     * @method findParent
+     * @param {string|Function} type - 类型名称（字符串）或类构造函数
+     * @returns {jmControl|null} 找到的父级控件实例，未找到返回 null
+     * 
+     * @example
+     * // 查找 jmGraph 实例
+     * const graph = control.findParent('jmGraph');
+     * 
+     * // 查找特定类的实例
+     * const parent = control.findParent(MyCustomControl);
+     */
+
+  }, {
+    key: "findParent",
+    value: function findParent(type) {
+      //如果为类型名称，则返回名称相同的类型对象
+      if (typeof type === 'string') {
+        if (this.type == type) return this;
+      } else if (this.is(type)) {
+        return this;
+      }
+
+      if (this.parent) {
+        return this.parent.findParent(type);
+      }
+
+      return null;
+    }
+    /**
+     * 设置控件是否可拖动
+     * 
+     * 启用或禁用控件的拖动功能。
+     * 拖动时会触发 movestart、move、moveend 事件。
+     * 
+     * @method canMove
+     * @param {boolean} m - true 启用拖动，false 禁用拖动
+     * @param {jmGraph} [graph] - 画布实例，如果控件已添加到画布可省略
+     * @returns {jmControl} 返回 this 以支持链式调用
+     * 
+     * @example
+     * // 启用拖动
+     * control.canMove(true);
+     * 
+     * // 禁用拖动
+     * control.canMove(false);
+     * 
+     * // 监听拖动事件
+     * control.on('movestart', (evt) => console.log('开始拖动'));
+     * control.on('moveend', (evt) => console.log('结束拖动'));
+     */
+
+  }, {
+    key: "canMove",
+    value: function canMove(m, graph) {
+      if (!this.__mvMonitor) {
+        /**
+         * 控制控件移动对象
+         * 
+         * @property __mvMonitor
+         * @private
+         */
+        this.__mvMonitor = {};
+        this.__mvMonitor.mouseDown = false;
+        this.__mvMonitor.curposition = {
+          x: 0,
+          y: 0
+        };
+        var self = this;
+        /**
+         * 控件移动鼠标事件
+         *
+         * @method mv
+         * @private
+         */
+
+        this.__mvMonitor.mv = function (evt) {
+          var _this = self; //如果鼠标经过当前可移动控件，则显示可移动指针
+          //if(evt.path && evt.path.indexOf(_this)>-1) {
+          //	_this.cursor('move');	
+          //}
+
+          if (_this.__mvMonitor.mouseDown) {
+            if (_this.parent) _this.parent.__boundsDirty = true; //let parentbounds = _this.parent.getAbsoluteBounds();		
+
+            var offsetx = evt.position.offsetX - _this.__mvMonitor.curposition.x;
+            var offsety = evt.position.offsetY - _this.__mvMonitor.curposition.y; //console.log(offsetx + ',' + offsety);
+            //如果锁定边界
+
+            if (_this.option.lockSide) {
+              var thisbounds = _this.bounds || _this.getAbsoluteBounds(); //检查边界出界
+
+
+              var outside = _jmUtils.jmUtils.checkOutSide(_this.option.lockSide, thisbounds, {
+                x: offsetx,
+                y: offsety
+              });
+
+              if (outside.left < 0 && offsetx < 0) {
+                //offsetx -= outside.left;
+                offsetx = 0;
+              } else if (outside.right > 0 && offsetx > 0) {
+                //offsetx -= outside.right;
+                offsetx = 0;
+              }
+
+              if (outside.top < 0 && offsety < 0) {
+                //offsety -= outside.top;
+                offsety = 0;
+              } else if (outside.bottom > 0 && offsety > 0) {
+                //offsety -= outside.bottom;
+                offsety = 0;
+              }
+            }
+
+            if (offsetx || offsety) {
+              _this.offset(offsetx, offsety, true, evt);
+
+              if (offsetx) _this.__mvMonitor.curposition.x = evt.position.offsetX;
+              if (offsety) _this.__mvMonitor.curposition.y = evt.position.offsetY; //console.log('mouse move',offsetx + '.' + offsety);
+            }
+
+            return false;
+          }
+        };
+        /**
+         * 控件移动鼠标松开事件
+         *
+         * @method mu
+         * @private
+         */
+
+
+        this.__mvMonitor.mu = function (evt) {
+          var _this = self;
+
+          if (_this.__mvMonitor.mouseDown) {
+            _this.__mvMonitor.mouseDown = false; //_this.cursor('default');
+
+            _this.emit('moveend', {
+              position: _this.__mvMonitor.curposition
+            }); //return false;
+
+          }
+        };
+        /**
+         * 控件移动鼠标离开事件
+         *
+         * @method ml
+         * @private
+         */
+
+
+        this.__mvMonitor.ml = function () {
+          var _this = self;
+
+          if (_this.__mvMonitor.mouseDown) {
+            _this.__mvMonitor.mouseDown = false; //_this.cursor('default');	
+
+            _this.emit('moveend', {
+              position: _this.__mvMonitor.curposition
+            });
+
+            return false;
+          }
+        };
+        /**
+         * 控件移动鼠标按下事件
+         *
+         * @method md
+         * @private
+         */
+
+
+        this.__mvMonitor.md = function (evt) {
+          if (this.__mvMonitor.mouseDown) return;
+
+          if (evt.button == 0 || evt.button == 1) {
+            this.__mvMonitor.mouseDown = true; //this.cursor('move');
+            //var parentbounds = this.parent.absoluteBounds || this.parent.getAbsoluteBounds();	
+
+            this.__mvMonitor.curposition.x = evt.position.offsetX; //evt.position.x + parentbounds.left;
+
+            this.__mvMonitor.curposition.y = evt.position.offsetY; //evt.position.y + parentbounds.top;
+            //触发控件移动事件
+
+            this.emit('movestart', {
+              position: this.__mvMonitor.curposition
+            });
+            evt.cancel = true;
+            return false;
+          }
+        };
+      }
+
+      graph = graph || this.graph; //获取最顶级元素画布
+
+      if (m !== false) {
+        graph.bind('mousemove', this.__mvMonitor.mv);
+        graph.bind('mouseup', this.__mvMonitor.mu);
+        graph.bind('mouseleave', this.__mvMonitor.ml);
+        this.bind('mousedown', this.__mvMonitor.md);
+        graph.bind('touchmove', this.__mvMonitor.mv);
+        graph.bind('touchend', this.__mvMonitor.mu);
+        this.bind('touchstart', this.__mvMonitor.md);
+      } else {
+        graph.unbind('mousemove', this.__mvMonitor.mv);
+        graph.unbind('mouseup', this.__mvMonitor.mu);
+        graph.unbind('mouseleave', this.__mvMonitor.ml);
+        this.unbind('mousedown', this.__mvMonitor.md);
+        graph.unbind('touchmove', this.__mvMonitor.mv);
+        graph.unbind('touchend', this.__mvMonitor.mu);
+        this.unbind('touchstart', this.__mvMonitor.md);
+      }
+
+      this.interactive = true; // 如果可以移动，则响应事件
+
+      return this;
+    }
+  }]);
+
+  return jmControl;
+}(_jmProperty2.jmProperty);
+
+exports.jmControl = exports["default"] = jmControl;
+;
+
+},{"../lib/webgl/path.js":27,"./jmFilter.js":4,"./jmGradient.js":5,"./jmList.js":8,"./jmProperty.js":12,"./jmShadow.js":14,"./jmUtils.js":16}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmEvents = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * jmEvents 事件处理类
+ * 
+ * 统一管理画布上的所有交互事件，包括鼠标、触摸和键盘事件。
+ * 支持事件冒泡机制，可以将事件传递给子控件处理。
+ * 
+ * @class jmEvents
+ * 
+ * @param {jmGraph} container jmGraph 实例
+ * @param {HTMLElement} target 事件目标元素（通常是 canvas 元素）
+ * 
+ * @example
+ * // 通常由 jmGraph 内部创建，不需要手动实例化
+ * const events = new jmEvents(graph, canvasElement);
+ */
+var jmEvents = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * 
+   * @param {jmGraph} container jmGraph 实例
+   * @param {HTMLElement} target 事件目标元素
+   */
+  function jmEvents(container, target) {
+    _classCallCheck(this, jmEvents);
+
+    /**
+     * jmGraph 实例
+     * @type {jmGraph}
+     */
+    this.container = container;
+    /**
+     * 事件目标元素
+     * @type {HTMLElement}
+     */
+
+    this.target = target || container;
+    /**
+     * 鼠标事件处理器
+     * @type {jmMouseEvent}
+     */
+
+    this.mouseHandler = new jmMouseEvent(this, container, target);
+    /**
+     * 键盘事件处理器
+     * @type {jmKeyEvent}
+     */
+
+    this.keyHandler = new jmKeyEvent(this, container, target);
+  }
+  /**
+   * 触摸开始事件处理
+   * 
+   * @method touchStart
+   * @param {TouchEvent} evt 触摸事件对象
+   * @return {boolean} 如果事件目标为画布本身则返回 false
+   */
+
+
+  _createClass(jmEvents, [{
+    key: "touchStart",
+    value: function touchStart(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'touchstart';
+      this.container.raiseEvent('touchstart', evt);
+      var t = evt.target || evt.srcElement;
+
+      if (t == this.target) {
+        return false;
+      }
+    }
+  }, {
+    key: "touchMove",
+    value:
+    /**
+     * 触摸移动事件处理
+     * 
+     * @method touchMove
+     * @param {TouchEvent} evt 触摸事件对象
+     * @return {boolean} 如果事件目标为画布本身则返回 false
+     */
+    function touchMove(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'touchmove';
+      this.container.raiseEvent('touchmove', evt);
+      var t = evt.target || evt.srcElement;
+
+      if (t == this.target) {
+        return false;
+      }
+    }
+  }, {
+    key: "touchEnd",
+    value:
+    /**
+     * 触摸结束事件处理
+     * 
+     * @method touchEnd
+     * @param {TouchEvent} evt 触摸事件对象
+     * @return {boolean} 如果事件目标为画布本身则返回 false
+     */
+    function touchEnd(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'touchend';
+      this.container.raiseEvent('touchend', evt);
+      var t = evt.target || evt.srcElement;
+
+      if (t == this.target) {
+        return false;
+      }
+    }
+  }, {
+    key: "touchCancel",
+    value:
+    /**
+     * 触摸取消事件处理
+     * 
+     * @method touchCancel
+     * @param {TouchEvent} evt 触摸事件对象
+     * @return {boolean} 如果事件目标为画布本身则返回 false
+     */
+    function touchCancel(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'touchcancel';
+      this.container.raiseEvent('touchcancel', evt);
+      var t = evt.target || evt.srcElement;
+
+      if (t == this.target) {
+        return false;
+      }
+    }
+  }, {
+    key: "tap",
+    value:
+    /**
+     * 轻触事件处理
+     * 
+     * @method tap
+     * @param {Event} evt 事件对象
+     * @return {boolean} 如果事件目标为画布本身则返回 false
+     */
+    function tap(evt) {
+      evt = evt || window.event;
+      evt.eventName = 'tap';
+      this.container.raiseEvent('tap', evt);
+      var t = evt.target || evt.srcElement;
+
+      if (t == this.target) {
+        return false;
+      }
+    }
+  }, {
+    key: "destroy",
+    value:
+    /**
+     * 销毁事件处理器
+     * 
+     * 移除所有绑定的事件监听器，释放资源。
+     * 
+     * @method destroy
+     */
+    function destroy() {
+      this.mouseHandler.destroy();
+      this.keyHandler.destroy();
+    }
+  }]);
+
+  return jmEvents;
+}();
+/**
+ * 鼠标事件处理器
+ * 
+ * @class jmMouseEvent
+ * @private
+ */
+
+
+exports.jmEvents = exports["default"] = jmEvents;
+
+var jmMouseEvent = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * 
+   * @param {jmEvents} instance jmEvents 实例
+   * @param {jmGraph} container jmGraph 实例
+   * @param {HTMLElement} target 事件目标元素
+   */
+  function jmMouseEvent(instance, container, target) {
+    _classCallCheck(this, jmMouseEvent);
+
+    this.instance = instance;
+    this.container = container;
+    this.target = target || container;
+    /**
+     * 已绑定的事件映射表
+     * @type {Object}
+     */
+
+    this.eventEvents = {};
+    this.init(instance, container, target);
+  }
+  /**
+   * 初始化鼠标事件绑定
+   * 
+   * @method init
+   * @private
+   * @param {jmEvents} instance jmEvents 实例
+   * @param {jmGraph} container jmGraph 实例
+   * @param {HTMLElement} target 事件目标元素
+   */
+
+
+  _createClass(jmMouseEvent, [{
+    key: "init",
+    value: function init(instance, container, target) {
+      var canvas = this.target;
+      var doc = typeof document != 'undefined' ? document : null;
+      this.eventEvents['mousedown'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousedown', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mousedown';
+        container.raiseEvent('mousedown', evt);
+      });
+      this.eventEvents['mousemove'] = _jmUtils.jmUtils.bindEvent(this.target, 'mousemove', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mousemove';
+        var target = evt.target || evt.srcElement;
+
+        if (target == canvas) {
+          container.raiseEvent('mousemove', evt);
+          if (evt.preventDefault) evt.preventDefault();
+          return false;
+        }
+      });
+      this.eventEvents['mouseover'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseover', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mouseover';
+        container.raiseEvent('mouseover', evt);
+      });
+      this.eventEvents['mouseleave'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseleave', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mouseleave';
+        container.raiseEvent('mouseleave', evt);
+      });
+      this.eventEvents['mouseout'] = _jmUtils.jmUtils.bindEvent(this.target, 'mouseout', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mouseout';
+        container.raiseEvent('mouseout', evt);
+      });
+      doc && (this.eventEvents['mouseup'] = _jmUtils.jmUtils.bindEvent(doc, 'mouseup', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'mouseup';
+        var r = container.raiseEvent('mouseup', evt);
+
+        if (r === false) {
+          if (evt.preventDefault) evt.preventDefault();
+          return false;
+        }
+      }));
+      this.eventEvents['wheel'] = _jmUtils.jmUtils.bindEvent(this.target, 'wheel', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'wheel';
+        var r = container.raiseEvent('wheel', evt);
+
+        if (r === false) {
+          if (evt.preventDefault) evt.preventDefault();
+          return false;
+        }
+      }, {
+        passive: false
+      });
+      this.eventEvents['dblclick'] = _jmUtils.jmUtils.bindEvent(this.target, 'dblclick', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'dblclick';
+        container.raiseEvent('dblclick', evt);
+      });
+      this.eventEvents['click'] = _jmUtils.jmUtils.bindEvent(this.target, 'click', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'click';
+        container.raiseEvent('click', evt);
+      });
+      doc && (this.eventEvents['resize'] = _jmUtils.jmUtils.bindEvent(doc, 'resize', function (evt) {
+        evt = evt || window.event;
+        evt.eventName = 'resize';
+        return container.raiseEvent('resize', evt);
+      }));
+      this.eventEvents['touchstart'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchstart', function (evt) {
+        evt.eventName = 'touchstart';
+        return instance.touchStart(evt);
+      }, {
+        passive: false
+      });
+      this.eventEvents['touchmove'] = _jmUtils.jmUtils.bindEvent(this.target, 'touchmove', function (evt) {
+        evt.eventName = 'touchmove';
+        return instance.touchMove(evt);
+      }, {
+        passive: false
+      });
+      doc && (this.eventEvents['touchend'] = _jmUtils.jmUtils.bindEvent(doc, 'touchend', function (evt) {
+        evt.eventName = 'touchend';
+        return instance.touchEnd(evt);
+      }, {
+        passive: false
+      }));
+      doc && (this.eventEvents['touchcancel'] = _jmUtils.jmUtils.bindEvent(doc, 'touchcancel', function (evt) {
+        evt.eventName = 'touchcancel';
+        return instance.touchCancel(evt);
+      }, {
+        passive: false
+      }));
+    }
+    /**
+     * 销毁鼠标事件处理器
+     * 
+     * 移除所有绑定的鼠标事件监听器。
+     * 
+     * @method destroy
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      for (var name in this.eventEvents) {
+        var event = this.eventEvents[name];
+        if (!event || !event.fun) continue;
+
+        _jmUtils.jmUtils.removeEvent(event.target, name, event.fun);
+      }
+    }
+  }]);
+
+  return jmMouseEvent;
+}();
+/**
+ * 键盘事件处理器
+ * 
+ * @class jmKeyEvent
+ * @private
+ */
+
+
+var jmKeyEvent = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * 
+   * @param {jmEvents} instance jmEvents 实例
+   * @param {jmGraph} container jmGraph 实例
+   * @param {HTMLElement} target 事件目标元素
+   */
+  function jmKeyEvent(instance, container, target) {
+    _classCallCheck(this, jmKeyEvent);
+
+    this.instance = instance;
+    this.container = container;
+    this.target = target || container;
+    /**
+     * 已绑定的事件映射表
+     * @type {Object}
+     */
+
+    this.eventEvents = {};
+    this.init(container, target);
+  }
+  /**
+   * 初始化键盘事件绑定
+   * 
+   * @method init
+   * @private
+   * @param {jmGraph} container jmGraph 实例
+   * @param {HTMLElement} target 事件目标元素
+   */
+
+
+  _createClass(jmKeyEvent, [{
+    key: "init",
+    value: function init(container, target) {
+      var doc = typeof document != 'undefined' ? document : null;
+
+      var checkKeyEvent = function checkKeyEvent(evt) {
+        var target = evt.srcElement || evt.target;
+
+        if (target && (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA' || target.tagName == 'ANCHOR' || target.tagName == 'FORM' || target.tagName == 'FILE' || target.tagName == 'IMG' || target.tagName == 'HIDDEN' || target.tagName == 'RADIO' || target.tagName == 'TEXT')) {
+          return false;
+        }
+
+        return true;
+      };
+
+      doc && (this.eventEvents['keypress'] = _jmUtils.jmUtils.bindEvent(doc, 'keypress', function (evt) {
+        evt = evt || window.event;
+        if (!checkKeyEvent(evt)) return;
+        var r = container.raiseEvent('keypress', evt);
+        if (r === false && evt.preventDefault) evt.preventDefault();
+        return r;
+      }));
+      doc && (this.eventEvents['keydown'] = _jmUtils.jmUtils.bindEvent(doc, 'keydown', function (evt) {
+        evt = evt || window.event;
+        if (!checkKeyEvent(evt)) return;
+        var r = container.raiseEvent('keydown', evt);
+        if (r === false && evt.preventDefault) evt.preventDefault();
+        return r;
+      }));
+      doc && (this.eventEvents['keyup'] = _jmUtils.jmUtils.bindEvent(doc, 'keyup', function (evt) {
+        evt = evt || window.event;
+        if (!checkKeyEvent(evt)) return;
+        var r = container.raiseEvent('keyup', evt);
+        if (r === false && evt.preventDefault) evt.preventDefault();
+        return r;
+      }));
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      for (var name in this.eventEvents) {
+        var event = this.eventEvents[name];
+        if (!event || !event.fun) continue;
+
+        _jmUtils.jmUtils.removeEvent(event.target, name, event.fun);
+      }
+    }
+  }]);
+
+  return jmKeyEvent;
+}();
+
+},{"./jmUtils.js":16}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmFilter = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * CSS 滤镜效果类
+ * 
+ * 支持的滤镜: blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity
+ *
+ * @class jmFilter
+ * @param {string|object} opt 滤镜参数
+ *   字符串格式: "blur(2px) grayscale(50%) brightness(1.2)"
+ *   对象格式: { blur: 2, grayscale: 0.5, brightness: 1.2 }
+ * 
+ * @example
+ * // 从字符串创建
+ * const filter = new jmFilter('blur(2px) grayscale(50%)');
+ * 
+ * // 从对象创建
+ * const filter = new jmFilter({
+ *     blur: 2,
+ *     grayscale: 0.5,
+ *     brightness: 1.2
+ * });
+ * 
+ * // 应用到图形
+ * shape.style.filter = filter;
+ */
+var jmFilter = /*#__PURE__*/function () {
+  function jmFilter(opt) {
+    _classCallCheck(this, jmFilter);
+
+    this.filters = [];
+
+    if (typeof opt === 'string') {
+      this.fromString(opt);
+    } else if (opt && _typeof(opt) === 'object') {
+      for (var k in opt) {
+        if (k === 'constructor' || k === 'filters') continue;
+        this.addFilter(k, opt[k]);
+      }
+    }
+  }
+  /**
+   * 添加单个滤镜
+   * @param {string} name 滤镜名称 (blur, grayscale, sepia, brightness, contrast, saturate, hue-rotate, invert, opacity)
+   * @param {number|string} value 滤镜值
+   */
+
+
+  _createClass(jmFilter, [{
+    key: "addFilter",
+    value: function addFilter(name, value) {
+      name = name.toLowerCase().trim();
+
+      if (typeof value === 'string') {
+        value = parseFloat(value);
+      }
+
+      if (isNaN(value)) return; // 规范化滤镜名称
+
+      var normalized = {
+        'blur': 'blur',
+        'grayscale': 'grayscale',
+        'greyscale': 'grayscale',
+        'sepia': 'sepia',
+        'brightness': 'brightness',
+        'contrast': 'contrast',
+        'saturate': 'saturate',
+        'hue-rotate': 'hueRotate',
+        'hueRotate': 'hueRotate',
+        'invert': 'invert',
+        'opacity': 'opacity'
+      }[name];
+      if (!normalized) return; // 检查是否已有同名滤镜，有则更新
+
+      var existing = this.filters.find(function (f) {
+        return f.name === normalized;
+      });
+
+      if (existing) {
+        existing.value = value;
+      } else {
+        this.filters.push({
+          name: normalized,
+          value: value
+        });
+      }
+    }
+    /**
+     * 从字符串格式解析滤镜
+     * 格式: "blur(2px) grayscale(50%) brightness(1.2)"
+     * @param {string} s 滤镜字符串
+     */
+
+  }, {
+    key: "fromString",
+    value: function fromString(s) {
+      if (!s || typeof s !== 'string') return; // 匹配 filterName(value) 模式
+
+      var regex = /([a-zA-Z-]+)\s*\(\s*([^)]+)\s*\)/g;
+      var match;
+
+      while ((match = regex.exec(s)) !== null) {
+        var name = match[1];
+        var valueStr = match[2].replace(/[a-z%]+$/i, '').trim();
+        var value = parseFloat(valueStr);
+
+        if (!isNaN(value)) {
+          this.addFilter(name, value);
+        }
+      }
+    }
+    /**
+     * 转换为CSS filter字符串格式
+     * @returns {string}
+     */
+
+  }, {
+    key: "toString",
+    value: function toString() {
+      return this.filters.map(function (f) {
+        switch (f.name) {
+          case 'blur':
+            return "blur(".concat(f.value, "px)");
+
+          case 'hueRotate':
+            return "hue-rotate(".concat(f.value, "deg)");
+
+          default:
+            return "".concat(f.name, "(").concat(f.value, ")");
+        }
+      }).join(' ');
+    }
+    /**
+     * 转换为Canvas context.filter可用的字符串
+     * @returns {string}
+     */
+
+  }, {
+    key: "toCanvasFilter",
+    value: function toCanvasFilter() {
+      if (this.filters.length === 0) return 'none';
+      return this.toString();
+    }
+    /**
+     * 检查是否有指定名称的滤镜
+     * @param {string} name 滤镜名称
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "has",
+    value: function has(name) {
+      return this.filters.some(function (f) {
+        return f.name === name;
+      });
+    }
+    /**
+     * 获取指定滤镜的值
+     * @param {string} name 滤镜名称
+     * @returns {number|undefined}
+     */
+
+  }, {
+    key: "get",
+    value: function get(name) {
+      var f = this.filters.find(function (f) {
+        return f.name === name;
+      });
+      return f ? f.value : undefined;
+    }
+    /**
+     * 移除指定滤镜
+     * @param {string} name 滤镜名称
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(name) {
+      var index = this.filters.findIndex(function (f) {
+        return f.name === name;
+      });
+
+      if (index > -1) {
+        this.filters.splice(index, 1);
+      }
+    }
+    /**
+     * 清空所有滤镜
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.filters = [];
+    }
+  }]);
+
+  return jmFilter;
+}();
+
+exports.jmFilter = exports["default"] = jmFilter;
+
+},{"./jmUtils.js":16}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmGradient = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+var _jmList = require("./jmList.js");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * 渐变类
+ * 
+ * 用于创建和管理线性渐变或径向渐变效果。
+ * 支持 CSS 渐变字符串格式解析，可以转换为 Canvas 或 WebGL 兼容的渐变对象。
+ * 
+ * @class jmGradient
+ * 
+ * @param {Object|string} opt 渐变参数对象或 CSS 渐变字符串
+ * @param {string} [opt.type='linear'] 渐变类型：'linear' 或 'radial'
+ * @param {number|string} [opt.x1] 起点X坐标（支持百分比）
+ * @param {number|string} [opt.y1] 起点Y坐标（支持百分比）
+ * @param {number|string} [opt.x2] 终点X坐标（支持百分比）
+ * @param {number|string} [opt.y2] 终点Y坐标（支持百分比）
+ * @param {number|string} [opt.r1] 内圆半径（径向渐变）
+ * @param {number|string} [opt.r2] 外圆半径（径向渐变）
+ * @param {Array} [opt.stops] 颜色停止点数组 [{offset, color}, ...]
+ * 
+ * @example
+ * // 创建线性渐变
+ * const gradient = new jmGradient({
+ *     type: 'linear',
+ *     x1: 0, y1: 0,
+ *     x2: '100%', y2: '100%',
+ *     stops: [
+ *         { offset: 0, color: '#ff0000' },
+ *         { offset: 1, color: '#0000ff' }
+ *     ]
+ * });
+ * 
+ * // 从 CSS 字符串创建
+ * const gradient = new jmGradient('linear-gradient(180deg, #ff0000, #0000ff)');
+ */
+var jmGradient = /*#__PURE__*/function () {
+  function jmGradient(opt) {
+    _classCallCheck(this, jmGradient);
+
+    this.stops = new _jmList.jmList();
+
+    if (opt && _typeof(opt) == 'object') {
+      for (var k in opt) {
+        if (k === 'stops') continue;
+        this[k] = opt[k];
+      }
+
+      if (opt.stops && Array.isArray(opt.stops)) {
+        var _this$stops;
+
+        (_this$stops = this.stops).push.apply(_this$stops, _toConsumableArray(opt.stops));
+      }
+    } //解析字符串格式
+    //linear-gradient(direction, color-stop1, color-stop2, ...);
+    //radial-gradient(center, shape size, start-color, ..., last-color);
+    else if (typeof opt == 'string') {
+      this.fromString(opt);
+    }
+  }
+  /**
+   * 添加渐变色
+   * 
+   * @method addStop
+   * @for jmGradient
+   * @param {number} offset 放射渐变颜色偏移,可为百分比参数。
+   * @param {string} color 当前偏移颜色值
+   */
+
+
+  _createClass(jmGradient, [{
+    key: "addStop",
+    value: function addStop(offset, color) {
+      this.stops.add({
+        offset: Number(offset),
+        color: color
+      });
+    }
+    /**
+     * 生成为canvas的渐变对象
+     *
+     * @method toGradient
+     * @for jmGradient
+     * @param {jmControl} control 当前渐变对应的控件
+     * @return {gradient} canvas渐变对象
+     */
+
+  }, {
+    key: "toGradient",
+    value: function toGradient(control) {
+      var gradient;
+      var context = control.context || control;
+      var bounds = control.absoluteBounds ? control.absoluteBounds : control.getAbsoluteBounds();
+      var x1 = this.x1 || 0;
+      var y1 = this.y1 || 0;
+      var x2 = this.x2;
+      var y2 = this.y2;
+      var location = control.getLocation();
+      var d = 0;
+
+      if (location.radius) {
+        d = location.radius * 2;
+      }
+
+      if (!d) {
+        d = Math.min(location.width || 0, location.height || 0);
+      }
+
+      if (d <= 0) {
+        d = Math.max(bounds.width || 0, bounds.height || 0, 100);
+      }
+
+      var width = bounds.width || d;
+      var height = bounds.height || d;
+
+      if (_jmUtils.jmUtils.checkPercent(x1)) {
+        x1 = _jmUtils.jmUtils.percentToNumber(x1) * width;
+      } else if (typeof x1 === 'number' && x1 >= 0 && x1 <= 1) {
+        x1 = x1 * width;
+      } else if (typeof x1 === 'string') {
+        var num = parseFloat(x1);
+        if (!isNaN(num)) x1 = num;
+      }
+
+      if (_jmUtils.jmUtils.checkPercent(x2)) {
+        x2 = _jmUtils.jmUtils.percentToNumber(x2) * width;
+      } else if (typeof x2 === 'number' && x2 >= 0 && x2 <= 1) {
+        x2 = x2 * width;
+      } else if (typeof x2 === 'string') {
+        var _num = parseFloat(x2);
+
+        if (!isNaN(_num)) x2 = _num;
+      }
+
+      if (_jmUtils.jmUtils.checkPercent(y1)) {
+        y1 = _jmUtils.jmUtils.percentToNumber(y1) * height;
+      } else if (typeof y1 === 'number' && y1 >= 0 && y1 <= 1) {
+        y1 = y1 * height;
+      } else if (typeof y1 === 'string') {
+        var _num2 = parseFloat(y1);
+
+        if (!isNaN(_num2)) y1 = _num2;
+      }
+
+      if (_jmUtils.jmUtils.checkPercent(y2)) {
+        y2 = _jmUtils.jmUtils.percentToNumber(y2) * height;
+      } else if (typeof y2 === 'number' && y2 >= 0 && y2 <= 1) {
+        y2 = y2 * height;
+      } else if (typeof y2 === 'string') {
+        var _num3 = parseFloat(y2);
+
+        if (!isNaN(_num3)) y2 = _num3;
+      }
+
+      x1 = Number(x1) || 0;
+      y1 = Number(y1) || 0;
+      x2 = Number(x2) || 0;
+      y2 = Number(y2) || 0;
+      var sx1 = x1 + (bounds.left || 0);
+      var sy1 = y1 + (bounds.top || 0);
+      var sx2 = x2 + (bounds.left || 0);
+      var sy2 = y2 + (bounds.top || 0);
+
+      if (this.type === 'linear') {
+        if (control.mode === 'webgl' && control.webglControl) {
+          // WebGL 着色器中 v_text_coord 是绝对坐标，需要传递绝对坐标
+          gradient = control.webglControl.createLinearGradient(sx1, sy1, sx2, sy2, bounds);
+          gradient.key = this.toString();
+        } else {
+          context.createLinearGradient && (gradient = context.createLinearGradient(sx1, sy1, sx2, sy2));
+        }
+      } else if (this.type === 'radial') {
+        var r1 = this.r1 || 0;
+        var r2 = this.r2;
+
+        if (d <= 0) {
+          d = Math.max(bounds.width || 0, bounds.height || 0, 1);
+        }
+
+        if (_jmUtils.jmUtils.checkPercent(r1)) {
+          r1 = _jmUtils.jmUtils.percentToNumber(r1);
+          r1 = d * r1;
+        } else if (typeof r1 === 'number' && r1 >= 0 && r1 <= 1) {
+          r1 = r1 * d;
+        } else if (typeof r1 === 'string') {
+          r1 = parseFloat(r1) || 0;
+        }
+
+        if (_jmUtils.jmUtils.checkPercent(r2)) {
+          r2 = _jmUtils.jmUtils.percentToNumber(r2);
+          r2 = d * r2;
+        } else if (typeof r2 === 'number' && r2 >= 0 && r2 <= 1) {
+          r2 = r2 * d;
+        } else if (typeof r2 === 'string') {
+          r2 = parseFloat(r2);
+        }
+
+        if (r2 === undefined || r2 === null || isNaN(Number(r2)) || Number(r2) <= 0) {
+          r2 = d / 2;
+        }
+
+        r1 = Number(r1) || 0;
+        r2 = Number(r2) || d / 2;
+
+        if (control.mode === 'webgl' && control.webglControl) {
+          gradient = control.webglControl.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2, bounds);
+          gradient.key = this.toString();
+        } else if (context.createRadialGradient) {
+          gradient = context.createRadialGradient(sx1, sy1, r1, sx2, sy2, r2);
+        } else if (context.createCircularGradient) {
+          gradient = context.createCircularGradient(sx1, sy1, r2);
+        }
+      } //颜色渐变
+
+
+      if (gradient) {
+        this.stops.each(function (i, s) {
+          var c = _jmUtils.jmUtils.toColor(s.color); //s.offset 0.0 ~ 1.0
+
+
+          gradient && gradient.addColorStop(s.offset, c);
+        });
+      } else {
+        var s = this.stops.get(0);
+        return s && s.color || '#000';
+      }
+
+      return gradient;
+    }
+    /**
+     * 解析渐变字符串
+     * 支持的格式:
+     * - linear-gradient(180deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%)
+     * - linear-gradient(to top, red, blue)
+     * - linear-gradient(to right bottom, red, blue)
+     * - linear-gradient(45deg, red, blue)
+     * - linear-gradient(0.5turn, red, blue)
+     * - radial-gradient(circle, red, blue)
+     * - radial-gradient(ellipse at top, red, blue)
+     *
+     * @method fromString
+     * @for jmGradient
+     * @param {string} s 渐变字符串
+     */
+
+  }, {
+    key: "fromString",
+    value: function fromString(s) {
+      if (!s) {
+        console.warn('jmGradient: 渐变字符串为空');
+        return;
+      } // 使用 [\s\S] 匹配任意字符（包括换行符），支持多行渐变字符串
+
+
+      var gradientMatch = s.match(/(linear|radial)-gradient\s*\(\s*([\s\S]+)\)/i);
+
+      if (!gradientMatch || gradientMatch.length < 3) {
+        console.warn('jmGradient: 无效的渐变字符串格式: "' + s + '"');
+        return;
+      }
+
+      var type = gradientMatch[1].toLowerCase();
+
+      if (type !== 'linear' && type !== 'radial') {
+        console.warn('jmGradient: 不支持的渐变类型 "' + type + '"，仅支持 linear 和 radial');
+        return;
+      }
+
+      this.type = type;
+
+      var content = _jmUtils.jmUtils.trim(gradientMatch[2]);
+
+      var splitIndex = this._findSplitIndex(content);
+
+      if (splitIndex < 0) {
+        console.warn('jmGradient: 无法解析渐变内容: "' + content + '"');
+        return;
+      }
+
+      var params = content.substring(0, splitIndex).trim();
+      var colorPart = content.substring(splitIndex + 1).trim();
+
+      if (!colorPart) {
+        console.warn('jmGradient: 未找到颜色停止点');
+        return;
+      }
+
+      if (this.type === 'linear') {
+        this._parseLinearParams(params);
+      } else {
+        this._parseRadialParams(params);
+      }
+
+      var colorCount = this._parseColorStops(colorPart);
+
+      if (colorCount === 0) {
+        console.warn('jmGradient: 未找到有效的颜色停止点: "' + colorPart + '"');
+      } else if (colorCount < 2) {
+        console.warn('jmGradient: 颜色停止点至少需要2个，当前只有 ' + colorCount + ' 个');
+      }
+    }
+    /**
+     * 找到参数和颜色的分割位置（第一个不在括号内的逗号）
+     * @param {string} content 内容字符串
+     * @returns {number} 分割位置索引
+     */
+
+  }, {
+    key: "_findSplitIndex",
+    value: function _findSplitIndex(content) {
+      var depth = 0;
+
+      for (var i = 0; i < content.length; i++) {
+        var _char = content[i];
+
+        if (_char === '(') {
+          depth++;
+        } else if (_char === ')') {
+          depth--;
+        } else if (_char === ',' && depth === 0) {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+    /**
+     * 验证渐变配置是否有效
+     * @returns {boolean} 是否有效
+     */
+
+  }, {
+    key: "isValid",
+    value: function isValid() {
+      if (!this.type) return false;
+
+      if (this.type === 'linear') {
+        return typeof this.x1 !== 'undefined' || typeof this.x2 !== 'undefined' || typeof this._angle !== 'undefined';
+      }
+
+      if (this.type === 'radial') {
+        return this.stops && this.stops.length >= 2;
+      }
+
+      return false;
+    }
+    /**
+     * 解析线性渐变参数
+     * @param {string} params 参数字符串
+     */
+
+  }, {
+    key: "_parseLinearParams",
+    value: function _parseLinearParams(params) {
+      var trimmed = _jmUtils.jmUtils.trim(params);
+
+      if (trimmed.startsWith('to ')) {
+        var direction = trimmed.substring(3).toLowerCase().trim();
+
+        var dir = this._directionToAngle(direction);
+
+        this._angle = dir.angle;
+        this.x1 = dir.x1;
+        this.y1 = dir.y1;
+        this.x2 = dir.x2;
+        this.y2 = dir.y2;
+      } else if (this._hasAngleUnit(trimmed)) {
+        var angle = this._parseAngle(trimmed);
+
+        this._angle = angle;
+
+        var coords = this._angleToCoords(angle);
+
+        this.x1 = coords.x1;
+        this.y1 = coords.y1;
+        this.x2 = coords.x2;
+        this.y2 = coords.y2;
+      } else if (trimmed.startsWith('at ')) {
+        var radialMatch = trimmed.match(/at\s+(.+)/i);
+
+        if (radialMatch) {
+          this._parseRadialParams(trimmed);
+        }
+      } else {
+        var parts = trimmed.split(/\s+/);
+
+        if (parts.length >= 4) {
+          this.x1 = parts[0];
+          this.y1 = parts[1];
+          this.x2 = parts[2];
+          this.y2 = parts[3];
+        } else if (parts.length === 2) {
+          this.x1 = 0;
+          this.y1 = 0;
+          this.x2 = parts[0];
+          this.y2 = parts[1];
+        }
+      }
+    }
+    /**
+     * 解析径向渐变参数
+     * @param {string} params 参数字符串
+     */
+
+  }, {
+    key: "_parseRadialParams",
+    value: function _parseRadialParams(params) {
+      var trimmed = _jmUtils.jmUtils.trim(params);
+
+      this.shape = 'ellipse';
+      this.position = {
+        x: '50%',
+        y: '50%'
+      };
+      var atMatch = trimmed.match(/^(.+?)\s+at\s+(.+)$/i);
+
+      if (atMatch) {
+        var shapePart = _jmUtils.jmUtils.trim(atMatch[1]);
+
+        var posPart = _jmUtils.jmUtils.trim(atMatch[2]);
+
+        this._parseRadialShape(shapePart);
+
+        this._parseRadialPosition(posPart);
+      } else if (trimmed.startsWith('circle') || trimmed.startsWith('ellipse')) {
+        this._parseRadialShape(trimmed);
+
+        this.x1 = '50%';
+        this.y1 = '50%';
+        this.x2 = '50%';
+        this.y2 = '50%';
+      } else {
+        var parts = trimmed.split(/\s+/);
+
+        if (parts.length >= 3) {
+          this.x1 = parts[0];
+          this.y1 = parts[1];
+          this.r1 = parts[2];
+        }
+
+        if (parts.length >= 6) {
+          this.x2 = parts[3];
+          this.y2 = parts[4];
+          this.r2 = parts[5];
+        }
+      }
+
+      if (this.x1 === undefined && this.y1 === undefined) {
+        this.x1 = '50%';
+        this.y1 = '50%';
+      }
+
+      if (this.x2 === undefined && this.y2 === undefined) {
+        this.x2 = '50%';
+        this.y2 = '50%';
+      }
+
+      if (this.r2 === undefined) {
+        this.r2 = '50%';
+      }
+    }
+    /**
+     * 解析径向渐变形状
+     * @param {string} shapePart 形状描述
+     */
+
+  }, {
+    key: "_parseRadialShape",
+    value: function _parseRadialShape(shapePart) {
+      if (shapePart.startsWith('circle')) {
+        this.shape = 'circle';
+        var sizeMatch = shapePart.match(/circle\s*\(\s*([^)]+)\s*\)/i);
+
+        if (sizeMatch) {
+          this.r2 = _jmUtils.jmUtils.trim(sizeMatch[1]);
+        }
+      } else if (shapePart.startsWith('ellipse')) {
+        this.shape = 'ellipse';
+
+        var _sizeMatch = shapePart.match(/ellipse\s*\(\s*([^)]+)\s*\)/i);
+
+        if (_sizeMatch) {
+          var sizes = _jmUtils.jmUtils.trim(_sizeMatch[1]).split(/\s+/);
+
+          if (sizes.length >= 2) {
+            this.rx = sizes[0];
+            this.ry = sizes[1];
+          }
+        }
+      }
+    }
+    /**
+     * 解析径向渐变位置
+     * @param {string} posPart 位置描述
+     */
+
+  }, {
+    key: "_parseRadialPosition",
+    value: function _parseRadialPosition(posPart) {
+      var parts = posPart.split(/\s+/);
+
+      if (parts.length >= 2) {
+        this.x1 = parts[0];
+        this.y1 = parts[1];
+        this.x2 = parts[0];
+        this.y2 = parts[1];
+      }
+    }
+    /**
+     * 解析颜色停止点
+     * @param {string} colorPart 颜色部分字符串
+     * @returns {number} 成功解析的颜色数量
+     */
+
+  }, {
+    key: "_parseColorStops",
+    value: function _parseColorStops(colorPart) {
+      if (!colorPart) {
+        return 0;
+      }
+
+      var stops = this._splitColorStops(colorPart);
+
+      var lastOffset = -1;
+      var colorCount = 0;
+
+      for (var i = 0; i < stops.length; i++) {
+        var stop = _jmUtils.jmUtils.trim(stops[i]);
+
+        if (!stop) continue;
+
+        var parsed = this._parseSingleColorStop(stop);
+
+        if (!parsed) {
+          continue;
+        }
+
+        var color = parsed.color,
+            offset = parsed.offset;
+
+        if (color === 'transparent') {
+          color = 'rgba(0,0,0,0)';
+        }
+
+        if (!this._isValidColor(color)) {
+          console.warn('jmGradient: 无效的颜色格式 "' + color + '"');
+          continue;
+        }
+
+        var normalizedOffset = this._normalizeOffset(offset);
+
+        var finalOffset = normalizedOffset;
+
+        if (finalOffset === null) {
+          if (i === 0) {
+            finalOffset = 0;
+          } else if (i === stops.length - 1) {
+            finalOffset = 1;
+          } else {
+            var nextOffset = this._findNextOffset(stops, i);
+
+            if (nextOffset !== null) {
+              finalOffset = (lastOffset + nextOffset) / 2;
+            } else {
+              finalOffset = Math.min(1, lastOffset + (1 - lastOffset) / (stops.length - i));
+            }
+          }
+        }
+
+        if (finalOffset !== null) {
+          if (finalOffset < 0 || finalOffset > 1) {
+            console.warn('jmGradient: 颜色偏移量 ' + finalOffset + ' 超出有效范围 [0, 1]，将调整为有效范围');
+            finalOffset = Math.max(0, Math.min(1, finalOffset));
+          }
+
+          lastOffset = finalOffset;
+          this.addStop(finalOffset, color);
+          colorCount++;
+        }
+      }
+
+      return colorCount;
+    }
+    /**
+     * 分割颜色停止点字符串
+     * @param {string} colorPart 颜色部分字符串
+     * @returns {string[]} 颜色停止点数组
+     */
+
+  }, {
+    key: "_splitColorStops",
+    value: function _splitColorStops(colorPart) {
+      var stops = [];
+      var depth = 0;
+      var current = '';
+
+      for (var i = 0; i < colorPart.length; i++) {
+        var _char2 = colorPart[i];
+
+        if (_char2 === '(') {
+          depth++;
+          current += _char2;
+        } else if (_char2 === ')') {
+          depth--;
+          current += _char2;
+        } else if (_char2 === ',' && depth === 0) {
+          stops.push(current.trim());
+          current = '';
+        } else {
+          current += _char2;
+        }
+      }
+
+      if (current.trim()) {
+        stops.push(current.trim());
+      }
+
+      return stops;
+    }
+    /**
+     * 解析单个颜色停止点
+     * @param {string} stop 单个颜色停止点字符串
+     * @returns {object|null} {color, offset} 或 null
+     */
+
+  }, {
+    key: "_parseSingleColorStop",
+    value: function _parseSingleColorStop(stop) {
+      var hexMatch = stop.match(/^(#[a-fA-F0-9]{3,8})\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (hexMatch) {
+        return {
+          color: hexMatch[1],
+          offset: hexMatch[2] || null
+        };
+      }
+
+      var rgbaMatch = stop.match(/^(rgba?\s*\([^)]+\))\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (rgbaMatch) {
+        return {
+          color: rgbaMatch[1],
+          offset: rgbaMatch[2] || null
+        };
+      }
+
+      var hslaMatch = stop.match(/^(hsla?\s*\([^)]+\))\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (hslaMatch) {
+        return {
+          color: hslaMatch[1],
+          offset: hslaMatch[2] || null
+        };
+      }
+
+      var namedMatch = stop.match(/^([a-zA-Z]+)\s*(\d+(?:\.\d+)?%?)?$/i);
+
+      if (namedMatch && this._isValidColor(namedMatch[1])) {
+        return {
+          color: namedMatch[1],
+          offset: namedMatch[2] || null
+        };
+      }
+
+      return null;
+    }
+    /**
+     * 查找下一个有偏移量的颜色停止点
+     * @param {string[]} stops 颜色停止点数组
+     * @param {number} currentIndex 当前索引
+     * @returns {number|null} 下一个偏移量或null
+     */
+
+  }, {
+    key: "_findNextOffset",
+    value: function _findNextOffset(stops, currentIndex) {
+      for (var i = currentIndex + 1; i < stops.length; i++) {
+        var parsed = this._parseSingleColorStop(_jmUtils.jmUtils.trim(stops[i]));
+
+        if (parsed && parsed.offset) {
+          return this._normalizeOffset(parsed.offset);
+        }
+      }
+
+      return null;
+    }
+    /**
+     * 验证颜色格式是否有效
+     * @param {string} color 颜色字符串
+     * @returns {boolean} 是否有效
+     */
+
+  }, {
+    key: "_isValidColor",
+    value: function _isValidColor(color) {
+      if (!color) return false;
+      var hexPattern = /^#([a-fA-F0-9]{3,8})$/;
+      if (hexPattern.test(color)) return true; // 支持 rgba(r,g,b,a) 和 rgba(r, g, b, a) 等各种空格格式
+
+      var rgbPattern = /^rgba?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (rgbPattern.test(color)) return true;
+      var hslPattern = /^hsla?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*(,\s*[\d.]+\s*)?\)$/i;
+      if (hslPattern.test(color)) return true; // 使用 jmUtils 中的完整 CSS 颜色关键字表
+
+      if (_jmUtils.colorKeywords && _jmUtils.colorKeywords[color.toLowerCase()]) return true; // 宽松处理：符合 CSS 关键字命名规则的字符串也视为有效颜色
+      // (纯字母，可能在运行时被浏览器或其他环境解析)
+
+      if (/^[a-zA-Z]+$/.test(color)) return true;
+      return false;
+    }
+    /**
+     * 标准化偏移值
+     * @param {string} offset 偏移字符串
+     * @returns {number|null} 0-1之间的数值或null
+     */
+
+  }, {
+    key: "_normalizeOffset",
+    value: function _normalizeOffset(offset) {
+      if (!offset) return null;
+      offset = _jmUtils.jmUtils.trim(offset);
+
+      if (offset.endsWith('%')) {
+        return parseFloat(offset) / 100;
+      }
+
+      var num = parseFloat(offset);
+      if (isNaN(num)) return null;
+
+      if (num > 1) {
+        return num / 100;
+      }
+
+      return num;
+    }
+    /**
+     * 检查字符串是否包含角度单位
+     * @param {string} str 待检查字符串
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "_hasAngleUnit",
+    value: function _hasAngleUnit(str) {
+      return /^-?\d+(\.\d+)?\s*(deg|rad|grad|turn)$/i.test(str);
+    }
+    /**
+     * 解析角度值
+     * @param {string} angleStr 角度字符串
+     * @returns {number} 弧度值
+     */
+
+  }, {
+    key: "_parseAngle",
+    value: function _parseAngle(angleStr) {
+      angleStr = _jmUtils.jmUtils.trim(angleStr);
+      var match = angleStr.match(/^(-?\d+(\.\d+)?)\s*(deg|rad|grad|turn)?$/i);
+      if (!match) return 0;
+      var value = parseFloat(match[1]);
+      var unit = (match[3] || 'deg').toLowerCase();
+
+      switch (unit) {
+        case 'deg':
+          return value * Math.PI / 180;
+
+        case 'rad':
+          return value;
+
+        case 'grad':
+          return value * Math.PI / 200;
+
+        case 'turn':
+          return value * 2 * Math.PI;
+
+        default:
+          return value * Math.PI / 180;
+      }
+    }
+    /**
+     * 将角度转换为起点和终点坐标
+     * @param {number} angle 弧度值
+     * @returns {object} 坐标对象
+     */
+
+  }, {
+    key: "_angleToCoords",
+    value: function _angleToCoords(angle) {
+      var x = Math.cos(angle);
+      var y = -Math.sin(angle);
+      return {
+        x1: Math.round((0.5 - x * 0.5) * 1000) / 1000,
+        y1: Math.round((0.5 + y * 0.5) * 1000) / 1000,
+        x2: Math.round((0.5 + x * 0.5) * 1000) / 1000,
+        y2: Math.round((0.5 - y * 0.5) * 1000) / 1000
+      };
+    }
+    /**
+     * 将方向关键词转换为角度和坐标
+     * @param {string} direction 方向描述
+     * @returns {object} 包含angle和坐标的对象
+     */
+
+  }, {
+    key: "_directionToAngle",
+    value: function _directionToAngle(direction) {
+      var directions = {
+        'to top': {
+          angle: 0,
+          x1: '50%',
+          y1: '100%',
+          x2: '50%',
+          y2: '0%'
+        },
+        'to bottom': {
+          angle: Math.PI,
+          x1: '50%',
+          y1: '0%',
+          x2: '50%',
+          y2: '100%'
+        },
+        'to left': {
+          angle: -Math.PI / 2,
+          x1: '100%',
+          y1: '50%',
+          x2: '0%',
+          y2: '50%'
+        },
+        'to right': {
+          angle: Math.PI / 2,
+          x1: '0%',
+          y1: '50%',
+          x2: '100%',
+          y2: '50%'
+        },
+        'to top left': {
+          angle: -Math.PI * 3 / 4,
+          x1: '100%',
+          y1: '100%',
+          x2: '0%',
+          y2: '0%'
+        },
+        'to top right': {
+          angle: -Math.PI / 4,
+          x1: '0%',
+          y1: '100%',
+          x2: '100%',
+          y2: '0%'
+        },
+        'to bottom left': {
+          angle: Math.PI * 3 / 4,
+          x1: '100%',
+          y1: '0%',
+          x2: '0%',
+          y2: '100%'
+        },
+        'to bottom right': {
+          angle: Math.PI / 4,
+          x1: '0%',
+          y1: '0%',
+          x2: '100%',
+          y2: '100%'
+        },
+        'top': {
+          angle: 0,
+          x1: '50%',
+          y1: '100%',
+          x2: '50%',
+          y2: '0%'
+        },
+        'bottom': {
+          angle: Math.PI,
+          x1: '50%',
+          y1: '0%',
+          x2: '50%',
+          y2: '100%'
+        },
+        'left': {
+          angle: -Math.PI / 2,
+          x1: '100%',
+          y1: '50%',
+          x2: '0%',
+          y2: '50%'
+        },
+        'right': {
+          angle: Math.PI / 2,
+          x1: '0%',
+          y1: '50%',
+          x2: '100%',
+          y2: '50%'
+        }
+      };
+      var dir = directions[direction];
+
+      if (dir) {
+        return dir;
+      }
+
+      var keywordMatch = direction.match(/to\s+(top|bottom|left|right)/i);
+
+      if (keywordMatch) {
+        var mainDir = keywordMatch[1].toLowerCase();
+        var secDir = direction.replace(keywordMatch[0], '').trim();
+
+        if (secDir) {
+          var combined = "to ".concat(mainDir, " ").concat(secDir);
+
+          if (directions[combined]) {
+            return directions[combined];
+          }
+        }
+      }
+
+      return {
+        angle: 0,
+        x1: '50%',
+        y1: '100%',
+        x2: '50%',
+        y2: '0%'
+      };
+    }
+    /**
+     * 转换为渐变的字符串表达
+     *
+     * @method toString
+     * @for jmGradient
+     * @return {string} linear-gradient(x1 y1 x2 y2, color1 step, color2 step, ...);	//radial-gradient(x1 y1 r1 x2 y2 r2, color1 step,color2 step, ...);
+     */
+
+  }, {
+    key: "toString",
+    value: function toString() {
+      var str = this.type + '-gradient(';
+
+      if (this.type == 'linear') {
+        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
+      } else {
+        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
+      } //颜色渐变
+
+
+      this.stops.each(function (i, s) {
+        str += ',' + s.color + ' ' + s.offset;
+      });
+      return str + ')';
+    }
+  }]);
+
+  return jmGradient;
+}();
+
+exports.jmGradient = exports["default"] = jmGradient;
+
+},{"./jmList.js":8,"./jmUtils.js":16}],6:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "jmUtils", {
+  enumerable: true,
+  get: function get() {
+    return _jmUtils.jmUtils;
+  }
+});
+Object.defineProperty(exports, "jmList", {
+  enumerable: true,
+  get: function get() {
+    return _jmList.jmList;
+  }
+});
+Object.defineProperty(exports, "jmProperty", {
+  enumerable: true,
+  get: function get() {
+    return _jmProperty.jmProperty;
+  }
+});
+Object.defineProperty(exports, "jmShadow", {
+  enumerable: true,
+  get: function get() {
+    return _jmShadow.jmShadow;
+  }
+});
+Object.defineProperty(exports, "jmGradient", {
+  enumerable: true,
+  get: function get() {
+    return _jmGradient.jmGradient;
+  }
+});
+Object.defineProperty(exports, "jmFilter", {
+  enumerable: true,
+  get: function get() {
+    return _jmFilter.jmFilter;
+  }
+});
+Object.defineProperty(exports, "jmEvents", {
+  enumerable: true,
+  get: function get() {
+    return _jmEvents.jmEvents;
+  }
+});
+Object.defineProperty(exports, "jmControl", {
+  enumerable: true,
+  get: function get() {
+    return _jmControl2.jmControl;
+  }
+});
+Object.defineProperty(exports, "jmPath", {
+  enumerable: true,
+  get: function get() {
+    return _jmPath.jmPath;
+  }
+});
+Object.defineProperty(exports, "jmViewport", {
+  enumerable: true,
+  get: function get() {
+    return _jmViewport["default"];
+  }
+});
+Object.defineProperty(exports, "jmSpatialIndex", {
+  enumerable: true,
+  get: function get() {
+    return _jmSpatialIndex["default"];
+  }
+});
+Object.defineProperty(exports, "Canvas2DRenderer", {
+  enumerable: true,
+  get: function get() {
+    return _jmRenderer.Canvas2DRenderer;
+  }
+});
+Object.defineProperty(exports, "jmRenderer", {
+  enumerable: true,
+  get: function get() {
+    return _jmRenderer.jmRenderer;
+  }
+});
+Object.defineProperty(exports, "jmPlatform", {
+  enumerable: true,
+  get: function get() {
+    return _jmPlatform.jmPlatform;
+  }
+});
+exports.jmGraph = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+var _jmList = require("./jmList.js");
+
+var _jmProperty = require("./jmProperty.js");
+
+var _jmShadow = require("./jmShadow.js");
+
+var _jmGradient = require("./jmGradient.js");
+
+var _jmFilter = require("./jmFilter.js");
+
+var _jmEvents = require("./jmEvents.js");
+
+var _jmControl2 = require("./jmControl.js");
+
+var _jmPath = require("./jmPath.js");
+
+var _jmViewport = _interopRequireDefault(require("./jmViewport.js"));
+
+var _jmSpatialIndex = _interopRequireDefault(require("./jmSpatialIndex.js"));
+
+var _jmRenderer = require("./jmRenderer.js");
+
+var _jmPlatform = require("./jmPlatform.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * jmGraph 画图类
+ * 
+ * 对 Canvas 画图 API 进行二次封装，使其更易调用，省去很多重复的工作。
+ * 支持多种图形的创建、渲染、交互和导出。
+ * 
+ * @class jmGraph
+ * @extends jmControl
+ * 
+ * @param {HTMLElement|string} canvas Canvas 元素或元素 ID
+ * @param {Object} [option] 配置选项
+ * @param {number} [option.width] 画布宽度
+ * @param {number} [option.height] 画布高度
+ * @param {string} [option.mode='2d'] 渲染模式：'2d' 或 'webgl'
+ * @param {boolean} [option.autoRefresh=false] 是否自动刷新
+ * @param {Object} [option.shapes] 自定义图形类型映射
+ * @param {function} [callback] 初始化完成后的回调函数
+ * 
+ * @example
+ * // 创建画布实例
+ * const graph = new jmGraph('canvasId', {
+ *     width: 800,
+ *     height: 600,
+ *     mode: '2d'
+ * });
+ * 
+ * // 创建一个矩形
+ * const rect = graph.createShape('rect', {
+ *     x: 100, y: 100,
+ *     width: 200, height: 150,
+ *     style: { fill: '#ff0000' }
+ * });
+ * graph.children.add(rect);
+ * graph.refresh();
+ */
+var jmGraph = /*#__PURE__*/function (_jmControl) {
+  _inherits(jmGraph, _jmControl);
+
+  var _super = _createSuper(jmGraph);
+
+  function jmGraph(canvas, option, callback) {
+    var _this;
+
+    _classCallCheck(this, jmGraph);
+
+    if (typeof option == 'function') {
+      callback = option;
+      option = {};
+    }
+
+    option = option || {}; //option.mode = '2d'; // webgl | 2d 暂不支持webgl
+
+    option.interactive = true;
+    option.isRegular = true; // 规则的
+
+    _this = _super.call(this, option, 'jmGraph');
+    _this.option = option || {};
+    _this.devicePixelRatio = 1; // 根据屏幕的缩放倍数
+
+    /**
+     * 工具类
+     * @property utils/util
+     * @type {jmUtils}
+     */
+
+    _this.util = _this.utils = _jmUtils.jmUtils; // 模式 webgl | 2d
+
+    _this.mode = option.mode || '2d'; // 视口管理器：统一负责缩放/平移/坐标转换/视口剔除
+
+    _this.viewport = new _jmViewport["default"](option.width || 0, option.height || 0, {
+      scaleFactor: 1,
+      x: 0,
+      y: 0,
+      minZoom: typeof option.minZoom === 'number' ? option.minZoom : 0.1,
+      maxZoom: typeof option.maxZoom === 'number' ? option.maxZoom : 10
+    }); // 空间命中索引（大图交互优化），可通过 option.hitIndex === false 关闭
+
+    _this.hitIndex = option.hitIndex === false ? null : new _jmSpatialIndex["default"](option.hitIndexCellSize || 100);
+    _this.__hitIndexDirty = true; // 兼容旧 API：scaleFactor / translation 委托到 viewport
+
+    Object.defineProperty(_assertThisInitialized(_this), 'scaleFactor', {
+      get: function get() {
+        return _this.viewport.scaleFactor;
+      },
+      set: function set(v) {
+        _this.viewport.scaleFactor = v;
+        _this.viewport._stamp++;
+        return v;
+      },
+      configurable: true
+    });
+    _this.translation = _this.viewport.translation; //如果是小程序
+
+    if (_jmPlatform.jmPlatform.isWX()) {
+      if (typeof canvas === 'string') canvas = wx.createSelectorQuery().select('#' + canvas);
+      _this.isWXMiniApp = true; // 微信小程序平台
+
+      _this.container = canvas;
+    } else {
+      if (typeof canvas === 'string') {
+        canvas = _jmPlatform.jmPlatform.resolveCanvas(canvas);
+      } else if (canvas.length) {
+        canvas = canvas[0];
+      }
+
+      if (!canvas.getContext && _jmPlatform.jmPlatform.getDocument()) {
+        _this.container = canvas;
+
+        var cn = _jmPlatform.jmPlatform.createCanvas();
+
+        canvas.appendChild(cn);
+        cn.width = canvas.offsetWidth || canvas.clientWidth;
+        cn.height = canvas.offsetHeight || canvas.clientHeight;
+        canvas = cn;
+      } else {
+        _this.container = canvas.parentElement;
+      }
+    }
+
+    _this.canvas = canvas; // Create context with preserveDrawingBuffer for webgl to prevent flickering
+
+    if (_this.mode === 'webgl') {
+      _this.context = canvas.getContext(_this.mode, {
+        preserveDrawingBuffer: true
+      });
+    } else {
+      _this.context = canvas.getContext(_this.mode);
+    } // webgl模式
+
+
+    if (_this.mode === 'webgl') {
+      _this.context.enable(_this.context.BLEND); // 开启混合功能：（注意，它不可和gl.DEPTH_TEST一起使用）
+
+
+      _this.context.blendFunc(_this.context.SRC_ALPHA, _this.context.ONE_MINUS_SRC_ALPHA); // 指定混合函数：
+      // webglcontextlost webglcontextrestored
+
+
+      _jmUtils.jmUtils.bindEvent(canvas, 'webglcontextlost', function (e) {
+        console.log('canvas webglcontextlost', e);
+
+        _this.emit('webglcontextlost', e);
+      });
+
+      _jmUtils.jmUtils.bindEvent(canvas, 'webglcontextrestored', function (e) {
+        console.log('canvas webglcontextrestored', e);
+
+        _this.emit('webglcontextrestored', e);
+      });
+    }
+
+    _this.__init(callback);
+
+    return _this;
+  }
+  /**
+   * 初始化画布
+   * @method init
+   */
+
+
+  _createClass(jmGraph, [{
+    key: "__init",
+    value: function __init(callback) {
+      /**
+       * 当前所有图形类型
+       * @property shapes
+       * @type {object}
+       */
+      this.shapes = Object.assign({
+        "path": _jmPath.jmPath
+      }, this.option.shapes);
+      /**
+       * 画控件前初始化
+       * 为了解决一像素线条问题 + 应用视口（缩放/平移）变换
+       * 变换逻辑统一收口到 renderer.begin/end，避免散落在事件闭包中
+       */
+
+      this.on('beginDraw', function () {
+        if (this.renderer) this.renderer.begin();
+      });
+      /**
+       * 结束控件绘制
+       */
+
+      this.on('endDraw', function () {
+        if (this.renderer) this.renderer.end();
+      }); // devicePixelRatio初始化（平台适配层）
+
+      var dpr = _jmPlatform.jmPlatform.getDevicePixelRatio();
+
+      this.devicePixelRatio = dpr > 1 ? dpr : 1; // 为了解决锯齿问题，先放大canvas再缩放。
+      // 可通过 option.dprScale === false 关闭（性能优先）或指定具体倍数
+
+      var dprOpt = this.option.dprScale;
+
+      if (dprOpt === false) {
+        this.dprScaleSize = 1;
+      } else if (typeof dprOpt === 'number' && dprOpt > 0) {
+        this.dprScaleSize = dprOpt;
+      } else {
+        this.dprScaleSize = this.devicePixelRatio > 1 ? this.devicePixelRatio : 2;
+      } // 渲染器：统一管理视口变换与清屏（Canvas2D / WebGL 可替换）
+
+
+      this.renderer = new _jmRenderer.Canvas2DRenderer(this);
+      if (this.option.width > 0) this.width = this.option.width;
+      if (this.option.height > 0) this.height = this.option.height;
+      this.resize(); //绑定事件
+
+      this.eventHandler = new _jmEvents.jmEvents(this, this.canvas.canvas || this.canvas); //如果指定了自动刷新
+
+      if (this.option.autoRefresh) {
+        this.autoRefresh();
+      }
+
+      if (callback) callback(this);
+    } //  重置canvas大小，并判断高清屏，画图先放大二倍
+
+  }, {
+    key: "resize",
+    value: function resize(w, h) {
+      if (!this.canvas) return;
+      this.__normalSize = this.__normalSize || {
+        width: 0,
+        height: 0
+      };
+      w = w || this.__normalSize.width || this.width, h = h || this.__normalSize.height || this.height;
+      if (w) this.__normalSize.width = w;
+      if (h) this.__normalSize.height = h; // 每次 resize 都按当前设备像素比重算 dprScaleSize：
+      // 移动端/跨屏/浏览器缩放时 devicePixelRatio 会在初始化之后变化，
+      // 若只在构造时算一次，高 DPR 屏会被低采样而模糊。
+
+      var dprOpt = this.option.dprScale;
+
+      if (dprOpt === false) {
+        this.dprScaleSize = 1;
+      } else if (typeof dprOpt === 'number' && dprOpt > 0) {
+        this.dprScaleSize = dprOpt;
+      } else {
+        this.dprScaleSize = _jmPlatform.jmPlatform.getDevicePixelRatio() || 1;
+      } // 高清屏：放大后备分辨率并按 dpr 缩放绘制。
+      // 关键：CSS 尺寸用「后备像素 / dpr」反推，保证 CSS:device 比例恰好等于 dpr，
+      // 消除 Windows 下 fractional DPR（125%/150%）及移动端高 DPR 的亚像素模糊。
+
+
+      var dpr = this.dprScaleSize;
+      var bw = Math.round(w * dpr);
+      var bh = Math.round(h * dpr);
+
+      if (this.mode === '2d') {
+        this.canvas.width = bw;
+        this.canvas.height = bh;
+        this.css('width', bw / dpr + 'px');
+        this.css('height', bh / dpr + 'px');
+        if (dpr !== 1) this.context.scale && this.context.scale(dpr, dpr);
+      } else {
+        this.canvas.width = w;
+        this.canvas.height = h;
+      }
+
+      this.context.viewport && this.context.viewport(0, 0, w, h); // 同步视口尺寸（世界坐标可见区域依赖画布尺寸）
+
+      this.viewport.width = w;
+      this.viewport.height = h;
+      this.needUpdate = true;
+    }
+    /**
+     * 宽度
+     * @property width
+     * @type {number}
+     */
+
+  }, {
+    key: "width",
+    get: function get() {
+      if (this.__normalSize && this.__normalSize.width) return this.__normalSize.width;
+      if (this.canvas) return this.canvas.width;
+      return 0;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+
+      if (this.canvas) {
+        this.resize(v);
+      }
+
+      return v;
+    }
+    /**
+     * 高度
+     * @property height
+     * @type {number}
+     */
+
+  }, {
+    key: "height",
+    get: function get() {
+      if (this.__normalSize && this.__normalSize.height) return this.__normalSize.height;
+      if (this.canvas) return this.canvas.height;
+      return 0;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+
+      if (this.canvas) {
+        this.resize(0, v);
+      }
+
+      return v;
+    }
+    /**
+     * 创建jmGraph的静态对象
+     *
+     * @method create
+     * @return {jmGraph} jmGraph实例对象
+     */
+
+  }, {
+    key: "getPosition",
+    value:
+    /**
+     * 获取当前画布在浏览器中的绝对定位
+     *
+     * @method getPosition
+     * @return {postion} 返回定位坐标
+     */
+    function getPosition() {
+      var p = this.isWXMiniApp ? {
+        left: 0,
+        top: 0
+      } : _jmUtils.jmUtils.getElementPosition(this.canvas.canvas || this.canvas);
+      p.width = this.width;
+      p.height = this.height;
+      p.right = p.left + p.width;
+      p.bottom = p.top + p.height;
+      return p;
+    }
+    /**
+     * 注册图形类型,图形类型必需有统一的构造函数。参数为画布句柄和参数对象。
+     *
+     * @method registerShape 
+     * @param {string} name 控件图形名称
+     * @param {class} shape 图形控件类型
+     */
+
+  }, {
+    key: "registerShape",
+    value: function registerShape(name, shape) {
+      this.shapes[name] = shape;
+    }
+    /**
+     * 从已注册的图形类创建图形
+     * 简单直观创建对象
+     *
+     * @method createShape 
+     * @param {string} shape 注册控件的名称 也可以直接是控件类型
+     * @param {object} args 实例化控件的参数
+     * @return {object} 已实例化控件的对象
+     */
+
+  }, {
+    key: "createShape",
+    value: function createShape(shape, args) {
+      if (typeof shape === 'string') {
+        shape = this.shapes[shape];
+      }
+
+      if (shape) {
+        if (!args) args = {};
+        args.graph = this;
+        var obj = new shape(args);
+        return obj;
+      }
+    }
+    /**
+     * 生成阴影对象
+     *
+     * @method createShadow
+     * @param {number} x x偏移量
+     * @param {number} y y偏移量
+     * @param {number} blur 模糊值
+     * @param {string} color 颜色
+     * @return {jmShadow} 阴影对象
+     */
+
+  }, {
+    key: "createShadow",
+    value: function createShadow(x, y, blur, color) {
+      var sh = new _jmShadow.jmShadow(x, y, blur, color);
+      return sh;
+    }
+    /**
+     * 生成线性渐变对象
+     *
+     * @method createLinearGradient
+     * @param {number} x1 线性渐变起始点X坐标
+     * @param {number} y1 线性渐变起始点Y坐标
+     * @param {number} x2 线性渐变结束点X坐标
+     * @param {number} y2 线性渐变结束点Y坐标
+     * @return {jmGradient} 线性渐变对象
+     */
+
+  }, {
+    key: "createLinearGradient",
+    value: function createLinearGradient(x1, y1, x2, y2) {
+      var stops = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+      var gradient = new _jmGradient.jmGradient({
+        type: 'linear',
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        stops: stops
+      });
+      return gradient;
+    }
+    /**
+     * 生成放射渐变对象
+     *
+     * @method createRadialGradient
+     * @param {number} x1 放射渐变小圆中心X坐标
+     * @param {number} y1 放射渐变小圆中心Y坐标
+     * @param {number} r1 放射渐变小圆半径
+     * @param {number} x2 放射渐变大圆中心X坐标
+     * @param {number} y2 放射渐变大圆中心Y坐标
+     * @param {number} r2 放射渐变大圆半径
+     * @return {jmGradient} 放射渐变对象
+     */
+
+  }, {
+    key: "createRadialGradient",
+    value: function createRadialGradient(x1, y1, r1, x2, y2, r2) {
+      var stops = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : [];
+      var gradient = new _jmGradient.jmGradient({
+        type: 'radial',
+        x1: x1,
+        y1: y1,
+        r1: r1,
+        x2: x2,
+        y2: y2,
+        r2: r2,
+        stops: stops
+      });
+      return gradient;
+    }
+    /**
+     * 重新刷新整个画板
+     * 以加入动画事件触发延时10毫秒刷新，保存最尽的调用只刷新一次，加强性能的效果。
+     *
+     * @method refresh
+     */
+
+  }, {
+    key: "refresh",
+    value: function refresh() {
+      // 刷新节流：连续多次 refresh 合并为一次重绘（rAF 对齐），
+      // 避免非 autoRefresh 模式下高频调用导致每帧多次全量重绘
+      if (this.__refreshScheduled) return this;
+      this.__refreshScheduled = true;
+      var self = this;
+
+      var flush = function flush() {
+        self.__refreshScheduled = false;
+        self.redraw();
+      };
+
+      if (typeof requestAnimationFrame !== 'undefined' && !this.isWXMiniApp) {
+        requestAnimationFrame(flush);
+      } else {
+        setTimeout(flush, 16);
+      }
+
+      return this;
+    }
+    /**
+     * 重新刷新整个画板
+     * 此方法直接重画，与refresh效果类似
+     *
+     * @method redraw
+     * @param {number} [w] 清除画布的宽度
+     * @param {number} [h] 清除画布的高度
+     */
+
+  }, {
+    key: "redraw",
+    value: function redraw(w, h) {
+      this.clear(w || this.width, h || this.height);
+      this.paint();
+    }
+    /**
+     * 清除画布
+     * 
+     * @method clear
+     * @param {number} [w] 清除画布的宽度
+     * @param {number} [h] 清除画布的高度
+     */
+
+  }, {
+    key: "clear",
+    value: function clear(w, h) {
+      if (!w || !h) {
+        w = this.width;
+        h = this.height;
+        /*if(this.scaleSize) {
+        	w = w / this.scaleSize.x;
+        	h = h / this.scaleSize.y;
+        }*/
+      }
+
+      if (this.context.clearRect) {
+        // 清屏统一走渲染器（背景填充在 webgl 分支用 clearColor，2d 分支只清透明画布）
+        if (this.renderer) {
+          this.renderer.clear(w, h);
+        } else {
+          this.context.clearRect(0, 0, w, h);
+        }
+      } else if (this.mode === 'webgl' && this.context.clear) {
+        // 缓存 clearColor 对象，避免每帧创建
+        if (this.style && this.style.fill) {
+          var color = this.utils.hexToRGBA(this.style.fill);
+          this.__lastClearColor = color;
+          this.context.clearColor(color.r, color.g, color.b, color.a);
+        } else if (!this.__lastClearColor) {
+          this.__lastClearColor = {
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 0
+          };
+          this.context.clearColor(0, 0, 0, 0);
+        } else {
+          this.context.clearColor(this.__lastClearColor.r, this.__lastClearColor.g, this.__lastClearColor.b, this.__lastClearColor.a);
+        }
+
+        this.context.clear(this.context.COLOR_BUFFER_BIT); // 清空颜色缓冲区，也就是清空画布
+      }
+    }
+    /**
+    * 设置画布样式，此处只是设置其css样式
+    *
+    * @method css
+    * @param {string} name 样式名
+    * @param {string} value 样式值
+    */
+
+  }, {
+    key: "css",
+    value: function css(name, value) {
+      if (this.canvas && this.canvas.style) {
+        if (typeof value != 'undefined') this.canvas.style[name] = value;
+        return this.canvas.style[name];
+      }
+    }
+    /**
+     * 生成路径对象
+     *
+     * @method createPath
+     * @param {array} points 路径中的描点集合
+     * @param {style} style 当前路径的样式
+     * @return {jmPath} 路径对象jmPath
+     */
+
+  }, {
+    key: "createPath",
+    value: function createPath(points, style) {
+      var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var path = this.createShape('path', _objectSpread({
+        points: points,
+        style: style
+      }, option));
+      return path;
+    }
+    /**
+     * 生成直线
+     * 
+     * @method createLine
+     * @param {point} start 直线的起点
+     * @param {point} end 直线的终点
+     * @param {style} 直线的样式
+     * @return {jmLine} 直线对象
+     */
+
+  }, {
+    key: "createLine",
+    value: function createLine(start, end, style) {
+      var line = this.createShape('line', {
+        start: start,
+        end: end,
+        style: style
+      });
+      return line;
+    }
+    /**
+     * 缩小整个画布按比例0.9
+     * 
+     * @method zoomOut
+     */
+
+  }, {
+    key: "zoomOut",
+    value: function zoomOut() {
+      this.scale(0.9, 0.9);
+    }
+    /**
+     * 放大 每次增大0.1的比例
+     * 
+     * @method zoomIn
+     */
+
+  }, {
+    key: "zoomIn",
+    value: function zoomIn() {
+      this.scale(1.1, 1.1);
+    }
+    /**
+     * 大小复原
+     * 
+     * @method zoomActual
+     */
+
+  }, {
+    key: "zoomActual",
+    value: function zoomActual() {
+      if (this.scaleSize) {
+        this.scale(1 / this.scaleSize.x, 1 / this.scaleSize.y);
+      } else {
+        this.scale(1, 1);
+      }
+    }
+    /**
+     * 放大缩小画布
+     * 
+     * @method scale
+     * @param {number} dx 缩放X轴比例
+     * @param {number} dy 缩放Y轴比例
+     */
+
+  }, {
+    key: "scale",
+    value: function scale(dx, dy) {
+      if (!this.normalSize) {
+        this.normalSize = {
+          width: this.canvas.width,
+          height: this.canvas.height
+        };
+      } //this.context.scale && this.context.scale(dx,dy);
+
+
+      if (!this.scaleSize) {
+        this.scaleSize = {
+          x: 1,
+          y: 1
+        };
+      } else {
+        this.scaleSize = {
+          x: dx * this.scaleSize.x,
+          y: dy * this.scaleSize.y
+        };
+      }
+
+      this.canvas.style && (this.canvas.style.transform = "scale(".concat(this.scaleSize.x, ", ").concat(this.scaleSize.y, ")"));
+    }
+    /**
+     * 设置缩放因子
+     * 支持以指定点为中心进行缩放，保持该点在屏幕上的位置不变
+     * 
+     * @method setZoom
+     * @param {number} zoom 缩放因子（建议范围：0.1 - 10）
+     * @param {number} [x] 缩放中心X坐标（画布坐标）
+     * @param {number} [y] 缩放中心Y坐标（画布坐标）
+     * @return {jmGraph} 返回当前实例，支持链式调用
+     */
+
+  }, {
+    key: "setZoom",
+    value: function setZoom(zoom, x, y) {
+      // 参数验证
+      if (typeof zoom !== 'number' || isNaN(zoom)) {
+        console.warn('jmGraph: setZoom - 无效的缩放因子');
+        return this;
+      } // 统一委托 viewport（含缩放范围钳制与以指定点为中心的保持逻辑）
+
+
+      this.viewport.zoomAt(zoom, x, y);
+      this.needUpdate = true;
+      this.redraw();
+      return this; // 支持链式调用
+    }
+    /**
+     * 平移画布
+     * 移动画布视图，改变可视区域
+     * 
+     * @method pan
+     * @param {number} dx X轴平移量（像素）
+     * @param {number} dy Y轴平移量（像素）
+     * @return {jmGraph} 返回当前实例，支持链式调用
+     */
+
+  }, {
+    key: "pan",
+    value: function pan(dx, dy) {
+      // 参数验证
+      if (typeof dx !== 'number' || typeof dy !== 'number' || isNaN(dx) || isNaN(dy)) {
+        console.warn('jmGraph: pan - 无效的平移参数');
+        return this;
+      }
+
+      this.viewport.pan(dx, dy);
+      this.needUpdate = true;
+      this.redraw();
+      return this; // 支持链式调用
+    }
+    /**
+     * 重置缩放和平移
+     * 恢复画布到初始状态（缩放为1，平移为0）
+     * 
+     * @method resetTransform
+     * @return {jmGraph} 返回当前实例，支持链式调用
+     */
+
+  }, {
+    key: "resetTransform",
+    value: function resetTransform() {
+      this.viewport.reset();
+      this.needUpdate = true;
+      this.redraw();
+      return this; // 支持链式调用
+    }
+    /**
+     * 把屏幕坐标（画布像素坐标）转换为世界坐标（图形坐标）
+     * 
+     * 画布通过 translation/scaleFactor 做平移缩放，图形的 position 一律使用世界坐标，
+     * 因此涉及鼠标交互时需要用本方法把屏幕坐标换算回世界坐标。
+     * 
+     * @method screenToWorld
+     * @param {point} point 屏幕坐标 {x, y}
+     * @return {point} 世界坐标 {x, y}
+     */
+
+  }, {
+    key: "screenToWorld",
+    value: function screenToWorld(point) {
+      return this.viewport.screenToWorld(point);
+    }
+    /**
+     * 把世界坐标（图形坐标）转换为屏幕坐标（画布像素坐标）
+     * 
+     * @method worldToScreen
+     * @param {point} point 世界坐标 {x, y}
+     * @return {point} 屏幕坐标 {x, y}
+     */
+
+  }, {
+    key: "worldToScreen",
+    value: function worldToScreen(point) {
+      return this.viewport.worldToScreen(point);
+    }
+    /**
+     * 获取当前所有图形的内容边界（世界坐标）
+     *
+     * 会递归遍历图层/容器等子级，忽略无实际内容的图形（如图层容器本身）。
+     *
+     * @method getContentBounds
+     * @param {function} [filter] 过滤回调，返回 false 的图形会被忽略（其子级也不再遍历）
+     * @return {object|null} 边界对象 {left, top, right, bottom, width, height}，无图形时返回 null
+     */
+
+  }, {
+    key: "getContentBounds",
+    value: function getContentBounds(filter) {
+      var _this2 = this;
+
+      var rect = null;
+
+      var walk = function walk(control) {
+        if (!control || !control.children) return;
+        control.children.each(function (i, shape) {
+          if (!shape || shape === _this2 || shape.visible === false) return;
+          if (typeof filter === 'function' && filter(shape) === false) return; // 使用相对画布的绝对边界，保证不同层级的图形在同一坐标系下合并
+
+          if (shape.bounds !== undefined) shape.__boundsDirty = true;
+          var b = shape.getAbsoluteBounds ? shape.getAbsoluteBounds() : shape.getBounds ? shape.getBounds(true) : null;
+
+          if (b && (b.width || b.height)) {
+            if (!rect) {
+              rect = {
+                left: b.left,
+                top: b.top,
+                right: b.right,
+                bottom: b.bottom
+              };
+            } else {
+              if (b.left < rect.left) rect.left = b.left;
+              if (b.top < rect.top) rect.top = b.top;
+              if (b.right > rect.right) rect.right = b.right;
+              if (b.bottom > rect.bottom) rect.bottom = b.bottom;
+            }
+          }
+
+          walk(shape);
+        });
+      };
+
+      walk(this);
+
+      if (rect) {
+        rect.width = rect.right - rect.left;
+        rect.height = rect.bottom - rect.top;
+      }
+
+      return rect;
+    }
+    /**
+     * 缩放并平移到刚好容纳全部图形
+     * 
+     * @method fitView
+     * @param {number} [padding=0.15] 内容与画布边缘的留白比例（0-0.9）
+     * @param {function} [filter] 参与计算的内容过滤回调
+     * @return {jmGraph} 返回当前实例，支持链式调用
+     */
+
+  }, {
+    key: "fitView",
+    value: function fitView() {
+      var padding = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.15;
+      var filter = arguments.length > 1 ? arguments[1] : undefined;
+      var bounds = this.getContentBounds(filter);
+
+      if (!bounds || !bounds.width || !bounds.height || !this.width || !this.height) {
+        return this.resetTransform();
+      } // 统一委托 viewport（含缩放范围钳制与居中计算）
+
+
+      this.viewport.fitBounds(bounds, padding);
+      this.needUpdate = true;
+      this.redraw();
+      return this;
+    }
+    /**
+     * 触发事件
+     * 
+     * 重写以增加「缩放/平移感知」：当画布存在缩放或平移时，
+     * 先把原生事件的屏幕坐标换算为世界坐标，再交给基类的命中检测，
+     * 否则缩放、平移之后图形将无法被正确命中。
+     * 
+     * @method raiseEvent
+     * @param {string} name 事件名称
+     * @param {object} args 原生事件参数
+     * @return {boolean}
+     */
+
+  }, {
+    key: "raiseEvent",
+    value: function raiseEvent(name, args) {
+      // 事件前惰性重建命中索引（children 增删后只需重建一次）
+      if (this.hitIndex && this.__hitIndexDirty) {
+        this._syncHitIndex();
+      }
+
+      var transformed = this.viewport.transformed;
+
+      if (args && !args.position && transformed) {
+        var position = _jmUtils.jmUtils.getEventPosition(args); // 只转换相对画布的偏移，pageX/pageY 仍保留原始值供画布自身命中检测使用
+
+
+        var world = this.viewport.screenToWorld({
+          x: position.offsetX,
+          y: position.offsetY
+        });
+        position.offsetX = world.x;
+        position.offsetY = world.y;
+        position.x = world.x;
+        position.y = world.y;
+        args = {
+          position: position,
+          button: args.button == 0 || position.isTouch ? 1 : args.button,
+          keyCode: args.keyCode || args.charCode || args.which,
+          ctrlKey: args.ctrlKey,
+          cancel: false,
+          event: args,
+          srcElement: args.srcElement || args.target,
+          isWXMiniApp: this.isWXMiniApp
+        };
+      }
+
+      return _get(_getPrototypeOf(jmGraph.prototype), "raiseEvent", this).call(this, name, args);
+    }
+    /**
+     * 重建空间命中索引（事件前惰性调用）
+     * 收集所有 interactive 的图形边界到均匀网格中，
+     * 使 mousemove 等高频事件只对候选图形做精确命中。
+     * @private
+     */
+
+  }, {
+    key: "_syncHitIndex",
+    value: function _syncHitIndex() {
+      var _this3 = this;
+
+      this.__hitIndexDirty = false;
+      var index = this.hitIndex;
+      if (!index) return;
+      index.clear();
+
+      var collect = function collect(control) {
+        if (!control || !control.children) return;
+        control.children.each(function (i, shape) {
+          if (!shape || shape === _this3 || shape.visible === false) return;
+
+          if (shape.interactive !== false) {
+            try {
+              index.upsert(shape);
+            } catch (e) {// 忽略尚无边界的图形（例如尚未初始化完成）
+            }
+          }
+
+          collect(shape);
+        });
+      };
+
+      collect(this);
+    }
+    /**
+     * 保存为base64图形数据
+     * 
+     * @method toDataURL
+     * @return {string} 当前画布图的base64字符串
+     */
+
+  }, {
+    key: "toDataURL",
+    value: function toDataURL() {
+      var data = this.canvas.toDataURL ? this.canvas.toDataURL() : '';
+      return data;
+    }
+    /**
+     * 导出为PNG图片
+     * 使用Canvas的toDataURL方法导出当前画布内容
+     * 
+     * @method exportToPNG
+     * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+     * @param {string} [format='image/png'] 图片格式，支持image/png和image/jpeg
+     * @param {number} [quality=0.9] 图片质量（0-1之间，仅对JPEG格式有效）
+     */
+
+  }, {
+    key: "exportToPNG",
+    value: function exportToPNG() {
+      var fileName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'jmgraph-export';
+      var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'image/png';
+      var quality = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0.9;
+
+      try {
+        // 确保画布已渲染
+        this.redraw();
+        var dataURL = this.canvas.toDataURL(format, quality);
+        this.downloadFile(dataURL, fileName, 'png');
+      } catch (error) {
+        console.error('jmGraph: exportToPNG - 导出失败', error);
+      }
+    }
+    /**
+     * 导出为JPEG图片
+     * 
+     * @method exportToJPEG
+     * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+     * @param {number} [quality=0.9] 图片质量（0-1之间）
+     */
+
+  }, {
+    key: "exportToJPEG",
+    value: function exportToJPEG() {
+      var fileName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'jmgraph-export';
+      var quality = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.9;
+      this.exportToPNG(fileName, 'image/jpeg', quality);
+    }
+    /**
+     * 导出为SVG文件
+     * 将当前画布内容转换为SVG格式
+     * 注意：只有实现了toSVG方法的形状才能被导出
+     * 
+     * @method exportToSVG
+     * @param {string} [fileName='jmgraph-export'] 文件名（不含扩展名）
+     */
+
+  }, {
+    key: "exportToSVG",
+    value: function exportToSVG() {
+      var fileName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'jmgraph-export';
+
+      try {
+        var svg = this.toSVG();
+
+        var url = _jmPlatform.jmPlatform.createObjectURL(new Blob([svg], {
+          type: 'image/svg+xml;charset=utf-8'
+        }));
+
+        this.downloadFile(url, fileName, 'svg'); // 释放URL对象，避免内存泄漏
+
+        if (url) setTimeout(function () {
+          return _jmPlatform.jmPlatform.revokeObjectURL(url);
+        }, 100);
+      } catch (error) {
+        console.error('jmGraph: exportToSVG - 导出失败', error);
+      }
+    }
+    /**
+     * 遍历所有形状，生成SVG标记
+     *
+     * @method toSVG
+     * @return {string} SVG字符串
+     */
+
+  }, {
+    key: "toSVG",
+    value: function toSVG() {
+      // SVG头部，包含命名空间和画布尺寸
+      var svg = "<svg width=\"".concat(this.width, "\" height=\"").concat(this.height, "\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 ").concat(this.width, " ").concat(this.height, "\">"); // 添加背景色（如果有）
+
+      if (this.style && this.style.fill) {
+        svg += "<rect width=\"100%\" height=\"100%\" fill=\"".concat(this.style.fill, "\"/>");
+      } // 递归遍历所有层级的形状（含嵌套容器/图层）
+
+
+      var walk = function walk(shape) {
+        if (shape && shape.toSVG) {
+          svg += shape.toSVG();
+        }
+
+        if (shape && shape.children) {
+          shape.children.each(function (i, child) {
+            return walk(child);
+          });
+        }
+      };
+
+      this.children.each(function (i, shape) {
+        return walk(shape);
+      });
+      svg += '</svg>';
+      return svg;
+    }
+    /**
+     * 下载文件
+     * 创建临时链接元素触发浏览器下载
+     * 
+     * @method downloadFile
+     * @private
+     * @param {string} url 文件URL或Data URL
+     * @param {string} fileName 文件名（不含扩展名）
+     * @param {string} extension 文件扩展名
+     */
+
+  }, {
+    key: "downloadFile",
+    value: function downloadFile(url, fileName, extension) {
+      // 平台适配层统一处理下载
+      _jmPlatform.jmPlatform.download(url, "".concat(fileName, ".").concat(extension));
+    }
+    /** 
+     * 自动刷新画版
+     * @param {function} callback 执行回调
+     */
+
+  }, {
+    key: "autoRefresh",
+    value: function autoRefresh(callback) {
+      if (this.___isAutoRefreshing) return;
+      var self = this;
+      this.___isAutoRefreshing = true;
+      var refreshStartTime = Date.now();
+
+      function update() {
+        if (self.destroyed) {
+          self.___isAutoRefreshing = false;
+          return; // 已销毁
+        }
+
+        if (self.needUpdate) self.redraw();
+        var time = Date.now() - refreshStartTime; // 触发刷新事件
+
+        self.emit('update', time); // 直接 requestAnimationFrame，无需先 cancel
+
+        self.__requestAnimationFrameFunHandler = self.requestAnimationFrame(update);
+        if (callback) callback();
+      }
+
+      self.__requestAnimationFrameFunHandler && this.cancelAnimationFrame(self.__requestAnimationFrameFunHandler);
+      self.__requestAnimationFrameFunHandler = this.requestAnimationFrame(update);
+      return this;
+    } // 销毁当前对象
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      if (this.eventHandler) this.eventHandler.destroy();
+
+      if (this.hitIndex) {
+        this.hitIndex.clear();
+        this.hitIndex = null;
+      }
+
+      this.destroyed = true; // 标记已销毁
+    }
+  }], [{
+    key: "create",
+    value: function create() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _construct(jmGraph, args);
+    }
+  }]);
+
+  return jmGraph;
+}(_jmControl2.jmControl);
+
+exports.jmGraph = exports["default"] = jmGraph;
+
+},{"./jmControl.js":2,"./jmEvents.js":3,"./jmFilter.js":4,"./jmGradient.js":5,"./jmList.js":8,"./jmPath.js":10,"./jmPlatform.js":11,"./jmProperty.js":12,"./jmRenderer.js":13,"./jmShadow.js":14,"./jmSpatialIndex.js":15,"./jmUtils.js":16,"./jmViewport.js":17}],7:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmLayer = exports["default"] = void 0;
+
+var _jmControl2 = require("./jmControl.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 图层类
+ * 
+ * 用于组织和管理图形对象，支持可见性和锁定控制。
+ * 图层可以包含多个图形对象，并控制它们的显示和交互。
+ *
+ * @class jmLayer
+ * @extends jmControl
+ * @param {object} params 图层参数
+ * @param {string} [params.name] 图层名称，默认为 'Layer_${timestamp}'
+ * @param {boolean} [params.visible=true] 图层是否可见
+ * @param {boolean} [params.locked=false] 图层是否锁定（锁定后不可交互）
+ * @param {jmGraph} [params.graph] 所属的画布对象
+ * 
+ * @example
+ * // 创建图层
+ * const layer = new jmLayer({
+ *     name: 'background',
+ *     visible: true,
+ *     locked: false
+ * });
+ * 
+ * // 添加图形到图层
+ * layer.children.add(rect);
+ * 
+ * // 锁定图层
+ * layer.locked = true;
+ */
+var jmLayer = /*#__PURE__*/function (_jmControl) {
+  _inherits(jmLayer, _jmControl);
+
+  var _super = _createSuper(jmLayer);
+
+  function jmLayer(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmLayer';
+
+    _classCallCheck(this, jmLayer);
+
+    params = params || {};
+    params.interactive = false; // 图层本身不响应交互事件
+
+    _this = _super.call(this, params, t);
+    _this.name = params.name || "Layer_".concat(Date.now());
+    _this.visible = params.visible !== false;
+    _this.locked = params.locked || false;
+    return _this;
+  }
+  /**
+   * 图层名称
+   * 图层的唯一标识符，用于查找和管理图层
+   * 
+   * @property name
+   * @type {string}
+   */
+
+
+  _createClass(jmLayer, [{
+    key: "name",
+    get: function get() {
+      return this.property('name');
+    },
+    set: function set(v) {
+      if (!v || typeof v !== 'string') {
+        console.warn('jmLayer: name must be a non-empty string');
+        return;
+      }
+
+      return this.property('name', v);
+    }
+    /**
+     * 图层是否可见
+     * 不可见的图层不会被渲染，但仍然存在于图层列表中
+     * 
+     * @property visible
+     * @type {boolean}
+     */
+
+  }, {
+    key: "visible",
+    get: function get() {
+      return this.property('visible');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('visible', v);
+    }
+    /**
+     * 图层是否锁定
+     * 锁定的图层中的图形不可被选中或移动，但仍然可见
+     * 适用于背景图层或参考图层
+     * 
+     * @property locked
+     * @type {boolean}
+     */
+
+  }, {
+    key: "locked",
+    get: function get() {
+      return this.property('locked');
+    },
+    set: function set(v) {
+      return this.property('locked', v);
+    }
+    /**
+     * 绘制图层
+     * 只有可见的图层才会被绘制
+     * 
+     * @method paint
+     * @param {boolean} v 是否需要重绘
+     */
+
+  }, {
+    key: "paint",
+    value: function paint(v) {
+      if (this.visible !== false) {
+        _get(_getPrototypeOf(jmLayer.prototype), "paint", this).call(this, v);
+      }
+    }
+    /**
+     * 检查点是否在图层内
+     * 锁定的图层不会响应鼠标事件
+     * 
+     * @method checkPoint
+     * @param {object} p 坐标点 {x, y}
+     * @param {number} [pad] padding，额外的检测范围
+     * @return {boolean} 是否在图层内
+     */
+
+  }, {
+    key: "checkPoint",
+    value: function checkPoint(p, pad) {
+      // 锁定的图层不响应交互
+      if (this.locked) return false;
+      return _get(_getPrototypeOf(jmLayer.prototype), "checkPoint", this).call(this, p, pad);
+    }
+    /**
+     * 清空图层
+     * 移除图层中的所有图形对象
+     * 
+     * @method clear
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.children.clear();
+      this.needUpdate = true;
+    }
+    /**
+     * 获取图层中的图形数量
+     * 
+     * @method getShapeCount
+     * @return {number} 图形数量
+     */
+
+  }, {
+    key: "getShapeCount",
+    value: function getShapeCount() {
+      return this.children.length;
+    }
+    /**
+     * 获取图层信息
+     * 返回图层的基本信息，用于调试和日志
+     * 
+     * @method getInfo
+     * @return {object} 图层信息对象
+     */
+
+  }, {
+    key: "getInfo",
+    value: function getInfo() {
+      return {
+        name: this.name,
+        visible: this.visible,
+        locked: this.locked,
+        shapeCount: this.getShapeCount()
+      };
+    }
+  }]);
+
+  return jmLayer;
+}(_jmControl2.jmControl);
+
+exports.jmLayer = exports["default"] = jmLayer;
+
+},{"./jmControl.js":2}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmList = exports["default"] = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * @fileoverview jmList 列表类
+ * 
+ * jmList 是 jmGraph 库的集合类，继承自原生 Array。
+ * 提供了增强的列表操作方法，包括去重添加、条件查找、遍历等。
+ * 
+ * 主要功能：
+ * - 去重添加元素（add）
+ * - 条件查找（get）
+ * - 正向/反向遍历（each）
+ * - 元素计数（count）
+ * - 移除回调支持
+ * 
+ * @module jmList
+ * @author jmGraph Team
+ * @license MIT
+ */
+
+/**
+ * jmList 列表类
+ * 
+ * 继承自 Array 的增强列表类，提供去重、遍历、查找等功能。
+ * 主要用于管理图形对象的子元素集合。
+ * 
+ * @class jmList
+ * @extends Array
+ * 
+ * @param {...*} arg 初始元素或数组
+ * 
+ * @example
+ * // 创建列表
+ * const list = new jmList([1, 2, 3]);
+ * 
+ * // 添加元素（自动去重）
+ * list.add(4);
+ * list.add([5, 6]);
+ * 
+ * // 遍历
+ * list.each((index, item) => {
+ *     console.log(index, item);
+ * });
+ * 
+ * // 条件查找
+ * const found = list.get(item => item > 3);
+ */
+var jmList = /*#__PURE__*/function (_Array) {
+  _inherits(jmList, _Array);
+
+  var _super = _createSuper(jmList);
+
+  /**
+   * 构造函数
+   * 
+   * @param {...*} arg 初始元素或数组
+   */
+  function jmList() {
+    var _this;
+
+    _classCallCheck(this, jmList);
+
+    var ps = [];
+
+    for (var _len = arguments.length, arg = new Array(_len), _key = 0; _key < _len; _key++) {
+      arg[_key] = arguments[_key];
+    }
+
+    if (arg && arg.length && Array.isArray(arg[0])) {
+      for (var i = 0; i < arg[0].length; i++) {
+        ps.push(arg[0][i]);
+      }
+
+      _this = _super.call.apply(_super, [this].concat(ps));
+    } else {
+      _this = _super.call(this);
+    }
+    /**
+     * 配置选项
+     * @type {Object}
+     * @property {function} removeHandler 元素移除时的回调函数
+     */
+
+
+    _this.option = {};
+    /**
+     * 类型标识
+     * @type {string}
+     */
+
+    _this.type = 'jmList';
+    return _possibleConstructorReturn(_this);
+  }
+  /**
+   * 添加元素到列表
+   * 
+   * 自动去重，如果元素已存在则不会重复添加。
+   * 支持添加单个元素或数组。
+   * 
+   * @method add
+   * @param {*} obj 要添加的元素或数组
+   * @returns {*} 添加的元素
+   * 
+   * @example
+   * list.add(1);           // 添加单个元素
+   * list.add([2, 3, 4]);   // 添加数组
+   */
+
+
+  _createClass(jmList, [{
+    key: "add",
+    value: function add(obj) {
+      if (obj && Array.isArray(obj)) {
+        for (var i = 0; i < obj.length; i++) {
+          if (!this.includes(obj[i])) this.push(obj[i]);
+        }
+
+        return obj;
+      }
+
+      if (_typeof(obj) == 'object' && this.includes(obj)) return obj;
+      this.push(obj);
+      return obj;
+    }
+    /**
+     * 批量添加元素
+     * 
+     * 比逐个调用 add 更高效（去重仍为 O(n)，但避免每次 add 的数组包装开销）。
+     * 
+     * @method addAll
+     * @param {Array} objs 要添加的元素数组
+     * @returns {Array} 传入的数组
+     * 
+     * @example
+     * list.addAll([1, 2, 3]);
+     */
+
+  }, {
+    key: "addAll",
+    value: function addAll(objs) {
+      if (!Array.isArray(objs)) return objs;
+
+      for (var i = 0; i < objs.length; i++) {
+        if (!this.includes(objs[i])) this.push(objs[i]);
+      }
+
+      return objs;
+    }
+    /**
+     * 从列表中移除元素
+     * 
+     * 移除所有匹配的元素，并触发移除回调。
+     * 
+     * @method remove
+     * @param {*} obj 要移除的元素
+     * 
+     * @example
+     * list.remove(item);
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(obj) {
+      for (var i = this.length - 1; i >= 0; i--) {
+        if (this[i] == obj) {
+          this.removeAt(i);
+        }
+      }
+    }
+    /**
+     * 移除指定索引位置的元素
+     * 
+     * @method removeAt
+     * @param {number} index 要移除的元素索引
+     * 
+     * @example
+     * list.removeAt(0);  // 移除第一个元素
+     */
+
+  }, {
+    key: "removeAt",
+    value: function removeAt(index) {
+      if (this.length > index) {
+        var obj = this[index];
+        this.splice(index, 1);
+        if (this.option.removeHandler) this.option.removeHandler.call(this, obj, index);
+      }
+    }
+    /**
+     * 检查列表是否包含指定元素
+     * 
+     * @method contain
+     * @param {*} obj 要检查的元素
+     * @returns {boolean} 如果包含返回 true，否则返回 false
+     * 
+     * @example
+     * if (list.contain(item)) {
+     *     console.log('元素存在');
+     * }
+     */
+
+  }, {
+    key: "contain",
+    value: function contain(obj) {
+      return this.includes(obj);
+    }
+    /**
+     * 获取元素
+     * 
+     * 如果参数是函数，则返回第一个满足条件的元素；
+     * 如果参数是数字，则返回指定索引的元素。
+     * 
+     * @method get
+     * @param {number|function} index 索引或条件函数
+     * @returns {*} 找到的元素，如果未找到返回 undefined
+     * 
+     * @example
+     * // 按索引获取
+     * const item = list.get(0);
+     * 
+     * // 按条件查找
+     * const found = list.get(item => item.id === 5);
+     */
+
+  }, {
+    key: "get",
+    value: function get(index) {
+      if (typeof index == 'function') {
+        return this.find(index);
+      } else {
+        return this[index];
+      }
+    }
+    /**
+     * 遍历列表
+     * 
+     * 支持正向和反向遍历。在回调中返回 false 可以中断遍历。
+     * 
+     * @method each
+     * @param {function} cb 回调函数，参数为 (index, item)
+     * @param {boolean} [inverse=false] 是否反向遍历
+     * 
+     * @example
+     * // 正向遍历
+     * list.each((index, item) => {
+     *     console.log(index, item);
+     *     if (item.id === 3) return false;  // 中断遍历
+     * });
+     * 
+     * // 反向遍历
+     * list.each((index, item) => {
+     *     console.log(index, item);
+     * }, true);
+     */
+
+  }, {
+    key: "each",
+    value: function each(cb, inverse) {
+      if (cb && typeof cb == 'function') {
+        if (inverse) {
+          for (var i = this.length - 1; i >= 0; i--) {
+            var r = cb.call(this, i, this[i]);
+            if (r === false) break;
+          }
+        } else {
+          var len = this.length;
+
+          for (var _i = 0; _i < len; _i++) {
+            var _r = cb.call(this, _i, this[_i]);
+
+            if (_r === false) break;
+          }
+        }
+      }
+    }
+    /**
+     * 统计元素数量
+     * 
+     * 如果提供了条件函数，返回满足条件的元素数量；
+     * 否则返回列表总长度。
+     * 
+     * @method count
+     * @param {function} [handler] 条件函数
+     * @returns {number} 元素数量
+     * 
+     * @example
+     * const total = list.count();  // 总数量
+     * const matched = list.count(item => item.active);  // 满足条件的数量
+     */
+
+  }, {
+    key: "count",
+    value: function count(handler) {
+      if (handler && typeof handler == 'function') {
+        var count = 0;
+        var len = this.length;
+
+        for (var i = 0; i < len; i++) {
+          if (handler(this[i])) {
+            count++;
+          }
+        }
+
+        return count;
+      }
+
+      return this.length;
+    }
+    /**
+     * 清空列表
+     * 
+     * 移除列表中的所有元素。
+     * 
+     * @method clear
+     * 
+     * @example
+     * list.clear();
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.splice(0, this.length);
+    }
+  }]);
+
+  return jmList;
+}( /*#__PURE__*/_wrapNativeSuper(Array));
+
+exports.jmList = exports["default"] = jmList;
+
+},{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmObject = exports["default"] = void 0;
+
+var _jmList = require("./jmList.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * 控件ID计数器
+ * 用于为每个新创建的对象生成唯一标识符
+ * @type {number}
+ * @private
+ */
+var control_id_counter = 0;
+/**
+ * jmGraph 基础对象类
+ * 
+ * 所有图形控件、属性对象、工具类的基类。
+ * 提供了对象标识、类型检查和动画调度等核心功能。
+ * 
+ * @class jmObject
+ * @example
+ * // 创建一个基础对象
+ * const obj = new jmObject();
+ * console.log(obj.id); // 输出唯一ID
+ * 
+ * // 类型检查
+ * obj.is('jmObject'); // true
+ * obj.is(jmObject);  // true
+ */
+
+var jmObject = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * 
+   * 创建一个新的基础对象实例，自动分配唯一ID。
+   * 如果传入的是 jmGraph 实例，则建立关联关系。
+   * 
+   * @constructor
+   * @param {jmGraph} [g] - 可选的 jmGraph 实例，用于建立对象与画布的关联
+   * 
+   * @example
+   * // 创建独立对象
+   * const obj = new jmObject();
+   * 
+   * // 创建关联画布的对象
+   * const graph = new jmGraph(canvas);
+   * const objWithGraph = new jmObject(graph);
+   */
+  function jmObject(g) {
+    _classCallCheck(this, jmObject);
+
+    // 如果传入的是 jmGraph 实例，则建立引用关系
+    if (g && g.type == 'jmGraph') {
+      this.graph = g;
+    } // 生成唯一ID
+
+
+    this.id = ++control_id_counter;
+  }
+  /**
+   * 检查对象是否为指定类型
+   * 
+   * 支持两种类型检查方式：
+   * 1. 字符串方式：检查对象的 type 属性是否匹配
+   * 2. 类构造函数方式：使用 instanceof 检查原型链
+   * 
+   * @method is
+   * @param {string|Function} type - 要检查的类型名称（字符串）或类构造函数
+   * @returns {boolean} 如果对象是指定类型则返回 true，否则返回 false
+   * 
+   * @example
+   * // 使用字符串检查
+   * control.is('jmRect'); // 检查是否为矩形
+   * 
+   * // 使用类构造函数检查
+   * control.is(jmControl); // 检查是否为 jmControl 实例
+   * control.is(jmPath);   // 检查是否继承自 jmPath
+   */
+
+
+  _createClass(jmObject, [{
+    key: "is",
+    value: function is(type) {
+      // 字符串类型：检查 type 属性
+      if (typeof type == 'string') {
+        return this.type == type;
+      } // 类构造函数：使用 instanceof 检查原型链
+
+
+      return this instanceof type;
+    }
+    /**
+     * 注册并执行动画帧回调
+     * 
+     * 提供动画帧调度功能，支持：
+     * - 按指定时间间隔执行回调
+     * - 多个动画句柄并行执行
+     * - 自动清理返回 false 的动画
+     * - 错误自动移除异常动画
+     * 
+     * 此方法通常由 jmGraph 实例调用，子控件会委托给所属的 graph 处理。
+     * 
+     * @method animate
+     * @param {Function} handle - 动画回调函数，返回 false 时自动移除
+     * @param {number} [millisec=20] - 执行间隔（毫秒），默认 20ms
+     * @param {...*} [params] - 传递给回调函数的额外参数
+     * 
+     * @example
+     * // 创建一个简单的动画
+     * let x = 0;
+     * graph.animate(function() {
+     *     x += 1;
+     *     rect.position.x = x;
+     *     graph.redraw();
+     *     
+     *     // 动画结束条件
+     *     if(x > 100) return false;
+     * }, 16); // 约60fps
+     * 
+     * // 带参数的动画
+     * graph.animate(function(speed) {
+     *     x += speed;
+     *     // ...
+     * }, 16, 5); // speed = 5
+     */
+
+  }, {
+    key: "animate",
+    value: function animate() {
+      // 只有 jmGraph 实例才真正处理动画调度
+      if (this.is('jmGraph')) {
+        // 注册新的动画句柄
+        if (arguments.length > 1) {
+          if (!this.animateHandles) this.animateHandles = new _jmList.jmList(); // 收集额外参数
+
+          var params = [];
+
+          if (arguments.length > 2) {
+            for (var i = 2; i < arguments.length; i++) {
+              params.push(i < 0 || arguments.length <= i ? undefined : arguments[i]);
+            }
+          } // 添加动画句柄到列表
+
+
+          this.animateHandles.add({
+            millisec: (arguments.length <= 1 ? undefined : arguments[1]) || 20,
+            // 执行间隔
+            handle: arguments.length <= 0 ? undefined : arguments[0],
+            // 回调函数
+            params: params // 额外参数
+
+          });
+        } // 如果有动画句柄，启动调度循环
+
+
+        if (this.animateHandles) {
+          if (this.animateHandles.count() > 0) {
+            var self = this; // 使用 setTimeout 进行调度（避免 requestAnimationFrame 的固定帧率限制）
+
+            this.dispatcher = setTimeout(function (_this) {
+              _this = _this || self;
+              var overduehandles = []; // 需要移除的句柄
+
+              var curTimes = Date.now(); // 遍历执行所有动画句柄
+
+              _this.animateHandles.each(function (i, ani) {
+                try {
+                  // 检查是否到达执行时间
+                  if (ani && ani.handle && (!ani.times || curTimes - ani.times >= ani.millisec)) {
+                    // 执行回调
+                    var r = ani.handle.apply(_this, ani.params); // 返回 false 表示动画结束
+
+                    if (r === false) {
+                      overduehandles.push(ani);
+                    } // 更新最后执行时间
+
+
+                    ani.times = curTimes;
+                  }
+                } catch (e) {
+                  // 出错的句柄自动移除
+                  if (ani) overduehandles.push(ani);
+                }
+              }); // 移除已完成的动画句柄
+
+
+              for (var _i in overduehandles) {
+                _this.animateHandles.remove(overduehandles[_i]);
+              } // 继续下一轮调度
+
+
+              _this.animate();
+            }, 10, this);
+          }
+        }
+      } else {
+        // 非 jmGraph 对象委托给所属的 graph 处理
+        var graph = this.graph;
+
+        if (graph) {
+          graph.animate.apply(graph, arguments);
+        }
+      }
+    }
+  }]);
+
+  return jmObject;
+}();
+
+exports.jmObject = exports["default"] = jmObject;
+
+},{"./jmList.js":8}],10:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmPath = exports["default"] = void 0;
+
+var _jmControl2 = require("./jmControl.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 基础路径类
+ * 
+ * 大部分图形的基类，通过指定一系列点来画出图形。
+ * 支持开放路径和闭合路径，支持 SVG 导出。
+ * 
+ * @class jmPath
+ * @extends jmControl
+ * 
+ * @param {Object} params 路径参数
+ * @param {Array<Object>} [params.points] 点序列，每个点格式：{x:0, y:0, m:false}
+ * @param {string} [t='jmPath'] 类型标识
+ * 
+ * @example
+ * // 创建自定义路径
+ * const path = new jmPath({
+ *     points: [
+ *         {x: 0, y: 0},
+ *         {x: 100, y: 0},
+ *         {x: 100, y: 100},
+ *         {x: 0, y: 100}
+ *     ],
+ *     style: {
+ *         fill: '#ff0000',
+ *         stroke: '#000000',
+ *         close: true  // 闭合路径
+ *     }
+ * });
+ */
+var jmPath = /*#__PURE__*/function (_jmControl) {
+  _inherits(jmPath, _jmControl);
+
+  var _super = _createSuper(jmPath);
+
+  function jmPath(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmPath';
+
+    _classCallCheck(this, jmPath);
+
+    _this = _super.call(this, params, t);
+    _this.points = params && params.points ? params.points : [];
+    return _this;
+  }
+  /**
+   * 描点集合
+   * point格式：{x:0,y:0,m:true}
+   * @property points
+   * @type {array}
+   */
+
+
+  _createClass(jmPath, [{
+    key: "points",
+    get: function get() {
+      var s = this.property('points');
+      return s;
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('points', v);
+    }
+    /**
+     * 转换为SVG路径
+     * 
+     * @method toSVG
+     * @return {string} SVG路径字符串
+     */
+
+  }, {
+    key: "toSVG",
+    value: function toSVG() {
+      if (!this.points || this.points.length === 0) return '';
+      var pathData = '';
+      var points = this.points; // 移动到起点
+
+      pathData += "M ".concat(points[0].x, " ").concat(points[0].y); // 绘制路径
+
+      for (var i = 1; i < points.length; i++) {
+        var p = points[i];
+
+        if (p.m) {
+          // 移动到新位置
+          pathData += " M ".concat(p.x, " ").concat(p.y);
+        } else {
+          // 直线到
+          pathData += " L ".concat(p.x, " ").concat(p.y);
+        }
+      } // 如果是封闭路径
+
+
+      if (this.style && this.style.close) {
+        pathData += ' Z';
+      } // 构建SVG元素
+
+
+      var svg = '<path d="' + pathData + '"'; // 添加样式
+
+      if (this.style) {
+        if (this.style.fill) {
+          svg += ' fill="' + this.style.fill + '"';
+        }
+
+        if (this.style.stroke) {
+          svg += ' stroke="' + this.style.stroke + '"';
+        }
+
+        if (this.style.lineWidth) {
+          svg += ' stroke-width="' + this.style.lineWidth + '"';
+        }
+
+        if (this.style.opacity) {
+          svg += ' opacity="' + this.style.opacity + '"';
+        }
+      }
+
+      svg += '/>';
+      return svg;
+    }
+  }]);
+
+  return jmPath;
+}(_jmControl2.jmControl);
+
+exports.jmPath = exports["default"] = jmPath;
+
+},{"./jmControl.js":2}],11:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmPlatform = exports["default"] = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * @fileoverview jmPlatform 平台适配层
+ * 
+ * 抽象浏览器、微信小程序、Node(测试) 等运行环境的差异，
+ * 避免 document/wx 等全局对象散落在业务代码中。
+ * 
+ * @module jmPlatform
+ * @author jmGraph Team
+ * @license MIT
+ */
+var jmPlatform = /*#__PURE__*/function () {
+  function jmPlatform() {
+    _classCallCheck(this, jmPlatform);
+  }
+
+  _createClass(jmPlatform, null, [{
+    key: "isWX",
+    value:
+    /**
+     * 判断当前是否为微信小程序环境
+     * @return {boolean}
+     */
+    function isWX() {
+      return typeof wx !== 'undefined' && wx.canIUse && wx.canIUse('canvas');
+    }
+    /**
+     * 获取全局 document（不存在时返回 null）
+     * @return {Document|null}
+     */
+
+  }, {
+    key: "getDocument",
+    value: function getDocument() {
+      return typeof document !== 'undefined' ? document : null;
+    }
+    /**
+     * 获取全局 window（不存在时返回 null）
+     * @return {Window|null}
+     */
+
+  }, {
+    key: "getWindow",
+    value: function getWindow() {
+      return typeof window !== 'undefined' ? window : null;
+    }
+    /**
+     * 获取设备像素比
+     * @return {number}
+     */
+
+  }, {
+    key: "getDevicePixelRatio",
+    value: function getDevicePixelRatio() {
+      if (jmPlatform.isWX()) {
+        try {
+          return wx.getWindowInfo().pixelRatio || 1;
+        } catch (e) {
+          try {
+            return wx.getSystemInfoSync().pixelRatio || 1;
+          } catch (e2) {
+            return 1;
+          }
+        }
+      }
+
+      var win = jmPlatform.getWindow();
+      return win && win.devicePixelRatio > 1 ? win.devicePixelRatio : 1;
+    }
+    /**
+     * 通过 id 或元素本身解析 canvas 元素
+     * @param {HTMLElement|string} canvas canvas 元素或元素 id
+     * @return {HTMLElement|null}
+     */
+
+  }, {
+    key: "resolveCanvas",
+    value: function resolveCanvas(canvas) {
+      var doc = jmPlatform.getDocument();
+
+      if (typeof canvas === 'string' && doc) {
+        return doc.getElementById(canvas);
+      }
+
+      if (canvas && canvas.length && !canvas.getContext) {
+        return canvas[0];
+      }
+
+      return canvas;
+    }
+    /**
+     * 创建一个 canvas 元素（在 DOM 环境）
+     * @return {HTMLElement|null}
+     */
+
+  }, {
+    key: "createCanvas",
+    value: function createCanvas() {
+      var doc = jmPlatform.getDocument();
+      return doc ? doc.createElement('canvas') : null;
+    }
+    /**
+     * 创建 blob URL（DOM 环境）
+     * @param {Blob} blob
+     * @return {string}
+     */
+
+  }, {
+    key: "createObjectURL",
+    value: function createObjectURL(blob) {
+      var win = jmPlatform.getWindow();
+      return win && win.URL ? win.URL.createObjectURL(blob) : '';
+    }
+    /**
+     * 释放 blob URL（DOM 环境）
+     * @param {string} url
+     */
+
+  }, {
+    key: "revokeObjectURL",
+    value: function revokeObjectURL(url) {
+      var win = jmPlatform.getWindow();
+      if (win && win.URL) win.URL.revokeObjectURL(url);
+    }
+    /**
+     * 触发浏览器文件下载
+     * @param {string} url 文件 URL 或 Data URL
+     * @param {string} fileName 文件名（含扩展名）
+     */
+
+  }, {
+    key: "download",
+    value: function download(url, fileName) {
+      var doc = jmPlatform.getDocument();
+      if (!doc) return;
+      var link = doc.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      doc.body.appendChild(link);
+      link.click();
+      doc.body.removeChild(link);
+    }
+  }]);
+
+  return jmPlatform;
+}();
+
+exports.jmPlatform = exports["default"] = jmPlatform;
+
+},{}],12:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmProperty = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+var _jmObject2 = require("./jmObject.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 属性存储的 Symbol 键
+ * 使用 Symbol 确保属性存储的私有性和唯一性
+ * @type {Symbol}
+ * @private
+ */
+var PROPERTY_KEY = Symbol("properties");
+/**
+ * jmGraph 属性管理基类
+ * 
+ * jmProperty 是 jmControl 的父类，为所有图形控件提供属性管理功能。
+ * 采用 Symbol + WeakMap 模式实现真正的私有属性存储，避免属性名冲突。
+ * 
+ * 核心特性：
+ * 1. **私有属性存储**：使用 Symbol 键确保属性不被外部直接访问
+ * 2. **属性变更通知**：设置属性时自动触发 'propertyChange' 事件
+ * 3. **渲染模式继承**：子控件自动继承所属 graph 的渲染模式
+ * 4. **脏标记传播**：子控件 needUpdate 会自动传播到 graph
+ * 
+ * @class jmProperty
+ * @extends jmObject
+ * 
+ * @example
+ * // 创建属性对象
+ * const prop = new jmProperty({ mode: 'webgl' });
+ * 
+ * // 设置和获取属性
+ * prop.property('customValue', 100);
+ * console.log(prop.property('customValue')); // 100
+ * 
+ * // 监听属性变更
+ * prop.on('propertyChange', (name, args) => {
+ *     console.log(`${name} changed from ${args.oldValue} to ${args.newValue}`);
+ * });
+ */
+
+var jmProperty = /*#__PURE__*/function (_jmObject) {
+  _inherits(jmProperty, _jmObject);
+
+  var _super = _createSuper(jmProperty);
+
+  /**
+   * 构造函数
+   * 
+   * 初始化属性存储对象，并设置初始渲染模式。
+   * 
+   * @constructor
+   * @param {Object} [params] - 初始化参数
+   * @param {'2d'|'webgl'} [params.mode] - 渲染模式，默认 '2d'
+   * 
+   * @example
+   * // 创建使用 WebGL 渲染的属性对象
+   * const prop = new jmProperty({ mode: 'webgl' });
+   */
+  function jmProperty(params) {
+    var _this;
+
+    _classCallCheck(this, jmProperty);
+
+    _this = _super.call(this); // 初始化私有属性存储对象
+
+    _this[PROPERTY_KEY] = {}; // 设置渲染模式
+
+    if (params && params.mode) _this.mode = params.mode;
+    return _this;
+  }
+  /**
+   * 获取或设置属性值
+   * 
+   * 这是属性系统的核心方法，所有属性的存取都通过此方法。
+   * 设置属性时会自动触发 'propertyChange' 事件，便于实现响应式更新。
+   * 
+   * @method property
+   * @param {string} name - 属性名称
+   * @param {*} [value] - 属性值（设置时提供）
+   * @returns {*} 获取时返回属性值，设置时返回设置的值
+   * 
+   * @example
+   * // 获取属性
+   * const value = obj.property('myProp');
+   * 
+   * // 设置属性
+   * obj.property('myProp', 'newValue');
+   * 
+   * // 链式调用
+   * obj.property('a', 1).property('b', 2);
+   */
+
+
+  _createClass(jmProperty, [{
+    key: "property",
+    value: function property() {
+      for (var _len = arguments.length, pars = new Array(_len), _key = 0; _key < _len; _key++) {
+        pars[_key] = arguments[_key];
+      }
+
+      if (pars) {
+        var pros = this[PROPERTY_KEY];
+        var name = pars[0]; // 设置属性
+
+        if (pars.length > 1) {
+          var value = pars[1];
+          var args = {
+            oldValue: pros[name],
+            newValue: value
+          };
+          pros[name] = pars[1]; // 触发属性变更事件（如果对象支持事件）
+
+          if (this.emit) this.emit('propertyChange', name, args);
+          return pars[1];
+        } // 获取属性
+        else if (name) {
+          return pros[name];
+        }
+      }
+    }
+    /**
+     * 是否需要重绘标记
+     * 
+     * 当属性变化导致需要重新渲染时设置此标记。
+     * 设置为 true 时，会自动将所属 graph 的 needUpdate 设为 true，
+     * 从而触发画布重绘。
+     * 
+     * @type {boolean}
+     * 
+     * @example
+     * // 标记需要重绘
+     * control.needUpdate = true;
+     * 
+     * // 检查是否需要重绘
+     * if(control.needUpdate) {
+     *     control.redraw();
+     * }
+     */
+
+  }, {
+    key: "needUpdate",
+    get: function get() {
+      return this.property('needUpdate');
+    },
+    set: function set(v) {
+      this.property('needUpdate', v); // 传播脏标记到 graph（避免 jmGraph 自身循环）
+
+      if (v && !this.is('jmGraph') && this.graph) {
+        this.graph.needUpdate = true;
+      }
+    }
+    /**
+     * 所属的画布实例
+     * 
+     * 获取或设置当前对象所属的 jmGraph 实例。
+     * 如果未显式设置，会自动向上查找父级链中的 jmGraph。
+     * 
+     * @type {jmGraph}
+     * 
+     * @example
+     * // 获取所属画布
+     * const graph = control.graph;
+     * 
+     * // 设置所属画布（通常由框架内部调用）
+     * control.graph = myGraph;
+     */
+
+  }, {
+    key: "graph",
+    get: function get() {
+      var g = this.property('graph'); // 如果未设置，尝试从父级链查找
+
+      g = g || this.property('graph', this.findParent('jmGraph'));
+      return g;
+    },
+    set: function set(v) {
+      return this.property('graph', v);
+    }
+    /**
+     * 渲染模式
+     * 
+     * 获取当前渲染模式，支持 '2d' 和 'webgl' 两种模式。
+     * 渲染模式的查找优先级：
+     * 1. 当前对象设置的 mode
+     * 2. 如果是 jmGraph，默认 '2d'
+     * 3. 从所属 graph 继承 mode
+     * 
+     * @type {'2d'|'webgl'}
+     * @readonly
+     * 
+     * @example
+     * // 检查渲染模式
+     * if(control.mode === 'webgl') {
+     *     // 使用 WebGL 特性
+     * } else {
+     *     // 使用 Canvas 2D API
+     * }
+     */
+
+  }, {
+    key: "mode",
+    get: function get() {
+      var _this$graph;
+
+      var m = this.property('mode');
+      if (m) return m; // 如果当前对象是jmGraph且没有设置mode，返回默认值
+
+      if (this.is('jmGraph')) return this.property('mode') || '2d'; // 否则从所属的graph获取mode
+
+      return ((_this$graph = this.graph) === null || _this$graph === void 0 ? void 0 : _this$graph.mode) || '2d';
+    },
+    set: function set(v) {
+      return this.property('mode', v);
+    }
+    /**
+     * 请求动画帧
+     * 
+     * 封装 requestAnimationFrame，支持在不同环境下工作。
+     * 如果当前对象关联了 canvas，会使用 canvas 的 requestAnimationFrame。
+     * 
+     * @method requestAnimationFrame
+     * @param {Function} handler - 动画帧回调函数
+     * @returns {number} 动画帧请求ID，用于取消
+     * 
+     * @example
+     * // 请求下一帧动画
+     * const frameId = control.requestAnimationFrame(() => {
+     *     // 更新动画状态
+     *     control.redraw();
+     * });
+     * 
+     * // 取消动画帧
+     * control.cancelAnimationFrame(frameId);
+     */
+
+  }, {
+    key: "requestAnimationFrame",
+    value: function requestAnimationFrame(handler) {
+      return _jmUtils.jmUtils.requestAnimationFrame(handler, this.graph ? this.graph.canvas : null);
+    }
+    /**
+     * 取消动画帧请求
+     * 
+     * 取消之前通过 requestAnimationFrame 注册的回调。
+     * 
+     * @method cancelAnimationFrame
+     * @param {number} handler - 动画帧请求ID
+     * 
+     * @example
+     * // 取消动画帧
+     * control.cancelAnimationFrame(frameId);
+     */
+
+  }, {
+    key: "cancelAnimationFrame",
+    value: function cancelAnimationFrame(handler) {
+      return _jmUtils.jmUtils.cancelAnimationFrame(handler, this.graph ? this.graph.canvas : null);
+    }
+  }]);
+
+  return jmProperty;
+}(_jmObject2.jmObject);
+
+exports.jmProperty = exports["default"] = jmProperty;
+
+},{"./jmObject.js":9,"./jmUtils.js":16}],13:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.Canvas2DRenderer = exports.jmRenderer = void 0;
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * @fileoverview jmRenderer 渲染器抽象
+ * 
+ * 渲染器负责「画布变换、清屏、路径绘制」等与具体渲染后端相关的操作，
+ * 使 jmGraph/jmControl 不再直接依赖 Canvas 2D / WebGL 的具体差异。
+ * 
+ * 目前提供：
+ * - jmRenderer：抽象基类
+ * - Canvas2DRenderer：Canvas 2D 实现
+ * 
+ * WebGLRenderer 可作为后续工作基于本接口扩展，
+ * 届时 shape 只需产出几何描述，无需关心渲染后端。
+ * 
+ * @module jmRenderer
+ * @author jmGraph Team
+ * @license MIT
+ */
+var jmRenderer = /*#__PURE__*/function () {
+  /**
+   * @param {jmGraph} graph 所属画布
+   */
+  function jmRenderer(graph) {
+    _classCallCheck(this, jmRenderer);
+
+    this.graph = graph;
+  }
+  /** 底层渲染上下文 */
+
+
+  _createClass(jmRenderer, [{
+    key: "context",
+    get: function get() {
+      return this.graph.context;
+    }
+    /**
+     * 开始一次绘制（应用视口变换）
+     * 注意：本方法不负责 save/restore，由调用方（paint）统一管理栈。
+     */
+
+  }, {
+    key: "begin",
+    value: function begin() {}
+    /** 结束一次绘制（撤销 begin 应用的变换） */
+
+  }, {
+    key: "end",
+    value: function end() {}
+    /** 清空画布 */
+
+  }, {
+    key: "clear",
+    value: function clear(w, h) {}
+    /** 保存上下文状态 */
+
+  }, {
+    key: "save",
+    value: function save() {
+      this.context.save && this.context.save();
+    }
+    /** 恢复上下文状态 */
+
+  }, {
+    key: "restore",
+    value: function restore() {
+      this.context.restore && this.context.restore();
+    }
+    /** 开始路径 */
+
+  }, {
+    key: "beginPath",
+    value: function beginPath() {
+      this.context.beginPath && this.context.beginPath();
+    }
+    /** 移动画笔 */
+
+  }, {
+    key: "moveTo",
+    value: function moveTo(x, y) {
+      this.context.moveTo && this.context.moveTo(x, y);
+    }
+    /** 画线 */
+
+  }, {
+    key: "lineTo",
+    value: function lineTo(x, y) {
+      this.context.lineTo && this.context.lineTo(x, y);
+    }
+    /** 闭合路径 */
+
+  }, {
+    key: "closePath",
+    value: function closePath() {
+      this.context.closePath && this.context.closePath();
+    }
+    /** 填充 */
+
+  }, {
+    key: "fill",
+    value: function fill() {
+      this.context.fill && this.context.fill();
+    }
+    /** 描边 */
+
+  }, {
+    key: "stroke",
+    value: function stroke() {
+      this.context.stroke && this.context.stroke();
+    }
+  }]);
+
+  return jmRenderer;
+}();
+/**
+ * Canvas 2D 渲染器
+ * @class Canvas2DRenderer
+ * @extends jmRenderer
+ */
+
+
+exports.jmRenderer = jmRenderer;
+
+var Canvas2DRenderer = /*#__PURE__*/function (_jmRenderer) {
+  _inherits(Canvas2DRenderer, _jmRenderer);
+
+  var _super = _createSuper(Canvas2DRenderer);
+
+  function Canvas2DRenderer() {
+    _classCallCheck(this, Canvas2DRenderer);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Canvas2DRenderer, [{
+    key: "begin",
+    value:
+    /**
+     * 应用视口变换：0.5 偏移（解决一像素线条模糊）+ 平移 + 缩放。
+     */
+    function begin() {
+      var ctx = this.context;
+      var vp = this.graph.viewport;
+      if (!ctx.translate || !vp) return;
+      ctx.translate(0.5, 0.5);
+
+      if (vp.transformed) {
+        ctx.translate(vp.translation.x, vp.translation.y);
+        ctx.scale(vp.scaleFactor, vp.scaleFactor);
+      }
+    }
+    /**
+     * 撤销 begin 应用的变换。
+     */
+
+  }, {
+    key: "end",
+    value: function end() {
+      var ctx = this.context;
+      var vp = this.graph.viewport;
+      if (!ctx.translate || !vp) return;
+
+      if (vp.transformed) {
+        ctx.scale(1 / vp.scaleFactor, 1 / vp.scaleFactor);
+        ctx.translate(-vp.translation.x, -vp.translation.y);
+      }
+
+      ctx.translate(-0.5, -0.5);
+    }
+    /** 清空画布 */
+
+  }, {
+    key: "clear",
+    value: function clear(w, h) {
+      var ctx = this.context;
+
+      if (ctx && ctx.clearRect) {
+        ctx.clearRect(0, 0, w, h);
+      }
+    }
+  }]);
+
+  return Canvas2DRenderer;
+}(jmRenderer);
+
+exports.Canvas2DRenderer = Canvas2DRenderer;
+var _default = Canvas2DRenderer;
+exports["default"] = _default;
+
+},{}],14:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmShadow = exports["default"] = void 0;
+
+var _jmUtils = require("./jmUtils.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * 阴影类
+ * 
+ * 用于创建图形的阴影效果。阴影可以应用于任何图形控件。
+ * 
+ * @class jmShadow
+ * 
+ * @param {number|string} x 横坐标偏移量，或阴影字符串格式 'x,y,blur,color'
+ * @param {number} [y] 纵坐标偏移量
+ * @param {number} [blur] 模糊值
+ * @param {string} [color] 阴影颜色
+ * 
+ * @example
+ * // 创建阴影
+ * const shadow = new jmShadow(5, 5, 10, 'rgba(0,0,0,0.5)');
+ * 
+ * // 从字符串创建
+ * const shadow = new jmShadow('5, 5, 10, rgba(0,0,0,0.5)');
+ * 
+ * // 应用到图形
+ * rect.style.shadow = shadow;
+ */
+var jmShadow = /*#__PURE__*/function () {
+  function jmShadow(x, y, blur, color) {
+    _classCallCheck(this, jmShadow);
+
+    if (typeof x == 'string' && !y && !blur && !color) {
+      this.fromString(x);
+    } else {
+      this.x = x;
+      this.y = y;
+      this.blur = blur;
+      this.color = color;
+    }
+  }
+  /**
+   * 根据字符串格式转为阴影
+   * @method fromString
+   * @param {string} s 阴影字符串 x,y,blur,color
+   */
+
+
+  _createClass(jmShadow, [{
+    key: "fromString",
+    value: function fromString(s) {
+      if (!s) return;
+      var ms = s.match(/\s*([^,]+)\s*,\s*([^,]+)\s*(,[^,]+)?\s*(,[\s\S]+)?\s*/i);
+
+      if (ms) {
+        this.x = ms[1] || 0;
+        this.y = ms[2] || 0;
+
+        if (ms[3]) {
+          ms[3] = _jmUtils.jmUtils.trim(ms[3], ', '); //如果第三位是颜色格式，则表示为颜色
+
+          if (ms[3].indexOf('#') === 0 || /^rgb/i.test(ms[3])) {
+            this.color = ms[3];
+          } else {
+            this.blur = _jmUtils.jmUtils.trim(ms[3], ', ');
+          }
+        }
+
+        if (ms[4]) {
+          this.color = _jmUtils.jmUtils.trim(ms[4], ', ');
+        }
+      }
+
+      return this;
+    }
+    /**
+     * 转为字符串格式 x,y,blur,color
+     * @method toString
+     * @returns {string} 阴影字符串
+     */
+
+  }, {
+    key: "toString",
+    value: function toString() {
+      var s = this.x + ',' + this.y;
+      if (this.blur) s += ',' + this.blur;
+      if (this.color) s += ',' + this.color;
+      return s;
+    }
+  }]);
+
+  return jmShadow;
+}();
+
+exports.jmShadow = exports["default"] = jmShadow;
+
+},{"./jmUtils.js":16}],15:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmSpatialIndex = exports["default"] = void 0;
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * @fileoverview jmSpatialIndex 空间索引（均匀网格）
+ * 
+ * 用于加速事件命中测试。当画布中 interactive 控件数量很大时，
+ * 全量遍历所有子级做命中判断（O(n)）会成为交互性能瓶颈。
+ * 本类用均匀网格把控件按其边界插入到网格单元中，
+ * 查询时只遍历点所在单元（及相邻单元）的候选集，大幅减少命中测试次数。
+ * 
+ * 约定：索引以「世界坐标」为坐标系，与 viewport 解耦——
+ * 查询方先把事件点通过 viewport.screenToWorld 转换后再查询。
+ * 
+ * @module jmSpatialIndex
+ * @author jmGraph Team
+ * @license MIT
+ */
+var jmSpatialIndex = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * @param {number} [cellSize=100] 网格单元大小（世界坐标单位）
+   */
+  function jmSpatialIndex() {
+    var cellSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
+
+    _classCallCheck(this, jmSpatialIndex);
+
+    this.cellSize = Math.max(8, cellSize || 100);
+    /** 网格：cellKey -> Set<control> */
+
+    this.cells = new Map();
+    /** control -> Set<cellKey>，用于删除时精确清理 */
+
+    this.controlCells = new Map();
+  }
+  /** 计算某坐标对应的网格 key */
+
+
+  _createClass(jmSpatialIndex, [{
+    key: "_cellKey",
+    value: function _cellKey(x, y) {
+      return (x / this.cellSize | 0) + '_' + (y / this.cellSize | 0);
+    }
+    /** 计算某矩形覆盖的所有网格 key */
+
+  }, {
+    key: "_rectKeys",
+    value: function _rectKeys(bounds) {
+      var keys = [];
+      var left = Math.floor(bounds.left / this.cellSize);
+      var right = Math.floor(bounds.right / this.cellSize);
+      var top = Math.floor(bounds.top / this.cellSize);
+      var bottom = Math.floor(bounds.bottom / this.cellSize);
+
+      for (var cy = top; cy <= bottom; cy++) {
+        for (var cx = left; cx <= right; cx++) {
+          keys.push(cx + '_' + cy);
+        }
+      }
+
+      return keys;
+    }
+    /**
+     * 获取控件当前边界（世界坐标），用于插入索引。
+     * 控件必须已挂到 graph 上且已计算过 absoluteBounds。
+     * @param {Object} control
+     * @return {Object|null} {left, top, right, bottom}
+     */
+
+  }, {
+    key: "_boundsOf",
+    value: function _boundsOf(control) {
+      var b = control.absoluteBounds || (control.getAbsoluteBounds ? control.getAbsoluteBounds() : null);
+      if (!b) return null; // 命中容差：线条/非实心图形需要更宽的判定范围
+
+      var pad = control.style && (control.style.lineWidth || 0) || 1;
+      return {
+        left: b.left - pad,
+        top: b.top - pad,
+        right: b.right + pad,
+        bottom: b.bottom + pad
+      };
+    }
+    /**
+     * 插入（或更新）一个控件
+     * @param {Object} control
+     */
+
+  }, {
+    key: "upsert",
+    value: function upsert(control) {
+      this.remove(control);
+
+      var bounds = this._boundsOf(control);
+
+      if (!bounds) return;
+
+      var keys = this._rectKeys(bounds);
+
+      var cellSet = new Set();
+
+      var _iterator = _createForOfIteratorHelper(keys),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var key = _step.value;
+          var cell = this.cells.get(key);
+          if (!cell) this.cells.set(key, cell = new Set());
+          cell.add(control);
+          cellSet.add(key);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      this.controlCells.set(control, cellSet);
+    }
+    /**
+     * 移除一个控件
+     * @param {Object} control
+     */
+
+  }, {
+    key: "remove",
+    value: function remove(control) {
+      var cellSet = this.controlCells.get(control);
+      if (!cellSet) return;
+
+      var _iterator2 = _createForOfIteratorHelper(cellSet),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var key = _step2.value;
+          var cell = this.cells.get(key);
+
+          if (cell) {
+            cell["delete"](control);
+            if (cell.size === 0) this.cells["delete"](key);
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      this.controlCells["delete"](control);
+    }
+    /**
+     * 查询包含指定点（世界坐标）的所有候选控件。
+     * @param {Object} p {x, y} 世界坐标
+     * @return {Set<Object>|null} 候选控件集合（可为 null）
+     */
+
+  }, {
+    key: "query",
+    value: function query(p) {
+      var key = this._cellKey(p.x, p.y);
+
+      var cell = this.cells.get(key);
+      return cell || null;
+    }
+    /**
+     * 查询与指定矩形相交的所有候选控件。
+     * @param {Object} rect 世界坐标矩形 {left, top, right, bottom}
+     * @return {Set<Object>} 候选控件集合
+     */
+
+  }, {
+    key: "queryRect",
+    value: function queryRect(rect) {
+      var result = new Set();
+
+      var keys = this._rectKeys(rect);
+
+      var _iterator3 = _createForOfIteratorHelper(keys),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var key = _step3.value;
+          var cell = this.cells.get(key);
+
+          if (cell) {
+            var _iterator4 = _createForOfIteratorHelper(cell),
+                _step4;
+
+            try {
+              for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                var c = _step4.value;
+                result.add(c);
+              }
+            } catch (err) {
+              _iterator4.e(err);
+            } finally {
+              _iterator4.f();
+            }
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      return result;
+    }
+    /** 清空索引 */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.cells.clear();
+      this.controlCells.clear();
+    }
+    /** 索引中控件数量 */
+
+  }, {
+    key: "size",
+    get: function get() {
+      return this.controlCells.size;
+    }
+  }]);
+
+  return jmSpatialIndex;
+}();
+
+exports.jmSpatialIndex = exports["default"] = jmSpatialIndex;
+
+},{}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.colorKeywords = exports.jmUtils = exports["default"] = void 0;
+
+var _jmList = require("./jmList.js");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * CSS 颜色关键字映射表
+ * 
+ * 包含所有 CSS 标准颜色名称到十六进制值的映射。
+ * 支持 147 种命名颜色 + CSS 系统颜色。
+ * 
+ * @constant {Object.<string, string>}
+ * @private
+ */
+var colorKeywords = {
+  aliceblue: "#f0f8ff",
+  antiquewhite: "#faebd7",
+  aqua: "#00ffff",
+  aquamarine: "#7fffd4",
+  azure: "#f0ffff",
+  beige: "#f5f5dc",
+  bisque: "#ffe4c4",
+  black: "#000000",
+  blanchedalmond: "#ffebcd",
+  blue: "#0000ff",
+  blueviolet: "#8a2be2",
+  brown: "#a52a2a",
+  burlywood: "#deb887",
+  cadetblue: "#5f9ea0",
+  chartreuse: "#7fff00",
+  chocolate: "#d2691e",
+  coral: "#ff7f50",
+  cornflowerblue: "#6495ed",
+  cornsilk: "#fff8dc",
+  crimson: "#dc143c",
+  cyan: "#00ffff",
+  darkblue: "#00008b",
+  darkcyan: "#008b8b",
+  darkgoldenrod: "#b8860b",
+  darkgray: "#a9a9a9",
+  darkgreen: "#006400",
+  darkkhaki: "#bdb76b",
+  darkmagenta: "#8b008b",
+  darkolivegreen: "#556b2f",
+  darkorange: "#ff8c00",
+  darkorchid: "#9932cc",
+  darkred: "#8b0000",
+  darksalmon: "#e9967a",
+  darkseagreen: "#8fbc8f",
+  darkslateblue: "#483d8b",
+  darkslategray: "#2f4f4f",
+  darkslategrey: "#2f4f4f",
+  darkturquoise: "#00ced1",
+  darkviolet: "#9400d3",
+  deeppink: "#ff1493",
+  deepskyblue: "#00bfff",
+  dimgray: "#696969",
+  dimgrey: "#696969",
+  dodgerblue: "#1e90ff",
+  firebrick: "#b22222",
+  floralwhite: "#fffaf0",
+  forestgreen: "#228b22",
+  fuchsia: "#ff00ff",
+  gainsboro: "#dcdcdc",
+  ghostwhite: "#f8f8ff",
+  gold: "#ffd700",
+  goldenrod: "#daa520",
+  gray: "#808080",
+  green: "#008000",
+  greenyellow: "#adff2f",
+  grey: "#808080",
+  honeydew: "#f0fff0",
+  hotpink: "#ff69b4",
+  indianred: "#cd5c5c",
+  indigo: "#4b0082",
+  ivory: "#fffff0",
+  khaki: "#f0e68c",
+  lavender: "#e6e6fa",
+  lavenderblush: "#fff0f5",
+  lawngreen: "#7cfc00",
+  lemonchiffon: "#fffacd",
+  lightblue: "#add8e6",
+  lightcoral: "#f08080",
+  lightcyan: "#e0ffff",
+  lightgoldenrodyellow: "#fafad2",
+  lightgrey: "#d3d3d3",
+  lightgreen: "#90ee90",
+  lightpink: "#ffb6c1",
+  lightsalmon: "#ffa07a",
+  lightseagreen: "#20b2aa",
+  lightskyblue: "#87cefa",
+  lightslategray: "#778899",
+  lightslategrey: "#778899",
+  lightsteelblue: "#b0c4de",
+  lightyellow: "#ffffe0",
+  lime: "#00ff00",
+  limegreen: "#32cd32",
+  linen: "#faf0e6",
+  magenta: "#ff00ff",
+  maroon: "#800000",
+  mediumaquamarine: "#66cdaa",
+  mediumblue: "#0000cd",
+  mediumorchid: "#ba55d3",
+  mediumpurple: "#9370d8",
+  mediumseagreen: "#3cb371",
+  mediumslateblue: "#7b68ee",
+  mediumspringgreen: "#00fa9a",
+  mediumturquoise: "#48d1cc",
+  mediumvioletred: "#c71585",
+  midnightblue: "#191970",
+  mintcream: "#f5fffa",
+  mistyrose: "#ffe4e1",
+  moccasin: "#ffe4b5",
+  navajowhite: "#ffdead",
+  navy: "#000080",
+  oldlace: "#fdf5e6",
+  olive: "#808000",
+  olivedrab: "#6b8e23",
+  orange: "#ffa500",
+  orangered: "#ff4500",
+  orchid: "#da70d6",
+  palegoldenrod: "#eee8aa",
+  palegreen: "#98fb98",
+  paleturquoise: "#afeeee",
+  palevioletred: "#d87093",
+  papayawhip: "#ffefd5",
+  peachpuff: "#ffdab9",
+  peru: "#cd853f",
+  pink: "#ffc0cb",
+  plum: "#dda0dd",
+  powderblue: "#b0e0e6",
+  purple: "#800080",
+  red: "#ff0000",
+  rebeccapurple: "#663399",
+  rosybrown: "#bc8f8f",
+  royalblue: "#4169e1",
+  saddlebrown: "#8b4513",
+  salmon: "#fa8072",
+  sandybrown: "#f4a460",
+  seagreen: "#2e8b57",
+  seashell: "#fff5ee",
+  sienna: "#a0522d",
+  silver: "#c0c0c0",
+  skyblue: "#87ceeb",
+  slateblue: "#6a5acd",
+  slategray: "#708090",
+  slategrey: "#708090",
+  snow: "#fffafa",
+  springgreen: "#00ff7f",
+  steelblue: "#4682b4",
+  tan: "#d2b48c",
+  teal: "#008080",
+  thistle: "#d8bfd8",
+  tomato: "#ff6347",
+  turquoise: "#40e0d0",
+  violet: "#ee82ee",
+  wheat: "#f5deb3",
+  white: "#ffffff",
+  whitesmoke: "#f5f5f5",
+  yellow: "#ffff00",
+  yellowgreen: "#9acd32",
+  transparent: "rgba(0,0,0,0)",
+  // grey 别名（已有 darkslategrey/lightslategrey/slategrey/dimgrey）
+  // 以下为 CSS 系统颜色
+  activeborder: "#bfcaca",
+  activecaption: "#000080",
+  appworkspace: "#ababab",
+  background: "#636363",
+  buttonface: "#c0c0c0",
+  buttonhighlight: "#dedede",
+  buttonshadow: "#808080",
+  buttontext: "#000000",
+  captiontext: "#000000",
+  graytext: "#808080",
+  highlight: "#b3d4fc",
+  highlighttext: "#000000",
+  inactiveborder: "#d4d0c8",
+  inactivecaption: "#bfbbb0",
+  inactivecaptiontext: "#545454",
+  infobackground: "#fbfcc5",
+  infotext: "#000000",
+  menu: "#c0c0c0",
+  menutext: "#000000",
+  scrollbar: "#c0c0c0",
+  threeddarkshadow: "#696969",
+  threedface: "#c0c0c0",
+  threedhighlight: "#dfdfdf",
+  threedlightshadow: "#dcdcdc",
+  threedshadow: "#808080",
+  window: "#ffffff",
+  windowframe: "#646464",
+  windowtext: "#000000"
+};
+/**
+ * jmGraph 工具类
+ * 
+ * 提供常用的静态工具方法，包括对象操作、事件处理、几何计算、颜色转换等。
+ * 
+ * @class jmUtils
+ * @static
+ * 
+ * @example
+ * // 克隆对象
+ * const newObj = jmUtils.clone({ a: 1, b: 2 });
+ * 
+ * // 绑定事件
+ * jmUtils.bindEvent(element, 'click', handler);
+ * 
+ * // 检查点是否在多边形内
+ * const inside = jmUtils.pointInPolygon({x: 10, y: 10}, polygonPoints);
+ */
+
+exports.colorKeywords = colorKeywords;
+
+var jmUtils = /*#__PURE__*/function () {
+  function jmUtils() {
+    _classCallCheck(this, jmUtils);
+  }
+
+  _createClass(jmUtils, null, [{
+    key: "clone",
+    value:
+    /**
+     * 复制一个对象
+     * 
+     * @method clone
+     * @static
+     * @param {object} source 被复制的对象
+     * @param {object} target 可选，如果指定就表示复制给这个对象，如果为boolean它就是deep参数
+     * @param {boolean} deep 是否深度复制，如果为true,数组内的每个对象都会被复制
+     * @param {function} copyHandler 复制对象回调，如果返回undefined，就走后面的逻辑，否则到这里中止
+     * @return {object} 参数source的拷贝对象
+     */
+    function clone(source, target) {
+      var deep = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      var copyHandler = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+      var deepIndex = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+      var cloned = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
+
+      // 如果有指定回调，则用回调处理，否则走后面的复制逻辑
+      if (typeof copyHandler === 'function') {
+        var obj = copyHandler(source, deep, deepIndex);
+        if (obj) return obj;
+      } // 首次调用时初始化克隆映射表（用于处理循环引用）
+
+
+      if (!cloned) cloned = new WeakMap();
+
+      if (typeof target === 'boolean') {
+        deep = target;
+        target = undefined;
+      } // 非对象直接返回
+
+
+      if (!source || _typeof(source) !== 'object') {
+        return typeof target !== 'undefined' ? target : source;
+      } // 如果source已经被克隆过，直接返回之前的克隆对象，打破循环引用
+
+
+      if (cloned.has(source)) return cloned.get(source); // 数组处理
+
+      if (Array.isArray(source)) {
+        //如果为当前泛型，则直接new
+        if (this.isType(source, _jmList.jmList)) {
+          return new _jmList.jmList(source);
+        }
+
+        if (deep) {
+          var dest = [];
+          cloned.set(source, dest);
+
+          for (var i = 0; i < source.length; i++) {
+            dest.push(this.clone(source[i], undefined, deep, copyHandler, deepIndex + 1, cloned));
+          }
+
+          return dest;
+        }
+
+        return source.slice(0);
+      } // 不复制页面元素和class对象（如jmControl实例等复杂对象保持引用）
+
+
+      if (source.tagName || source.getContext || source.emit) {
+        return source;
+      } // 普通对象处理
+
+
+      target = target || {};
+      cloned.set(source, target); // 保持原型链一致
+
+      if (source.__proto__) target.__proto__ = source.__proto__; // 遍历自身可枚举属性（字符串键 + Symbol键），避免触发原型链上宿主对象的getter
+
+      var keys = Object.keys(source).concat(Object.getOwnPropertySymbols(source));
+
+      var _iterator = _createForOfIteratorHelper(keys),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var k = _step.value;
+          if (k === 'constructor') continue;
+          var v = source[k]; // 不复制页面元素和class对象
+
+          if (v && (v.tagName || v.getContext || v.emit)) {
+            target[k] = v;
+            continue;
+          } // 如果不是对象和空，则采用target的属性
+
+
+          if (_typeof(target[k]) === 'object' || typeof target[k] === 'undefined') {
+            target[k] = this.clone(v, target[k], deep, copyHandler, deepIndex + 1, cloned);
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      return target;
+    }
+    /**
+     * 绑定事件到html对象
+     * 
+     * @method bindEvent
+     * @static
+     * @param {element} html元素对象
+     * @param {string} name 事件名称
+     * @param {function} fun 事件委托
+     * @returns {name, fun, target} 返回当前绑定
+     */
+
+  }, {
+    key: "bindEvent",
+    value: function bindEvent(target, name, fun, opt) {
+      if (name && name.indexOf && name.indexOf(' ') != -1) {
+        var ns = name.split(' ');
+
+        for (var i = 0; i < ns.length; i++) {
+          this.bindEvent(target, ns[i], fun, opt);
+        }
+      }
+
+      if (target.attachEvent) {
+        target.attachEvent("on" + name, fun, opt);
+      } else if (target.addEventListener) {
+        target.addEventListener(name, fun, opt);
+      }
+
+      return {
+        name: name,
+        target: target,
+        fun: fun
+      };
+    }
+    /**
+     * 从对象中移除事件到
+     * 
+     * @method removeEvent
+     * @static
+     * @param {element} html元素对象
+     * @param {string} name 事件名称
+     * @param {function} fun 事件委托
+     */
+
+  }, {
+    key: "removeEvent",
+    value: function removeEvent(target, name, fun) {
+      if (target.removeEventListener) {
+        return target.removeEventListener(name, fun, false);
+      } else if (target.detachEvent) {
+        target.detachEvent('on' + name, fun);
+        return true;
+      } else {
+        target['on' + name] = null;
+      }
+    }
+    /**
+     * 获取元素的绝对定位
+     *
+     * @method getElementPosition
+     * @static
+     * @param {element} el 目标元素对象
+     * @return {position} 位置对象(top,left)
+     */
+
+  }, {
+    key: "getElementPosition",
+    value: function getElementPosition(el) {
+      var pos = {
+        "top": 0,
+        "left": 0
+      };
+      if (!el) return pos;
+
+      if (el.offsetParent) {
+        while (el.offsetParent) {
+          pos.top += el.offsetTop;
+          pos.left += el.offsetLeft;
+          el = el.offsetParent;
+        }
+      } else if (el.x) {
+        pos.left += el.x;
+      } else if (el.y) {
+        pos.top += el.y;
+      }
+
+      return pos;
+    }
+    /**
+     * 获取元素事件触发的位置
+     *
+     * @method getEventPosition
+     * @static
+     * @param {eventArg} evt 当前触发事件的参数
+     * @param {point} [scale] 当前画布的缩放比例
+     * @return {point} 事件触发的位置 
+     */
+
+  }, {
+    key: "getEventPosition",
+    value: function getEventPosition(evt, scale) {
+      evt = evt || event;
+      var isWXMiniApp = evt.isWXMiniApp;
+      var isTouch = false;
+      var touches = evt.changedTouches || evt.targetTouches || evt.touches;
+      var target = evt.target || evt.srcElement;
+
+      if (touches && touches.length) {
+        evt = touches[0]; //兼容touch事件            
+
+        if (!evt.target) evt.target = target;
+        isTouch = true;
+      }
+
+      var px = evt.pageX || evt.x;
+      if (typeof px == 'undefined') px = evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
+      var py = evt.pageY || evt.y;
+      if (typeof py == 'undefined') py = evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop);
+      var ox = evt.offsetX;
+      var oy = evt.offsetY;
+
+      if (typeof ox === 'undefined' && typeof oy === 'undefined') {
+        // 小程序下取x,y就是它的相对坐标
+        if (isWXMiniApp) {
+          ox = evt.x;
+          oy = evt.y;
+        } else {
+          var p = this.getElementPosition(target);
+          ox = px - p.left;
+          oy = py - p.top;
+        }
+      }
+
+      if (scale) {
+        if (scale.x) ox = ox / scale.x;
+        if (scale.y) oy = oy / scale.y;
+      }
+
+      return {
+        pageX: px,
+        pageY: py,
+        clientX: evt.clientX,
+        clientY: evt.clientY,
+        //相对于容器偏移量
+        offsetX: ox,
+        offsetY: oy,
+        layerX: evt.layerX,
+        layerY: evt.layerY,
+        screenX: evt.screenX,
+        screenY: evt.screenY,
+        x: ox,
+        y: oy,
+        isTouch: isTouch,
+        touches: touches,
+        isWXMiniApp: isWXMiniApp
+      };
+    }
+    /**
+     * 检 查对象是否为指定的类型,不包括继承
+     * 
+     * @method isType
+     * @static
+     * @param {object} target 需要判断类型的对象
+     * @param {class} type 对象类型
+     * @return {boolean} 返回对象是否为指定类型 
+     */
+
+  }, {
+    key: "isType",
+    value: function isType(target, type) {
+      if (!target || _typeof(target) !== 'object') return false;
+      if (target.constructor === type) return true;
+      /*if(target.__baseType) {        
+          return jmUtils.isType(target.__baseType.prototype,type);
+      }*/
+      //return target instanceof type;
+
+      return false;
+    }
+    /**
+     * 判断点是否在多边形内
+     * 如果一个点在多边形内部，任意角度做射线肯定会与多边形要么有一个交点，要么有与多边形边界线重叠。
+     * 如果一个点在多边形外部，任意角度做射线要么与多边形有一个交点，要么有两个交点，要么没有交点，要么有与多边形边界线重叠。
+     * 利用上面的结论，我们只要判断这个点与多边形的交点个数，就可以判断出点与多边形的位置关系了。
+     * 
+     * @method pointInPolygon
+     * @static
+     * @param {point} pt 坐标对象
+     * @param {array} polygon 多边型角坐标对象数组
+     * @param {number} offset 判断可偏移值
+     * @return {integer} 0= 不在图形内和线上，1=在边上，2=在图形内部
+     */
+
+  }, {
+    key: "pointInPolygon",
+    value: function pointInPolygon(pt, polygon, offset) {
+      offset = offset || 1;
+      offset = offset / 2;
+      var n = polygon.length;
+      if (!polygon || n == 0) return 0;
+
+      if (n == 1) {
+        return Math.abs(polygon[0].x - pt.x) <= offset && Math.abs(polygon[0].y - pt.y) <= offset ? 1 : 0;
+      }
+
+      if (n == 2) {
+        return this.pointOnLine(pt, polygon[0], polygon[1], offset);
+      }
+
+      for (var i = 0; i < n; i++) {
+        if (Math.abs(polygon[i].x - pt.x) <= offset && Math.abs(polygon[i].y - pt.y) <= offset) {
+          return 1;
+        }
+      }
+
+      return this.rayCasting(pt, polygon, offset);
+    }
+    /**
+     * 判断点是否在线段上
+     * 
+     * 通过计算点到线段的垂直距离来判断点是否在线段上。
+     * 同时检查点是否在线段的范围内（不仅仅是直线上）。
+     * 
+     * @method pointOnLine
+     * @static
+     * @private
+     * @param {Object} pt 待检测的点 {x, y}
+     * @param {Object} p1 线段起点 {x, y}
+     * @param {Object} p2 线段终点 {x, y}
+     * @param {number} offset 允许的偏差值（像素）
+     * @returns {number} 0=不在线段上, 1=在线段上
+     * 
+     * @example
+     * const onLine = jmUtils.pointOnLine(
+     *     {x: 5, y: 5},      // 待检测点
+     *     {x: 0, y: 0},      // 起点
+     *     {x: 10, y: 10},    // 终点
+     *     2                  // 允许偏差
+     * );
+     * // 返回 1，点在对角线上
+     */
+
+  }, {
+    key: "pointOnLine",
+    value: function pointOnLine(pt, p1, p2, offset) {
+      var minX = Math.min(p1.x, p2.x);
+      var maxX = Math.max(p1.x, p2.x);
+      var minY = Math.min(p1.y, p2.y);
+      var maxY = Math.max(p1.y, p2.y);
+
+      if (minX - pt.x > offset || pt.x - maxX > offset) {
+        return 0;
+      }
+
+      if (minY - pt.y > offset || pt.y - maxY > offset) {
+        return 0;
+      }
+
+      if (p1.x == p2.x) {
+        return Math.abs(p1.x - pt.x) <= offset && (pt.y - p1.y) * (pt.y - p2.y) <= 0 ? 1 : 0;
+      }
+
+      if (p1.y == p2.y) {
+        return Math.abs(p1.y - pt.y) <= offset && (pt.x - p1.x) * (pt.x - p2.x) <= 0 ? 1 : 0;
+      }
+
+      if (Math.abs(p1.x - pt.x) < offset && Math.abs(p1.y - pt.y) < offset) {
+        return 1;
+      }
+
+      if (Math.abs(p2.x - pt.x) < offset && Math.abs(p2.y - pt.y) < offset) {
+        return 1;
+      }
+
+      if (pt.y != p1.y && pt.y != p2.y) {
+        var f = (p2.x - p1.x) / (p2.y - p1.y) * (pt.y - p1.y);
+        var ff = (pt.y - p1.y) / Math.sqrt(f * f + (pt.y - p1.y) * (pt.y - p1.y));
+        var l = ff * (pt.x - p1.x - f);
+        return Math.abs(l) <= offset ? 1 : 0;
+      }
+
+      return 0;
+    }
+    /**
+     * 射线法判断点是否在多边形内部
+     * 
+     * 从待测点向右发射一条水平射线，计算与多边形边界的交点数量。
+     * - 交点数为奇数：点在多边形内部
+     * - 交点数为偶数：点在多边形外部
+     * 
+     * 这是判断点是否在任意多边形内的经典算法，时间复杂度 O(n)。
+     * 
+     * @method rayCasting
+     * @static
+     * @private
+     * @param {Object} pt 待检测的点 {x, y}
+     * @param {Array<Object>} polygon 多边形顶点数组 [{x, y}, ...]
+     * @param {number} offset 允许的偏差值（未使用）
+     * @returns {number} 0=在多边形外部, 2=在多边形内部
+     * 
+     * @see {@link https://en.wikipedia.org/wiki/Point_in_polygon Point in polygon - Wikipedia}
+     */
+
+  }, {
+    key: "rayCasting",
+    value: function rayCasting(pt, polygon, offset) {
+      var n = polygon.length;
+      var inside = false;
+      var testY = pt.y;
+      var testX = pt.x;
+
+      for (var i = 0, j = n - 1; i < n; j = i++) {
+        var yi = polygon[i].y;
+        var yj = polygon[j].y;
+        var xi = polygon[i].x;
+        var xj = polygon[j].x;
+        var intersect = yi > testY !== yj > testY && testX < (xj - xi) * (testY - yi) / (yj - yi) + xi;
+
+        if (intersect) {
+          inside = !inside;
+        }
+      }
+
+      return inside ? 2 : 0;
+    }
+    /**
+     * @method judge 判断点是否在多边形中
+     * @param {point} dot {{x,y}} 需要判断的点
+     * @param {array} coordinates {{x,y}} 多边形点坐标的数组，为保证图形能够闭合，起点和终点必须相等。
+     *        比如三角形需要四个点表示，第一个点和最后一个点必须相同。 
+     * @param  {number} 是否为实心 1= 是
+     * @returns {boolean} 结果 true=在形状内
+     */
+
+    /*static judge(dot,coordinates,noneZeroMode) {
+        // 默认启动none zero mode
+        noneZeroMode=noneZeroMode||1;
+        var x = dot.x,y=dot.y;
+        var crossNum = 0;
+        // 点在线段的左侧数目
+        var leftCount = 0;
+        // 点在线段的右侧数目
+        var rightCount = 0;
+        for(var i=0;i<coordinates.length-1;i++){
+            var start = coordinates[i];
+            var end = coordinates[i+1];
+                
+            // 起点、终点斜率不存在的情况
+            if(start.x===end.x) {
+                // 因为射线向右水平，此处说明不相交
+                if(x>start.x) continue;
+                
+                // 从左侧贯穿
+                if((end.y>start.y&&y>=start.y && y<=end.y)){
+                    leftCount++;
+                    crossNum++;
+                }
+                // 从右侧贯穿
+                if((end.y<start.y&&y>=end.y && y<=start.y)) {
+                    rightCount++;
+                    crossNum++;
+                }
+                continue;
+            }
+            // 斜率存在的情况，计算斜率
+            var k=(end.y-start.y)/(end.x-start.x);
+            // 交点的x坐标
+            var x0 = (y-start.y)/k+start.x;
+            // 因为射线向右水平，此处说明不相交
+            if(x>x0) continue;
+                
+            if((end.x>start.x&&x0>=start.x && x0<=end.x)){
+                crossNum++;
+                if(k>=0) leftCount++;
+                else rightCount++;
+            }
+            if((end.x<start.x&&x0>=end.x && x0<=start.x)) {
+                crossNum++;
+                if(k>=0) rightCount++;
+                else leftCount++;
+            }
+        }
+        
+        return noneZeroMode===1?leftCount-rightCount!==0:crossNum%2===1;
+    }*/
+
+    /**
+     * 检查边界，子对象是否超出父容器边界
+     * 当对象偏移offset后是否出界
+     * 返回(left:0,right:0,top:0,bottom:0)
+     * 如果right>0表示右边出界right偏移量,left<0则表示左边出界left偏移量
+     * 如果bottom>0表示下边出界bottom偏移量,top<0则表示上边出界ltop偏移量
+     *
+     * @method checkOutSide
+     * @static
+     * @param {bound} parentBounds 父对象的边界
+     * @param {bound} targetBounds 对象的边界
+     * @param {number} offset 判断是否越界可容偏差
+     * @return {bound} 越界标识
+     */
+
+  }, {
+    key: "checkOutSide",
+    value: function checkOutSide(parentBounds, targetBounds, offset) {
+      var result = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      };
+
+      if (offset.x < 0) {
+        result.left = targetBounds.left + offset.x - parentBounds.left;
+      } else if (offset.x > 0) {
+        result.right = targetBounds.right + offset.x - parentBounds.right;
+      }
+
+      if (offset.y < 0) {
+        result.top = targetBounds.top + offset.y - parentBounds.top;
+      } else if (offset.y > 0) {
+        result.bottom = targetBounds.bottom + offset.y - parentBounds.bottom;
+      }
+
+      return result;
+    }
+    /**
+     * 把一个或多个点绕某个点旋转一定角度
+     * 先把坐标原点移到旋转中心点，计算后移回
+     * @method rotatePoints
+     * @static
+     * @param {Array/object} p 一个或多个点
+     * @param {*} rp 旋转中心点
+     * @param {*} r 旋转角度
+     */
+
+  }, {
+    key: "rotatePoints",
+    value: function rotatePoints(p, rp, r) {
+      if (!r || !p) return p;
+      var cos = Math.cos(r);
+      var sin = Math.sin(r);
+
+      if (Array.isArray(p)) {
+        for (var i = 0; i < p.length; i++) {
+          if (!p[i]) continue;
+          var x1 = p[i].x - rp.x;
+          var y1 = p[i].y - rp.y;
+          p[i].x = x1 * cos - y1 * sin + rp.x;
+          p[i].y = x1 * sin + y1 * cos + rp.y;
+        }
+      } else {
+        var _x = p.x - rp.x;
+
+        var _y = p.y - rp.y;
+
+        p.x = _x * cos - _y * sin + rp.x;
+        p.y = _x * sin + _y * cos + rp.y;
+      }
+
+      return p;
+    }
+    /**
+     * 去除字符串开始字符
+     * 
+     * @method trimStart
+     * @static
+     * @param {string} source 需要处理的字符串
+     * @param {char} [c] 要去除字符串的前置字符
+     * @return {string} 去除前置字符后的字符串
+     */
+
+  }, {
+    key: "trimStart",
+    value: function trimStart(source, c) {
+      c = c || ' ';
+
+      if (source && source.length > 0) {
+        var sc = source[0];
+
+        if (sc === c || c.indexOf(sc) >= 0) {
+          source = source.substring(1);
+          return this.trimStart(source, c);
+        }
+      }
+
+      return source;
+    }
+    /**
+     * 去除字符串结束的字符c
+     *
+     * @method trimEnd
+     * @static
+     * @param {string} source 需要处理的字符串
+     * @param {char} [c] 要去除字符串的后置字符
+     * @return {string} 去除后置字符后的字符串
+     */
+
+  }, {
+    key: "trimEnd",
+    value: function trimEnd(source, c) {
+      c = c || ' ';
+
+      if (source && source.length > 0) {
+        var sc = source[source.length - 1];
+
+        if (sc === c || c.indexOf(sc) >= 0) {
+          source = source.substring(0, source.length - 1);
+          return this.trimStart(source, c);
+        }
+      }
+
+      return source;
+    }
+    /**
+     * 去除字符串开始与结束的字符
+     *
+     * @method trim
+     * @static
+     * @param {string} source 需要处理的字符串
+     * @param {char} [c] 要去除字符串的字符
+     * @return {string} 去除字符后的字符串
+     */
+
+  }, {
+    key: "trim",
+    value: function trim(source, c) {
+      return this.trimEnd(this.trimStart(source, c), c);
+    }
+    /**
+     * 检查是否为百分比参数
+     *
+     * @method checkPercent
+     * @static
+     * @param {string} 字符串参数
+     * @return {boolean} true=当前字符串为百分比参数,false=不是
+     */
+
+  }, {
+    key: "checkPercent",
+    value: function checkPercent(per) {
+      if (typeof per === 'string') {
+        per = this.trim(per);
+
+        if (per[per.length - 1] == '%') {
+          return per;
+        }
+      }
+    }
+    /**
+     * 转换百分数为数值类型
+     *
+     * @method percentToNumber
+     * @static
+     * @param {string} per 把百分比转为数值的参数
+     * @return {number} 百分比对应的数值
+     */
+
+  }, {
+    key: "percentToNumber",
+    value: function percentToNumber(per) {
+      if (typeof per === 'string') {
+        var tmp = this.checkPercent(per);
+
+        if (tmp) {
+          per = this.trim(tmp, '% ');
+          per = per / 100;
+        }
+      }
+
+      return per;
+    }
+    /**
+     * 转换16进制为数值
+     *
+     * @method hexToNumber
+     * @static
+     * @param {string} h 16进制颜色表达
+     * @return {number} 10进制表达
+     */
+
+  }, {
+    key: "hexToNumber",
+    value: function hexToNumber(h) {
+      if (typeof h !== 'string') return h;
+      h = h.toLowerCase();
+      var hex = '0123456789abcdef';
+      var v = 0;
+      var l = h.length;
+
+      for (var i = 0; i < l; i++) {
+        var iv = hex.indexOf(h[i]);
+        if (iv == 0) continue;
+
+        for (var j = 1; j < l - i; j++) {
+          iv *= 16;
+        }
+
+        v += iv;
+      }
+
+      return v;
+    }
+    /**
+     * 转换数值为16进制字符串表达
+     *
+     * @method hex
+     * @static
+     * @param {number} v 数值
+     * @return {string} 16进制表达
+     */
+
+  }, {
+    key: "numberToHex",
+    value: function numberToHex(v) {
+      var hex = '0123456789abcdef';
+      var h = '';
+
+      while (v > 0) {
+        var t = v % 16;
+        h = hex[t] + h;
+        v = Math.floor(v / 16);
+      }
+
+      return h;
+    }
+    /**
+     * 16进制颜色转为r g b a 对象 {r, g , b, a}
+     * @param {string}} hex 16进度的颜色
+     */
+
+  }, {
+    key: "hexToRGBA",
+    value: function hexToRGBA(hex) {
+      if (typeof hex === 'string') hex = this.trim(hex);else return hex; // 如果缓存存在，则直接返回
+
+      this.__hexToRGBA_Cache = this.__hexToRGBA_Cache || {};
+      if (this.__hexToRGBA_Cache[hex]) return this.__hexToRGBA_Cache[hex];
+      var res = hex; // 系统颜色
+
+      if (colorKeywords[res]) res = colorKeywords[res]; //当为7位时，表示需要转为带透明度的rgba
+
+      if (res[0] == '#') {
+        var color = {
+          a: 1
+        };
+
+        if (res.length >= 8) {
+          color.a = res.substr(1, 2);
+          color.g = res.substr(5, 2);
+          color.b = res.substr(7, 2);
+          color.r = res.substr(3, 2); //透明度
+
+          color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
+          color.r = this.hexToNumber(color.r || 0);
+          color.g = this.hexToNumber(color.g || 0);
+          color.b = this.hexToNumber(color.b || 0);
+          res = color;
+        } // #cccccc || #ccc
+        else if (res.length === 7 || res.length === 4) {
+          // #ccc这种情况，把每个位复制一份
+          if (res.length === 4) {
+            color.g = res.substr(2, 1);
+            color.g = color.g + color.g;
+            color.b = res.substr(3, 1);
+            color.b = color.b + color.b;
+            color.r = res.substr(1, 1);
+            color.r = color.r + color.r;
+          } else {
+            color.g = res.substr(3, 2); //除#号外的第二位
+
+            color.b = res.substr(5, 2);
+            color.r = res.substr(1, 2);
+          }
+
+          color.r = this.hexToNumber(color.r || 0);
+          color.g = this.hexToNumber(color.g || 0);
+          color.b = this.hexToNumber(color.b || 0);
+          res = color;
+        } //如果是5位的话，# 则第2位表示A，后面依次是r,g,b
+        else if (res.length === 5) {
+          color.a = res.substr(1, 1);
+          color.g = res.substr(3, 1); //除#号外的第二位
+
+          color.b = res.substr(4, 1);
+          color.r = res.substr(2, 1);
+          color.r = this.hexToNumber(color.r || 0);
+          color.g = this.hexToNumber(color.g || 0);
+          color.b = this.hexToNumber(color.b || 0); //透明度
+
+          color.a = Number((this.hexToNumber(color.a) / 255).toFixed(4));
+          res = color;
+        }
+      }
+
+      if (typeof res === 'string') {
+        var m = res.match(/rgb(a)?\s*\(\s*([\d\.]+)\s*,\s*([\d\.]+)\s*,\s*([\d\.]+)\s*(,\s*[\d\.]+)?\s*\)/i);
+
+        if (m && m.length === 6) {
+          var _color = {
+            r: Number(m[2]),
+            g: Number(m[3]),
+            b: Number(m[4]),
+            a: Number(this.trimStart(m[5] || '1', ','))
+          };
+          res = _color;
+        }
+      }
+
+      return this.__hexToRGBA_Cache[hex] = res;
+    }
+    /**
+     * 将 RGB 颜色值从 0-255 范围转换为 0-1 范围
+     * 
+     * WebGL 中的颜色值通常使用 0-1 的浮点数表示，
+     * 此方法用于将标准 RGB 值转换为 WebGL 兼容格式。
+     * 
+     * @method rgbToDecimal
+     * @static
+     * @param {Object} color 颜色对象 {r, g, b, a?}
+     * @returns {Object} 转换后的颜色对象 {r, g, b, a?}，其中 r/g/b 为 0-1 范围
+     * 
+     * @example
+     * const color = jmUtils.rgbToDecimal({ r: 255, g: 128, b: 64 });
+     * // 返回 { r: 1, g: 0.502, b: 0.251 }
+     */
+
+  }, {
+    key: "rgbToDecimal",
+    value: function rgbToDecimal(color) {
+      color = this.clone(color);
+      color.r = this.byteToDecimal(color.r);
+      color.g = this.byteToDecimal(color.g);
+      color.b = this.byteToDecimal(color.b);
+      return color;
+    }
+    /**
+     * 将字节值（0-255）转换为小数（0-1）
+     * 
+     * @method byteToDecimal
+     * @static
+     * @private
+     * @param {number} b 字节值（0-255）
+     * @returns {number} 小数值（0-1）
+     */
+
+  }, {
+    key: "byteToDecimal",
+    value: function byteToDecimal(b) {
+      return b / 255;
+    }
+    /**
+     * 转换颜色格式，如果输入r,g,b则转为hex格式,如果为hex则转为r,g,b格式
+     *
+     * @method toColor
+     * @static
+     * @param {string} hex 16进制颜色表达
+     * @return {string} 颜色字符串
+     */
+
+  }, {
+    key: "toColor",
+    value: function toColor(r, g, b, a) {
+      if (typeof r === 'string' && r) {
+        r = this.trim(r); // 正常的颜色表达，不需要转换
+
+        if (r[0] === '#' && (r.length === 4 || r.length === 7)) return r;
+        var color = this.hexToRGBA(r);
+        if (typeof color === 'string') return color;
+        r = typeof color.r !== 'undefined' ? color.r : r;
+        g = typeof color.g !== 'undefined' ? color.g : g;
+        b = typeof color.b !== 'undefined' ? color.b : b;
+        a = typeof color.a !== 'undefined' ? color.a : a;
+      }
+
+      if (r && _typeof(r) === 'object') {
+        g = r.g;
+        b = r.b;
+        a = r.a || 1;
+        r = r.r;
+      }
+
+      if (typeof r != 'undefined' && typeof g != 'undefined' && typeof b != 'undefined') {
+        if (typeof a != 'undefined') {
+          return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+        } else {
+          return 'rgb(' + r + ',' + g + ',' + b + ')';
+        }
+      }
+
+      return r;
+    }
+    /**
+     * 请求动画帧
+     * 
+     * 封装浏览器原生的 requestAnimationFrame 方法，提供跨浏览器兼容性。
+     * 在不支持 requestAnimationFrame 的环境中降级为 setTimeout。
+     * 
+     * @method requestAnimationFrame
+     * @static
+     * @param {Function} callback 动画帧回调函数，接收时间戳参数
+     * @param {Window} [win] 可选的窗口对象（用于多窗口环境）
+     * @returns {number} 动画帧请求ID，用于取消
+     * 
+     * @example
+     * let animationId;
+     * function animate(timestamp) {
+     *     // 更新动画
+     *     animationId = jmUtils.requestAnimationFrame(animate);
+     * }
+     * animationId = jmUtils.requestAnimationFrame(animate);
+     * 
+     * // 取消动画
+     * jmUtils.cancelAnimationFrame(animationId);
+     */
+
+  }, {
+    key: "requestAnimationFrame",
+    value: function requestAnimationFrame(callback, win) {
+      var fun = win && win.requestAnimationFrame ? win.requestAnimationFrame : typeof window !== 'undefined' && window.requestAnimationFrame ? window.requestAnimationFrame : setTimeout;
+      return fun(callback, 20);
+    }
+    /**
+     * 取消动画帧请求
+     * 
+     * 取消之前通过 requestAnimationFrame 注册的回调。
+     * 在不支持 cancelAnimationFrame 的环境中降级为 clearTimeout。
+     * 
+     * @method cancelAnimationFrame
+     * @static
+     * @param {number} handler requestAnimationFrame 返回的请求ID
+     * @param {Window} [win] 可选的窗口对象（用于多窗口环境）
+     * 
+     * @example
+     * const animationId = jmUtils.requestAnimationFrame(animate);
+     * jmUtils.cancelAnimationFrame(animationId);
+     */
+
+  }, {
+    key: "cancelAnimationFrame",
+    value: function cancelAnimationFrame(handler, win) {
+      var fun = win && win.cancelAnimationFrame ? win.cancelAnimationFrame : typeof window !== 'undefined' && window.cancelAnimationFrame ? window.cancelAnimationFrame : clearTimeout;
+      return fun(handler);
+    }
+  }]);
+
+  return jmUtils;
+}();
+
+exports.jmUtils = exports["default"] = jmUtils;
+
+},{"./jmList.js":8}],17:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmViewport = exports["default"] = void 0;
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * @fileoverview jmViewport 视口与坐标变换管理器
+ * 
+ * jmViewport 统一管理画布的缩放(scaleFactor)和平移(translation)，
+ * 是「世界坐标 ↔ 屏幕坐标」转换与视口剔除的唯一入口。
+ * 
+ * 背景：原实现中，坐标转换散落在 jmGraph（translation/scaleFactor）、
+ * jmControl（getAbsoluteBounds）和 paint（视口裁剪）三处，职责混乱，
+ * 导致缩放平移后裁剪逻辑容易漏转换（历史 bug 的根源）。
+ * 本类将这些职责收拢为一个可独立测试的纯逻辑模块。
+ * 
+ * 术语：
+ * - 世界坐标：图形 position/points 所在坐标系（与缩放平移无关）
+ * - 屏幕坐标：画布像素坐标系（等于世界坐标 * scaleFactor + translation）
+ * 
+ * @module jmViewport
+ * @author jmGraph Team
+ * @license MIT
+ */
+var jmViewport = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   *
+   * @param {number} width 画布逻辑宽度
+   * @param {number} height 画布逻辑高度
+   * @param {Object} [option] 可选参数
+   * @param {number} [option.scaleFactor=1] 初始缩放因子
+   * @param {number} [option.x=0] 初始 X 平移
+   * @param {number} [option.y=0] 初始 Y 平移
+   * @param {number} [option.minZoom=0.1] 最小缩放
+   * @param {number} [option.maxZoom=10] 最大缩放
+   */
+  function jmViewport(width, height) {
+    var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+    _classCallCheck(this, jmViewport);
+
+    this.width = width || 0;
+    this.height = height || 0;
+    this.scaleFactor = typeof option.scaleFactor === 'number' ? option.scaleFactor : 1;
+    this.translation = {
+      x: option.x || 0,
+      y: option.y || 0
+    };
+    this.minZoom = typeof option.minZoom === 'number' ? option.minZoom : 0.1;
+    this.maxZoom = typeof option.maxZoom === 'number' ? option.maxZoom : 10;
+    /**
+     * 变换版本号，任何缩放/平移变化都会自增。
+     * 用于让调用方判断「变换是否变化过」，避免重复计算。
+     * @type {number}
+     */
+
+    this._stamp = 0;
+  }
+  /** 当前变换版本号 */
+
+
+  _createClass(jmViewport, [{
+    key: "stamp",
+    get: function get() {
+      return this._stamp;
+    }
+    /** 是否发生过缩放或平移（判断是否需要转换坐标） */
+
+  }, {
+    key: "transformed",
+    get: function get() {
+      return this.scaleFactor !== 1 || this.translation.x !== 0 || this.translation.y !== 0;
+    }
+    /**
+     * 重置视口（缩放=1，平移=0）
+     */
+
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.scaleFactor = 1;
+      this.translation.x = 0;
+      this.translation.y = 0;
+      this._stamp++;
+      return this;
+    }
+    /**
+     * 平移画布
+     * @param {number} dx X 轴平移量（屏幕像素）
+     * @param {number} dy Y 轴平移量（屏幕像素）
+     */
+
+  }, {
+    key: "pan",
+    value: function pan(dx, dy) {
+      this.translation.x += dx;
+      this.translation.y += dy;
+      this._stamp++;
+      return this;
+    }
+    /**
+     * 以指定世界坐标点为缩放中心进行缩放，保持该点屏幕位置不变。
+     *
+     * @param {number} zoom 目标缩放因子
+     * @param {number} [cx] 缩放中心 X（世界坐标）
+     * @param {number} [cy] 缩放中心 Y（世界坐标）
+     */
+
+  }, {
+    key: "zoomAt",
+    value: function zoomAt(zoom, cx, cy) {
+      zoom = this.clampZoom(zoom);
+
+      if (cx !== undefined && cy !== undefined) {
+        var old = this.scaleFactor || 1;
+        this.translation.x = cx - (cx - this.translation.x) * (zoom / old);
+        this.translation.y = cy - (cy - this.translation.y) * (zoom / old);
+      }
+
+      this.scaleFactor = zoom;
+      this._stamp++;
+      return this;
+    }
+    /**
+     * 直接设置平移
+     * @param {number} x X 平移（屏幕像素）
+     * @param {number} y Y 平移（屏幕像素）
+     */
+
+  }, {
+    key: "setTranslation",
+    value: function setTranslation(x, y) {
+      this.translation.x = x;
+      this.translation.y = y;
+      this._stamp++;
+      return this;
+    }
+    /** 缩放范围钳制 */
+
+  }, {
+    key: "clampZoom",
+    value: function clampZoom(zoom) {
+      if (typeof zoom !== 'number' || isNaN(zoom)) return this.scaleFactor;
+      return Math.max(this.minZoom, Math.min(this.maxZoom, zoom));
+    }
+    /**
+     * 屏幕坐标 → 世界坐标
+     * @param {Object} p {x, y}
+     * @return {Object} 世界坐标
+     */
+
+  }, {
+    key: "screenToWorld",
+    value: function screenToWorld(p) {
+      return {
+        x: (p.x - this.translation.x) / this.scaleFactor,
+        y: (p.y - this.translation.y) / this.scaleFactor
+      };
+    }
+    /**
+     * 世界坐标 → 屏幕坐标
+     * @param {Object} p {x, y}
+     * @return {Object} 屏幕坐标
+     */
+
+  }, {
+    key: "worldToScreen",
+    value: function worldToScreen(p) {
+      return {
+        x: p.x * this.scaleFactor + this.translation.x,
+        y: p.y * this.scaleFactor + this.translation.y
+      };
+    }
+    /**
+     * 把世界坐标边界矩形转换为屏幕坐标边界矩形。
+     * @param {Object} bounds 世界坐标矩形 {left, top, right, bottom, width, height}
+     * @return {Object} 屏幕坐标矩形
+     */
+
+  }, {
+    key: "worldRectToScreen",
+    value: function worldRectToScreen(bounds) {
+      var s = this.scaleFactor;
+      var left = bounds.left * s + this.translation.x;
+      var top = bounds.top * s + this.translation.y;
+      return {
+        left: left,
+        top: top,
+        right: bounds.right * s + this.translation.x,
+        bottom: bounds.bottom * s + this.translation.y,
+        width: bounds.width * s,
+        height: bounds.height * s
+      };
+    }
+    /**
+     * 获取当前视口对应的世界坐标可见区域。
+     *
+     * @return {Object} {left, top, right, bottom, width, height}
+     */
+
+  }, {
+    key: "getVisibleWorldRect",
+    value: function getVisibleWorldRect() {
+      var left = -this.translation.x / this.scaleFactor;
+      var top = -this.translation.y / this.scaleFactor;
+      return {
+        left: left,
+        top: top,
+        right: left + this.width / this.scaleFactor,
+        bottom: top + this.height / this.scaleFactor,
+        width: this.width / this.scaleFactor,
+        height: this.height / this.scaleFactor
+      };
+    }
+    /**
+     * 判断一个世界坐标边界矩形是否与视口相交（是否可见）。
+     *
+     * 先把世界坐标矩形变换到屏幕坐标，再与画布尺寸比较，
+     * 保证缩放、平移后裁剪结果始终正确。
+     *
+     * @param {Object} bounds 世界坐标矩形 {left, top, right, bottom}
+     * @param {number} [pad=0] 额外容差（像素，屏幕坐标）
+     * @return {boolean} true=可见
+     */
+
+  }, {
+    key: "isVisible",
+    value: function isVisible(bounds) {
+      var pad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      if (!bounds) return false;
+      var s = this.scaleFactor;
+      var sl = bounds.left * s + this.translation.x - pad;
+      var st = bounds.top * s + this.translation.y - pad;
+      var sr = bounds.right * s + this.translation.x + pad;
+      var sb = bounds.bottom * s + this.translation.y + pad;
+      if (sl >= this.width) return false;
+      if (st >= this.height) return false;
+      if (sr <= 0) return false;
+      if (sb <= 0) return false;
+      return true;
+    }
+    /**
+     * 判断一个世界坐标点是否在视口内。
+     * @param {Object} p {x, y} 世界坐标
+     * @return {boolean}
+     */
+
+  }, {
+    key: "containsPoint",
+    value: function containsPoint(p) {
+      var sp = this.worldToScreen(p);
+      return sp.x >= 0 && sp.x <= this.width && sp.y >= 0 && sp.y <= this.height;
+    }
+    /**
+     * 按画布中心进行自适应缩放（fitView 用）。
+     * @param {Object} bounds 内容边界（世界坐标）
+     * @param {number} padding 留白比例 0-0.9
+     */
+
+  }, {
+    key: "fitBounds",
+    value: function fitBounds(bounds) {
+      var padding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
+
+      if (!bounds) {
+        this.reset();
+        return this;
+      } // 兼容只传 {left, top, right, bottom} 的边界对象
+
+
+      var bw = bounds.width !== undefined ? bounds.width : bounds.right - bounds.left;
+      var bh = bounds.height !== undefined ? bounds.height : bounds.bottom - bounds.top;
+
+      if (!bw || !bh || !this.width || !this.height) {
+        this.reset();
+        return this;
+      }
+
+      var pad = Math.max(0, Math.min(0.9, padding));
+      var zoom = this.clampZoom(Math.min(this.width / bw, this.height / bh) * (1 - pad));
+      this.scaleFactor = zoom;
+      this.translation.x = this.width / 2 - (bounds.left + bw / 2) * zoom;
+      this.translation.y = this.height / 2 - (bounds.top + bh / 2) * zoom;
+      this._stamp++;
+      return this;
+    }
+    /**
+     * 序列化当前视口状态（调试/持久化用）。
+     * @return {Object}
+     */
+
+  }, {
+    key: "toJSON",
+    value: function toJSON() {
+      return {
+        scaleFactor: this.scaleFactor,
+        translation: _objectSpread({}, this.translation),
+        width: this.width,
+        height: this.height
+      };
+    }
+  }]);
+
+  return jmViewport;
+}();
+
+exports.jmViewport = exports["default"] = jmViewport;
+
+},{}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _default = earcut;
+exports["default"] = _default;
+
+function earcut(data, holeIndices, dim) {
+  dim = dim || 2;
+  var hasHoles = holeIndices && holeIndices.length,
+      outerLen = hasHoles ? holeIndices[0] * dim : data.length,
+      outerNode = linkedList(data, 0, outerLen, dim, true),
+      triangles = [];
+  if (!outerNode || outerNode.next === outerNode.prev) return triangles;
+  var minX, minY, maxX, maxY, x, y, invSize;
+  if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim); // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
+
+  if (data.length > 80 * dim) {
+    minX = maxX = data[0];
+    minY = maxY = data[1];
+
+    for (var i = dim; i < outerLen; i += dim) {
+      x = data[i];
+      y = data[i + 1];
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      if (x > maxX) maxX = x;
+      if (y > maxY) maxY = y;
+    } // minX, minY and invSize are later used to transform coords into integers for z-order calculation
+
+
+    invSize = Math.max(maxX - minX, maxY - minY);
+    invSize = invSize !== 0 ? 32767 / invSize : 0;
+  }
+
+  earcutLinked(outerNode, triangles, dim, minX, minY, invSize, 0);
+  return triangles;
+} // create a circular doubly linked list from polygon points in the specified winding order
+
+
+function linkedList(data, start, end, dim, clockwise) {
+  var i, last;
+
+  if (clockwise === signedArea(data, start, end, dim) > 0) {
+    for (i = start; i < end; i += dim) {
+      last = insertNode(i, data[i], data[i + 1], last);
+    }
+  } else {
+    for (i = end - dim; i >= start; i -= dim) {
+      last = insertNode(i, data[i], data[i + 1], last);
+    }
+  }
+
+  if (last && equals(last, last.next)) {
+    removeNode(last);
+    last = last.next;
+  }
+
+  return last;
+} // eliminate colinear or duplicate points
+
+
+function filterPoints(start, end) {
+  if (!start) return start;
+  if (!end) end = start;
+  var p = start,
+      again;
+
+  do {
+    again = false;
+
+    if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
+      removeNode(p);
+      p = end = p.prev;
+      if (p === p.next) break;
+      again = true;
+    } else {
+      p = p.next;
+    }
+  } while (again || p !== end);
+
+  return end;
+} // main ear slicing loop which triangulates a polygon (given as a linked list)
+
+
+function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
+  if (!ear) return; // interlink polygon nodes in z-order
+
+  if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
+  var stop = ear,
+      prev,
+      next; // iterate through ears, slicing them one by one
+
+  while (ear.prev !== ear.next) {
+    prev = ear.prev;
+    next = ear.next;
+
+    if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
+      // cut off the triangle
+      triangles.push(prev.i / dim | 0);
+      triangles.push(ear.i / dim | 0);
+      triangles.push(next.i / dim | 0);
+      removeNode(ear); // skipping the next vertex leads to less sliver triangles
+
+      ear = next.next;
+      stop = next.next;
+      continue;
+    }
+
+    ear = next; // if we looped through the whole remaining polygon and can't find any more ears
+
+    if (ear === stop) {
+      // try filtering points and slicing again
+      if (!pass) {
+        earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1); // if this didn't work, try curing all small self-intersections locally
+      } else if (pass === 1) {
+        ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
+        earcutLinked(ear, triangles, dim, minX, minY, invSize, 2); // as a last resort, try splitting the remaining polygon into two
+      } else if (pass === 2) {
+        splitEarcut(ear, triangles, dim, minX, minY, invSize);
+      }
+
+      break;
+    }
+  }
+} // check whether a polygon node forms a valid ear with adjacent nodes
+
+
+function isEar(ear) {
+  var a = ear.prev,
+      b = ear,
+      c = ear.next;
+  if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+  // now make sure we don't have other points inside the potential ear
+
+  var ax = a.x,
+      bx = b.x,
+      cx = c.x,
+      ay = a.y,
+      by = b.y,
+      cy = c.y; // triangle bbox; min & max are calculated like this for speed
+
+  var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx,
+      y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy,
+      x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx,
+      y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
+  var p = c.next;
+
+  while (p !== a) {
+    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
+    p = p.next;
+  }
+
+  return true;
+}
+
+function isEarHashed(ear, minX, minY, invSize) {
+  var a = ear.prev,
+      b = ear,
+      c = ear.next;
+  if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+
+  var ax = a.x,
+      bx = b.x,
+      cx = c.x,
+      ay = a.y,
+      by = b.y,
+      cy = c.y; // triangle bbox; min & max are calculated like this for speed
+
+  var x0 = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx,
+      y0 = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy,
+      x1 = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx,
+      y1 = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy; // z-order range for the current triangle bbox;
+
+  var minZ = zOrder(x0, y0, minX, minY, invSize),
+      maxZ = zOrder(x1, y1, minX, minY, invSize);
+  var p = ear.prevZ,
+      n = ear.nextZ; // look for points inside the triangle in both directions
+
+  while (p && p.z >= minZ && n && n.z <= maxZ) {
+    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
+    p = p.prevZ;
+    if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+    n = n.nextZ;
+  } // look for remaining points in decreasing z-order
+
+
+  while (p && p.z >= minZ) {
+    if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c && pointInTriangle(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
+    p = p.prevZ;
+  } // look for remaining points in increasing z-order
+
+
+  while (n && n.z <= maxZ) {
+    if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c && pointInTriangle(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
+    n = n.nextZ;
+  }
+
+  return true;
+} // go through all polygon nodes and cure small local self-intersections
+
+
+function cureLocalIntersections(start, triangles, dim) {
+  var p = start;
+
+  do {
+    var a = p.prev,
+        b = p.next.next;
+
+    if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
+      triangles.push(a.i / dim | 0);
+      triangles.push(p.i / dim | 0);
+      triangles.push(b.i / dim | 0); // remove two nodes involved
+
+      removeNode(p);
+      removeNode(p.next);
+      p = start = b;
+    }
+
+    p = p.next;
+  } while (p !== start);
+
+  return filterPoints(p);
+} // try splitting polygon into two and triangulate them independently
+
+
+function splitEarcut(start, triangles, dim, minX, minY, invSize) {
+  // look for a valid diagonal that divides the polygon into two
+  var a = start;
+
+  do {
+    var b = a.next.next;
+
+    while (b !== a.prev) {
+      if (a.i !== b.i && isValidDiagonal(a, b)) {
+        // split the polygon in two by the diagonal
+        var c = splitPolygon(a, b); // filter colinear points around the cuts
+
+        a = filterPoints(a, a.next);
+        c = filterPoints(c, c.next); // run earcut on each half
+
+        earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
+        earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
+        return;
+      }
+
+      b = b.next;
+    }
+
+    a = a.next;
+  } while (a !== start);
+} // link every hole into the outer loop, producing a single-ring polygon without holes
+
+
+function eliminateHoles(data, holeIndices, outerNode, dim) {
+  var queue = [],
+      i,
+      len,
+      start,
+      end,
+      list;
+
+  for (i = 0, len = holeIndices.length; i < len; i++) {
+    start = holeIndices[i] * dim;
+    end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+    list = linkedList(data, start, end, dim, false);
+    if (list === list.next) list.steiner = true;
+    queue.push(getLeftmost(list));
+  }
+
+  queue.sort(compareX); // process holes from left to right
+
+  for (i = 0; i < queue.length; i++) {
+    outerNode = eliminateHole(queue[i], outerNode);
+  }
+
+  return outerNode;
+}
+
+function compareX(a, b) {
+  return a.x - b.x;
+} // find a bridge between vertices that connects hole with an outer ring and and link it
+
+
+function eliminateHole(hole, outerNode) {
+  var bridge = findHoleBridge(hole, outerNode);
+
+  if (!bridge) {
+    return outerNode;
+  }
+
+  var bridgeReverse = splitPolygon(bridge, hole); // filter collinear points around the cuts
+
+  filterPoints(bridgeReverse, bridgeReverse.next);
+  return filterPoints(bridge, bridge.next);
+} // David Eberly's algorithm for finding a bridge between hole and outer polygon
+
+
+function findHoleBridge(hole, outerNode) {
+  var p = outerNode,
+      hx = hole.x,
+      hy = hole.y,
+      qx = -Infinity,
+      m; // find a segment intersected by a ray from the hole's leftmost point to the left;
+  // segment's endpoint with lesser x will be potential connection point
+
+  do {
+    if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
+      var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
+
+      if (x <= hx && x > qx) {
+        qx = x;
+        m = p.x < p.next.x ? p : p.next;
+        if (x === hx) return m; // hole touches outer segment; pick leftmost endpoint
+      }
+    }
+
+    p = p.next;
+  } while (p !== outerNode);
+
+  if (!m) return null; // look for points inside the triangle of hole point, segment intersection and endpoint;
+  // if there are no points found, we have a valid connection;
+  // otherwise choose the point of the minimum angle with the ray as connection point
+
+  var stop = m,
+      mx = m.x,
+      my = m.y,
+      tanMin = Infinity,
+      tan;
+  p = m;
+
+  do {
+    if (hx >= p.x && p.x >= mx && hx !== p.x && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+      tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
+
+      if (locallyInside(p, hole) && (tan < tanMin || tan === tanMin && (p.x > m.x || p.x === m.x && sectorContainsSector(m, p)))) {
+        m = p;
+        tanMin = tan;
+      }
+    }
+
+    p = p.next;
+  } while (p !== stop);
+
+  return m;
+} // whether sector in vertex m contains sector in vertex p in the same coordinates
+
+
+function sectorContainsSector(m, p) {
+  return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
+} // interlink polygon nodes in z-order
+
+
+function indexCurve(start, minX, minY, invSize) {
+  var p = start;
+
+  do {
+    if (p.z === 0) p.z = zOrder(p.x, p.y, minX, minY, invSize);
+    p.prevZ = p.prev;
+    p.nextZ = p.next;
+    p = p.next;
+  } while (p !== start);
+
+  p.prevZ.nextZ = null;
+  p.prevZ = null;
+  sortLinked(p);
+} // Simon Tatham's linked list merge sort algorithm
+// http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
+
+
+function sortLinked(list) {
+  var i,
+      p,
+      q,
+      e,
+      tail,
+      numMerges,
+      pSize,
+      qSize,
+      inSize = 1;
+
+  do {
+    p = list;
+    list = null;
+    tail = null;
+    numMerges = 0;
+
+    while (p) {
+      numMerges++;
+      q = p;
+      pSize = 0;
+
+      for (i = 0; i < inSize; i++) {
+        pSize++;
+        q = q.nextZ;
+        if (!q) break;
+      }
+
+      qSize = inSize;
+
+      while (pSize > 0 || qSize > 0 && q) {
+        if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
+          e = p;
+          p = p.nextZ;
+          pSize--;
+        } else {
+          e = q;
+          q = q.nextZ;
+          qSize--;
+        }
+
+        if (tail) tail.nextZ = e;else list = e;
+        e.prevZ = tail;
+        tail = e;
+      }
+
+      p = q;
+    }
+
+    tail.nextZ = null;
+    inSize *= 2;
+  } while (numMerges > 1);
+
+  return list;
+} // z-order of a point given coords and inverse of the longer side of data bbox
+
+
+function zOrder(x, y, minX, minY, invSize) {
+  // coords are transformed into non-negative 15-bit integer range
+  x = (x - minX) * invSize | 0;
+  y = (y - minY) * invSize | 0;
+  x = (x | x << 8) & 0x00FF00FF;
+  x = (x | x << 4) & 0x0F0F0F0F;
+  x = (x | x << 2) & 0x33333333;
+  x = (x | x << 1) & 0x55555555;
+  y = (y | y << 8) & 0x00FF00FF;
+  y = (y | y << 4) & 0x0F0F0F0F;
+  y = (y | y << 2) & 0x33333333;
+  y = (y | y << 1) & 0x55555555;
+  return x | y << 1;
+} // find the leftmost node of a polygon ring
+
+
+function getLeftmost(start) {
+  var p = start,
+      leftmost = start;
+
+  do {
+    if (p.x < leftmost.x || p.x === leftmost.x && p.y < leftmost.y) leftmost = p;
+    p = p.next;
+  } while (p !== start);
+
+  return leftmost;
+} // check if a point lies within a convex triangle
+
+
+function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
+  return (cx - px) * (ay - py) >= (ax - px) * (cy - py) && (ax - px) * (by - py) >= (bx - px) * (ay - py) && (bx - px) * (cy - py) >= (cx - px) * (by - py);
+} // check if a diagonal between two polygon nodes is valid (lies in polygon interior)
+
+
+function isValidDiagonal(a, b) {
+  return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
+  equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
+} // signed area of a triangle
+
+
+function area(p, q, r) {
+  return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+} // check if two points are equal
+
+
+function equals(p1, p2) {
+  return p1.x === p2.x && p1.y === p2.y;
+} // check if two segments intersect
+
+
+function intersects(p1, q1, p2, q2) {
+  var o1 = sign(area(p1, q1, p2));
+  var o2 = sign(area(p1, q1, q2));
+  var o3 = sign(area(p2, q2, p1));
+  var o4 = sign(area(p2, q2, q1));
+  if (o1 !== o2 && o3 !== o4) return true; // general case
+
+  if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
+
+  if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
+
+  if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
+
+  if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
+
+  return false;
+} // for collinear points p, q, r, check if point q lies on segment pr
+
+
+function onSegment(p, q, r) {
+  return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
+}
+
+function sign(num) {
+  return num > 0 ? 1 : num < 0 ? -1 : 0;
+} // check if a polygon diagonal intersects any polygon segments
+
+
+function intersectsPolygon(a, b) {
+  var p = a;
+
+  do {
+    if (p.i !== a.i && p.next.i !== a.i && p.i !== b.i && p.next.i !== b.i && intersects(p, p.next, a, b)) return true;
+    p = p.next;
+  } while (p !== a);
+
+  return false;
+} // check if a polygon diagonal is locally inside the polygon
+
+
+function locallyInside(a, b) {
+  return area(a.prev, a, a.next) < 0 ? area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 : area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
+} // check if the middle point of a polygon diagonal is inside the polygon
+
+
+function middleInside(a, b) {
+  var p = a,
+      inside = false,
+      px = (a.x + b.x) / 2,
+      py = (a.y + b.y) / 2;
+
+  do {
+    if (p.y > py !== p.next.y > py && p.next.y !== p.y && px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x) inside = !inside;
+    p = p.next;
+  } while (p !== a);
+
+  return inside;
+} // link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
+// if one belongs to the outer ring and another to a hole, it merges it into a single ring
+
+
+function splitPolygon(a, b) {
+  var a2 = new Node(a.i, a.x, a.y),
+      b2 = new Node(b.i, b.x, b.y),
+      an = a.next,
+      bp = b.prev;
+  a.next = b;
+  b.prev = a;
+  a2.next = an;
+  an.prev = a2;
+  b2.next = a2;
+  a2.prev = b2;
+  bp.next = b2;
+  b2.prev = bp;
+  return b2;
+} // create a node and optionally link it with previous one (in a circular doubly linked list)
+
+
+function insertNode(i, x, y, last) {
+  var p = new Node(i, x, y);
+
+  if (!last) {
+    p.prev = p;
+    p.next = p;
+  } else {
+    p.next = last.next;
+    p.prev = last;
+    last.next.prev = p;
+    last.next = p;
+  }
+
+  return p;
+}
+
+function removeNode(p) {
+  p.next.prev = p.prev;
+  p.prev.next = p.next;
+  if (p.prevZ) p.prevZ.nextZ = p.nextZ;
+  if (p.nextZ) p.nextZ.prevZ = p.prevZ;
+}
+
+function Node(i, x, y) {
+  // vertex index in coordinates array
+  this.i = i; // vertex coordinates
+
+  this.x = x;
+  this.y = y; // previous and next vertex nodes in a polygon ring
+
+  this.prev = null;
+  this.next = null; // z-order curve value
+
+  this.z = 0; // previous and next nodes in z-order
+
+  this.prevZ = null;
+  this.nextZ = null; // indicates whether this is a steiner point
+
+  this.steiner = false;
+} // return a percentage difference between the polygon area and its triangulation area;
+// used to verify correctness of triangulation
+
+
+earcut.deviation = function (data, holeIndices, dim, triangles) {
+  var hasHoles = holeIndices && holeIndices.length;
+  var outerLen = hasHoles ? holeIndices[0] * dim : data.length;
+  var polygonArea = Math.abs(signedArea(data, 0, outerLen, dim));
+
+  if (hasHoles) {
+    for (var i = 0, len = holeIndices.length; i < len; i++) {
+      var start = holeIndices[i] * dim;
+      var end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+      polygonArea -= Math.abs(signedArea(data, start, end, dim));
+    }
+  }
+
+  var trianglesArea = 0;
+
+  for (i = 0; i < triangles.length; i += 3) {
+    var a = triangles[i] * dim;
+    var b = triangles[i + 1] * dim;
+    var c = triangles[i + 2] * dim;
+    trianglesArea += Math.abs((data[a] - data[c]) * (data[b + 1] - data[a + 1]) - (data[a] - data[b]) * (data[c + 1] - data[a + 1]));
+  }
+
+  return polygonArea === 0 && trianglesArea === 0 ? 0 : Math.abs((trianglesArea - polygonArea) / polygonArea);
+};
+
+function signedArea(data, start, end, dim) {
+  var sum = 0;
+
+  for (var i = start, j = end - dim; i < end; i += dim) {
+    sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
+    j = i;
+  }
+
+  return sum;
+} // turn a polygon in a multi-dimensional array form (e.g. as in GeoJSON) into a form Earcut accepts
+
+
+earcut.flatten = function (data) {
+  var dim = data[0][0].length,
+      result = {
+    vertices: [],
+    holes: [],
+    dimensions: dim
+  },
+      holeIndex = 0;
+
+  for (var i = 0; i < data.length; i++) {
+    for (var j = 0; j < data[i].length; j++) {
+      for (var d = 0; d < dim; d++) {
+        result.vertices.push(data[i][j][d]);
+      }
+    }
+
+    if (i > 0) {
+      holeIndex += data[i - 1].length;
+      result.holes.push(holeIndex);
+    }
+  }
+
+  return result;
+};
+
+},{}],19:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "MAX_STOPS", {
+  enumerable: true,
+  get: function get() {
+    return _gradient.MAX_STOPS;
+  }
+});
+exports.pathFragmentSource = exports.pathVertexSource = exports["default"] = void 0;
+
+var _earcut = _interopRequireDefault(require("../earcut.js"));
+
+var _gradient = _interopRequireWildcard(require("./gradient.js"));
+
+var _program = require("./core/program.js");
+
+var _buffer = require("./core/buffer.js");
+
+var _texture = require("./core/texture.js");
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// 把canvas坐标转为webgl坐标系
+var convertPointSource = "\n    vec4 translatePosition(vec4 point, float x, float y) {\n        point.x = (point.x-x)/x;\n        point.y = (y-point.y)/y;\n        return point;\n    }"; // 把纹理的canvas坐标转为纹理的坐标系
+
+var convertTexturePosition = "\n    vec2 translateTexturePosition(in vec2 point, vec4 bounds) {\n        point.x = (point.x-bounds.x)/bounds.z; // \u79BB\u5DE6\u4E0A\u89D2\u4F4D\u7F6E\u7684X\u957F\u6BD4\u4E0A\u7EB9\u7406\u5BBD 0-1\n        point.y = 1.0-(point.y-bounds.y)/bounds.w; // \u79BB\u5DE6\u4E0A\u89D2\u4F4D\u7F6E\u7684Y\u957F\u6BD4\u4E0A\u9AD8\uFF0C\u56E0\u4E3A\u7EB9\u7406\u5750\u6807\u662F\u5DE6\u4E0B\u89D2\u8D77\uFF0C\u6240\u4EE5\u8981\u75281-\n        return point;\n    }"; // path顶点着色器源码
+
+var pathVertexSource = "\n    attribute vec4 a_position;\n    attribute vec4 a_color;\n    attribute vec2 a_text_coord;\n    uniform vec2 a_center_point; // \u5F53\u524Dcanvas\u7684\u4E2D\u5FC3\u4F4D\u7F6E\n    uniform float a_point_size; // \u70B9\u7684\u5927\u5C0F\n    uniform int a_type;\n    varying vec4 v_color;\n    varying vec2 v_text_coord;\n    varying float v_type;\n\n    ".concat(convertPointSource, "\n\n    void main() {\n        gl_PointSize = a_point_size == 0.0? 1.0 : a_point_size;\n        v_type = float(a_type);\n        vec4 pos = translatePosition(a_position, a_center_point.x, a_center_point.y);\n        gl_Position = pos;\n        v_color = a_color;\n        if(a_type == 2 || a_type == 5) {\n            v_text_coord = a_position.xy;\n        }\n    }\n"); // path 片段着色器源码
+
+exports.pathVertexSource = pathVertexSource;
+var pathFragmentSource = "\n    precision mediump float;\n    uniform sampler2D u_sample;\n    uniform vec4 v_texture_bounds; // \u7EB9\u7406\u7684\u5DE6\u4E0A\u5750\u6807\u548C\u5927\u5C0F x,y,z,w\n    uniform vec4 v_single_color;\n    // GLSL \u6E10\u53D8 uniforms\n    uniform int u_gradient_type;     // 0=\u65E0 1=\u7EBF\u6027 2=\u5F84\u5411\n    uniform vec4 u_gradient_start;   // \u7EBF\u6027:{x1,y1,0,0} \u5F84\u5411:{cx,cy,r1,0}\n    uniform vec4 u_gradient_end;     // \u7EBF\u6027:{x2,y2,0,0} \u5F84\u5411:{cx,cy,r2,0}\n    uniform int u_gradient_stop_count;\n    uniform float u_gradient_offsets[".concat(_gradient.MAX_STOPS, "];\n    uniform vec4 u_gradient_colors[").concat(_gradient.MAX_STOPS, "]; // {r, g, b, a} 0~1 \u8303\u56F4\n    varying float v_type;\n    varying vec4 v_color;\n    varying vec2 v_text_coord;\n\n    ").concat(convertTexturePosition, "\n\n    // \u5728 sorted stops \u4E2D\u6309 t \u503C\u91C7\u6837\u989C\u8272\n    // \u517C\u5BB9 GLSL ES 1.0\uFF1A\u5FAA\u73AF\u4EC5\u4E0E\u5E38\u91CF\u6BD4\u8F83\uFF0C\u65E0 break/continue\n    vec4 sampleGradient(float t) {\n        t = clamp(t, 0.0, 1.0);\n        // \u6B63\u5411\u626B\u63CF\uFF1A\u59CB\u7EC8\u904D\u5386 MAX_STOPS-1 \u6B21\uFF0C\u627E\u5230 t \u6240\u5728\u6BB5\u5E76\u8986\u76D6\u7ED3\u679C\n        float localT = 0.0;\n        vec4 c0 = u_gradient_colors[0];\n        vec4 c1 = u_gradient_colors[0];\n        for(int i = 0; i < ").concat(_gradient.MAX_STOPS - 1, "; i++) {\n            float s0 = u_gradient_offsets[i];\n            float s1 = u_gradient_offsets[i + 1];\n            if(t >= s0) {\n                float range = s1 - s0;\n                localT = range > 0.0001 ? clamp((t - s0) / range, 0.0, 1.0) : 0.0;\n                c0 = u_gradient_colors[i];\n                c1 = u_gradient_colors[i + 1];\n            }\n        }\n        return mix(c0, c1, localT);\n    }\n\n    void main() {\n        // \u5982\u679C\u662Ffill\uFF0C\u5219\u76F4\u63A5\u586B\u5145\u989C\u8272\n        if(v_type == 1.0) {\n            gl_FragColor = v_single_color;\n        }\n        // \u6E10\u53D8\u8272 (\u65E7\u65B9\u5F0F\uFF0C\u9876\u70B9\u989C\u8272\u63D2\u503C)\n        else if(v_type == 3.0) {\n            gl_FragColor = v_color;\n        }\n        // GLSL \u6E10\u53D8\u586B\u5145 (type=5)\n        else if(v_type == 5.0) {\n            float t;\n            if(u_gradient_type == 2) {\n                // \u5F84\u5411\u6E10\u53D8\n                vec2 d = v_text_coord - u_gradient_start.xy;\n                float dist = length(d);\n                float r1 = u_gradient_start.z;\n                float r2 = u_gradient_end.z;\n                float range = r2 - r1;\n                t = range > 0.001 ? (dist - r1) / range : 0.0;\n            } else {\n                // \u7EBF\u6027\u6E10\u53D8\n                vec2 dir = u_gradient_end.xy - u_gradient_start.xy;\n                float lenSq = dot(dir, dir);\n                if(lenSq > 0.001) {\n                    vec2 pos = v_text_coord - u_gradient_start.xy;\n                    t = dot(pos, dir) / lenSq;\n                } else {\n                    t = 0.0;\n                }\n            }\n            gl_FragColor = sampleGradient(t) * v_single_color.a;\n        }\n        else if(v_type == 2.0) {\n            vec2 pos = translateTexturePosition(v_text_coord, v_texture_bounds);\n            gl_FragColor = texture2D(u_sample, pos);\n        }\n        else {\n            float r = distance(gl_PointCoord, vec2(0.5, 0.5));\n            //\u6839\u636E\u8DDD\u79BB\u8BBE\u7F6E\u7247\u5143\n            if(r <= 0.5){\n                // \u65B9\u5F62\u533A\u57DF\u7247\u5143\u8DDD\u79BB\u51E0\u4F55\u4E2D\u5FC3\u534A\u5F84\u5C0F\u4E8E0.5\uFF0C\u50CF\u7D20\u989C\u8272\u8BBE\u7F6E\u7EA2\u8272\n                gl_FragColor = v_single_color;\n            }else {\n                // \u65B9\u5F62\u533A\u57DF\u8DDD\u79BB\u51E0\u4F55\u4E2D\u5FC3\u534A\u5F84\u4E0D\u5C0F\u4E8E0.5\u7684\u7247\u5143\u526A\u88C1\u820D\u5F03\u6389\uFF1A\n                discard;\n            }\n        }\n    }\n");
+/**
+ * WebGL 基础渲染类
+ * 提供 WebGL 渲染的核心功能，包括着色器、缓冲区、纹理管理等
+ * 
+ * @class WeblBase
+ * @example
+ * const base = new WeblBase(graph, { mode: 'webgl' });
+ * base.setStyle({ fillStyle: '#ff0000' });
+ */
+
+exports.pathFragmentSource = pathFragmentSource;
+
+var WeblBase = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * @param {jmGraph} graph jmGraph 实例
+   * @param {Object} option 配置选项
+   */
+  function WeblBase(graph, option) {
+    _classCallCheck(this, WeblBase);
+
+    this.graph = graph;
+    this.option = option || {};
+    this.style = {
+      globalAlpha: 1
+    };
+    this.stateStack = [];
+    /** @type {number[]} 2D 变换矩阵 [a, b, c, d, tx, ty] */
+
+    this.transformMatrix = [1, 0, 0, 1, 0, 0];
+  }
+  /** @returns {WebGLRenderingContext} WebGL 渲染上下文 */
+
+
+  _createClass(WeblBase, [{
+    key: "context",
+    get: function get() {
+      if (this.graph) return this.graph.context;
+    }
+    /** 保存当前状态到状态栈 */
+
+  }, {
+    key: "save",
+    value: function save() {
+      this.stateStack.push({
+        transformMatrix: _toConsumableArray(this.transformMatrix),
+        style: _objectSpread({}, this.style)
+      });
+    }
+    /** 从状态栈恢复上一个状态 */
+
+  }, {
+    key: "restore",
+    value: function restore() {
+      if (this.stateStack.length > 0) {
+        var state = this.stateStack.pop();
+        this.transformMatrix = state.transformMatrix;
+        this.style = state.style;
+      }
+    }
+    /**
+     * 平移变换
+     * @param {number} x X 轴平移量
+     * @param {number} y Y 轴平移量
+     */
+
+  }, {
+    key: "translate",
+    value: function translate(x, y) {
+      this.transformMatrix[4] += x * this.transformMatrix[0] + y * this.transformMatrix[2];
+      this.transformMatrix[5] += x * this.transformMatrix[1] + y * this.transformMatrix[3];
+    }
+    /**
+     * 缩放变换
+     * @param {number} sx X 轴缩放比例
+     * @param {number} sy Y 轴缩放比例
+     */
+
+  }, {
+    key: "scale",
+    value: function scale(sx, sy) {
+      this.transformMatrix[0] *= sx;
+      this.transformMatrix[1] *= sx;
+      this.transformMatrix[2] *= sy;
+      this.transformMatrix[3] *= sy;
+    }
+    /**
+     * 旋转变换
+     * @param {number} angle 旋转角度（弧度）
+     */
+
+  }, {
+    key: "rotate",
+    value: function rotate(angle) {
+      var cos = Math.cos(angle);
+      var sin = Math.sin(angle);
+
+      var _this$transformMatrix = _slicedToArray(this.transformMatrix, 4),
+          a = _this$transformMatrix[0],
+          b = _this$transformMatrix[1],
+          c = _this$transformMatrix[2],
+          d = _this$transformMatrix[3];
+
+      this.transformMatrix[0] = a * cos - b * sin;
+      this.transformMatrix[1] = a * sin + b * cos;
+      this.transformMatrix[2] = c * cos - d * sin;
+      this.transformMatrix[3] = c * sin + d * cos;
+    }
+    /**
+     * 矩阵变换
+     * @param {number} a 水平缩放
+     * @param {number} b 垂直倾斜
+     * @param {number} c 水平倾斜
+     * @param {number} d 垂直缩放
+     * @param {number} e 水平移动
+     * @param {number} f 垂直移动
+     */
+
+  }, {
+    key: "transform",
+    value: function transform(a, b, c, d, e, f) {
+      var _this$transformMatrix2 = _slicedToArray(this.transformMatrix, 6),
+          currentA = _this$transformMatrix2[0],
+          currentB = _this$transformMatrix2[1],
+          currentC = _this$transformMatrix2[2],
+          currentD = _this$transformMatrix2[3],
+          currentE = _this$transformMatrix2[4],
+          currentF = _this$transformMatrix2[5];
+
+      this.transformMatrix[0] = a * currentA + b * currentC;
+      this.transformMatrix[1] = a * currentB + b * currentD;
+      this.transformMatrix[2] = c * currentA + d * currentC;
+      this.transformMatrix[3] = c * currentB + d * currentD;
+      this.transformMatrix[4] = e * currentA + f * currentC + currentE;
+      this.transformMatrix[5] = e * currentB + f * currentD + currentF;
+    }
+    /**
+     * 应用变换到点
+     * @param {Object} point 点坐标 {x, y}
+     * @returns {Object} 变换后的点坐标 {x, y}
+     */
+
+  }, {
+    key: "applyTransform",
+    value: function applyTransform(point) {
+      var _this$transformMatrix3 = _slicedToArray(this.transformMatrix, 6),
+          a = _this$transformMatrix3[0],
+          b = _this$transformMatrix3[1],
+          c = _this$transformMatrix3[2],
+          d = _this$transformMatrix3[3],
+          tx = _this$transformMatrix3[4],
+          ty = _this$transformMatrix3[5];
+
+      return {
+        x: a * point.x + c * point.y + tx,
+        y: b * point.x + d * point.y + ty
+      };
+    }
+    /**
+     * 文本测量用的离屏 canvas context
+     * @private
+     * @returns {CanvasRenderingContext2D|null}
+     */
+
+  }, {
+    key: "_measureCtx",
+    get: function get() {
+      if (!this.__measureCtx) {
+        try {
+          if (typeof document !== 'undefined') {
+            var c = document.createElement('canvas');
+            c.width = c.height = 1;
+            this.__measureCtx = c.getContext('2d');
+          }
+        } catch (e) {
+          this.__measureCtx = null;
+        }
+      }
+
+      return this.__measureCtx;
+    }
+    /**
+     * 获取当前着色器程序
+     * @returns {Object} 着色器程序对象
+     */
+
+  }, {
+    key: "program",
+    get: function get() {
+      return this.graph.context.pathProgram || (this.graph.context.pathProgram = this.createProgram(pathVertexSource, pathFragmentSource));
+    }
+    /**
+     * 设置样式
+     * @param {Object|string} style 样式对象或样式属性名
+     * @param {string} [value] 样式值（当 style 为字符串时使用）
+     */
+
+  }, {
+    key: "setStyle",
+    value: function setStyle() {
+      var style = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.style;
+      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+      if (typeof style === 'string') {
+        var obj = {};
+        obj[style] = value;
+        style = obj;
+      }
+
+      this.style = _objectSpread(_objectSpread({}, this.style), style);
+    }
+    /**
+     * 将颜色转换为 WebGL 可识别的格式
+     * @param {string|Object} color 颜色值
+     * @returns {Object} RGBA 对象 {r, g, b, a}，范围 0-1
+     */
+
+  }, {
+    key: "convertColor",
+    value: function convertColor(color) {
+      if (this.isGradient(color)) return color;
+
+      if (typeof color === 'string') {
+        color = this.graph.utils.hexToRGBA(color);
+
+        if (typeof color === 'string') {
+          color = this.__parseCSSColor(color);
+        }
+      }
+
+      if (_typeof(color) === 'object' && color.r !== undefined) {
+        return this.graph.utils.rgbToDecimal(color);
+      }
+
+      return color;
+    }
+    /**
+     * 利用离屏 canvas 解析任意 CSS 颜色
+     * @private
+     * @param {string} colorStr CSS 颜色字符串
+     * @returns {Object} RGBA 对象 {r, g, b, a}
+     */
+
+  }, {
+    key: "__parseCSSColor",
+    value: function __parseCSSColor(colorStr) {
+      var ctx = this._measureCtx;
+      if (!ctx) return {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0
+      };
+
+      try {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = '#000000';
+        ctx.fillStyle = colorStr;
+        ctx.fillRect(0, 0, 1, 1);
+
+        var _ctx$getImageData$dat = _slicedToArray(ctx.getImageData(0, 0, 1, 1).data, 4),
+            r = _ctx$getImageData$dat[0],
+            g = _ctx$getImageData$dat[1],
+            b = _ctx$getImageData$dat[2],
+            a = _ctx$getImageData$dat[3];
+
+        if (ctx.fillStyle === '#000000' && colorStr !== '#000000' && colorStr !== 'black') {
+          return {
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 0
+          };
+        }
+
+        return {
+          r: r,
+          g: g,
+          b: b,
+          a: a / 255
+        };
+      } catch (e) {
+        return {
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 0
+        };
+      }
+    }
+    /**
+     * 创建着色器程序
+     * @param {string} vertexSrc 顶点着色器源码
+     * @param {string} fragmentSrc 片段着色器源码
+     * @returns {Object} 着色器程序对象
+     */
+
+  }, {
+    key: "createProgram",
+    value: function createProgram(vertexSrc, fragmentSrc) {
+      return (0, _program.createProgram)(this.context, vertexSrc, fragmentSrc);
+    }
+    /**
+     * 使用指定的着色器程序
+     * @param {Object} [program] 着色器程序，默认使用当前程序
+     * @returns {Object} 着色器程序
+     */
+
+  }, {
+    key: "useProgram",
+    value: function useProgram() {
+      var program = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.program;
+      program = program.program || program;
+      if (this.context.__curent_program === program) return program;
+      (0, _program.useProgram)(this.context, program.program || program);
+      this.context.__curent_program = program;
+      return program;
+    }
+    /**
+     * 获取属性位置
+     * @param {string} name 属性名
+     * @returns {number} 属性位置
+     */
+
+  }, {
+    key: "getAttribLocation",
+    value: function getAttribLocation(name) {
+      return this.context.getAttribLocation(this.program.program, name);
+    }
+    /**
+     * 获取 uniform 位置
+     * @param {string} name uniform 变量名
+     * @returns {WebGLUniformLocation} uniform 位置
+     */
+
+  }, {
+    key: "getUniformLocation",
+    value: function getUniformLocation(name) {
+      return this.context.getUniformLocation(this.program.program, name);
+    }
+    /**
+     * 将缓冲区数据写入顶点属性
+     * @param {Object} buffer 缓冲区对象
+     * @param {Object} attr 属性对象
+     * @param {number} [size=2] 每个顶点的分量数（1-4）
+     * @param {number} [strip=0] 步长，0 表示紧密排列
+     * @param {number} [offset=0] 字节偏移量
+     * @param {number} [dataType=FLOAT] 数据类型
+     * @returns {Object} 缓冲区对象
+     */
+
+  }, {
+    key: "writeVertexAttrib",
+    value: function writeVertexAttrib(buffer, attr) {
+      var size = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+      var strip = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+      var offset = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+      var dataType = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : this.context.FLOAT;
+      buffer.attr = attr;
+      return (0, _program.writeVertexAttrib)(this.context, buffer, attr, size, strip, offset, dataType);
+    }
+    /**
+     * 禁用顶点属性数组
+     * @param {Object} attr 属性对象
+     * @returns {Object} 属性对象
+     */
+
+  }, {
+    key: "disableVertexAttribArray",
+    value: function disableVertexAttribArray(attr) {
+      try {
+        if (!attr) return attr;
+        return (0, _program.disableVertexAttribArray)(this.context, attr);
+      } catch (e) {
+        console.error(e);
+      }
+
+      return attr;
+    }
+    /**
+     * 创建 Float32 缓冲区
+     * @param {Array} data 数据数组
+     * @param {number} [type=ARRAY_BUFFER] 缓冲区类型
+     * @param {number} [drawType=STATIC_DRAW] 绘制类型
+     * @returns {Object} 缓冲区对象
+     */
+
+  }, {
+    key: "createFloat32Buffer",
+    value: function createFloat32Buffer(data) {
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.context.ARRAY_BUFFER;
+      var drawType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.context.STATIC_DRAW;
+      var buffer = (0, _buffer.createFloat32Buffer)(this.context, data, type, drawType);
+      return _objectSpread({
+        data: data
+      }, buffer);
+    }
+    /**
+     * 创建 Uint16 缓冲区
+     * @param {Array} data 数据数组
+     * @param {number} [type=ARRAY_BUFFER] 缓冲区类型
+     * @param {number} [drawType=STATIC_DRAW] 绘制类型
+     * @returns {Object} 缓冲区对象
+     */
+
+  }, {
+    key: "createUint16Buffer",
+    value: function createUint16Buffer(data) {
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.context.ARRAY_BUFFER;
+      var drawType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.context.STATIC_DRAW;
+      var buffer = (0, _buffer.createUint16Buffer)(this.context, data, type, drawType);
+      return _objectSpread({
+        data: data
+      }, buffer);
+    }
+    /**
+     * 删除缓冲区
+     * @param {Object} buffer 缓冲区对象
+     * @returns {Object} 缓冲区对象
+     */
+
+  }, {
+    key: "deleteBuffer",
+    value: function deleteBuffer(buffer) {
+      try {
+        if (!buffer) return;
+        var bufferHandler = buffer.buffer || buffer;
+        if (bufferHandler) return (0, _buffer.deleteBuffer)(this.context, bufferHandler);
+      } catch (e) {
+        console.log(buffer);
+        console.error(e);
+      }
+
+      return buffer;
+    }
+    /** @returns {WebGLTexture} 2D 纹理对象 */
+
+  }, {
+    key: "create2DTexture",
+    value: function create2DTexture() {
+      return (0, _texture.create2DTexture)(this.context);
+    }
+    /**
+     * 创建图片纹理
+     * @param {Image|HTMLImageElement} img 图像对象
+     * @returns {Object} 纹理对象
+     */
+
+  }, {
+    key: "createImgTexture",
+    value: function createImgTexture(img) {
+      return (0, _texture.createImgTexture)(this.context, img);
+    }
+    /**
+     * 根据像素数据创建纹理
+     * @param {ImageData|Uint8Array} data 像素数据
+     * @returns {Object} 纹理对象
+     */
+
+  }, {
+    key: "createDataTexture",
+    value: function createDataTexture(data) {
+      return (0, _texture.createDataTexture)(this.context, data);
+    }
+    /**
+     * 删除纹理
+     * @param {Object} texture 纹理对象
+     * @returns {Object} 纹理对象
+     */
+
+  }, {
+    key: "deleteTexture",
+    value: function deleteTexture(texture) {
+      try {
+        return (0, _texture.deleteTexture)(this.context, texture.texture || texture);
+      } catch (e) {
+        console.error(e);
+      }
+
+      return texture;
+    }
+    /**
+     * 多边形三角化，得到三角形顶点索引数组
+     * @param {Array<Object>} points 多边形顶点数组
+     * @returns {Array<number>} 三角形顶点索引数组
+     */
+
+  }, {
+    key: "earCutPoints",
+    value: function earCutPoints(points) {
+      var arr = this.pointsToArray(points);
+      var ps = (0, _earcut["default"])(arr);
+      return ps;
+    }
+    /**
+     * 多边形三角化，得到三角形顶点数组
+     * @param {Array<Object>} points 多边形顶点数组
+     * @returns {Array<Array<Object>>} 三角形数组，每个三角形包含3个顶点
+     */
+
+  }, {
+    key: "earCutPointsToTriangles",
+    value: function earCutPointsToTriangles(points) {
+      this.earCutCache = this.earCutCache || (this.earCutCache = {});
+      var len = points.length;
+      var key = len + '_' + points[0].x + '_' + points[0].y + '_' + points[len - 1].x + '_' + points[len - 1].y;
+      if (this.earCutCache[key]) return this.earCutCache[key];
+      var ps = this.earCutPoints(points);
+      var triangles = [];
+
+      for (var i = 0; i < ps.length; i += 3) {
+        var p1 = points[ps[i]];
+        var p2 = points[ps[i + 1]];
+        var p3 = points[ps[i + 2]];
+        triangles.push([p1, p2, p3]);
+      }
+
+      this.earCutCache[key] = triangles;
+      return triangles;
+    }
+    /**
+     * 点坐标数组转为一维数组
+     * @param {Array<Object>} points 点数组 [{x, y}, ...]
+     * @returns {Array<number>} 一维数组 [x1, y1, x2, y2, ...]
+     */
+
+  }, {
+    key: "pointsToArray",
+    value: function pointsToArray(points) {
+      var _ref;
+
+      return (_ref = []).concat.apply(_ref, _toConsumableArray(points.map(function (p) {
+        return [p.x, p.y];
+      })));
+    }
+    /**
+     * 一维数组转为点坐标数组
+     * @param {Array<number>} arr 一维数组 [x1, y1, x2, y2, ...]
+     * @returns {Array<Object>} 点数组 [{x, y}, ...]
+     */
+
+  }, {
+    key: "arrayToPoints",
+    value: function arrayToPoints(arr) {
+      var points = [];
+
+      for (var i = 0; i < arr.length; i += 2) {
+        points.push({
+          x: arr[i],
+          y: arr[i + 1]
+        });
+      }
+
+      return points;
+    }
+    /**
+     * 创建线性渐变
+     * @param {number} x1 起点X坐标
+     * @param {number} y1 起点Y坐标
+     * @param {number} x2 终点X坐标
+     * @param {number} y2 终点Y坐标
+     * @param {Object} bounds 渐变边界
+     * @returns {WebglGradient} 渐变对象
+     */
+
+  }, {
+    key: "createLinearGradient",
+    value: function createLinearGradient(x1, y1, x2, y2, bounds) {
+      return new _gradient["default"]('linear', {
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        bounds: bounds,
+        control: this
+      });
+    }
+    /**
+     * 创建径向渐变
+     * @param {number} x1 内圆中心X坐标
+     * @param {number} y1 内圆中心Y坐标
+     * @param {number} r1 内圆半径
+     * @param {number} x2 外圆中心X坐标
+     * @param {number} y2 外圆中心Y坐标
+     * @param {number} r2 外圆半径
+     * @param {Object} bounds 渐变边界
+     * @returns {WebglGradient} 渐变对象
+     */
+
+  }, {
+    key: "createRadialGradient",
+    value: function createRadialGradient(x1, y1, r1, x2, y2, r2, bounds) {
+      return new _gradient["default"]('radial', {
+        x1: x1,
+        y1: y1,
+        r1: r1,
+        x2: x2,
+        y2: y2,
+        r2: r2,
+        bounds: bounds,
+        control: this
+      });
+    }
+    /**
+     * 判断是否为渐变对象
+     * @param {Object} obj 待检测对象
+     * @returns {boolean} 是否为渐变对象
+     */
+
+  }, {
+    key: "isGradient",
+    value: function isGradient(obj) {
+      return obj && obj instanceof _gradient["default"];
+    }
+    /**
+     * 测试获取文本所占大小
+     *
+     * @method testSize
+     * @return {object} 含文本大小的对象
+     */
+
+  }, {
+    key: "testSize",
+    value: function testSize(text) {
+      var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.style;
+      var ctx = this._measureCtx;
+      if (!ctx) return {
+        width: 15,
+        height: style.fontSize || 15
+      };
+      ctx.save && ctx.save();
+      if (style.font || style.fontSize) ctx.font = style.font || style.fontSize + 'px ' + style.fontFamily;
+      var size = ctx.measureText ? ctx.measureText(text) : {
+        width: 15
+      };
+      ctx.restore && ctx.restore();
+      size.height = style.fontSize ? parseInt(style.fontSize) : 15;
+      return size;
+    }
+  }]);
+
+  return WeblBase;
+}();
+
+var _default = WeblBase;
+exports["default"] = _default;
+
+},{"../earcut.js":18,"./core/buffer.js":20,"./core/program.js":23,"./core/texture.js":25,"./gradient.js":26}],20:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createBuffer = createBuffer;
+exports.createUint16Buffer = createUint16Buffer;
+exports.createFloat32Buffer = createFloat32Buffer;
+exports.deleteBuffer = deleteBuffer;
+
+/**
+ * @fileoverview WebGL 缓冲区管理模块
+ * 
+ * 本模块提供了 WebGL 缓冲区的创建和管理功能，包括：
+ * - 创建通用缓冲区
+ * - 创建 Float32 类型缓冲区
+ * - 创建 Uint16 类型缓冲区
+ * - 删除缓冲区
+ * 
+ * @module lib/webgl/core/buffer
+ * @author jmGraph Team
+ */
+
+/**
+ * 创建 WebGL 缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array|TypedArray} data 缓冲区数据
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象 {type, drawType, buffer, unitSize}
+ */
+function createBuffer(gl, data) {
+  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
+  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
+  var buffer = gl.createBuffer();
+
+  if (!buffer) {
+    throw Error('创建缓冲区对象失败');
+  }
+
+  gl.bindBuffer(type, buffer);
+  gl.bufferData(type, data.buffer || data, drawType);
+  return {
+    type: type,
+    drawType: drawType,
+    buffer: buffer,
+    unitSize: data.BYTES_PER_ELEMENT
+  };
+}
+/**
+ * 创建 Float32 类型缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array} data 数据数组
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象
+ */
+
+
+function createFloat32Buffer(gl, data) {
+  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
+  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
+  var vertices = new Float32Array(data);
+  var buffer = createBuffer(gl, vertices, type, drawType);
+  return buffer;
+}
+/**
+ * 创建 Uint16 类型缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Array} data 数据数组
+ * @param {number} [type=gl.ARRAY_BUFFER] 缓冲区类型
+ * @param {number} [drawType=gl.STATIC_DRAW] 绘制类型
+ * @returns {Object} 缓冲区对象
+ */
+
+
+function createUint16Buffer(gl, data) {
+  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : gl.ARRAY_BUFFER;
+  var drawType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : gl.STATIC_DRAW;
+  var vertices = new Uint16Array(data);
+  var buffer = createBuffer(gl, vertices, type, drawType);
+  return buffer;
+}
+/**
+ * 删除缓冲区
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object|WebGLBuffer} buffer 缓冲区对象或 WebGL 缓冲区
+ */
+
+
+function deleteBuffer(gl, buffer) {
+  gl.deleteBuffer(buffer.buffer || buffer);
+}
+
+},{}],21:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.mapSize = void 0;
+
+/**
+ * @fileoverview GLSL 类型大小映射模块
+ * 
+ * 本模块提供了 GLSL 类型到其元素数量的映射。
+ * 
+ * @module lib/webgl/core/mapSize
+ * @author jmGraph Team
+ */
+
+/**
+ * GLSL 类型到元素数量的映射表
+ * @constant {Object.<string, number>}
+ */
+var GLSL_TO_SIZE = {
+  'float': 1,
+  'vec2': 2,
+  'vec3': 3,
+  'vec4': 4,
+  'int': 1,
+  'ivec2': 2,
+  'ivec3': 3,
+  'ivec4': 4,
+  'bool': 1,
+  'bvec2': 2,
+  'bvec3': 3,
+  'bvec4': 4,
+  'mat2': 4,
+  'mat3': 9,
+  'mat4': 16,
+  'sampler2D': 1
+};
+/**
+ * 根据 GLSL 类型名获取元素数量
+ * @param {string} type GLSL 类型名
+ * @returns {number} 元素数量
+ */
+
+var mapSize = function mapSize(type) {
+  return GLSL_TO_SIZE[type];
+};
+
+exports.mapSize = mapSize;
+
+},{}],22:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.mapType = void 0;
+
+/**
+ * @fileoverview WebGL 类型到 GLSL 类型映射模块
+ * 
+ * 本模块提供了 WebGL 常量类型到 GLSL 类型名的映射。
+ * 
+ * @module lib/webgl/core/mapType
+ * @author jmGraph Team
+ */
+
+/** @type {Object.<number, string>|null} 缓存的类型映射表 */
+var GL_TABLE = null;
+/**
+ * WebGL 常量到 GLSL 类型的映射表
+ * @constant {Object.<string, string>}
+ */
+
+var GL_TO_GLSL_TYPES = {
+  'FLOAT': 'float',
+  'FLOAT_VEC2': 'vec2',
+  'FLOAT_VEC3': 'vec3',
+  'FLOAT_VEC4': 'vec4',
+  'INT': 'int',
+  'INT_VEC2': 'ivec2',
+  'INT_VEC3': 'ivec3',
+  'INT_VEC4': 'ivec4',
+  'BOOL': 'bool',
+  'BOOL_VEC2': 'bvec2',
+  'BOOL_VEC3': 'bvec3',
+  'BOOL_VEC4': 'bvec4',
+  'FLOAT_MAT2': 'mat2',
+  'FLOAT_MAT3': 'mat3',
+  'FLOAT_MAT4': 'mat4',
+  'SAMPLER_2D': 'sampler2D'
+};
+/**
+ * 将 WebGL 类型常量映射为 GLSL 类型名
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {number} type WebGL 类型常量
+ * @returns {string} GLSL 类型名
+ */
+
+var mapType = function mapType(gl, type) {
+  if (!GL_TABLE) {
+    var typeNames = Object.keys(GL_TO_GLSL_TYPES);
+    GL_TABLE = {};
+
+    for (var i = 0; i < typeNames.length; ++i) {
+      var tn = typeNames[i];
+      GL_TABLE[gl[tn]] = GL_TO_GLSL_TYPES[tn];
+    }
+  }
+
+  return GL_TABLE[type];
+};
+
+exports.mapType = mapType;
+
+},{}],23:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createProgram = createProgram;
+exports.useProgram = useProgram;
+exports.getAttribLocation = getAttribLocation;
+exports.getUniformLocation = getUniformLocation;
+exports.extractAttributes = extractAttributes;
+exports.extractUniforms = extractUniforms;
+exports.writeVertexAttrib = writeVertexAttrib;
+exports.disableVertexAttribArray = disableVertexAttribArray;
+
+var _shader = require("./shader.js");
+
+var _mapSize = require("./mapSize.js");
+
+var _mapType = require("./mapType.js");
+
+/**
+ * @fileoverview WebGL 着色器程序管理模块
+ * 
+ * 本模块提供了 WebGL 着色器程序的创建和管理功能，包括：
+ * - 创建着色器程序
+ * - 提取属性和 uniform 变量
+ * - 顶点属性绑定
+ * 
+ * @module lib/webgl/core/program
+ * @author jmGraph Team
+ */
+
+/**
+ * 创建着色器程序
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {string} vertexSrc 顶点着色器源码
+ * @param {string} fragmentSrc 片段着色器源码
+ * @returns {Object} 程序对象 {program, attrs, uniforms}
+ */
+function createProgram(gl, vertexSrc, fragmentSrc) {
+  var vertexShader = (0, _shader.createShader)(gl, gl.VERTEX_SHADER, vertexSrc);
+  var fragmentShader = (0, _shader.createShader)(gl, gl.FRAGMENT_SHADER, fragmentSrc);
+  var program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error('PError: Could not initialize shader.');
+    console.error('gl.VALIDATE_STATUS', gl.getProgramParameter(program, gl.VALIDATE_STATUS));
+    console.error('gl.getError()', gl.getError());
+
+    if (gl.getProgramInfoLog(program) !== '') {
+      console.warn('Warning: gl.getProgramInfoLog()', gl.getProgramInfoLog(program));
+    }
+
+    gl.deleteProgram(program);
+  }
+
+  useProgram(gl, program);
+  gl.deleteShader(vertexShader);
+  gl.deleteShader(fragmentShader);
+  var attrs = extractAttributes(gl, program);
+  var uniforms = extractUniforms(gl, program);
+  return {
+    program: program,
+    attrs: attrs,
+    uniforms: uniforms
+  };
+}
+/**
+ * 使用指定的着色器程序
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ */
+
+
+function useProgram(gl, program) {
+  return gl.useProgram(program);
+}
+/**
+ * 提取着色器程序中的所有属性
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @returns {Object} 属性对象字典
+ */
+
+
+function extractAttributes(gl, program) {
+  var attributes = {};
+  var count = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
+
+  for (var i = 0; i < count; i++) {
+    var attribData = gl.getActiveAttrib(program, i);
+    var type = (0, _mapType.mapType)(gl, attribData.type);
+    attributes[attribData.name] = {
+      attribData: attribData,
+      size: (0, _mapSize.mapSize)(type),
+      type: type,
+      location: gl.getAttribLocation(program, attribData.name)
+    };
+  }
+
+  return attributes;
+}
+/**
+ * 提取着色器程序中的所有 uniform 变量
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @returns {Object} uniform 变量对象字典
+ */
+
+
+function extractUniforms(gl, program) {
+  var uniforms = {};
+  var count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+
+  for (var i = 0; i < count; i++) {
+    var uniformData = gl.getActiveUniform(program, i);
+    var name = uniformData.name.replace(/\[.*?\]/, "");
+    var type = (0, _mapType.mapType)(gl, uniformData.type);
+    uniforms[name] = {
+      uniformData: uniformData,
+      type: type,
+      size: uniformData.size,
+      location: gl.getUniformLocation(program, name)
+    };
+  }
+
+  return uniforms;
+}
+/**
+ * 将缓冲区数据写入顶点属性
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object} buffer 缓冲区对象
+ * @param {Object} attr 属性对象
+ * @param {number} [size=2] 每个顶点的分量数（1-4）
+ * @param {number} [strip=0] 步长，0 表示紧密排列
+ * @param {number} [offset=0] 字节偏移量
+ * @param {number} [dataType=gl.FLOAT] 数据类型
+ * @returns {Object} 缓冲区对象
+ */
+
+
+function writeVertexAttrib(gl, buffer, attr) {
+  var size = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 2;
+  var strip = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+  var offset = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+  var dataType = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : gl.FLOAT;
+  gl.bindBuffer(buffer.type, buffer.buffer);
+  gl.vertexAttribPointer(attr.location, size, dataType, false, strip * buffer.unitSize, offset);
+  gl.enableVertexAttribArray(attr.location);
+  return buffer;
+}
+/**
+ * 禁用顶点属性数组
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Object} attr 属性对象
+ */
+
+
+function disableVertexAttribArray(gl, attr) {
+  return gl.disableVertexAttribArray(attr.location);
+}
+/**
+ * 获取属性位置
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @param {string} name 属性名
+ * @returns {number} 属性位置
+ */
+
+
+function getAttribLocation(gl, program, name) {
+  return gl.getAttribLocation(program, name);
+}
+/**
+ * 获取 uniform 位置
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLProgram} program 着色器程序
+ * @param {string} name uniform 变量名
+ * @returns {WebGLUniformLocation} uniform 位置
+ */
+
+
+function getUniformLocation(gl, program, name) {
+  return gl.getUniformLocation(program, name);
+}
+
+},{"./mapSize.js":21,"./mapType.js":22,"./shader.js":24}],24:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createShader = createShader;
+
+/**
+ * @fileoverview WebGL 着色器管理模块
+ * 
+ * 本模块提供了 WebGL 着色器的创建功能。
+ * 
+ * @module lib/webgl/core/shader
+ * @author jmGraph Team
+ */
+
+/**
+ * 创建 WebGL 着色器
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {number} type 着色器类型：gl.VERTEX_SHADER 或 gl.FRAGMENT_SHADER
+ * @param {string} src 着色器源码
+ * @returns {WebGLShader} 编译后的着色器对象
+ */
+function createShader(gl, type, src) {
+  var shader = gl.createShader(type);
+  gl.shaderSource(shader, src);
+  gl.compileShader(shader);
+  return shader;
+}
+
+},{}],25:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.create2DTexture = create2DTexture;
+exports.createImgTexture = createImgTexture;
+exports.createDataTexture = createDataTexture;
+exports.deleteTexture = deleteTexture;
+
+/**
+ * @fileoverview WebGL 纹理管理模块
+ * 
+ * 本模块提供了 WebGL 纹理的创建和管理功能，包括：
+ * - 创建 2D 纹理
+ * - 创建图片纹理
+ * - 创建数据纹理
+ * - 删除纹理
+ * 
+ * @module lib/webgl/core/texture
+ * @author jmGraph Team
+ */
+
+/**
+ * 创建 2D 纹理
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @returns {WebGLTexture} 纹理对象
+ */
+function create2DTexture(gl) {
+  var texture = gl.createTexture();
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return texture;
+}
+/**
+ * 创建图片纹理
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {Image|HTMLImageElement} img 图像对象
+ * @returns {Object} 纹理对象 {texture}
+ */
+
+
+function createImgTexture(gl, img) {
+  var texture = create2DTexture(gl);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  return {
+    texture: texture
+  };
+}
+/**
+ * 根据像素数据创建纹理
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {ImageData|Object} pixels 像素数据 {data, width, height}
+ * @returns {Object} 纹理对象 {texture}
+ */
+
+
+function createDataTexture(gl, pixels) {
+  var data = new Uint8Array(pixels.data || pixels);
+  var texture = create2DTexture(gl);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, pixels.width || 1, pixels.height || 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  return {
+    texture: texture
+  };
+}
+/**
+ * 删除纹理
+ * @param {WebGLRenderingContext} gl WebGL 渲染上下文
+ * @param {WebGLTexture} texture 纹理对象
+ */
+
+
+function deleteTexture(gl, texture) {
+  return gl.deleteTexture(texture);
+}
+
+},{}],26:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MAX_STOPS = exports["default"] = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * @fileoverview WebGL 渐变对象
+ * 
+ * 本模块提供了 WebGL 渐变功能，支持 GLSL 着色器直接计算渐变色，
+ * 无需 textureCanvas，性能更优。
+ * 
+ * 支持的渐变类型：
+ * - 线性渐变 (linear)
+ * - 径向渐变 (radial)
+ * 
+ * @module lib/webgl/gradient
+ * @author jmGraph Team
+ */
+
+/** @constant {number} 最大颜色断点数量 */
+var MAX_STOPS = 16;
+/**
+ * WebGL 渐变类
+ * 支持 GLSL 着色器直接计算渐变色
+ * 
+ * @class WebglGradient
+ * @example
+ * const gradient = new WebglGradient('linear', { x1: 0, y1: 0, x2: 100, y2: 0 });
+ * gradient.addColorStop(0, '#ff0000');
+ * gradient.addColorStop(1, '#0000ff');
+ */
+
+exports.MAX_STOPS = MAX_STOPS;
+
+var WebglGradient = /*#__PURE__*/function () {
+  /**
+   * 构造函数
+   * @param {string} [type='linear'] 渐变类型：'linear' 或 'radial'
+   * @param {Object} params 渐变参数
+   * @param {number} [params.x1=0] 起点/内圆中心X坐标
+   * @param {number} [params.y1=0] 起点/内圆中心Y坐标
+   * @param {number} [params.r1=0] 内圆半径（径向渐变）
+   * @param {number} [params.x2=0] 终点/外圆中心X坐标
+   * @param {number} [params.y2=0] 终点/外圆中心Y坐标
+   * @param {number} [params.r2=0] 外圆半径（径向渐变）
+   * @param {Object} [params.bounds] 渐变边界
+   * @param {Object} [params.control] 控制器对象
+   */
+  function WebglGradient() {
+    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'linear';
+    var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    _classCallCheck(this, WebglGradient);
+
+    /** @type {string} 渐变类型 */
+    this.type = type || 'linear';
+    this.x1 = params.x1 || 0;
+    this.y1 = params.y1 || 0;
+    this.r1 = params.r1 || 0;
+    this.x2 = params.x2 || 0;
+    this.y2 = params.y2 || 0;
+    this.r2 = params.r2 || 0;
+    /** @type {Object} 渐变边界 */
+
+    this.bounds = params.bounds || {
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
+    };
+    this.control = params.control;
+    /** @type {Array<{offset: number, color: string}>} 颜色断点数组 */
+
+    this.stops = [];
+    this._sortedStops = null;
+    this._paramsHash = null;
+  }
+  /**
+   * 添加颜色断点
+   * @param {number} offset 断点位置 (0-1)
+   * @param {string} color 颜色值
+   */
+
+
+  _createClass(WebglGradient, [{
+    key: "addColorStop",
+    value: function addColorStop(offset, color) {
+      this.stops.push({
+        offset: Math.max(0, Math.min(1, offset)),
+        color: color
+      });
+      this._sortedStops = null;
+      this._paramsHash = null;
+    }
+    /**
+     * 获取排序后的断点数组（带解析后的颜色）
+     * @private
+     * @returns {Array<{offset: number, r: number, g: number, b: number, a: number}>}
+     */
+
+  }, {
+    key: "_getSortedStops",
+    value: function _getSortedStops() {
+      if (this._sortedStops) return this._sortedStops;
+      var utils = this.control && this.control.graph && this.control.graph.utils;
+      this._sortedStops = this.stops.map(function (s) {
+        var c = s.color;
+
+        if (utils && typeof c === 'string') {
+          c = utils.hexToRGBA(c);
+        }
+
+        if (_typeof(c) === 'object' && c !== null) {
+          var needNormalize = c.r > 1 || c.g > 1 || c.b > 1 ? 255 : 1;
+          return {
+            offset: s.offset,
+            r: (c.r !== undefined ? c.r : 0) / needNormalize,
+            g: (c.g !== undefined ? c.g : 0) / needNormalize,
+            b: (c.b !== undefined ? c.b : 0) / needNormalize,
+            a: c.a !== undefined ? c.a : 1
+          };
+        }
+
+        return {
+          offset: s.offset,
+          r: 0,
+          g: 0,
+          b: 0,
+          a: 1
+        };
+      }).sort(function (a, b) {
+        return a.offset - b.offset;
+      });
+      return this._sortedStops;
+    }
+    /**
+     * 将渐变参数转换为 uniform 格式，传递给着色器
+     * @returns {Object} uniform 参数对象
+     */
+
+  }, {
+    key: "toUniformParams",
+    value: function toUniformParams() {
+      var stops = this._getSortedStops();
+
+      var count = Math.min(stops.length, MAX_STOPS);
+      var flatStops = new Float32Array(count * 5);
+
+      for (var i = 0; i < count; i++) {
+        var s = stops[i];
+        flatStops[i * 5 + 0] = s.offset;
+        flatStops[i * 5 + 1] = s.r;
+        flatStops[i * 5 + 2] = s.g;
+        flatStops[i * 5 + 3] = s.b;
+        flatStops[i * 5 + 4] = s.a;
+      }
+
+      return {
+        gradientType: this.type === 'radial' ? 2 : 1,
+        gradientStart: new Float32Array([this.x1, this.y1, this.type === 'radial' ? Math.max(0, this.r1) : 0, 0]),
+        gradientEnd: new Float32Array([this.x2, this.y2, this.type === 'radial' ? Math.max(0, this.r2) : 0, 0]),
+        stopCount: count,
+        stops: flatStops
+      };
+    }
+    /** 使缓存失效 */
+
+  }, {
+    key: "invalidateCache",
+    value: function invalidateCache() {
+      this._sortedStops = null;
+      this._paramsHash = null;
+    }
+    /**
+     * 转换为渐变的字符串表达
+     * @returns {string} 渐变字符串
+     */
+
+  }, {
+    key: "toString",
+    value: function toString() {
+      var str = this.type + '-gradient(';
+
+      if (this.type == 'linear') {
+        str += this.x1 + ' ' + this.y1 + ' ' + this.x2 + ' ' + this.y2;
+      } else {
+        str += this.x1 + ' ' + this.y1 + ' ' + this.r1 + ' ' + this.x2 + ' ' + this.y2 + ' ' + this.r2;
+      }
+
+      this.stops.forEach(function (s) {
+        str += ',' + s.color + ' ' + s.offset;
+      });
+      return str + ')';
+    }
+  }]);
+
+  return WebglGradient;
+}();
+
+var _default = WebglGradient;
+exports["default"] = _default;
+
+},{}],27:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _base = _interopRequireWildcard(require("./base.js"));
+
+var _earcut = _interopRequireDefault(require("../earcut.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * WebGL 路径绘制类
+ * 继承自 WeblBase，提供路径绘制功能
+ * 
+ * @class WebglPath
+ * @extends WeblBase
+ * @example
+ * const path = new WebglPath(graph, { isRegular: false, needCut: true });
+ * path.draw(points);
+ * path.stroke(points, '#ff0000', 2);
+ */
+var WebglPath = /*#__PURE__*/function (_WebglBase) {
+  _inherits(WebglPath, _WebglBase);
+
+  var _super = _createSuper(WebglPath);
+
+  /**
+   * 构造函数
+   * @param {jmGraph} graph jmGraph 实例
+   * @param {Object} option 配置选项
+   * @param {boolean} [option.isRegular=false] 是否为规则图形（凸多边形）
+   * @param {boolean} [option.needCut=false] 是否需要切割处理
+   * @param {Object} [option.control] 控制器对象
+   */
+  function WebglPath(graph, option) {
+    var _this;
+
+    _classCallCheck(this, WebglPath);
+
+    _this = _super.call(this, graph, option);
+    /** @type {boolean} 是否为规则图形（凸多边形），规则图形处理更高效 */
+
+    _this.isRegular = option.isRegular || false;
+    /** @type {boolean} 是否需要切割处理 */
+
+    _this.needCut = option.needCut || false;
+    _this.control = option.control;
+    /** @type {Array<Object>} 路径点数组 */
+
+    _this.points = [];
+    /** @type {Array} 缓存的缓冲区，避免每帧创建/销毁 */
+
+    _this.__cachedBuffers = [];
+    /** @type {Object} 缓存的纹理 */
+
+    _this.__cachedTexture = null;
+    /** @type {string} 缓存纹理的 key */
+
+    _this.__cachedTextureKey = null;
+    return _this;
+  }
+  /** 释放缓存的 WebGL 资源 */
+
+
+  _createClass(WebglPath, [{
+    key: "dispose",
+    value: function dispose() {
+      var _iterator = _createForOfIteratorHelper(this.__cachedBuffers),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var buf = _step.value;
+          this.deleteBuffer(buf);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      this.__cachedBuffers = [];
+
+      if (this.__cachedTexture) {
+        this.deleteTexture(this.__cachedTexture);
+        this.__cachedTexture = null;
+        this.__cachedTextureKey = null;
+      }
+    }
+    /**
+     * 获取或创建缓冲区，优先复用缓存
+     * @param {Array} data 数据数组
+     * @param {Object} attr 属性对象
+     * @returns {Object} 缓冲区对象
+     */
+
+  }, {
+    key: "getOrCreateBuffer",
+    value: function getOrCreateBuffer(data, attr) {
+      var buffer = this.__cachedBuffers.find(function (b) {
+        return b.attr === attr;
+      });
+
+      if (buffer) {
+        var gl = this.context;
+        var float32 = new Float32Array(data);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, float32, gl.DYNAMIC_DRAW);
+        buffer.data = data;
+        return buffer;
+      }
+
+      buffer = this.createFloat32Buffer(data);
+      buffer.attr = attr;
+
+      this.__cachedBuffers.push(buffer);
+
+      return buffer;
+    }
+    /**
+     * 应用变换到点
+     * @param {Object} point 点坐标 {x, y}
+     * @returns {Object} 变换后的点坐标
+     */
+
+  }, {
+    key: "applyTransform",
+    value: function applyTransform(point) {
+      return _get(_getPrototypeOf(WebglPath.prototype), "applyTransform", this).call(this, point);
+    }
+    /**
+     * 设置父级边界
+     * @param {Object} [parentBounds] 父级边界 {left, top, width, height}
+     */
+
+  }, {
+    key: "setParentBounds",
+    value: function setParentBounds() {
+      var parentBounds = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.parentAbsoluteBounds;
+      //this.useProgram();
+      if (parentBounds) this.parentAbsoluteBounds = parentBounds; // 缓存中心点值，只在变化时才更新 uniform
+
+      var cx = this.graph.width / 2;
+      var cy = this.graph.height / 2;
+
+      if (this.__lastCenterX !== cx || this.__lastCenterY !== cy) {
+        this.context.uniform2f(this.program.uniforms.a_center_point.location, cx, cy);
+        this.__lastCenterX = cx;
+        this.__lastCenterY = cy;
+      }
+    }
+  }, {
+    key: "setFragColor",
+    value: function setFragColor(color) {
+      if (!Array.isArray(color)) {
+        color = this.convertColor(color);
+        if (typeof color.a === 'undefined') color.a = 1;
+        this.context.uniform4f(this.program.uniforms.v_single_color.location, color.r, color.g, color.b, color.a * this.style.globalAlpha);
+        return null;
+      }
+
+      var colorData = [];
+
+      var _iterator2 = _createForOfIteratorHelper(color),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var c = _step2.value;
+          c = this.convertColor(c);
+          if (typeof c.a === 'undefined') c.a = 1;
+          colorData.push(c.r, c.g, c.b, c.a * this.style.globalAlpha);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      var colorBuffer = this.createFloat32Buffer(colorData);
+      this.writeVertexAttrib(colorBuffer, this.program.attrs.a_color, 4, 0, 0);
+      colorBuffer.attr = this.program.attrs.a_color;
+      return colorBuffer;
+    }
+  }, {
+    key: "beginDraw",
+    value: function beginDraw() {
+      this.useProgram();
+    } // 开始绘制
+
+  }, {
+    key: "draw",
+    value: function draw(points) {
+      var parentBounds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.parentAbsoluteBounds;
+      //this.useProgram();
+      this.setParentBounds(parentBounds);
+      this.points = points;
+    }
+  }, {
+    key: "endDraw",
+    value: function endDraw() {
+      if (this.points) delete this.points;
+      if (this.pathPoints) delete this.pathPoints;
+      this.needClose = false; // 缓存的纹理保留到下次绘制（渐变可能不变）
+    }
+    /**
+     * 标记路径需要闭合（不修改原始 points 数组）
+     * 闭合逻辑由 stroke/fill 绘制方法自行处理
+     */
+
+  }, {
+    key: "closePath",
+    value: function closePath() {
+      this.needClose = true;
+    } // 绘制点数组（使用 DYNAMIC_DRAW 复用 buffer，避免每帧 create/delete）
+
+  }, {
+    key: "writePoints",
+    value: function writePoints(points) {
+      var attr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.program.attrs.a_position;
+      var fixedPoints = [];
+
+      var _this$transformMatrix = _slicedToArray(this.transformMatrix, 6),
+          a = _this$transformMatrix[0],
+          b = _this$transformMatrix[1],
+          c = _this$transformMatrix[2],
+          d = _this$transformMatrix[3],
+          tx = _this$transformMatrix[4],
+          ty = _this$transformMatrix[5];
+
+      var isIdentity = a === 1 && b === 0 && c === 0 && d === 1 && tx === 0 && ty === 0;
+      var offsetLeft = this.parentAbsoluteBounds.left;
+      var offsetTop = this.parentAbsoluteBounds.top;
+
+      if (isIdentity) {
+        // 单位矩阵时直接加偏移，避免逐点调用 applyTransform
+        for (var i = 0; i < points.length; i++) {
+          fixedPoints.push(points[i].x + offsetLeft, points[i].y + offsetTop);
+        }
+      } else {
+        var _iterator3 = _createForOfIteratorHelper(points),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var p = _step3.value;
+            var transformedPoint = this.applyTransform(p);
+            fixedPoints.push(transformedPoint.x + offsetLeft, transformedPoint.y + offsetTop);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+      }
+
+      var float32 = new Float32Array(fixedPoints);
+      var gl = this.context; // 复用已有 buffer 或创建新的
+
+      if (this.__cachedBuffers.length > 0) {
+        // 找一个同 attr 的 buffer 复用
+        var buffer = this.__cachedBuffers.find(function (b) {
+          return b.attr === attr;
+        });
+
+        if (buffer) {
+          gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, float32, gl.DYNAMIC_DRAW);
+          buffer.data = fixedPoints;
+          this.writeVertexAttrib(buffer, attr, 2, 0, 0);
+          return buffer;
+        }
+      }
+
+      var vertexBuffer = this.createFloat32Buffer(float32, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+      this.writeVertexAttrib(vertexBuffer, attr, 2, 0, 0);
+      vertexBuffer.attr = attr;
+
+      this.__cachedBuffers.push(vertexBuffer);
+
+      return vertexBuffer;
+    } // 连接二个点
+
+  }, {
+    key: "genLinePoints",
+    value: function genLinePoints(start, end) {
+      var points = [start];
+      var dx = end.x - start.x;
+      var dy = end.y - start.y;
+
+      if (dx !== 0 || dy !== 0) {
+        var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        var cos = dx / len;
+        var sin = dy / len;
+        var step = 0.5;
+
+        for (var l = step; l < len; l += step) {
+          var x = start.x + cos * l;
+          var y = start.y + sin * l;
+          points.push({
+            x: x,
+            y: y
+          });
+        }
+      }
+
+      points.push(end);
+      return points;
+    } // 把path坐标集合分解成一个个点，并且处理moveTo线段能力
+
+  }, {
+    key: "pathToPoints",
+    value: function pathToPoints() {
+      var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.points;
+      var start = null;
+      var res = [];
+
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i];
+
+        if (start && !p.m) {
+          var linePoints = this.genLinePoints(start, p);
+          res.push.apply(res, _toConsumableArray(linePoints));
+        } else if (start && !res.includes(start)) {
+          res.push(start);
+        }
+
+        start = p;
+      }
+
+      if (!res.includes(start)) res.push(start);
+      return res;
+    } // 二点是否重合
+
+  }, {
+    key: "equalPoint",
+    value: function equalPoint(p1, p2) {
+      return p1.x === p2.x && p1.y === p2.y;
+    } // 将带 moveTo 标记的点集拆分为外轮廓和多个洞
+
+  }, {
+    key: "splitSubPaths",
+    value: function splitSubPaths(points) {
+      var subPaths = [];
+      var current = [];
+
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i];
+
+        if (p.m && current.length > 0) {
+          subPaths.push(current);
+          current = [];
+        }
+
+        current.push(p);
+      }
+
+      if (current.length > 0) subPaths.push(current); // 面积最大的作为外轮廓，其余作为洞
+
+      var maxArea = -1;
+      var outerIdx = 0;
+
+      for (var _i2 = 0; _i2 < subPaths.length; _i2++) {
+        var area = Math.abs(this.polygonArea(subPaths[_i2]));
+
+        if (area > maxArea) {
+          maxArea = area;
+          outerIdx = _i2;
+        }
+      }
+
+      var outerPoints = subPaths[outerIdx];
+      var holes = [];
+
+      for (var _i3 = 0; _i3 < subPaths.length; _i3++) {
+        if (_i3 !== outerIdx) holes.push(subPaths[_i3]);
+      }
+
+      return {
+        outerPoints: outerPoints,
+        holes: holes
+      };
+    } // 计算多边形面积（Shoelace 公式）
+
+  }, {
+    key: "polygonArea",
+    value: function polygonArea(points) {
+      var area = 0;
+      var n = points.length;
+
+      for (var i = 0; i < n; i++) {
+        var j = (i + 1) % n;
+        area += points[i].x * points[j].y;
+        area -= points[j].x * points[i].y;
+      }
+
+      return area / 2;
+    } // 使用 earcut 带 holes 填充多边形
+
+  }, {
+    key: "fillWithHoles",
+    value: function fillWithHoles(outerPoints, holes) {
+      var _this2 = this;
+
+      var isTexture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      // 将所有点合并：外轮廓 + 各个洞，并记录洞的起始索引
+      var allPoints = _toConsumableArray(outerPoints);
+
+      var holeIndices = [];
+
+      var _iterator4 = _createForOfIteratorHelper(holes),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var hole = _step4.value;
+          holeIndices.push(allPoints.length);
+          allPoints.push.apply(allPoints, _toConsumableArray(hole));
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      var dim = 2;
+      var vertexData = [];
+
+      var _iterator5 = _createForOfIteratorHelper(allPoints),
+          _step5;
+
+      try {
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var _p = _step5.value;
+          vertexData.push(_p.x, _p.y);
+        } // 用 earcut 进行带洞三角化
+
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+
+      var indices = (0, _earcut["default"])(vertexData, holeIndices, dim);
+      if (!indices || indices.length < 3) return; // 构建 GPU 顶点数据
+
+      var allVertices = [];
+      var allTexCoords = [];
+
+      for (var i = 0; i < indices.length; i++) {
+        var p = allPoints[indices[i]];
+        allVertices.push(p.x, p.y);
+        if (isTexture) allTexCoords.push(p.x, p.y);
+      }
+
+      var gl = this.context;
+      var vertexArr = new Float32Array(allVertices);
+
+      var posBuffer = this.__cachedBuffers.find(function (b) {
+        return b.attr === _this2.program.attrs.a_position;
+      });
+
+      if (!posBuffer) {
+        posBuffer = this.createFloat32Buffer(vertexArr, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+        posBuffer.attr = this.program.attrs.a_position;
+
+        this.__cachedBuffers.push(posBuffer);
+      } else {
+        gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer.buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertexArr, gl.DYNAMIC_DRAW);
+      }
+
+      this.writeVertexAttrib(posBuffer, this.program.attrs.a_position, 2, 0, 0);
+
+      if (isTexture && allTexCoords.length) {
+        var texData = new Float32Array(allTexCoords);
+
+        var texBuffer = this.__cachedBuffers.find(function (b) {
+          return b.attr === _this2.program.attrs.a_text_coord;
+        });
+
+        if (!texBuffer) {
+          texBuffer = this.createFloat32Buffer(texData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+          texBuffer.attr = this.program.attrs.a_text_coord;
+
+          this.__cachedBuffers.push(texBuffer);
+        } else {
+          gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer.buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, texData, gl.DYNAMIC_DRAW);
+        }
+
+        this.writeVertexAttrib(texBuffer, this.program.attrs.a_text_coord, 2, 0, 0);
+      }
+
+      gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
+    } // 把path坐标集合转为线段集
+
+  }, {
+    key: "pathToLines",
+    value: function pathToLines(points) {
+      var start = null;
+      var res = [];
+
+      for (var i = 0; i < points.length; i++) {
+        var p = points[i]; // 不重合的二个点，组成线段
+
+        if (start && !p.m && !(start.x == p.x && start.y == p.y)) {
+          var line = {
+            start: start,
+            end: p
+          };
+          res.push(line);
+        }
+
+        start = p;
+      }
+
+      return res;
+    } // 裁剪线段，如果二段线段有交点，则分割成四段， 端头相交的线段不用分割
+
+  }, {
+    key: "cutLines",
+    value: function cutLines(lines) {
+      var index1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var index2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      if (lines && lines.length < 3) return lines;
+      index2 = Math.max(index1 + 1, index2); //如果指定了比下一个更大的索引，则用更大的，说明前面的已经处理过了，不需要重复
+      // 找出线段相交的点，并切割线段
+
+      while (index1 < lines.length) {
+        var line1 = lines[index1];
+
+        while (index2 < lines.length) {
+          var line2 = lines[index2]; // 如果二条线顶点有重合，则不用处理
+
+          if (this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.end, line2.end) || this.equalPoint(line1.start, line2.end) || this.equalPoint(line1.end, line2.start)) {
+            index2++;
+            continue;
+          }
+
+          var cuted = false;
+          var intersection = this.getIntersection(line1, line2); // 计算交点
+
+          if (intersection) {
+            // 如果交点不是线段的端点，则分割成二条线段
+            if (!this.equalPoint(line1.start, intersection) && !this.equalPoint(line1.end, intersection)) {
+              var sub1 = {
+                start: line1.start,
+                end: intersection
+              };
+              var sub2 = {
+                start: intersection,
+                end: line1.end
+              }; // 从原数组中删除当前线段，替换成新的线段
+
+              lines.splice(index1, 1, sub1, sub2); // 当前线段被重新替换，需要重新从它开始处理
+
+              cuted = true;
+              index2++; // 因为多加入了一个线段，则对比线索引需要加1
+            } // 如果交点不是线段的端点，则分割成二条线段
+
+
+            if (!this.equalPoint(line2.start, intersection) && !this.equalPoint(line2.end, intersection)) {
+              var _sub = {
+                start: line2.start,
+                end: intersection
+              };
+              var _sub2 = {
+                start: intersection,
+                end: line2.end
+              }; // 从原数组中删除当前线段，替换成新的线段
+
+              lines.splice(index2, 1, _sub, _sub2);
+              index2++; // 线段2也切成了二段，对比索引要继续加1
+            }
+          }
+
+          index2++; // 如果已经分割了起始线段，则第一个子线段开始，重新对比后面还未对比完的。直接所有对比完成返回
+
+          if (cuted) return this.cutLines(lines, index1, index2);
+        }
+
+        index1++;
+        index2 = index1 + 1;
+      }
+
+      return lines;
+    } // 计算二个线段的交点
+
+  }, {
+    key: "getIntersection",
+    value: function getIntersection(line1, line2) {
+      // 如果首尾相接，也认为是有交点
+      if (this.equalPoint(line1.start, line2.start) || this.equalPoint(line1.start, line2.end)) return line1.start;
+      if (this.equalPoint(line1.end, line2.start) || this.equalPoint(line1.end, line2.end)) return line1.end; // 三角形abc 面积的2倍
+
+      var area_abc = (line1.start.x - line2.start.x) * (line1.end.y - line2.start.y) - (line1.start.y - line2.start.y) * (line1.end.x - line2.start.x); // 三角形abd 面积的2倍
+
+      var area_abd = (line1.start.x - line2.end.x) * (line1.end.y - line2.end.y) - (line1.start.y - line2.end.y) * (line1.end.x - line2.end.x); // 面积符号相同则两点在线段同侧,不相交 (=0表示在线段顶点上);
+
+      if (area_abc * area_abd > 0) {
+        return null;
+      } // 三角形cda 面积的2倍
+
+
+      var area_cda = (line2.start.x - line1.start.x) * (line2.end.y - line1.start.y) - (line2.start.y - line1.start.y) * (line2.end.x - line1.start.x); // 三角形cdb 面积的2倍
+      // 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.
+
+      var area_cdb = area_cda + area_abc - area_abd;
+
+      if (area_cda * area_cdb > 0) {
+        return null;
+      }
+
+      if (area_abd === area_abc) return null; //计算交点坐标
+
+      var t = area_cda / (area_abd - area_abc);
+      var dx = t * (line1.end.x - line1.start.x);
+      var dy = t * (line1.end.y - line1.start.y);
+      return {
+        x: line1.start.x + dx,
+        y: line1.start.y + dy
+      };
+    } // 找出跟当前线段尾部相交的所有线段
+
+  }, {
+    key: "getIntersectionLines",
+    value: function getIntersectionLines(line, lines, index) {
+      var point = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : line.end;
+      var points = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+      var root = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
+      var res = {
+        line: line,
+        polygons: []
+      };
+      points.push(point);
+
+      if (root && this.equalPoint(root.line.start, point)) {
+        points.unshift(root.line.start); // 把起始地址加入进去
+
+        root.polygons.push(points);
+        return res;
+      }
+
+      for (; index < lines.length; index++) {
+        var l = lines[index];
+
+        if (this.equalPoint(point, l.start)) {
+          if (points.includes(l.end)) continue;
+          this.getIntersectionLines(l, lines, index + 1, l.end, _toConsumableArray(points), root || res);
+        } else if (this.equalPoint(point, l.end)) {
+          if (points.includes(l.start)) continue;
+          this.getIntersectionLines(l, lines, index + 1, l.start, _toConsumableArray(points), root || res);
+        }
+      }
+
+      return res;
+    } // 根据路径点坐标，切割出封闭的多边形
+
+  }, {
+    key: "getPolygon",
+    value: function getPolygon(points) {
+      var polygons = [];
+      var lines = this.pathToLines(points); // 分解得到线段
+
+      if (lines && lines.length > 2) {
+        lines = this.cutLines(lines); // 把所有相交点切割线段找出来
+
+        for (var i = 0; i < lines.length - 1; i++) {
+          var line1 = lines[i];
+          var polygon = []; // 当前图形
+
+          var treeLine = this.getIntersectionLines(line1, lines, i + 1);
+          if (treeLine.polygons.length) polygons.push.apply(polygons, _toConsumableArray(treeLine.polygons));
+          continue;
+          var lastLine = line1; // 下一个还在连接状态的线
+
+          for (var j = i + 1; j < lines.length; j++) {
+            var line2 = lines[j]; // 如果跟下一条线相接，则表示还在形成图形中
+
+            if (this.equalPoint(lastLine.end, line2.start)) {
+              polygon.push(lastLine.end);
+              lastLine = line2;
+              if (i === j + 1) continue; //下一条相连 则不需要处理相交情况
+            } else {
+              polygon = [];
+            } // 因为前面进行了分割线段，则里只有处理端点相连的情况
+
+
+            var intersection = this.equalPoint(line1.start, line2.end) ? line1.start : null; //this.getIntersection(line1, line2);// 计算交点
+
+            if (intersection) {
+              polygon.push(intersection); // 交叉点为图形顶点
+              // 如果上一个连接线不是当前交叉线，则表示重新开始闭合
+              // 如果上一个连接线是当前交叉线，形成了封闭的图形
+
+              if (lastLine === line2 && polygon.length > 1) {
+                polygons.push(polygon); // 封闭后，下一个起始线条就是从交点开始计算起
+
+                /*lastLine = {
+                    start: intersection,
+                    end: line2.end
+                };*/
+
+                polygon = []; // 重新开始新一轮找图形
+
+                /*
+                // 如果交点是上一条线的终点，则新图形为空
+                if(this.equalPoint(line2.end, intersection)) {
+                    polygon = [];// 重新开始新一轮找图形
+                }
+                else {
+                    // 同时交点也要加到上一个图形中第一个点，形成封闭
+                    polygon.unshift(intersection);
+                     polygon = [ intersection ];// 重新开始新一轮找图形
+                }*/
+              } else {
+                lastLine = line2;
+              }
+            }
+          }
+        }
+      } // 当有多个封闭图形时，再弟归一下，里面是不是有封闭图形内还有子封闭图形
+
+      /*if(polygons.length > 1) {
+          const newPolygons = [];
+          for(const polygon of polygons) {
+              // 只有大于4才有可能有子封闭图形
+              if(polygon.length > 4) {
+                  const childPolygons = this.getPolygon(polygon);
+                  // 当有多个子图形时，表示它不是最终封闭图形，跳过，
+                  // 因为它的子图形之前有加入的，不需要重复加入
+                  if(childPolygons.length > 1) {
+                      //newPolygons.push(...childPolygons);
+                      continue;
+                  }
+              }
+              newPolygons.push(polygon);
+          }
+          polygons = newPolygons;
+      }*/
+
+
+      return polygons;
+    } // 分割成一个个规则的三角形，不规则的多边形不全割的话纹理就会没法正确覆盖
+
+  }, {
+    key: "getTriangles",
+    value: function getTriangles(points) {
+      this.trianglesCache = this.trianglesCache || (this.trianglesCache = {}); // 快速缓存 key：用长度和首尾点坐标（比 JSON.stringify 快几个数量级）
+
+      var len = points.length;
+      var key = len + '_' + points[0].x + '_' + points[0].y + '_' + points[len - 1].x + '_' + points[len - 1].y;
+      if (this.trianglesCache[key]) return this.trianglesCache[key];
+      var res = [];
+      var polygons = this.getPolygon(points);
+
+      if (polygons.length) {
+        var _iterator6 = _createForOfIteratorHelper(polygons),
+            _step6;
+
+        try {
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var polygon = _step6.value;
+            // 需要分割三角形，不然填充会有问题
+            var triangles = this.earCutPointsToTriangles(polygon);
+            res.push.apply(res, _toConsumableArray(triangles));
+          }
+        } catch (err) {
+          _iterator6.e(err);
+        } finally {
+          _iterator6.f();
+        }
+      }
+
+      this.trianglesCache[key] = res;
+      return res;
+    } // 画线条
+
+  }, {
+    key: "stroke",
+    value: function stroke() {
+      var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.points;
+      var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.style.strokeStyle;
+      var lineWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.style.lineWidth;
+      if (!points || !points.length) return; // this.useProgram();
+
+      var colorBuffer = null;
+
+      if (color) {
+        colorBuffer = this.setFragColor(color);
+      } // 线宽
+
+
+      if (lineWidth) {
+        this.context.uniform1f(this.program.uniforms.a_point_size.location, lineWidth); // * this.graph.devicePixelRatio
+      } // 标注为stroke
+
+
+      if (this.program.uniforms.a_type) {
+        // 4表示单画一个圆点，1表示方块形成的线条
+        this.context.uniform1i(this.program.uniforms.a_type.location, points.length === 1 ? 4 : 1);
+      }
+
+      if (points && points.length) {
+        var regular = lineWidth <= 1.2;
+        var hasMoveTo = points.some && points.some(function (p) {
+          return p.m;
+        });
+        var isRing = !hasMoveTo && this.needCut; // 空心形状（jmHArc close=true 时无 m 标记）
+
+        if (regular && (hasMoveTo || isRing)) {
+          // 有 moveTo 标记或空心形状时，分段绘制每个子路径的 LINE_LOOP
+          // 避免 LINE_LOOP 把不同子路径的点连起来产生拉扯线
+          if (hasMoveTo) {
+            var subPath = [];
+
+            for (var i = 0; i < points.length; i++) {
+              if (points[i].m && subPath.length > 0) {
+                var buffer = this.writePoints(subPath);
+                this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+                subPath = [];
+              }
+
+              subPath.push(points[i]);
+            }
+
+            if (subPath.length > 1) {
+              var _buffer = this.writePoints(subPath);
+
+              this.context.drawArrays(this.context.LINE_LOOP, 0, subPath.length);
+            }
+          } else if (isRing) {
+            // 空心形状：前半段为内弧，后半段为外弧（反向），各自 LINE_LOOP
+            var mid = Math.floor(points.length / 2);
+            var inner = points.slice(0, mid);
+            var outer = points.slice(mid);
+
+            if (inner.length > 1) {
+              this.writePoints(inner);
+              this.context.drawArrays(this.context.LINE_LOOP, 0, inner.length);
+            }
+
+            if (outer.length > 1) {
+              this.writePoints(outer);
+              this.context.drawArrays(this.context.LINE_LOOP, 0, outer.length);
+            }
+          }
+        } else {
+          points = regular ? points : this.pathToPoints(points);
+
+          var _buffer2 = this.writePoints(points);
+
+          this.context.drawArrays(regular ? this.context.LINE_LOOP : this.context.POINTS, 0, points.length);
+        } // buffer 由 endDraw 统一清理
+
+      }
+
+      colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
+    } // 填充图形
+
+  }, {
+    key: "fill",
+    value: function fill() {
+      var bounds = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+      };
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      if (this.points && this.points.length) {
+        // 如果是颜色rgba
+        if (this.style.fillStyle) {
+          this.fillColor(this.style.fillStyle, this.points, bounds, type);
+        }
+
+        if (this.style.fillImage) {
+          this.fillImage(this.style.fillImage, this.points, bounds, type);
+        }
+      }
+    }
+  }, {
+    key: "fillColor",
+    value: function fillColor(color, points, bounds) {
+      var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+
+      // 如果是渐变色，使用 GLSL 着色器直接计算
+      if (this.isGradient(color)) {
+        return this.fillGradient(color, points, bounds);
+      } // 标注为fill
+
+
+      this.context.uniform1i(this.program.uniforms.a_type.location, type);
+      var colorBuffer = this.setFragColor(color);
+      this.fillPolygons(points);
+      colorBuffer && this.disableVertexAttribArray(colorBuffer && colorBuffer.attr);
+    }
+    /**
+     * 使用 GLSL 着色器渲染渐变填充
+     * 无需 textureCanvas，直接通过 uniform 传递渐变参数给 GPU
+     */
+
+  }, {
+    key: "fillGradient",
+    value: function fillGradient(gradient, points, bounds) {
+      var params = gradient.toUniformParams();
+      if (!params) return; // 标注为 GLSL 渐变 (type=5)
+
+      this.context.uniform1i(this.program.uniforms.a_type.location, 5); // 设置 globalAlpha（通过 v_single_color.a 传递给着色器）
+
+      this.context.uniform4f(this.program.uniforms.v_single_color.location, 1.0, 1.0, 1.0, this.style.globalAlpha); // 设置渐变类型
+
+      if (this.program.uniforms.u_gradient_type) {
+        this.context.uniform1i(this.program.uniforms.u_gradient_type.location, params.gradientType);
+      } // 设置渐变起点/终点
+
+
+      if (this.program.uniforms.u_gradient_start) {
+        this.context.uniform4fv(this.program.uniforms.u_gradient_start.location, params.gradientStart);
+      }
+
+      if (this.program.uniforms.u_gradient_end) {
+        this.context.uniform4fv(this.program.uniforms.u_gradient_end.location, params.gradientEnd);
+      } // 设置颜色断点数量
+
+
+      if (this.program.uniforms.u_gradient_stop_count) {
+        this.context.uniform1i(this.program.uniforms.u_gradient_stop_count.location, params.stopCount);
+      } // 设置每个 stop 的 offset
+      // 关键：必须填充完整的 MAX_STOPS 长度数组，否则未初始化元素默认为 0
+      // 会导致着色器循环中 t >= 0 始终为 true，返回黑色
+
+
+      if (this.program.uniforms.u_gradient_offsets) {
+        var offsets = new Float32Array(_base.MAX_STOPS);
+
+        for (var i = 0; i < params.stopCount; i++) {
+          offsets[i] = params.stops[i * 5];
+        } // 用 2.0 填充剩余项，使 t(0~1) >= 2.0 为 false，不会被匹配
+
+
+        for (var _i4 = params.stopCount; _i4 < _base.MAX_STOPS; _i4++) {
+          offsets[_i4] = 2.0;
+        }
+
+        this.context.uniform1fv(this.program.uniforms.u_gradient_offsets.location, offsets);
+      } // 设置每个 stop 的颜色 (rgba)
+
+
+      if (this.program.uniforms.u_gradient_colors) {
+        var colors = new Float32Array(_base.MAX_STOPS * 4);
+
+        for (var _i5 = 0; _i5 < params.stopCount; _i5++) {
+          colors[_i5 * 4 + 0] = params.stops[_i5 * 5 + 1]; // r
+
+          colors[_i5 * 4 + 1] = params.stops[_i5 * 5 + 2]; // g
+
+          colors[_i5 * 4 + 2] = params.stops[_i5 * 5 + 3]; // b
+
+          colors[_i5 * 4 + 3] = params.stops[_i5 * 5 + 4]; // a
+        } // 用最后一个 stop 的颜色填充剩余项，确保不会返回黑色
+
+
+        if (params.stopCount > 0) {
+          var lastR = params.stops[(params.stopCount - 1) * 5 + 1];
+          var lastG = params.stops[(params.stopCount - 1) * 5 + 2];
+          var lastB = params.stops[(params.stopCount - 1) * 5 + 3];
+          var lastA = params.stops[(params.stopCount - 1) * 5 + 4];
+
+          for (var _i6 = params.stopCount; _i6 < _base.MAX_STOPS; _i6++) {
+            colors[_i6 * 4 + 0] = lastR;
+            colors[_i6 * 4 + 1] = lastG;
+            colors[_i6 * 4 + 2] = lastB;
+            colors[_i6 * 4 + 3] = lastA;
+          }
+        }
+
+        this.context.uniform4fv(this.program.uniforms.u_gradient_colors.location, colors);
+      } // 填充多边形（需要纹理坐标来计算渐变位置）
+
+
+      this.fillPolygons(points, true);
+      this.disableVertexAttribArray(this.program.attrs.a_text_coord);
+    } // 区域填充图片
+    // points绘制的图形顶点
+    // 图片整体绘制区域
+
+  }, {
+    key: "fillImage",
+    value: function fillImage(img, points, bounds) {
+      if (!img) return; // 对于 ImageData，生成缓存 key（基于渐变参数或 bounds），复用纹理
+
+      var texture = null;
+
+      if (img instanceof ImageData) {
+        var key = "".concat(img.width, "_").concat(img.height, "_").concat(bounds.width, "_").concat(bounds.height, "_").concat(bounds.left, "_").concat(bounds.top);
+
+        if (this.__cachedTexture && this.__cachedTextureKey === key) {
+          texture = this.__cachedTexture;
+        } else {
+          texture = this.createDataTexture(img); // 释放旧纹理
+
+          if (this.__cachedTexture) {
+            this.deleteTexture(this.__cachedTexture);
+          }
+
+          this.__cachedTexture = texture;
+          this.__cachedTextureKey = key;
+        }
+      } else {
+        texture = this.createImgTexture(img);
+      }
+
+      this.context.uniform1i(this.program.uniforms.u_sample.location, 0); // 纹理单元传递给着色器
+      // 指定纹理区域尺寸
+
+      this.context.uniform4f(this.program.uniforms.v_texture_bounds.location, bounds.left + this.parentAbsoluteBounds.left, bounds.top + this.parentAbsoluteBounds.top, bounds.width, bounds.height); // 纹理单元传递给着色器
+
+      this.fillTexture(points); // 仅对非缓存纹理（非 ImageData）立即删除
+
+      if (!(img instanceof ImageData)) {
+        this.deleteTexture(texture);
+      }
+    }
+  }, {
+    key: "fillTexture",
+    value: function fillTexture(points) {
+      if (points && points.length) {
+        // 标注为纹理对象
+        this.context.uniform1i(this.program.uniforms.a_type.location, 2); // 纹理坐标
+        //const coordBuffer = this.writePoints(points, this.program.attrs.a_text_coord);
+
+        this.fillPolygons(points, true); //this.deleteBuffer(coordBuffer);  
+
+        this.disableVertexAttribArray(this.program.attrs.a_text_coord);
+      }
+    } // 进行多边形填充
+
+  }, {
+    key: "fillPolygons",
+    value: function fillPolygons(points) {
+      var _this3 = this;
+
+      var isTexture = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (points.length <= 3) {
+        // 3个点以下的三角形直接画
+        var buffer = this.writePoints(points);
+        var coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
+        this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+        return;
+      } // 规则图形（凸多边形，如圆）：直接用 TRIANGLE_FAN 一次性绘制，无需 earcut
+
+
+      if (this.isRegular) {
+        // 检查是否有 moveTo 标记，如果有说明路径包含多个子路径（如空心圆弧 jmHArc）
+        var hasMoveTo = points.some && points.some(function (p) {
+          return p.m;
+        });
+
+        if (hasMoveTo) {
+          // 有 m 标记：按 m 标记拆分子路径
+          var _this$splitSubPaths = this.splitSubPaths(points),
+              outerPoints = _this$splitSubPaths.outerPoints,
+              holes = _this$splitSubPaths.holes;
+
+          this.fillWithHoles(outerPoints, holes, isTexture);
+          return;
+        } // 无 m 标记但 needCut=true 表示空心形状（如 jmHArc close=true）
+        // 前半段为内弧，后半段为外弧（反向），按中点拆分
+
+
+        if (this.needCut && points.length >= 6) {
+          var mid = Math.floor(points.length / 2);
+          var inner = points.slice(0, mid);
+          var outer = points.slice(mid);
+          var innerArea = Math.abs(this.polygonArea(inner));
+          var outerArea = Math.abs(this.polygonArea(outer));
+
+          if (outerArea >= innerArea) {
+            this.fillWithHoles(outer, [inner], isTexture);
+          } else {
+            this.fillWithHoles(inner, [outer], isTexture);
+          }
+
+          return;
+        }
+
+        var _buffer3 = this.writePoints(points);
+
+        var _coordBuffer = isTexture ? this.writePoints(points, this.program.attrs.a_text_coord) : null;
+
+        this.context.drawArrays(this.context.TRIANGLE_FAN, 0, points.length);
+        return;
+      } // 不规则图形：需要 earcut 三角化后，合并为一个大的顶点缓冲区，单次 drawArrays
+
+
+      var triangles = this.needCut ? this.earCutPointsToTriangles(points) : this.getTriangles(points);
+      if (!triangles.length) return; // 合并所有三角形的顶点到一个数组
+
+      var allVertices = [];
+      var allTexCoords = [];
+
+      var _iterator7 = _createForOfIteratorHelper(triangles),
+          _step7;
+
+      try {
+        for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+          var triangle = _step7.value;
+
+          var _iterator8 = _createForOfIteratorHelper(triangle),
+              _step8;
+
+          try {
+            for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+              var p = _step8.value;
+              allVertices.push(p.x, p.y);
+              if (isTexture) allTexCoords.push(p.x, p.y);
+            }
+          } catch (err) {
+            _iterator8.e(err);
+          } finally {
+            _iterator8.f();
+          }
+        } // 一次性上传所有数据并绘制
+
+      } catch (err) {
+        _iterator7.e(err);
+      } finally {
+        _iterator7.f();
+      }
+
+      var vertexData = new Float32Array(allVertices);
+      var gl = this.context; // 复用或创建 position buffer
+
+      var posBuffer = this.__cachedBuffers.find(function (b) {
+        return b.attr === _this3.program.attrs.a_position;
+      });
+
+      if (!posBuffer) {
+        posBuffer = this.createFloat32Buffer(vertexData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+        posBuffer.attr = this.program.attrs.a_position;
+
+        this.__cachedBuffers.push(posBuffer);
+      } else {
+        gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer.buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertexData, gl.DYNAMIC_DRAW);
+      }
+
+      this.writeVertexAttrib(posBuffer, this.program.attrs.a_position, 2, 0, 0);
+
+      if (isTexture && allTexCoords.length) {
+        var texData = new Float32Array(allTexCoords);
+
+        var texBuffer = this.__cachedBuffers.find(function (b) {
+          return b.attr === _this3.program.attrs.a_text_coord;
+        });
+
+        if (!texBuffer) {
+          texBuffer = this.createFloat32Buffer(texData, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+          texBuffer.attr = this.program.attrs.a_text_coord;
+
+          this.__cachedBuffers.push(texBuffer);
+        } else {
+          gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer.buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, texData, gl.DYNAMIC_DRAW);
+        }
+
+        this.writeVertexAttrib(texBuffer, this.program.attrs.a_text_coord, 2, 0, 0);
+      }
+
+      gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
+    } // 填充图形
+
+  }, {
+    key: "drawImage",
+    value: function drawImage(img) {
+      var left = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var top = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      var width = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : img.width;
+      var height = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : img.height;
+      width = width || img.width;
+      height = height || img.height;
+      this.fillImage(img, this.points, {
+        left: left,
+        top: top,
+        width: width,
+        height: height
+      });
+    }
+  }, {
+    key: "drawText",
+    value: function drawText(text, x, y, bounds) {
+      // 文本渲染仍需要 2D canvas 绘制字形，然后作为纹理上传
+      // 使用临时 canvas，不依赖共享的 textureCanvas
+      if (!bounds.width || !bounds.height) return null;
+      if (typeof document === 'undefined') return null;
+      var canvas = this.__textCanvas;
+
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        this.__textCanvas = canvas;
+      }
+
+      canvas.width = bounds.width;
+      canvas.height = bounds.height;
+      var ctx = canvas.getContext('2d', {
+        willReadFrequently: true
+      });
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // 修改字体
+
+      ctx.font = this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily;
+      x -= bounds.left;
+      y -= bounds.top; // 设置文本样式
+
+      if (this.style.fillStyle) {
+        ctx.fillStyle = this.graph.utils.toColor(this.style.fillStyle);
+      }
+
+      if (this.style.strokeStyle) {
+        ctx.strokeStyle = this.graph.utils.toColor(this.style.strokeStyle);
+      }
+
+      if (this.style.shadowColor) {
+        ctx.shadowColor = this.graph.utils.toColor(this.style.shadowColor);
+      }
+
+      if (this.style.shadowBlur) {
+        ctx.shadowBlur = this.style.shadowBlur;
+      }
+
+      if (this.style.shadowOffsetX !== undefined) {
+        ctx.shadowOffsetX = this.style.shadowOffsetX;
+      }
+
+      if (this.style.shadowOffsetY !== undefined) {
+        ctx.shadowOffsetY = this.style.shadowOffsetY;
+      }
+
+      if (this.style.textAlign) {
+        ctx.textAlign = this.style.textAlign;
+      }
+
+      if (this.style.textBaseline) {
+        ctx.textBaseline = this.style.textBaseline;
+      }
+
+      if (this.style.fillStyle && ctx.fillText) {
+        if (this.style.maxWidth) {
+          ctx.fillText(text, x, y, this.style.maxWidth);
+        } else {
+          ctx.fillText(text, x, y);
+        }
+      }
+
+      if (this.style.strokeStyle && ctx.strokeText) {
+        if (this.style.maxWidth) {
+          ctx.strokeText(text, x, y, this.style.maxWidth);
+        } else {
+          ctx.strokeText(text, x, y);
+        }
+      } // 用纹理图片代替文字
+
+
+      var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      this.fillImage(data, this.points, bounds);
+    }
+  }]);
+
+  return WebglPath;
+}(_base["default"]);
+
+var _default = WebglPath;
+exports["default"] = _default;
+
+},{"../earcut.js":18,"./base.js":19}],28:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmArc = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 圆弧类
+ * 
+ * 绘制圆弧或扇形图形，继承自 jmPath。
+ * 支持设置圆心、半径、起始角度和结束角度。
+ *
+ * @class jmArc
+ * @extends jmPath
+ * @param {object} params 圆弧参数
+ * @param {object} [params.center] 圆弧中心点 {x, y}
+ * @param {number} [params.radius] 圆弧半径
+ * @param {number} [params.start=0] 圆弧起始角度（弧度）
+ * @param {number} [params.end=Math.PI*2] 圆弧结束角度（弧度）
+ * @param {boolean} [params.anticlockwise=false] 绘制方向：false=顺时针，true=逆时针
+ * @param {boolean} [params.isFan=false] 是否绘制为扇形
+ * 
+ * @example
+ * // 创建圆弧
+ * const arc = graph.createShape('arc', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     start: 0,
+ *     end: Math.PI,
+ *     style: { stroke: '#000' }
+ * });
+ * 
+ * // 创建扇形
+ * const fan = graph.createShape('arc', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     start: 0,
+ *     end: Math.PI / 2,
+ *     isFan: true,
+ *     style: { fill: '#ff0000' }
+ * });
+ */
+var jmArc = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmArc, _jmPath);
+
+  var _super = _createSuper(jmArc);
+
+  function jmArc(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmArc';
+
+    _classCallCheck(this, jmArc);
+
+    if (!params) params = {};
+    params.isRegular = params.isRegular === false ? false : true; // 规则的
+
+    params.needCut = params.needCut === true ? true : false; // 规则的
+
+    _this = _super.call(this, params, t);
+    _this.center = params.center || {
+      x: 0,
+      y: 0
+    };
+    _this.radius = params.radius || 0;
+    _this.startAngle = params.start || params.startAngle || 0;
+    _this.endAngle = params.end || params.endAngle || Math.PI * 2;
+    _this.anticlockwise = params.anticlockwise || 0;
+    _this.isFan = !!params.isFan;
+    return _this;
+  }
+  /**
+   * 中心点
+   * point格式：{x:0,y:0,m:true}
+   * @property center
+   * @type {point}
+   */
+
+
+  _createClass(jmArc, [{
+    key: "center",
+    get: function get() {
+      return this.property('center');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('center', v);
+    }
+    /**
+     * 半径
+     * @property radius
+     * @type {number}
+     */
+
+  }, {
+    key: "radius",
+    get: function get() {
+      return this.property('radius');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('radius', v);
+    }
+    /**
+     * 扇形起始角度
+     * @property startAngle
+     * @type {number}
+     */
+
+  }, {
+    key: "startAngle",
+    get: function get() {
+      return this.property('startAngle');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('startAngle', v);
+    }
+    /**
+     * 扇形结束角度
+     * @property endAngle
+     * @type {number}
+     */
+
+  }, {
+    key: "endAngle",
+    get: function get() {
+      return this.property('endAngle');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('endAngle', v);
+    }
+    /**
+     * 可选。规定应该逆时针还是顺时针绘图
+     * false  顺时针，true 逆时针
+     * @property anticlockwise
+     * @type {boolean}
+     */
+
+  }, {
+    key: "anticlockwise",
+    get: function get() {
+      return this.property('anticlockwise');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('anticlockwise', v);
+    }
+    /**
+     * 初始化图形点
+     * 
+     * @method initPoint
+     * @private
+     * @for jmArc
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      var location = this.getLocation(); //获取位置参数
+
+      var mw = 0;
+      var mh = 0;
+      var cx = location.center.x;
+      var cy = location.center.y; //如果设定了半径。则以半径为主	
+
+      if (location.radius) {
+        mw = mh = location.radius;
+      } else {
+        mw = location.width / 2;
+        mh = location.height / 2;
+      }
+
+      var start = this.startAngle;
+      var end = this.endAngle;
+      if (mw == 0 && mh == 0 || start == end) return;
+      var anticlockwise = this.anticlockwise;
+      var step = 1 / Math.max(mw, mh); //如果是逆时针绘制，则角度为负数，并且结束角为2Math.PI-end
+
+      if (anticlockwise) {
+        var p2 = Math.PI * 2;
+        start = p2 - start;
+        end = p2 - end;
+      }
+
+      if (start > end) step = -step; // 预计算需要的点数量
+
+      var pointCount = Math.ceil(Math.abs(end - start) / Math.abs(step)) + 1;
+      if (this.isFan) pointCount++; // 复用已有数组，避免每帧分配；大小变化时才重建
+
+      if (!this.points || this.points.length !== pointCount) {
+        this.points = new Array(pointCount);
+
+        for (var i = 0; i < pointCount; i++) {
+          this.points[i] = {
+            x: 0,
+            y: 0
+          };
+        }
+      }
+
+      var idx = 0;
+
+      if (this.isFan) {
+        this.points[idx].x = location.center.x;
+        this.points[idx].y = location.center.y;
+        idx++;
+      } //椭圆方程x=a*cos(r) ,y=b*sin(r)	
+
+
+      for (var r = start;; r += step) {
+        if (step > 0 && r > end) r = end;else if (step < 0 && r < end) r = end;
+        this.points[idx].x = Math.cos(r) * mw + cx;
+        this.points[idx].y = Math.sin(r) * mh + cy;
+        idx++;
+        if (r == end) break;
+      }
+
+      return this.points;
+    }
+  }]);
+
+  return jmArc;
+}(_jmPath2.jmPath);
+
+exports.jmArc = exports["default"] = jmArc;
+
+},{"../core/jmPath.js":10}],29:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmArrow = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+var _jmUtils = require("../core/jmUtils.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 箭头类
+ * 
+ * 绘制箭头图形，支持空心和实心两种样式。
+ * 箭头方向由起点和终点决定。
+ *
+ * @class jmArrow
+ * @extends jmPath
+ * @param {object} params 箭头参数
+ * @param {object} [params.start] 箭头起始点 {x, y}
+ * @param {object} [params.end] 箭头终点（箭头尖端）{x, y}
+ * @param {number} [params.angle] 箭头角度（弧度），不指定则自动计算
+ * @param {number} [params.offsetX=5] 箭头X方向偏移量
+ * @param {number} [params.offsetY=8] 箭头Y方向偏移量
+ * 
+ * @example
+ * // 创建箭头
+ * const arrow = graph.createShape('arrow', {
+ *     start: {x: 100, y: 100},
+ *     end: {x: 200, y: 100},
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ */
+var jmArrow = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmArrow, _jmPath);
+
+  var _super = _createSuper(jmArrow);
+
+  function jmArrow(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmArrow';
+
+    _classCallCheck(this, jmArrow);
+
+    _this = _super.call(this, params, t);
+    _this.style.lineJoin = 'miter';
+    _this.style.lineCap = 'square';
+    _this.angle = params.angle || 0;
+    _this.start = params.start || {
+      x: 0,
+      y: 0
+    };
+    _this.end = params.end || {
+      x: 0,
+      y: 0
+    };
+    _this.offsetX = params.offsetX || 5;
+    _this.offsetY = params.offsetY || 8;
+    return _this;
+  }
+  /**
+   * 控制起始点
+   *
+   * @property start
+   * @for jmArrow
+   * @type {point}
+   */
+
+
+  _createClass(jmArrow, [{
+    key: "start",
+    get: function get() {
+      return this.property('start');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('start', v);
+    }
+    /**
+     * 控制结束点
+     *
+     * @property end
+     * @for jmArrow
+     * @type {point} 结束点
+     */
+
+  }, {
+    key: "end",
+    get: function get() {
+      return this.property('end');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('end', v);
+    }
+    /**
+     * 箭头角度
+     *
+     * @property angle
+     * @for jmArrow
+     * @type {number} 箭头角度
+     */
+
+  }, {
+    key: "angle",
+    get: function get() {
+      return this.property('angle');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('angle', v);
+    }
+    /**
+     * 箭头X偏移量
+     *
+     * @property offsetX
+     * @for jmArrow
+     * @type {number}
+     */
+
+  }, {
+    key: "offsetX",
+    get: function get() {
+      return this.property('offsetX');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('offsetX', v);
+    }
+    /**
+     * 箭头Y偏移量
+     *
+     * @property offsetY
+     * @for jmArrow
+     * @type {number}
+     */
+
+  }, {
+    key: "offsetY",
+    get: function get() {
+      return this.property('offsetY');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('offsetY', v);
+    }
+    /**
+     * 初始化图形点
+     * 
+     * @method initPoint
+     * @private
+     * @param {boolean} solid 是否为实心的箭头
+     * @for jmArrow
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints(solid) {
+      var rotate = this.angle;
+      var start = this.start;
+      var end = this.end;
+      if (!end) return; //计算箭头指向角度
+
+      if (!rotate) {
+        rotate = Math.atan2(end.y - start.y, end.x - start.x);
+      }
+
+      this.points = [];
+      var offx = this.offsetX;
+      var offy = this.offsetY; //箭头相对于线的偏移角度
+
+      var r = Math.atan2(offx, offy);
+      var r1 = rotate + r;
+      var rsin = Math.sin(r1);
+      var rcos = Math.cos(r1);
+      var sq = Math.sqrt(offx * offx + offy * offy);
+      var ystep = rsin * sq;
+      var xstep = rcos * sq;
+      var p1 = {
+        x: end.x - xstep,
+        y: end.y - ystep
+      };
+      var r2 = rotate - r;
+      rsin = Math.sin(r2);
+      rcos = Math.cos(r2);
+      ystep = rsin * sq;
+      xstep = rcos * sq;
+      var p2 = {
+        x: end.x - xstep,
+        y: end.y - ystep
+      };
+
+      var s = _jmUtils.jmUtils.clone(end);
+
+      s.m = true;
+      this.points.push(s);
+      this.points.push(p1); //如果实心箭头则封闭路线
+
+      if (solid || this.style.fill) {
+        this.points.push(p2);
+        this.points.push(end);
+      } else {
+        this.points.push(s);
+        this.points.push(p2);
+      }
+
+      return this.points;
+    }
+  }]);
+
+  return jmArrow;
+}(_jmPath2.jmPath);
+
+exports.jmArrow = exports["default"] = jmArrow;
+
+},{"../core/jmPath.js":10,"../core/jmUtils.js":16}],30:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmArrowLine = exports["default"] = void 0;
+
+var _jmLine2 = require("./jmLine.js");
+
+var _jmArrow = require("./jmArrow.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 带箭头的直线类
+ * 
+ * 绘制带箭头的直线，继承自 jmLine。
+ * 箭头位于直线的末端。
+ *
+ * @class jmArrowLine
+ * @extends jmLine
+ * @param {object} params 直线参数
+ * @param {object} [params.start] 直线起始点 {x, y}
+ * @param {object} [params.end] 直线终结点 {x, y}
+ * @param {boolean} [params.arrowVisible=true] 是否显示箭头
+ * 
+ * @example
+ * // 创建带箭头的直线
+ * const arrowLine = graph.createShape('arrowLine', {
+ *     start: {x: 100, y: 100},
+ *     end: {x: 200, y: 100},
+ *     style: { stroke: '#000', lineWidth: 2 }
+ * });
+ */
+var jmArrowLine = /*#__PURE__*/function (_jmLine) {
+  _inherits(jmArrowLine, _jmLine);
+
+  var _super = _createSuper(jmArrowLine);
+
+  function jmArrowLine(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmArrowLine);
+
+    params.start = params.start || {
+      x: 0,
+      y: 0
+    };
+    params.end = params.end || {
+      x: 0,
+      y: 0
+    };
+    _this = _super.call(this, params, t || 'jmArrowLine');
+    _this.style.lineJoin = _this.style.lineJoin || 'miter';
+    _this.arrow = new _jmArrow.jmArrow(params);
+    return _this;
+  }
+  /**
+   * 初始化直线和箭头描点
+   *
+   * @method initPoints
+   * @private
+   */
+
+
+  _createClass(jmArrowLine, [{
+    key: "initPoints",
+    value: function initPoints() {
+      this.points = _get(_getPrototypeOf(jmArrowLine.prototype), "initPoints", this).call(this);
+
+      if (this.arrowVisible !== false) {
+        this.points = this.points.concat(this.arrow.initPoints());
+      }
+
+      return this.points;
+    }
+  }]);
+
+  return jmArrowLine;
+}(_jmLine2.jmLine);
+
+exports.jmArrowLine = exports["default"] = jmArrowLine;
+
+},{"./jmArrow.js":29,"./jmLine.js":37}],31:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmBezier = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 贝塞尔曲线类
+ * 
+ * 绘制 N 阶贝塞尔曲线，参数 points 中为控制点。
+ * 支持 2 阶（二次贝塞尔）、3 阶（三次贝塞尔）及更高阶曲线。
+ *
+ * @class jmBezier
+ * @extends jmPath
+ * @param {object} params 参数
+ * @param {array} [params.points] 控制点数组 [{x, y}, ...]
+ * 
+ * @example
+ * // 创建二次贝塞尔曲线（3个控制点）
+ * const quadBezier = graph.createShape('bezier', {
+ *     points: [
+ *         {x: 100, y: 100},  // 起点
+ *         {x: 200, y: 50},   // 控制点
+ *         {x: 300, y: 100}   // 终点
+ *     ],
+ *     style: { stroke: '#000', lineWidth: 2 }
+ * });
+ * 
+ * // 创建三次贝塞尔曲线（4个控制点）
+ * const cubicBezier = graph.createShape('bezier', {
+ *     points: [
+ *         {x: 100, y: 100},  // 起点
+ *         {x: 150, y: 50},   // 控制点1
+ *         {x: 250, y: 50},   // 控制点2
+ *         {x: 300, y: 100}   // 终点
+ *     ],
+ *     style: { stroke: '#ff0000' }
+ * });
+ */
+var jmBezier = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmBezier, _jmPath);
+
+  var _super = _createSuper(jmBezier);
+
+  function jmBezier(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmBezier';
+
+    _classCallCheck(this, jmBezier);
+
+    // 参数初始化
+    params = params || {}; // 曲线默认不封闭
+
+    if (!params.style) params.style = {};
+
+    if (typeof params.style.close !== true) {
+      params.style.close = false;
+    }
+
+    _this = _super.call(this, params, t);
+    _this.cpoints = params.points || [];
+    return _this;
+  }
+  /**
+   * 控制点
+   *
+   * @property cpoints
+   * @for jmBezier
+   * @type {array}
+   */
+
+
+  _createClass(jmBezier, [{
+    key: "cpoints",
+    get: function get() {
+      return this.property('cpoints');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('cpoints', v);
+    }
+    /**
+     * 初始化图形点
+     *
+     * @method initPoints
+     * @private
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      this.points = [];
+      var cps = this.cpoints;
+
+      for (var t = 0; t <= 1; t += 0.01) {
+        var p = this.getPoint(cps, t);
+        this.points.push(p);
+      }
+
+      this.points.push(cps[cps.length - 1]);
+      return this.points;
+    }
+    /**
+     * 根据控制点和参数t生成贝塞尔曲线轨迹点
+     *
+     * @method getPoint
+     * @param {array} ps 控制点集合
+     * @param {number} t 参数(0-1)
+     * @return {array} 所有轨迹点的数组
+     */
+
+  }, {
+    key: "getPoint",
+    value: function getPoint(ps, t) {
+      if (ps.length == 1) return ps[0];
+
+      if (ps.length == 2) {
+        var p = {};
+        p.x = (ps[1].x - ps[0].x) * t + ps[0].x;
+        p.y = (ps[1].y - ps[0].y) * t + ps[0].y;
+        return p;
+      }
+
+      if (ps.length > 2) {
+        var nps = [];
+
+        for (var i = 0; i < ps.length - 1; i++) {
+          var _p = this.getPoint([ps[i], ps[i + 1]], t);
+
+          if (_p) nps.push(_p);
+        }
+
+        return this.getPoint(nps, t);
+      }
+    }
+    /**
+     * 对控件进行平移
+     * 遍历控件所有描点或位置，设置其偏移量。
+     *
+     * @method offset
+     * @param {number} x x轴偏移量
+     * @param {number} y y轴偏移量
+     * @param {boolean} [trans] 是否传递,监听者可以通过此属性是否决定是否响应移动事件,默认=true
+     */
+
+  }, {
+    key: "offset",
+    value: function offset(x, y, trans) {
+      var p = this.cpoints;
+
+      if (p) {
+        var len = p.length;
+
+        for (var i = 0; i < len; i++) {
+          p[i].x += x;
+          p[i].y += y;
+        } //触发控件移动事件	
+
+
+        this.emit('move', {
+          offsetX: x,
+          offsetY: y,
+          trans: trans
+        });
+        this.getLocation(true); //重置
+      }
+    }
+  }]);
+
+  return jmBezier;
+}(_jmPath2.jmPath);
+
+exports.jmBezier = exports["default"] = jmBezier;
+
+},{"../core/jmPath.js":10}],32:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmCircle = exports["default"] = void 0;
+
+var _jmArc2 = require("./jmArc.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 圆形类
+ * 
+ * 绘制圆形图形，继承自 jmArc。
+ * 可以通过 center 和 radius 指定圆心和半径，
+ * 也可以通过 width 和 height 指定圆的尺寸。
+ *
+ * @class jmCircle
+ * @extends jmArc
+ * @param {object} params 圆的参数
+ * @param {object} [params.center] 圆心坐标 {x, y}
+ * @param {number} [params.radius] 圆半径（优先使用）
+ * @param {number} [params.width] 圆宽度（无 radius 时使用）
+ * @param {number} [params.height] 圆高度（无 radius 时使用）
+ * 
+ * @example
+ * // 创建圆形
+ * const circle = graph.createShape('circle', {
+ *     center: {x: 200, y: 200},
+ *     radius: 50,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ */
+var jmCircle = /*#__PURE__*/function (_jmArc) {
+  _inherits(jmCircle, _jmArc);
+
+  var _super = _createSuper(jmCircle);
+
+  function jmCircle(params) {
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmCircle';
+
+    _classCallCheck(this, jmCircle);
+
+    params.isRegular = true; // 规则的
+
+    return _super.call(this, params, t);
+  }
+  /**
+   * 初始化图形点
+   * 
+   * @method initPoint
+   * @private
+   * @for jmCircle
+   */
+
+
+  _createClass(jmCircle, [{
+    key: "initPoints",
+    value: function initPoints() {
+      if (this.graph.mode === 'webgl') {
+        return _get(_getPrototypeOf(jmCircle.prototype), "initPoints", this).call(this);
+      }
+
+      var location = this.getLocation();
+
+      if (!location.radius) {
+        location.radius = Math.min(location.width, location.height) / 2;
+      }
+
+      this.points = [];
+      this.points.push({
+        x: location.center.x - location.radius,
+        y: location.center.y - location.radius
+      });
+      this.points.push({
+        x: location.center.x + location.radius,
+        y: location.center.y - location.radius
+      });
+      this.points.push({
+        x: location.center.x + location.radius,
+        y: location.center.y + location.radius
+      });
+      this.points.push({
+        x: location.center.x - location.radius,
+        y: location.center.y + location.radius
+      });
+    }
+    /**
+     * 重写基类画图，此处为画一个完整的圆 
+     *
+     * @method draw
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      if (this.graph.mode === 'webgl') {
+        return _get(_getPrototypeOf(jmCircle.prototype), "draw", this).call(this);
+      }
+
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      var location = this.getLocation();
+
+      if (!location.radius) {
+        location.radius = Math.min(location.width, location.height) / 2;
+      }
+
+      var start = this.startAngle;
+      var end = this.endAngle;
+      var anticlockwise = this.anticlockwise; //context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+
+      this.context.arc(location.center.x + bounds.left, location.center.y + bounds.top, location.radius, start, end, anticlockwise);
+    }
+  }]);
+
+  return jmCircle;
+}(_jmArc2.jmArc);
+
+exports.jmCircle = exports["default"] = jmCircle;
+
+},{"./jmArc.js":28}],33:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmEllipse = exports["default"] = void 0;
+
+var _jmArc2 = require("./jmArc.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 椭圆类
+ * 
+ * 绘制椭圆图形，继承自 jmArc。
+ * 可以指定起始角度和结束角度来绘制椭圆弧。
+ *
+ * @class jmEllipse
+ * @extends jmArc
+ * @param {object} params 椭圆的参数
+ * @param {object} [params.center={x:0,y:0}] 椭圆中心点坐标
+ * @param {number} [params.width=100] 椭圆宽度（长轴直径）
+ * @param {number} [params.height=60] 椭圆高度（短轴直径）
+ * @param {number} [params.startAngle=0] 起始角度（弧度）
+ * @param {number} [params.endAngle=Math.PI*2] 结束角度（弧度）
+ * @param {boolean} [params.anticlockwise=false] 是否逆时针绘制
+ * 
+ * @example
+ * // 创建椭圆
+ * const ellipse = graph.createShape('ellipse', {
+ *     center: {x: 200, y: 200},
+ *     width: 200,
+ *     height: 100,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ */
+var jmEllipse = /*#__PURE__*/function (_jmArc) {
+  _inherits(jmEllipse, _jmArc);
+
+  var _super = _createSuper(jmEllipse);
+
+  function jmEllipse(params) {
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmEllipse';
+
+    _classCallCheck(this, jmEllipse);
+
+    params = params || {};
+    params.isRegular = true; // 标记为规则图形
+
+    return _super.call(this, params, t);
+  }
+  /**
+   * 初始化图形点
+   * 为WebGL模式生成控制点，2D模式使用draw方法直接绘制
+   * 
+   * @method initPoints
+   * @private
+   * @for jmEllipse
+   */
+
+
+  _createClass(jmEllipse, [{
+    key: "initPoints",
+    value: function initPoints() {
+      // WebGL模式使用父类的点生成方法
+      if (this.graph.mode === 'webgl') {
+        return _get(_getPrototypeOf(jmEllipse.prototype), "initPoints", this).call(this);
+      } // 2D模式：生成4个控制点用于边界计算
+      // 这些点不是实际的绘制点，而是用于碰撞检测和边界计算
+
+
+      var location = this.getLocation();
+      this.points = [];
+      this.points.push({
+        x: location.center.x - location.width / 2,
+        y: location.center.y
+      }); // 左
+
+      this.points.push({
+        x: location.center.x,
+        y: location.center.y - location.height / 2
+      }); // 上
+
+      this.points.push({
+        x: location.center.x + location.width / 2,
+        y: location.center.y
+      }); // 右
+
+      this.points.push({
+        x: location.center.x,
+        y: location.center.y + location.height / 2
+      }); // 下
+    }
+    /**
+     * 重写基类画图，此处为画一个椭圆
+     * 使用Canvas的变换功能（平移和缩放）来绘制椭圆
+     * 
+     * @method draw
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      // WebGL模式使用父类的绘制方法
+      if (this.graph.mode === 'webgl') {
+        return _get(_getPrototypeOf(jmEllipse.prototype), "draw", this).call(this);
+      } // 获取边界和位置信息
+
+
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      var location = this.getLocation(); // 获取椭圆弧参数
+
+      var start = this.startAngle || 0;
+      var end = this.endAngle || Math.PI * 2;
+      var anticlockwise = this.anticlockwise || false; // 椭圆绘制：通过变换圆形来实现
+      // 1. 保存当前绘图状态
+
+      this.context.save(); // 2. 平移到椭圆中心
+
+      this.context.translate(location.center.x + bounds.left, location.center.y + bounds.top); // 3. 缩放坐标系，使圆形变为椭圆
+      // 将X轴缩放width/2，Y轴缩放height/2，这样单位圆就变成了椭圆
+
+      this.context.scale(location.width / 2, location.height / 2); // 4. 绘制单位圆（会被缩放成椭圆）
+
+      this.context.arc(0, 0, 1, start, end, anticlockwise); // 5. 恢复绘图状态
+
+      this.context.restore();
+    }
+  }]);
+
+  return jmEllipse;
+}(_jmArc2.jmArc);
+
+exports.jmEllipse = exports["default"] = jmEllipse;
+
+},{"./jmArc.js":28}],34:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmHArc = exports["default"] = void 0;
+
+var _jmArc2 = require("./jmArc.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 空心圆弧类
+ * 
+ * 绘制空心圆弧（圆环弧），继承自 jmArc。
+ * 由内圆半径和外圆半径定义环形区域。
+ *
+ * @class jmHArc
+ * @extends jmArc
+ * @param {object} params 空心圆弧参数
+ * @param {object} [params.center] 圆弧中心点 {x, y}
+ * @param {number} [params.minRadius] 内圆半径
+ * @param {number} [params.maxRadius] 外圆半径
+ * @param {number} [params.start=0] 起始角度（弧度）
+ * @param {number} [params.end=Math.PI*2] 结束角度（弧度）
+ * @param {boolean} [params.anticlockwise=false] 是否逆时针绘制
+ * 
+ * @example
+ * // 创建空心圆弧
+ * const hArc = graph.createShape('hArc', {
+ *     center: {x: 200, y: 200},
+ *     minRadius: 30,
+ *     maxRadius: 50,
+ *     start: 0,
+ *     end: Math.PI,
+ *     style: { fill: '#ff0000' }
+ * });
+ */
+var jmHArc = /*#__PURE__*/function (_jmArc) {
+  _inherits(jmHArc, _jmArc);
+
+  var _super = _createSuper(jmHArc);
+
+  function jmHArc(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmHArc';
+
+    _classCallCheck(this, jmHArc);
+
+    params.isRegular = true; // 规则的
+
+    params.needCut = true;
+    _this = _super.call(this, params, t);
+    _this.minRadius = params.minRadius || _this.style.minRadius || 0;
+    _this.maxRadius = params.maxRadius || _this.style.maxRadius || 0;
+    return _this;
+  }
+  /**
+   * 设定或获取内空心圆半径
+   * 
+   * @property minRadius
+   * @for jmHArc
+   * @type {number} 
+   */
+
+
+  _createClass(jmHArc, [{
+    key: "minRadius",
+    get: function get() {
+      return this.property('minRadius');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('minRadius', v);
+    }
+    /**
+     * 设定或获取外空心圆半径
+     * 
+     * @property maxRadius
+     * @for jmHArc
+     * @type {number} 
+     */
+
+  }, {
+    key: "maxRadius",
+    get: function get() {
+      return this.property('maxRadius');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('maxRadius', v);
+    }
+    /**
+     * 初始化图形点
+     *
+     * @method initPoints
+     * @private
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      var location = this.getLocation(); //如果设定了半径。则以半径为主
+
+      var minr = this.minRadius;
+      var maxr = this.maxRadius;
+      var start = this.startAngle;
+      var end = this.endAngle;
+      var anticlockwise = this.anticlockwise; //如果是逆时针绘制，则角度为负数，并且结束角为2Math.PI-end
+
+      if (anticlockwise) {
+        var p2 = Math.PI * 2;
+        start = p2 - start;
+        end = p2 - end;
+      }
+
+      var step = 0.1;
+      if (start > end) step = -step;
+      var minps = [];
+      var maxps = []; //椭圆方程x=a*cos(r) ,y=b*sin(r)
+
+      for (var r = start;; r += step) {
+        if (step > 0 && r > end) {
+          r = end;
+        } else if (step < 0 && r < end) {
+          r = end;
+        }
+
+        var cos = Math.cos(r);
+        var sin = Math.sin(r);
+        var p1 = {
+          x: cos * minr + location.center.x,
+          y: sin * minr + location.center.y
+        };
+        var _p = {
+          x: cos * maxr + location.center.x,
+          y: sin * maxr + location.center.y
+        };
+        minps.push(p1);
+        maxps.push(_p);
+        if (r === end) break;
+      }
+
+      maxps.reverse(); //大圆逆序
+
+      if (!this.style || !this.style.close) {
+        maxps[0].m = true; //非闭合时标记 moveTo，分隔内外两个子路径
+      }
+
+      this.points = minps.concat(maxps);
+    }
+  }]);
+
+  return jmHArc;
+}(_jmArc2.jmArc);
+
+exports.jmHArc = exports["default"] = jmHArc;
+
+},{"./jmArc.js":28}],35:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmImage = exports["default"] = void 0;
+
+var _jmControl2 = require("../core/jmControl.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 图片类
+ * 
+ * 显示图片控件，支持从 URL 或 Image 对象加载图片。
+ * 支持图片裁剪和缩放功能。
+ *
+ * @class jmImage
+ * @extends jmControl
+ * @param {object} params 控件参数
+ * @param {string|HTMLImageElement} [params.image] 图片源地址或图片对象
+ * @param {object} [params.position] 图片位置 {x, y}
+ * @param {number} [params.width] 图片显示宽度
+ * @param {number} [params.height] 图片显示高度
+ * @param {object} [params.sourcePosition] 图片裁剪起始位置 {x, y}
+ * @param {number} [params.sourceWidth] 图片裁剪宽度
+ * @param {number} [params.sourceHeight] 图片裁剪高度
+ * 
+ * @example
+ * // 从 URL 加载图片
+ * const img = graph.createShape('image', {
+ *     image: 'path/to/image.png',
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150
+ * });
+ * 
+ * // 裁剪图片
+ * const croppedImg = graph.createShape('image', {
+ *     image: 'path/to/sprite.png',
+ *     position: {x: 100, y: 100},
+ *     sourcePosition: {x: 0, y: 0},
+ *     sourceWidth: 50,
+ *     sourceHeight: 50,
+ *     width: 100,
+ *     height: 100
+ * });
+ */
+var jmImage = /*#__PURE__*/function (_jmControl) {
+  _inherits(jmImage, _jmControl);
+
+  var _super = _createSuper(jmImage);
+
+  function jmImage(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmImage);
+
+    params = params || {};
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t || 'jmImage');
+    _this.style.fill = _this.fill || 'transparent'; //默认指定一个fill，为了可以鼠标选中
+
+    _this.sourceWidth = params.sourceWidth;
+    _this.sourceHeight = params.sourceHeight;
+    _this.sourcePosition = params.sourcePosition;
+    _this.image = params.image || _this.style.image;
+    return _this;
+  }
+  /**
+   * 画图开始剪切位置
+   *
+   * @property sourcePosition
+   * @type {point}
+   */
+
+
+  _createClass(jmImage, [{
+    key: "sourcePosition",
+    get: function get() {
+      return this.property('sourcePosition');
+    },
+    set: function set(v) {
+      return this.property('sourcePosition', v);
+    }
+    /**
+     * 被剪切宽度
+     *
+     * @property sourceWidth
+     * @type {number}
+     */
+
+  }, {
+    key: "sourceWidth",
+    get: function get() {
+      return this.property('sourceWidth');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('sourceWidth', v);
+    }
+    /**
+     * 被剪切高度
+     *
+     * @method sourceHeight
+     * @type {number}
+     */
+
+  }, {
+    key: "sourceHeight",
+    get: function get() {
+      return this.property('sourceHeight');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('sourceHeight', v);
+    }
+    /**
+     * 设定要绘制的图像或其它多媒体对象，可以是图片地址，或图片image对象
+     *
+     * @method image
+     * @type {img}
+     */
+
+  }, {
+    key: "image",
+    get: function get() {
+      return this.property('image');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('image', v);
+    }
+    /**
+     * 重写控件绘制
+     * 根据父边界偏移和此控件参数绘制图片
+     *
+     * @method draw
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      try {
+        var img = this.getImage();
+        this.drawImg(img);
+      } catch (e) {
+        console.error && console.error(e);
+      }
+    } // 绘制
+
+  }, {
+    key: "drawImg",
+    value: function drawImg(img) {
+      if (!img || !img.complete) {
+        console.warn('image is empty');
+        return;
+      }
+
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      if (!bounds) bounds = this.parent && this.parent.getAbsoluteBounds ? this.parent.getAbsoluteBounds() : this.getAbsoluteBounds();
+      var p = this.getLocation();
+      var sp = this.sourcePosition;
+      var sw = this.sourceWidth;
+      var sh = this.sourceHeight;
+      var ctx = this.webglControl || this.context;
+
+      if (this.webglControl) {
+        ctx.setParentBounds && ctx.setParentBounds(bounds);
+        var localBounds = this.getBounds(); // 给图片给定顶点
+
+        ctx.draw([{
+          x: localBounds.left,
+          y: localBounds.top
+        }, {
+          x: localBounds.left + localBounds.width,
+          y: localBounds.top
+        }, {
+          x: localBounds.left + localBounds.width,
+          y: localBounds.top + localBounds.height
+        }, {
+          x: localBounds.left,
+          y: localBounds.top + localBounds.height
+        }], bounds);
+        ctx.drawImage(img, localBounds.left, localBounds.top, localBounds.width, localBounds.height);
+        return;
+      } // 计算绝对定位
+
+
+      p.left += bounds.left;
+      p.top += bounds.top;
+
+      if (sp || typeof sw != 'undefined' || typeof sh != 'undefined') {
+        if (typeof sw == 'undefined') sw = p.width || img.width || 0;
+        if (typeof sh == 'undefined') sh = p.height || img.height || 0;
+        sp = sp || {
+          x: 0,
+          y: 0
+        };
+        if (p.width && p.height) ctx.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, p.height);else if (p.width) {
+          ctx.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, p.width, sh);
+        } else if (p.height) {
+          ctx.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, p.height);
+        } else ctx.drawImage(img, sp.x, sp.y, sw, sh, p.left, p.top, sw, sh);
+      } else if (p) {
+        if (p.width && p.height) ctx.drawImage(img, p.left, p.top, p.width, p.height);else if (p.width) ctx.drawImage(img, p.left, p.top, p.width, img.height);else if (p.height) ctx.drawImage(img, p.left, p.top, img.width, p.height);else ctx.drawImage(img, p.left, p.top);
+      } else {
+        ctx.drawImage(img);
+      }
+    }
+    /**
+     * 获取当前控件的边界 
+     * 
+     * @method getBounds
+     * @return {object} 边界对象(left,top,right,bottom,width,height)
+     */
+
+  }, {
+    key: "getBounds",
+    value: function getBounds(isReset) {
+      //如果当次计算过，则不重复计算
+      if (this.bounds && !isReset) return this.bounds;
+      var rect = {};
+      var img = this.getImage() || {
+        width: 0,
+        height: 0
+      };
+      var p = this.getLocation();
+      var w = p.width || img.width;
+      var h = p.height || img.height;
+      rect.left = p.left;
+      rect.top = p.top;
+      rect.right = p.left + w;
+      rect.bottom = p.top + h;
+      rect.width = w;
+      rect.height = h;
+      return this.bounds = rect;
+    }
+  }, {
+    key: "getLocation",
+    value: function getLocation() {
+      var img = this.getImage();
+
+      var loc = _get(_getPrototypeOf(jmImage.prototype), "getLocation", this).call(this); // 如果指定了宽度，但没有指定高宽，则等比缩放
+
+
+      if (loc.width && !loc.height) {
+        loc.height = loc.width / img.width * img.height;
+      } else if (loc.height && !loc.width) {
+        loc.width = loc.height / img.height * img.width;
+      }
+
+      return loc;
+    }
+    /**
+     * img对象
+     *
+     * @method getImage
+     * @return {img} 图片对象
+     */
+
+  }, {
+    key: "getImage",
+    value: function getImage() {
+      var _this2 = this;
+
+      var src = this.image || this.style.src || this.style.image;
+
+      if (this.__img && this.__img.src && this.__img.src.indexOf(src) != -1) {
+        return this.__img;
+      } else if (src && src.src) {
+        this.__img = src;
+      } else if (typeof document !== 'undefined' && document.createElement) {
+        this.__img = document.createElement('img');
+
+        this.__img.onload = function () {
+          _this2.needUpdate = true;
+        };
+
+        if (src && typeof src == 'string') this.__img.src = src;
+      } else if (this.graph.isWXMiniApp && this.graph.canvas && typeof src === 'string') {
+        // 图片对象
+        this.__img = this.graph.canvas.createImage();
+
+        this.__img.onload = function () {
+          _this2.needUpdate = true;
+        }; // 设置图片src
+
+
+        this.__img.src = src;
+      } else {
+        this.__img = src;
+      }
+
+      if (this.__img) this.image = this.__img.src;
+      return this.__img;
+    }
+  }]);
+
+  return jmImage;
+}(_jmControl2.jmControl);
+
+exports.jmImage = exports["default"] = jmImage;
+
+},{"../core/jmControl.js":2}],36:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmLabel = exports["default"] = void 0;
+
+var _jmControl2 = require("../core/jmControl.js");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 文本标签类
+ * 
+ * 显示文字控件，支持多种文本样式和对齐方式。
+ *
+ * @class jmLabel
+ * @extends jmControl
+ * @param {object} params 参数
+ * @param {string} [params.text=''] 显示的文字内容
+ * @param {object} [params.center] 文本中心点坐标
+ * @param {object} [params.style] 样式对象
+ * @param {string} [params.style.font] 字体样式
+ * @param {string} [params.style.textAlign='left'] 水平对齐方式
+ * @param {string} [params.style.textBaseline='middle'] 垂直对齐方式
+ * @param {number} [params.style.maxWidth] 最大宽度（用于自动换行）
+ * 
+ * @example
+ * // 创建文本标签
+ * const label = graph.createShape('label', {
+ *     position: {x: 100, y: 100},
+ *     text: 'Hello World',
+ *     style: {
+ *         fill: '#000',
+ *         font: '20px Arial',
+ *         textAlign: 'center'
+ *     }
+ * });
+ */
+var jmLabel = /*#__PURE__*/function (_jmControl) {
+  _inherits(jmLabel, _jmControl);
+
+  var _super = _createSuper(jmLabel);
+
+  function jmLabel(params, t) {
+    var _this;
+
+    _classCallCheck(this, jmLabel);
+
+    params = params || {};
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t || 'jmLabel');
+    _this.style.font = _this.style.font || "15px Arial";
+    _this.style.fontFamily = _this.style.fontFamily || 'Arial';
+    _this.style.fontSize = _this.style.fontSize || 15; // 显示不同的 textAlign 值
+    //文字水平对齐
+
+    _this.style.textAlign = _this.style.textAlign || 'left'; //文字垂直对齐
+
+    _this.style.textBaseline = _this.style.textBaseline || 'middle';
+    _this.text = params.text || params.value || '';
+    _this.center = params.center || null;
+    return _this;
+  }
+  /**
+   * 显示的内容
+   * @property text
+   * @type {string}
+   */
+
+
+  _createClass(jmLabel, [{
+    key: "text",
+    get: function get() {
+      return this.property('text');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('text', v);
+    }
+    /**
+     * 中心点
+     * point格式：{x:0,y:0,m:true}
+     * @property center
+     * @type {point}
+     */
+
+  }, {
+    key: "center",
+    get: function get() {
+      return this.property('center');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('center', v);
+    }
+    /**
+     * 当前位置左上角
+     * @property position
+     * @type {point}
+     */
+
+  }, {
+    key: "position",
+    get: function get() {
+      return this.property('position');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('position', v);
+    }
+    /**
+     * 在基础的getLocation上，再加上一个特殊的center处理
+     * 
+     * @method getLocation
+     * @returns {Object}
+     */
+
+  }, {
+    key: "getLocation",
+    value: function getLocation() {
+      var location = _get(_getPrototypeOf(jmLabel.prototype), "getLocation", this).call(this);
+
+      var size = this.testSize();
+      location.width = location.width || size.width;
+      location.height = location.height || size.height; //如果没有指定位置，但指定了中心，则用中心来计算坐标
+
+      if (!location.left && !location.top && location.center) {
+        location.left = location.center.x - location.width / 2;
+        location.top = location.center.y - location.height / 2;
+      }
+
+      return location;
+    }
+    /**
+     * 初始化图形点,主要用于限定控件边界。
+     *
+     * @method initPoints
+     * @return {array} 所有边界点数组
+     * @private
+     */
+
+    /**
+     * 生成文本尺寸缓存 key（text/字体/换行宽度任一变化时缓存自动失效）
+     * @private
+     */
+
+  }, {
+    key: "_sizeCacheKey",
+    value: function _sizeCacheKey() {
+      return (this.text || '') + '|' + (this.style.font || '') + '|' + (this.style.fontSize || '') + '|' + (this.style.fontFamily || '') + '|' + (this.style.maxWidth || '');
+    }
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      // 仅在文本或字体相关属性变化时失效测量缓存，避免每帧重复 measureText
+      var key = this._sizeCacheKey();
+
+      if (this.__size && this.__sizeKey !== key) {
+        this.__size = null;
+      }
+
+      this.__sizeKey = key;
+      var location = this.getLocation();
+      this.points = [{
+        x: location.left,
+        y: location.top
+      }];
+      this.points.push({
+        x: location.left + location.width,
+        y: location.top
+      });
+      this.points.push({
+        x: location.left + location.width,
+        y: location.top + location.height
+      });
+      this.points.push({
+        x: location.left,
+        y: location.top + location.height
+      });
+      return this.points;
+    }
+    /**
+     * 测试获取文本所占大小
+     * 计算文本渲染所需的宽度和高度，支持自动换行
+     * 
+     * @method testSize
+     * @return {object} 含文本大小的对象 {width, height}
+     */
+
+  }, {
+    key: "testSize",
+    value: function testSize() {
+      // 使用缓存提高性能，避免重复计算（key 变化时缓存已由 initPoints 失效）
+      if (this.__size && this.__sizeKey === this._sizeCacheKey()) return this.__size;
+
+      if (this.webglControl) {
+        this.__size = this.webglControl.testSize(this.text, this.style);
+      } else {
+        this.context.save && this.context.save(); // 设置字体样式用于测量
+
+        this.setStyle({
+          font: this.style.font || this.style.fontSize + 'px ' + this.style.fontFamily
+        }); // 计算文本尺寸
+
+        if (this.style.maxWidth && this.text) {
+          // 文本换行处理
+          var lines = this.wrapText(this.text, this.style.maxWidth);
+          var maxWidth = 0; // 找出最宽的一行
+
+          var _iterator = _createForOfIteratorHelper(lines),
+              _step;
+
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var line = _step.value;
+              var width = this.context.measureText(line).width;
+              if (width > maxWidth) maxWidth = width;
+            } // 计算总高度（行数 × 行高）
+
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+
+          var lineHeight = this.style.lineHeight || this.style.fontSize * 1.2;
+          this.__size = {
+            width: maxWidth,
+            height: lineHeight * lines.length
+          };
+        } else {
+          // 单行文本
+          this.__size = this.context.measureText ? this.context.measureText(this.text) : {
+            width: 15
+          };
+          this.__size.height = this.style.fontSize ? this.style.fontSize : 15;
+        }
+
+        this.context.restore && this.context.restore();
+      } // 设置默认宽高
+
+
+      if (!this.width) this.width = this.__size.width;
+      if (!this.height) this.height = this.__size.height;
+      this.__sizeKey = this._sizeCacheKey();
+      return this.__size;
+    }
+    /**
+     * 文本换行处理
+     * 根据最大宽度将文本分割成多行
+     * 支持中英文混合文本，优先在空格处换行
+     * 
+     * @method wrapText
+     * @param {string} text 文本内容
+     * @param {number} maxWidth 最大宽度（像素）
+     * @return {array} 换行后的文本数组
+     */
+
+  }, {
+    key: "wrapText",
+    value: function wrapText(text, maxWidth) {
+      // 参数验证
+      if (!text || !maxWidth) return [text || '']; // 检查缓存，避免重复计算
+
+      var cacheKey = "".concat(text, "_").concat(maxWidth);
+
+      if (this.__wrapTextCache && this.__wrapTextCache.key === cacheKey) {
+        return this.__wrapTextCache.lines;
+      }
+
+      var lines = []; // 先按换行符分割
+
+      var paragraphs = text.split('\n');
+
+      var _iterator2 = _createForOfIteratorHelper(paragraphs),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var paragraph = _step2.value;
+
+          // 如果段落为空，添加空行
+          if (!paragraph) {
+            lines.push('');
+            continue;
+          } // 按空格分割单词
+
+
+          var words = paragraph.split(' ');
+          var currentLine = words[0];
+
+          for (var i = 1; i < words.length; i++) {
+            var word = words[i];
+            var testLine = currentLine + ' ' + word;
+            var metrics = this.context.measureText(testLine);
+            var testWidth = metrics.width;
+
+            if (testWidth <= maxWidth) {
+              // 当前行还能容纳这个单词
+              currentLine = testLine;
+            } else {
+              // 当前行已满，保存当前行并开始新行
+              if (currentLine) lines.push(currentLine);
+              currentLine = word;
+            }
+          } // 添加最后一行
+
+
+          if (currentLine) lines.push(currentLine);
+        } // 缓存结果
+
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      this.__wrapTextCache = {
+        key: cacheKey,
+        lines: lines
+      };
+      return lines;
+    }
+    /**
+     * 根据位置偏移画字符串
+     * 
+     * @method draw
+     */
+
+  }, {
+    key: "draw",
+    value: function draw() {
+      //获取当前控件的绝对位置
+      var bounds = this.parent && this.parent.absoluteBounds ? this.parent.absoluteBounds : this.absoluteBounds;
+      var size = this.testSize();
+      var location = this.location;
+      var x = location.left + bounds.left;
+      var y = location.top + bounds.top; //通过文字对齐方式计算起始X位置
+
+      switch (this.style.textAlign) {
+        case 'right':
+          {
+            x += location.width;
+            break;
+          }
+
+        case 'center':
+          {
+            x += location.width / 2;
+            break;
+          }
+      } //通过垂直对齐方式计算起始Y值
+
+
+      switch (this.style.textBaseline) {
+        case 'bottom':
+          {
+            y += location.height;
+            break;
+          }
+
+        case 'hanging':
+        case 'alphabetic':
+        case 'middle':
+          {
+            y += location.height / 2;
+            break;
+          }
+      }
+
+      var txt = this.text;
+
+      if (typeof txt !== 'undefined') {
+        // webgl方式
+        if (this.webglControl) {
+          this.webglControl.draw(this.points, bounds);
+          this.webglControl.drawText(txt, x, y, location);
+        } else if (this.style.fill && this.context.fillText) {
+          if (this.style.maxWidth) {
+            // 绘制换行文本
+            var lines = this.wrapText(txt, this.style.maxWidth);
+            var lineHeight = this.style.fontSize; // 调整起始Y位置以支持垂直对齐
+
+            var startY = y - (lines.length - 1) * lineHeight / 2;
+
+            for (var i = 0; i < lines.length; i++) {
+              var lineY = startY + i * lineHeight;
+              this.context.fillText(lines[i], x, lineY);
+            }
+          } else {
+            this.context.fillText(txt, x, y);
+          }
+        } else if (this.context.strokeText) {
+          if (this.style.maxWidth) {
+            // 绘制换行文本
+            var _lines = this.wrapText(txt, this.style.maxWidth);
+
+            var _lineHeight = this.style.fontSize; // 调整起始Y位置以支持垂直对齐
+
+            var _startY = y - (_lines.length - 1) * _lineHeight / 2;
+
+            for (var _i = 0; _i < _lines.length; _i++) {
+              var _lineY = _startY + _i * _lineHeight;
+
+              this.context.strokeText(_lines[_i], x, _lineY);
+            }
+          } else {
+            this.context.strokeText(txt, x, y);
+          }
+        }
+      }
+    }
+  }, {
+    key: "endDraw",
+    value: function endDraw() {
+      if (this.mode === '2d') {
+        _get(_getPrototypeOf(jmLabel.prototype), "endDraw", this).call(this);
+      }
+    }
+  }]);
+
+  return jmLabel;
+}(_jmControl2.jmControl);
+
+exports.jmLabel = exports["default"] = jmLabel;
+
+},{"../core/jmControl.js":2}],37:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmLine = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 直线类
+ * 
+ * 绘制从起点到终点的直线，支持实线和虚线两种模式。
+ *
+ * @class jmLine
+ * @extends jmPath
+ * @param {object} params 直线参数
+ * @param {object} [params.start] 起始点 {x, y}
+ * @param {object} [params.end] 结束点 {x, y}
+ * @param {string} [params.lineType='solid'] 线类型：'solid'=实线，'dotted'=虚线
+ * @param {number} [params.dashLength=4] 虚线间隔长度
+ * 
+ * @example
+ * // 创建实线
+ * const line = graph.createShape('line', {
+ *     start: {x: 0, y: 0},
+ *     end: {x: 100, y: 100},
+ *     style: { stroke: '#000', lineWidth: 2 }
+ * });
+ * 
+ * // 创建虚线
+ * const dottedLine = graph.createShape('line', {
+ *     start: {x: 0, y: 0},
+ *     end: {x: 100, y: 100},
+ *     lineType: 'dotted',
+ *     dashLength: 5,
+ *     style: { stroke: '#000' }
+ * });
+ */
+var jmLine = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmLine, _jmPath);
+
+  var _super = _createSuper(jmLine);
+
+  function jmLine(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmLine';
+
+    _classCallCheck(this, jmLine);
+
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t);
+    _this.start = params.start || {
+      x: 0,
+      y: 0
+    };
+    _this.end = params.end || {
+      x: 0,
+      y: 0
+    };
+    _this.style.lineType = _this.style.lineType || 'solid';
+    _this.style.dashLength = _this.style.dashLength || 4;
+    _this.style.close = false;
+    return _this;
+  }
+  /**
+   * 控制起始点
+   * 
+   * @property start
+   * @for jmLine
+   * @type {point}
+   */
+
+
+  _createClass(jmLine, [{
+    key: "start",
+    get: function get() {
+      return this.property('start');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('start', v);
+    }
+    /**
+     * 控制结束点
+     * 
+     * @property end
+     * @for jmLine
+     * @type {point}
+     */
+
+  }, {
+    key: "end",
+    get: function get() {
+      return this.property('end');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('end', v);
+    }
+    /**
+     * 初始化图形点,如呆为虚线则根据跳跃间隔描点
+     * @method initPoints
+     * @private
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      var start = this.start;
+      var end = this.end;
+      this.points = [];
+      this.points.push(start);
+
+      if (this.style.lineType === 'dotted') {
+        var dx = end.x - start.x;
+        var dy = end.y - start.y;
+        var lineLen = Math.sqrt(dx * dx + dy * dy);
+        dx = dx / lineLen;
+        dy = dy / lineLen;
+        var dottedstart = false;
+        var dashLen = this.style.dashLength || 5;
+        var dottedsp = dashLen / 2;
+
+        for (var l = dashLen; l <= lineLen;) {
+          var p = {
+            x: start.x + dx * l,
+            y: start.y + dy * l
+          };
+
+          if (dottedstart === false) {
+            l += dottedsp;
+          } else {
+            p.m = true; // 移动到当时坐标
+
+            l += dashLen;
+          }
+
+          this.points.push(p);
+          dottedstart = !dottedstart;
+        }
+      }
+
+      this.points.push(end);
+      return this.points;
+    }
+  }]);
+
+  return jmLine;
+}(_jmPath2.jmPath);
+
+exports.jmLine = exports["default"] = jmLine;
+
+},{"../core/jmPath.js":10}],38:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmPolygon = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 多边形类
+ * 
+ * 绘制多边形图形，支持规则多边形和自定义多边形。
+ * 规则多边形通过边数和半径自动计算顶点，
+ * 自定义多边形通过顶点数组定义。
+ *
+ * @class jmPolygon
+ * @extends jmPath
+ * @param {object} params 多边形的参数
+ * @param {array} [params.points] 自定义顶点数组，如果提供则忽略sides和radius
+ * @param {number} [params.sides=3] 多边形边数（3-100）
+ * @param {number} [params.radius=50] 多边形半径（像素）
+ * @param {object} [params.center={x:0,y:0}] 多边形中心点坐标
+ * 
+ * @example
+ * // 创建正六边形
+ * const hexagon = graph.createShape('polygon', {
+ *     center: {x: 200, y: 200},
+ *     sides: 6,
+ *     radius: 50,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建自定义多边形
+ * const polygon = graph.createShape('polygon', {
+ *     points: [
+ *         {x: 100, y: 100},
+ *         {x: 200, y: 50},
+ *         {x: 300, y: 100},
+ *         {x: 250, y: 200},
+ *         {x: 150, y: 200}
+ *     ],
+ *     style: { fill: '#00ff00' }
+ * });
+ */
+var jmPolygon = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmPolygon, _jmPath);
+
+  var _super = _createSuper(jmPolygon);
+
+  function jmPolygon(params) {
+    var _params$points;
+
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmPolygon';
+
+    _classCallCheck(this, jmPolygon);
+
+    params = params || {};
+    params.isRegular = true; // 标记为规则图形，便于优化渲染
+
+    _this = _super.call(this, params, t); // 参数验证和初始化
+
+    _this.sides = params.sides || ((_params$points = params.points) === null || _params$points === void 0 ? void 0 : _params$points.length) || 3;
+    _this.radius = params.radius || 50;
+    _this.center = params.center || {
+      x: 0,
+      y: 0
+    };
+    return _this;
+  }
+  /**
+   * 设定或获取多边形边数
+   * 边数决定了多边形的形状，最小为3（三角形）
+   * 
+   * @property sides
+   * @for jmPolygon
+   * @type {number}
+   */
+
+
+  _createClass(jmPolygon, [{
+    key: "sides",
+    get: function get() {
+      return this.property('sides');
+    },
+    set: function set(v) {
+      // 参数验证：边数必须在3-100之间
+      if (typeof v !== 'number' || isNaN(v) || v < 3) {
+        console.warn('jmPolygon: sides must be a number >= 3');
+        v = 3;
+      }
+
+      if (v > 100) {
+        console.warn('jmPolygon: sides should not exceed 100 for performance reasons');
+        v = 100;
+      }
+
+      this.needUpdate = true;
+      return this.property('sides', Math.floor(v)); // 确保是整数
+    }
+    /**
+     * 设定或获取多边形半径
+     * 半径是从中心点到顶点的距离
+     * 
+     * @property radius
+     * @for jmPolygon
+     * @type {number}
+     */
+
+  }, {
+    key: "radius",
+    get: function get() {
+      return this.property('radius');
+    },
+    set: function set(v) {
+      // 参数验证：半径必须为正数
+      if (typeof v !== 'number' || isNaN(v) || v <= 0) {
+        console.warn('jmPolygon: radius must be a positive number');
+        v = 1;
+      }
+
+      this.needUpdate = true;
+      return this.property('radius', v);
+    }
+    /**
+     * 设定或获取多边形中心
+     * 中心点是多边形的几何中心
+     * 
+     * @property center
+     * @for jmPolygon
+     * @type {object}
+     */
+
+  }, {
+    key: "center",
+    get: function get() {
+      return this.property('center');
+    },
+    set: function set(v) {
+      // 参数验证：中心点必须包含x和y属性
+      if (!v || typeof v.x !== 'number' || typeof v.y !== 'number') {
+        console.warn('jmPolygon: center must be an object with x and y properties');
+        v = {
+          x: 0,
+          y: 0
+        };
+      }
+
+      this.needUpdate = true;
+      return this.property('center', v);
+    }
+    /**
+     * 初始化图形点
+     * 如果提供了自定义顶点，则使用自定义顶点
+     * 否则根据边数和半径自动计算规则多边形的顶点
+     * 
+     * @method initPoints
+     * @private
+     * @for jmPolygon
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      // 如果提供了自定义顶点，直接使用
+      if (this.points && this.points.length > 0) {
+        return;
+      } // 计算规则多边形的顶点
+
+
+      var points = [];
+      var sides = this.sides;
+      var radius = this.radius;
+      var center = this.center; // 从顶部开始绘制（-90度），顺时针方向
+
+      for (var i = 0; i < sides; i++) {
+        var angle = i / sides * Math.PI * 2 - Math.PI / 2;
+        var x = center.x + Math.cos(angle) * radius;
+        var y = center.y + Math.sin(angle) * radius;
+        points.push({
+          x: x,
+          y: y
+        });
+      }
+
+      this.points = points;
+    }
+  }]);
+
+  return jmPolygon;
+}(_jmPath2.jmPath);
+
+exports.jmPolygon = exports["default"] = jmPolygon;
+
+},{"../core/jmPath.js":10}],39:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmPrismatic = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 棱形类
+ * 
+ * 绘制棱形（菱形）图形，继承自 jmPath。
+ * 棱形由中心点、宽度和高度定义。
+ *
+ * @class jmPrismatic
+ * @extends jmPath
+ * @param {object} params 参数
+ * @param {object} [params.center] 棱形中心点 {x, y}
+ * @param {number} [params.width] 棱形宽度
+ * @param {number} [params.height] 棱形高度
+ * 
+ * @example
+ * // 创建棱形
+ * const prismatic = graph.createShape('prismatic', {
+ *     center: {x: 200, y: 200},
+ *     width: 100,
+ *     height: 80,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ */
+var jmPrismatic = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmPrismatic, _jmPath);
+
+  var _super = _createSuper(jmPrismatic);
+
+  function jmPrismatic(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmPrismatic';
+
+    _classCallCheck(this, jmPrismatic);
+
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t);
+    _this.style.close = typeof _this.style.close == 'undefined' ? true : _this.style.close;
+    _this.center = params.center || {
+      x: 0,
+      y: 0
+    };
+    _this.width = params.width || 0; //this.on('PropertyChange',this.initPoints);
+
+    _this.height = params.height || 0;
+    return _this;
+  }
+  /**
+   * 中心点
+   * point格式：{x:0,y:0,m:true}
+   * @property center
+   * @type {point}
+   */
+
+
+  _createClass(jmPrismatic, [{
+    key: "center",
+    get: function get() {
+      return this.property('center');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('center', v);
+    }
+    /**
+     * 初始化图形点
+     * 计算棱形顶点
+     * 
+     * @method initPoints
+     * @private
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      var location = this.getLocation();
+      var mw = location.width / 2;
+      var mh = location.height / 2;
+      this.points = [];
+      this.points.push({
+        x: location.center.x - mw,
+        y: location.center.y
+      });
+      this.points.push({
+        x: location.center.x,
+        y: location.center.y + mh
+      });
+      this.points.push({
+        x: location.center.x + mw,
+        y: location.center.y
+      });
+      this.points.push({
+        x: location.center.x,
+        y: location.center.y - mh
+      });
+    }
+  }]);
+
+  return jmPrismatic;
+}(_jmPath2.jmPath);
+
+exports.jmPrismatic = exports["default"] = jmPrismatic;
+
+},{"../core/jmPath.js":10}],40:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmRect = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+var _jmArc = require("./jmArc.js");
+
+var _jmLine = require("./jmLine.js");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 矩形类
+ * 
+ * 绘制矩形图形，支持圆角和虚线边框。
+ * 圆角可以统一设置或四角独立设置。
+ *
+ * @class jmRect
+ * @extends jmPath
+ * @param {object} params 参数
+ * @param {object} [params.position] 矩形左上角顶点坐标 {x, y}
+ * @param {number} [params.width] 矩形宽度
+ * @param {number} [params.height] 矩形高度
+ * @param {number|object} [params.radius] 边角弧度，支持数字(四角相同)或对象 { topLeft, topRight, bottomRight, bottomLeft }
+ * 
+ * @example
+ * // 创建普通矩形
+ * const rect = graph.createShape('rect', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建圆角矩形
+ * const roundedRect = graph.createShape('rect', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     radius: 10,  // 四角统一圆角
+ *     // 或 radius: { topLeft: 5, topRight: 10, bottomRight: 15, bottomLeft: 20 }
+ *     style: { fill: '#00ff00' }
+ * });
+ */
+var jmRect = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmRect, _jmPath);
+
+  var _super = _createSuper(jmRect);
+
+  function jmRect(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmRect';
+
+    _classCallCheck(this, jmRect);
+
+    params = params || {};
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t);
+    _this.style.close = true;
+    var r = params.radius || _this.style.radius || _this.style.borderRadius || 0;
+
+    if (_typeof(r) === 'object' && r !== null) {
+      // 四角独立圆角
+      _this.radius = {
+        topLeft: Number(r.topLeft) || 0,
+        topRight: Number(r.topRight) || 0,
+        bottomRight: Number(r.bottomRight) || 0,
+        bottomLeft: Number(r.bottomLeft) || 0
+      };
+    } else {
+      _this.radius = r;
+    }
+
+    return _this;
+  }
+  /**
+   * 圆角半径，支持数字或四角独立对象
+   * @property radius
+   * @type {number|object}
+   */
+
+
+  _createClass(jmRect, [{
+    key: "radius",
+    get: function get() {
+      return this.property('radius');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('radius', v);
+    }
+    /**
+     * 获取规范化的圆角值（四角独立）
+     * @returns {object} { topLeft, topRight, bottomRight, bottomLeft }
+     */
+
+  }, {
+    key: "getNormalizedRadius",
+    value: function getNormalizedRadius() {
+      var r = this.radius;
+
+      if (typeof r === 'number') {
+        var v = Math.max(0, r);
+        return {
+          topLeft: v,
+          topRight: v,
+          bottomRight: v,
+          bottomLeft: v
+        };
+      }
+
+      if (_typeof(r) === 'object' && r !== null) {
+        return {
+          topLeft: Math.max(0, Number(r.topLeft) || 0),
+          topRight: Math.max(0, Number(r.topRight) || 0),
+          bottomRight: Math.max(0, Number(r.bottomRight) || 0),
+          bottomLeft: Math.max(0, Number(r.bottomLeft) || 0)
+        };
+      }
+
+      return {
+        topLeft: 0,
+        topRight: 0,
+        bottomRight: 0,
+        bottomLeft: 0
+      };
+    }
+    /**
+     * 检查是否有圆角
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "hasRadius",
+    value: function hasRadius() {
+      var nr = this.getNormalizedRadius();
+      return nr.topLeft > 0 || nr.topRight > 0 || nr.bottomRight > 0 || nr.bottomLeft > 0;
+    }
+    /**
+     * 当前位置左上角
+     * @property position
+     * @type {point}
+     */
+
+  }, {
+    key: "position",
+    get: function get() {
+      return this.property('position');
+    },
+    set: function set(v) {
+      this.needUpdate = true;
+      return this.property('position', v);
+    }
+    /**
+     * 获取当前控件的边界
+     *
+     * @method getBounds
+     * @return {bound} 当前控件边界
+     */
+
+  }, {
+    key: "getBounds",
+    value: function getBounds(isReset) {
+      //如果当次计算过，则不重复计算
+      if (this.bounds && !isReset) return this.bounds;
+      var rect = {};
+      this.initPoints();
+      var p = this.getLocation();
+      rect.left = p.left;
+      rect.top = p.top;
+      rect.right = p.left + p.width;
+      rect.bottom = p.top + p.height;
+      rect.width = rect.right - rect.left;
+      rect.height = rect.bottom - rect.top;
+      return this.bounds = rect;
+    }
+    /**
+     * 重写检查坐标是否在区域内
+     *
+     * @method checkPoint
+     * @param {point} p 待检查的坐标
+     * @return {boolean} 如果在则返回true,否则返回false
+     */
+
+    /*checkPoint(p) {	
+    	//生成当前坐标对应的父级元素的相对位置
+    	let abounds = this.bounds || this.getBounds();
+    
+    	if(p.x > abounds.right || p.x < abounds.left) {
+    		return false;
+    	}
+    	if(p.y > abounds.bottom || p.y < abounds.top) {
+    		return false;
+    	}
+    	
+    	return true;
+    }*/
+
+    /**
+     * 初始化图形点
+     * 支持四角独立圆角，借助圆弧对象计算描点
+     * 
+     * @method initPoints
+     * @private
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      var location = this.getLocation();
+      var p1 = {
+        x: location.left,
+        y: location.top
+      };
+      var p2 = {
+        x: location.left + location.width,
+        y: location.top
+      };
+      var p3 = {
+        x: location.left + location.width,
+        y: location.top + location.height
+      };
+      var p4 = {
+        x: location.left,
+        y: location.top + location.height
+      }; //如果指定为虚线 , 则初始化一个直线组件，来构建虚线点集合
+
+      if (this.style.lineType === 'dotted' && !this.dottedLine) {
+        this.dottedLine = this.graph.createShape(_jmLine.jmLine, {
+          style: this.style
+        });
+      }
+
+      var nr = this.getNormalizedRadius();
+      var hasRadius = this.hasRadius(); // 如果有圆角（支持四角独立），借助圆弧对象计算描点
+
+      if (hasRadius) {
+        var q = Math.PI / 2; // 限制圆角不超过短边的一半
+
+        var maxR = Math.min(location.width / 2, location.height / 2);
+        var rtl = Math.min(nr.topLeft, maxR);
+        var rtr = Math.min(nr.topRight, maxR);
+        var rbr = Math.min(nr.bottomRight, maxR);
+        var rbl = Math.min(nr.bottomLeft, maxR); // 左上角圆弧
+
+        if (rtl > 0) {
+          var arc = this.graph.createShape(_jmArc.jmArc, {
+            radius: rtl,
+            anticlockwise: false
+          });
+          arc.center = {
+            x: location.left + rtl,
+            y: location.top + rtl
+          };
+          arc.startAngle = Math.PI;
+          arc.endAngle = Math.PI + q;
+          var ps1 = arc.initPoints();
+        } else {
+          var ps1 = [p1];
+        } // 右上角圆弧
+
+
+        if (rtr > 0) {
+          var _arc = this.graph.createShape(_jmArc.jmArc, {
+            radius: rtr,
+            anticlockwise: false
+          });
+
+          _arc.center = {
+            x: p2.x - rtr,
+            y: p2.y + rtr
+          };
+          _arc.startAngle = Math.PI + q;
+          _arc.endAngle = Math.PI * 2;
+
+          var ps2 = _arc.initPoints();
+        } else {
+          var ps2 = [p2];
+        } // 右下角圆弧
+
+
+        if (rbr > 0) {
+          var _arc2 = this.graph.createShape(_jmArc.jmArc, {
+            radius: rbr,
+            anticlockwise: false
+          });
+
+          _arc2.center = {
+            x: p3.x - rbr,
+            y: p3.y - rbr
+          };
+          _arc2.startAngle = 0;
+          _arc2.endAngle = q;
+
+          var ps3 = _arc2.initPoints();
+        } else {
+          var ps3 = [p3];
+        } // 左下角圆弧
+
+
+        if (rbl > 0) {
+          var _arc3 = this.graph.createShape(_jmArc.jmArc, {
+            radius: rbl,
+            anticlockwise: false
+          });
+
+          _arc3.center = {
+            x: p4.x + rbl,
+            y: p4.y - rbl
+          };
+          _arc3.startAngle = q;
+          _arc3.endAngle = Math.PI;
+
+          var ps4 = _arc3.initPoints();
+        } else {
+          var ps4 = [p4];
+        }
+
+        this.points = ps1.concat(ps2, ps3, ps4);
+      } else {
+        this.points = [];
+        this.points.push(p1); //如果是虚线
+
+        if (this.dottedLine) {
+          this.dottedLine.start = p1;
+          this.dottedLine.end = p2;
+          this.points = this.points.concat(this.dottedLine.initPoints());
+        }
+
+        this.points.push(p2); //如果是虚线
+
+        if (this.dottedLine) {
+          this.dottedLine.start = p2;
+          this.dottedLine.end = p3;
+          this.points = this.points.concat(this.dottedLine.initPoints());
+        }
+
+        this.points.push(p3); //如果是虚线
+
+        if (this.dottedLine) {
+          this.dottedLine.start = p3;
+          this.dottedLine.end = p4;
+          this.points = this.points.concat(this.dottedLine.initPoints());
+        }
+
+        this.points.push(p4); //如果是虚线
+
+        if (this.dottedLine) {
+          this.dottedLine.start = p4;
+          this.dottedLine.end = p1;
+          this.points = this.points.concat(this.dottedLine.initPoints());
+        }
+      }
+
+      return this.points;
+    }
+  }]);
+
+  return jmRect;
+}(_jmPath2.jmPath);
+
+exports.jmRect = exports["default"] = jmRect;
+
+},{"../core/jmPath.js":10,"./jmArc.js":28,"./jmLine.js":37}],41:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmResize = exports["default"] = void 0;
+
+var _jmRect2 = require("./jmRect.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 可缩放控件类
+ * 
+ * 继承自 jmRect，在矩形四边和四角添加可拖拽的控制点。
+ * 用于实现图形的缩放和调整功能。
+ *
+ * @class jmResize
+ * @extends jmRect
+ * @param {object} params 控件参数
+ * @param {boolean} [params.resizable=true] 是否可缩放
+ * @param {boolean} [params.movable] 是否可移动
+ * @param {number} [params.rectSize=8] 控制点大小
+ * 
+ * @example
+ * // 创建可缩放矩形
+ * const resize = graph.createShape('resize', {
+ *     position: {x: 100, y: 100},
+ *     width: 200,
+ *     height: 150,
+ *     resizable: true,
+ *     movable: true
+ * });
+ * 
+ * // 监听缩放事件
+ * resize.on('resize', (px, py, dx, dy) => {
+ *     console.log('缩放中', px, py, dx, dy);
+ * });
+ */
+var jmResize = /*#__PURE__*/function (_jmRect) {
+  _inherits(jmResize, _jmRect);
+
+  var _super = _createSuper(jmResize);
+
+  function jmResize(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmResize';
+
+    _classCallCheck(this, jmResize);
+
+    params = params || {};
+    params.isRegular = true; // 规则的
+
+    _this = _super.call(this, params, t); //是否可拉伸
+
+    _this.resizable = params.resizable === false ? false : true;
+    _this.movable = params.movable;
+    _this.rectSize = params.rectSize || 8;
+    _this.style.close = _this.style.close || true; // 方块鼠标指针方向
+
+    _this.rectCursors = ['w-resize', 'nw-resize', 'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize', 'sw-resize'];
+
+    _this.init(params);
+
+    return _this;
+  }
+  /**
+   * 拉动的小方块大小
+   * @property rectSize
+   * @type {number}
+   */
+
+
+  _createClass(jmResize, [{
+    key: "rectSize",
+    get: function get() {
+      return this.property('rectSize');
+    },
+    set: function set(v) {
+      return this.property('rectSize', v);
+    }
+    /**
+     * 是否可以拉大缩小
+     * @property resizable
+     * @type {boolean}
+     */
+
+  }, {
+    key: "resizable",
+    get: function get() {
+      return this.property('resizable');
+    },
+    set: function set(v) {
+      return this.property('resizable', v);
+    }
+    /**
+     * 初始化控件的8个拉伸方框
+     *
+     * @method init
+     * @private
+     */
+
+  }, {
+    key: "init",
+    value: function init(params) {
+      //如果不可改变大小。则直接退出
+      if (this.resizable === false) return;
+      this.resizeRects = [];
+      var rs = this.rectSize;
+      var rectStyle = this.style.rectStyle || {
+        stroke: 'red',
+        fill: 'transparent',
+        lineWidth: 2,
+        close: true,
+        zIndex: 100
+      };
+      rectStyle.close = true;
+      rectStyle.fill = rectStyle.fill || 'transparent';
+
+      for (var i = 0; i < 8; i++) {
+        //生成改变大小方块
+        var r = (this.graph || params.graph).createShape(_jmRect2.jmRect, {
+          position: {
+            x: 0,
+            y: 0
+          },
+          width: rs,
+          height: rs,
+          style: rectStyle,
+          interactive: true
+        });
+        r.index = i;
+        r.visible = true;
+        this.resizeRects.push(r);
+        this.children.add(r);
+        r.canMove(true, this.graph);
+      }
+
+      this.reset(0, 0, 0, 0); //初始化位置
+      //绑定其事件
+
+      this.bindRectEvents();
+    }
+    /**
+     * 绑定周边拉伸的小方块事件
+     *
+     * @method bindRectEvents
+     * @private
+     */
+
+  }, {
+    key: "bindRectEvents",
+    value: function bindRectEvents() {
+      for (var i = 0; i < this.resizeRects.length; i++) {
+        var r = this.resizeRects[i]; //小方块移动监听
+
+        r.on('move', function (arg) {
+          arg.cancel = true;
+          var px = 0,
+              py = 0,
+              dx = 0,
+              dy = 0;
+
+          if (this.index == 0) {
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+          } else if (this.index == 1) {
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 2) {
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 3) {
+            dx = arg.offsetX;
+            dy = -arg.offsetY;
+            py = arg.offsetY;
+          } else if (this.index == 4) {
+            dx = arg.offsetX;
+          } else if (this.index == 5) {
+            dx = arg.offsetX;
+            dy = arg.offsetY;
+          } else if (this.index == 6) {
+            dy = arg.offsetY;
+          } else if (this.index == 7) {
+            dx = -arg.offsetX;
+            dx = -arg.offsetX;
+            px = arg.offsetX;
+            dy = arg.offsetY;
+          } //重新定位
+
+
+          this.parent.reset(px, py, dx, dy);
+        }); //鼠标指针
+
+        r.bind('mousemove', function () {
+          // 如果有旋转方位，则重新定义小块的作用
+          var rotation = this.parent.getRotation();
+          var cursor = this.parent.rectCursors[this.index]; // 旋转一定角度后的位置
+
+          var position = rotation && rotation.angle ? this.graph.utils.rotatePoints(this.graph.utils.clone(this.position), rotation, rotation.angle) : this.position;
+          var center = {
+            x: this.parent.width / 2,
+            y: this.parent.height / 2
+          };
+          this.rotationAngleByCenter = Math.atan((position.y - center.y) / (position.x - center.x)); // 与中心连线和x轴的夹角
+          // 把90度分割成三个区域，不同的指针
+
+          var angleSplit1 = Math.atan(center.y / center.x) / 2;
+          var angleSplit2 = angleSplit1 * 2 + Math.PI / 4; // 如果在左边，
+
+          if (position.x < center.x) {
+            if (this.rotationAngleByCenter >= -angleSplit1 && this.rotationAngleByCenter <= angleSplit1) {
+              cursor = this.parent.rectCursors[0];
+            } else if (this.rotationAngleByCenter > angleSplit1 && this.rotationAngleByCenter < angleSplit2) {
+              cursor = this.parent.rectCursors[1];
+            } else if (this.rotationAngleByCenter >= angleSplit2) {
+              cursor = this.parent.rectCursors[2];
+            } else if (this.rotationAngleByCenter <= -angleSplit1 && this.rotationAngleByCenter > -angleSplit2) {
+              cursor = this.parent.rectCursors[7];
+            } else if (this.rotationAngleByCenter <= -angleSplit2) {
+              cursor = this.parent.rectCursors[6];
+            }
+          } else {
+            if (this.rotationAngleByCenter >= -angleSplit1 && this.rotationAngleByCenter <= angleSplit1) {
+              cursor = this.parent.rectCursors[4];
+            } else if (this.rotationAngleByCenter > angleSplit1 && this.rotationAngleByCenter < angleSplit2) {
+              cursor = this.parent.rectCursors[5];
+            } else if (this.rotationAngleByCenter >= angleSplit2) {
+              cursor = this.parent.rectCursors[6];
+            } else if (this.rotationAngleByCenter <= -angleSplit1 && this.rotationAngleByCenter > -angleSplit2) {
+              cursor = this.parent.rectCursors[3];
+            } else if (this.rotationAngleByCenter <= -angleSplit2) {
+              cursor = this.parent.rectCursors[2];
+            }
+          }
+
+          this.cursor = cursor;
+        });
+        r.bind('mouseleave', function () {
+          this.cursor = 'default';
+        });
+      }
+      /*
+      // 如果是双指开始滑动
+      let touchPositions;
+      this.on('touchstart', (evt) => {
+      	if(evt.touches && evt.touches.legnth === 2) {
+      		touchPositions = evt.touches;
+      	}
+      });
+      	// 如果是双指滑动
+      //计算二手指滑动距离，然后再通过在父容器中的占比得到缩放比例
+      this.on('touchmove', (evt) => {
+      	if(touchPositions && evt.touches && evt.touches.length == 2) {
+      		//上次滑动二指的距离
+      		const preOffX = touchPositions[0].x - touchPositions[1].x;
+      		const preOffY = touchPositions[0].y - touchPositions[1].y;
+      		const preDis = Math.sqrt(preOffX * preOffX + preOffY * preOffY);
+      		//当次滑动二指的距离
+      		const curOffX = evt.touches[0].x - evt.touches[1].x;
+      		const curOffY = evt.touches[0].y - evt.touches[1].y;
+      		const curDis = Math.sqrt(curOffX * curOffX + curOffY * curOffY);
+      				//const disx = Math.abs(preOffX - curOffX);//x轴滑行的距离
+      		//const disy = Math.abs(preOffY - curOffY);//y轴滑行的距离
+      		
+      		const offset = curDis - preDis;
+      			this.reset(0, 0, offset, offset);
+      	}
+      });	
+      // 结束滑动
+      this.on('touchend touchcancel', (evt) => {
+      	touchPositions = null;
+      });*/
+
+    }
+    /**
+     * 按移动偏移量重置当前对象，并触发大小和位置改变事件
+     * @method reset
+     * @param {number} px 位置X轴偏移
+     * @param {number} py 位置y轴偏移
+     * @param {number} dx 大小x轴偏移
+     * @param {number} dy 大小y轴偏移
+     */
+
+  }, {
+    key: "reset",
+    value: function reset(px, py, dx, dy) {
+      var minWidth = typeof this.style.minWidth == 'undefined' ? 5 : this.style.minWidth;
+      var minHeight = typeof this.style.minHeight == 'undefined' ? 5 : this.style.minHeight;
+      var location = this.getLocation();
+
+      if (dx != 0 || dy != 0) {
+        var w = location.width + dx;
+        var h = location.height + dy;
+
+        if (w >= minWidth || h >= minHeight) {
+          if (w >= minWidth) {
+            this.width = w;
+          } else {
+            px = 0;
+            dx = 0;
+          }
+
+          if (h >= minHeight) {
+            this.height = h;
+          } else {
+            py = 0;
+            dy = 0;
+          } //如果当前控件能移动才能改变其位置
+
+
+          if (this.movable !== false && (px || py)) {
+            var p = this.position;
+            p.x = location.left + px;
+            p.y = location.top + py;
+            this.position = p;
+          } //触发大小改变事件
+
+
+          this.emit('resize', px, py, dx, dy);
+        }
+      }
+
+      var newLocation = this.getLocation();
+
+      for (var i in this.resizeRects) {
+        var r = this.resizeRects[i];
+
+        switch (r.index) {
+          case 0:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = (newLocation.height - r.height) / 2;
+              break;
+            }
+
+          case 1:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 2:
+            {
+              r.position.x = (newLocation.width - r.width) / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 3:
+            {
+              r.position.x = newLocation.width - r.width / 2;
+              r.position.y = -r.height / 2;
+              break;
+            }
+
+          case 4:
+            {
+              r.position.x = newLocation.width - r.width / 2;
+              r.position.y = (newLocation.height - r.height) / 2;
+              break;
+            }
+
+          case 5:
+            {
+              r.position.x = newLocation.width - r.width / 2;
+              r.position.y = newLocation.height - r.height / 2;
+              break;
+            }
+
+          case 6:
+            {
+              r.position.x = (newLocation.width - r.width) / 2;
+              r.position.y = newLocation.height - r.height / 2;
+              break;
+            }
+
+          case 7:
+            {
+              r.position.x = -r.width / 2;
+              r.position.y = newLocation.height - r.height / 2;
+              break;
+            }
+        }
+
+        r.needUpdate = true;
+      }
+    }
+  }]);
+
+  return jmResize;
+}(_jmRect2.jmRect);
+
+exports.jmResize = exports["default"] = jmResize;
+
+},{"./jmRect.js":40}],42:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.jmStar = exports["default"] = void 0;
+
+var _jmPath2 = require("../core/jmPath.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+/**
+ * 星形类
+ * 
+ * 绘制星形图形，支持自定义顶点数和内外半径。
+ * 星形由交替的外半径和内半径顶点组成。
+ *
+ * @class jmStar
+ * @extends jmPath
+ * @param {object} params 星形的参数
+ * @param {number} [params.points=5] 星形顶点数（角数，3-50）
+ * @param {number} [params.radius=50] 星形外半径（从中心到尖角的距离）
+ * @param {number} [params.innerRadius=25] 星形内半径（从中心到凹陷处的距离）
+ * @param {object} [params.center={x:0,y:0}] 星形中心点坐标
+ * 
+ * @example
+ * // 创建五角星
+ * const star = graph.createShape('star', {
+ *     center: {x: 200, y: 200},
+ *     points: 5,
+ *     radius: 50,
+ *     innerRadius: 25,
+ *     style: { fill: '#ff0000', stroke: '#000' }
+ * });
+ * 
+ * // 创建六角星
+ * const hexStar = graph.createShape('star', {
+ *     center: {x: 200, y: 200},
+ *     points: 6,
+ *     radius: 60,
+ *     innerRadius: 30
+ * });
+ */
+var jmStar = /*#__PURE__*/function (_jmPath) {
+  _inherits(jmStar, _jmPath);
+
+  var _super = _createSuper(jmStar);
+
+  function jmStar(params) {
+    var _this;
+
+    var t = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jmStar';
+
+    _classCallCheck(this, jmStar);
+
+    params = params || {};
+    params.isRegular = true; // 标记为规则图形
+
+    _this = _super.call(this, params, t); // 参数验证和初始化
+
+    _this.pointsCount = params.points || 5;
+    _this.radius = params.radius || 50;
+    _this.innerRadius = params.innerRadius || 25;
+    _this.center = params.center || {
+      x: 0,
+      y: 0
+    };
+    return _this;
+  }
+  /**
+   * 设定或获取星形顶点数（角数）
+   * 顶点数决定了星形的角数，例如5表示五角星
+   * 
+   * @property pointsCount
+   * @for jmStar
+   * @type {number}
+   */
+
+
+  _createClass(jmStar, [{
+    key: "pointsCount",
+    get: function get() {
+      return this.property('pointsCount');
+    },
+    set: function set(v) {
+      // 参数验证：顶点数必须在3-50之间
+      if (typeof v !== 'number' || isNaN(v) || v < 3) {
+        console.warn('jmStar: pointsCount must be a number >= 3');
+        v = 3;
+      }
+
+      if (v > 50) {
+        console.warn('jmStar: pointsCount should not exceed 50 for performance reasons');
+        v = 50;
+      }
+
+      this.needUpdate = true;
+      return this.property('pointsCount', Math.floor(v)); // 确保是整数
+    }
+    /**
+     * 设定或获取星形外半径
+     * 外半径是从中心到尖角的距离
+     * 
+     * @property radius
+     * @for jmStar
+     * @type {number}
+     */
+
+  }, {
+    key: "radius",
+    get: function get() {
+      return this.property('radius');
+    },
+    set: function set(v) {
+      // 参数验证：半径必须为正数
+      if (typeof v !== 'number' || isNaN(v) || v <= 0) {
+        console.warn('jmStar: radius must be a positive number');
+        v = 1;
+      }
+
+      this.needUpdate = true;
+      return this.property('radius', v);
+    }
+    /**
+     * 设定或获取星形内半径
+     * 内半径是从中心到凹陷处的距离
+     * 内半径应该小于外半径，否则会产生奇怪的形状
+     * 
+     * @property innerRadius
+     * @for jmStar
+     * @type {number}
+     */
+
+  }, {
+    key: "innerRadius",
+    get: function get() {
+      return this.property('innerRadius');
+    },
+    set: function set(v) {
+      // 参数验证：内半径必须为正数
+      if (typeof v !== 'number' || isNaN(v) || v <= 0) {
+        console.warn('jmStar: innerRadius must be a positive number');
+        v = 1;
+      } // 警告：内半径不应大于外半径
+
+
+      if (v >= this.radius) {
+        console.warn('jmStar: innerRadius should be less than radius for proper star shape');
+      }
+
+      this.needUpdate = true;
+      return this.property('innerRadius', v);
+    }
+    /**
+     * 设定或获取星形中心
+     * 中心点是星形的几何中心
+     * 
+     * @property center
+     * @for jmStar
+     * @type {object}
+     */
+
+  }, {
+    key: "center",
+    get: function get() {
+      return this.property('center');
+    },
+    set: function set(v) {
+      // 参数验证：中心点必须包含x和y属性
+      if (!v || typeof v.x !== 'number' || typeof v.y !== 'number') {
+        console.warn('jmStar: center must be an object with x and y properties');
+        v = {
+          x: 0,
+          y: 0
+        };
+      }
+
+      this.needUpdate = true;
+      return this.property('center', v);
+    }
+    /**
+     * 初始化图形点
+     * 计算星形的顶点坐标，交替使用外半径和内半径
+     * 
+     * @method initPoints
+     * @private
+     * @for jmStar
+     */
+
+  }, {
+    key: "initPoints",
+    value: function initPoints() {
+      // 如果提供了自定义顶点，直接使用
+      if (this.points && this.points.length > 0) {
+        return;
+      } // 计算星形顶点
+
+
+      var points = [];
+      var pointsCount = this.pointsCount;
+      var radius = this.radius;
+      var innerRadius = this.innerRadius;
+      var center = this.center; // 星形有2倍顶点数的点（外半径和内半径交替）
+      // 从顶部开始绘制（-90度），顺时针方向
+
+      for (var i = 0; i < pointsCount * 2; i++) {
+        var angle = i / pointsCount * Math.PI - Math.PI / 2; // 偶数索引使用外半径，奇数索引使用内半径
+
+        var r = i % 2 === 0 ? radius : innerRadius;
+        var x = center.x + Math.cos(angle) * r;
+        var y = center.y + Math.sin(angle) * r;
+        points.push({
+          x: x,
+          y: y
+        });
+      }
+
+      this.points = points;
+    }
+  }]);
+
+  return jmStar;
+}(_jmPath2.jmPath);
+
+exports.jmStar = exports["default"] = jmStar;
+
+},{"../core/jmPath.js":10}]},{},[1]);
+var _r=_m(1);_g.jmGraph=_r;return _r;})})(typeof window!=='undefined'?window:(typeof global!=='undefined'?global:(typeof self!=='undefined'?self:this)));
